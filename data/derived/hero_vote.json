@@ -1105,7 +1105,7 @@
    "name": "Dr. Budai Gyula",
    "faction": "Fidesz",
    "position": "nem",
-   "mp_azon": null
+   "mp_azon": "b076"
   },
   {
    "name_raw": "Czirbus Gábor (Fidesz)",
@@ -1294,7 +1294,7 @@
    "name": "Szijjártó Péter",
    "faction": "Fidesz",
    "position": "nem",
-   "mp_azon": null
+   "mp_azon": "s054"
   },
   {
    "name_raw": "Szűcs Gábor (Fidesz)",
@@ -1494,5 +1494,5 @@
   "agrees_with_source": true,
   "present_assumed": false
  },
- "derived_at": "2026-08-18T08:19:13+00:00"
+ "derived_at": "2026-08-18T08:52:22+00:00"
 }

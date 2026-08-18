@@ -118,7 +118,14 @@ def main(argv: list[str] | None = None) -> int:
     print(f"written {OUT}")
 
     # -- votes_index.json ---------------------------------------------------------------
-    resolver = NameResolver(mps) if mps else None
+    # aliases from the Wikidata snapshot cover former MPs (ended statements) — P4966 = p_azon
+    aliases = {}
+    snap_path = ROOT / "reference" / "wikidata" / "members_ckl43.json"
+    if snap_path.exists():
+        for m in json.loads(snap_path.read_text(encoding="utf-8"))["members"]:
+            if m.get("name_hu") and m.get("ogy_ids"):
+                aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
+    resolver = NameResolver(mps, aliases=aliases) if mps else None
     bill_links = {}
     if (RAW / "iromanyok" / "all.xml").exists():
         root = parse_xml((RAW / "iromanyok" / "all.xml").read_bytes())

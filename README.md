@@ -53,11 +53,14 @@ majority rule is the story: simple, absolute, two-thirds of those present
 every vote against a simple-majority marker; that is the single defect this project
 was built not to inherit.
 
-**The seat chart can be real.** The MP record carries `<ulohely szektor sor szek>` —
-sector, row and seat — so the diagram can be the chamber's own seating plan rather
-than an algorithmic hemicycle, once the sector geometry is digitised. Konzol's
-algorithm (rows proportional to radius, parties poured by angle) is documented in the
-teardown as the fallback.
+**The seat chart is real.** The MP record carries `<ulohely szektor sor szek>` — sector,
+row and seat — and with all 199 records in hand the chamber's structure reads straight
+off the data: sectors 1–6 of five rows (widest rows 6 · 9 · 12 · 12 · 8 · 6), the
+opposition in sectors 1–2 to the Speaker's left, TISZA in 3–6 to the right, and a sector 0
+/ row 0 that is the ministerial front bench (12 TISZA MPs, seat numbers up to 21).
+`karzat/seating.py` turns that into coordinates and states its assumptions (sector width
+∝ widest row, seat numbers left→right, orientation per parlament.hu's own description).
+Konzol's algorithm stays as the fallback.
 
 ## Status
 
@@ -73,13 +76,13 @@ teardown as the fallback.
 - [x] First live calls: MP list, four months of vote lists, five vote details, sitting days, one MP, the bill list, one bill — read, fixtured (`tests/fixtures/real_*`), normalised (`karzat/normalise.py`) and gated
 - [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
-- [ ] `sync-mps` (199 MP records: seats, histories), SQLite loader over `normalise.py`
-- [ ] Per-vote pages and the real seating plan; cycle 42 for comparison
+- [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
+- [ ] SQLite loader over `normalise.py`; per-vote pages; cycle 42 for comparison
 
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 95 tests
+python3 -m unittest discover -s tests -t .      # offline; 102 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -91,6 +94,7 @@ python3 -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached X
 python3 -m karzat fingerprint tests/fixtures/*.xml   # digest table for tests/test_golden.py
 python3 -m scripts.pull_wikidata                 # re-pull the Wikidata member snapshot (deliberately)
 python3 -m scripts.derive_first_light            # cache → data/derived/{first_light,votes_index,hero_vote}.json
+python3 -m scripts.derive_seating                # kepviselo records → data/derived/seating.json (the chamber)
 python3 -m scripts.build_site                    # data/derived + config → site/index.html (--check to verify)
 python3 -m http.server 4174 --directory site     # then open http://localhost:4174/
 ```
@@ -170,8 +174,10 @@ needed 133, 135 igen, margin +2, and "számítás egyezik" because the computed 
 agrees with the recorded result. Then the headline counts, the mode table, T/71's four
 days, and the directory: all 259 votes, newest first, each with its rule, threshold /
 base, tally, margin and result, filterable by rule and result and searchable by subject.
-The seats are laid out algorithmically (faction, then position) — the API gives sector /
-row / seat, but the chamber's geometry is not digitised yet, and the page says so.
+The seats are the chamber's own: every MP at their sector / row / seat from the API,
+seen from the Speaker's platform, opposition left and government right, ministers on the
+front bench; what is estimated (sector widths, row spacing, the direction of seat
+numbers) the caption says.
 
 Built by `scripts/build_site.py` from committed inputs only, with no clock read, so a
 clean checkout reproduces it byte for byte; `tests/test_site.py` fails if it does not.
@@ -251,7 +257,7 @@ unavailable, say that currency cannot be told rather than imply it. `sync-votes`
 2. The citations in `karzat/majority.py` (Alaptörvény / HHSZ paragraphs) — the API's own rule labels make them unnecessary for classification, but they are still asserted in the docs.
 3. `bizottsagok.cgi` (the manual's link is broken; not called yet), and the earliest date `szavazasok.cgi` serves.
 4. Whether parlament.hu portraits (`…/kepviselo-kepek/{p_azon}`) may be republished.
-5. The geometry behind `<ulohely>` sectors — needed before the seat chart can be the real one.
+5. The exact geometry of the chamber: the sector structure and orientation are now read from the data, but sector widths, row spacing and the left→right direction of seat numbers within a row are assumptions in `karzat/seating.py` — a photograph of the chamber would settle them.
 
 ## First light — what the cached payloads say
 
@@ -286,8 +292,8 @@ this section will say what the numbers cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · majority.py (rules, thresholds, classifier) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
-scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py — cache → data/derived · build_site.py — data/derived → site/index.html
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
+scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py — cache → data/derived · build_site.py — data/derived → site/index.html
 site/              index.html — the first page, generated, guarded by --check and tests/test_site.py
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v1 after the first real payloads

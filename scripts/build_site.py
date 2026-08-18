@@ -34,6 +34,7 @@ from karzat.freshness import BUDAPEST, assess  # noqa: E402
 from karzat.majority import RULES, Rule  # noqa: E402
 
 DERIVED = ROOT / "data" / "derived"
+SEATING = DERIVED / "seating.json"
 SITE = ROOT / "site" / "index.html"
 FACTIONS = ROOT / "config" / "factions.yml"
 
@@ -85,6 +86,63 @@ def hemicycle_layout(n: int, rows: int = 7, r0: float = 78.0, gap: float = 17.0)
             seats.append({"cx": round(r * math.cos(a), 2), "cy": round(-r * math.sin(a), 2), "angle": a, "row": row})
     seats.sort(key=lambda p: (-p["angle"], p["row"]))
     return seats[:n]
+
+
+def _node(cx: float, cy: float, pos: str, c: str) -> str:
+    if pos == "igen":
+        return f'<circle cx="{cx}" cy="{cy}" r="5.2" fill="{c}"/>'
+    if pos == "nem":
+        return f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-width="1.6"/>'
+    if pos == "tartozkodott":
+        return (f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-width="1.6"/>'
+                f'<path d="M {cx-4.6} {cy} A 4.6 4.6 0 0 1 {cx+4.6} {cy} Z" fill="{c}"/>')
+    if pos == "jelen_nem_szavazott":
+        return f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-width="1.6" stroke-dasharray="2.4 2"/>'
+    if pos == "nem_szavazott":
+        return f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="{c}" fill-opacity="0.22" stroke="{c}" stroke-opacity="0.35" stroke-width="1"/>'
+    return f'<circle cx="{cx}" cy="{cy}" r="2.2" fill="{c}" fill-opacity="0.35"/>'
+
+
+def seat_svg_real(hero: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
+    """The reconstructed chamber: every voting MP at their (sector,row,seat) coordinates.
+    Returns (svg, info) where info counts what could not be placed."""
+    colour = {f["id"]: f["colour"] for f in facs}
+    coords = plan["coords"]; geo = plan["geometry"]
+    parts, unplaced = [], []
+    for m in hero["positions"]:
+        azon = m.get("mp_azon")
+        c = colour.get(m["faction"] or "", "#8a8a8a")
+        pos = m["position"]
+        title = html.escape(f'{m["name"]} ({m["faction"]}) — {POSITION_LABEL.get(pos, pos)}')
+        if azon and azon in coords:
+            xy = coords[azon]
+            place = "miniszteri pad" if xy.get("front_bench") else str(xy["sector"]) + ". szektor"
+            where = " · " + place + ", " + str(xy["row"]) + ". sor, " + str(xy["seat"]) + ". szék"
+            parts.append(f'<g class="seat" data-pos="{pos}" data-f="{html.escape(m["faction"] or "")}"><title>{title}{html.escape(where)}</title>{_node(xy["x"], xy["y"], pos, c)}</g>')
+        else:
+            unplaced.append(m)
+    # unplaced (no seat / unresolved): a small row at the bottom left, so nothing silently disappears
+    for i, m in enumerate(unplaced):
+        c = colour.get(m["faction"] or "", "#8a8a8a")
+        why = "azonosítatlan név" if not m.get("mp_azon") else "nincs ülőhely a képviselői adatlapon (a mandátum azóta megszűnt)"
+        parts.append(f'<g class="seat" data-pos="{m["position"]}"><title>{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}</title>{_node(-150 + i * 12, 12, m["position"], c)}</g>')
+    # chrome: platform, front-bench arc, sector labels at the outer edge, aisles
+    R = geo["outer_radius"] + 14
+    labels = []
+    for sec, (a0, a1) in geo["sector_wedges_rad"].items():
+        mid = (a0 + a1) / 2
+        labels.append(f'<text x="{R*math.cos(mid):.1f}" y="{-R*math.sin(mid):.1f}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>')
+        for a in (a0, a1):   # aisle ticks
+            r_in, r_out = geo["r0"] - 8, geo["outer_radius"] + 6
+            labels.append(f'<line x1="{r_in*math.cos(a):.1f}" y1="{-r_in*math.sin(a):.1f}" x2="{r_out*math.cos(a):.1f}" y2="{-r_out*math.sin(a):.1f}" class="aisle"/>')
+    fb = geo["front_bench_radius"]; fs = geo["front_bench_span_rad"]
+    a0, a1 = math.pi / 2 + fs / 2, math.pi / 2 - fs / 2
+    arc = (f'<path d="M {fb*math.cos(a0):.1f} {-fb*math.sin(a0):.1f} A {fb} {fb} 0 0 1 {fb*math.cos(a1):.1f} {-fb*math.sin(a1):.1f}" class="fbarc"/>'
+           f'<text x="0" y="{-fb+20:.1f}" class="seclabel" text-anchor="middle">miniszteri pad</text>')
+    svg = (f'<svg viewBox="-172 -{R+12:.0f} 344 {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(hero["positions"])} képviselő, frakció és szavazat szerint">'
+           f'<rect x="-16" y="-7" width="32" height="8" rx="1.5" class="rostrum"/><text x="0" y="12" class="seclabel" text-anchor="middle">elnöki emelvény</text>'
+           + arc + "".join(labels) + "".join(parts) + '</svg>')
+    return svg, {"placed": len(hero["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"]}
 
 
 def seat_svg(hero: dict, facs: list[dict]) -> str:
@@ -157,7 +215,7 @@ header h1{margin:0;font-size:34px;font-weight:600;letter-spacing:-.02em}header h
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s}
 .chart svg:hover .seat{opacity:.55}.chart svg .seat:hover{opacity:1}
-.rostrum{fill:var(--rostrum)}
+.rostrum{fill:var(--rostrum)}.seclabel{font-size:8px;fill:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}.aisle{stroke:var(--line);stroke-width:.8}.fbarc{fill:none;stroke:var(--line);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:8px;font-size:12.5px;color:var(--muted)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:11px;height:11px;border-radius:50%;display:inline-block}.legend svg{width:14px;height:14px;flex:none}
 .tally{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 12px}
@@ -234,6 +292,7 @@ JS = """
 def build() -> str:
     hero = json.loads((DERIVED / "hero_vote.json").read_text(encoding="utf-8"))
     idx = json.loads((DERIVED / "votes_index.json").read_text(encoding="utf-8"))
+    plan = json.loads(SEATING.read_text(encoding="utf-8")) if SEATING.exists() else None
     fl = json.loads((DERIVED / "first_light.json").read_text(encoding="utf-8"))
     facs = factions()
     fac_by_id = {f["id"]: f for f in facs}
@@ -247,6 +306,16 @@ def build() -> str:
     fr = assess(sitting_days=[_date.fromisoformat(d["date"]) for d in idx["sitting_days"] if d.get("date")],
                 newest_vote_at=newest_dt, last_sync_at=last_sync, now=derived_at)
 
+    if plan:
+        chart_svg, info = seat_svg_real(hero, facs, plan)
+        geo = plan["geometry"]
+        chart_note = (f'Az ülésrend a képviselői adatlapok szektor/sor/szék adataiból rekonstruálva ({info["placed"]} képviselő a helyén'
+                      + (f', {info["unplaced"]} balra lent, ülőhely-adat nélkül' if info["unplaced"] else '') + '), az elnöki emelvény felől nézve: '
+                      f'balra az ellenzék ({", ".join(str(x) for x in geo["sector_order_left_to_right"][:2])}. szektor), jobbra a kormányoldal; '
+                      'a 0. szektor a miniszteri pad. Becsült: a szektorok szélessége (a legszélesebb sorral arányos), a sorok távolsága és a székek balról jobbra sorrendje.')
+    else:
+        chart_svg = seat_svg(hero, facs)
+        chart_note = "Sorrend: frakció (a beállított bal–jobb sorrendben), azon belül szavazat. A helyek nem a valódi ülésrend."
     m = hero["majority"] or {}
     mo = hero["motions"][0] if hero["motions"] else {}
     rule_info = RULES[Rule(m["rule"])] if m else None
@@ -330,10 +399,10 @@ def build() -> str:
     <h2>Egy szavazás, ülőhelyenként · {esc(hero_date)} {esc(hero["ts"][11:16])}</h2>
     <div class="hero-title">{('<a href="' + esc(mo.get("href")) + '" target="_blank" rel="noopener">' + esc(mo.get("iromany")) + '</a> ' if mo.get("href") else esc(mo.get("iromany", "")) + " ")}{esc(mo.get("title", ""))}</div>
     <div class="hero-meta">{esc(mo.get("outcome", ""))} · benyújtó: {esc(", ".join(mo.get("submitters", [])))}</div>
-    <div class="chart">{seat_svg(hero, facs)}</div>
+    <div class="chart">{chart_svg}</div>
     <div class="legend">{legend_f}</div>
     <div class="legend">{legend_p}</div>
-    <div class="hero-meta" style="margin-top:8px">Sorrend: frakció (a beállított bal–jobb sorrendben), azon belül szavazat. A helyek nem a valódi ülésrend — az API adja a szektor/sor/szék hármast, a terem geometriája még nincs digitalizálva.</div>
+    <div class="hero-meta" style="margin-top:8px">{chart_note}</div>
   </div>
   <div class="card">
     <h2>Eredmény és a szükséges többség</h2>

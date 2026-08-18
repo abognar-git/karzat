@@ -1,0 +1,3027 @@
+{
+ "derived_at": "2026-08-18T08:50:40+00:00",
+ "government": "TISZA",
+ "government_note": "largest faction unless --government given",
+ "mps_listed": 199,
+ "records_read": 199,
+ "records_missing": [],
+ "seated": 199,
+ "unseated": [],
+ "analysis": {
+  "sectors": {
+   "0": {
+    "count": 12,
+    "rows": {
+     "0": 12
+    },
+    "max_row": 0,
+    "max_seat_by_row": {
+     "0": 21
+    },
+    "widest_row": 21,
+    "factions": {
+     "TISZA": 12
+    }
+   },
+   "1": {
+    "count": 23,
+    "rows": {
+     "1": 5,
+     "2": 6,
+     "3": 6,
+     "4": 4,
+     "5": 2
+    },
+    "max_row": 5,
+    "max_seat_by_row": {
+     "1": 5,
+     "2": 6,
+     "3": 6,
+     "4": 6,
+     "5": 6
+    },
+    "widest_row": 6,
+    "factions": {
+     "Fidesz": 17,
+     "Mi Hazánk": 6
+    }
+   },
+   "2": {
+    "count": 35,
+    "rows": {
+     "1": 5,
+     "2": 6,
+     "3": 7,
+     "4": 8,
+     "5": 9
+    },
+    "max_row": 5,
+    "max_seat_by_row": {
+     "1": 5,
+     "2": 6,
+     "3": 7,
+     "4": 8,
+     "5": 9
+    },
+    "widest_row": 9,
+    "factions": {
+     "Fidesz": 27,
+     "KDNP": 8
+    }
+   },
+   "3": {
+    "count": 44,
+    "rows": {
+     "1": 5,
+     "2": 7,
+     "3": 9,
+     "4": 11,
+     "5": 12
+    },
+    "max_row": 5,
+    "max_seat_by_row": {
+     "1": 5,
+     "2": 7,
+     "3": 9,
+     "4": 11,
+     "5": 12
+    },
+    "widest_row": 12,
+    "factions": {
+     "TISZA": 44
+    }
+   },
+   "4": {
+    "count": 44,
+    "rows": {
+     "1": 5,
+     "2": 7,
+     "3": 9,
+     "4": 11,
+     "5": 12
+    },
+    "max_row": 5,
+    "max_seat_by_row": {
+     "1": 5,
+     "2": 7,
+     "3": 9,
+     "4": 11,
+     "5": 12
+    },
+    "widest_row": 12,
+    "factions": {
+     "TISZA": 44
+    }
+   },
+   "5": {
+    "count": 30,
+    "rows": {
+     "1": 5,
+     "2": 6,
+     "3": 7,
+     "4": 8,
+     "5": 4
+    },
+    "max_row": 5,
+    "max_seat_by_row": {
+     "1": 5,
+     "2": 6,
+     "3": 7,
+     "4": 8,
+     "5": 4
+    },
+    "widest_row": 8,
+    "factions": {
+     "TISZA": 30
+    }
+   },
+   "6": {
+    "count": 11,
+    "rows": {
+     "1": 5,
+     "2": 6
+    },
+    "max_row": 2,
+    "max_seat_by_row": {
+     "1": 5,
+     "2": 6
+    },
+    "widest_row": 6,
+    "factions": {
+     "TISZA": 11
+    }
+   }
+  },
+  "n_seated": 199,
+  "duplicates": []
+ },
+ "orientation": {
+  "sector_order": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "flipped": false,
+  "gov_centroid": 4.06,
+  "note": "TISZA centroid at sector 4.06 of 1–6; kept sector order so the government sits to the Speaker's right"
+ },
+ "geometry": {
+  "r0": 70.0,
+  "row_gap": 17.0,
+  "aisle_rad": 0.06,
+  "span_rad": 3.3301,
+  "sector_order_left_to_right": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "sector_wedges_rad": {
+   "1": [
+    3.2358,
+    2.8928
+   ],
+   "2": [
+    2.8328,
+    2.3183
+   ],
+   "3": [
+    2.2583,
+    1.5722
+   ],
+   "4": [
+    1.5122,
+    0.8262
+   ],
+   "5": [
+    0.7662,
+    0.3088
+   ],
+   "6": [
+    0.2488,
+    -0.0942
+   ]
+  },
+  "front_bench_sector": 0,
+  "front_bench_radius": 46.2,
+  "front_bench_span_rad": 1.9,
+  "front_bench_max_seat": 21,
+  "max_row": 5,
+  "outer_radius": 138.0,
+  "seat_numbers_left_to_right": true,
+  "assumptions": [
+   "sector width ∝ widest row (+ aisle)",
+   "rows concentric, row 1 nearest the platform",
+   "seat numbers left→right within a row (Speaker's view)",
+   "orientation: government to the Speaker's right (parlament.hu description)",
+   "sector 0 / row 0 = ministerial front bench, drawn as an inner arc"
+  ]
+ },
+ "seats": {
+  "a011": {
+   "sector": 2,
+   "row": 5,
+   "seat": 7,
+   "faction": "Fidesz",
+   "name": "Ágh Péter"
+  },
+  "a018": {
+   "sector": 1,
+   "row": 2,
+   "seat": 1,
+   "faction": "Mi Hazánk",
+   "name": "Dr. Apáti István"
+  },
+  "0032": {
+   "sector": 6,
+   "row": 1,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Dr. Árvay Nikolett"
+  },
+  "002M": {
+   "sector": 3,
+   "row": 2,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Bakos Csaba Attila"
+  },
+  "002T": {
+   "sector": 3,
+   "row": 5,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Balajti István"
+  },
+  "003C": {
+   "sector": 3,
+   "row": 5,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Dr. Balatincz Péter"
+  },
+  "b007": {
+   "sector": 1,
+   "row": 1,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Balla György"
+  },
+  "b008": {
+   "sector": 1,
+   "row": 2,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Balla Mihály"
+  },
+  "001P": {
+   "sector": 5,
+   "row": 4,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Balogh Mihály"
+  },
+  "003Y": {
+   "sector": 4,
+   "row": 5,
+   "seat": 11,
+   "faction": "TISZA",
+   "name": "Bárkányi Bence"
+  },
+  "002J": {
+   "sector": 6,
+   "row": 1,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Dr. Barna-Szabó Tímea"
+  },
+  "b034": {
+   "sector": 1,
+   "row": 3,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Bencsik János"
+  },
+  "0046": {
+   "sector": 5,
+   "row": 5,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Benke József"
+  },
+  "001R": {
+   "sector": 5,
+   "row": 3,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Berki Ákos"
+  },
+  "0031": {
+   "sector": 6,
+   "row": 1,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Bicskei László"
+  },
+  "0043": {
+   "sector": 5,
+   "row": 3,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Dr. Bihari Zoltán"
+  },
+  "002Z": {
+   "sector": 3,
+   "row": 3,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Dr. Bilisics Zita"
+  },
+  "001Z": {
+   "sector": 3,
+   "row": 1,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Boda Nikoletta"
+  },
+  "000W": {
+   "sector": 4,
+   "row": 1,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Bódis Kriszta"
+  },
+  "0026": {
+   "sector": 3,
+   "row": 2,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Bódis Péter"
+  },
+  "0028": {
+   "sector": 6,
+   "row": 2,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Bodóczi István"
+  },
+  "b130": {
+   "sector": 2,
+   "row": 1,
+   "seat": 1,
+   "faction": "Fidesz",
+   "name": "Dr. Bóka János"
+  },
+  "0037": {
+   "sector": 4,
+   "row": 5,
+   "seat": 12,
+   "faction": "TISZA",
+   "name": "Dr. Bóka Zsolt"
+  },
+  "002O": {
+   "sector": 4,
+   "row": 5,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Borics Mihály"
+  },
+  "001C": {
+   "sector": 3,
+   "row": 4,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Borsós Gabriella"
+  },
+  "002F": {
+   "sector": 5,
+   "row": 1,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Dr. Bögi Viktória"
+  },
+  "0039": {
+   "sector": 4,
+   "row": 5,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Dr. Bugya László"
+  },
+  "000T": {
+   "sector": 4,
+   "row": 1,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Bujdosó Andrea Anna"
+  },
+  "003H": {
+   "sector": 3,
+   "row": 4,
+   "seat": 10,
+   "faction": "TISZA",
+   "name": "Czakó Czirbus Pál"
+  },
+  "0049": {
+   "sector": 3,
+   "row": 4,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Czipa András"
+  },
+  "004U": {
+   "sector": 2,
+   "row": 5,
+   "seat": 2,
+   "faction": "Fidesz",
+   "name": "Czirbus Gábor"
+  },
+  "003W": {
+   "sector": 3,
+   "row": 4,
+   "seat": 9,
+   "faction": "TISZA",
+   "name": "Csák László"
+  },
+  "001Q": {
+   "sector": 4,
+   "row": 2,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Császár Martin"
+  },
+  "002L": {
+   "sector": 3,
+   "row": 3,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Csatári Ernő"
+  },
+  "0045": {
+   "sector": 3,
+   "row": 5,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Cseh Tamás"
+  },
+  "000U": {
+   "sector": 4,
+   "row": 2,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Csézy Erzsébet"
+  },
+  "0005": {
+   "sector": 1,
+   "row": 4,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Dr. Csibi Krisztina"
+  },
+  "003R": {
+   "sector": 4,
+   "row": 4,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Csiszár Béla"
+  },
+  "0034": {
+   "sector": 5,
+   "row": 1,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Csontos Bence"
+  },
+  "002P": {
+   "sector": 3,
+   "row": 2,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Csőszi Attila"
+  },
+  "000E": {
+   "sector": 2,
+   "row": 5,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Dr. Csuzda Gábor"
+  },
+  "003G": {
+   "sector": 3,
+   "row": 4,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Dr. Dicső Viktória"
+  },
+  "0027": {
+   "sector": 4,
+   "row": 2,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Diószegi Judit"
+  },
+  "d040": {
+   "sector": 1,
+   "row": 3,
+   "seat": 2,
+   "faction": "Mi Hazánk",
+   "name": "Dócs Dávid"
+  },
+  "d028": {
+   "sector": 1,
+   "row": 1,
+   "seat": 1,
+   "faction": "Mi Hazánk",
+   "name": "Dúró Dóra"
+  },
+  "003V": {
+   "sector": 3,
+   "row": 5,
+   "seat": 12,
+   "faction": "TISZA",
+   "name": "Dr. Farkas Csongor"
+  },
+  "003Z": {
+   "sector": 3,
+   "row": 5,
+   "seat": 9,
+   "faction": "TISZA",
+   "name": "Ferenczi Gábor"
+  },
+  "k151": {
+   "sector": 2,
+   "row": 3,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "F. Kovács Sándor"
+  },
+  "000P": {
+   "sector": 6,
+   "row": 1,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Forsthoffer Ágnes"
+  },
+  "004G": {
+   "sector": 5,
+   "row": 3,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Gajda Attila"
+  },
+  "000O": {
+   "sector": 0,
+   "row": 0,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Gajdos László"
+  },
+  "0041": {
+   "sector": 5,
+   "row": 5,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Dr. Gáspár Levente"
+  },
+  "003E": {
+   "sector": 3,
+   "row": 4,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Gombár Dávid"
+  },
+  "000Z": {
+   "sector": 3,
+   "row": 3,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Göröghné Bocskai Éva"
+  },
+  "g053": {
+   "sector": 2,
+   "row": 4,
+   "seat": 1,
+   "faction": "Fidesz",
+   "name": "Gulyás Gergely"
+  },
+  "002H": {
+   "sector": 5,
+   "row": 4,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Dr. Gurzó Mária"
+  },
+  "g048": {
+   "sector": 1,
+   "row": 4,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Gyopáros Alpár"
+  },
+  "003O": {
+   "sector": 3,
+   "row": 5,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Gyömbér Dávid"
+  },
+  "001N": {
+   "sector": 4,
+   "row": 4,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Gyöngyösi István"
+  },
+  "001F": {
+   "sector": 5,
+   "row": 4,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Gyuk Zsolt"
+  },
+  "001K": {
+   "sector": 3,
+   "row": 1,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Hajdu Márton"
+  },
+  "0042": {
+   "sector": 5,
+   "row": 2,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Hallerné Dr. Nagy Anikó"
+  },
+  "002E": {
+   "sector": 3,
+   "row": 3,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Halmai Ferenc"
+  },
+  "h092": {
+   "sector": 1,
+   "row": 2,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Dr. Hankó Balázs"
+  },
+  "001M": {
+   "sector": 4,
+   "row": 2,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Dr. Hantosi István"
+  },
+  "h006": {
+   "sector": 2,
+   "row": 5,
+   "seat": 9,
+   "faction": "KDNP",
+   "name": "Dr. Hargitai János"
+  },
+  "0047": {
+   "sector": 3,
+   "row": 4,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Hatala-Orosz Csaba"
+  },
+  "003P": {
+   "sector": 4,
+   "row": 5,
+   "seat": 10,
+   "faction": "TISZA",
+   "name": "Havasi Balázs"
+  },
+  "0002": {
+   "sector": 2,
+   "row": 1,
+   "seat": 2,
+   "faction": "Fidesz",
+   "name": "Dr. Hegedűs Barbara"
+  },
+  "000V": {
+   "sector": 0,
+   "row": 0,
+   "seat": 10,
+   "faction": "TISZA",
+   "name": "Dr. Hegedűs Zsolt Csaba"
+  },
+  "h083": {
+   "sector": 1,
+   "row": 5,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Héjj Dávid"
+  },
+  "002S": {
+   "sector": 5,
+   "row": 4,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Hende Máté"
+  },
+  "h074": {
+   "sector": 2,
+   "row": 2,
+   "seat": 2,
+   "faction": "Fidesz",
+   "name": "Hidvéghi Balázs"
+  },
+  "006E": {
+   "sector": 2,
+   "row": 5,
+   "seat": 6,
+   "faction": "Fidesz",
+   "name": "Hortay Olivér"
+  },
+  "h366": {
+   "sector": 1,
+   "row": 5,
+   "seat": 6,
+   "faction": "Fidesz",
+   "name": "Horváth László"
+  },
+  "003K": {
+   "sector": 5,
+   "row": 4,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Horváth Nándor Zsolt"
+  },
+  "0011": {
+   "sector": 4,
+   "row": 3,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Jakab Zsuzsanna"
+  },
+  "003D": {
+   "sector": 4,
+   "row": 3,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Járosi Péter"
+  },
+  "002C": {
+   "sector": 4,
+   "row": 3,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Jelencsik József"
+  },
+  "0018": {
+   "sector": 5,
+   "row": 4,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Jójárt Erika"
+  },
+  "004C": {
+   "sector": 4,
+   "row": 5,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Judák Zsolt"
+  },
+  "003M": {
+   "sector": 3,
+   "row": 5,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Juhász Áron"
+  },
+  "k155": {
+   "sector": 2,
+   "row": 2,
+   "seat": 6,
+   "faction": "KDNP",
+   "name": "Dr. Juhász Hajnalka"
+  },
+  "004A": {
+   "sector": 4,
+   "row": 5,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Juhász Roland Csongor"
+  },
+  "001E": {
+   "sector": 6,
+   "row": 2,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Kalázdi-Kerekes Kinga"
+  },
+  "000Q": {
+   "sector": 0,
+   "row": 0,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Kapitány István"
+  },
+  "001X": {
+   "sector": 3,
+   "row": 3,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Kaprinyák Tibor"
+  },
+  "003L": {
+   "sector": 5,
+   "row": 2,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Kapronczai Balázs"
+  },
+  "k122": {
+   "sector": 0,
+   "row": 0,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Kármán András"
+  },
+  "004B": {
+   "sector": 3,
+   "row": 4,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Karsai-Juhász Katalin"
+  },
+  "0019": {
+   "sector": 0,
+   "row": 0,
+   "seat": 21,
+   "faction": "TISZA",
+   "name": "Dr. Kátai-Németh Vilmos"
+  },
+  "001B": {
+   "sector": 4,
+   "row": 4,
+   "seat": 9,
+   "faction": "TISZA",
+   "name": "Dr. Kincse Csongor"
+  },
+  "003N": {
+   "sector": 3,
+   "row": 3,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Kiss János"
+  },
+  "001V": {
+   "sector": 4,
+   "row": 4,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Dr. Kiss Máté Zsolt"
+  },
+  "k100": {
+   "sector": 1,
+   "row": 4,
+   "seat": 6,
+   "faction": "Fidesz",
+   "name": "Kocsis Máté"
+  },
+  "0020": {
+   "sector": 4,
+   "row": 5,
+   "seat": 9,
+   "faction": "TISZA",
+   "name": "Dr. Koncz Áron"
+  },
+  "k163": {
+   "sector": 2,
+   "row": 2,
+   "seat": 1,
+   "faction": "Fidesz",
+   "name": "Dr. Koncz Zsófia"
+  },
+  "003Q": {
+   "sector": 4,
+   "row": 4,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Dr. Kovács Áron"
+  },
+  "003J": {
+   "sector": 3,
+   "row": 5,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Dr. Kovács Gyula"
+  },
+  "0038": {
+   "sector": 3,
+   "row": 1,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Kovács Petra Judit"
+  },
+  "k765": {
+   "sector": 2,
+   "row": 4,
+   "seat": 6,
+   "faction": "Fidesz",
+   "name": "Kovács Sándor"
+  },
+  "001U": {
+   "sector": 5,
+   "row": 2,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Kőszegi Krisztián"
+  },
+  "0016": {
+   "sector": 5,
+   "row": 1,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Kulcsár Krisztián"
+  },
+  "0021": {
+   "sector": 4,
+   "row": 5,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "László Endre Márton"
+  },
+  "l049": {
+   "sector": 2,
+   "row": 3,
+   "seat": 7,
+   "faction": "KDNP",
+   "name": "Dr. Latorcai Csaba"
+  },
+  "l016": {
+   "sector": 2,
+   "row": 5,
+   "seat": 1,
+   "faction": "Fidesz",
+   "name": "Lázár János"
+  },
+  "0044": {
+   "sector": 5,
+   "row": 5,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Lontay László"
+  },
+  "003A": {
+   "sector": 4,
+   "row": 4,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Lovkó Csaba"
+  },
+  "002I": {
+   "sector": 0,
+   "row": 0,
+   "seat": 18,
+   "faction": "TISZA",
+   "name": "Dr. Lőrincz Viktória"
+  },
+  "001W": {
+   "sector": 3,
+   "row": 5,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Lukács Gábor"
+  },
+  "m076": {
+   "sector": 0,
+   "row": 0,
+   "seat": 12,
+   "faction": "TISZA",
+   "name": "Magyar Péter"
+  },
+  "004Q": {
+   "sector": 2,
+   "row": 3,
+   "seat": 6,
+   "faction": "KDNP",
+   "name": "Dr. Máthé Zsuzsa"
+  },
+  "0017": {
+   "sector": 4,
+   "row": 2,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Melléthei-Barna Márton"
+  },
+  "002B": {
+   "sector": 4,
+   "row": 3,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Dr. Miskolczi Orsolya"
+  },
+  "004H": {
+   "sector": 3,
+   "row": 2,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Molnár János"
+  },
+  "004R": {
+   "sector": 1,
+   "row": 4,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Molnárné Dr. Lezsák Anna"
+  },
+  "001A": {
+   "sector": 4,
+   "row": 2,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Molnár Zoltán"
+  },
+  "002U": {
+   "sector": 4,
+   "row": 4,
+   "seat": 11,
+   "faction": "TISZA",
+   "name": "Muhari Gergely"
+  },
+  "0029": {
+   "sector": 3,
+   "row": 2,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Müller Anna"
+  },
+  "n048": {
+   "sector": 2,
+   "row": 4,
+   "seat": 7,
+   "faction": "KDNP",
+   "name": "Nacsa Lőrinc"
+  },
+  "n053": {
+   "sector": 2,
+   "row": 2,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Nagy Bálint"
+  },
+  "0012": {
+   "sector": 6,
+   "row": 1,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Nagy Ervin"
+  },
+  "0040": {
+   "sector": 4,
+   "row": 5,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Dr. Nagy Márta"
+  },
+  "003X": {
+   "sector": 6,
+   "row": 2,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Néher András"
+  },
+  "004S": {
+   "sector": 2,
+   "row": 2,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Németh Balázs Lajos"
+  },
+  "003I": {
+   "sector": 4,
+   "row": 4,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Németh Csilla"
+  },
+  "n322": {
+   "sector": 2,
+   "row": 1,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Németh Zsolt"
+  },
+  "n036": {
+   "sector": 1,
+   "row": 2,
+   "seat": 2,
+   "faction": "Mi Hazánk",
+   "name": "Novák Előd"
+  },
+  "000R": {
+   "sector": 0,
+   "row": 0,
+   "seat": 13,
+   "faction": "TISZA",
+   "name": "Dr. Orbán Anita"
+  },
+  "o015": {
+   "sector": 2,
+   "row": 4,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Dr. Orbán Balázs"
+  },
+  "006F": {
+   "sector": 2,
+   "row": 4,
+   "seat": 2,
+   "faction": "Fidesz",
+   "name": "Palóc André"
+  },
+  "p067": {
+   "sector": 1,
+   "row": 2,
+   "seat": 6,
+   "faction": "Fidesz",
+   "name": "Dr. Panyi Miklós"
+  },
+  "004W": {
+   "sector": 2,
+   "row": 3,
+   "seat": 2,
+   "faction": "Fidesz",
+   "name": "Papp Zsolt"
+  },
+  "001L": {
+   "sector": 4,
+   "row": 3,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Pásztor Anett"
+  },
+  "0022": {
+   "sector": 3,
+   "row": 2,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Perticsné Kácsor Andrea"
+  },
+  "p041": {
+   "sector": 2,
+   "row": 3,
+   "seat": 1,
+   "faction": "Fidesz",
+   "name": "Pócs János"
+  },
+  "004D": {
+   "sector": 4,
+   "row": 4,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Polgár György"
+  },
+  "001Y": {
+   "sector": 3,
+   "row": 1,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Porcher Áron"
+  },
+  "0030": {
+   "sector": 3,
+   "row": 1,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Dr. Porpáczy Krisztina"
+  },
+  "000X": {
+   "sector": 0,
+   "row": 0,
+   "seat": 16,
+   "faction": "TISZA",
+   "name": "Pósfai Gábor"
+  },
+  "004X": {
+   "sector": 1,
+   "row": 3,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Radics Béla"
+  },
+  "000S": {
+   "sector": 4,
+   "row": 1,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Radnai Márk"
+  },
+  "0036": {
+   "sector": 4,
+   "row": 3,
+   "seat": 8,
+   "faction": "TISZA",
+   "name": "Ráki Zsolt"
+  },
+  "001J": {
+   "sector": 5,
+   "row": 2,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Dr. Rák Richárd"
+  },
+  "003T": {
+   "sector": 3,
+   "row": 5,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Rápli Róbert"
+  },
+  "r023": {
+   "sector": 2,
+   "row": 1,
+   "seat": 5,
+   "faction": "KDNP",
+   "name": "Rétvári Bence"
+  },
+  "000N": {
+   "sector": 4,
+   "row": 1,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Rost Andrea"
+  },
+  "0048": {
+   "sector": 5,
+   "row": 3,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Rózsahegyi Áron"
+  },
+  "0010": {
+   "sector": 0,
+   "row": 0,
+   "seat": 17,
+   "faction": "TISZA",
+   "name": "Dr. Ruszin-Szendi Romulusz"
+  },
+  "0024": {
+   "sector": 5,
+   "row": 2,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Dr. Ruzsa Diána"
+  },
+  "002K": {
+   "sector": 6,
+   "row": 2,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Dr. Sárosi József"
+  },
+  "001O": {
+   "sector": 6,
+   "row": 2,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Dr. Sasi-Nagy Edit"
+  },
+  "001G": {
+   "sector": 4,
+   "row": 2,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Schummer Orsolya"
+  },
+  "s093": {
+   "sector": 2,
+   "row": 5,
+   "seat": 8,
+   "faction": "KDNP",
+   "name": "Dr. Seszták Miklós"
+  },
+  "s011": {
+   "sector": 2,
+   "row": 4,
+   "seat": 8,
+   "faction": "KDNP",
+   "name": "Dr. Simicskó István"
+  },
+  "001S": {
+   "sector": 4,
+   "row": 4,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Dr. Simon Krisztián Márk"
+  },
+  "0035": {
+   "sector": 4,
+   "row": 3,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Dr. Simon Zsuzsánna"
+  },
+  "0025": {
+   "sector": 4,
+   "row": 3,
+   "seat": 9,
+   "faction": "TISZA",
+   "name": "Dr. Sopov Ildikó Éva"
+  },
+  "001I": {
+   "sector": 5,
+   "row": 2,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Sóti Anikó Zsuzsanna"
+  },
+  "002N": {
+   "sector": 5,
+   "row": 4,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Strompová Viktória"
+  },
+  "004F": {
+   "sector": 3,
+   "row": 3,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Dr. Stumpf Péter"
+  },
+  "s184": {
+   "sector": 1,
+   "row": 3,
+   "seat": 1,
+   "faction": "Mi Hazánk",
+   "name": "Szabadi István"
+  },
+  "002D": {
+   "sector": 4,
+   "row": 3,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Dr. Szabó Alexandra"
+  },
+  "002R": {
+   "sector": 6,
+   "row": 2,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Szabó Tibor"
+  },
+  "001D": {
+   "sector": 3,
+   "row": 4,
+   "seat": 11,
+   "faction": "TISZA",
+   "name": "Szafkó Zoltán Péter"
+  },
+  "003F": {
+   "sector": 5,
+   "row": 5,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Szakács Péter Lajos"
+  },
+  "004T": {
+   "sector": 1,
+   "row": 3,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Szalai Piroska"
+  },
+  "004Y": {
+   "sector": 1,
+   "row": 1,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Szentkirályi Alexandra"
+  },
+  "003S": {
+   "sector": 3,
+   "row": 4,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Dr. Szijjártó Gábor"
+  },
+  "002Y": {
+   "sector": 4,
+   "row": 5,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Szimon Renáta"
+  },
+  "0013": {
+   "sector": 3,
+   "row": 2,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Szűcs Dóra"
+  },
+  "004Z": {
+   "sector": 1,
+   "row": 2,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Szűcs Gábor"
+  },
+  "004V": {
+   "sector": 2,
+   "row": 5,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Dr. Takács Árpád"
+  },
+  "t062": {
+   "sector": 2,
+   "row": 2,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Takács Péter"
+  },
+  "000Y": {
+   "sector": 0,
+   "row": 0,
+   "seat": 20,
+   "faction": "TISZA",
+   "name": "Tanács Zoltán"
+  },
+  "004E": {
+   "sector": 5,
+   "row": 1,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Tárkányi Zsolt"
+  },
+  "t067": {
+   "sector": 0,
+   "row": 0,
+   "seat": 19,
+   "faction": "TISZA",
+   "name": "Tarr Zoltán"
+  },
+  "t023": {
+   "sector": 2,
+   "row": 5,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Dr. Tilki Attila"
+  },
+  "002G": {
+   "sector": 5,
+   "row": 1,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Tompa Enikő"
+  },
+  "t058": {
+   "sector": 1,
+   "row": 1,
+   "seat": 2,
+   "faction": "Mi Hazánk",
+   "name": "Toroczkai László"
+  },
+  "0023": {
+   "sector": 5,
+   "row": 3,
+   "seat": 1,
+   "faction": "TISZA",
+   "name": "Tóthmajor Balázs"
+  },
+  "003B": {
+   "sector": 5,
+   "row": 4,
+   "seat": 2,
+   "faction": "TISZA",
+   "name": "Tóth Norbert"
+  },
+  "001T": {
+   "sector": 4,
+   "row": 4,
+   "seat": 10,
+   "faction": "TISZA",
+   "name": "Tóth Tamás"
+  },
+  "002X": {
+   "sector": 3,
+   "row": 4,
+   "seat": 5,
+   "faction": "TISZA",
+   "name": "Trentin Balázs"
+  },
+  "002A": {
+   "sector": 3,
+   "row": 3,
+   "seat": 9,
+   "faction": "TISZA",
+   "name": "Trompler Ildikó"
+  },
+  "t687": {
+   "sector": 2,
+   "row": 1,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Tuzson Bence"
+  },
+  "003U": {
+   "sector": 5,
+   "row": 3,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Ujvári Szilvia"
+  },
+  "0033": {
+   "sector": 5,
+   "row": 3,
+   "seat": 6,
+   "faction": "TISZA",
+   "name": "Varga Balázs"
+  },
+  "v048": {
+   "sector": 2,
+   "row": 4,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Varga Gábor"
+  },
+  "001H": {
+   "sector": 3,
+   "row": 3,
+   "seat": 7,
+   "faction": "TISZA",
+   "name": "Varga Lőrinc Mihály"
+  },
+  "0014": {
+   "sector": 4,
+   "row": 1,
+   "seat": 4,
+   "faction": "TISZA",
+   "name": "Velkey György László"
+  },
+  "002Q": {
+   "sector": 3,
+   "row": 5,
+   "seat": 10,
+   "faction": "TISZA",
+   "name": "Veres Ádám"
+  },
+  "002W": {
+   "sector": 4,
+   "row": 5,
+   "seat": 3,
+   "faction": "TISZA",
+   "name": "Dr. Virágh Gabriella Mária"
+  },
+  "z014": {
+   "sector": 1,
+   "row": 3,
+   "seat": 6,
+   "faction": "Fidesz",
+   "name": "Vitályos Eszter"
+  },
+  "v008": {
+   "sector": 2,
+   "row": 3,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Dr. Vitányi István József"
+  },
+  "n004": {
+   "sector": 2,
+   "row": 3,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "V. Németh Zsolt"
+  },
+  "002V": {
+   "sector": 3,
+   "row": 5,
+   "seat": 11,
+   "faction": "TISZA",
+   "name": "Weigand István"
+  },
+  "w704": {
+   "sector": 2,
+   "row": 4,
+   "seat": 4,
+   "faction": "Fidesz",
+   "name": "Witzmann Mihály"
+  },
+  "z004": {
+   "sector": 1,
+   "row": 1,
+   "seat": 3,
+   "faction": "Fidesz",
+   "name": "Zsigó Róbert"
+  }
+ },
+ "coords": {
+  "a011": {
+   "x": -107.27,
+   "y": -86.82,
+   "sector": 2,
+   "row": 5,
+   "seat": 7
+  },
+  "a018": {
+   "x": -86.81,
+   "y": 5.71,
+   "sector": 1,
+   "row": 2,
+   "seat": 1
+  },
+  "0032": {
+   "x": 69.26,
+   "y": -10.17,
+   "sector": 6,
+   "row": 1,
+   "seat": 2
+  },
+  "002M": {
+   "x": -44.76,
+   "y": -74.6,
+   "sector": 3,
+   "row": 2,
+   "seat": 2
+  },
+  "002T": {
+   "x": -84.49,
+   "y": -109.11,
+   "sector": 3,
+   "row": 5,
+   "seat": 1
+  },
+  "003C": {
+   "x": -42.87,
+   "y": -131.17,
+   "sector": 3,
+   "row": 5,
+   "seat": 7
+  },
+  "b007": {
+   "x": -68.4,
+   "y": -14.9,
+   "sector": 1,
+   "row": 1,
+   "seat": 5
+  },
+  "b008": {
+   "x": -86.9,
+   "y": -4.23,
+   "sector": 1,
+   "row": 2,
+   "seat": 3
+  },
+  "001P": {
+   "x": 102.13,
+   "y": -64.89,
+   "sector": 5,
+   "row": 4,
+   "seat": 4
+  },
+  "003Y": {
+   "x": 84.49,
+   "y": -109.11,
+   "sector": 4,
+   "row": 5,
+   "seat": 11
+  },
+  "002J": {
+   "x": 69.87,
+   "y": 4.19,
+   "sector": 6,
+   "row": 1,
+   "seat": 5
+  },
+  "b034": {
+   "x": -102.62,
+   "y": -16.88,
+   "sector": 1,
+   "row": 3,
+   "seat": 5
+  },
+  "0046": {
+   "x": 128.86,
+   "y": -49.38,
+   "sector": 5,
+   "row": 5,
+   "seat": 4
+  },
+  "001R": {
+   "x": 92.62,
+   "y": -47.3,
+   "sector": 5,
+   "row": 3,
+   "seat": 5
+  },
+  "0031": {
+   "x": 69.79,
+   "y": -5.4,
+   "sector": 6,
+   "row": 1,
+   "seat": 3
+  },
+  "0043": {
+   "x": 85.67,
+   "y": -58.96,
+   "sector": 5,
+   "row": 3,
+   "seat": 3
+  },
+  "002Z": {
+   "x": -12.01,
+   "y": -103.3,
+   "sector": 3,
+   "row": 3,
+   "seat": 8
+  },
+  "001Z": {
+   "x": -32.43,
+   "y": -62.04,
+   "sector": 3,
+   "row": 1,
+   "seat": 2
+  },
+  "000W": {
+   "x": 27.36,
+   "y": -64.43,
+   "sector": 4,
+   "row": 1,
+   "seat": 3
+  },
+  "0026": {
+   "x": -29.38,
+   "y": -81.89,
+   "sector": 3,
+   "row": 2,
+   "seat": 4
+  },
+  "0028": {
+   "x": 87.0,
+   "y": 0.74,
+   "sector": 6,
+   "row": 2,
+   "seat": 5
+  },
+  "b130": {
+   "x": -65.51,
+   "y": -24.67,
+   "sector": 2,
+   "row": 1,
+   "seat": 1
+  },
+  "0037": {
+   "x": 90.59,
+   "y": -104.11,
+   "sector": 4,
+   "row": 5,
+   "seat": 12
+  },
+  "002O": {
+   "x": 64.63,
+   "y": -121.93,
+   "sector": 4,
+   "row": 5,
+   "seat": 8
+  },
+  "001C": {
+   "x": -26.37,
+   "y": -118.09,
+   "sector": 3,
+   "row": 4,
+   "seat": 8
+  },
+  "002F": {
+   "x": 56.61,
+   "y": -41.18,
+   "sector": 5,
+   "row": 1,
+   "seat": 2
+  },
+  "0039": {
+   "x": 42.87,
+   "y": -131.17,
+   "sector": 4,
+   "row": 5,
+   "seat": 5
+  },
+  "000T": {
+   "x": 43.8,
+   "y": -54.6,
+   "sector": 4,
+   "row": 1,
+   "seat": 5
+  },
+  "003H": {
+   "x": -11.47,
+   "y": -120.45,
+   "sector": 3,
+   "row": 4,
+   "seat": 10
+  },
+  "0049": {
+   "x": -54.71,
+   "y": -107.92,
+   "sector": 3,
+   "row": 4,
+   "seat": 4
+  },
+  "004U": {
+   "x": -127.4,
+   "y": -53.04,
+   "sector": 2,
+   "row": 5,
+   "seat": 2
+  },
+  "003W": {
+   "x": -18.96,
+   "y": -119.51,
+   "sector": 3,
+   "row": 4,
+   "seat": 9
+  },
+  "001Q": {
+   "x": 26.01,
+   "y": -83.02,
+   "sector": 4,
+   "row": 2,
+   "seat": 3
+  },
+  "002L": {
+   "x": -42.47,
+   "y": -94.93,
+   "sector": 3,
+   "row": 3,
+   "seat": 4
+  },
+  "0045": {
+   "x": -57.55,
+   "y": -125.43,
+   "sector": 3,
+   "row": 5,
+   "seat": 5
+  },
+  "000U": {
+   "x": 41.68,
+   "y": -76.37,
+   "sector": 4,
+   "row": 2,
+   "seat": 5
+  },
+  "0005": {
+   "x": -119.4,
+   "y": -19.64,
+   "sector": 1,
+   "row": 4,
+   "seat": 5
+  },
+  "003R": {
+   "x": 60.79,
+   "y": -104.62,
+   "sector": 4,
+   "row": 4,
+   "seat": 8
+  },
+  "0034": {
+   "x": 52.61,
+   "y": -46.18,
+   "sector": 5,
+   "row": 1,
+   "seat": 1
+  },
+  "002P": {
+   "x": -12.87,
+   "y": -86.04,
+   "sector": 3,
+   "row": 2,
+   "seat": 6
+  },
+  "000E": {
+   "x": -116.48,
+   "y": -74.01,
+   "sector": 2,
+   "row": 5,
+   "seat": 5
+  },
+  "003G": {
+   "x": -33.68,
+   "y": -116.22,
+   "sector": 3,
+   "row": 4,
+   "seat": 7
+  },
+  "0027": {
+   "x": 17.76,
+   "y": -85.17,
+   "sector": 4,
+   "row": 2,
+   "seat": 2
+  },
+  "d040": {
+   "x": -104.0,
+   "y": 0.88,
+   "sector": 1,
+   "row": 3,
+   "seat": 2
+  },
+  "d028": {
+   "x": -69.87,
+   "y": 4.19,
+   "sector": 1,
+   "row": 1,
+   "seat": 1
+  },
+  "003V": {
+   "x": -4.14,
+   "y": -137.94,
+   "sector": 3,
+   "row": 5,
+   "seat": 12
+  },
+  "003Z": {
+   "x": -27.62,
+   "y": -135.21,
+   "sector": 3,
+   "row": 5,
+   "seat": 9
+  },
+  "k151": {
+   "x": -91.64,
+   "y": -49.18,
+   "sector": 2,
+   "row": 3,
+   "seat": 3
+  },
+  "000P": {
+   "x": 68.4,
+   "y": -14.9,
+   "sector": 6,
+   "row": 1,
+   "seat": 1
+  },
+  "004G": {
+   "x": 81.64,
+   "y": -64.43,
+   "sector": 5,
+   "row": 3,
+   "seat": 2
+  },
+  "000O": {
+   "x": -23.87,
+   "y": -39.56,
+   "sector": 0,
+   "row": 0,
+   "seat": 5,
+   "front_bench": true
+  },
+  "0041": {
+   "x": 104.75,
+   "y": -89.85,
+   "sector": 5,
+   "row": 5,
+   "seat": 1
+  },
+  "003E": {
+   "x": -61.33,
+   "y": -104.3,
+   "sector": 3,
+   "row": 4,
+   "seat": 3
+  },
+  "000Z": {
+   "x": -56.4,
+   "y": -87.38,
+   "sector": 3,
+   "row": 3,
+   "seat": 2
+  },
+  "g053": {
+   "x": -114.04,
+   "y": -40.46,
+   "sector": 2,
+   "row": 4,
+   "seat": 1
+  },
+  "002H": {
+   "x": 108.86,
+   "y": -52.82,
+   "sector": 5,
+   "row": 4,
+   "seat": 6
+  },
+  "g048": {
+   "x": -120.32,
+   "y": -12.78,
+   "sector": 1,
+   "row": 4,
+   "seat": 4
+  },
+  "003O": {
+   "x": -50.29,
+   "y": -128.51,
+   "sector": 3,
+   "row": 5,
+   "seat": 6
+  },
+  "001N": {
+   "x": 18.34,
+   "y": -119.6,
+   "sector": 4,
+   "row": 4,
+   "seat": 2
+  },
+  "001F": {
+   "x": 111.7,
+   "y": -46.51,
+   "sector": 5,
+   "row": 4,
+   "seat": 7
+  },
+  "001K": {
+   "x": -23.64,
+   "y": -65.89,
+   "sector": 3,
+   "row": 1,
+   "seat": 3
+  },
+  "0042": {
+   "x": 76.38,
+   "y": -41.66,
+   "sector": 5,
+   "row": 2,
+   "seat": 4
+  },
+  "002E": {
+   "x": -49.58,
+   "y": -91.42,
+   "sector": 3,
+   "row": 3,
+   "seat": 3
+  },
+  "h092": {
+   "x": -86.51,
+   "y": -9.19,
+   "sector": 1,
+   "row": 2,
+   "seat": 4
+  },
+  "001M": {
+   "x": 48.95,
+   "y": -71.92,
+   "sector": 4,
+   "row": 2,
+   "seat": 6
+  },
+  "h006": {
+   "x": -96.67,
+   "y": -98.49,
+   "sector": 2,
+   "row": 5,
+   "seat": 9
+  },
+  "0047": {
+   "x": -40.86,
+   "y": -113.89,
+   "sector": 3,
+   "row": 4,
+   "seat": 6
+  },
+  "003P": {
+   "x": 78.12,
+   "y": -113.76,
+   "sector": 4,
+   "row": 5,
+   "seat": 10
+  },
+  "0002": {
+   "x": -62.63,
+   "y": -31.27,
+   "sector": 2,
+   "row": 1,
+   "seat": 2
+  },
+  "000V": {
+   "x": -4.17,
+   "y": -46.01,
+   "sector": 0,
+   "row": 0,
+   "seat": 10,
+   "front_bench": true
+  },
+  "h083": {
+   "x": -136.17,
+   "y": -22.4,
+   "sector": 1,
+   "row": 5,
+   "seat": 5
+  },
+  "002S": {
+   "x": 114.18,
+   "y": -40.05,
+   "sector": 5,
+   "row": 4,
+   "seat": 8
+  },
+  "h074": {
+   "x": -78.81,
+   "y": -36.85,
+   "sector": 2,
+   "row": 2,
+   "seat": 2
+  },
+  "006E": {
+   "x": -112.06,
+   "y": -80.54,
+   "sector": 2,
+   "row": 5,
+   "seat": 6
+  },
+  "h366": {
+   "x": -134.67,
+   "y": -30.14,
+   "sector": 1,
+   "row": 5,
+   "seat": 6
+  },
+  "003K": {
+   "x": 105.67,
+   "y": -58.95,
+   "sector": 5,
+   "row": 4,
+   "seat": 5
+  },
+  "0011": {
+   "x": 33.25,
+   "y": -98.54,
+   "sector": 4,
+   "row": 3,
+   "seat": 4
+  },
+  "003D": {
+   "x": 54.72,
+   "y": -88.44,
+   "sector": 4,
+   "row": 3,
+   "seat": 7
+  },
+  "002C": {
+   "x": 40.65,
+   "y": -95.72,
+   "sector": 4,
+   "row": 3,
+   "seat": 5
+  },
+  "0018": {
+   "x": 89.55,
+   "y": -81.37,
+   "sector": 5,
+   "row": 4,
+   "seat": 1
+  },
+  "004C": {
+   "x": 12.01,
+   "y": -137.48,
+   "sector": 4,
+   "row": 5,
+   "seat": 1
+  },
+  "003M": {
+   "x": -64.63,
+   "y": -121.93,
+   "sector": 3,
+   "row": 5,
+   "seat": 4
+  },
+  "k155": {
+   "x": -61.82,
+   "y": -61.21,
+   "sector": 2,
+   "row": 2,
+   "seat": 6
+  },
+  "004A": {
+   "x": 50.29,
+   "y": -128.51,
+   "sector": 4,
+   "row": 5,
+   "seat": 6
+  },
+  "001E": {
+   "x": 84.9,
+   "y": -19.0,
+   "sector": 6,
+   "row": 2,
+   "seat": 1
+  },
+  "000Q": {
+   "x": -20.19,
+   "y": -41.55,
+   "sector": 0,
+   "row": 0,
+   "seat": 6,
+   "front_bench": true
+  },
+  "001X": {
+   "x": -27.56,
+   "y": -100.28,
+   "sector": 3,
+   "row": 3,
+   "seat": 6
+  },
+  "003L": {
+   "x": 64.94,
+   "y": -57.89,
+   "sector": 5,
+   "row": 2,
+   "seat": 1
+  },
+  "k122": {
+   "x": -12.39,
+   "y": -44.51,
+   "sector": 0,
+   "row": 0,
+   "seat": 8,
+   "front_bench": true
+  },
+  "004B": {
+   "x": -67.71,
+   "y": -100.28,
+   "sector": 3,
+   "row": 4,
+   "seat": 2
+  },
+  "0019": {
+   "x": 36.33,
+   "y": -28.55,
+   "sector": 0,
+   "row": 0,
+   "seat": 21,
+   "front_bench": true
+  },
+  "001B": {
+   "x": 67.19,
+   "y": -100.63,
+   "sector": 4,
+   "row": 4,
+   "seat": 9
+  },
+  "003N": {
+   "x": -35.12,
+   "y": -97.89,
+   "sector": 3,
+   "row": 3,
+   "seat": 5
+  },
+  "001V": {
+   "x": 10.85,
+   "y": -120.51,
+   "sector": 4,
+   "row": 4,
+   "seat": 1
+  },
+  "k100": {
+   "x": -118.08,
+   "y": -26.43,
+   "sector": 1,
+   "row": 4,
+   "seat": 6
+  },
+  "0020": {
+   "x": 71.49,
+   "y": -118.04,
+   "sector": 4,
+   "row": 5,
+   "seat": 9
+  },
+  "k163": {
+   "x": -81.68,
+   "y": -29.97,
+   "sector": 2,
+   "row": 2,
+   "seat": 1
+  },
+  "003Q": {
+   "x": 54.15,
+   "y": -108.21,
+   "sector": 4,
+   "row": 4,
+   "seat": 7
+  },
+  "003J": {
+   "x": -35.3,
+   "y": -133.41,
+   "sector": 3,
+   "row": 5,
+   "seat": 8
+  },
+  "0038": {
+   "x": -4.9,
+   "y": -69.83,
+   "sector": 3,
+   "row": 1,
+   "seat": 5
+  },
+  "k765": {
+   "x": -95.4,
+   "y": -74.43,
+   "sector": 2,
+   "row": 4,
+   "seat": 6
+  },
+  "001U": {
+   "x": 79.33,
+   "y": -35.72,
+   "sector": 5,
+   "row": 2,
+   "seat": 5
+  },
+  "0016": {
+   "x": 60.13,
+   "y": -35.84,
+   "sector": 5,
+   "row": 1,
+   "seat": 3
+  },
+  "0021": {
+   "x": 35.3,
+   "y": -133.41,
+   "sector": 4,
+   "row": 5,
+   "seat": 4
+  },
+  "l049": {
+   "x": -73.45,
+   "y": -73.63,
+   "sector": 2,
+   "row": 3,
+   "seat": 7
+  },
+  "l016": {
+   "x": -130.22,
+   "y": -45.68,
+   "sector": 2,
+   "row": 5,
+   "seat": 1
+  },
+  "0044": {
+   "x": 122.39,
+   "y": -63.76,
+   "sector": 5,
+   "row": 5,
+   "seat": 3
+  },
+  "003A": {
+   "x": 40.27,
+   "y": -114.1,
+   "sector": 4,
+   "row": 4,
+   "seat": 5
+  },
+  "002I": {
+   "x": 27.34,
+   "y": -37.24,
+   "sector": 0,
+   "row": 0,
+   "seat": 18,
+   "front_bench": true
+  },
+  "001W": {
+   "x": -78.12,
+   "y": -113.76,
+   "sector": 3,
+   "row": 5,
+   "seat": 2
+  },
+  "m076": {
+   "x": 4.17,
+   "y": -46.01,
+   "sector": 0,
+   "row": 0,
+   "seat": 12,
+   "front_bench": true
+  },
+  "004Q": {
+   "x": -78.66,
+   "y": -68.03,
+   "sector": 2,
+   "row": 3,
+   "seat": 6
+  },
+  "0017": {
+   "x": 55.76,
+   "y": -66.79,
+   "sector": 4,
+   "row": 2,
+   "seat": 7
+  },
+  "002B": {
+   "x": 17.9,
+   "y": -102.45,
+   "sector": 4,
+   "row": 3,
+   "seat": 2
+  },
+  "004H": {
+   "x": -51.85,
+   "y": -69.86,
+   "sector": 3,
+   "row": 2,
+   "seat": 1
+  },
+  "004R": {
+   "x": -120.86,
+   "y": -5.89,
+   "sector": 1,
+   "row": 4,
+   "seat": 3
+  },
+  "001A": {
+   "x": 9.34,
+   "y": -86.5,
+   "sector": 4,
+   "row": 2,
+   "seat": 1
+  },
+  "002U": {
+   "x": 79.19,
+   "y": -91.49,
+   "sector": 4,
+   "row": 4,
+   "seat": 11
+  },
+  "0029": {
+   "x": -4.38,
+   "y": -86.89,
+   "sector": 3,
+   "row": 2,
+   "seat": 7
+  },
+  "n048": {
+   "x": -90.42,
+   "y": -80.41,
+   "sector": 2,
+   "row": 4,
+   "seat": 7
+  },
+  "n053": {
+   "x": -66.84,
+   "y": -55.69,
+   "sector": 2,
+   "row": 2,
+   "seat": 5
+  },
+  "0012": {
+   "x": 70.0,
+   "y": -0.61,
+   "sector": 6,
+   "row": 1,
+   "seat": 4
+  },
+  "0040": {
+   "x": 57.55,
+   "y": -125.43,
+   "sector": 4,
+   "row": 5,
+   "seat": 7
+  },
+  "003X": {
+   "x": 86.81,
+   "y": 5.71,
+   "sector": 6,
+   "row": 2,
+   "seat": 6
+  },
+  "004S": {
+   "x": -71.36,
+   "y": -49.76,
+   "sector": 2,
+   "row": 2,
+   "seat": 4
+  },
+  "003I": {
+   "x": 33.08,
+   "y": -116.39,
+   "sector": 4,
+   "row": 4,
+   "seat": 4
+  },
+  "n322": {
+   "x": -54.91,
+   "y": -43.41,
+   "sector": 2,
+   "row": 1,
+   "seat": 4
+  },
+  "n036": {
+   "x": -87.0,
+   "y": 0.74,
+   "sector": 1,
+   "row": 2,
+   "seat": 2
+  },
+  "000R": {
+   "x": 8.31,
+   "y": -45.45,
+   "sector": 0,
+   "row": 0,
+   "seat": 13,
+   "front_bench": true
+  },
+  "o015": {
+   "x": -99.99,
+   "y": -68.14,
+   "sector": 2,
+   "row": 4,
+   "seat": 5
+  },
+  "006F": {
+   "x": -111.2,
+   "y": -47.7,
+   "sector": 2,
+   "row": 4,
+   "seat": 2
+  },
+  "p067": {
+   "x": -84.9,
+   "y": -19.0,
+   "sector": 1,
+   "row": 2,
+   "seat": 6
+  },
+  "004W": {
+   "x": -95.0,
+   "y": -42.32,
+   "sector": 2,
+   "row": 3,
+   "seat": 2
+  },
+  "001L": {
+   "x": 10.04,
+   "y": -103.51,
+   "sector": 4,
+   "row": 3,
+   "seat": 1
+  },
+  "0022": {
+   "x": -21.22,
+   "y": -84.37,
+   "sector": 3,
+   "row": 2,
+   "seat": 5
+  },
+  "p041": {
+   "x": -97.85,
+   "y": -35.22,
+   "sector": 2,
+   "row": 3,
+   "seat": 1
+  },
+  "004D": {
+   "x": 47.3,
+   "y": -111.37,
+   "sector": 4,
+   "row": 4,
+   "seat": 6
+  },
+  "001Y": {
+   "x": -40.61,
+   "y": -57.02,
+   "sector": 3,
+   "row": 1,
+   "seat": 1
+  },
+  "0030": {
+   "x": -14.4,
+   "y": -68.5,
+   "sector": 3,
+   "row": 1,
+   "seat": 4
+  },
+  "000X": {
+   "x": 20.19,
+   "y": -41.55,
+   "sector": 0,
+   "row": 0,
+   "seat": 16,
+   "front_bench": true
+  },
+  "004X": {
+   "x": -103.88,
+   "y": -5.06,
+   "sector": 1,
+   "row": 3,
+   "seat": 3
+  },
+  "000S": {
+   "x": 8.88,
+   "y": -69.43,
+   "sector": 4,
+   "row": 1,
+   "seat": 1
+  },
+  "0036": {
+   "x": 61.3,
+   "y": -84.02,
+   "sector": 4,
+   "row": 3,
+   "seat": 8
+  },
+  "001J": {
+   "x": 81.82,
+   "y": -29.58,
+   "sector": 5,
+   "row": 2,
+   "seat": 6
+  },
+  "003T": {
+   "x": -71.49,
+   "y": -118.04,
+   "sector": 3,
+   "row": 5,
+   "seat": 3
+  },
+  "r023": {
+   "x": -50.16,
+   "y": -48.82,
+   "sector": 2,
+   "row": 1,
+   "seat": 5
+  },
+  "000N": {
+   "x": 18.29,
+   "y": -67.57,
+   "sector": 4,
+   "row": 1,
+   "seat": 2
+  },
+  "0048": {
+   "x": 98.0,
+   "y": -34.82,
+   "sector": 5,
+   "row": 3,
+   "seat": 7
+  },
+  "0010": {
+   "x": 23.87,
+   "y": -39.56,
+   "sector": 0,
+   "row": 0,
+   "seat": 17,
+   "front_bench": true
+  },
+  "0024": {
+   "x": 69.16,
+   "y": -52.78,
+   "sector": 5,
+   "row": 2,
+   "seat": 2
+  },
+  "002K": {
+   "x": 85.85,
+   "y": -14.12,
+   "sector": 6,
+   "row": 2,
+   "seat": 2
+  },
+  "001O": {
+   "x": 86.51,
+   "y": -9.19,
+   "sector": 6,
+   "row": 2,
+   "seat": 3
+  },
+  "001G": {
+   "x": 34.01,
+   "y": -80.08,
+   "sector": 4,
+   "row": 2,
+   "seat": 4
+  },
+  "s093": {
+   "x": -102.13,
+   "y": -92.8,
+   "sector": 2,
+   "row": 5,
+   "seat": 8
+  },
+  "s011": {
+   "x": -85.07,
+   "y": -86.05,
+   "sector": 2,
+   "row": 4,
+   "seat": 8
+  },
+  "001S": {
+   "x": 25.76,
+   "y": -118.23,
+   "sector": 4,
+   "row": 4,
+   "seat": 3
+  },
+  "0035": {
+   "x": 25.65,
+   "y": -100.79,
+   "sector": 4,
+   "row": 3,
+   "seat": 3
+  },
+  "0025": {
+   "x": 67.52,
+   "y": -79.1,
+   "sector": 4,
+   "row": 3,
+   "seat": 9
+  },
+  "001I": {
+   "x": 72.98,
+   "y": -47.36,
+   "sector": 5,
+   "row": 2,
+   "seat": 3
+  },
+  "002N": {
+   "x": 98.25,
+   "y": -70.62,
+   "sector": 5,
+   "row": 4,
+   "seat": 3
+  },
+  "004F": {
+   "x": -62.89,
+   "y": -82.83,
+   "sector": 3,
+   "row": 3,
+   "seat": 1
+  },
+  "s184": {
+   "x": -103.78,
+   "y": 6.82,
+   "sector": 1,
+   "row": 3,
+   "seat": 1
+  },
+  "002D": {
+   "x": 47.83,
+   "y": -92.35,
+   "sector": 4,
+   "row": 3,
+   "seat": 6
+  },
+  "002R": {
+   "x": 86.9,
+   "y": -4.23,
+   "sector": 6,
+   "row": 2,
+   "seat": 4
+  },
+  "001D": {
+   "x": -3.94,
+   "y": -120.94,
+   "sector": 3,
+   "row": 4,
+   "seat": 11
+  },
+  "003F": {
+   "x": 114.31,
+   "y": -77.31,
+   "sector": 5,
+   "row": 5,
+   "seat": 2
+  },
+  "004T": {
+   "x": -103.42,
+   "y": -10.99,
+   "sector": 1,
+   "row": 3,
+   "seat": 4
+  },
+  "004Y": {
+   "x": -69.26,
+   "y": -10.17,
+   "sector": 1,
+   "row": 1,
+   "seat": 4
+  },
+  "003S": {
+   "x": -73.83,
+   "y": -95.86,
+   "sector": 3,
+   "row": 4,
+   "seat": 1
+  },
+  "002Y": {
+   "x": 19.85,
+   "y": -136.56,
+   "sector": 4,
+   "row": 5,
+   "seat": 2
+  },
+  "0013": {
+   "x": -37.25,
+   "y": -78.62,
+   "sector": 3,
+   "row": 2,
+   "seat": 3
+  },
+  "004Z": {
+   "x": -85.85,
+   "y": -14.12,
+   "sector": 1,
+   "row": 2,
+   "seat": 5
+  },
+  "004V": {
+   "x": -124.16,
+   "y": -60.24,
+   "sector": 2,
+   "row": 5,
+   "seat": 3
+  },
+  "t062": {
+   "x": -75.36,
+   "y": -43.47,
+   "sector": 2,
+   "row": 2,
+   "seat": 3
+  },
+  "000Y": {
+   "x": 33.6,
+   "y": -31.71,
+   "sector": 0,
+   "row": 0,
+   "seat": 20,
+   "front_bench": true
+  },
+  "004E": {
+   "x": 65.65,
+   "y": -24.3,
+   "sector": 5,
+   "row": 1,
+   "seat": 5
+  },
+  "t067": {
+   "x": 30.6,
+   "y": -34.62,
+   "sector": 0,
+   "row": 0,
+   "seat": 19,
+   "front_bench": true
+  },
+  "t023": {
+   "x": -120.51,
+   "y": -67.23,
+   "sector": 2,
+   "row": 5,
+   "seat": 4
+  },
+  "002G": {
+   "x": 63.15,
+   "y": -30.19,
+   "sector": 5,
+   "row": 1,
+   "seat": 4
+  },
+  "t058": {
+   "x": -70.0,
+   "y": -0.61,
+   "sector": 1,
+   "row": 1,
+   "seat": 2
+  },
+  "0023": {
+   "x": 77.26,
+   "y": -69.62,
+   "sector": 5,
+   "row": 3,
+   "seat": 1
+  },
+  "003B": {
+   "x": 94.06,
+   "y": -76.12,
+   "sector": 5,
+   "row": 4,
+   "seat": 2
+  },
+  "001T": {
+   "x": 73.33,
+   "y": -96.25,
+   "sector": 4,
+   "row": 4,
+   "seat": 10
+  },
+  "002X": {
+   "x": -47.88,
+   "y": -111.12,
+   "sector": 3,
+   "row": 4,
+   "seat": 5
+  },
+  "002A": {
+   "x": -4.11,
+   "y": -103.92,
+   "sector": 3,
+   "row": 3,
+   "seat": 9
+  },
+  "t687": {
+   "x": -59.08,
+   "y": -37.54,
+   "sector": 2,
+   "row": 1,
+   "seat": 3
+  },
+  "003U": {
+   "x": 89.34,
+   "y": -53.24,
+   "sector": 5,
+   "row": 3,
+   "seat": 4
+  },
+  "0033": {
+   "x": 95.51,
+   "y": -41.15,
+   "sector": 5,
+   "row": 3,
+   "seat": 6
+  },
+  "v048": {
+   "x": -107.9,
+   "y": -54.75,
+   "sector": 2,
+   "row": 4,
+   "seat": 3
+  },
+  "001H": {
+   "x": -19.84,
+   "y": -102.09,
+   "sector": 3,
+   "row": 3,
+   "seat": 7
+  },
+  "0014": {
+   "x": 35.92,
+   "y": -60.08,
+   "sector": 4,
+   "row": 1,
+   "seat": 4
+  },
+  "002Q": {
+   "x": -19.85,
+   "y": -136.56,
+   "sector": 3,
+   "row": 5,
+   "seat": 10
+  },
+  "002W": {
+   "x": 27.62,
+   "y": -135.21,
+   "sector": 4,
+   "row": 5,
+   "seat": 3
+  },
+  "z014": {
+   "x": -101.49,
+   "y": -22.72,
+   "sector": 1,
+   "row": 3,
+   "seat": 6
+  },
+  "v008": {
+   "x": -87.78,
+   "y": -55.78,
+   "sector": 2,
+   "row": 3,
+   "seat": 4
+  },
+  "n004": {
+   "x": -83.45,
+   "y": -62.07,
+   "sector": 2,
+   "row": 3,
+   "seat": 5
+  },
+  "002V": {
+   "x": -12.01,
+   "y": -137.48,
+   "sector": 3,
+   "row": 5,
+   "seat": 11
+  },
+  "w704": {
+   "x": -104.16,
+   "y": -61.58,
+   "sector": 2,
+   "row": 4,
+   "seat": 4
+  },
+  "z004": {
+   "x": -69.79,
+   "y": -5.4,
+   "sector": 1,
+   "row": 1,
+   "seat": 3
+  }
+ }
+}

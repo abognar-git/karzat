@@ -117,6 +117,7 @@ def build() -> list[tuple[str, list]]:
     import json as _json
     vi = _json.loads((ROOT / "data" / "derived" / "votes_index.json").read_text(encoding="utf-8"))
     hero = _json.loads((ROOT / "data" / "derived" / "hero_vote.json").read_text(encoding="utf-8"))
+    seat_plan = _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -177,6 +178,14 @@ def build() -> list[tuple[str, list]]:
         ("All {:,.0f} cycle-43 vote details synced ({:,.0f} calls)", [vi["details_cached"], 254]),
         ("With all {:,.0f} roll\ncalls in hand", [vi["details_cached"]]),
         ("needed {:,.0f}, {:,.0f} igen, margin +{:,.0f}, and", [hero["majority"]["needed"], hero["igen"], hero["majority"]["margin"]]),
+        # the chamber — data/derived/seating.json
+        ("widest rows {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f}",
+         [seat_plan["analysis"]["sectors"][str(k)]["widest_row"] for k in (1, 2, 3, 4, 5, 6)]),
+        ("ministerial front bench ({:,.0f} TISZA MPs, seat numbers up to {:,.0f})",
+         [seat_plan["analysis"]["sectors"]["0"]["count"], seat_plan["analysis"]["sectors"]["0"]["widest_row"]]),
+        ("{:,.0f} of the hero vote's {:,.0f} placed, the {:,.0f} MPs whose mandates",
+         [sum(1 for pp in hero["positions"] if pp.get("mp_azon") in seat_plan["coords"]), len(hero["positions"]),
+          sum(1 for pp in hero["positions"] if pp.get("mp_azon") not in seat_plan["coords"])]),
     ]
 
 
