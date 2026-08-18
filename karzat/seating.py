@@ -25,6 +25,7 @@ algorithmic hemicycle stays available as the fallback for MPs without a seat.
 from __future__ import annotations
 
 import math
+import re
 from collections import Counter, defaultdict
 from typing import Any, Iterable
 
@@ -184,3 +185,129 @@ def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_or
                                          "the seat numbers a row skips are empty seats; rows nobody occupies are unknown and not drawn",
                                          "orientation: government to the Speaker's right (parlament.hu description)",
                                          "sector 0 / row 0 = the ministerial patkó: the horseshoe's inner circle, drawn as a semicircle round the platform"]}}
+
+# -- the real floor plan (parlament.hu's own seat outlines) ------------------------------------
+
+_NUM = re.compile(r"-?\d*\.?\d+(?:e-?\d+)?")
+
+
+def path_points(d: str, samples: int = 4) -> list[tuple[float, float]]:
+    """Absolute on-curve points of an SVG path using M/m L/l C/c Z/z (all the seat outlines use); cubic
+    curves are sampled at `samples` points so the outline keeps its shape when drawn as a polygon."""
+    pts: list[tuple[float, float]] = []
+    x = y = 0.0
+    start = (0.0, 0.0)
+    for cmd, args in re.findall(r"([MmLlCcZz])([^MmLlCcZz]*)", d):
+        nums = [float(v) for v in _NUM.findall(args)]
+        if cmd in "Zz":
+            x, y = start
+            continue
+        if cmd in "Mm":
+            for i in range(0, len(nums), 2):
+                nx, ny = nums[i], nums[i + 1]
+                if cmd == "m":
+                    nx, ny = x + nx, y + ny
+                x, y = nx, ny
+                if i == 0:
+                    start = (x, y)
+                pts.append((x, y))
+        elif cmd in "Ll":
+            for i in range(0, len(nums), 2):
+                nx, ny = nums[i], nums[i + 1]
+                if cmd == "l":
+                    nx, ny = x + nx, y + ny
+                x, y = nx, ny
+                pts.append((x, y))
+        elif cmd in "Cc":
+            for i in range(0, len(nums), 6):
+                c1x, c1y, c2x, c2y, ex, ey = nums[i:i + 6]
+                if cmd == "c":
+                    c1x, c1y, c2x, c2y, ex, ey = x + c1x, y + c1y, x + c2x, y + c2y, x + ex, y + ey
+                for k in range(1, samples + 1):
+                    t = k / samples
+                    mt = 1 - t
+                    px = mt ** 3 * x + 3 * mt * mt * t * c1x + 3 * mt * t * t * c2x + t ** 3 * ex
+                    py = mt ** 3 * y + 3 * mt * mt * t * c1y + 3 * mt * t * t * c2y + t ** 3 * ey
+                    pts.append((px, py))
+                x, y = ex, ey
+    return pts
+
+
+def _centroid(pts: list[tuple[float, float]]) -> tuple[float, float]:
+    """Area centroid of a closed polygon (falls back to the mean for degenerate shapes)."""
+    a = cx = cy = 0.0
+    n = len(pts)
+    for i in range(n):
+        x0, y0 = pts[i]
+        x1, y1 = pts[(i + 1) % n]
+        cross = x0 * y1 - x1 * y0
+        a += cross
+        cx += (x0 + x1) * cross
+        cy += (y0 + y1) * cross
+    if abs(a) < 1e-9:
+        return sum(p[0] for p in pts) / n, sum(p[1] for p in pts) / n
+    a *= 0.5
+    return cx / (6 * a), cy / (6 * a)
+
+
+def layout_from_plan(seats: dict[str, dict[str, Any]], plan_seats: list[dict[str, Any]], width: float = 260.0,
+                     front_bench: int | None = FRONT_BENCH) -> dict[str, Any]:
+    """Coordinates for every MP from parlament.hu's own floor plan (reference/parlament/patko_seats.json):
+    each seat's outline is parsed, its centroid taken, and the whole plan is moved so the Speaker's
+    platform (the mouth of the horseshoe, bottom centre of the source drawing) sits at the origin
+    with the seats above it (negative y), scaled to `width` units across. Nothing about the room's
+    geometry is estimated; only the scale is a drawing choice."""
+    shapes = {}
+    for ps in plan_seats:
+        pts = path_points(ps["svgpath"])
+        shapes[(ps["szektor"], ps["sor"], ps["szek"])] = {"pts": pts, "c": _centroid(pts), "type": ps.get("szektipus")}
+    xs = [p[0] for sh in shapes.values() for p in sh["pts"]]
+    ys = [p[1] for sh in shapes.values() for p in sh["pts"]]
+    x_mid = (min(xs) + max(xs)) / 2
+    y_pod = max(ys) + 40.0                     # the platform sits just below the arms' last seats
+    scale = width / (max(xs) - min(xs))
+
+    def tx(pt: tuple[float, float]) -> tuple[float, float]:
+        return round((pt[0] - x_mid) * scale, 2), round((pt[1] - y_pod) * scale, 2)
+
+    occupied = {(s_["sector"], s_["row"], s_["seat"]): azon for azon, s_ in seats.items()}
+    coords, unmatched, empty, outlines = {}, [], [], []
+    for key, sh in shapes.items():
+        cx, cy = tx(sh["c"])
+        poly = [tx(p) for p in sh["pts"]]
+        outlines.append({"sector": key[0], "row": key[1], "seat": key[2], "type": sh["type"], "x": cx, "y": cy,
+                         "points": " ".join(f"{px},{py}" for px, py in poly)})
+        azon = occupied.get(key)
+        if azon:
+            coords[azon] = {"x": cx, "y": cy, "sector": key[0], "row": key[1], "seat": key[2], **({"front_bench": True} if key[0] == front_bench else {})}
+        else:
+            empty.append({"x": cx, "y": cy, "sector": key[0], "row": key[1], "seat": key[2], "type": sh["type"], **({"front_bench": True} if key[0] == front_bench else {})})
+    for key, azon in occupied.items():
+        if key not in shapes:
+            unmatched.append(azon)
+    # the smallest distance between two seat centres sets the glyph size
+    cs = [sh["c"] for sh in shapes.values()]
+    dmin = min(math.hypot(a[0] - b[0], a[1] - b[1]) for i, a in enumerate(cs) for b in cs[i + 1:]) * scale
+    # label anchors: each sector's centre pushed outward from the platform; the patkó's label inside its U
+    anchors = {}
+    for sec in sorted({k[0] for k in shapes}):
+        pts = [tx(sh["c"]) for k, sh in shapes.items() if k[0] == sec]
+        mx, my = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
+        if sec == front_bench:
+            anchors[str(sec)] = (round(mx, 1), round(my + 0.25 * abs(my), 1))     # inside the horseshoe
+        else:
+            r = max(math.hypot(p[0], p[1]) for p in pts) + 12
+            ang = math.atan2(my, mx)                     # the sector's mean direction from the platform
+            anchors[str(sec)] = (round(r * math.cos(ang), 1), round(r * math.sin(ang), 1))
+    return {"coords": coords, "empty_seats": empty, "seat_outlines": outlines, "unmatched": unmatched,
+            "geometry": {"source": "parlament.hu patko-queries/kepviselo-helye-apatkoban", "scale": round(scale, 5),
+                         "seat_pitch": round(dmin, 3), "node_radius": round(0.42 * dmin, 2), "seats_in_plan": len(shapes),
+                         "x_min": round(min(p[0] for o in outlines for p in [tuple(map(float, q.split(","))) for q in o["points"].split()]), 1),
+                         "x_max": round(max(p[0] for o in outlines for p in [tuple(map(float, q.split(","))) for q in o["points"].split()]), 1),
+                         "y_min": round(min(p[1] for o in outlines for p in [tuple(map(float, q.split(","))) for q in o["points"].split()]), 1),
+                         "y_max": round(max(p[1] for o in outlines for p in [tuple(map(float, q.split(","))) for q in o["points"].split()]), 1),
+                         "sector_label_anchors": anchors, "front_bench_sector": front_bench,
+                         "assumptions": ["the floor plan is parlament.hu's own (reference/parlament/patko_seats.json): seat outlines, sectors, rows, seat numbers",
+                                         "orientation: as parlament.hu draws it — the platform at the bottom centre, sector 1 to the left; government to the Speaker's right (parlament.hu's description) matches",
+                                         "the only drawing choices: the scale, and the platform placed 40 source units below the last seats"]}}
+

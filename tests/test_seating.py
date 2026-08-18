@@ -5,7 +5,7 @@ import math
 import unittest
 from pathlib import Path
 
-from karzat.seating import analyse, infer_orientation, layout, seats_from_records
+from karzat.seating import analyse, infer_orientation, layout, layout_from_plan, path_points, seats_from_records
 
 ROOT = Path(__file__).resolve().parent.parent
 PLAN = ROOT / "data" / "derived" / "seating.json"
@@ -82,6 +82,40 @@ class RealPlan(unittest.TestCase):
         gov = p["government"]
         xs = [c["x"] for azon, c in p["coords"].items() if p["seats"][azon]["faction"] == gov]
         self.assertGreater(sum(xs) / len(xs), 0)
+
+
+class RealPlan(unittest.TestCase):
+    """parlament.hu's own floor plan (reference/parlament/patko_seats.json) lays every MP on a real seat."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.ref = json.loads((ROOT / "reference" / "parlament" / "patko_seats.json").read_text(encoding="utf-8"))
+        cls.plan = json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))
+
+    def test_path_parser_handles_the_plans_commands(self):
+        pts = path_points("M 0,0 10,0 10,5 0,5z")
+        self.assertEqual(pts, [(0.0, 0.0), (10.0, 0.0), (10.0, 5.0), (0.0, 5.0)])
+        curved = path_points("M0,0l10,0c0,5,10,5,10,10l-20,0z", samples=2)
+        self.assertEqual(curved[0], (0.0, 0.0)); self.assertEqual(curved[1], (10.0, 0.0))
+        self.assertEqual(curved[-1], (0.0, 10.0))                       # the last l lands back on the left edge
+        for seat in self.ref["seats"]:
+            self.assertGreaterEqual(len(path_points(seat["svgpath"])), 4, seat["id"])
+
+    def test_every_mp_sits_on_a_real_seat(self):
+        self.assertEqual(self.ref["count"], 274)
+        self.assertEqual(len(self.plan["seat_outlines"]), 274)
+        self.assertEqual(self.plan["unmatched"], [])
+        self.assertEqual(len(self.plan["coords"]) + len(self.plan["empty_seats"]), 274)
+        self.assertEqual(sum(1 for o in self.plan["seat_outlines"] if o["sector"] == 0), 22)      # the ministerial patkó
+        self.assertEqual(self.plan["geometry"]["source"], "parlament.hu patko-queries/kepviselo-helye-apatkoban")
+        L = layout_from_plan(self.plan["seats"], self.ref["seats"])
+        self.assertEqual(len(L["coords"]), len(self.plan["seats"]))
+        # a known seat: Ágh Péter 2/5/7 is on the Speaker's left, in the arc, above the platform
+        a = L["coords"]["a011"]
+        self.assertEqual((a["sector"], a["row"], a["seat"]), (2, 5, 7))
+        self.assertLess(a["x"], 0); self.assertLess(a["y"], 0)
+        # glyphs sized from the plan's own pitch never touch
+        self.assertGreater(L["geometry"]["seat_pitch"], 2 * L["geometry"]["node_radius"])
 
 
 if __name__ == "__main__":

@@ -267,6 +267,8 @@ def _annulus(ri: float, ro: float, a0: float, a1: float, cls: str) -> str:
 
 def room_floor(geo: dict) -> str:
     """The room under the seats: each sector's floor with its row guides, and the front-bench band."""
+    if "sector_wedges_rad" not in geo:
+        return ""
     gap, r0, r_out = geo["row_gap"], geo["r0"], geo["outer_radius"]
     out = []
     for sec, (a0, a1) in geo["sector_wedges_rad"].items():
@@ -324,18 +326,37 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
             parts.append(_seat_group(pos, m["faction"], azon, align.get(azon), title + html.escape(where), _node(xy["x"], xy["y"], pos, c, k), ring_r, k, hit_r))
         else:
             unplaced.append(m)
-    # the room's empty seats (numbers a row skips), faint — so a half-empty bench reads as one
-    empties = "".join(f'<circle cx="{e["x"]}" cy="{e["y"]}" r="{4.6*k:.2f}" class="seat-empty"><title>üres hely · '
-                      + ("miniszteri pad" if e.get("front_bench") else f'{e["sector"]}. szektor, {e["row"]}. sor') + f', {e["seat"]}. szék</title></circle>'
-                      for e in plan.get("empty_seats") or [])
-    R = geo["outer_radius"] + 12
-    W = R + 20                                                    # half-width of the drawing
-    labels = []
-    for sec, (a0, a1) in geo["sector_wedges_rad"].items():
-        mid = (a0 + a1) / 2
-        labels.append(f'<text x="{R*math.cos(mid):.1f}" y="{-R*math.sin(mid):.1f}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>')
-    floor = [room_floor(geo)]
-    arc = '<text x="0" y="-13" class="seclabel s" text-anchor="middle">miniszteri pad</text>'
+    outlines = plan.get("seat_outlines")
+    if outlines:
+        # parlament.hu's own floor plan: every seat's outline is the floor; empty seats stay outlines
+        occupied = {(c["sector"], c["row"], c["seat"]) for c in coords.values()}
+        empties = "".join(
+            f'<polygon points="{o["points"]}" class="seatshape{" occ" if (o["sector"], o["row"], o["seat"]) in occupied else ""}">'
+            + ("" if (o["sector"], o["row"], o["seat"]) in occupied else f'<title>üres hely · {"miniszteri pad" if o["sector"] == geo.get("front_bench_sector") else str(o["sector"]) + ". szektor, " + str(o["row"]) + ". sor"}, {o["seat"]}. szék</title>')
+            + '</polygon>' for o in outlines)
+        W = max(abs(geo["x_min"]), abs(geo["x_max"])) + 22
+        R = -geo["y_min"] + 10
+        labels = []
+        for sec, (ax, ay) in geo["sector_label_anchors"].items():
+            if int(sec) == geo.get("front_bench_sector"):
+                continue
+            labels.append(f'<text x="{ax}" y="{ay}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>')
+        floor = []
+        fx, fy = geo["sector_label_anchors"].get(str(geo.get("front_bench_sector")), (0, -40))
+        arc = f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>'
+    else:
+        # the estimated geometry: numbers a row skips are the empty seats, drawn faint
+        empties = "".join(f'<circle cx="{e["x"]}" cy="{e["y"]}" r="{4.6*k:.2f}" class="seat-empty"><title>üres hely · '
+                          + ("miniszteri pad" if e.get("front_bench") else f'{e["sector"]}. szektor, {e["row"]}. sor') + f', {e["seat"]}. szék</title></circle>'
+                          for e in plan.get("empty_seats") or [])
+        R = geo["outer_radius"] + 12
+        W = R + 20                                                    # half-width of the drawing
+        labels = []
+        for sec, (a0, a1) in geo["sector_wedges_rad"].items():
+            mid = (a0 + a1) / 2
+            labels.append(f'<text x="{R*math.cos(mid):.1f}" y="{-R*math.sin(mid):.1f}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>')
+        floor = [room_floor(geo)]
+        arc = '<text x="0" y="-13" class="seclabel s" text-anchor="middle">miniszteri pad</text>'
     # MPs the plan cannot place: a small labelled tray, bottom left, outside the room
     tray = ""
     if unplaced:
@@ -350,7 +371,8 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
     svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
            + "".join(floor) + arc + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
            + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
-    return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or [])}
+    return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or []),
+                 "seats_in_plan": len(outlines) if outlines else None}
 
 
 def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None) -> str:
@@ -479,6 +501,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .inspector .pin button:hover{color:var(--white);border-color:var(--border-hi)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
+.seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35}.seatshape.occ{fill:rgba(255,255,255,.06)}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
@@ -824,8 +847,11 @@ def chart_block(view: dict, inp: dict) -> str:
     if plan:
         svg, info = seat_svg_real(view, facs, plan, align_here)
         geo = plan["geometry"]
-        note = ('Valódi ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. '
-                f'Halvány karika: üres hely ({info.get("empty", 0)}).')
+        note = ((f'Az ülésterem a parlament.hu saját alaprajza szerint ({info["seats_in_plan"]} ülőhely), a képviselők a képviselői adatlapok ülőhelye szerint; '
+                 f'az emelvény felől nézve balra az ellenzék, jobbra a kormányoldal. Üres hely: {info.get("empty", 0)}.')
+                if info.get("seats_in_plan") else
+                ('Valódi ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. '
+                 f'Halvány karika: üres hely ({info.get("empty", 0)}).'))
     else:
         svg = seat_svg_fallback(view, facs, align_here)
         note = "Sorrend: frakció, azon belül szavazat — nem az ülésrend (az csak a jelenlegi ciklusra ismert)."
@@ -939,8 +965,10 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     idx, fl, plan = inp["idx"], inp["fl"], inp["plan"]
     roll_calls = sum(1 for rows in inp["store"]["positions"].values() if rows)      # secret ballots have no list
     derived_txt = datetime.fromisoformat(idx["derived_at"]).astimezone(BUDAPEST).strftime("%Y-%m-%d %H:%M")
-    seating_txt = (f"ülésrend: {len(plan['geometry']['sector_order_left_to_right'])} szektor + miniszteri pad" if plan
-                   else "ülésrend: becsült elrendezés")
+    n_sec = len({o["sector"] for o in plan["seat_outlines"] if o["sector"] != plan["geometry"].get("front_bench_sector")}) if plan and plan.get("seat_outlines") else (
+        len(plan["geometry"]["sector_order_left_to_right"]) if plan else 0)
+    seating_txt = ((f"ülésrend: parlament.hu alaprajz, {len(plan['seat_outlines'])} ülőhely, {n_sec} szektor + miniszteri pad" if plan.get("seat_outlines")
+                    else f"ülésrend: {n_sec} szektor + miniszteri pad") if plan else "ülésrend: becsült elrendezés")
     default_lines = [
         f"parlament.hu/cgi-bin/web-api-pub — személyes hozzáférési kód, minden lekérés naplózva",
         (f"kepviselok.cgi → {fl['mps']['total']} képviselő · " + " · ".join(f"{k} {v}" for k, v in fl["mps"]["by_faction"].items())) if not inp["closed"]
@@ -1132,19 +1160,24 @@ def chamber_mini_svg(inp: dict, azon: str) -> str:
         return ""
     colour = {f["id"]: f["colour"] for f in inp["facs"]}
     geo = plan["geometry"]
-    R = geo["outer_radius"] + 14
+    R = (geo["outer_radius"] + 14) if "outer_radius" in geo else (-geo["y_min"] + 10)
     parts = []
     k = geo.get("node_radius", 5.2) / 5.2
     for a, xy in plan["coords"].items():
         if a == azon:
             continue
         parts.append(f'<circle cx="{xy["x"]}" cy="{xy["y"]}" r="{3.6*k:.2f}" fill="#a1a1aa" fill-opacity=".16"/>')
-    for e in plan.get("empty_seats") or []:
-        parts.append(f'<circle cx="{e["x"]}" cy="{e["y"]}" r="{3.6*k:.2f}" class="seat-empty"/>')
+    outlines = plan.get("seat_outlines")
+    if outlines:
+        parts = [f'<polygon points="{o["points"]}" class="seatshape"/>' for o in outlines] + parts
+        R = -geo["y_min"] + 10
+    else:
+        for e in plan.get("empty_seats") or []:
+            parts.append(f'<circle cx="{e["x"]}" cy="{e["y"]}" r="{3.6*k:.2f}" class="seat-empty"/>')
     me = plan["coords"][azon]
     c = colour.get(inp["mps"].get(azon, {}).get("faction") or "", "#8a8a8a")
     parts.append(f'<circle cx="{me["x"]}" cy="{me["y"]}" r="{9*k:.2f}" fill="{c}" fill-opacity=".25"/><circle cx="{me["x"]}" cy="{me["y"]}" r="{5*k:.2f}" fill="{c}"/>')
-    W = R + 20
+    W = (max(abs(geo["x_min"]), abs(geo["x_max"])) + 22) if outlines else R + 20
     return (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+24:.0f}" role="img" aria-label="Ülőhely az ülésteremben">'
             + room_floor(geo) + PODIUM + "".join(parts) + '</svg>')
 

@@ -199,8 +199,11 @@ def build() -> list[tuple[str, list]]:
         ("{:,.0f} submissions across the current cycle's {:,.0f}\nirományok, and for every one of the {:,.0f} people the list count equals",
          [sum(len(m["motions"]) for m in m43["mps"].values()), dbs["bills"], m43["count"]]),
         # the chamber geometry — data/derived/seating.json
-        ("row sits at one common pitch ({:.1f} units here); the seat numbers a row skips are the room's\nempty seats and are drawn faint ({:,.0f} of them:",
-         [seat_plan["geometry"]["seat_pitch"], len(seat_plan["empty_seats"])]),
+        ("returns all {:,.0f} seats of the\nképviselőházi ülésterem with their outlines: the ministerial *patkó* as sector 0 ({:,.0f} seats",
+         [len(seat_plan["seat_outlines"]), sum(1 for o in seat_plan["seat_outlines"] if o["sector"] == 0)]),
+        ("lays every MP on their real seat: {:,.0f} of {:,.0f} match, {:,.0f} seats stay\nempty",
+         [len(seat_plan["coords"]), seat_plan["seated"], len(seat_plan["empty_seats"])]),
+        ("What `szektipus` `p` ({:,.0f} seats at the outer ends", [sum(1 for o in seat_plan["seat_outlines"] if o["type"] == "p")]),
         # cycle 42 pages — data/derived/first_light_ckl42.json + mps_ckl42.json + hero_vote_ckl42.json
         ("its own index, {:,.0f} vote pages and {:,.0f} MP pages, a cycle switch", [f42["votes"], m42["count"]]),
         ("all\n{:,.0f} votes in the directory, the 15th Alaptörvény amendment's final vote — {:,.0f}–{:,.0f}–{:,.0f},\nneeded {:,.0f} — as the hero), {:,.0f} vote pages and {:,.0f} MP pages",
@@ -222,10 +225,6 @@ def build() -> list[tuple[str, list]]:
           round(100 * fl["qualified_majority_votes"] / fl["decisions"]), fl["kiveteles_votes"], fl["surgos_votes"]]),
         ("**Cycle 42 backfilled** (2022-05-02 → 2026-05-08): {:,.0f} votes over {:,.0f} sitting days", [f42["votes"], f42["sitting_days"]["count"]]),
         # the chamber — data/derived/seating.json
-        ("widest rows {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f}",
-         [seat_plan["analysis"]["sectors"][str(k)]["widest_row"] for k in (1, 2, 3, 4, 5, 6)]),
-        ("ministerial front bench ({:,.0f} TISZA MPs, seat numbers up to {:,.0f})",
-         [seat_plan["analysis"]["sectors"]["0"]["count"], seat_plan["analysis"]["sectors"]["0"]["widest_row"]]),
         ("{:,.0f} of the hero vote's {:,.0f} placed, the {:,.0f} MPs whose mandates",
          [sum(1 for pp in hero["positions"] if pp.get("mp_azon") in seat_plan["coords"]), len(hero["positions"]),
           sum(1 for pp in hero["positions"] if pp.get("mp_azon") not in seat_plan["coords"])]),

@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from karzat.normalise import parse_kepviselo, parse_kepviselok  # noqa: E402
-from karzat.seating import analyse, infer_orientation, layout, seats_from_records  # noqa: E402
+from karzat.seating import analyse, infer_orientation, layout, layout_from_plan, seats_from_records  # noqa: E402
 from karzat.xmlutil import parse_xml, to_dict  # noqa: E402
 
 RAW = ROOT / "data" / "raw"
@@ -55,7 +55,12 @@ def main(argv: list[str] | None = None) -> int:
     else:
         gov = max({m["faction"] for m in listed}, key=lambda f: sum(1 for m in listed if m["faction"] == f))
     orient = infer_orientation(analysis, gov)
-    L = layout(seats, analysis, orient["sector_order"])
+    plan_file = ROOT / "reference" / "parlament" / "patko_seats.json"
+    if plan_file.exists():
+        L = layout_from_plan(seats, json.loads(plan_file.read_text(encoding="utf-8"))["seats"])
+        L["geometry"]["orientation_check"] = orient["note"]
+    else:
+        L = layout(seats, analysis, orient["sector_order"])
     out = {
         "derived_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "government": gov, "government_note": "largest faction unless --government given",
@@ -66,6 +71,8 @@ def main(argv: list[str] | None = None) -> int:
         "seats": {a: {**s} for a, s in seats.items()},
         "coords": L["coords"],
         "empty_seats": L["empty_seats"],
+        "seat_outlines": L.get("seat_outlines"),
+        "unmatched": L.get("unmatched", []),
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

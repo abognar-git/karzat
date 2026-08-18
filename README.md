@@ -53,25 +53,22 @@ majority rule is the story: simple, absolute, two-thirds of those present
 every vote against a simple-majority marker; that is the single defect this project
 was built not to inherit.
 
-**The seat chart is real.** The MP record carries `<ulohely szektor sor szek>` — sector,
-row and seat — and with all 199 records in hand the chamber's structure reads straight
-off the data: sectors 1–6 of five rows (widest rows 6 · 9 · 12 · 12 · 8 · 6), the
-opposition in sectors 1–2 to the Speaker's left, TISZA in 3–6 to the right, and a sector 0
-/ row 0 that is the ministerial front bench (12 TISZA MPs, seat numbers up to 21).
-`karzat/seating.py` turns that into coordinates and states its assumptions: seats are the
-same width everywhere, so a sector's wedge is as wide as its tightest row needs and every
-row sits at one common pitch (5.0 units here); the seat numbers a row skips are the room's
-empty seats and are drawn faint (15 of them: nine on the front bench, six in sector 1's
-outer rows), while rows nobody occupies are unknown and not drawn; seat numbers run
-left→right; orientation per parlament.hu's own description; the ministerial front bench is
-the horseshoe's inner circle — parlament.hu says the ministers sit "a kormányzati patkó
-bársonyszékein", the Katolikus Lexikon that the chamber is "patkó alakú… a belső körben a
-mindenkori kormány miniszterei ülnek, középső részén az elnöki emelvény és a gyorsírók
-asztala" — so it is drawn as a semicircle round the platform, its 21 armchairs at a wider
-pitch than an MP's seat. My first cut had sector wedges
-∝ their widest row and a fixed glyph size — sectors 1 and 6 came out cramped and the dots
-overlapped into ropes; the glyphs are now sized from the pitch, so no two seats can touch.
-Konzol's algorithm stays as the fallback. The chart is a console, not an
+**The seat chart is the chamber.** The MP record carries `<ulohely szektor sor szek>` —
+sector, row and seat — and parlament.hu draws a seat map on every MP page from a query
+of its own (`patko-queries/kepviselo-helye-apatkoban`) that returns all 274 seats of the
+képviselőházi ülésterem with their outlines: the ministerial *patkó* as sector 0 (22 seats —
+two straight arms of eight along the centre aisle, joined by an arc of six), sectors 1 and 6
+as straight blocks whose "rows" are columns nearest the aisle first, sectors 2–5 as
+concentric arcs, six rows everywhere, the Speaker's platform in the mouth of the horseshoe.
+That table is in `reference/parlament/patko_seats.json` with its provenance, and
+`karzat/seating.py` lays every MP on their real seat: 199 of 199 match, 75 seats stay
+empty and are drawn as outlines, the glyphs are sized from the plan's own pitch. Nothing
+about the room is estimated any more — only the scale is a drawing choice, and the
+orientation parlament.hu describes (government to the Speaker's right) is what the plan
+shows. Before that table turned up I estimated the geometry twice — first with sector
+wedges proportional to their widest row (cramped, overlapping), then with a uniform seat
+pitch and a semicircular front bench (tidy, and still wrong in shape); both are kept in
+`layout()` as the fallback for a cycle without a plan, and the story is in the git log. Konzol's algorithm stays as the fallback. The chart is a console, not an
 illustration: hover, tap or tab to a seat and an inspector under the chart fills — name,
 faction, mandate, seat, this vote's position, the cycle record (cast, with / against own
 faction) and the last twenty roll calls up to that vote as a streak strip; click pins it, Esc
@@ -370,7 +367,7 @@ unavailable, say that currency cannot be told rather than imply it. `sync-votes`
 2. The citations in `karzat/majority.py` (Alaptörvény / HHSZ paragraphs) — the API's own rule labels make them unnecessary for classification, but they are still asserted in the docs.
 3. `bizottsagok.cgi` (the manual's link is broken; not called yet), and the earliest date `szavazasok.cgi` serves.
 4. Whether parlament.hu portraits (`…/kepviselo-kepek/{p_azon}`) may be republished.
-5. The exact geometry of the chamber: the sector structure, the orientation and the empty seats within occupied rows are now read from the data, but uniform seat width, row spacing, the left→right direction of seat numbers within a row and the capacity of rows nobody occupies are assumptions in `karzat/seating.py` — a photograph of the chamber would settle them.
+5. What `szektipus` `p` (21 seats at the outer ends of sectors 1–2 and 5–6, none occupied by an MP) and `s` (one seat) mean in parlament.hu's seat table — the source does not say; the sides of the horseshoe are described as the EP members' and permanent guests' places, which fits, but is not confirmed.
 
 ## First light — what the cached payloads say
 
