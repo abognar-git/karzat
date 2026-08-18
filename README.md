@@ -77,8 +77,9 @@ Konzol's algorithm stays as the fallback.
 - [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
 - [x] **The console look** — restyled in Konzol's visual language (dark ground, dot grid, corner-bracketed panels, mono labels, terminal footer, boot sequence); shared generated `site/assets/karzat.css` / `karzat.js`, checked like the index
+- [x] **Cycle 42 pages** — the same builder, one level down (`site/ckl42/`): its own index, 2,599 vote pages and 214 MP pages, a cycle switch in the top bar and cross-links between an MP's two pages; inputs `votes_index_ckl42.json.gz` + `votes_positions_ckl42.json.gz` (deterministic gzip, 424 KB together) + `mps_ckl42.json`; the missing `kepviselo.cgi` records fetched (171 of the 214 people are not in the cycle-43 roster); factions attributed by each person's last roll call (10 switchers)
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
-- [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v2 built from scratch from the cache in about twelve seconds for two cycles — 2,858 votes, 563,216 roll-call positions with 0 unresolved names, 395 faction-history rows, 389 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
+- [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v2 built from scratch from the cache in about twelve seconds for two cycles — 2,858 votes, 563,216 roll-call positions with 0 unresolved names, 1,015 faction-history rows, 980 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
 - [x] **Per-vote pages**: `site/szavazas/<slug>.html` for all 259 votes — the reconstructed chamber for that vote, the verdict card, faction bars, and a sortable, filterable roll call with every MP's seat; prev/next; the directory links to them. Generated from the committed `data/derived/votes_positions.json` (git-ignored output, 0.6 s for all 259)
 - [x] **MP pages**: `site/kepviselo/<p_azon>.html` for all 201 people in the roll calls plus an index — mandate, seat highlighted on the chamber, faction history and mandates back to 1990, motion counts, this cycle's participation and with/against-own-faction record with definitions on the page, the votes cast against the faction plurality, and every vote linked. Portraits linked, not embedded (licence unverified). Names on vote pages link here
 - [x] **Cycle 42 backfilled** (2022-05-02 → 2026-05-08): 2,599 votes over 192 sitting days listed and every roll call fetched (2,445 calls at the polite pace, about 26 a minute, in one afternoon); a second Wikidata snapshot for the names; the list-level summary in `data/derived/first_light_ckl42.json`, the comparison below; both cycles in the database. What the backfill taught the vocabulary: a **seventh** roll-call state, `Ig.távol` (excused absence — 1,223 entries in 288 of cycle 42's roll calls, none in cycle 43's first 259), and how the faction rows aggregate the seven into five columns (`igtav_db` = Ig.távol + Előre bejelentett hiányzó, `nemszav_db` = Nem szav. + Jelen, nem szav.) — schema v2, one real fixture, one test
@@ -86,7 +87,7 @@ Konzol's algorithm stays as the fallback.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 127 tests
+python3 -m unittest discover -s tests -t .      # offline; 137 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -217,20 +218,49 @@ regenerates the 259 vote pages from `data/derived/votes_positions.json` — a co
 of every roll call (p_azon, faction, position) that is committed so the pages never
 depend on the raw cache.
 
+**Cycle 42 has the same pages one level down**, under `site/ckl42/`: its own index (all
+2,599 votes in the directory, the 15th Alaptörvény amendment's final vote — 140–21–0,
+needed 133 — as the hero), 2,599 vote pages and 214 MP pages, built by the same functions
+with a `cycle` argument; the top bar switches cycles and an MP who sat in both has each
+page linking to the other. Two things a closed cycle cannot have, and the pages say so:
+the API publishes seats present-tense only (of 173 former MPs' records exactly one still
+carries a seat — a leftover, not history), so cycle-42 chamber views are the by-faction
+fallback layout, not an ülésrend, and there is no seat column; and instead of the freshness
+sentence the index says the cycle is closed (2022-05-02 – 2026-05-08) and prints the sync
+stamp. The roster is everyone in the cycle's roll calls — 214 people with the replacements,
+each under the faction printed at their last roll call, which is how the LMP group's
+dissolution and the Jobbik departures show up (10 people end the cycle in a different group
+than they began it). Inputs: `votes_index_ckl42.json.gz` and `votes_positions_ckl42.json.gz`
+(gzip with mtime zeroed, so a re-derive from the same cache is byte-identical; 424 KB
+together instead of 16 MB), `mps_ckl42.json` (171 of the 214 are not in the cycle-43 roster and needed their own
+`kepviselo.cgi` record — six had come in for the name resolver, the rest in one afternoon at
+the polite pace), and `factions_ckl42` in
+`config/factions.yml` with the eleven groups the roll calls print. The generated tree is
+big — about half a gigabyte of HTML, because every roll call is a page and every MP page
+lists every vote — and git-ignored like the cycle-43 pages.
+
 ## The database
 
 `schema.sql` is the contract and `karzat/load.py` the only writer. `python3 -m karzat load
 --since 2022-05-01` rebuilds `data/karzat.sqlite` from the raw cache — both cycles, about
 twelve seconds — atomically, and runs a foreign-key check at the end; nothing is ever
-edited in place. Loaded today: 371 MPs (199
-seated, 205 with a Wikidata QID, plus 172 stub rows for former MPs the roll calls name), 395
-faction-history rows and 389 mandates back to 1990, 215 sitting days, 2,858 votes of which
-2,835 carry a roll call — 563,216 positions, 0 unresolved names — 2,746 motions, 507 bills, and
-27,343 rows of `vote_faction_majority` (each faction's plurality position per vote). The
-zero is earned, not assumed: six former MPs resolved to nobody until their own
-`kepviselo.cgi` records were fetched, because the roll call prints the API's spelling
-("Z. Kárpát Dániel", "Czunyiné Dr. Bertalan Judit", "Szabó Timea") where Wikidata's label
-differs — so every cached record now feeds the resolver, and the API's spelling wins. Two
+edited in place. Loaded today: 372 MPs (200 with a seat in their record — the 199
+sitting, and one former MP whose record still carries a leftover seat — 370 with a Wikidata
+QID, plus 173 rows for former MPs the roll calls name, full records now that cycle 42
+needed them), 1,015 faction-history rows and 980 mandates back to 1990, 215 sitting days,
+2,858 votes of which 2,835 carry a roll call — 563,216 positions, 0 unresolved names — 2,746
+motions, 507 bills, and 27,343 rows of `vote_faction_majority` (each faction's plurality
+position per vote). The zero is earned, not assumed, twice over. First, six former MPs
+resolved to nobody until their own `kepviselo.cgi` records were fetched, because the roll
+call prints the API's spelling ("Z. Kárpát Dániel", "Czunyiné Dr. Bertalan Judit", "Szabó
+Timea") where Wikidata's label differs — so every cached record feeds the resolver, and the
+API's spelling wins. Second, and worse, a zero can hide a wrong person: cycle 42's "Dr. Kiss
+János (Fidesz)" resolved for a while to the 2026 TISZA MP Kiss János, because a bare-name
+fallback against today's list ran before anything else. The resolver now goes exact label →
+the API's own record spelling → bare name, and any candidate must not contradict the printed
+faction in the record's faction history for the vote's cycle; two candidates it cannot tell
+apart stay unresolved. A cross-check that every attribution agrees with the person's own
+record is now a test, for both cycles. Two
 views make the analytics the README promised into queries: `v_vote` (vote + motion + rule)
 and `v_mp_alignment` (per MP: cast, abstained, absent, with / against own faction). The
 consistency check that matters is in `stats`: 0 votes where the computed threshold and the
@@ -365,7 +395,7 @@ this section will say what the numbers cannot support.
 ```
 karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
 scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py, derive_mps.py — cache → data/derived · build_site.py — data/derived → site/
-site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · assets/karzat.css, karzat.js — the shared look and the boot sequence, generated and checked the same way · szavazas/ — one page per vote · kepviselo/ — one page per MP + index (both generated, git-ignored)
+site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · assets/karzat.css, karzat.js — the shared look and the boot sequence, generated and checked the same way · szavazas/ — one page per vote · kepviselo/ — one page per MP + index · ckl42/ — the same three for cycle 42 (all generated, git-ignored)
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v1 after the first real payloads — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels

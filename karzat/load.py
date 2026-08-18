@@ -28,7 +28,8 @@ from typing import Any, Iterable
 from .majority import RULES, Rule
 from .normalise import (
     NameResolver,
-    record_name_aliases,
+    cycle_of_date as _cycle_of_date,
+    record_histories,
     parse_iromany,
     parse_iromanyok,
     parse_kepviselo,
@@ -88,20 +89,7 @@ def cycle_number(label: str | None) -> int | None:
     return 34 + (y - 1990) // 4 if y >= 1990 else None
 
 
-def cycle_of_date(on_date: str | None) -> int | None:
-    """Cycle by date, using the constitutive sittings (approximate: election years every 4 years)."""
-    if not on_date:
-        return None
-    y = int(on_date[:4])
-    # cycles start in May of the election year (1990-05-02, 1994-06-28, 1998-06-18, 2002-05-15, 2006-05-16,
-    # 2010-05-14, 2014-05-06, 2018-05-08, 2022-05-02, 2026-05-09) — the month is a good-enough boundary
-    starts = {34: "1990-05-02", 35: "1994-06-28", 36: "1998-06-18", 37: "2002-05-15", 38: "2006-05-16",
-              39: "2010-05-14", 40: "2014-05-06", 41: "2018-05-08", 42: "2022-05-02", 43: "2026-05-09"}
-    ckl = None
-    for k, d in starts.items():
-        if on_date >= d:
-            ckl = k
-    return ckl
+cycle_of_date = _cycle_of_date        # shared with the normaliser (the resolver needs it too)
 
 
 def mandate_kind(constituency: str | None) -> str:
@@ -392,7 +380,7 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
                     qid_by_azon.setdefault(oid, m["qid"])
                 if m.get("name_hu") and m.get("ogy_ids"):
                     aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
-        aliases.update(record_name_aliases(cache))          # the API's own spelling wins over Wikidata's label
+        histories = record_histories(cache)                 # the API's own spelling + faction history per cycle
         mps = []
         kl = cache / "kepviselok" / "all.xml"
         if kl.exists():
@@ -408,7 +396,7 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
             if since and p.stem.split("__")[0] < since:
                 continue
             L.load_vote_list(_load_xml(p))
-        resolver = NameResolver(mps, aliases=aliases) if mps else None
+        resolver = NameResolver(mps, aliases=aliases, histories=histories) if mps else None
         for p in sorted((cache / "szavazas").glob("*.xml")):
             if since and p.stem[:10] < since:
                 continue

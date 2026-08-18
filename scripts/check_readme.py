@@ -120,6 +120,9 @@ def build() -> list[tuple[str, list]]:
     seat_plan = _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))
     dbs = _json.loads((ROOT / "data" / "derived" / "db_summary.json").read_text(encoding="utf-8"))
     f42 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl42.json").read_text(encoding="utf-8"))
+    m42 = _json.loads((ROOT / "data" / "derived" / "mps_ckl42.json").read_text(encoding="utf-8"))
+    m43 = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))
+    h42 = _json.loads((ROOT / "data" / "derived" / "hero_vote_ckl42.json").read_text(encoding="utf-8"))
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -183,12 +186,22 @@ def build() -> list[tuple[str, list]]:
         # the database — data/derived/db_summary.json (python3 -m karzat stats --json)
         ("{:,.0f} votes, {:,.0f} roll-call positions with {:,.0f} unresolved names, {:,.0f} faction-history rows, {:,.0f} mandates across cycles, {:,.0f} bills",
          [dbs["votes"], dbs["positions"], dbs["positions_unresolved"], dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["bills"]]),
-        ("Loaded today: {:,.0f} MPs ({:,.0f}\nseated, {:,.0f} with a Wikidata QID, plus {:,.0f} stub rows",
-         [dbs["mp"], dbs["mp_with_seat"], dbs["mp_with_qid"], dbs["mp"] - 199]),
+        ("Loaded today: {:,.0f} MPs ({:,.0f} with a seat in their record — the {:,.0f}\nsitting, and one former MP whose record still carries a leftover seat — {:,.0f} with a Wikidata\nQID, plus {:,.0f} rows for former MPs",
+         [dbs["mp"], dbs["mp_with_seat"], fl["mps"]["total"], dbs["mp_with_qid"], dbs["mp"] - fl["mps"]["total"]]),
+        ("(of {:,.0f} former MPs' records exactly one still\ncarries a seat", [m42["count"] - m42["current"]]),
         ("{:,.0f}\nfaction-history rows and {:,.0f} mandates back to 1990, {:,.0f} sitting days, {:,.0f} votes of which\n{:,.0f} carry a roll call — {:,.0f} positions, {:,.0f} unresolved names — {:,.0f} motions, {:,.0f} bills, and\n{:,.0f} rows of `vote_faction_majority`",
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
         ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across two cycles and {:,.0f} roll calls, not {:,.0f}", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"]]),
+        # cycle 42 pages — data/derived/first_light_ckl42.json + mps_ckl42.json + hero_vote_ckl42.json
+        ("its own index, {:,.0f} vote pages and {:,.0f} MP pages, a cycle switch", [f42["votes"], m42["count"]]),
+        ("all\n{:,.0f} votes in the directory, the 15th Alaptörvény amendment's final vote — {:,.0f}–{:,.0f}–{:,.0f},\nneeded {:,.0f} — as the hero), {:,.0f} vote pages and {:,.0f} MP pages",
+         [f42["votes"], h42["igen"], h42["nem"], h42["tartozkodott"], h42["majority"]["needed"], f42["votes"], m42["count"]]),
+        ("The roster is everyone in the cycle's roll calls — {:,.0f} people with the replacements", [m42["count"]]),
+        ("({:,.0f} people end the cycle in a different group\nthan they began it)", [sum(1 for m in m42["mps"].values() if m.get("faction_first") and m["faction_first"] != m["faction"])]),
+        ("`mps_ckl42.json` ({:,.0f} of the {:,.0f} are not in the cycle-43 roster", [len(set(m42["mps"]) - set(m43["mps"])), m42["count"]]),
+        ("({:,.0f} of the {:,.0f} people are not in the cycle-43 roster); factions attributed by each person's last roll call ({:,.0f} switchers)",
+         [len(set(m42["mps"]) - set(m43["mps"])), m42["count"], sum(1 for m in m42["mps"].values() if m.get("faction_first") and m["faction_first"] != m["faction"])]),
         # cycle 42 vs 43 — data/derived/first_light_ckl42.json + first_light.json
         ("Cycle 42:\n{:,.0f} votes over {:,.0f} sitting days — {:.1f} per sitting day — of which {:,.0f} decisions and {:,.0f}\nquorum checks ({:,.0f} of them inquorate",
          [f42["votes"], f42["sitting_days"]["count"], f42["votes"] / f42["sitting_days"]["count"], f42["decisions"], f42["quorum_checks"],

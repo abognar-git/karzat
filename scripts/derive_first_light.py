@@ -28,7 +28,7 @@ sys.path.insert(0, str(ROOT))
 from karzat.majority import RULES, Rule, Tally, classify, evaluate  # noqa: E402
 from karzat.normalise import (  # noqa: E402
     NameResolver,
-    record_name_aliases,
+    record_histories,
     parse_kepviselok,
     parse_szavazas,
     parse_szavazasok,
@@ -62,6 +62,17 @@ def list_majority(v: dict) -> dict | None:
             "present_basis": "list: Összes szavazat"}
 
 
+def write_json(path: Path, obj, indent=1, sort_keys=False) -> None:
+    """Plain or gzip by extension; gzip with mtime=0 so a rebuild from the same inputs is byte-identical."""
+    text = json.dumps(obj, ensure_ascii=False, indent=indent, separators=None if indent else (",", ":"), sort_keys=sort_keys) + "\n"
+    if path.suffix == ".gz":
+        import gzip
+        with gzip.GzipFile(filename="", mode="wb", fileobj=path.open("wb"), mtime=0) as gz:
+            gz.write(text.encode("utf-8"))
+    else:
+        path.write_text(text, encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
     ap = argparse.ArgumentParser(description=__doc__)
@@ -70,10 +81,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--until", default=None, help="ignore listed votes after this ISO date")
     ap.add_argument("--suffix", default="", help="write first_light_<suffix>.json instead of first_light.json")
     ap.add_argument("--summary-only", action="store_true", help="only the first_light summary (no votes_index / positions / hero)")
+    ap.add_argument("--gzip", action="store_true", help="write votes_index / votes_positions as .json.gz (a whole cycle is ~16 MB raw); deterministic (mtime=0)")
     args = ap.parse_args(argv)
     global OUT
+    sfx = f"_{args.suffix}" if args.suffix else ""
     if args.suffix:
-        OUT = DERIVED / f"first_light_{args.suffix}.json"
+        OUT = DERIVED / f"first_light{sfx}.json"
+    ext = ".json.gz" if args.gzip else ".json"
+    p_index, p_positions, p_hero = DERIVED / f"votes_index{sfx}{ext}", DERIVED / f"votes_positions{sfx}{ext}", DERIVED / f"hero_vote{sfx}.json"
 
     votes = []
     for f in sorted((RAW / "szavazasok").glob("*.xml")):
@@ -133,8 +148,8 @@ def main(argv: list[str] | None = None) -> int:
         for m in json.loads(snap_path.read_text(encoding="utf-8"))["members"]:
             if m.get("name_hu") and m.get("ogy_ids"):
                 aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
-    aliases.update(record_name_aliases(RAW))               # the API's own spelling wins over Wikidata's label
-    resolver = NameResolver(mps, aliases=aliases) if mps else None
+    histories = record_histories(RAW)                      # the API's own spelling + faction history per cycle
+    resolver = NameResolver(mps, aliases=aliases, histories=histories) if mps else None
     if args.summary_only:
         return 0
     bill_links = {}
@@ -185,8 +200,8 @@ def main(argv: list[str] | None = None) -> int:
         "sitting_days": days,
         "disagreements": [r["ts"] for r in index_rows if r.get("majority") and r["majority"]["agrees_with_source"] is False],
     }
-    (DERIVED / "votes_index.json").write_text(json.dumps(idx, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(f"written {DERIVED / 'votes_index.json'}: {len(index_rows)} votes, {details_cached} with details, "
+    write_json(p_index, idx, indent=None if args.gzip else 1)
+    print(f"written {p_index}: {len(index_rows)} votes, {details_cached} with details, "
           f"{len(idx['disagreements'])} rule/source disagreements")
 
     # -- votes_positions.json: every roll call, compact -----------------------------------
@@ -210,10 +225,9 @@ def main(argv: list[str] | None = None) -> int:
                 members.setdefault(pnt["mp_azon"], {"name": pnt["name"], "faction": f})
             rows.append([key, factions_list.index(f), CODES.get(pnt["position"], "?")])
         positions[v["ts"]] = rows
-    (DERIVED / "votes_positions.json").write_text(json.dumps(
-        {"derived_at": out["derived_at"], "codes": {v: k for k, v in CODES.items()}, "factions": factions_list,
-         "members": members, "positions": positions}, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n", encoding="utf-8")
-    print(f"written {DERIVED / 'votes_positions.json'}: {len(positions)} roll calls, {len(members)} members")
+    write_json(p_positions, {"derived_at": out["derived_at"], "codes": {v: k for k, v in CODES.items()}, "factions": factions_list,
+                             "members": members, "positions": positions}, indent=None, sort_keys=True)
+    print(f"written {p_positions}: {len(positions)} roll calls, {len(members)} members")
 
     # -- hero_vote.json -----------------------------------------------------------------
     hero_path = RAW / "szavazas" / f"{ts_to_slug(args.hero)}.xml"
@@ -222,8 +236,8 @@ def main(argv: list[str] | None = None) -> int:
         hero["derived_at"] = out["derived_at"]
         for m in hero["motions"]:
             m["href"] = bill_links.get(m["iromany"] or "")
-        (DERIVED / "hero_vote.json").write_text(json.dumps(hero, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        print(f"written {DERIVED / 'hero_vote.json'}: {hero['ts']} {hero['motions'][0]['iromany'] if hero['motions'] else ''} "
+        p_hero.write_text(json.dumps(hero, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"written {p_hero}: {hero['ts']} {hero['motions'][0]['iromany'] if hero['motions'] else ''} "
               f"{hero['igen']}-{hero['nem']}-{hero['tartozkodott']} rule={hero['majority']['rule'] if hero['majority'] else None}")
     else:
         print(f"hero vote {args.hero} not in cache — run sync-votes first", file=sys.stderr)

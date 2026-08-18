@@ -25,6 +25,8 @@ venv/
 # generated run state (rebuilt by sync/freshness commands)
 data/*.json
 
-# generated per-vote pages (rebuilt by scripts/build_site.py from committed data/derived inputs)
+# generated per-vote / per-MP pages and every earlier cycle's tree (rebuilt by scripts/build_site.py from
+# committed data/derived inputs; the cycle-42 tree alone is ~500 MB of HTML — 2,599 roll calls, 214 records)
 site/szavazas/
 site/kepviselo/
+site/ckl*/

@@ -1,11 +1,12 @@
 (function(){
   var tbody = document.getElementById('rows'), n = document.getElementById('n'); if (!tbody) return;
   var rows = Array.prototype.slice.call(tbody.rows), rule = 'all', result = 'all', q = '';
+  var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   function render(){
     var k = 0;
-    rows.forEach(function(r){
-      var ok = (rule === 'all' || r.getAttribute('data-rule') === rule) && (result === 'all' || r.getAttribute('data-result') === result) && (!q || (r.getAttribute('data-hay') || '').indexOf(q) >= 0);
+    rows.forEach(function(r, i){
+      var ok = (rule === 'all' || r.getAttribute('data-rule') === rule) && (result === 'all' || r.getAttribute('data-result') === result) && (!q || hay[i].indexOf(q) >= 0);
       if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', '');
     });
     n.textContent = k + ' / ' + rows.length;
@@ -35,7 +36,8 @@
     function sort(){
       var d = dir[i] = -(dir[i] || -1);
       var key = th.getAttribute('data-key');
-      rows.sort(function(a, b){ var x = a.getAttribute('data-' + key) || '', y = b.getAttribute('data-' + key) || ''; var nx = parseFloat(x), ny = parseFloat(y); if (!isNaN(nx) && !isNaN(ny)) return (nx - ny) * d; return x.localeCompare(y, 'hu') * d; });
+      function val(r){ return key === 'text' ? (r.cells[0].textContent || '').trim() : (r.getAttribute('data-' + key) || ''); }
+      rows.sort(function(a, b){ var x = val(a), y = val(b); var nx = parseFloat(x), ny = parseFloat(y); if (!isNaN(nx) && !isNaN(ny)) return (nx - ny) * d; return x.localeCompare(y, 'hu') * d; });
       rows.forEach(function(r){ tbody.appendChild(r); });
       heads.forEach(function(h){ h.setAttribute('aria-sort', h === th ? (d > 0 ? 'ascending' : 'descending') : 'none'); });
     }

@@ -38,7 +38,7 @@ factions:
     wikidata_seats_2026_08_18: 8
   - id: "Mi Hazánk"
     name: Mi Hazánk Mozgalom
-    colour: "#3b5e2b"
+    colour: "#4f8a3a"
     sort_order: 80
     wikidata_group: Mi Hazánk Mozgalom
     wikidata_group_qid: Q55443054
@@ -48,6 +48,58 @@ factions:
     colour: "#8a8a8a"
     sort_order: 90
     wikidata_seats_2026_08_18: 0
+
+# Ciklus 42 (2022-05-02 → 2026-05-08) — the groups exactly as the roll calls print them
+# (data/derived/votes_positions_ckl42.json.gz `factions`, 2,599 roll calls). Colours are again
+# this project's own; sort_order is left→right for the by-faction FALLBACK layout only: the API
+# publishes seats present-tense, so cycle 42 has no reconstructed chamber and the diagram says so.
+# Opposition left, government (Fidesz–KDNP) right, mirroring the orientation the cycle-43
+# reconstruction found; where Mi Hazánk and the independents actually sat is not claimed.
+factions_ckl42:
+  - id: DK
+    name: Demokratikus Koalíció
+    colour: "#5b8def"
+    sort_order: 10
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 20
+  - id: Párbeszéd
+    name: Párbeszéd – A Zöldek Pártja
+    colour: "#45b39d"
+    sort_order: 25
+  - id: LMP
+    name: LMP – Magyarország Zöld Pártja
+    colour: "#a4c639"
+    sort_order: 30
+  - id: Momentum
+    name: Momentum Mozgalom
+    colour: "#9b6dff"
+    sort_order: 35
+  - id: Jobbik
+    name: Jobbik Magyarországért Mozgalom
+    colour: "#e0c341"
+    sort_order: 40
+  - id: "Mi Hazánk"
+    name: Mi Hazánk Mozgalom
+    colour: "#4f8a3a"
+    sort_order: 45
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 50
+  - id: "Nemzetiségi képviselő"
+    name: Nemzetiségi képviselő (német nemzetiségi lista)
+    colour: "#b3a58c"
+    sort_order: 55
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 60
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 70
 
 # Vote positions — the seven recorded states, exactly as the API's roll call prints them
 # (karzat/normalise.py POSITIONS). tartózkodott IS present and counts against a motion under

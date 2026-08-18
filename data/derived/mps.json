@@ -1,16 +1,20 @@
 {
- "derived_at": "2026-08-18T09:19:53+00:00",
+ "derived_at": "2026-08-18T11:28:41+00:00",
+ "cycle": 43,
  "count": 201,
  "current": 199,
+ "with_record": 201,
  "mps": {
   "a011": {
    "p_azon": "a011",
    "name": "Ágh Péter",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Vas",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/a011",
    "website": "aghpeter.hu",
    "seat": {
@@ -18,6 +22,7 @@
     "row": 5,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -140,10 +145,12 @@
    "p_azon": "a018",
    "name": "Dr. Apáti István",
    "faction": "Mi Hazánk",
+   "faction_first": "Mi Hazánk",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/a018",
    "website": null,
    "seat": {
@@ -151,6 +158,7 @@
     "row": 2,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -261,10 +269,12 @@
    "p_azon": "0032",
    "name": "Dr. Árvay Nikolett",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Komárom-Esztergom",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0032",
    "website": null,
    "seat": {
@@ -272,6 +282,7 @@
     "row": 1,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -304,10 +315,12 @@
    "p_azon": "002M",
    "name": "Bakos Csaba Attila",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Somogy",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002M",
    "website": null,
    "seat": {
@@ -315,6 +328,7 @@
     "row": 2,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -347,10 +361,12 @@
    "p_azon": "002T",
    "name": "Balajti István",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 8,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002T",
    "website": null,
    "seat": {
@@ -358,6 +374,7 @@
     "row": 5,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -390,10 +407,12 @@
    "p_azon": "003C",
    "name": "Dr. Balatincz Péter",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Veszprém",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003C",
    "website": "drbalatinczpeter.hu",
    "seat": {
@@ -401,6 +420,7 @@
     "row": 5,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -433,10 +453,12 @@
    "p_azon": "b007",
    "name": "Balla György",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/b007",
    "website": null,
    "seat": {
@@ -444,6 +466,7 @@
     "row": 1,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -602,10 +625,12 @@
    "p_azon": "b008",
    "name": "Balla Mihály",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Nógrád",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/b008",
    "website": null,
    "seat": {
@@ -613,6 +638,7 @@
     "row": 2,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -771,10 +797,12 @@
    "p_azon": "001P",
    "name": "Balogh Mihály",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001P",
    "website": null,
    "seat": {
@@ -782,6 +810,7 @@
     "row": 4,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -814,10 +843,12 @@
    "p_azon": "003Y",
    "name": "Bárkányi Bence",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Csongrád",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003Y",
    "website": null,
    "seat": {
@@ -825,6 +856,7 @@
     "row": 5,
     "seat": 11
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -857,10 +889,12 @@
    "p_azon": "002J",
    "name": "Dr. Barna-Szabó Tímea",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Szabolcs-Szatmár-Bereg",
    "constituency_no": 6,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002J",
    "website": null,
    "seat": {
@@ -868,6 +902,7 @@
     "row": 1,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -900,10 +935,12 @@
    "p_azon": "b034",
    "name": "Bencsik János",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/b034",
    "website": null,
    "seat": {
@@ -911,6 +948,7 @@
     "row": 3,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1052,10 +1090,12 @@
    "p_azon": "0046",
    "name": "Benke József",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Somogy",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0046",
    "website": null,
    "seat": {
@@ -1063,6 +1103,7 @@
     "row": 5,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1095,10 +1136,12 @@
    "p_azon": "001R",
    "name": "Berki Ákos",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001R",
    "website": null,
    "seat": {
@@ -1106,6 +1149,7 @@
     "row": 3,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1138,10 +1182,12 @@
    "p_azon": "0031",
    "name": "Bicskei László",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0031",
    "website": null,
    "seat": {
@@ -1149,6 +1195,7 @@
     "row": 1,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1181,10 +1228,12 @@
    "p_azon": "0043",
    "name": "Dr. Bihari Zoltán",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 6,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0043",
    "website": null,
    "seat": {
@@ -1192,6 +1241,7 @@
     "row": 3,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1224,10 +1274,12 @@
    "p_azon": "002Z",
    "name": "Dr. Bilisics Zita",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 9,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002Z",
    "website": null,
    "seat": {
@@ -1235,6 +1287,7 @@
     "row": 3,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1267,10 +1320,12 @@
    "p_azon": "001Z",
    "name": "Boda Nikoletta",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 11,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001Z",
    "website": "bodanikoletta.hu",
    "seat": {
@@ -1278,6 +1333,7 @@
     "row": 1,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1310,10 +1366,12 @@
    "p_azon": "000W",
    "name": "Bódis Kriszta",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000W",
    "website": null,
    "seat": {
@@ -1321,6 +1379,7 @@
     "row": 1,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1353,10 +1412,12 @@
    "p_azon": "0026",
    "name": "Dr. Bódis Péter",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Heves",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0026",
    "website": null,
    "seat": {
@@ -1364,6 +1425,7 @@
     "row": 2,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1396,10 +1458,12 @@
    "p_azon": "0028",
    "name": "Bodóczi István",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Békés",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0028",
    "website": null,
    "seat": {
@@ -1407,6 +1471,7 @@
     "row": 2,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1439,10 +1504,12 @@
    "p_azon": "b130",
    "name": "Dr. Bóka János",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/b130",
    "website": null,
    "seat": {
@@ -1450,6 +1517,7 @@
     "row": 1,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1482,10 +1550,12 @@
    "p_azon": "0037",
    "name": "Dr. Bóka Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0037",
    "website": null,
    "seat": {
@@ -1493,6 +1563,7 @@
     "row": 5,
     "seat": 12
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1525,10 +1596,12 @@
    "p_azon": "002O",
    "name": "Borics Mihály",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Fejér",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002O",
    "website": "boricsmihaly.hu",
    "seat": {
@@ -1536,6 +1609,7 @@
     "row": 5,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1568,10 +1642,12 @@
    "p_azon": "001C",
    "name": "Borsós Gabriella",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001C",
    "website": null,
    "seat": {
@@ -1579,6 +1655,7 @@
     "row": 4,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1611,10 +1688,12 @@
    "p_azon": "002F",
    "name": "Dr. Bögi Viktória",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Fejér",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002F",
    "website": null,
    "seat": {
@@ -1622,6 +1701,7 @@
     "row": 1,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1654,10 +1734,12 @@
    "p_azon": "0039",
    "name": "Dr. Bugya László",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0039",
    "website": null,
    "seat": {
@@ -1665,6 +1747,7 @@
     "row": 5,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1697,10 +1780,12 @@
    "p_azon": "000T",
    "name": "Bujdosó Andrea Anna",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000T",
    "website": null,
    "seat": {
@@ -1708,6 +1793,7 @@
     "row": 1,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1740,10 +1826,12 @@
    "p_azon": "003H",
    "name": "Czakó Czirbus Pál",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003H",
    "website": null,
    "seat": {
@@ -1751,6 +1839,7 @@
     "row": 4,
     "seat": 10
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1783,10 +1872,12 @@
    "p_azon": "0049",
    "name": "Dr. Czipa András",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0049",
    "website": null,
    "seat": {
@@ -1794,6 +1885,7 @@
     "row": 4,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1826,10 +1918,12 @@
    "p_azon": "004U",
    "name": "Czirbus Gábor",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004U",
    "website": null,
    "seat": {
@@ -1837,6 +1931,7 @@
     "row": 5,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1869,10 +1964,12 @@
    "p_azon": "003W",
    "name": "Csák László",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Hajdú-Bihar",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003W",
    "website": null,
    "seat": {
@@ -1880,6 +1977,7 @@
     "row": 4,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1912,10 +2010,12 @@
    "p_azon": "001Q",
    "name": "Császár Martin",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001Q",
    "website": "csaszarmartin.hu",
    "seat": {
@@ -1923,6 +2023,7 @@
     "row": 2,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1955,10 +2056,12 @@
    "p_azon": "002L",
    "name": "Csatári Ernő",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Somogy",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002L",
    "website": null,
    "seat": {
@@ -1966,6 +2069,7 @@
     "row": 3,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -1998,10 +2102,12 @@
    "p_azon": "0045",
    "name": "Cseh Tamás",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Tolna",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0045",
    "website": null,
    "seat": {
@@ -2009,6 +2115,7 @@
     "row": 5,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2041,10 +2148,12 @@
    "p_azon": "000U",
    "name": "Csézy Erzsébet",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 7,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000U",
    "website": "csezy.eu",
    "seat": {
@@ -2052,6 +2161,7 @@
     "row": 2,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2084,10 +2194,12 @@
    "p_azon": "0005",
    "name": "Dr. Csibi Krisztina",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0005",
    "website": null,
    "seat": {
@@ -2095,6 +2207,7 @@
     "row": 4,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2145,10 +2258,12 @@
    "p_azon": "003R",
    "name": "Csiszár Béla",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Fejér",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003R",
    "website": null,
    "seat": {
@@ -2156,6 +2271,7 @@
     "row": 4,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2188,10 +2304,12 @@
    "p_azon": "0034",
    "name": "Csontos Bence",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Bács-Kiskun",
    "constituency_no": 6,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0034",
    "website": null,
    "seat": {
@@ -2199,6 +2317,7 @@
     "row": 1,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2231,10 +2350,12 @@
    "p_azon": "002P",
    "name": "Csőszi Attila",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Bács-Kiskun",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002P",
    "website": null,
    "seat": {
@@ -2242,6 +2363,7 @@
     "row": 2,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2274,10 +2396,12 @@
    "p_azon": "000E",
    "name": "Dr. Csuzda Gábor",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000E",
    "website": null,
    "seat": {
@@ -2285,6 +2409,7 @@
     "row": 5,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2330,10 +2455,12 @@
    "p_azon": "003G",
    "name": "Dr. Dicső Viktória",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Szabolcs-Szatmár-Bereg",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003G",
    "website": null,
    "seat": {
@@ -2341,6 +2468,7 @@
     "row": 4,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2373,10 +2501,12 @@
    "p_azon": "0027",
    "name": "Diószegi Judit",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Győr-Moson-Sopron",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0027",
    "website": null,
    "seat": {
@@ -2384,6 +2514,7 @@
     "row": 2,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2416,10 +2547,12 @@
    "p_azon": "d040",
    "name": "Dócs Dávid",
    "faction": "Mi Hazánk",
+   "faction_first": "Mi Hazánk",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/d040",
    "website": null,
    "seat": {
@@ -2427,6 +2560,7 @@
     "row": 3,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2477,10 +2611,12 @@
    "p_azon": "d028",
    "name": "Dúró Dóra",
    "faction": "Mi Hazánk",
+   "faction_first": "Mi Hazánk",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/d028",
    "website": "www.facebook.com/durodora",
    "seat": {
@@ -2488,6 +2624,7 @@
     "row": 1,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2598,10 +2735,12 @@
    "p_azon": "003V",
    "name": "Dr. Farkas Csongor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Jász-Nagykun-Szolnok",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003V",
    "website": null,
    "seat": {
@@ -2609,6 +2748,7 @@
     "row": 5,
     "seat": 12
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2641,10 +2781,12 @@
    "p_azon": "003Z",
    "name": "Ferenczi Gábor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Csongrád",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003Z",
    "website": "www.drferenczigabor.hu",
    "seat": {
@@ -2652,6 +2794,7 @@
     "row": 5,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2684,10 +2827,12 @@
    "p_azon": "k151",
    "name": "F. Kovács Sándor",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Jász-Nagykun-Szolnok",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/k151",
    "website": null,
    "seat": {
@@ -2695,6 +2840,7 @@
     "row": 3,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2763,10 +2909,12 @@
    "p_azon": "000P",
    "name": "Forsthoffer Ágnes",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Veszprém",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000P",
    "website": null,
    "seat": {
@@ -2774,6 +2922,7 @@
     "row": 1,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2800,10 +2949,12 @@
    "p_azon": "004G",
    "name": "Gajda Attila",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Csongrád",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004G",
    "website": null,
    "seat": {
@@ -2811,6 +2962,7 @@
     "row": 3,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2843,10 +2995,12 @@
    "p_azon": "000O",
    "name": "Gajdos László",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Szabolcs-Szatmár-Bereg",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000O",
    "website": null,
    "seat": {
@@ -2854,6 +3008,7 @@
     "row": 0,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2886,10 +3041,12 @@
    "p_azon": "0041",
    "name": "Dr. Gáspár Levente",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Veszprém",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0041",
    "website": "gasparlevente.hu",
    "seat": {
@@ -2897,6 +3054,7 @@
     "row": 5,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2929,10 +3087,12 @@
    "p_azon": "003E",
    "name": "Gombár Dávid",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Békés",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003E",
    "website": null,
    "seat": {
@@ -2940,6 +3100,7 @@
     "row": 4,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -2972,10 +3133,12 @@
    "p_azon": "000Z",
    "name": "Göröghné Bocskai Éva",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Hajdú-Bihar",
    "constituency_no": 6,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000Z",
    "website": null,
    "seat": {
@@ -2983,6 +3146,7 @@
     "row": 3,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3015,10 +3179,12 @@
    "p_azon": "g053",
    "name": "Gulyás Gergely",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/g053",
    "website": null,
    "seat": {
@@ -3026,6 +3192,7 @@
     "row": 4,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3130,10 +3297,12 @@
    "p_azon": "002H",
    "name": "Dr. Gurzó Mária",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Békés",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002H",
    "website": null,
    "seat": {
@@ -3141,6 +3310,7 @@
     "row": 4,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3173,10 +3343,12 @@
    "p_azon": "g048",
    "name": "Gyopáros Alpár",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Győr-Moson-Sopron",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/g048",
    "website": null,
    "seat": {
@@ -3184,6 +3356,7 @@
     "row": 4,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3306,10 +3479,12 @@
    "p_azon": "003O",
    "name": "Gyömbér Dávid",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003O",
    "website": "gyomberdavid.hu",
    "seat": {
@@ -3317,6 +3492,7 @@
     "row": 5,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3349,10 +3525,12 @@
    "p_azon": "001N",
    "name": "Gyöngyösi István",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001N",
    "website": "www.facebook.com/gyongyosiistvan.tisza",
    "seat": {
@@ -3360,6 +3538,7 @@
     "row": 4,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3392,10 +3571,12 @@
    "p_azon": "001F",
    "name": "Gyuk Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001F",
    "website": null,
    "seat": {
@@ -3403,6 +3584,7 @@
     "row": 4,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3435,10 +3617,12 @@
    "p_azon": "001K",
    "name": "Hajdu Márton",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001K",
    "website": null,
    "seat": {
@@ -3446,6 +3630,7 @@
     "row": 1,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3478,10 +3663,12 @@
    "p_azon": "0042",
    "name": "Dr. Hallerné Dr. Nagy Anikó",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Győr-Moson-Sopron",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0042",
    "website": null,
    "seat": {
@@ -3489,6 +3676,7 @@
     "row": 2,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3521,10 +3709,12 @@
    "p_azon": "002E",
    "name": "Halmai Ferenc",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Jász-Nagykun-Szolnok",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002E",
    "website": null,
    "seat": {
@@ -3532,6 +3722,7 @@
     "row": 3,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3564,10 +3755,12 @@
    "p_azon": "h092",
    "name": "Dr. Hankó Balázs",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/h092",
    "website": null,
    "seat": {
@@ -3575,6 +3768,7 @@
     "row": 2,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3607,10 +3801,12 @@
    "p_azon": "001M",
    "name": "Dr. Hantosi István",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001M",
    "website": null,
    "seat": {
@@ -3618,6 +3814,7 @@
     "row": 2,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3650,10 +3847,12 @@
    "p_azon": "h006",
    "name": "Dr. Hargitai János",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/h006",
    "website": "www.hargitaijanos.fidesz.hu",
    "seat": {
@@ -3661,6 +3860,7 @@
     "row": 5,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3819,10 +4019,12 @@
    "p_azon": "0047",
    "name": "Hatala-Orosz Csaba",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0047",
    "website": null,
    "seat": {
@@ -3830,6 +4032,7 @@
     "row": 4,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3862,10 +4065,12 @@
    "p_azon": "003P",
    "name": "Havasi Balázs",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003P",
    "website": null,
    "seat": {
@@ -3873,6 +4078,7 @@
     "row": 5,
     "seat": 10
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3905,10 +4111,12 @@
    "p_azon": "0002",
    "name": "Dr. Hegedűs Barbara",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0002",
    "website": null,
    "seat": {
@@ -3916,6 +4124,7 @@
     "row": 1,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -3966,10 +4175,12 @@
    "p_azon": "000V",
    "name": "Dr. Hegedűs Zsolt Csaba",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000V",
    "website": null,
    "seat": {
@@ -3977,6 +4188,7 @@
     "row": 0,
     "seat": 10
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4009,10 +4221,12 @@
    "p_azon": "h083",
    "name": "Héjj Dávid",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/h083",
    "website": null,
    "seat": {
@@ -4020,6 +4234,7 @@
     "row": 5,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4088,10 +4303,12 @@
    "p_azon": "002S",
    "name": "Hende Máté",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 13,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002S",
    "website": "https://hendematepest13.hu",
    "seat": {
@@ -4099,6 +4316,7 @@
     "row": 4,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4131,10 +4349,12 @@
    "p_azon": "h074",
    "name": "Hidvéghi Balázs",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/h074",
    "website": null,
    "seat": {
@@ -4142,6 +4362,7 @@
     "row": 2,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4210,10 +4431,12 @@
    "p_azon": "006E",
    "name": "Hortay Olivér",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/006E",
    "website": null,
    "seat": {
@@ -4221,6 +4444,7 @@
     "row": 5,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4247,10 +4471,12 @@
    "p_azon": "h366",
    "name": "Horváth László",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/h366",
    "website": null,
    "seat": {
@@ -4258,6 +4484,7 @@
     "row": 5,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4422,10 +4649,12 @@
    "p_azon": "003K",
    "name": "Horváth Nándor Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003K",
    "website": "horvathnandorzsolt.hu",
    "seat": {
@@ -4433,6 +4662,7 @@
     "row": 4,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4465,10 +4695,12 @@
    "p_azon": "0011",
    "name": "Dr. Jakab Zsuzsanna",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 12,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0011",
    "website": null,
    "seat": {
@@ -4476,6 +4708,7 @@
     "row": 3,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4508,10 +4741,12 @@
    "p_azon": "003D",
    "name": "Járosi Péter",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003D",
    "website": null,
    "seat": {
@@ -4519,6 +4754,7 @@
     "row": 3,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4551,10 +4787,12 @@
    "p_azon": "002C",
    "name": "Jelencsik József",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002C",
    "website": null,
    "seat": {
@@ -4562,6 +4800,7 @@
     "row": 3,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4594,10 +4833,12 @@
    "p_azon": "0018",
    "name": "Jójárt Erika",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0018",
    "website": null,
    "seat": {
@@ -4605,6 +4846,7 @@
     "row": 4,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4637,10 +4879,12 @@
    "p_azon": "004C",
    "name": "Judák Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Bács-Kiskun",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004C",
    "website": null,
    "seat": {
@@ -4648,6 +4892,7 @@
     "row": 5,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4680,10 +4925,12 @@
    "p_azon": "003M",
    "name": "Dr. Juhász Áron",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Heves",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003M",
    "website": null,
    "seat": {
@@ -4691,6 +4938,7 @@
     "row": 5,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4723,10 +4971,12 @@
    "p_azon": "k155",
    "name": "Dr. Juhász Hajnalka",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/k155",
    "website": null,
    "seat": {
@@ -4734,6 +4984,7 @@
     "row": 2,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4802,10 +5053,12 @@
    "p_azon": "004A",
    "name": "Juhász Roland Csongor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004A",
    "website": "https://www.facebook.com/tisza.borsodabaujzemplenmegye.01oevk",
    "seat": {
@@ -4813,6 +5066,7 @@
     "row": 5,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4845,10 +5099,12 @@
    "p_azon": "001E",
    "name": "Kalázdi-Kerekes Kinga",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001E",
    "website": null,
    "seat": {
@@ -4856,6 +5112,7 @@
     "row": 2,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4888,10 +5145,12 @@
    "p_azon": "000Q",
    "name": "Kapitány István",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000Q",
    "website": null,
    "seat": {
@@ -4899,6 +5158,7 @@
     "row": 0,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4931,10 +5191,12 @@
    "p_azon": "001X",
    "name": "Kaprinyák Tibor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001X",
    "website": null,
    "seat": {
@@ -4942,6 +5204,7 @@
     "row": 3,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -4974,10 +5237,12 @@
    "p_azon": "003L",
    "name": "Kapronczai Balázs",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Baranya",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003L",
    "website": null,
    "seat": {
@@ -4985,6 +5250,7 @@
     "row": 2,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5017,10 +5283,12 @@
    "p_azon": "k122",
    "name": "Kármán András",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/k122",
    "website": null,
    "seat": {
@@ -5028,6 +5296,7 @@
     "row": 0,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5060,10 +5329,12 @@
    "p_azon": "004B",
    "name": "Karsai-Juhász Katalin",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Bács-Kiskun",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004B",
    "website": null,
    "seat": {
@@ -5071,6 +5342,7 @@
     "row": 4,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5103,10 +5375,12 @@
    "p_azon": "0019",
    "name": "Dr. Kátai-Németh Vilmos",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 9,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0019",
    "website": null,
    "seat": {
@@ -5114,6 +5388,7 @@
     "row": 0,
     "seat": 21
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5146,10 +5421,12 @@
    "p_azon": "001B",
    "name": "Dr. Kincse Csongor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001B",
    "website": "kincsecsongor.hu",
    "seat": {
@@ -5157,6 +5434,7 @@
     "row": 4,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5189,10 +5467,12 @@
    "p_azon": "003N",
    "name": "Kiss János",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Heves",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003N",
    "website": null,
    "seat": {
@@ -5200,6 +5480,7 @@
     "row": 3,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5232,10 +5513,12 @@
    "p_azon": "001V",
    "name": "Dr. Kiss Máté Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001V",
    "website": null,
    "seat": {
@@ -5243,6 +5526,7 @@
     "row": 4,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5275,10 +5559,12 @@
    "p_azon": "k100",
    "name": "Kocsis Máté",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/k100",
    "website": "facebook.com/kocsismate",
    "seat": {
@@ -5286,6 +5572,7 @@
     "row": 4,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5372,10 +5659,12 @@
    "p_azon": "0020",
    "name": "Dr. Koncz Áron",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0020",
    "website": "drkonczaron.hu",
    "seat": {
@@ -5383,6 +5672,7 @@
     "row": 5,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5415,10 +5705,12 @@
    "p_azon": "k163",
    "name": "Dr. Koncz Zsófia",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/k163",
    "website": null,
    "seat": {
@@ -5426,6 +5718,7 @@
     "row": 2,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5494,10 +5787,12 @@
    "p_azon": "003Q",
    "name": "Dr. Kovács Áron",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Baranya",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003Q",
    "website": null,
    "seat": {
@@ -5505,6 +5800,7 @@
     "row": 4,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5537,10 +5833,12 @@
    "p_azon": "003J",
    "name": "Dr. Kovács Gyula",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Bács-Kiskun",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003J",
    "website": null,
    "seat": {
@@ -5548,6 +5846,7 @@
     "row": 5,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5580,10 +5879,12 @@
    "p_azon": "0038",
    "name": "Kovács Petra Judit",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0038",
    "website": null,
    "seat": {
@@ -5591,6 +5892,7 @@
     "row": 1,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5623,10 +5925,12 @@
    "p_azon": "k765",
    "name": "Kovács Sándor",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Szabolcs-Szatmár-Bereg",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/k765",
    "website": "www.facebook.com/kovacssandorszabolcs05/",
    "seat": {
@@ -5634,6 +5938,7 @@
     "row": 4,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5720,10 +6025,12 @@
    "p_azon": "001U",
    "name": "Kőszegi Krisztián",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001U",
    "website": null,
    "seat": {
@@ -5731,6 +6038,7 @@
     "row": 2,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5763,10 +6071,12 @@
    "p_azon": "0016",
    "name": "Kulcsár Krisztián",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 10,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0016",
    "website": null,
    "seat": {
@@ -5774,6 +6084,7 @@
     "row": 1,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5806,10 +6117,12 @@
    "p_azon": "0021",
    "name": "László Endre Márton",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 6,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0021",
    "website": "laszloendremartonpest06.hu",
    "seat": {
@@ -5817,6 +6130,7 @@
     "row": 5,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5849,10 +6163,12 @@
    "p_azon": "l049",
    "name": "Dr. Latorcai Csaba",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/l049",
    "website": null,
    "seat": {
@@ -5860,6 +6176,7 @@
     "row": 3,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -5892,10 +6209,12 @@
    "p_azon": "l016",
    "name": "Lázár János",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/l016",
    "website": "www.lazarjanos.hu",
    "seat": {
@@ -5903,6 +6222,7 @@
     "row": 5,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6043,10 +6363,12 @@
    "p_azon": "0044",
    "name": "Lontay László",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Borsod-Abaúj-Zemplén",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0044",
    "website": null,
    "seat": {
@@ -6054,6 +6376,7 @@
     "row": 5,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6086,10 +6409,12 @@
    "p_azon": "003A",
    "name": "Lovkó Csaba",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Zala",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003A",
    "website": null,
    "seat": {
@@ -6097,6 +6422,7 @@
     "row": 4,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6129,10 +6455,12 @@
    "p_azon": "002I",
    "name": "Dr. Lőrincz Viktória",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Somogy",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002I",
    "website": null,
    "seat": {
@@ -6140,6 +6468,7 @@
     "row": 0,
     "seat": 18
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6172,10 +6501,12 @@
    "p_azon": "001W",
    "name": "Lukács Gábor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001W",
    "website": null,
    "seat": {
@@ -6183,6 +6514,7 @@
     "row": 5,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6215,10 +6547,12 @@
    "p_azon": "m076",
    "name": "Magyar Péter",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/m076",
    "website": null,
    "seat": {
@@ -6226,6 +6560,7 @@
     "row": 0,
     "seat": 12
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6258,10 +6593,12 @@
    "p_azon": "004Q",
    "name": "Dr. Máthé Zsuzsa",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004Q",
    "website": null,
    "seat": {
@@ -6269,6 +6606,7 @@
     "row": 3,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6301,10 +6639,12 @@
    "p_azon": "0017",
    "name": "Melléthei-Barna Márton",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0017",
    "website": null,
    "seat": {
@@ -6312,6 +6652,7 @@
     "row": 2,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6344,10 +6685,12 @@
    "p_azon": "002B",
    "name": "Dr. Miskolczi Orsolya",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002B",
    "website": null,
    "seat": {
@@ -6355,6 +6698,7 @@
     "row": 3,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6387,10 +6731,12 @@
    "p_azon": "004H",
    "name": "Molnár János",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Bács-Kiskun",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004H",
    "website": null,
    "seat": {
@@ -6398,6 +6744,7 @@
     "row": 2,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6430,10 +6777,12 @@
    "p_azon": "004R",
    "name": "Molnárné Dr. Lezsák Anna",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004R",
    "website": null,
    "seat": {
@@ -6441,6 +6790,7 @@
     "row": 4,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6473,10 +6823,12 @@
    "p_azon": "001A",
    "name": "Molnár Zoltán",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001A",
    "website": null,
    "seat": {
@@ -6484,6 +6836,7 @@
     "row": 2,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6516,10 +6869,12 @@
    "p_azon": "002U",
    "name": "Muhari Gergely",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 14,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002U",
    "website": null,
    "seat": {
@@ -6527,6 +6882,7 @@
     "row": 4,
     "seat": 11
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6559,10 +6915,12 @@
    "p_azon": "0029",
    "name": "Müller Anna",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 13,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0029",
    "website": null,
    "seat": {
@@ -6570,6 +6928,7 @@
     "row": 2,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6602,10 +6961,12 @@
    "p_azon": "n048",
    "name": "Nacsa Lőrinc",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/n048",
    "website": "www.facebook.com/NacsaLorinc",
    "seat": {
@@ -6613,6 +6974,7 @@
     "row": 4,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6681,10 +7043,12 @@
    "p_azon": "n053",
    "name": "Nagy Bálint",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/n053",
    "website": null,
    "seat": {
@@ -6692,6 +7056,7 @@
     "row": 2,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6742,10 +7107,12 @@
    "p_azon": "0012",
    "name": "Nagy Ervin",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Fejér",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0012",
    "website": null,
    "seat": {
@@ -6753,6 +7120,7 @@
     "row": 1,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6785,10 +7153,12 @@
    "p_azon": "0040",
    "name": "Dr. Nagy Márta",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Zala",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0040",
    "website": null,
    "seat": {
@@ -6796,6 +7166,7 @@
     "row": 5,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6828,10 +7199,12 @@
    "p_azon": "003X",
    "name": "Néher András",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Győr-Moson-Sopron",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003X",
    "website": null,
    "seat": {
@@ -6839,6 +7212,7 @@
     "row": 2,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6871,10 +7245,12 @@
    "p_azon": "004S",
    "name": "Németh Balázs Lajos",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004S",
    "website": null,
    "seat": {
@@ -6882,6 +7258,7 @@
     "row": 2,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6914,10 +7291,12 @@
    "p_azon": "003I",
    "name": "Dr. Németh Csilla",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003I",
    "website": null,
    "seat": {
@@ -6925,6 +7304,7 @@
     "row": 4,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -6957,10 +7337,12 @@
    "p_azon": "n322",
    "name": "Németh Zsolt",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/n322",
    "website": null,
    "seat": {
@@ -6968,6 +7350,7 @@
     "row": 1,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7157,10 +7540,12 @@
    "p_azon": "n036",
    "name": "Novák Előd",
    "faction": "Mi Hazánk",
+   "faction_first": "Mi Hazánk",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/n036",
    "website": "facebook.com/novakelod",
    "seat": {
@@ -7168,6 +7553,7 @@
     "row": 2,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7254,10 +7640,12 @@
    "p_azon": "000R",
    "name": "Dr. Orbán Anita",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000R",
    "website": null,
    "seat": {
@@ -7265,6 +7653,7 @@
     "row": 0,
     "seat": 13
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7297,10 +7686,12 @@
    "p_azon": "o015",
    "name": "Dr. Orbán Balázs",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/o015",
    "website": null,
    "seat": {
@@ -7308,6 +7699,7 @@
     "row": 4,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7358,10 +7750,12 @@
    "p_azon": "006F",
    "name": "Palóc André",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/006F",
    "website": null,
    "seat": {
@@ -7369,6 +7763,7 @@
     "row": 4,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7395,10 +7790,12 @@
    "p_azon": "p067",
    "name": "Dr. Panyi Miklós",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/p067",
    "website": null,
    "seat": {
@@ -7406,6 +7803,7 @@
     "row": 2,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7438,10 +7836,12 @@
    "p_azon": "004W",
    "name": "Papp Zsolt",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004W",
    "website": null,
    "seat": {
@@ -7449,6 +7849,7 @@
     "row": 3,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7481,10 +7882,12 @@
    "p_azon": "001L",
    "name": "Pásztor Anett",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001L",
    "website": null,
    "seat": {
@@ -7492,6 +7895,7 @@
     "row": 3,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7524,10 +7928,12 @@
    "p_azon": "0022",
    "name": "Perticsné Kácsor Andrea",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 10,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0022",
    "website": "kacsorandrea.hu",
    "seat": {
@@ -7535,6 +7941,7 @@
     "row": 2,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7567,10 +7974,12 @@
    "p_azon": "p041",
    "name": "Pócs János",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/p041",
    "website": "www.pocsjanos.fidesz.hu",
    "seat": {
@@ -7578,6 +7987,7 @@
     "row": 3,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7682,10 +8092,12 @@
    "p_azon": "004D",
    "name": "Polgár György",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 12,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004D",
    "website": "www.linkedin.com/in/györgy-polgár-048114143",
    "seat": {
@@ -7693,6 +8105,7 @@
     "row": 4,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7725,10 +8138,12 @@
    "p_azon": "001Y",
    "name": "Porcher Áron",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 15,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001Y",
    "website": null,
    "seat": {
@@ -7736,6 +8151,7 @@
     "row": 1,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7768,10 +8184,12 @@
    "p_azon": "0030",
    "name": "Dr. Porpáczy Krisztina",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Győr-Moson-Sopron",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0030",
    "website": null,
    "seat": {
@@ -7779,6 +8197,7 @@
     "row": 1,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7811,10 +8230,12 @@
    "p_azon": "000X",
    "name": "Pósfai Gábor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000X",
    "website": null,
    "seat": {
@@ -7822,6 +8243,7 @@
     "row": 0,
     "seat": 16
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7854,10 +8276,12 @@
    "p_azon": "004X",
    "name": "Radics Béla",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004X",
    "website": null,
    "seat": {
@@ -7865,6 +8289,7 @@
     "row": 3,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7897,10 +8322,12 @@
    "p_azon": "000S",
    "name": "Radnai Márk",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Komárom-Esztergom",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000S",
    "website": "www.komarom2.hu",
    "seat": {
@@ -7908,6 +8335,7 @@
     "row": 1,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7940,10 +8368,12 @@
    "p_azon": "0036",
    "name": "Ráki Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Békés",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0036",
    "website": "www.facebook.com/tisza.bekesmegye.03oevk",
    "seat": {
@@ -7951,6 +8381,7 @@
     "row": 3,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -7983,10 +8414,12 @@
    "p_azon": "001J",
    "name": "Dr. Rák Richárd",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001J",
    "website": null,
    "seat": {
@@ -7994,6 +8427,7 @@
     "row": 2,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8026,10 +8460,12 @@
    "p_azon": "003T",
    "name": "Rápli Róbert",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Vas",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003T",
    "website": null,
    "seat": {
@@ -8037,6 +8473,7 @@
     "row": 5,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8069,10 +8506,12 @@
    "p_azon": "r023",
    "name": "Rétvári Bence",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/r023",
    "website": "www.retvari.hu",
    "seat": {
@@ -8080,6 +8519,7 @@
     "row": 1,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8202,10 +8642,12 @@
    "p_azon": "000N",
    "name": "Rost Andrea",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Jász-Nagykun-Szolnok",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000N",
    "website": null,
    "seat": {
@@ -8213,6 +8655,7 @@
     "row": 1,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8245,10 +8688,12 @@
    "p_azon": "0048",
    "name": "Rózsahegyi Áron",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Baranya",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0048",
    "website": "rozsahegyiaron.hu",
    "seat": {
@@ -8256,6 +8701,7 @@
     "row": 3,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8288,10 +8734,12 @@
    "p_azon": "0010",
    "name": "Dr. Ruszin-Szendi Romulusz",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Hajdú-Bihar",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0010",
    "website": null,
    "seat": {
@@ -8299,6 +8747,7 @@
     "row": 0,
     "seat": 17
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8331,10 +8780,12 @@
    "p_azon": "0024",
    "name": "Dr. Ruzsa Diána",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Baranya",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0024",
    "website": null,
    "seat": {
@@ -8342,6 +8793,7 @@
     "row": 2,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8374,10 +8826,12 @@
    "p_azon": "002K",
    "name": "Dr. Sárosi József",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Tolna",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002K",
    "website": null,
    "seat": {
@@ -8385,6 +8839,7 @@
     "row": 2,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8417,10 +8872,12 @@
    "p_azon": "001O",
    "name": "Dr. Sasi-Nagy Edit",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001O",
    "website": null,
    "seat": {
@@ -8428,6 +8885,7 @@
     "row": 2,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8460,10 +8918,12 @@
    "p_azon": "001G",
    "name": "Schummer Orsolya",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001G",
    "website": null,
    "seat": {
@@ -8471,6 +8931,7 @@
     "row": 2,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8503,10 +8964,12 @@
    "p_azon": "s093",
    "name": "Dr. Seszták Miklós",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/s093",
    "website": null,
    "seat": {
@@ -8514,6 +8977,7 @@
     "row": 5,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8618,10 +9082,12 @@
    "p_azon": "s011",
    "name": "Dr. Simicskó István",
    "faction": "KDNP",
+   "faction_first": "KDNP",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/s011",
    "website": "www.simicskoistvan.hu",
    "seat": {
@@ -8629,6 +9095,7 @@
     "row": 4,
     "seat": 8
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8787,10 +9254,12 @@
    "p_azon": "001S",
    "name": "Dr. Simon Krisztián Márk",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001S",
    "website": null,
    "seat": {
@@ -8798,6 +9267,7 @@
     "row": 4,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8830,10 +9300,12 @@
    "p_azon": "0035",
    "name": "Dr. Simon Zsuzsánna",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0035",
    "website": null,
    "seat": {
@@ -8841,6 +9313,7 @@
     "row": 3,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8873,10 +9346,12 @@
    "p_azon": "0025",
    "name": "Dr. Sopov Ildikó Éva",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Komárom-Esztergom",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0025",
    "website": null,
    "seat": {
@@ -8884,6 +9359,7 @@
     "row": 3,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8916,10 +9392,12 @@
    "p_azon": "001I",
    "name": "Sóti Anikó Zsuzsanna",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001I",
    "website": null,
    "seat": {
@@ -8927,6 +9405,7 @@
     "row": 2,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -8959,10 +9438,12 @@
    "p_azon": "002N",
    "name": "Strompová Viktória",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002N",
    "website": null,
    "seat": {
@@ -8970,6 +9451,7 @@
     "row": 4,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9002,10 +9484,12 @@
    "p_azon": "004F",
    "name": "Dr. Stumpf Péter",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Csongrád",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004F",
    "website": null,
    "seat": {
@@ -9013,6 +9497,7 @@
     "row": 3,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9045,10 +9530,12 @@
    "p_azon": "s184",
    "name": "Szabadi István",
    "faction": "Mi Hazánk",
+   "faction_first": "Mi Hazánk",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/s184",
    "website": "www.szabadiistvan.hu",
    "seat": {
@@ -9056,6 +9543,7 @@
     "row": 3,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9106,10 +9594,12 @@
    "p_azon": "002D",
    "name": "Dr. Szabó Alexandra",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 14,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002D",
    "website": null,
    "seat": {
@@ -9117,6 +9607,7 @@
     "row": 3,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9149,10 +9640,12 @@
    "p_azon": "002R",
    "name": "Szabó Tibor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002R",
    "website": null,
    "seat": {
@@ -9160,6 +9653,7 @@
     "row": 2,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9192,10 +9686,12 @@
    "p_azon": "001D",
    "name": "Szafkó Zoltán Péter",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Nógrád",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001D",
    "website": "szafkozoltanpeter.hu",
    "seat": {
@@ -9203,6 +9699,7 @@
     "row": 4,
     "seat": 11
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9235,10 +9732,12 @@
    "p_azon": "003F",
    "name": "Szakács Péter Lajos",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Szabolcs-Szatmár-Bereg",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003F",
    "website": null,
    "seat": {
@@ -9246,6 +9745,7 @@
     "row": 5,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9278,10 +9778,12 @@
    "p_azon": "004T",
    "name": "Szalai Piroska",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004T",
    "website": null,
    "seat": {
@@ -9289,6 +9791,7 @@
     "row": 3,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9321,10 +9824,12 @@
    "p_azon": "004Y",
    "name": "Szentkirályi Alexandra",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004Y",
    "website": null,
    "seat": {
@@ -9332,6 +9837,7 @@
     "row": 1,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9364,10 +9870,12 @@
    "p_azon": "003S",
    "name": "Dr. Szijjártó Gábor",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Tolna",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003S",
    "website": null,
    "seat": {
@@ -9375,6 +9883,7 @@
     "row": 4,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9407,10 +9916,12 @@
    "p_azon": "002Y",
    "name": "Szimon Renáta",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 11,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002Y",
    "website": "https://szimonrenata.hu",
    "seat": {
@@ -9418,6 +9929,7 @@
     "row": 5,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9450,10 +9962,12 @@
    "p_azon": "0013",
    "name": "Szűcs Dóra",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0013",
    "website": null,
    "seat": {
@@ -9461,6 +9975,7 @@
     "row": 2,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9493,10 +10008,12 @@
    "p_azon": "004Z",
    "name": "Szűcs Gábor",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004Z",
    "website": null,
    "seat": {
@@ -9504,6 +10021,7 @@
     "row": 2,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9536,10 +10054,12 @@
    "p_azon": "004V",
    "name": "Dr. Takács Árpád",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004V",
    "website": null,
    "seat": {
@@ -9547,6 +10067,7 @@
     "row": 5,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9579,10 +10100,12 @@
    "p_azon": "t062",
    "name": "Takács Péter",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/t062",
    "website": null,
    "seat": {
@@ -9590,6 +10113,7 @@
     "row": 2,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9622,10 +10146,12 @@
    "p_azon": "000Y",
    "name": "Tanács Zoltán",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/000Y",
    "website": null,
    "seat": {
@@ -9633,6 +10159,7 @@
     "row": 0,
     "seat": 20
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9665,10 +10192,12 @@
    "p_azon": "004E",
    "name": "Tárkányi Zsolt",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Hajdú-Bihar",
    "constituency_no": 1,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004E",
    "website": null,
    "seat": {
@@ -9676,6 +10205,7 @@
     "row": 1,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9708,10 +10238,12 @@
    "p_azon": "t067",
    "name": "Tarr Zoltán",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 16,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/t067",
    "website": null,
    "seat": {
@@ -9719,6 +10251,7 @@
     "row": 0,
     "seat": 19
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9751,10 +10284,12 @@
    "p_azon": "t023",
    "name": "Dr. Tilki Attila",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Szabolcs-Szatmár-Bereg",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/t023",
    "website": "www.tilkiattila.hu",
    "seat": {
@@ -9762,6 +10297,7 @@
     "row": 5,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9884,10 +10420,12 @@
    "p_azon": "002G",
    "name": "Tompa Enikő",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Hajdú-Bihar",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002G",
    "website": "www.tompaeniko.hu",
    "seat": {
@@ -9895,6 +10433,7 @@
     "row": 1,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9927,10 +10466,12 @@
    "p_azon": "t058",
    "name": "Toroczkai László",
    "faction": "Mi Hazánk",
+   "faction_first": "Mi Hazánk",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/t058",
    "website": "www.toroczkai.info",
    "seat": {
@@ -9938,6 +10479,7 @@
     "row": 1,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -9988,10 +10530,12 @@
    "p_azon": "0023",
    "name": "Tóthmajor Balázs",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0023",
    "website": null,
    "seat": {
@@ -9999,6 +10543,7 @@
     "row": 3,
     "seat": 1
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10031,10 +10576,12 @@
    "p_azon": "003B",
    "name": "Tóth Norbert",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003B",
    "website": null,
    "seat": {
@@ -10042,6 +10589,7 @@
     "row": 4,
     "seat": 2
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10074,10 +10622,12 @@
    "p_azon": "001T",
    "name": "Tóth Tamás",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001T",
    "website": null,
    "seat": {
@@ -10085,6 +10635,7 @@
     "row": 4,
     "seat": 10
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10117,10 +10668,12 @@
    "p_azon": "002X",
    "name": "Trentin Balázs",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 7,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002X",
    "website": null,
    "seat": {
@@ -10128,6 +10681,7 @@
     "row": 4,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10160,10 +10714,12 @@
    "p_azon": "002A",
    "name": "Trompler Ildikó",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Pest",
    "constituency_no": 7,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002A",
    "website": "tromplerildiko.hu",
    "seat": {
@@ -10171,6 +10727,7 @@
     "row": 3,
     "seat": 9
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10203,10 +10760,12 @@
    "p_azon": "t687",
    "name": "Tuzson Bence",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/t687",
    "website": "www.tuzsonbence.hu",
    "seat": {
@@ -10214,6 +10773,7 @@
     "row": 1,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10300,10 +10860,12 @@
    "p_azon": "003U",
    "name": "Ujvári Szilvia",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Veszprém",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/003U",
    "website": null,
    "seat": {
@@ -10311,6 +10873,7 @@
     "row": 3,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10343,10 +10906,12 @@
    "p_azon": "0033",
    "name": "Varga Balázs",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Zala",
    "constituency_no": 2,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0033",
    "website": null,
    "seat": {
@@ -10354,6 +10919,7 @@
     "row": 3,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10386,10 +10952,12 @@
    "p_azon": "v048",
    "name": "Varga Gábor",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Fejér",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/v048",
    "website": null,
    "seat": {
@@ -10397,6 +10965,7 @@
     "row": 4,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10501,10 +11070,12 @@
    "p_azon": "001H",
    "name": "Varga Lőrinc Mihály",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/001H",
    "website": null,
    "seat": {
@@ -10512,6 +11083,7 @@
     "row": 3,
     "seat": 7
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10544,10 +11116,12 @@
    "p_azon": "0014",
    "name": "Velkey György László",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 6,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0014",
    "website": null,
    "seat": {
@@ -10555,6 +11129,7 @@
     "row": 1,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10587,10 +11162,12 @@
    "p_azon": "002Q",
    "name": "Veres Ádám",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002Q",
    "website": null,
    "seat": {
@@ -10598,6 +11175,7 @@
     "row": 5,
     "seat": 10
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10630,10 +11208,12 @@
    "p_azon": "002W",
    "name": "Dr. Virágh Gabriella Mária",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 8,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002W",
    "website": null,
    "seat": {
@@ -10641,6 +11221,7 @@
     "row": 5,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10673,10 +11254,12 @@
    "p_azon": "z014",
    "name": "Vitályos Eszter",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/z014",
    "website": null,
    "seat": {
@@ -10684,6 +11267,7 @@
     "row": 3,
     "seat": 6
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10752,10 +11336,12 @@
    "p_azon": "v008",
    "name": "Dr. Vitányi István József",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Hajdú-Bihar",
    "constituency_no": 4,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/v008",
    "website": null,
    "seat": {
@@ -10763,6 +11349,7 @@
     "row": 3,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -10921,10 +11508,12 @@
    "p_azon": "n004",
    "name": "V. Németh Zsolt",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Vas",
    "constituency_no": 3,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/n004",
    "website": null,
    "seat": {
@@ -10932,6 +11521,7 @@
     "row": 3,
     "seat": 5
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -11096,10 +11686,12 @@
    "p_azon": "002V",
    "name": "Weigand István",
    "faction": "TISZA",
+   "faction_first": "TISZA",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "egyeni",
    "county": "Budapest",
    "constituency_no": 5,
-   "mandate_kind": "egyeni",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/002V",
    "website": null,
    "seat": {
@@ -11107,6 +11699,7 @@
     "row": 5,
     "seat": 11
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -11139,10 +11732,12 @@
    "p_azon": "w704",
    "name": "Witzmann Mihály",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/w704",
    "website": null,
    "seat": {
@@ -11150,6 +11745,7 @@
     "row": 4,
     "seat": 4
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -11236,10 +11832,12 @@
    "p_azon": "z004",
    "name": "Zsigó Róbert",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": true,
+   "cycle": 43,
+   "mandate_kind": "lista",
    "county": "Országos lista",
    "constituency_no": null,
-   "mandate_kind": "lista",
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/z004",
    "website": "www.zsigorobert.hu",
    "seat": {
@@ -11247,6 +11845,7 @@
     "row": 1,
     "seat": 3
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -11405,10 +12004,12 @@
    "p_azon": "b076",
    "name": "Dr. Budai Gyula",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": false,
+   "cycle": 43,
+   "mandate_kind": null,
    "county": null,
    "constituency_no": null,
-   "mandate_kind": null,
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/b076",
    "website": null,
    "seat": {
@@ -11416,6 +12017,7 @@
     "row": null,
     "seat": null
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",
@@ -11520,10 +12122,12 @@
    "p_azon": "s054",
    "name": "Szijjártó Péter",
    "faction": "Fidesz",
+   "faction_first": "Fidesz",
    "current": false,
+   "cycle": 43,
+   "mandate_kind": null,
    "county": null,
    "constituency_no": null,
-   "mandate_kind": null,
    "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/s054",
    "website": null,
    "seat": {
@@ -11531,6 +12135,7 @@
     "row": null,
     "seat": null
    },
+   "has_record": true,
    "factions": [
     {
      "ciklus": "2026-",

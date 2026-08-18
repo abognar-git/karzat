@@ -139,48 +139,109 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+# Cycle starts (constitutive sittings; the month is a good-enough boundary) — shared with load.py.
+CYCLE_STARTS = {34: "1990-05-02", 35: "1994-06-28", 36: "1998-06-18", 37: "2002-05-15", 38: "2006-05-16",
+                39: "2010-05-14", 40: "2014-05-06", 41: "2018-05-08", 42: "2022-05-02", 43: "2026-05-09"}
+CYCLE_LABELS = {34: "1990-1994", 35: "1994-1998", 36: "1998-2002", 37: "2002-2006", 38: "2006-2010",
+                39: "2010-2014", 40: "2014-2018", 41: "2018-2022", 42: "2022-2026", 43: "2026-"}   # as kepviselo.cgi prints ciklus
+
+
+def cycle_of_date(on_date: str | None) -> int | None:
+    """Cycle by date (34 = 1990–94 … 43 = 2026–)."""
+    if not on_date:
+        return None
+    ckl = None
+    for k, d in CYCLE_STARTS.items():
+        if on_date >= d:
+            ckl = k
+    return ckl
+
+
 class NameResolver:
     """'Név (Frakció)' as printed in nev_szerint -> p_azon.
 
-    Exact match on the current MP list first (kepviselok.cgi prints the same spelling as
-    nev_szerint, honorifics included); then honorific-stripped name against an alias table
-    (Wikidata name_hu -> ogy_ids, which covers ended statements too). Unresolved names stay
-    unresolved — the schema keeps mp_name for auditing rather than guessing.
+    Order: (1) the exact 'Név (Frakció)' label against the current MP list (kepviselok.cgi prints
+    the same spelling as nev_szerint, honorifics included); (2) the exact printed name against the
+    names of cached kepviselo.cgi records — the API's own spelling of every person we have fetched,
+    current or former; (3) the honorific-stripped name against every source (current list, records,
+    Wikidata name_hu → P4966), and if that yields more than one person, the printed faction against
+    each candidate's faction history for the cycle of the vote (records) — a "Dr. Kiss János (Fidesz)"
+    in 2025 is not the "Kiss János (TISZA)" of 2026. Still ambiguous → unresolved: the schema keeps
+    mp_name for auditing rather than guessing.
     """
 
-    def __init__(self, current: list[dict[str, Any]], aliases: dict[str, str] | None = None):
+    def __init__(self, current: list[dict[str, Any]], aliases: dict[str, str] | None = None,
+                 histories: dict[str, dict[str, Any]] | None = None):
         self.exact = {f'{m["name"]} ({m["faction"]})': m["p_azon"] for m in current}
-        self.by_bare = {}
+        self.by_bare: dict[str, set[str]] = {}
         for m in current:
             self.by_bare.setdefault(strip_honorific(m["name"]), set()).add(m["p_azon"])
-        self.aliases = {strip_honorific(k): v for k, v in (aliases or {}).items()}
+        self.histories = histories or {}                        # azon -> {"name": ..., "factions": [(ciklus_label, faction), ...]}
+        self.record_names: dict[str, set[str]] = {}
+        for azon, h in self.histories.items():
+            if h.get("name"):
+                self.record_names.setdefault(h["name"], set()).add(azon)
+                self.by_bare.setdefault(strip_honorific(h["name"]), set()).add(azon)
+        for k, v in (aliases or {}).items():                    # Wikidata labels: bare, may collide across cycles
+            self.by_bare.setdefault(strip_honorific(k), set()).add(v)
 
     @staticmethod
     def split(label: str) -> tuple[str, str | None]:
         m = re.match(r"^(.*?)\s*\(([^()]*)\)\s*$", label.strip())
         return (m.group(1).strip(), m.group(2).strip()) if m else (label.strip(), None)
 
-    def resolve(self, label: str) -> str | None:
+    def _by_faction(self, cands: set[str], faction: str | None, on_date: str | None) -> set[str]:
+        """Keep the candidates whose record puts them in `faction` — in the vote's cycle if we know it."""
+        if not faction:
+            return cands
+        label = CYCLE_LABELS.get(cycle_of_date(on_date) or -1)
+        keep = set()
+        for a in cands:
+            rows = self.histories.get(a, {}).get("factions") or []
+            if any(f == faction and (label is None or c == label) for c, f in rows):
+                keep.add(a)
+        return keep
+
+    def _consistent(self, azon: str, faction: str | None, on_date: str | None) -> bool:
+        """A candidate with a known history must not contradict the printed faction for the vote's cycle."""
+        rows = self.histories.get(azon, {}).get("factions") or []
+        if not faction or not rows:
+            return True
+        label = CYCLE_LABELS.get(cycle_of_date(on_date) or -1)
+        in_cycle = [f for c, f in rows if label is None or c == label]
+        return faction in in_cycle                           # no row for that cycle → not an MP then → not this person
+
+    def _pick(self, cands: set[str], faction: str | None, on_date: str | None) -> str | None:
+        ok = {a for a in cands if self._consistent(a, faction, on_date)}
+        if len(ok) == 1:
+            return next(iter(ok))
+        if len(ok) > 1:
+            narrowed = self._by_faction(ok, faction, on_date)
+            if len(narrowed) == 1:
+                return next(iter(narrowed))
+        return None
+
+    def resolve(self, label: str, on_date: str | None = None) -> str | None:
         if label in self.exact:
             return self.exact[label]
-        name, _ = self.split(label)
-        bare = strip_honorific(name)
-        cands = self.by_bare.get(bare)
-        if cands and len(cands) == 1:
-            return next(iter(cands))
-        return self.aliases.get(bare)
+        name, faction = self.split(label)
+        hit = self._pick(self.record_names.get(name) or set(), faction, on_date)     # the API's own spelling
+        if hit:
+            return hit
+        return self._pick(self.by_bare.get(strip_honorific(name)) or set(), faction, on_date)
 
 
-def record_name_aliases(cache: "Path") -> dict[str, str]:
-    """name -> p_azon from every cached kepviselo.cgi record (data/raw/kepviselo/mp_<azon>.xml).
+def record_histories(cache: "Path") -> dict[str, dict[str, Any]]:
+    """p_azon -> {name, factions: [(ciklus_label, faction), ...]} from every cached kepviselo.cgi record.
 
     The API's own record prints the same spelling as the roll call ("Z. Kárpát Dániel",
     "Czunyiné Dr. Bertalan Judit", "Szabó Timea"), where Wikidata's label differs — so a
-    former MP's record, once fetched, resolves every roll call they ever appear in.
+    former MP's record, once fetched, resolves every roll call they ever appear in; and the
+    faction history per cycle is what tells two people of one name apart.
     """
     from pathlib import Path  # noqa: F811 — local import keeps this module free of a Path dependency at import
     from .xmlutil import parse_xml, to_dict
-    out: dict[str, str] = {}
+    out: dict[str, dict[str, Any]] = {}
     folder = Path(cache) / "kepviselo"
     if not folder.exists():
         return out
@@ -191,7 +252,15 @@ def record_name_aliases(cache: "Path") -> dict[str, str]:
         except Exception:      # a truncated download must not take the whole build down
             continue
         if rec.get("name"):
-            out.setdefault(rec["name"], p.stem[3:])
+            out[p.stem[3:]] = {"name": rec["name"], "factions": [(f.get("ciklus"), f.get("faction")) for f in rec.get("factions") or []]}
+    return out
+
+
+def record_name_aliases(cache: "Path") -> dict[str, str]:
+    """name -> p_azon from the cached records (first wins on a duplicate name; prefer record_histories + NameResolver)."""
+    out: dict[str, str] = {}
+    for azon, h in record_histories(cache).items():
+        out.setdefault(h["name"], azon)
     return out
 
 
@@ -343,7 +412,7 @@ def parse_szavazas(payload: dict[str, Any], resolver: NameResolver | None = None
             pos = POSITIONS.get(s.get("@szavazat", ""), "unknown:" + str(s.get("@szavazat")))
             counts[pos] = counts.get(pos, 0) + 1
             positions.append({"name_raw": label, "name": name, "faction": faction, "position": pos,
-                              "mp_azon": resolver.resolve(label) if resolver else None})
+                              "mp_azon": resolver.resolve(label, rec.get("on_date")) if resolver else None})
     rec["faction_tallies"] = tallies
     rec["totals_row"] = totals
     rec["positions"] = positions

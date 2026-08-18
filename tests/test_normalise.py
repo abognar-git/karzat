@@ -291,5 +291,35 @@ class SeventhState(unittest.TestCase):
         self.assertFalse(v["passed"])
 
 
+class Resolver(unittest.TestCase):
+    """Two people, one bare name, different cycles: the printed faction and the record history decide."""
+
+    CUR = [{"name": "Kiss János", "faction": "TISZA", "p_azon": "003N"}]
+    HIST = {"003N": {"name": "Kiss János", "factions": [("2026-", "TISZA")]},
+            "k166": {"name": "Dr. Kiss János", "factions": [("2022-2026", "Fidesz")]}}
+
+    def test_exact_label_then_record_spelling_then_faction_history(self):
+        r = NameResolver(self.CUR, aliases={"Kiss János": "k166"}, histories=self.HIST)
+        self.assertEqual(r.resolve("Kiss János (TISZA)", "2026-06-15"), "003N")          # exact current label
+        self.assertEqual(r.resolve("Dr. Kiss János (Fidesz)", "2025-04-14"), "k166")      # the API's own record spelling
+        self.assertEqual(r.resolve("Kiss János (Fidesz)", "2025-04-14"), "k166")          # bare name, faction + cycle decide
+        self.assertEqual(r.resolve("Kiss János (TISZA)", "2026-06-15"), "003N")
+
+    def test_ambiguity_stays_unresolved_instead_of_guessing(self):
+        # without k166's record the bare name has two candidates; 003N's history contradicts the label (no 2022-2026 row),
+        # so the Wikidata-backed k166 is the one candidate left standing
+        r = NameResolver(self.CUR, aliases={"Kiss János": "k166"}, histories={"003N": self.HIST["003N"]})
+        self.assertEqual(r.resolve("Dr. Kiss János (Fidesz)", "2025-04-14"), "k166")
+        # two candidates and nothing to tell them apart → unresolved, never a guess
+        r0 = NameResolver([], aliases={}, histories={"x001": {"name": "Nagy Péter", "factions": []}, "x002": {"name": "Nagy Péter", "factions": []}})
+        self.assertIsNone(r0.resolve("Nagy Péter (Fidesz)", "2024-01-01"))
+        # …and the exact record spelling settles it when the two spellings differ
+        r1 = NameResolver([], aliases={}, histories={"x001": {"name": "Nagy Péter", "factions": []}, "x002": {"name": "Dr. Nagy Péter", "factions": []}})
+        self.assertEqual(r1.resolve("Dr. Nagy Péter (Fidesz)", "2024-01-01"), "x002")
+        # a plain unique name still resolves through the alias table
+        r2 = NameResolver(self.CUR, aliases={"Zsiga-Kárpát Dániel": "z012"}, histories={})
+        self.assertEqual(r2.resolve("Zsiga-Kárpát Dániel (Jobbik)", "2023-01-01"), "z012")
+
+
 if __name__ == "__main__":
     unittest.main()
