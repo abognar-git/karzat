@@ -66,7 +66,14 @@ outer rows), while rows nobody occupies are unknown and not drawn; seat numbers 
 left→right; orientation per parlament.hu's own description. My first cut had sector wedges
 ∝ their widest row and a fixed glyph size — sectors 1 and 6 came out cramped and the dots
 overlapped into ropes; the glyphs are now sized from the pitch, so no two seats can touch.
-Konzol's algorithm stays as the fallback.
+Konzol's algorithm stays as the fallback. The chart is a console, not an
+illustration: hover, tap or tab to a seat and an inspector under the chart fills — name,
+faction, mandate, seat, this vote's position, the cycle record (cast, with / against own
+faction) and the last twenty roll calls up to that vote as a streak strip; click pins it, Esc
+releases. Seats where the MP voted against their faction's plurality wear a thin white ring,
+counted in the legend; the roll-call filters dim the seats they exclude, and hovering a table
+row lights its seat. All of it is build-time JSON in the page (no network), and without JS the
+chart is what it was: seats, rings and titles.
 
 ## Status
 
@@ -93,7 +100,7 @@ Konzol's algorithm stays as the fallback.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 137 tests
+python3 -m unittest discover -s tests -t .      # offline; 138 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token

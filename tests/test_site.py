@@ -4,6 +4,7 @@ Same rule as trigger-discipline's index.html: never hand-edit site/index.html; c
 inputs or the builder and rebuild. `python3 -m scripts.build_site --check` is the CLI form.
 """
 
+import json
 import re
 import unittest
 from pathlib import Path
@@ -100,6 +101,34 @@ class VotePages(unittest.TestCase):
         self.assertIn('data-posrank=', page)                                 # sort key kept apart from the filter attribute
         self.assertEqual(page.count("data-seat="), 199)                      # every row sortable by seat; the seatless carry the sentinel
         self.assertIn('data-seat="999999"', page)
+
+    def test_seat_inspector_data_and_against_rings(self):
+        # 2026-07-28 10:35 (387/7): Fidesz 0–23–16 → the 16 abstainers voted against their group's plurality
+        ts = "2026.07.28.10:35:33"
+        page = build_vote_page(self.inp, ts)
+        self.assertEqual(page.count('data-al="against"'), 16)
+        self.assertEqual(page.count('class="against"'), 16)
+        self.assertIn("frakciója többsége ellen <span class=\"mono\">16</span>", page)
+        self.assertIn("Fehér gyűrű: 16 képviselő", page)
+        m = re.search(r'<script type="application/json" id="insp-data">(.*?)</script>', page, re.S)
+        self.assertTrue(m)
+        data = json.loads(m.group(1).replace("<\\/", "</"))
+        self.assertEqual(len(data), 198)                                     # every resolved MP in the roll call
+        a011 = data["a011"]
+        self.assertEqual(a011[0], "Ágh Péter")
+        self.assertEqual(a011[1], "Fidesz")
+        self.assertEqual(a011[4], "tartozkodott")
+        self.assertEqual((a011[5], a011[6]), (239, 256))                     # the cycle record, as on the MP page
+        self.assertEqual(len(a011[9]), 20)                                    # the last 20 roll calls up to this vote
+        self.assertEqual(a011[9][-1], "a")                                    # …ending in this vote: against
+        self.assertEqual(page.count('class="seat"'), 198)
+        self.assertEqual(page.count('tabindex="0"'), 198)                     # every seat is keyboard-reachable
+        self.assertEqual(page.count("<tr data-f="), len(re.findall(r'<tr data-f="[^>]*data-az="', page)))   # every roll-call row is linked to a seat
+        # the hero vote has no dissenters and says nothing about rings
+        hero = build_vote_page(self.inp, HERO_TS)
+        self.assertNotIn("Fehér gyűrű", hero)
+        self.assertNotIn('data-al="against"', hero)
+        self.assertIn('id="insp-data"', self.__class__.inp and hero)
 
     def test_secret_ballot_page_has_no_roll_call(self):
         page = build_vote_page(self.inp, "2026.05.09.11:50:00")

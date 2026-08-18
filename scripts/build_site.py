@@ -284,11 +284,28 @@ def room_floor(geo: dict) -> str:
 PODIUM = '<path d="M -11 0 A 11 11 0 0 1 11 0 L 11 3 L -11 3 Z" class="rostrum"/><path d="M -6 -3 A 6 6 0 0 1 6 -3 L 6 0 L -6 0 Z" class="rostrum hi"/>'
 
 
-def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
+def _seat_group(pos: str, faction: str, azon: str | None, align: str | None, title: str, node: str, ring_r: float, k: float) -> str:
+    """One interactive seat: data hooks for the inspector and filters, and a white ring when the MP voted against their faction."""
+    ring = f'<circle cx="{node_cx(node)}" cy="{node_cy(node)}" r="{ring_r:.2f}" class="against"/>' if align == "against" else ""
+    attrs = f'class="seat" data-pos="{pos}" data-f="{html.escape(faction or "")}"' + (f' data-az="{html.escape(azon)}"' if azon else "") + (f' data-al="{align}"' if align else "") + ' tabindex="0"'
+    return f'<g {attrs}><title>{title}</title>{ring}{node}</g>'
+
+
+def node_cx(node: str) -> str:
+    return re.search(r'cx="([^"]+)"', node).group(1)
+
+
+def node_cy(node: str) -> str:
+    return re.search(r'cy="([^"]+)"', node).group(1)
+
+
+def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None = None) -> tuple[str, dict]:
     """The reconstructed chamber: every voting MP at their (sector,row,seat). Returns (svg, info)."""
     colour = {f["id"]: f["colour"] for f in facs}
     coords = plan["coords"]; geo = plan["geometry"]
     k = geo.get("node_radius", 5.2) / 5.2                       # glyphs sized to the plan's seat pitch, never overlapping
+    align = align or {}
+    ring_r = 5.2 * k * 1.55
     parts, unplaced = [], []
     for m in view["positions"]:
         azon = m.get("mp_azon")
@@ -299,7 +316,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
             xy = coords[azon]
             place = "miniszteri pad" if xy.get("front_bench") else str(xy["sector"]) + ". szektor"
             where = " · " + place + ", " + str(xy["row"]) + ". sor, " + str(xy["seat"]) + ". szék"
-            parts.append(f'<g class="seat" data-pos="{pos}" data-f="{html.escape(m["faction"] or "")}"><title>{title}{html.escape(where)}</title>{_node(xy["x"], xy["y"], pos, c, k)}</g>')
+            parts.append(_seat_group(pos, m["faction"], azon, align.get(azon), title + html.escape(where), _node(xy["x"], xy["y"], pos, c, k), ring_r, k))
         else:
             unplaced.append(m)
     # the room's empty seats (numbers a row skips), faint — so a half-empty bench reads as one
@@ -322,25 +339,28 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
         for i, m in enumerate(unplaced):
             c = colour.get(m["faction"] or "", "#8a8a8a")
             why = "azonosítatlan név" if not m.get("mp_azon") else "nincs ülőhely a képviselői adatlapon (a mandátum azóta megszűnt)"
-            tray += (f'<g class="seat" data-pos="{m["position"]}"><title>{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}</title>'
-                     f'{_node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k)}</g>')
+            tray += _seat_group(m["position"], m["faction"], m.get("mp_azon"), align.get(m.get("mp_azon") or ""),
+                                f'{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}',
+                                _node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k), ring_r, k)
     svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
            + "".join(floor) + arc + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
            + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
     return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or [])}
 
 
-def seat_svg_fallback(view: dict, facs: list[dict]) -> str:
+def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None) -> str:
     order = {f["id"]: f["sort_order"] for f in facs}
     colour = {f["id"]: f["colour"] for f in facs}
     pos_rank = {p: i for i, p in enumerate(POSITION_ORDER)}
     members = sorted(view["positions"], key=lambda p: (order.get(p["faction"] or "", 999), pos_rank.get(p["position"], 9), p["name"]))
     seats = hemicycle_layout(len(members))
+    align = align or {}
     parts = []
     for seat, m in zip(seats, members):
         c = colour.get(m["faction"] or "", "#8a8a8a")
         title = html.escape(f'{m["name"]} ({m["faction"]}) — {POSITION_LABEL.get(m["position"], m["position"])}')
-        parts.append(f'<g class="seat" data-pos="{m["position"]}"><title>{title}</title>{_node(seat["cx"], seat["cy"], m["position"], c)}</g>')
+        parts.append(_seat_group(m["position"], m["faction"], m.get("mp_azon"), align.get(m.get("mp_azon") or ""), title,
+                                 _node(seat["cx"], seat["cy"], m["position"], c), 5.2 * 1.55, 1.0))
     r0, gap, rows = 78.0, 17.0, 7
     ri, ro = r0 - gap * 0.5, r0 + (rows - 1) * gap + gap * 0.5
     floor = (f'<path d="M {-ri:.1f} 0 L {-ro:.1f} 0 A {ro:.1f} {ro:.1f} 0 0 1 {ro:.1f} 0 L {ri:.1f} 0 A {ri:.1f} {ri:.1f} 0 0 0 {-ri:.1f} 0 Z" class="floor"/>'
@@ -428,7 +448,29 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 /* chart */
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s,filter .2s;cursor:crosshair}
-.chart svg:hover .seat{opacity:.4}.chart svg .seat:hover{opacity:1;filter:drop-shadow(0 0 3px rgba(255,255,255,.7))}.chart svg .seat{transition:opacity .15s}
+.chart svg .seat{transition:opacity .15s,filter .15s;outline:none;cursor:pointer}
+.chart svg .seat[data-pos="nem_szavazott"],.chart svg .seat[data-pos="bejelentett_hianyzo"],.chart svg .seat[data-pos="igazoltan_tavol"],.chart svg .seat[data-pos="jelen_nem_szavazott"]{opacity:.55}
+.chart svg .seat.dim{opacity:.12}
+.chart svg .seat.hl,.chart svg .seat:hover,.chart svg .seat:focus-visible{opacity:1;filter:drop-shadow(0 0 3px rgba(255,255,255,.75))}
+.chart svg .against{fill:none;stroke:#fff;stroke-width:.55;stroke-opacity:.9}
+.chart.pinned svg .seat:not(.hl){opacity:.35}
+tbody tr.hl td{background:rgba(255,255,255,.07)}
+/* seat inspector */
+.inspector{margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
+.inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
+.inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+.inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
+.inspector .meta{color:var(--dim2);font-size:10px;letter-spacing:.06em}
+.inspector .row2{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:6px}
+.inspector .rec{color:var(--dim)}.inspector .rec b{color:var(--white);font-weight:400}
+.inspector .streak{display:inline-flex;gap:2px;align-items:center}.inspector .streak i{width:7px;height:10px;display:inline-block;background:var(--line2);border:1px solid var(--border)}
+.inspector .streak i.w{background:var(--c);border-color:var(--c)}.inspector .streak i.a{background:#fff;border-color:#fff}.inspector .streak i.c{background:var(--dim3);border-color:var(--dim3)}.inspector .streak i.n{background:transparent}.inspector .streak i.x{visibility:hidden}
+.inspector .streak i.now{outline:1px solid var(--white);outline-offset:1px}
+.inspector .lbl{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);margin-right:4px}
+.inspector .pin{position:absolute;top:6px;right:8px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim3)}
+.inspector .pin button{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;cursor:pointer;margin-left:6px}
+.inspector .pin button:hover{color:var(--white);border-color:var(--border-hi)}
+@media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
@@ -526,6 +568,7 @@ JS_VOTE = """
     var k = 0;
     rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos); if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', ''); });
     document.getElementById('rn').textContent = k + ' / ' + rows.length;
+    if (window.__karzatDimSeats) window.__karzatDimSeats(fac, pos);
   }
   document.querySelectorAll('button[data-fac]').forEach(function(b){ b.addEventListener('click', function(){ fac = b.getAttribute('data-fac'); press('button[data-fac]', b); apply(); }); });
   document.querySelectorAll('button[data-posf]').forEach(function(b){ b.addEventListener('click', function(){ pos = b.getAttribute('data-posf'); press('button[data-posf]', b); apply(); }); });
@@ -544,6 +587,60 @@ JS_VOTE = """
     th.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sort(); } });
   });
   apply();
+})();
+"""
+
+JS_INSPECT = """
+(function(){
+  var chart = document.querySelector('.chart'), box = document.getElementById('insp'), src = document.getElementById('insp-data');
+  if (!chart || !box || !src) return;
+  var data; try { data = JSON.parse(src.textContent); } catch (e) { return; }
+  var svg = chart.querySelector('svg'); if (!svg) return;
+  var hint = box.innerHTML, pinned = null, colours = {};
+  document.querySelectorAll('.legend .f i').forEach(function(i){ var t = i.parentNode.textContent.trim().split(' ')[0]; if (t) colours[t] = i.style.background; });
+  var POS = {igen:'igen', nem:'nem', tartozkodott:'tartózkodott', jelen_nem_szavazott:'jelen, nem szavazott', nem_szavazott:'nem szavazott', bejelentett_hianyzo:'előre bejelentett hiányzó', igazoltan_tavol:'igazoltan távol'};
+  var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\.html$/, '') : '';
+  var mpBase = (svg.closest('body').querySelector('.pager') ? '../kepviselo/' : 'kepviselo/');
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function render(az){
+    var d = data[az]; if (!d) return;
+    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], pos = d[4], cast = d[5], inroll = d[6], w = d[7], a = d[8], streak = d[9];
+    var c = colours[fac] || '#8a8a8a';
+    var part = inroll ? Math.round(100 * cast / inroll) : 0, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
+    var sq = '';
+    for (var i = 0; i < streak.length; i++) { var ch = streak[i]; sq += '<i class="' + (ch === '.' ? 'x' : ch) + (i === streak.length - 1 ? ' now' : '') + '" style="--c:' + c + '"></i>'; }
+    box.innerHTML = '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
+      '<span class="badge' + (pos === 'igen' ? ' ok' : pos === 'nem' ? ' no' : ' mid') + '">' + esc(POS[pos] || pos) + '</span></div>' +
+      '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyezés ' + agree + '%' : '') + '</span>' +
+      '<span class="streak" title="az utolsó ' + streak.length + ' név szerinti szavazás eddig a szavazásig: frakciójával (szín) · ellene (fehér) · nem adott le (üres)"><span class="lbl">utolsó ' + streak.length + '</span>' + sq + '</span></div>' +
+      (pinned ? '<span class="pin">rögzítve<button type="button" data-unpin>Esc</button></span>' : '');
+  }
+  function mark(az, on){
+    svg.querySelectorAll('.seat[data-az="' + az + '"]').forEach(function(g){ g.classList.toggle('hl', on); });
+    document.querySelectorAll('tr[data-az="' + az + '"]').forEach(function(r){ r.classList.toggle('hl', on); });
+  }
+  function show(az){ if (pinned && pinned !== az) return; render(az); }
+  function reset(){ if (pinned) return; box.innerHTML = hint; }
+  svg.addEventListener('mouseover', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; mark(g.getAttribute('data-az'), true); show(g.getAttribute('data-az')); });
+  svg.addEventListener('mouseout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
+  svg.addEventListener('focusin', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; mark(g.getAttribute('data-az'), true); show(g.getAttribute('data-az')); });
+  svg.addEventListener('focusout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
+  function pin(az){ if (pinned) mark(pinned, false); pinned = az; chart.classList.add('pinned'); mark(az, true); render(az); }
+  function unpin(){ if (pinned) mark(pinned, false); pinned = null; chart.classList.remove('pinned'); box.innerHTML = hint; }
+  svg.addEventListener('click', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) { unpin(); return; } var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); });
+  svg.addEventListener('keydown', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); } });
+  box.addEventListener('click', function(e){ if (e.target.closest('[data-unpin]')) unpin(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') unpin(); });
+  // the roll-call table talks back: hovering a row lights its seat
+  document.querySelectorAll('tr[data-az]').forEach(function(r){
+    r.addEventListener('mouseenter', function(){ mark(r.getAttribute('data-az'), true); show(r.getAttribute('data-az')); });
+    r.addEventListener('mouseleave', function(){ if (pinned !== r.getAttribute('data-az')) mark(r.getAttribute('data-az'), false); reset(); });
+  });
+  // filters dim the seats they exclude
+  window.__karzatDimSeats = function(fac, pos){
+    svg.querySelectorAll('.seat').forEach(function(g){ var ok = (fac === 'all' || g.getAttribute('data-f') === fac) && (pos === 'all' || g.getAttribute('data-pos') === pos); g.classList.toggle('dim', !ok); });
+  };
 })();
 """
 
@@ -567,6 +664,12 @@ JS_BOOT = """
   // panels: fade and settle in
   var panels = Array.prototype.slice.call(document.querySelectorAll('.panel, .counts .c, .fresh, .kz-terminal'));
   panels.forEach(function(p, i){ p.style.opacity = '0'; p.style.transform = 'scale(.985)'; p.style.transition = 'opacity .35s ease-out, transform .45s cubic-bezier(.2,.7,.2,1)'; setTimeout(function(){ p.style.opacity = ''; p.style.transform = ''; }, 60 + i * 35); });
+  // seats: pop in, inner rows first
+  var seats = Array.prototype.slice.call(document.querySelectorAll('.chart svg .seat'));
+  if (seats.length && seats.length < 600) {
+    seats.forEach(function(g){ g.style.transition = 'none'; g.style.opacity = '0'; g.style.transform = 'scale(.3)'; g.style.transformBox = 'fill-box'; g.style.transformOrigin = 'center'; });
+    seats.forEach(function(g, i){ setTimeout(function(){ g.style.transition = 'opacity .28s ease-out, transform .38s cubic-bezier(.2,.8,.2,1.2)'; g.style.opacity = ''; g.style.transform = ''; setTimeout(function(){ g.style.transition = ''; g.style.transformBox = ''; g.style.transformOrigin = ''; }, 450); }, 250 + i * 4); });
+  }
   // labels (mono, uppercase only): scramble in — digits and punctuation stay put
   document.querySelectorAll('[data-kz-text]').forEach(function(el, i){
     var txt = el.textContent, n = txt.length; if (!n || n > 120) return;
@@ -644,7 +747,7 @@ def page_tail(inp: dict, depth: int = 0, extra_script: str = "") -> str:
     return f'</div></main>\n{terminal_html(inp)}{extra_script}<script src="{rel}assets/karzat.js"></script>\n</body>\n</html>\n'
 
 
-def legend_html(view: dict, facs: list[dict]) -> str:
+def legend_html(view: dict, facs: list[dict], n_against: int = 0) -> str:
     fac_by_id = {f["id"]: f for f in facs}
     legend_f = "".join(
         f'<span class="f"><i style="background:{fac_by_id.get(t["faction"], {"colour": "#8a8a8a"})["colour"]}"></i>{esc(t["faction"])} <span class="mono">{esc(t["osszesen"])}</span></span>'
@@ -656,8 +759,52 @@ def legend_html(view: dict, facs: list[dict]) -> str:
                 '<span class="f"><svg viewBox="-7 -7 14 14" aria-hidden="true" focusable="false"><circle r="4.6" fill="currentColor" fill-opacity=".35" stroke="currentColor" stroke-opacity=".6"/></svg>nem szavazott</span>'
                 '<span class="f"><svg viewBox="-7 -7 14 14" aria-hidden="true" focusable="false"><circle r="2.2" fill="currentColor" fill-opacity=".6"/></svg>előre bejelentett hiányzó</span>'
                 + ('<span class="f"><svg viewBox="-7 -7 14 14" aria-hidden="true" focusable="false"><circle r="4.6" fill="none" stroke="currentColor" stroke-opacity=".5"/><circle r="2.2" fill="currentColor" fill-opacity=".6"/></svg>igazoltan távol</span>'
-                   if (view.get("position_counts") or {}).get("igazoltan_tavol") else ""))
+                   if (view.get("position_counts") or {}).get("igazoltan_tavol") else "")
+                + (f'<span class="f"><svg viewBox="-7 -7 14 14" aria-hidden="true" focusable="false"><circle r="6.2" fill="none" stroke="#fff" stroke-width="1"/><circle r="3.6" fill="currentColor"/></svg>frakciója többsége ellen <span class="mono">{n_against}</span></span>'
+                   if n_against else ""))
     return f'<div class="legend">{legend_f}</div><div class="legend">{legend_p}</div>'
+
+
+STREAK_LEN = 20
+
+
+def inspector_data(view: dict, inp: dict) -> tuple[dict, dict]:
+    """Per MP in this roll call: what the seat inspector shows without any network — name, faction, mandate,
+    seat, this vote's position, the cycle record (cast / in roll / with / against) and the last 20 roll calls
+    up to and including this one as a streak string (w = with faction, a = against, c = cast without a
+    faction plurality, n = did not cast, . = not in that roll call). Also returns {azon: align} for this vote."""
+    per_mp = inp["alignment"]["per_mp"]
+    pos_index = {ts: i for i, ts in enumerate(inp["order"])}
+    ts = view["ts"]
+    here = pos_index.get(ts, 0)
+    # the roll calls of the cycle up to and including this one, newest last
+    window = [t for t in inp["order"][:here + 1] if inp["store"]["positions"].get(t)][-STREAK_LEN:]
+    data, align_here = {}, {}
+    for pnt in view["positions"]:
+        azon = pnt.get("mp_azon")
+        if not azon:
+            continue
+        rec = per_mp.get(azon) or {"votes": [], "cast": 0, "in_roll": 0, "with": 0, "against": 0}
+        by_ts = {v["ts"]: v for v in rec["votes"]}
+        streak = ""
+        for t in window:
+            v = by_ts.get(t)
+            if v is None:
+                streak += "."
+            elif v["align"] == "with":
+                streak += "w"
+            elif v["align"] == "against":
+                streak += "a"
+            elif v["position"] in CAST:
+                streak += "c"
+            else:
+                streak += "n"
+        mp = inp["mps"].get(azon) or {}
+        align_here[azon] = (by_ts.get(ts) or {}).get("align")
+        data[azon] = [pnt["name"], pnt["faction"] or "", mandate_text(mp) if mp else "—",
+                      seat_text(mp) if (mp and inp["plan"]) else None, pnt["position"],
+                      rec["cast"], rec["in_roll"], rec["with"], rec["against"], streak]
+    return data, align_here
 
 
 def chart_block(view: dict, inp: dict) -> str:
@@ -665,8 +812,10 @@ def chart_block(view: dict, inp: dict) -> str:
     if not view["roll_call_available"]:
         return ('<div class="hero-meta" style="margin:14px 0">Titkos szavazás: nincs név szerinti lista, ezért ülésrend sincs — csak az összesített eredmény.</div>'
                 if view.get("secret") else '<div class="hero-meta" style="margin:14px 0">Ehhez a szavazáshoz nincs név szerinti lista.</div>')
+    data, align_here = inspector_data(view, inp)
+    n_against = sum(1 for a in align_here.values() if a == "against")
     if plan:
-        svg, info = seat_svg_real(view, facs, plan)
+        svg, info = seat_svg_real(view, facs, plan, align_here)
         geo = plan["geometry"]
         note = (f'Az ülésrend a képviselői adatlapok szektor/sor/szék adataiból rekonstruálva ({info["placed"]} képviselő a helyén'
                 + (f', {info["unplaced"]} a bal alsó tálcán, ülőhely-adat nélkül' if info["unplaced"] else '') + '), az elnöki emelvény felől nézve: '
@@ -674,10 +823,16 @@ def chart_block(view: dict, inp: dict) -> str:
                 f'a 0. szektor a miniszteri pad. A halvány karikák a sorszámozásból kikövetkeztetett üres helyek ({info.get("empty", 0)}); a teljesen üres sorokat nem ismerjük. '
                 'Becsült: egységes székszélesség (egy szektor olyan széles, amilyet a legsűrűbb sora kíván), a sorok távolsága és a székek balról jobbra sorrendje.')
     else:
-        svg = seat_svg_fallback(view, facs)
+        svg = seat_svg_fallback(view, facs, align_here)
         note = ("Sorrend: frakció, azon belül szavazat — nem az ülésrend. Az API az ülőhelyeket csak a jelenlegi ciklusra közli, "
                 "ezért egy lezárult ciklus szavazásait így, frakciónként rendezve rajzoljuk.")
-    return f'<div class="chart">{svg}</div>{legend_html(view, facs)}<div class="hero-meta" style="margin-top:8px">{note}</div>'
+    if n_against:
+        note += f' Fehér gyűrű: {n_against} képviselő a saját frakciója többségével szemben szavazott.'
+    payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    inspector = ('<div class="inspector" id="insp" aria-live="polite">'
+                 '<div class="insp-hint">Ülőhelyre mutatva vagy koppintva: a képviselő és a ciklusbeli mérlege. <span class="mono">Esc</span> old.</div></div>'
+                 f'<script type="application/json" id="insp-data">{payload}</script>')
+    return f'<div class="chart">{svg}</div>{inspector}{legend_html(view, facs, n_against)}<div class="hero-meta" style="margin-top:8px">{note}</div>'
 
 
 def verdict_block(view: dict, inp: dict) -> str:
@@ -765,7 +920,7 @@ def roll_call_table(view: dict, inp: dict) -> str:
             seat_full, seatkey = "—", "999999"
         c = colour.get(p["faction"] or "", "#8a8a8a")
         name_html = f'<a href="../kepviselo/{esc(p["mp_azon"])}.html">{esc(p["name"])}</a>' if p.get("mp_azon") else esc(p["name"])
-        trs.append(f'<tr data-f="{esc(p["faction"])}" data-p="{esc(p["position"])}" data-posrank="{pos_rank.get(p["position"], 9)}"' + (f' data-seat="{seatkey}"' if plan else "") + '>'
+        trs.append(f'<tr data-f="{esc(p["faction"])}" data-p="{esc(p["position"])}" data-posrank="{pos_rank.get(p["position"], 9)}"' + (f' data-seat="{seatkey}"' if plan else "") + (f' data-az="{esc(p["mp_azon"])}"' if p.get("mp_azon") else "") + '>'
                    f'<td>{name_html}</td><td><span class="pos"><i class="d" style="--c:{c}"></i>{esc(p["faction"])}</span></td>'
                    f'<td><span class="pos">{_glyph(p["position"], c)}{esc(POSITION_LABEL.get(p["position"], p["position"]))}</span></td>' + (f'<td class="mono">{esc(seat_full)}</td>' if plan else '') + '</tr>')
     fac_buttons = '<button type="button" data-fac="all" class="on" aria-pressed="true">minden frakció</button>' + "".join(f'<button type="button" data-fac="{esc(t["faction"])}" aria-pressed="false">{esc(t["faction"])}</button>' for t in view.get("faction_tallies") or [])
@@ -1156,7 +1311,7 @@ def build() -> str:
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_INDEX + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_BOOT).strip() + "\n"}
+    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
