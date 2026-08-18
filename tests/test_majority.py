@@ -29,6 +29,7 @@ class Needed(unittest.TestCase):
         self.assertEqual(needed(Rule.KETHARMAD_JELENLEVO, t), 133)   # ceil(132.67)
         self.assertEqual(needed(Rule.KETHARMAD_OSSZES, t), 133)
         self.assertEqual(needed(Rule.NEGYOTOD_JELENLEVO, t), 160)    # ceil(159.2)
+        self.assertEqual(needed(Rule.NEGYOTOD_OSSZES, t), 160)
         self.assertIsNone(needed(Rule.RELATIV, t))
 
     def test_present_based_rules_track_attendance_seat_based_do_not(self):
@@ -38,6 +39,7 @@ class Needed(unittest.TestCase):
         self.assertEqual(needed(Rule.NEGYOTOD_JELENLEVO, t), 141)    # ceil(140.8)
         self.assertEqual(needed(Rule.ABSZOLUT, t), 100)
         self.assertEqual(needed(Rule.KETHARMAD_OSSZES, t), 133)
+        self.assertEqual(needed(Rule.NEGYOTOD_OSSZES, t), 160)      # attendance-independent
 
     def test_exact_fractions_are_not_rounded_up(self):
         t = Tally(yes=0, no=0, present=150)
@@ -97,6 +99,7 @@ class Evaluate(unittest.TestCase):
         self.assertFalse(all_v["ketharmad_jelenlevo"].passed)  # needs 127
         self.assertFalse(all_v["ketharmad_osszes"].passed)     # needs 133
         self.assertFalse(all_v["negyotod_jelenlevo"].passed)   # needs 152
+        self.assertFalse(all_v["negyotod_osszes"].passed)      # needs 160
         self.assertNotIn("relativ", all_v)
 
     def test_relativ_is_not_decidable_from_yes_no(self):

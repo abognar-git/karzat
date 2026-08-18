@@ -1,0 +1,1498 @@
+{
+ "ts": "2026.06.15.17:20:04",
+ "slug": "2026-06-15T17-20-04",
+ "on_date": "2026-06-15",
+ "mode": "Listás az összes képviselő 2/3-ával",
+ "secret": false,
+ "kind": "dontes",
+ "igen": 135,
+ "nem": 50,
+ "tartozkodott": 6,
+ "osszes_szavazat": 191,
+ "result_raw": "Elfogadva",
+ "passed": true,
+ "remark": null,
+ "motions": [
+  {
+   "iromany": "T/51",
+   "point": null,
+   "title": "Magyarország Alaptörvényének tizenhatodik módosítása",
+   "outcome": "önálló indítvány minősített többséget igénylő része elfogadva",
+   "submitters": [
+    "Melléthei-Barna Márton (TISZA), Dr. Hantosi István (TISZA)"
+   ],
+   "submitter_ids": [],
+   "submitter_kind": "kepviselo",
+   "iromany_parsed": {
+    "kind": "T",
+    "number": 51
+   },
+   "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22bf4d53c4-01dc-4ff9-8b04-0f8029057cbc%22%7D"
+  }
+ ],
+ "seats": 199,
+ "faction_tallies": [
+  {
+   "faction": "TISZA",
+   "igen": 135,
+   "nem": 0,
+   "tartozkodott": 0,
+   "bejelentett_hianyzo": 1,
+   "nem_szavazott": 5,
+   "osszesen": 141
+  },
+  {
+   "faction": "Fidesz",
+   "igen": 0,
+   "nem": 42,
+   "tartozkodott": 0,
+   "bejelentett_hianyzo": 0,
+   "nem_szavazott": 2,
+   "osszesen": 44
+  },
+  {
+   "faction": "KDNP",
+   "igen": 0,
+   "nem": 8,
+   "tartozkodott": 0,
+   "bejelentett_hianyzo": 0,
+   "nem_szavazott": 0,
+   "osszesen": 8
+  },
+  {
+   "faction": "Mi Hazánk",
+   "igen": 0,
+   "nem": 0,
+   "tartozkodott": 6,
+   "bejelentett_hianyzo": 0,
+   "nem_szavazott": 0,
+   "osszesen": 6
+  }
+ ],
+ "totals_row": {
+  "igen": 135,
+  "nem": 50,
+  "tartozkodott": 6,
+  "bejelentett_hianyzo": 1,
+  "nem_szavazott": 7,
+  "osszesen": 199
+ },
+ "positions": [
+  {
+   "name_raw": "Dr. Árvay Nikolett (TISZA)",
+   "name": "Dr. Árvay Nikolett",
+   "faction": "TISZA",
+   "position": "jelen_nem_szavazott",
+   "mp_azon": "0032"
+  },
+  {
+   "name_raw": "Bakos Csaba Attila (TISZA)",
+   "name": "Bakos Csaba Attila",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002M"
+  },
+  {
+   "name_raw": "Balajti István (TISZA)",
+   "name": "Balajti István",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002T"
+  },
+  {
+   "name_raw": "Dr. Balatincz Péter (TISZA)",
+   "name": "Dr. Balatincz Péter",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003C"
+  },
+  {
+   "name_raw": "Balogh Mihály (TISZA)",
+   "name": "Balogh Mihály",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001P"
+  },
+  {
+   "name_raw": "Bárkányi Bence (TISZA)",
+   "name": "Bárkányi Bence",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003Y"
+  },
+  {
+   "name_raw": "Dr. Barna-Szabó Tímea (TISZA)",
+   "name": "Dr. Barna-Szabó Tímea",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002J"
+  },
+  {
+   "name_raw": "Benke József (TISZA)",
+   "name": "Benke József",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0046"
+  },
+  {
+   "name_raw": "Berki Ákos (TISZA)",
+   "name": "Berki Ákos",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001R"
+  },
+  {
+   "name_raw": "Bicskei László (TISZA)",
+   "name": "Bicskei László",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0031"
+  },
+  {
+   "name_raw": "Dr. Bihari Zoltán (TISZA)",
+   "name": "Dr. Bihari Zoltán",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0043"
+  },
+  {
+   "name_raw": "Dr. Bilisics Zita (TISZA)",
+   "name": "Dr. Bilisics Zita",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002Z"
+  },
+  {
+   "name_raw": "Boda Nikoletta (TISZA)",
+   "name": "Boda Nikoletta",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001Z"
+  },
+  {
+   "name_raw": "Bódis Kriszta (TISZA)",
+   "name": "Bódis Kriszta",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000W"
+  },
+  {
+   "name_raw": "Dr. Bódis Péter (TISZA)",
+   "name": "Dr. Bódis Péter",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0026"
+  },
+  {
+   "name_raw": "Bodóczi István (TISZA)",
+   "name": "Bodóczi István",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0028"
+  },
+  {
+   "name_raw": "Dr. Bóka Zsolt (TISZA)",
+   "name": "Dr. Bóka Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0037"
+  },
+  {
+   "name_raw": "Borics Mihály (TISZA)",
+   "name": "Borics Mihály",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002O"
+  },
+  {
+   "name_raw": "Borsós Gabriella (TISZA)",
+   "name": "Borsós Gabriella",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001C"
+  },
+  {
+   "name_raw": "Dr. Bögi Viktória (TISZA)",
+   "name": "Dr. Bögi Viktória",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002F"
+  },
+  {
+   "name_raw": "Dr. Bugya László (TISZA)",
+   "name": "Dr. Bugya László",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0039"
+  },
+  {
+   "name_raw": "Bujdosó Andrea Anna (TISZA)",
+   "name": "Bujdosó Andrea Anna",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000T"
+  },
+  {
+   "name_raw": "Czakó Czirbus Pál (TISZA)",
+   "name": "Czakó Czirbus Pál",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003H"
+  },
+  {
+   "name_raw": "Dr. Czipa András (TISZA)",
+   "name": "Dr. Czipa András",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0049"
+  },
+  {
+   "name_raw": "Csák László (TISZA)",
+   "name": "Csák László",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003W"
+  },
+  {
+   "name_raw": "Császár Martin (TISZA)",
+   "name": "Császár Martin",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001Q"
+  },
+  {
+   "name_raw": "Csatári Ernő (TISZA)",
+   "name": "Csatári Ernő",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002L"
+  },
+  {
+   "name_raw": "Cseh Tamás (TISZA)",
+   "name": "Cseh Tamás",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0045"
+  },
+  {
+   "name_raw": "Csézy Erzsébet (TISZA)",
+   "name": "Csézy Erzsébet",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000U"
+  },
+  {
+   "name_raw": "Csiszár Béla (TISZA)",
+   "name": "Csiszár Béla",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003R"
+  },
+  {
+   "name_raw": "Csontos Bence (TISZA)",
+   "name": "Csontos Bence",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0034"
+  },
+  {
+   "name_raw": "Csőszi Attila (TISZA)",
+   "name": "Csőszi Attila",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002P"
+  },
+  {
+   "name_raw": "Dr. Dicső Viktória (TISZA)",
+   "name": "Dr. Dicső Viktória",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003G"
+  },
+  {
+   "name_raw": "Diószegi Judit (TISZA)",
+   "name": "Diószegi Judit",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0027"
+  },
+  {
+   "name_raw": "Dr. Farkas Csongor (TISZA)",
+   "name": "Dr. Farkas Csongor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003V"
+  },
+  {
+   "name_raw": "Ferenczi Gábor (TISZA)",
+   "name": "Ferenczi Gábor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003Z"
+  },
+  {
+   "name_raw": "Forsthoffer Ágnes (TISZA)",
+   "name": "Forsthoffer Ágnes",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000P"
+  },
+  {
+   "name_raw": "Gajda Attila (TISZA)",
+   "name": "Gajda Attila",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004G"
+  },
+  {
+   "name_raw": "Gajdos László (TISZA)",
+   "name": "Gajdos László",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000O"
+  },
+  {
+   "name_raw": "Dr. Gáspár Levente (TISZA)",
+   "name": "Dr. Gáspár Levente",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0041"
+  },
+  {
+   "name_raw": "Gombár Dávid (TISZA)",
+   "name": "Gombár Dávid",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003E"
+  },
+  {
+   "name_raw": "Göröghné Bocskai Éva (TISZA)",
+   "name": "Göröghné Bocskai Éva",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000Z"
+  },
+  {
+   "name_raw": "Dr. Gurzó Mária (TISZA)",
+   "name": "Dr. Gurzó Mária",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002H"
+  },
+  {
+   "name_raw": "Gyömbér Dávid (TISZA)",
+   "name": "Gyömbér Dávid",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003O"
+  },
+  {
+   "name_raw": "Gyöngyösi István (TISZA)",
+   "name": "Gyöngyösi István",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001N"
+  },
+  {
+   "name_raw": "Gyuk Zsolt (TISZA)",
+   "name": "Gyuk Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001F"
+  },
+  {
+   "name_raw": "Hajdu Márton (TISZA)",
+   "name": "Hajdu Márton",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001K"
+  },
+  {
+   "name_raw": "Dr. Hallerné Dr. Nagy Anikó (TISZA)",
+   "name": "Dr. Hallerné Dr. Nagy Anikó",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0042"
+  },
+  {
+   "name_raw": "Halmai Ferenc (TISZA)",
+   "name": "Halmai Ferenc",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002E"
+  },
+  {
+   "name_raw": "Dr. Hantosi István (TISZA)",
+   "name": "Dr. Hantosi István",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001M"
+  },
+  {
+   "name_raw": "Hatala-Orosz Csaba (TISZA)",
+   "name": "Hatala-Orosz Csaba",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0047"
+  },
+  {
+   "name_raw": "Havasi Balázs (TISZA)",
+   "name": "Havasi Balázs",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003P"
+  },
+  {
+   "name_raw": "Dr. Hegedűs Zsolt Csaba (TISZA)",
+   "name": "Dr. Hegedűs Zsolt Csaba",
+   "faction": "TISZA",
+   "position": "nem_szavazott",
+   "mp_azon": "000V"
+  },
+  {
+   "name_raw": "Hende Máté (TISZA)",
+   "name": "Hende Máté",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002S"
+  },
+  {
+   "name_raw": "Horváth Nándor Zsolt (TISZA)",
+   "name": "Horváth Nándor Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003K"
+  },
+  {
+   "name_raw": "Dr. Jakab Zsuzsanna (TISZA)",
+   "name": "Dr. Jakab Zsuzsanna",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0011"
+  },
+  {
+   "name_raw": "Járosi Péter (TISZA)",
+   "name": "Járosi Péter",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003D"
+  },
+  {
+   "name_raw": "Jelencsik József (TISZA)",
+   "name": "Jelencsik József",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002C"
+  },
+  {
+   "name_raw": "Jójárt Erika (TISZA)",
+   "name": "Jójárt Erika",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0018"
+  },
+  {
+   "name_raw": "Judák Zsolt (TISZA)",
+   "name": "Judák Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004C"
+  },
+  {
+   "name_raw": "Dr. Juhász Áron (TISZA)",
+   "name": "Dr. Juhász Áron",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003M"
+  },
+  {
+   "name_raw": "Juhász Roland Csongor (TISZA)",
+   "name": "Juhász Roland Csongor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004A"
+  },
+  {
+   "name_raw": "Kalázdi-Kerekes Kinga (TISZA)",
+   "name": "Kalázdi-Kerekes Kinga",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001E"
+  },
+  {
+   "name_raw": "Kapitány István (TISZA)",
+   "name": "Kapitány István",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000Q"
+  },
+  {
+   "name_raw": "Kaprinyák Tibor (TISZA)",
+   "name": "Kaprinyák Tibor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001X"
+  },
+  {
+   "name_raw": "Kapronczai Balázs (TISZA)",
+   "name": "Kapronczai Balázs",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003L"
+  },
+  {
+   "name_raw": "Kármán András (TISZA)",
+   "name": "Kármán András",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "k122"
+  },
+  {
+   "name_raw": "Karsai-Juhász Katalin (TISZA)",
+   "name": "Karsai-Juhász Katalin",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004B"
+  },
+  {
+   "name_raw": "Dr. Kátai-Németh Vilmos (TISZA)",
+   "name": "Dr. Kátai-Németh Vilmos",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0019"
+  },
+  {
+   "name_raw": "Dr. Kincse Csongor (TISZA)",
+   "name": "Dr. Kincse Csongor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001B"
+  },
+  {
+   "name_raw": "Kiss János (TISZA)",
+   "name": "Kiss János",
+   "faction": "TISZA",
+   "position": "bejelentett_hianyzo",
+   "mp_azon": "003N"
+  },
+  {
+   "name_raw": "Dr. Kiss Máté Zsolt (TISZA)",
+   "name": "Dr. Kiss Máté Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001V"
+  },
+  {
+   "name_raw": "Dr. Koncz Áron (TISZA)",
+   "name": "Dr. Koncz Áron",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0020"
+  },
+  {
+   "name_raw": "Dr. Kovács Áron (TISZA)",
+   "name": "Dr. Kovács Áron",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003Q"
+  },
+  {
+   "name_raw": "Dr. Kovács Gyula (TISZA)",
+   "name": "Dr. Kovács Gyula",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003J"
+  },
+  {
+   "name_raw": "Kovács Petra Judit (TISZA)",
+   "name": "Kovács Petra Judit",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0038"
+  },
+  {
+   "name_raw": "Kőszegi Krisztián (TISZA)",
+   "name": "Kőszegi Krisztián",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001U"
+  },
+  {
+   "name_raw": "Kulcsár Krisztián (TISZA)",
+   "name": "Kulcsár Krisztián",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0016"
+  },
+  {
+   "name_raw": "László Endre Márton (TISZA)",
+   "name": "László Endre Márton",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0021"
+  },
+  {
+   "name_raw": "Lontay László (TISZA)",
+   "name": "Lontay László",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0044"
+  },
+  {
+   "name_raw": "Lovkó Csaba (TISZA)",
+   "name": "Lovkó Csaba",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003A"
+  },
+  {
+   "name_raw": "Dr. Lőrincz Viktória (TISZA)",
+   "name": "Dr. Lőrincz Viktória",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002I"
+  },
+  {
+   "name_raw": "Lukács Gábor (TISZA)",
+   "name": "Lukács Gábor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001W"
+  },
+  {
+   "name_raw": "Magyar Péter (TISZA)",
+   "name": "Magyar Péter",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "m076"
+  },
+  {
+   "name_raw": "Melléthei-Barna Márton (TISZA)",
+   "name": "Melléthei-Barna Márton",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0017"
+  },
+  {
+   "name_raw": "Dr. Miskolczi Orsolya (TISZA)",
+   "name": "Dr. Miskolczi Orsolya",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002B"
+  },
+  {
+   "name_raw": "Molnár János (TISZA)",
+   "name": "Molnár János",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004H"
+  },
+  {
+   "name_raw": "Molnár Zoltán (TISZA)",
+   "name": "Molnár Zoltán",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001A"
+  },
+  {
+   "name_raw": "Muhari Gergely (TISZA)",
+   "name": "Muhari Gergely",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002U"
+  },
+  {
+   "name_raw": "Müller Anna (TISZA)",
+   "name": "Müller Anna",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0029"
+  },
+  {
+   "name_raw": "Nagy Ervin (TISZA)",
+   "name": "Nagy Ervin",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0012"
+  },
+  {
+   "name_raw": "Dr. Nagy Márta (TISZA)",
+   "name": "Dr. Nagy Márta",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0040"
+  },
+  {
+   "name_raw": "Néher András (TISZA)",
+   "name": "Néher András",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003X"
+  },
+  {
+   "name_raw": "Dr. Németh Csilla (TISZA)",
+   "name": "Dr. Németh Csilla",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003I"
+  },
+  {
+   "name_raw": "Dr. Orbán Anita (TISZA)",
+   "name": "Dr. Orbán Anita",
+   "faction": "TISZA",
+   "position": "nem_szavazott",
+   "mp_azon": "000R"
+  },
+  {
+   "name_raw": "Pásztor Anett (TISZA)",
+   "name": "Pásztor Anett",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001L"
+  },
+  {
+   "name_raw": "Perticsné Kácsor Andrea (TISZA)",
+   "name": "Perticsné Kácsor Andrea",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0022"
+  },
+  {
+   "name_raw": "Polgár György (TISZA)",
+   "name": "Polgár György",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004D"
+  },
+  {
+   "name_raw": "Porcher Áron (TISZA)",
+   "name": "Porcher Áron",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001Y"
+  },
+  {
+   "name_raw": "Dr. Porpáczy Krisztina (TISZA)",
+   "name": "Dr. Porpáczy Krisztina",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0030"
+  },
+  {
+   "name_raw": "Pósfai Gábor (TISZA)",
+   "name": "Pósfai Gábor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000X"
+  },
+  {
+   "name_raw": "Radnai Márk (TISZA)",
+   "name": "Radnai Márk",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000S"
+  },
+  {
+   "name_raw": "Ráki Zsolt (TISZA)",
+   "name": "Ráki Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0036"
+  },
+  {
+   "name_raw": "Dr. Rák Richárd (TISZA)",
+   "name": "Dr. Rák Richárd",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001J"
+  },
+  {
+   "name_raw": "Rápli Róbert (TISZA)",
+   "name": "Rápli Róbert",
+   "faction": "TISZA",
+   "position": "jelen_nem_szavazott",
+   "mp_azon": "003T"
+  },
+  {
+   "name_raw": "Rost Andrea (TISZA)",
+   "name": "Rost Andrea",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000N"
+  },
+  {
+   "name_raw": "Rózsahegyi Áron (TISZA)",
+   "name": "Rózsahegyi Áron",
+   "faction": "TISZA",
+   "position": "jelen_nem_szavazott",
+   "mp_azon": "0048"
+  },
+  {
+   "name_raw": "Dr. Ruszin-Szendi Romulusz (TISZA)",
+   "name": "Dr. Ruszin-Szendi Romulusz",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0010"
+  },
+  {
+   "name_raw": "Dr. Ruzsa Diána (TISZA)",
+   "name": "Dr. Ruzsa Diána",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0024"
+  },
+  {
+   "name_raw": "Dr. Sárosi József (TISZA)",
+   "name": "Dr. Sárosi József",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002K"
+  },
+  {
+   "name_raw": "Dr. Sasi-Nagy Edit (TISZA)",
+   "name": "Dr. Sasi-Nagy Edit",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001O"
+  },
+  {
+   "name_raw": "Schummer Orsolya (TISZA)",
+   "name": "Schummer Orsolya",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001G"
+  },
+  {
+   "name_raw": "Dr. Simon Krisztián Márk (TISZA)",
+   "name": "Dr. Simon Krisztián Márk",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001S"
+  },
+  {
+   "name_raw": "Dr. Simon Zsuzsánna (TISZA)",
+   "name": "Dr. Simon Zsuzsánna",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0035"
+  },
+  {
+   "name_raw": "Dr. Sopov Ildikó Éva (TISZA)",
+   "name": "Dr. Sopov Ildikó Éva",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0025"
+  },
+  {
+   "name_raw": "Sóti Anikó Zsuzsanna (TISZA)",
+   "name": "Sóti Anikó Zsuzsanna",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001I"
+  },
+  {
+   "name_raw": "Strompová Viktória (TISZA)",
+   "name": "Strompová Viktória",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002N"
+  },
+  {
+   "name_raw": "Dr. Stumpf Péter (TISZA)",
+   "name": "Dr. Stumpf Péter",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004F"
+  },
+  {
+   "name_raw": "Dr. Szabó Alexandra (TISZA)",
+   "name": "Dr. Szabó Alexandra",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002D"
+  },
+  {
+   "name_raw": "Szabó Tibor (TISZA)",
+   "name": "Szabó Tibor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002R"
+  },
+  {
+   "name_raw": "Szafkó Zoltán Péter (TISZA)",
+   "name": "Szafkó Zoltán Péter",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001D"
+  },
+  {
+   "name_raw": "Szakács Péter Lajos (TISZA)",
+   "name": "Szakács Péter Lajos",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003F"
+  },
+  {
+   "name_raw": "Dr. Szijjártó Gábor (TISZA)",
+   "name": "Dr. Szijjártó Gábor",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003S"
+  },
+  {
+   "name_raw": "Szimon Renáta (TISZA)",
+   "name": "Szimon Renáta",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002Y"
+  },
+  {
+   "name_raw": "Szűcs Dóra (TISZA)",
+   "name": "Szűcs Dóra",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0013"
+  },
+  {
+   "name_raw": "Tanács Zoltán (TISZA)",
+   "name": "Tanács Zoltán",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "000Y"
+  },
+  {
+   "name_raw": "Tárkányi Zsolt (TISZA)",
+   "name": "Tárkányi Zsolt",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "004E"
+  },
+  {
+   "name_raw": "Tarr Zoltán (TISZA)",
+   "name": "Tarr Zoltán",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "t067"
+  },
+  {
+   "name_raw": "Tompa Enikő (TISZA)",
+   "name": "Tompa Enikő",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002G"
+  },
+  {
+   "name_raw": "Tóthmajor Balázs (TISZA)",
+   "name": "Tóthmajor Balázs",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0023"
+  },
+  {
+   "name_raw": "Tóth Norbert (TISZA)",
+   "name": "Tóth Norbert",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003B"
+  },
+  {
+   "name_raw": "Tóth Tamás (TISZA)",
+   "name": "Tóth Tamás",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001T"
+  },
+  {
+   "name_raw": "Trentin Balázs (TISZA)",
+   "name": "Trentin Balázs",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002X"
+  },
+  {
+   "name_raw": "Trompler Ildikó (TISZA)",
+   "name": "Trompler Ildikó",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002A"
+  },
+  {
+   "name_raw": "Ujvári Szilvia (TISZA)",
+   "name": "Ujvári Szilvia",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "003U"
+  },
+  {
+   "name_raw": "Varga Balázs (TISZA)",
+   "name": "Varga Balázs",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0033"
+  },
+  {
+   "name_raw": "Varga Lőrinc Mihály (TISZA)",
+   "name": "Varga Lőrinc Mihály",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "001H"
+  },
+  {
+   "name_raw": "Velkey György László (TISZA)",
+   "name": "Velkey György László",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "0014"
+  },
+  {
+   "name_raw": "Veres Ádám (TISZA)",
+   "name": "Veres Ádám",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002Q"
+  },
+  {
+   "name_raw": "Dr. Virágh Gabriella Mária (TISZA)",
+   "name": "Dr. Virágh Gabriella Mária",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002W"
+  },
+  {
+   "name_raw": "Weigand István (TISZA)",
+   "name": "Weigand István",
+   "faction": "TISZA",
+   "position": "igen",
+   "mp_azon": "002V"
+  },
+  {
+   "name_raw": "Ágh Péter (Fidesz)",
+   "name": "Ágh Péter",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "a011"
+  },
+  {
+   "name_raw": "Balla György (Fidesz)",
+   "name": "Balla György",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "b007"
+  },
+  {
+   "name_raw": "Balla Mihály (Fidesz)",
+   "name": "Balla Mihály",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "b008"
+  },
+  {
+   "name_raw": "Bencsik János (Fidesz)",
+   "name": "Bencsik János",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "b034"
+  },
+  {
+   "name_raw": "Dr. Bóka János (Fidesz)",
+   "name": "Dr. Bóka János",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "b130"
+  },
+  {
+   "name_raw": "Dr. Budai Gyula (Fidesz)",
+   "name": "Dr. Budai Gyula",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": null
+  },
+  {
+   "name_raw": "Czirbus Gábor (Fidesz)",
+   "name": "Czirbus Gábor",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004U"
+  },
+  {
+   "name_raw": "Dr. Csibi Krisztina (Fidesz)",
+   "name": "Dr. Csibi Krisztina",
+   "faction": "Fidesz",
+   "position": "nem_szavazott",
+   "mp_azon": "0005"
+  },
+  {
+   "name_raw": "Dr. Csuzda Gábor (Fidesz)",
+   "name": "Dr. Csuzda Gábor",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "000E"
+  },
+  {
+   "name_raw": "F. Kovács Sándor (Fidesz)",
+   "name": "F. Kovács Sándor",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "k151"
+  },
+  {
+   "name_raw": "Gulyás Gergely (Fidesz)",
+   "name": "Gulyás Gergely",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "g053"
+  },
+  {
+   "name_raw": "Gyopáros Alpár (Fidesz)",
+   "name": "Gyopáros Alpár",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "g048"
+  },
+  {
+   "name_raw": "Dr. Hankó Balázs (Fidesz)",
+   "name": "Dr. Hankó Balázs",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "h092"
+  },
+  {
+   "name_raw": "Dr. Hegedűs Barbara (Fidesz)",
+   "name": "Dr. Hegedűs Barbara",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "0002"
+  },
+  {
+   "name_raw": "Héjj Dávid (Fidesz)",
+   "name": "Héjj Dávid",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "h083"
+  },
+  {
+   "name_raw": "Hidvéghi Balázs (Fidesz)",
+   "name": "Hidvéghi Balázs",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "h074"
+  },
+  {
+   "name_raw": "Horváth László (Fidesz)",
+   "name": "Horváth László",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "h366"
+  },
+  {
+   "name_raw": "Kocsis Máté (Fidesz)",
+   "name": "Kocsis Máté",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "k100"
+  },
+  {
+   "name_raw": "Dr. Koncz Zsófia (Fidesz)",
+   "name": "Dr. Koncz Zsófia",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "k163"
+  },
+  {
+   "name_raw": "Kovács Sándor (Fidesz)",
+   "name": "Kovács Sándor",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "k765"
+  },
+  {
+   "name_raw": "Lázár János (Fidesz)",
+   "name": "Lázár János",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "l016"
+  },
+  {
+   "name_raw": "Molnárné Dr. Lezsák Anna (Fidesz)",
+   "name": "Molnárné Dr. Lezsák Anna",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004R"
+  },
+  {
+   "name_raw": "Nagy Bálint (Fidesz)",
+   "name": "Nagy Bálint",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "n053"
+  },
+  {
+   "name_raw": "Németh Balázs Lajos (Fidesz)",
+   "name": "Németh Balázs Lajos",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004S"
+  },
+  {
+   "name_raw": "Németh Zsolt (Fidesz)",
+   "name": "Németh Zsolt",
+   "faction": "Fidesz",
+   "position": "jelen_nem_szavazott",
+   "mp_azon": "n322"
+  },
+  {
+   "name_raw": "Dr. Orbán Balázs (Fidesz)",
+   "name": "Dr. Orbán Balázs",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "o015"
+  },
+  {
+   "name_raw": "Dr. Panyi Miklós (Fidesz)",
+   "name": "Dr. Panyi Miklós",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "p067"
+  },
+  {
+   "name_raw": "Papp Zsolt (Fidesz)",
+   "name": "Papp Zsolt",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004W"
+  },
+  {
+   "name_raw": "Pócs János (Fidesz)",
+   "name": "Pócs János",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "p041"
+  },
+  {
+   "name_raw": "Radics Béla (Fidesz)",
+   "name": "Radics Béla",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004X"
+  },
+  {
+   "name_raw": "Szalai Piroska (Fidesz)",
+   "name": "Szalai Piroska",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004T"
+  },
+  {
+   "name_raw": "Szentkirályi Alexandra (Fidesz)",
+   "name": "Szentkirályi Alexandra",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004Y"
+  },
+  {
+   "name_raw": "Szijjártó Péter (Fidesz)",
+   "name": "Szijjártó Péter",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": null
+  },
+  {
+   "name_raw": "Szűcs Gábor (Fidesz)",
+   "name": "Szűcs Gábor",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004Z"
+  },
+  {
+   "name_raw": "Dr. Takács Árpád (Fidesz)",
+   "name": "Dr. Takács Árpád",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "004V"
+  },
+  {
+   "name_raw": "Takács Péter (Fidesz)",
+   "name": "Takács Péter",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "t062"
+  },
+  {
+   "name_raw": "Dr. Tilki Attila (Fidesz)",
+   "name": "Dr. Tilki Attila",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "t023"
+  },
+  {
+   "name_raw": "Tuzson Bence (Fidesz)",
+   "name": "Tuzson Bence",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "t687"
+  },
+  {
+   "name_raw": "Varga Gábor (Fidesz)",
+   "name": "Varga Gábor",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "v048"
+  },
+  {
+   "name_raw": "Vitályos Eszter (Fidesz)",
+   "name": "Vitályos Eszter",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "z014"
+  },
+  {
+   "name_raw": "Dr. Vitányi István József (Fidesz)",
+   "name": "Dr. Vitányi István József",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "v008"
+  },
+  {
+   "name_raw": "V. Németh Zsolt (Fidesz)",
+   "name": "V. Németh Zsolt",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "n004"
+  },
+  {
+   "name_raw": "Witzmann Mihály (Fidesz)",
+   "name": "Witzmann Mihály",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "w704"
+  },
+  {
+   "name_raw": "Zsigó Róbert (Fidesz)",
+   "name": "Zsigó Róbert",
+   "faction": "Fidesz",
+   "position": "nem",
+   "mp_azon": "z004"
+  },
+  {
+   "name_raw": "Dr. Hargitai János (KDNP)",
+   "name": "Dr. Hargitai János",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "h006"
+  },
+  {
+   "name_raw": "Dr. Juhász Hajnalka (KDNP)",
+   "name": "Dr. Juhász Hajnalka",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "k155"
+  },
+  {
+   "name_raw": "Dr. Latorcai Csaba (KDNP)",
+   "name": "Dr. Latorcai Csaba",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "l049"
+  },
+  {
+   "name_raw": "Dr. Máthé Zsuzsa (KDNP)",
+   "name": "Dr. Máthé Zsuzsa",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "004Q"
+  },
+  {
+   "name_raw": "Nacsa Lőrinc (KDNP)",
+   "name": "Nacsa Lőrinc",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "n048"
+  },
+  {
+   "name_raw": "Rétvári Bence (KDNP)",
+   "name": "Rétvári Bence",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "r023"
+  },
+  {
+   "name_raw": "Dr. Seszták Miklós (KDNP)",
+   "name": "Dr. Seszták Miklós",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "s093"
+  },
+  {
+   "name_raw": "Dr. Simicskó István (KDNP)",
+   "name": "Dr. Simicskó István",
+   "faction": "KDNP",
+   "position": "nem",
+   "mp_azon": "s011"
+  },
+  {
+   "name_raw": "Dr. Apáti István (Mi Hazánk)",
+   "name": "Dr. Apáti István",
+   "faction": "Mi Hazánk",
+   "position": "tartozkodott",
+   "mp_azon": "a018"
+  },
+  {
+   "name_raw": "Dócs Dávid (Mi Hazánk)",
+   "name": "Dócs Dávid",
+   "faction": "Mi Hazánk",
+   "position": "tartozkodott",
+   "mp_azon": "d040"
+  },
+  {
+   "name_raw": "Dúró Dóra (Mi Hazánk)",
+   "name": "Dúró Dóra",
+   "faction": "Mi Hazánk",
+   "position": "tartozkodott",
+   "mp_azon": "d028"
+  },
+  {
+   "name_raw": "Novák Előd (Mi Hazánk)",
+   "name": "Novák Előd",
+   "faction": "Mi Hazánk",
+   "position": "tartozkodott",
+   "mp_azon": "n036"
+  },
+  {
+   "name_raw": "Szabadi István (Mi Hazánk)",
+   "name": "Szabadi István",
+   "faction": "Mi Hazánk",
+   "position": "tartozkodott",
+   "mp_azon": "s184"
+  },
+  {
+   "name_raw": "Toroczkai László (Mi Hazánk)",
+   "name": "Toroczkai László",
+   "faction": "Mi Hazánk",
+   "position": "tartozkodott",
+   "mp_azon": "t058"
+  }
+ ],
+ "position_counts": {
+  "jelen_nem_szavazott": 4,
+  "igen": 135,
+  "nem_szavazott": 3,
+  "bejelentett_hianyzo": 1,
+  "nem": 50,
+  "tartozkodott": 6
+ },
+ "roll_call_available": true,
+ "present": 195,
+ "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+ "majority": {
+  "rule": "ketharmad_osszes",
+  "source": "payload",
+  "evidence": "Listás az összes képviselő 2/3-ával",
+  "base": 199,
+  "needed": 133,
+  "margin": 2,
+  "passed_by_rule": true,
+  "agrees_with_source": true,
+  "present_assumed": false
+ },
+ "derived_at": "2026-08-18T08:19:13+00:00"
+}

@@ -41,7 +41,17 @@ POSITIONS: dict[str, str] = {
 }
 PRESENT_POSITIONS = ("igen", "nem", "tartozkodott", "jelen_nem_szavazott")   # the "jelen lévő" base — interpretation, VERIFY legally
 
-RESULTS: dict[str, bool | None] = {"Elfogadva": True, "Elutasítva": False, "Határozatképes": None}
+RESULTS: dict[str, bool | None] = {"Elfogadva": True, "Elutasítva": False, "Határozatképes": None,
+                                   "Érvénytelen": None}   # invalid vote (seen 1990, 1998)
+
+SEATS_199_FROM = "2014-05-06"   # the 2014–2018 term is the first with 199 seats; 386 before that
+
+
+def seats_for(on_date: str | None) -> int:
+    """Number of seats of the Országgyűlés on a given ISO date: 386 (1990–2014), 199 since the 2014 term."""
+    if on_date and on_date < SEATS_199_FROM:
+        return 386
+    return 199
 
 HONORIFICS = re.compile(r"^(?:dr\.|prof\.|ifj\.|id\.|özv\.|dr\s)\s*", re.IGNORECASE)
 
@@ -277,11 +287,14 @@ def _faction_tallies(kcs: Any) -> tuple[list[dict[str, Any]], dict[str, int] | N
 
 
 def parse_szavazas(payload: dict[str, Any], resolver: NameResolver | None = None,
-                   seats: int = 199) -> dict[str, Any]:
+                   seats: int | None = None) -> dict[str, Any]:
     """szavazas.cgi -> full vote record with faction tallies, per-MP positions and the majority verdict."""
     outer = payload.get("szavazas", payload)
     el = outer.get("szavazas", outer) if isinstance(outer, dict) and "szavazas" in outer else outer
     rec = _vote_core(el)
+    if seats is None:
+        seats = seats_for(rec["on_date"])
+    rec["seats"] = seats
     tallies, totals = _faction_tallies(el.get("kepvcsop_szerint"))
     positions = []
     counts: dict[str, int] = {}

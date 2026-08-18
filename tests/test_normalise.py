@@ -224,6 +224,20 @@ class Bills(unittest.TestCase):
         self.assertIsNone(submitter_kind([]))
 
 
+class Seats(unittest.TestCase):
+    def test_seats_by_date(self):
+        from karzat.normalise import seats_for
+        self.assertEqual(seats_for("1990-05-02"), 386)
+        self.assertEqual(seats_for("2014-05-05"), 386)
+        self.assertEqual(seats_for("2014-05-06"), 199)
+        self.assertEqual(seats_for("2026-06-15"), 199)
+        self.assertEqual(seats_for(None), 199)
+
+    def test_detail_records_carry_seats(self):
+        v = parse_szavazas(load("real_szavazas_2026-06-15T17-20-04.xml"))
+        self.assertEqual(v["seats"], 199)
+
+
 class RealModeVocabulary(unittest.TestCase):
     def test_every_observed_mode_classifies_from_payload(self):
         expect = {
@@ -234,6 +248,7 @@ class RealModeVocabulary(unittest.TestCase):
             "Listás a jelenlevők 4/5-ével": Rule.NEGYOTOD_JELENLEVO,
             "Titkos az összes képviselő 2/3-ával": Rule.KETHARMAD_OSSZES,
             "Titkos": Rule.EGYSZERU,
+            "Listás az összes képviselő 4/5-ével": Rule.NEGYOTOD_OSSZES,   # 2014 lists
         }
         for mode, rule in expect.items():
             with self.subTest(mode=mode):

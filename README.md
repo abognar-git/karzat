@@ -2,9 +2,10 @@
 
 **Konzol, rebuilt for the Országgyűlés: every recorded vote of the Hungarian
 Parliament, drawn seat by seat, with the majority rule that actually applied.**
-The parlament.hu Web API token arrived on 18 August 2026; the first fifteen calls
-have been read, fixtured and normalised. Nothing is ingested at scale yet and there
-is no site — this repository is the foundation, now standing on real payloads.
+The parlament.hu Web API token arrived on 18 August 2026. By the end of that day the
+whole of cycle 43 to date — 259 votes with their roll calls — was cached and
+normalised, and the first page was built: one vote drawn seat by seat with the rule
+that applied, and every vote listed with its threshold. Open `site/index.html`.
 
 <sub>**How to read this.** The first section is the whole idea in one page. After
 it come the data sources, the model, the analytical core, what the first real
@@ -70,13 +71,15 @@ teardown as the fallback.
 - [x] Harness: golden fingerprints of every fixture (`tests/test_golden.py`, `python3 -m karzat fingerprint`) and the README gate (`scripts/check_readme.py`, run by the suite) — the numbers in this file are recomputed, not typed
 - [x] Access token received 18 August 2026 (personal; `.env`, git-ignored)
 - [x] First live calls: MP list, four months of vote lists, five vote details, sitting days, one MP, the bill list, one bill — read, fixtured (`tests/fixtures/real_*`), normalised (`karzat/normalise.py`) and gated
-- [ ] Ingest at scale: `sync-mps`, `sync-votes` details for ciklus 43, load into SQLite (`schema.sql` v1)
-- [ ] Front end
+- [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
+- [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
+- [ ] `sync-mps` (199 MP records: seats, histories), SQLite loader over `normalise.py`
+- [ ] Per-vote pages and the real seating plan; cycle 42 for comparison
 
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 87 tests
+python3 -m unittest discover -s tests -t .      # offline; 95 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -87,7 +90,9 @@ python3 -m karzat freshness --fetch              # one ulesnap call; writes data
 python3 -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML → JSON
 python3 -m karzat fingerprint tests/fixtures/*.xml   # digest table for tests/test_golden.py
 python3 -m scripts.pull_wikidata                 # re-pull the Wikidata member snapshot (deliberately)
-python3 -m scripts.derive_first_light            # cache → data/derived/first_light.json (the numbers below)
+python3 -m scripts.derive_first_light            # cache → data/derived/{first_light,votes_index,hero_vote}.json
+python3 -m scripts.build_site                    # data/derived + config → site/index.html (--check to verify)
+python3 -m http.server 4174 --directory site     # then open http://localhost:4174/
 ```
 
 Everything the client fetches is cached as raw XML under `data/raw/<service>/` with
@@ -153,6 +158,23 @@ majority — recorded as such, so the site can never quietly show a default as a
 Per Wikidata on 2026-08-18, the 199 members of cycle 43 sit in four groups — TISZA 141,
 Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one group above the
 133-seat line on its own. That is why this module comes before any pixel of UI.
+
+## The first page
+
+`site/index.html` is one self-contained file (no CDN, no fonts fetched, one external
+link type: parlament.hu bill pages), Hungarian-first with the freshness sentence in both
+languages, light and dark. Top: the freshness contract's sentence. Hero: T/51, the 16th
+amendment of the Alaptörvény, 15 June 2026 — 199 seats drawn by faction and by the six
+recorded positions, with the verdict card: mode as the API states it, rule, base 199,
+needed 133, 135 igen, margin +2, and "számítás egyezik" because the computed verdict
+agrees with the recorded result. Then the headline counts, the mode table, T/71's four
+days, and the directory: all 259 votes, newest first, each with its rule, threshold /
+base, tally, margin and result, filterable by rule and result and searchable by subject.
+The seats are laid out algorithmically (faction, then position) — the API gives sector /
+row / seat, but the chamber's geometry is not digitised yet, and the page says so.
+
+Built by `scripts/build_site.py` from committed inputs only, with no clock read, so a
+clean checkout reproduces it byte for byte; `tests/test_site.py` fails if it does not.
 
 ## The identity spine
 
@@ -237,7 +259,10 @@ Numbers here come from `data/derived/first_light.json` (regenerate with
 `python3 -m scripts.derive_first_light`) and from the fixtures; the gate checks them.
 
 Between 9 May and 11 August 2026 the Országgyűlés recorded 259 votes over 23 sitting
-days: 258 decisions and 1 quorum check, 3 of them secret ballots. 190 were plain
+days: 258 decisions and 1 quorum check, 3 of them secret ballots. With all 259 roll
+calls in hand, the majority module's verdict agrees with the Országgyűlés's own
+Elfogadva/Elutasítva on 259 of 259 — 0 disagreements — which is the first evidence
+that the "present" interpretation is at least not contradicted by the record. 190 were plain
 "Listás" votes; 47 needed two-thirds of those present, 7 two-thirds of all 199, 6
 more than half of all 199, 5 four-fifths of those present — 65 qualified-majority
 votes, a quarter of all decisions. 5 votes ordered exceptional procedure
@@ -262,7 +287,8 @@ this section will say what the numbers cannot support.
 
 ```
 karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · majority.py (rules, thresholds, classifier) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
-scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py — cache → data/derived
+scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py — cache → data/derived · build_site.py — data/derived → site/index.html
+site/              index.html — the first page, generated, guarded by --check and tests/test_site.py
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v1 after the first real payloads
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels

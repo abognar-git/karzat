@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS vote (
     present_basis  TEXT,                          -- how `present` was derived
     -- karzat/majority.py: Rule enum, classification provenance, and the derived threshold
     majority_rule  TEXT CHECK (majority_rule IN ('egyszeru', 'abszolut', 'ketharmad_jelenlevo',
-                                                 'ketharmad_osszes', 'negyotod_jelenlevo', 'relativ')),
+                                                 'ketharmad_osszes', 'negyotod_jelenlevo', 'negyotod_osszes', 'relativ')),
     majority_source TEXT CHECK (majority_source IN ('payload', 'keyword', 'default')),  -- how the rule was decided
     majority_evidence TEXT,                       -- payload string or matched keyword, for the reader to disagree with
     needed         INTEGER,                       -- votes needed under majority_rule (majority.needed(); NULL for relativ)

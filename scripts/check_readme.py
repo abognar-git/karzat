@@ -114,6 +114,9 @@ def build() -> list[tuple[str, list]]:
     fl = first_light()
     bm = fl["by_mode"]
     bill = t71()
+    import json as _json
+    vi = _json.loads((ROOT / "data" / "derived" / "votes_index.json").read_text(encoding="utf-8"))
+    hero = _json.loads((ROOT / "data" / "derived" / "hero_vote.json").read_text(encoding="utf-8"))
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -169,6 +172,11 @@ def build() -> list[tuple[str, list]]:
          [int(bill["promulgation"]["mk_issue"]), bill["days_submission_to_promulgation"]]),
         # window: day numbers gated; if the month words stop matching, the fragment fails and says so
         ("Between {:,.0f} May and {:,.0f} August 2026", [int(fl["window"]["from"][8:10]), int(fl["window"]["to"][8:10])]),
+        # agreement of computed verdicts with the recorded results — from votes_index.json
+        ("on {:,.0f} of {:,.0f} — {:,.0f} disagreements", [vi["details_cached"] - len(vi["disagreements"]), vi["details_cached"], len(vi["disagreements"])]),
+        ("All {:,.0f} cycle-43 vote details synced ({:,.0f} calls)", [vi["details_cached"], 254]),
+        ("With all {:,.0f} roll\ncalls in hand", [vi["details_cached"]]),
+        ("needed {:,.0f}, {:,.0f} igen, margin +{:,.0f}, and", [hero["majority"]["needed"], hero["igen"], hero["majority"]["margin"]]),
     ]
 
 

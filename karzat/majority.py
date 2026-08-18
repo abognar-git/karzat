@@ -23,6 +23,9 @@ ketharmad_osszes      at least two-thirds of *all* MPs (133 of 199)      S) cikk
                                                                           26. cikk (3), 29. cikk (4), 30. cikk (3), 43. cikk (2)
                                                                           public officers; 11. cikk (3) KE 1st round (VERIFY each)
 negyotod_jelenlevo    at least four-fifths of the MPs *present*          HHSZ Házszabálytól eltérés (VERIFY §)
+negyotod_osszes       at least four-fifths of *all* MPs (160 of 199)     seen in the API's own vocabulary
+                                                                          ("Listás az összes képviselő 4/5-ével", 2014);
+                                                                          legal basis not identified (VERIFY)
 relativ               plurality among candidates, no yes/no threshold    11. cikk (4) KE 2nd round
 
 Arithmetic
@@ -61,6 +64,7 @@ class Rule(str, Enum):
     KETHARMAD_JELENLEVO = "ketharmad_jelenlevo"
     KETHARMAD_OSSZES = "ketharmad_osszes"
     NEGYOTOD_JELENLEVO = "negyotod_jelenlevo"
+    NEGYOTOD_OSSZES = "negyotod_osszes"
     RELATIV = "relativ"
 
 
@@ -107,6 +111,11 @@ RULES: dict[Rule, RuleInfo] = {
         Rule.NEGYOTOD_JELENLEVO, "Jelen lévők négyötöde", "Four-fifths of those present",
         "present", "ceil(4*present/5)",
         ("HHSZ — Házszabálytól eltérés (VERIFY §)",),
+    ),
+    Rule.NEGYOTOD_OSSZES: RuleInfo(
+        Rule.NEGYOTOD_OSSZES, "Összes képviselő négyötöde", "Four-fifths of all MPs",
+        "seats", "ceil(4*seats/5)",
+        ("W-API 'Szavazási mód' = 'Listás az összes képviselő 4/5-ével' (observed 2014); legal basis not identified (VERIFY)",),
     ),
     Rule.RELATIV: RuleInfo(
         Rule.RELATIV, "Relatív többség", "Plurality among candidates",
@@ -208,7 +217,7 @@ def needed(rule: Rule, tally: Tally) -> int | None:
         return _more_than_half(b)
     if rule in (Rule.KETHARMAD_JELENLEVO, Rule.KETHARMAD_OSSZES):
         return _at_least_fraction(b, 2, 3)
-    if rule == Rule.NEGYOTOD_JELENLEVO:
+    if rule in (Rule.NEGYOTOD_JELENLEVO, Rule.NEGYOTOD_OSSZES):
         return _at_least_fraction(b, 4, 5)
     raise AssertionError(rule)
 
@@ -265,6 +274,7 @@ PAYLOAD_RULES: dict[str, Rule] = {
     "az összes képviselő 2/3-ával": Rule.KETHARMAD_OSSZES,
     "az összes képviselő felével": Rule.ABSZOLUT,          # "felével" = (more than) half of all MPs
     "a jelenlevők 4/5-ével": Rule.NEGYOTOD_JELENLEVO,
+    "az összes képviselő 4/5-ével": Rule.NEGYOTOD_OSSZES,     # seen in 2014 lists
     "listás": Rule.EGYSZERU,
     "titkos": Rule.EGYSZERU,
     # older / prose forms kept for text sources

@@ -8,8 +8,8 @@
 # kepviselok.cgi / <kepvcsop-tagsagok> before publishing, and match `id` to the API's spelling.
 # tests/test_wikidata.py asserts the seat counts below equal the snapshot's summary.
 #
-# Colours are conventional party colours so the diagram renders; replace with the palette you
-# settle on. sort_order: left→right seating in the chamber diagram (parlament.hu: government
+# Colours are this project's presentation colours, not the parties' brands (Fidesz orange is
+# the one conventional pick); TISZA is teal so it sits far from orange, blue and green. sort_order: left→right seating in the chamber diagram (parlament.hu: government
 # benches to the Speaker's right, opposition to the left — VERIFY which way the diagram faces).
 
 seats: 199
@@ -17,7 +17,7 @@ seats: 199
 factions:
   - id: TISZA
     name: Tisztelet és Szabadság Párt
-    colour: "#7b3f00"
+    colour: "#1f8a70"
     sort_order: 10
     wikidata_group: Tisztelet és Szabadság Párt
     wikidata_group_qid: Q125418097
@@ -70,4 +70,5 @@ majority_rules:
   ketharmad_jelenlevo: { label: "Jelen lévők kétharmada",        base: present, needed: "ceil(2N/3)", api: ["Listás a jelenlevők 2/3-ával"] }     # sarkalatos; sürgős tárgyalás
   ketharmad_osszes:    { label: "Összes képviselő kétharmada",  base: seats,   needed: "ceil(2N/3)", api: ["Listás az összes képviselő 2/3-ával", "Titkos az összes képviselő 2/3-ával"] }     # 133 — Alaptörvény, AB tagok, tisztségviselők
   negyotod_jelenlevo:  { label: "Jelen lévők négyötöde",        base: present, needed: "ceil(4N/5)", api: ["Listás a jelenlevők 4/5-ével"] }     # Házszabálytól eltérés
+  negyotod_osszes:     { label: "Összes képviselő négyötöde",   base: seats,   needed: "ceil(4N/5)", api: ["Listás az összes képviselő 4/5-ével"] }  # 160 — seen in 2014 lists; basis VERIFY
   relativ:             { label: "Relatív többség",              base: candidates, needed: "n/a" }         # KE 2. forduló

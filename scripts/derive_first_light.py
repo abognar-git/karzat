@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Derive a small, committed summary of what the cached W-API payloads say — the numbers the
-README quotes about cycle 43 come from here, never from prose.
+"""Derive the committed inputs of the site and the README from the cached W-API payloads.
 
-    python3 -m scripts.derive_first_light        # data/raw/* -> data/derived/first_light.json
+    python3 -m scripts.derive_first_light [--hero 2026.06.15.17:20:04]
 
-Reads only the local cache (no network). Re-run after a sync; the README gate then tells you
-which sentences moved. The raw cache is git-ignored; this file is not, so a clean checkout
-can still verify the README.
+Writes, from data/raw/* (no network):
+  data/derived/first_light.json   counts the README quotes (modes, results, procedures, MPs, sitting days)
+  data/derived/votes_index.json   every listed vote with its motion, majority verdict and — where the
+                                  detail is cached — the roll-call counts; plus sitting days and bill links
+  data/derived/hero_vote.json     one vote in full (positions, factions, verdict) for the seat chart
+
+The raw cache is git-ignored; these files are not, so a clean checkout can rebuild the site and
+verify the README. Re-run after every sync; the README gate then says which sentences moved.
 """
 
 from __future__ import annotations
@@ -21,11 +25,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from karzat.normalise import parse_kepviselok, parse_szavazasok, parse_ulesnap  # noqa: E402
-from karzat.xmlutil import parse_xml, to_dict  # noqa: E402
+from karzat.majority import RULES, Rule, Tally, classify, evaluate  # noqa: E402
+from karzat.normalise import (  # noqa: E402
+    NameResolver,
+    parse_kepviselok,
+    parse_szavazas,
+    parse_szavazasok,
+    parse_ulesnap,
+    seats_for,
+)
+from karzat.xmlutil import parse_xml, to_dict, ts_to_slug  # noqa: E402
 
 RAW = ROOT / "data" / "raw"
-OUT = ROOT / "data" / "derived" / "first_light.json"
+DERIVED = ROOT / "data" / "derived"
+OUT = DERIVED / "first_light.json"
+HERO_DEFAULT = "2026.06.15.17:20:04"   # T/51, Alaptörvény 16. módosítása — 135–50–6, 2/3 of all, margin +2
 
 
 def load(path: Path) -> dict:
@@ -33,10 +47,32 @@ def load(path: Path) -> dict:
     return {root.tag: to_dict(root)}
 
 
-def main() -> int:
+def list_majority(v: dict) -> dict | None:
+    """Majority verdict from list-level numbers only (present = Összes szavazat; flagged)."""
+    if v["kind"] != "dontes" or v["igen"] is None:
+        return None
+    cls = classify(payload_rule=v["mode"])
+    tally = Tally(yes=v["igen"], no=v["nem"] or 0, abstain=v["tartozkodott"] or 0, present=v["osszes_szavazat"],
+                  seats=seats_for(v["on_date"]))
+    r = evaluate(cls.rule, tally)
+    return {"rule": r.rule, "label_hu": r.label_hu, "source": cls.source, "base": r.base, "needed": r.needed,
+            "margin": r.margin, "passed_by_rule": r.passed,
+            "agrees_with_source": (r.passed == v["passed"]) if v["passed"] is not None and r.passed is not None else None,
+            "present_basis": "list: Összes szavazat"}
+
+
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--hero", default=HERO_DEFAULT, help="idopont of the vote to write out in full")
+    ap.add_argument("--since", default="2026-05-01", help="ignore listed votes before this ISO date (cycle 43 starts 2026-05-09)")
+    ap.add_argument("--until", default=None, help="ignore listed votes after this ISO date")
+    args = ap.parse_args(argv)
+
     votes = []
     for f in sorted((RAW / "szavazasok").glob("*.xml")):
         votes.extend(parse_szavazasok(load(f)))
+    votes = [v for v in votes if v["on_date"] and v["on_date"] >= args.since and (not args.until or v["on_date"] <= args.until)]
     votes.sort(key=lambda v: v["ts"] or "")
     if not votes:
         print("no cached vote lists under data/raw/szavazasok — run sync-votes first", file=sys.stderr)
@@ -80,6 +116,73 @@ def main() -> int:
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(json.dumps(out, ensure_ascii=False, indent=1))
     print(f"written {OUT}")
+
+    # -- votes_index.json ---------------------------------------------------------------
+    resolver = NameResolver(mps) if mps else None
+    bill_links = {}
+    if (RAW / "iromanyok" / "all.xml").exists():
+        root = parse_xml((RAW / "iromanyok" / "all.xml").read_bytes())
+        for el in root:
+            if el.get("szam") and el.get("href"):
+                bill_links[el.get("szam")] = el.get("href")
+    index_rows = []
+    details_cached = 0
+    for v in votes:
+        row = {k: v[k] for k in ("ts", "slug", "on_date", "mode", "secret", "kind", "igen", "nem", "tartozkodott",
+                                 "osszes_szavazat", "result_raw", "passed", "remark")}
+        row["time"] = v["ts"][11:16] if v["ts"] else None
+        row["motions"] = [{"iromany": m["iromany"], "title": m["title"], "outcome": m["outcome"],
+                           "submitters": m["submitters"], "submitter_kind": m["submitter_kind"],
+                           "kind": m["iromany_parsed"].get("kind"), "href": bill_links.get(m["iromany"] or "")}
+                          for m in v["motions"]]
+        detail_path = RAW / "szavazas" / f"{ts_to_slug(v['ts'])}.xml"
+        if detail_path.exists():
+            d = parse_szavazas(load(detail_path), resolver=resolver)
+            details_cached += 1
+            row["detail"] = True
+            row["position_counts"] = d["position_counts"]
+            row["present"] = d["present"]
+            row["present_basis"] = d["present_basis"]
+            row["faction_tallies"] = d["faction_tallies"]
+            m = d["majority"]
+            row["majority"] = ({"rule": m["rule"], "label_hu": RULES[Rule(m["rule"])].label_hu,
+                                "source": m["source"], "base": m["base"], "needed": m["needed"], "margin": m["margin"],
+                                "passed_by_rule": m["passed_by_rule"], "agrees_with_source": m["agrees_with_source"],
+                                "present_basis": d["present_basis"]} if m else None)
+        else:
+            row["detail"] = False
+            row["majority"] = list_majority(v)
+        index_rows.append(row)
+    sync_state = ROOT / "data" / "sync_state.json"
+    last_sync_at = None
+    if sync_state.exists():
+        try:
+            last_sync_at = json.loads(sync_state.read_text(encoding="utf-8")).get("last_sync_at")
+        except json.JSONDecodeError:
+            last_sync_at = None
+    idx = {
+        "derived_at": out["derived_at"], "last_sync_at": last_sync_at, "seats": seats_for(votes[0]["on_date"]),
+        "since": args.since, "window": out["window"],
+        "votes": index_rows, "details_cached": details_cached,
+        "sitting_days": days,
+        "disagreements": [r["ts"] for r in index_rows if r.get("majority") and r["majority"]["agrees_with_source"] is False],
+    }
+    (DERIVED / "votes_index.json").write_text(json.dumps(idx, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"written {DERIVED / 'votes_index.json'}: {len(index_rows)} votes, {details_cached} with details, "
+          f"{len(idx['disagreements'])} rule/source disagreements")
+
+    # -- hero_vote.json -----------------------------------------------------------------
+    hero_path = RAW / "szavazas" / f"{ts_to_slug(args.hero)}.xml"
+    if hero_path.exists():
+        hero = parse_szavazas(load(hero_path), resolver=resolver)
+        hero["derived_at"] = out["derived_at"]
+        for m in hero["motions"]:
+            m["href"] = bill_links.get(m["iromany"] or "")
+        (DERIVED / "hero_vote.json").write_text(json.dumps(hero, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"written {DERIVED / 'hero_vote.json'}: {hero['ts']} {hero['motions'][0]['iromany'] if hero['motions'] else ''} "
+              f"{hero['igen']}-{hero['nem']}-{hero['tartozkodott']} rule={hero['majority']['rule'] if hero['majority'] else None}")
+    else:
+        print(f"hero vote {args.hero} not in cache — run sync-votes first", file=sys.stderr)
     return 0
 
 
