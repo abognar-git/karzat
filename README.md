@@ -59,6 +59,7 @@ angle) is documented in the teardown as the fallback.
 - [x] Draft schema (`schema.sql`) and faction/majority config (`config/factions.yml`) — both marked VERIFY throughout
 - [x] Majority-rule module (`karzat/majority.py`): six rules with citations, explicit present/seats bases, classifier with provenance; 23 tests
 - [x] Cycle-43 faction list from Wikidata (199 members, four groups) as a placeholder to verify against the API
+- [x] Freshness contract (`karzat/freshness.py` + `python3 -m karzat freshness`): status and a bilingual sentence from sitting days, newest vote, last sync; 16 tests
 - [ ] Access token (requested via parlament.hu/web-api-regisztracio, Aug 2026)
 - [ ] First `probe` against the live API; replace synthetic test fixtures with trimmed real XML
 - [ ] Ingest: `sync-mps`, `sync-votes` for ciklus 43, normalise into SQLite
@@ -67,12 +68,13 @@ angle) is documented in the teardown as the fallback.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 38 tests
+python3 -m unittest discover -s tests -t .      # offline; 54 tests
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
 python3 -m karzat probe                          # one call: encoding, root tag, counts, first record
 python3 -m karzat sync-votes --from 2026-05-01   # month-windowed lists + one call per vote, cached
 python3 -m karzat sync-mps                       # MP list + one call per MP, cached
+python3 -m karzat freshness --fetch              # one ulesnap call; writes data/freshness.json + the sentence
 python3 -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML → JSON
 ```
 
@@ -139,6 +141,20 @@ Per Wikidata on 2026-08-18, the 199 members of cycle 43 sit in four groups — T
 Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one group above the
 133-seat line on its own. That is why this module comes before any pixel of UI.
 
+## The freshness contract
+
+Konzol pulsed "LIVE_FEED_ACTIVE" while its ingest had been dead for 26 days. karzat
+cannot: `karzat/freshness.py` takes the sitting days known from `ulesnap.cgi`, the newest
+vote held, and the last successful sync, and produces a status and **a sentence** — the
+sentence is what the page shows, in Hungarian and English. Its rules: never say "live" (a
+test forbids the word); always name the date of the newest vote; count what is missing in
+*sitting days*, not calendar days, so recess is not staleness ("Parliament sat on 22 and 23
+July 2026; the votes from those 2 sitting days are not here yet"); always state the sync's
+age and say plainly when it has not run on schedule; and when the sitting-day list is
+unavailable, say that currency cannot be told rather than imply it. `sync-votes` and
+`sync-mps` record `data/sync_state.json` only on success; `freshness` reads it, costs one
+`ulesnap` call, and writes `data/freshness.json` for the static build.
+
 ## Decisions taken before the token arrived
 
 - **Votes are keyed by timestamp**, URL slug `YYYY-MM-DDTHH-MM-SS`; no invented roll numbers.
@@ -169,8 +185,8 @@ cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · majority.py (rules, thresholds, classifier)
-tests/             offline tests: client/XML (synthetic fixtures, to be replaced by real XML) · majority arithmetic
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · majority.py (rules, thresholds, classifier) · freshness.py (what the site may say about currency)
+tests/             offline tests: client/XML (synthetic fixtures, to be replaced by real XML) · majority arithmetic · freshness sentences
 schema.sql         draft normalised store (SQLite)
 config/factions.yml faction colours/order, position vocabulary, majority rules — placeholders
 reference/         parlament-webapi/ (manual v2.5, PDF + text) · konzol/ (teardown + notes)

@@ -4,9 +4,12 @@
     python -m karzat probe                        # one MP-list call: encoding, root tag, counts
     python -m karzat sync-votes --from 2026-09-01 --to 2026-09-30 [--no-details]
     python -m karzat sync-mps                     # kepviselok + kepviselo for every p_azon
+    python -m karzat freshness [--ckl 43] [--fetch]   # the sentence the site is allowed to show
     python -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML -> JSON
 
 The token comes from PARLAMENT_API_TOKEN (environment or a local .env file).
+Successful sync runs record data/sync_state.json; `freshness` reads it and writes
+data/freshness.json.
 """
 
 from __future__ import annotations
@@ -19,15 +22,43 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from .api import SERVICES, TOKEN_ENV, ApiError, WebApi, build_url, mask_token
+from .freshness import BUDAPEST, assess, now_budapest, sitting_days_from_ulesnap
 from .xmlutil import (
     as_list,
     declared_encoding,
     fmt_date,
     parse_ts,
     parse_xml,
+    slug_to_ts,
     to_dict,
     ts_to_slug,
 )
+
+
+def _data_dir(cache: Path) -> Path:
+    """data/raw -> data ; anything else -> its parent."""
+    return cache.parent if cache.name == "raw" else cache
+
+
+def _write_sync_state(cache: Path, cmd: str, api: WebApi, **extra) -> Path:
+    """Record a successful sync run. Only called when the run completed without a fatal error."""
+    d = _data_dir(cache)
+    d.mkdir(parents=True, exist_ok=True)
+    path = d / "sync_state.json"
+    state = {"last_sync_at": now_budapest().isoformat(), "cmd": cmd,
+             "live_calls": api.live_calls, "cache_hits": api.cache_hits, **extra}
+    path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return path
+
+
+def _read_sync_state(cache: Path) -> dict | None:
+    path = _data_dir(cache) / "sync_state.json"
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
 
 
 def load_dotenv(path: Path = Path(".env")) -> None:
@@ -133,6 +164,9 @@ def cmd_sync_votes(args: argparse.Namespace) -> int:
         cur = nxt + timedelta(days=1)
     print(f"done: {total_listed} listed, {total_detail} details cached; "
           f"live calls={api.live_calls} cache hits={api.cache_hits}")
+    state = _write_sync_state(args.cache, "sync-votes", api, date_from=d_from.isoformat(),
+                              date_to=d_to.isoformat(), listed=total_listed, details=total_detail)
+    print(f"sync state -> {state}")
     return 0
 
 
@@ -167,6 +201,55 @@ def cmd_sync_mps(args: argparse.Namespace) -> int:
         except ApiError as e:
             print(f"  {azon}: {e}", file=sys.stderr)
     print(f"done: {ok}/{len(ids)} MP records cached; live calls={api.live_calls} cache hits={api.cache_hits}")
+    state = _write_sync_state(args.cache, "sync-mps", api, mps=len(ids), ok=ok)
+    print(f"sync state -> {state}")
+    return 0
+
+
+def _newest_cached_vote(cache: Path) -> datetime | None:
+    """Max vote timestamp among cached szavazas/*.xml files (names are ts slugs)."""
+    folder = cache / "szavazas"
+    if not folder.exists():
+        return None
+    best: datetime | None = None
+    for p in folder.glob("*.xml"):
+        try:
+            dt = parse_ts(slug_to_ts(p.stem)).replace(tzinfo=BUDAPEST)
+        except ValueError:
+            continue
+        if best is None or dt > best:
+            best = dt
+    return best
+
+
+def cmd_freshness(args: argparse.Namespace) -> int:
+    api = WebApi(cache_dir=args.cache)
+    sitting_days = None
+    try:
+        if args.fetch:
+            raw = api.fetch("ulesnap", refresh=True, p_ckl=args.ckl)
+        else:
+            path = api.cache_path("ulesnap", {"p_ckl": args.ckl})
+            raw = path.read_bytes() if path.exists() else None
+        if raw is not None:
+            sitting_days = sitting_days_from_ulesnap(to_dict(parse_xml(raw)))
+            if not sitting_days:
+                print("ulesnap payload held no recognisable dates — adjust sitting_days_from_ulesnap()",
+                      file=sys.stderr)
+                sitting_days = None
+    except ApiError as e:
+        print(f"ulesnap: {e}", file=sys.stderr)
+    state = _read_sync_state(args.cache)
+    last_sync = datetime.fromisoformat(state["last_sync_at"]) if state and state.get("last_sync_at") else None
+    fr = assess(sitting_days=sitting_days, newest_vote_at=_newest_cached_vote(args.cache),
+                last_sync_at=last_sync, now=now_budapest())
+    out = _data_dir(args.cache) / "freshness.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(fr.to_dict(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"status   {fr.status}")
+    print(f"EN       {fr.sentence_en}")
+    print(f"HU       {fr.sentence_hu}")
+    print(f"written  {out}")
     return 0
 
 
@@ -201,12 +284,18 @@ def main(argv: list[str] | None = None) -> int:
     sm = sub.add_parser("sync-mps", help="cache the MP list and every MP record")
     sm.set_defaults(fn=cmd_sync_mps)
 
+    sf = sub.add_parser("freshness", help="compute the freshness sentence from cache + sync state")
+    sf.add_argument("--ckl", type=int, default=43, help="parliamentary cycle for ulesnap (default 43)")
+    sf.add_argument("--fetch", action="store_true", help="refresh ulesnap.cgi from the API (needs token)")
+    sf.set_defaults(fn=cmd_freshness)
+
     si = sub.add_parser("inspect", help="print a cached XML file as JSON")
     si.add_argument("file")
     si.set_defaults(fn=cmd_inspect)
 
     args = p.parse_args(argv)
-    if args.cmd in ("probe", "sync-votes", "sync-mps") and not os.environ.get(TOKEN_ENV):
+    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps") or (args.cmd == "freshness" and args.fetch)
+    if needs_token and not os.environ.get(TOKEN_ENV):
         print(f"{TOKEN_ENV} is not set — copy .env.example to .env once the token arrives "
               f"(dry-run and inspect work without it)", file=sys.stderr)
         return 2

@@ -21,3 +21,6 @@ venv/
 .cursor/
 .vscode/
 .DS_Store
+
+# generated run state (rebuilt by sync/freshness commands)
+data/*.json
