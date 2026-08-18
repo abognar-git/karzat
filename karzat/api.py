@@ -92,6 +92,10 @@ def cache_key(service: str, params: dict[str, Any]) -> str:
         return f"mp_{params['p_azon']}"
     if service == "iromany":
         return f"iromany_{params['p_izon']}"
+    if service == "felszolalasok" and "p_ckl" in params and "p_nap" in params:
+        return f"ckl{int(params['p_ckl'])}_nap{int(params['p_nap']):04d}"
+    if service == "ulesnap" and "p_ckl" in params:
+        return f"ckl{int(params['p_ckl'])}"
     if not params:
         return "all"
     blob = json.dumps(params, sort_keys=True, ensure_ascii=False).encode("utf-8")

@@ -128,8 +128,10 @@ def main(argv: list[str] | None = None) -> int:
             cur = next((f for f in rec["factions"] if f.get("to") is None), None) or (rec["factions"][0] if rec["factions"] else None)
         member = store["members"].get(azon, {})
         if cycle == 43:
-            mandate = {"mandate_kind": (listed_m or {}).get("mandate_kind"), "county": (listed_m or {}).get("county"),
-                       "constituency_no": (listed_m or {}).get("constituency_no")}
+            span = mandate_from_record(rec, cycle)                  # the record's own row for this cycle: when the mandate began and, if it did, ended
+            mandate = {"mandate_kind": (listed_m or {}).get("mandate_kind") or span.get("mandate_kind"), "county": (listed_m or {}).get("county") or span.get("county"),
+                       "constituency_no": (listed_m or {}).get("constituency_no") or span.get("constituency_no"),
+                       "mandate_from": span.get("mandate_from"), "mandate_to": span.get("mandate_to")}
             faction = (listed_m or {}).get("faction") or member.get("faction") or (cur or {}).get("faction")
         else:
             mandate = mandate_from_record(rec, cycle)
@@ -149,12 +151,19 @@ def main(argv: list[str] | None = None) -> int:
             "factions": (rec or {}).get("factions") or [],
             "elections": (rec or {}).get("elections") or [],
             "motion_stats": (rec or {}).get("motion_stats") or [],
+            "speech_stats": (rec or {}).get("speech_stats") or [],       # the record's own per-cycle felszólalás / technikai counts
+            "committees": (rec or {}).get("committees") or [],           # bizottsági tagságok with dates, every cycle
             "motions": motions_by_azon.get(azon, []),           # this cycle's irományok (current cycle only; empty for earlier cycles)
             "wikidata_qid": wd.get("qid"),
             "wikidata_end": wd.get("end"),
             "parlament_url": f"https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22{azon}%22%7D",
         }
-    out = {"derived_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "cycle": cycle, "count": len(out_mps),
+    sync_state = ROOT / "data" / "sync_state.json"
+    try:
+        last_sync = json.loads(sync_state.read_text(encoding="utf-8")).get("last_sync_at") if sync_state.exists() else None
+    except json.JSONDecodeError:
+        last_sync = None
+    out = {"derived_at": last_sync or datetime.now(timezone.utc).isoformat(timespec="seconds"), "cycle": cycle, "count": len(out_mps),
            "current": sum(1 for m in out_mps.values() if m["current"]),
            "with_record": sum(1 for m in out_mps.values() if m["has_record"]), "mps": out_mps}
     OUT = out_path

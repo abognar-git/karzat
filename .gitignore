@@ -39,6 +39,8 @@ site/szamok/
 site/modszer/
 site/kereses/
 site/feed/
+site/felszolalas/
+site/kepviselom/
 
 # editor/session config
 .claude/

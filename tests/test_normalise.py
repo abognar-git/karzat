@@ -80,7 +80,7 @@ class SittingDays(unittest.TestCase):
         days = parse_ulesnap(load("real_ulesnap_43.xml"))
         self.assertEqual(len(days), 23)
         self.assertEqual(days[0], {"date": "2026-05-09", "ulnap": 1, "weekday": "szombat", "session": "2026. tavaszi",
-                                   "kind": "Rendes", "remark": None})
+                                   "kind": "Rendes", "remark": None, "date_corrected": False, "weekday_conflict": False})    # the weekday agrees with the date here
         self.assertEqual(days[-1]["date"], "2026-08-11")
         self.assertEqual(days[-1]["session"], "2026. nyári")
         self.assertEqual(days[-1]["kind"], "Rendkívüli")

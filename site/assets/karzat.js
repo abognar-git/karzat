@@ -11,7 +11,7 @@
     wrap.parentNode.insertBefore(nav, wrap.nextSibling);
     function render(reset){
       if (reset) page = 1;
-      var rows = Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty'); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
+      var rows = Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty') && !(r.cells.length === 1 && r.cells[0].colSpan > 1); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
       var total = vis.length, pages = Math.max(1, Math.ceil(total / per));
       if (page > pages) page = pages;
       rows.forEach(function(r){ r.hidden = true; });
@@ -36,7 +36,7 @@
       else if (empty && empty.parentNode) empty.parentNode.removeChild(empty);
     }
     var render0 = render;
-    render = function(reset){ render0(reset); emptyRow(tbody.querySelectorAll('tr:not([data-x]):not(.empty)').length); };
+    render = function(reset){ render0(reset); var placeholder = Array.prototype.some.call(tbody.rows, function(r){ return r.cells.length === 1 && r.cells[0].colSpan > 1 && !r.classList.contains('empty'); }); emptyRow(placeholder ? 1 : tbody.querySelectorAll('tr:not([data-x]):not(.empty)').length); };
     nav.addEventListener('click', function(e){
       var b = e.target.closest('button[data-pg]'); if (!b) return;
       var v = b.getAttribute('data-pg'), had = document.activeElement === b;

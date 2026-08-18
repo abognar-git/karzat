@@ -186,7 +186,7 @@ def _mp_ids(root) -> list[str]:
 def cmd_sync_mps(args: argparse.Namespace) -> int:
     api = WebApi(cache_dir=args.cache)
     try:
-        root = parse_xml(api.fetch("kepviselok"))
+        root = parse_xml(api.fetch("kepviselok", refresh=args.refresh))
     except ApiError as e:
         print(f"kepviselok: {e}", file=sys.stderr)
         return 2
@@ -199,7 +199,7 @@ def cmd_sync_mps(args: argparse.Namespace) -> int:
     ok = 0
     for azon in ids:
         try:
-            api.fetch("kepviselo", p_azon=azon)
+            api.fetch("kepviselo", p_azon=azon, refresh=args.refresh)
             ok += 1
         except ApiError as e:
             print(f"  {azon}: {e}", file=sys.stderr)
@@ -223,6 +223,45 @@ def _newest_cached_vote(cache: Path) -> datetime | None:
         if best is None or dt > best:
             best = dt
     return best
+
+
+def cmd_sync_speeches(args: argparse.Namespace) -> int:
+    """Cache every sitting day's speech list of a cycle (felszolalasok.cgi, one call per day; the day list from
+    ulesnap.cgi). Days already cached are not fetched again, except the newest --refresh-last ones of the current
+    cycle, whose list may still be growing on the day itself."""
+    from .normalise import CYCLE_STARTS, parse_ulesnap
+    api = WebApi(cache_dir=args.cache)
+    current = args.ckl == max(CYCLE_STARTS)
+    try:
+        days = parse_ulesnap(to_dict_payload(api.fetch("ulesnap", p_ckl=args.ckl, refresh=current)))   # the open cycle's day list grows
+    except ApiError as e:
+        print(f"ulesnap {args.ckl}: {e}", file=sys.stderr)
+        return 2
+    days = [d for d in days if d.get("ulnap")]
+    if args.from_day:
+        days = [d for d in days if d["ulnap"] >= args.from_day]
+    refresh_last = args.refresh_last if args.refresh_last is not None else (1 if current else 0)   # a closed cycle's lists do not grow
+    newest = sorted(days, key=lambda d: d["ulnap"])[-refresh_last:] if refresh_last else []
+    n_speech = 0
+    for d in sorted(days, key=lambda d: d["ulnap"]):
+        refresh = d in newest
+        try:
+            raw = api.fetch("felszolalasok", p_ckl=args.ckl, p_nap=d["ulnap"], refresh=refresh)
+        except ApiError as e:
+            print(f"  day {d['ulnap']} ({d['date']}): {e}", file=sys.stderr)
+            continue
+        k = raw.count(b"<felszolalas>")
+        n_speech += k
+        if args.verbose or refresh:
+            print(f"  day {d['ulnap']:>4} {d['date']}: {k} speeches{' (refreshed)' if refresh else ''}")
+    print(f"done: cycle {args.ckl}, {len(days)} sitting days, {n_speech} speeches; live calls={api.live_calls} cache hits={api.cache_hits}")
+    return 0
+
+
+def to_dict_payload(raw: bytes) -> dict:
+    root = parse_xml(raw)
+    from .xmlutil import to_dict
+    return {root.tag: to_dict(root)}
 
 
 def cmd_freshness(args: argparse.Namespace) -> int:
@@ -329,8 +368,15 @@ def main(argv: list[str] | None = None) -> int:
     sv.set_defaults(fn=cmd_sync_votes)
 
     sm = sub.add_parser("sync-mps", help="cache the MP list and every MP record")
+    sm.add_argument("--refresh", action="store_true", help="re-fetch the list and every record even if cached (records carry per-cycle counts that grow: speeches, motions, committees)")
     sm.set_defaults(fn=cmd_sync_mps)
 
+    ssp = sub.add_parser("sync-speeches", help="cache every sitting day's speech list of a cycle (felszolalasok.cgi)")
+    ssp.add_argument("--ckl", type=int, required=True, help="cycle number (36 or later — the API has speeches from 1998)")
+    ssp.add_argument("--from-day", type=int, default=0, help="first ülésnap number to fetch (default: all)")
+    ssp.add_argument("--refresh-last", type=int, default=None, help="re-fetch the newest N days even if cached (an open day's list grows); default 1 for the current cycle, 0 for a closed one")
+    ssp.add_argument("--verbose", action="store_true")
+    ssp.set_defaults(fn=cmd_sync_speeches)
     sf = sub.add_parser("freshness", help="compute the freshness sentence from cache + sync state")
     sf.add_argument("--ckl", type=int, default=43, help="parliamentary cycle for ulesnap (default 43)")
     sf.add_argument("--fetch", action="store_true", help="refresh ulesnap.cgi from the API (needs token)")
@@ -355,7 +401,7 @@ def main(argv: list[str] | None = None) -> int:
     ss.set_defaults(fn=cmd_stats)
 
     args = p.parse_args(argv)
-    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps") or (args.cmd == "freshness" and args.fetch)
+    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches") or (args.cmd == "freshness" and args.fetch)
     if needs_token and not os.environ.get(TOKEN_ENV):
         print(f"{TOKEN_ENV} is not set — copy .env.example to .env once the token arrives "
               f"(dry-run and inspect work without it)", file=sys.stderr)

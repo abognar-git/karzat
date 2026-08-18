@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<felszolalasok ulesnap="2" datum="2026.05.12.">
+            <esemeny>
+                Ülésnap megnyitása
+                        <felszolalas>
+                            <sorszam>1</sorszam>
+                            <felszolalo>Forsthoffer Ágnes (TISZA)</felszolalo>
+                            <felsztip>Az ülésnap megnyitása</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>4:04</videoido>
+                        </felszolalas>
+            </esemeny>
+            <esemeny>
+                Az ülés napirendjének megállapítása
+                        <felszolalas>
+                            <sorszam>1</sorszam>
+                            <felszolalo>Forsthoffer Ágnes (TISZA)</felszolalo>
+                            <felsztip>ülés napirendjének elfogadása</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>4:04</videoido>
+                        </felszolalas>
+            </esemeny>
+            <esemeny>
+                Bejelentések
+                        <felszolalas>
+                            <sorszam>2</sorszam>
+                            <felszolalo>Sóti Anikó Zsuzsanna (TISZA)</felszolalo>
+                            <felsztip>jegyzői ismertetés</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>1:59</videoido>
+                        </felszolalas>
+                        <felszolalas>
+                            <sorszam>3</sorszam>
+                            <felszolalo>Forsthoffer Ágnes (TISZA)</felszolalo>
+                            <felsztip>ülésvezetés</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>1:37</videoido>
+                        </felszolalas>
+            </esemeny>
+            <esemeny>
+                Bejelentések
+                        <felszolalas>
+                            <sorszam>4</sorszam>
+                            <felszolalo>Magyar Péter (TISZA)</felszolalo>
+                            <felsztip>felszólalás</felsztip>
+                            <kormbiz>miniszterelnök</kormbiz>
+                            <felszkezdete>2026.05.12.</felszkezdete>
+                            <videoido>38:26</videoido>
+                        </felszolalas>
+            </esemeny>
+            <esemeny>
+                Eskütétel
+                        <felszolalas>
+                            <sorszam>5</sorszam>
+                            <felszolalo>Forsthoffer Ágnes (TISZA)</felszolalo>
+                            <felsztip>ülésvezetés</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>0:21</videoido>
+                        </felszolalas>
+                        <felszolalas>
+                            <sorszam>6</sorszam>
+                            <felszolalo>Sóti Anikó Zsuzsanna (TISZA)</felszolalo>
+                            <felsztip>jegyzői ismertetés</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>1:19</videoido>
+                        </felszolalas>
+                        <felszolalas>
+                            <sorszam>7</sorszam>
+                            <felszolalo>Forsthoffer Ágnes (TISZA)</felszolalo>
+                            <felsztip>ülésvezetés</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>16:18</videoido>
+                        </felszolalas>
+            </esemeny>
+            <esemeny>
+                Ülésnap lezárása
+                        <felszolalas>
+                            <sorszam>7</sorszam>
+                            <felszolalo>Forsthoffer Ágnes (TISZA)</felszolalo>
+                            <felsztip>Az ülésnap bezárása</felsztip>
+                            <kormbiz></kormbiz>
+                            <felszkezdete></felszkezdete>
+                            <videoido>16:18</videoido>
+                        </felszolalas>
+            </esemeny>
+</felszolalasok>

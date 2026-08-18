@@ -1,4 +1,4 @@
--- karzat — SQLite schema (v2: seven roll-call states after the cycle-42 backfill, 2026-08-18; v1 after the first real payloads).
+-- karzat — SQLite schema (v3: speeches and committee memberships, 2026-08-18; v2: seven roll-call states after the cycle-42 backfill; v1 after the first real payloads).
 --
 -- Target shape for the normalised store the front end reads from. Columns are named after
 -- what the W-API actually returns (see karzat/normalise.py for the payload → record mapping);
@@ -183,6 +183,38 @@ CREATE TABLE IF NOT EXISTS vote_motion (
     submitter_ids  TEXT,                          -- p_azon list from the href, when present
     submitter_kind TEXT,
     PRIMARY KEY (vote_ts, iromany)
+);
+
+-- One line of a sitting day's speech list (felszolalasok.cgi): who spoke, on which agenda item, what kind of speech.
+-- `technical` follows karzat.normalise.SUBSTANTIVE_KINDS (chairing, announcements, procedural result lines = 1).
+CREATE TABLE IF NOT EXISTS speech (
+    ckl            INTEGER NOT NULL REFERENCES ciklus(ckl),
+    nap            INTEGER NOT NULL,              -- ülésnap number
+    on_date        TEXT,                          -- the day's <datum>
+    ord            INTEGER NOT NULL,              -- position in the day's list (1-based, over all agenda items)
+    seq            INTEGER,                       -- <sorszam> as printed (restarts per agenda item)
+    event          TEXT,                          -- the agenda item's title (<esemeny> text)
+    iromany        TEXT,                          -- iromány number found in the title, e.g. 'T/51'
+    speaker_label  TEXT,                          -- <felszolalo> as printed: 'Név (Frakció)' or a non-MP's name
+    mp_azon        TEXT REFERENCES mp(azon),      -- resolved person; NULL for ministers/officials who are not MPs
+    faction        TEXT,                          -- the faction printed in the label
+    kind           TEXT,                          -- <felsztip>
+    role           TEXT,                          -- <kormbiz> ('miniszterelnök', 'az Országgyűlés alelnöke' …)
+    duration_s     INTEGER,                       -- <videoido> mm:ss → seconds
+    technical      INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (ckl, nap, ord)
+);
+CREATE INDEX IF NOT EXISTS speech_mp ON speech(mp_azon, on_date);
+
+-- Committee memberships from the MP record (<bizottsagi-tagsagok>), every cycle, dated.
+CREATE TABLE IF NOT EXISTS mp_committee (
+    mp_azon        TEXT NOT NULL REFERENCES mp(azon),
+    committee      TEXT NOT NULL,
+    subcommittee   TEXT,
+    role           TEXT,                          -- 'tag' / 'alelnök' / 'elnök' …
+    from_date      TEXT,
+    to_date        TEXT,
+    PRIMARY KEY (mp_azon, committee, subcommittee, role, from_date)
 );
 
 CREATE TABLE IF NOT EXISTS sync_run (

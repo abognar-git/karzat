@@ -128,6 +128,11 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
     } for v in as_list((r.get("valasztasok") or {}).get("valasztas")) if isinstance(v, dict)]
     motions = [{"ciklus": s.get("@ciklus"), "onallo": _int(s.get("@onallo_db")), "nem_onallo": _int(s.get("@nem_onallo_db"))}
                for s in as_list((r.get("inditvanyok") or {}).get("stat")) if isinstance(s, dict)]
+    speech_stats = [{"ciklus": s.get("@ciklus"), "speeches": _int(s.get("@felszolalas_db")), "technical": _int(s.get("@technikai_db"))}
+                    for s in as_list((r.get("felszolalasok") or {}).get("stat")) if isinstance(s, dict)]
+    committees = [{"committee": t.get("@bizottsag") or None, "subcommittee": t.get("@albizottsag") or None, "role": t.get("@tisztseg") or None,
+                   "from": _hu_date(t.get("@tol")), "to": _hu_date(t.get("@ig"))}
+                  for t in as_list((r.get("bizottsagi-tagsagok") or {}).get("tagsag")) if isinstance(t, dict)]
     return {
         "name": r.get("nev"),
         "photo_url": r.get("fenykep") or None,
@@ -136,6 +141,8 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
         "factions": factions,
         "elections": elections,
         "motion_stats": motions,
+        "speech_stats": speech_stats,        # per cycle: felszólalás / technikai counts, as parlament.hu counts them
+        "committees": committees,            # bizottsági tagságok with dates (subcommittees named)
     }
 
 
@@ -203,12 +210,18 @@ class NameResolver:
         return keep
 
     def _consistent(self, azon: str, faction: str | None, on_date: str | None) -> bool:
-        """A candidate with a known history must not contradict the printed faction for the vote's cycle."""
-        rows = self.histories.get(azon, {}).get("factions") or []
-        if not faction or not rows:
+        """A candidate with a known history must not contradict the printed faction for the vote's cycle. A label with no
+        faction at all (a speech list prints ministers, officials, guests that way — an MP speaks with a faction) is
+        taken for a known person only if that person had a faction row in the cycle of the date, i.e. sat then; a
+        namesake outside parliament (an oath-taking Monetary Council member) stays unresolved, with the role."""
+        h = self.histories.get(azon, {})
+        rows = h.get("factions") or []
+        if not rows:
             return True
         label = CYCLE_LABELS.get(cycle_of_date(on_date) or -1)
         in_cycle = [f for c, f in rows if label is None or c == label]
+        if not faction:
+            return (bool(in_cycle) or label in (h.get("speech_cycles") or [])) if label else True
         return faction in in_cycle                           # no row for that cycle → not an MP then → not this person
 
     def _pick(self, cands: set[str], faction: str | None, on_date: str | None) -> str | None:
@@ -228,6 +241,8 @@ class NameResolver:
         hit = self._pick(self.record_names.get(name) or set(), faction, on_date)     # the API's own spelling
         if hit:
             return hit
+        if not faction and self.histories:
+            return None                                       # a faction-less label (not an MP's line) is taken only for a record spelled exactly so
         return self._pick(self.by_bare.get(strip_honorific(name)) or set(), faction, on_date)
 
 
@@ -252,22 +267,132 @@ def record_histories(cache: "Path") -> dict[str, dict[str, Any]]:
         except Exception:      # a truncated download must not take the whole build down
             continue
         if rec.get("name"):
-            out[p.stem[3:]] = {"name": rec["name"], "factions": [(f.get("ciklus"), f.get("faction")) for f in rec.get("factions") or []]}
+            out[p.stem[3:]] = {"name": rec["name"], "factions": [(f.get("ciklus"), f.get("faction")) for f in rec.get("factions") or []],
+                               # cycles in which parlament.hu credits speeches to this record — a former MP speaking as a state secretary is still that person
+                               "speech_cycles": [st.get("ciklus") for st in rec.get("speech_stats") or [] if (st.get("speeches") or st.get("technical"))]}
     return out
 
 
 # -- sitting days ---------------------------------------------------------------------------
 
+_WEEKDAYS_HU = ("hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat", "vasárnap")
+
+
 def parse_ulesnap(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """ulesnap.cgi → sitting days. The API prints each day's date and weekday name; for the older cycles (36, 37 seen)
+    the date is one day early against its own weekday (1998-06-17 'csütörtök' — the 17th was a Wednesday), for the
+    recent cycles the two agree. Where the weekday names the next day, the date is moved to it and the row is flagged
+    date_corrected — the weekday is the evidence, the shift is not silent."""
+    from datetime import date as _d, timedelta as _td
     root = payload.get("ulesnapok", payload)
-    out = []
+    rows = []
     for u in as_list(root.get("ulesnap")):
         if not isinstance(u, dict):
             continue
-        out.append({"date": _hu_date(u.get("datum")), "ulnap": _int(u.get("ulnap")), "weekday": u.get("nap") or None,
+        d = _hu_date(u.get("datum"))
+        wd = (u.get("nap") or "").strip().lower() or None
+        shift = None                                   # per row: does the weekday name say the printed date, or the next day?
+        if d and wd in _WEEKDAYS_HU:
+            dt = _d.fromisoformat(d)
+            if _WEEKDAYS_HU[dt.weekday()] == wd:
+                shift = 0
+            elif _WEEKDAYS_HU[(dt + _td(days=1)).weekday()] == wd:
+                shift = 1
+        rows.append((u, d, wd, shift))
+    # the shift is a property of the file (one cycle), not of a row: when nearly every dated row says "next day", the two
+    # or three that do not are the weekday names' own slips (an unshifted twin would land on its neighbour's date)
+    dated = [r for r in rows if r[3] is not None]
+    systematic = bool(dated) and sum(1 for r in dated if r[3] == 1) >= 0.9 * len(dated)
+    out = []
+    for u, d, wd, shift in rows:
+        corrected = False
+        if d and (systematic or shift == 1):
+            d = (_d.fromisoformat(d) + _td(days=1)).isoformat()
+            corrected = True
+        out.append({"date": d, "ulnap": _int(u.get("ulnap")), "weekday": u.get("nap") or None,
                     "session": u.get("ulszak") or None, "kind": u.get("ulesjelleg") or None,
-                    "remark": u.get("megjegyzes") or None})
+                    "remark": u.get("megjegyzes") or None, "date_corrected": corrected,
+                    "weekday_conflict": bool(d and wd in _WEEKDAYS_HU and _WEEKDAYS_HU[_d.fromisoformat(d).weekday()] != wd)})
     return sorted(out, key=lambda x: (x["date"] or "", x["ulnap"] or 0))
+
+
+# -- speeches -------------------------------------------------------------------------------
+#
+#   felszolalasok.cgi  <felszolalasok ulesnap datum><esemeny>Napirendi pont címe<felszolalas><sorszam/><felszolalo>Név (Frakció)
+#                      </felszolalo><felsztip/><kormbiz/><felszkezdete/><videoido/></felszolalas>…</esemeny>…
+#   One <esemeny> is one agenda item (its text is the title, often carrying the iromány number); its children are the
+#   speeches in order. felsztip is the kind ("felszólalás", "ülésvezetés", "kérdés megválaszolva" …), kormbiz the
+#   speaker's role when not an MP's own ("miniszterelnök", "az Országgyűlés alelnöke"), videoido the length mm:ss.
+
+# A speech is *substantive* when someone speaks on the matter — a speech, a two-minute one, a lead speaker's, before/after
+# the agenda, an interpellation/question and its answers and rejoinders, a rapporteur's or committee's report, a point of
+# order. Everything else the list prints under a person's name is procedure: chairing (ülésvezetés), the clerk's
+# announcements, opening/closing the day, adopting the agenda, the oath, and the chair's result/status lines ("… elfogadva",
+# "… vita megkezdve/lezárva", immunity decisions). parlament.hu's own per-MP record splits the same way ("felszólalás" vs
+# "technikai"): with this list our count equals the record's for all but a handful of MPs in each cycle (the derive prints the
+# check; the MP page prints the record's number beside ours when they differ). Personal-involvement remarks (személyes érintettség) are
+# on the record's technical side, so they are here. A speech printed under several agenda items (a deputy speaker's one
+# announcement covering several items) is one speech: parse_felszolalasok flags the later printings `reprint`, and every
+# count treats a reprint as non-substantive while still listing it under each item.
+SUBSTANTIVE_KINDS = {
+    "felszólalás", "kétperces felszólalás", "vezérszónoki felszólalás", "napirend előtti felszólalás", "napirend előttihez hozzászólás",
+    "napirend utáni felszólalás", "napirend utánihoz hozzászólás", "elhangzik az interpelláció/kérdés/azonnali kérdés", "kérdés megválaszolva",
+    "interpelláció szóban megválaszolva", "azonnali kérdésre adott képviselői viszonválasz", "azonnali kérdésre adott miniszteri viszonválasz",
+    "képviselő elfogadta a választ", "képviselő elutasította a választ", "előadói válasz", "előterjesztő nyitóbeszéde",
+    "ismerteti a bizottság véleményét", "bizottság kisebbségi véleményének ismertetése",
+    "ügyrendi javaslat", "ügyrendi kérdés", "bejelentés helyettes válaszadó elutasításáról",
+}
+# ("egyéb felszólalás" is on the record's technical side too — six rows in two cycles, all matching the record only that way.)
+
+
+def _duration_s(v: str | None) -> int | None:
+    """'25:40' → 1540; '1:02:03' → 3723; '' → None."""
+    if not v or ":" not in v:
+        return None
+    parts = [int(x) for x in v.strip().split(":") if x.strip().isdigit()]
+    if not parts:
+        return None
+    total = 0
+    for x in parts:
+        total = total * 60 + x
+    return total
+
+
+def parse_felszolalasok(payload: dict[str, Any]) -> dict[str, Any]:
+    """felszolalasok.cgi → {ulnap, date, speeches: [...]}, speeches in the day's order with the agenda item they belong to."""
+    root = payload.get("felszolalasok", payload)
+    out = {"ulnap": _int(root.get("@ulesnap")), "date": _hu_date(root.get("@datum")), "speeches": []}
+    order = 0
+    seen: set[tuple] = set()                          # (sorszam, speaker) already printed today under an earlier agenda item
+    for ev in as_list(root.get("esemeny")):
+        if isinstance(ev, str):                       # an agenda item without speeches: to_dict collapsed it to its title
+            continue
+        title = re.sub(r"\s+", " ", (ev.get("#text") or "")).strip() or None
+        nums: list[str] = []
+        for m in re.finditer(r"\b([A-ZÁÉÍÓÖŐÚÜŰ]{1,3}/\d+)\b", title or ""):
+            if m.group(1) not in nums:
+                nums.append(m.group(1))               # a joint debate names every bill: keep them all, in order
+        num = " · ".join(nums) if nums else None
+        for f in as_list(ev.get("felszolalas")):
+            if not isinstance(f, dict):
+                continue
+            label = (f.get("felszolalo") or "").strip()
+            name, faction = NameResolver.split(label) if label else (None, None)
+            kind = (f.get("felsztip") or "").strip() or None
+            seq = _int(f.get("sorszam"))
+            key = (seq, label)
+            reprint = seq is not None and key in seen
+            seen.add(key)
+            order += 1
+            out["speeches"].append({
+                "order": order, "seq": seq, "event": title, "iromany": num,
+                "speaker_label": label or None, "name": name, "faction": faction,
+                "kind": kind, "role": (f.get("kormbiz") or "").strip() or None,
+                "start": _hu_date(f.get("felszkezdete")), "duration_s": _duration_s(f.get("videoido")),
+                "reprint": reprint,                    # the same speech (same sorszam, same speaker) printed under an earlier item today
+                "technical": reprint or (kind or "").casefold() not in SUBSTANTIVE_KINDS,
+            })
+    return out
 
 
 # -- votes ----------------------------------------------------------------------------------

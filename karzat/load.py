@@ -35,6 +35,7 @@ from .normalise import (
     parse_kepviselo,
     parse_kepviselok,
     parse_szavazas,
+    parse_felszolalasok,
     parse_szavazasok,
     parse_ulesnap,
     seats_for,
@@ -164,7 +165,31 @@ class Loader:
             self._ciklus(ckl, e["ciklus"])
             self.conn.execute("INSERT OR REPLACE INTO mp_mandate(mp_azon, ckl, kind, constituency, elected_on, mandate_from, mandate_to) VALUES (?,?,?,?,?,?,?)",
                               (azon, ckl, mandate_kind(e["constituency"]), e["constituency"], e["elected_on"], e["mandate_from"], e["mandate_to"]))
+        for c in r.get("committees") or []:
+            if c.get("committee"):
+                self.conn.execute("INSERT OR REPLACE INTO mp_committee(mp_azon, committee, subcommittee, role, from_date, to_date) VALUES (?,?,?,?,?,?)",
+                                  (azon, c["committee"], c.get("subcommittee") or "", c.get("role") or "", c.get("from") or "", c.get("to")))
+                self.stats["mp_committees"] += 1
         self.stats["mp_records"] += 1
+
+    # -- speeches ---------------------------------------------------------------------------
+    def load_felszolalasok(self, payload: dict[str, Any], ckl: int, resolver: "NameResolver | None") -> int:
+        """One sitting day's speech list."""
+        day = parse_felszolalasok(payload)
+        if day["ulnap"] is None:
+            return 0
+        self._ciklus(ckl)
+        n = 0
+        for sp in day["speeches"]:
+            azon = resolver.resolve(sp["speaker_label"], on_date=day["date"]) if (resolver and sp["speaker_label"]) else None
+            self.conn.execute(
+                "INSERT OR REPLACE INTO speech(ckl, nap, on_date, ord, seq, event, iromany, speaker_label, mp_azon, faction, kind, role, duration_s, technical) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (ckl, day["ulnap"], day["date"], sp["order"], sp["seq"], sp["event"], sp["iromany"], sp["speaker_label"], azon, sp["faction"],
+                 sp["kind"], sp["role"], sp["duration_s"], 1 if sp["technical"] else 0))
+            n += 1
+        self.stats["speeches"] += n
+        return n
 
     # -- sitting days -----------------------------------------------------------------------
     def load_ulesnap(self, payload: dict[str, Any], ckl: int | None = None) -> int:
@@ -403,6 +428,10 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
             if since and p.stem[:10] < since:
                 continue
             L.load_vote_detail(_load_xml(p), resolver)
+        for p in sorted((cache / "felszolalasok").glob("ckl*_nap*.xml")):
+            m = re.match(r"ckl(\d+)_nap(\d+)$", p.stem)
+            if m:
+                L.load_felszolalasok(_load_xml(p), int(m.group(1)), resolver)
         il = cache / "iromanyok" / "all.xml"
         if il.exists():
             L.load_iromanyok(_load_xml(il))
@@ -439,6 +468,8 @@ def summary(db_path: Path) -> dict[str, Any]:
             "vote_motions": q("SELECT COUNT(*) FROM vote_motion"), "bills": q("SELECT COUNT(*) FROM bill"),
             "bills_detailed": q("SELECT COUNT(*) FROM bill WHERE raw_json IS NOT NULL"), "bill_events": q("SELECT COUNT(*) FROM bill_event"),
             "faction_majorities": q("SELECT COUNT(*) FROM vote_faction_majority"),
+            "speeches": q("SELECT COUNT(*) FROM speech"), "speeches_substantive": q("SELECT COUNT(*) FROM speech WHERE technical = 0"),
+            "speeches_resolved": q("SELECT COUNT(*) FROM speech WHERE mp_azon IS NOT NULL"), "mp_committee_rows": q("SELECT COUNT(*) FROM mp_committee"),
             "rule_source_disagreements": q("SELECT COUNT(*) FROM vote WHERE passed IS NOT NULL AND needed IS NOT NULL AND ((igen >= needed) <> (passed = 1))"),
         }
         out["by_rule"] = dict(conn.execute("SELECT COALESCE(majority_rule,'—'), COUNT(*) FROM vote GROUP BY 1 ORDER BY 2 DESC").fetchall())

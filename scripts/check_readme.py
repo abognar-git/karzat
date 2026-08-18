@@ -124,7 +124,10 @@ def build() -> list[tuple[str, list]]:
     m43 = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))
     h42 = _json.loads((ROOT / "data" / "derived" / "hero_vote_ckl42.json").read_text(encoding="utf-8"))
     from scripts.build_site import dissent_events, load_inputs   # the feeds' numbers come from the builder's own alignment
-    ev43 = dissent_events(load_inputs())
+    inp43 = load_inputs()
+    ev43 = dissent_events(inp43)
+    sp43 = inp43["speeches"] or {}
+    sp42 = load_inputs(42)["speeches"] or {}
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -194,6 +197,11 @@ def build() -> list[tuple[str, list]]:
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
         ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across two cycles and {:,.0f} roll calls, not {:,.0f}", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"]]),
+        # speeches — data/derived/speeches*.json.gz
+        ("agrees with it for {:,.0f} of {:,.0f} cycle-43 MPs and {:,.0f} of {:,.0f} in cycle 42",
+         [sp43.get("record_check", {}).get("agree", 0), sp43.get("record_check", {}).get("mps", 0), sp42.get("record_check", {}).get("agree", 0), sp42.get("record_check", {}).get("mps", 0)]),
+        ("Cycle 43: {:,.0f} rows over {:,.0f} sitting days, {:,.0f} substantive; cycle 42: {:,.0f} rows over {:,.0f} days",
+         [sp43.get("count", 0), len(sp43.get("days") or []), sp43.get("substantive", 0), sp42.get("count", 0), len(sp42.get("days") or [])]),
         # feeds — the same alignment record the MP pages print
         ("Cycle 43: {:,.0f} roll calls with a dissent, {:,.0f} dissents in all", [len(ev43), sum(len(e["dissents"]) for e in ev43)]),
         # motions on the MP pages — data/derived/mps.json + first_light.json (bills listed)

@@ -49,7 +49,7 @@ class Build(unittest.TestCase):
         for m in re.finditer(r'(?:src|href)="(https?://[^"]+)"', self.page):
             self.assertTrue(m.group(1).startswith("https://www.parlament.hu/"), m.group(1))
         self.assertEqual(re.findall(r'<link rel="stylesheet" [^>]*href="([^"]+)"', self.page), ["assets/karzat.css"])
-        self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.page), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml"])   # feed autodiscovery, own files
+        self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.page), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml", "feed/heti.xml"])   # feed autodiscovery, own files
         self.assertEqual(re.findall(r'<script src="([^"]+)"', self.page), ["assets/karzat.js"])
         self.assertNotIn("@import", self.page)
         self.assertNotIn("url(http", build_assets()["karzat.css"])
@@ -69,7 +69,7 @@ class Build(unittest.TestCase):
         self.assertIn('id="roll" data-page-size="25" data-counter="rn"', vote)
         mp = build_mp_page(load_inputs(), "a011")
         self.assertIn('id="mine" data-page-size="25" data-counter="rn"', mp)
-        self.assertEqual(mp.count('data-page-size="25"'), 3)             # votes, dissents, motions
+        self.assertEqual(mp.count('data-page-size="25"'), 5)             # weeks, speeches, votes, dissents, motions
 
     def test_boot_sequence_is_honest_and_optional(self):
         js = build_assets()["karzat.js"]

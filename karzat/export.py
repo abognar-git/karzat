@@ -150,6 +150,30 @@ def dissents_csv(events: list[dict[str, Any]], cycle: int) -> str:
     return _csv(rows, ["ts", "date", "time", "cycle", "p_azon", "name", "faction", "position", "faction_plurality", "iromany", "title", "igen", "nem", "tartozkodott", "result"])
 
 
+def speeches_csv(rows: list[dict[str, Any]], cycle: int) -> str:
+    """adatok/felszolalasok.csv — every line of the cycle's speech lists, in the days' order."""
+    out = [{"cycle": cycle, "date": r.get("date"), "ulnap": r.get("ulnap"), "order": r.get("order"), "seq": r.get("seq"), "event": r.get("event"),
+            "iromany": r.get("iromany"), "speaker": r.get("speaker_label"), "p_azon": r.get("azon"), "faction": r.get("faction"),
+            "kind": r.get("kind"), "role": r.get("role"), "duration_s": r.get("duration_s"), "substantive": not r.get("technical")}
+           for r in sorted(rows, key=lambda r: (r.get("date") or "", r.get("order") or 0))]
+    return _csv(out, ["cycle", "date", "ulnap", "order", "seq", "event", "iromany", "speaker", "p_azon", "faction", "kind", "role", "duration_s", "substantive"])
+
+
+def weekly_csv(weeks: list[dict[str, Any]], digests: dict[str, dict[str, Any]], mps: dict[str, dict[str, Any]], cycle: int) -> str:
+    """adatok/heti.csv — one row per MP per sitting week: the numbers of the weekly digest."""
+    out = []
+    for w in weeks:
+        d = digests.get(w["key"]) or {}
+        rc = (d.get("cycle") or {}).get("roll_calls", 0)
+        for azon in sorted(mps):
+            m = (d.get("mps") or {}).get(azon)
+            out.append({"cycle": cycle, "week": w["key"], "from": w["from"], "to": w["to"], "sitting_days": w.get("ulnaps", len(w["days"])), "p_azon": azon,
+                        "name": mps[azon]["name"], "faction": mps[azon].get("faction"), "roll_calls": rc,
+                        "in_roll": (m or {}).get("in_roll", 0), "cast": (m or {}).get("cast", 0), "against": (m or {}).get("against", 0),
+                        "speeches": len((m or {}).get("speeches") or [])})
+    return _csv(out, ["cycle", "week", "from", "to", "sitting_days", "p_azon", "name", "faction", "roll_calls", "in_roll", "cast", "against", "speeches"])
+
+
 def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
     """The data dictionary: file → (column, meaning). Rendered on adatok/index.html."""
     return [
@@ -181,6 +205,18 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("p_azon, name, faction", "a képviselő; a frakció, amit a névsor annál a szavazásnál ír"),
             ("position, faction_plurality", "a leadott szavazat és a frakció leadott szavazatainak többsége — eltérnek (ez a különvélemény)"),
             ("iromany, title, igen, nem, tartozkodott, result", "a szavazás első indítványa és összesítése"),
+        ]),
+        ("felszolalasok.csv — az ülésnapok felszólalás-listái, egy sor egy felszólalás-sor", [
+            ("cycle, date, ulnap, order, seq", "ciklus, nap, ülésnap száma, sorszám a napon belül (minden napirendi ponton át), a lista saját sorszáma"),
+            ("event, iromany", "a napirendi pont címe az API szerint; a címben talált iromány-szám"),
+            ("speaker, p_azon, faction", "a felszólaló ahogy a lista írja („Név (Frakció)”), a feloldott azonosító (üres, ha nem képviselő: miniszter, köztársasági elnök), a nyomtatott frakció"),
+            ("kind, role, duration_s", "a felszólalás fajtája („felszólalás”, „ülésvezetés”, „kérdés megválaszolva” …), a lista által írt szerep, hossz másodpercben"),
+            ("substantive", "érdemi (igaz) vagy eljárási (hamis) — a fajta neve szerint, lásd a módszer oldalt"),
+        ]),
+        ("heti.csv — képviselőnként és ülésnapos hetenként a heti összefoglaló számai", [
+            ("cycle, week, from, to, sitting_days", "ciklus, ISO-hét, a hét első és utolsó ülésnapja, ülésnapok száma"),
+            ("p_azon, name, faction", "a képviselő; a ciklusbeli utolsó frakciója"),
+            ("roll_calls, in_roll, cast, against, speeches", "a hét név szerinti szavazásai · ebből hány névsorában szerepelt · leadott szavazatai · a frakciója többségével szemben · érdemi felszólalásai"),
         ]),
         ("kepviselok.csv / kepviselok.json — a ciklus névsoraiban szereplő személyek", [
             ("p_azon, name, faction, faction_first", "azonosító, név, frakció az utolsó, illetve az első név szerinti szavazásán"),
