@@ -1,70 +1,59 @@
-# Faction (képviselőcsoport) presentation config — PLACEHOLDER, NOT VERIFIED.
+# Faction (képviselőcsoport) presentation config for ciklus 43 (elected April 2026).
 #
-# The real list of factions for ciklus 43 (elected April 2026) must come from the API
-# (kepviselok.cgi / kepviselo.cgi <kepvcsop-tagsagok>) — do not trust this file until the
-# ids below have been matched against real payloads. Colours are conventional party colours
-# and are here so the diagram has *something* to render; replace with the palette you settle on.
+# SOURCE OF THE LIST: Wikidata, queried 2026-08-18 — 199 items hold P39 "member of the National
+# Assembly of Hungary" (Q17590876) with start 2026-05-09 and no end date, and the P4100
+# parliamentary-group qualifier gives: TISZA 141 · Fidesz 44 · KDNP 8 · Mi Hazánk 6.
+# That is community-maintained data. VERIFY against kepviselok.cgi / <kepvcsop-tagsagok>
+# before publishing anything, and match `id` to the exact string the API prints.
 #
-# id must equal the short faction code as the API prints it (VERIFY exact spelling/casing).
-# sort_order: left→right seating in the chamber diagram (lower = further left).
+# Colours are conventional party colours so the diagram renders; replace with the palette you
+# settle on. sort_order: left→right seating in the chamber diagram (parlament.hu: government
+# benches to the Speaker's right, opposition to the left — VERIFY which way the diagram faces).
+
+seats: 199
 
 factions:
-  - id: DK
-    name: Demokratikus Koalíció
-    colour: "#1f6ac6"
-    sort_order: 10
-  - id: MSZP
-    name: Magyar Szocialista Párt
-    colour: "#c8102e"
-    sort_order: 20
-  - id: Párbeszéd
-    name: Párbeszéd–Zöldek
-    colour: "#3aa655"
-    sort_order: 25
-  - id: LMP
-    name: LMP – Magyarország Zöld Pártja
-    colour: "#6cbf3d"
-    sort_order: 30
-  - id: Momentum
-    name: Momentum Mozgalom
-    colour: "#8e44ad"
-    sort_order: 35
   - id: TISZA
     name: Tisztelet és Szabadság Párt
     colour: "#7b3f00"
-    sort_order: 40
-  - id: Jobbik
-    name: Jobbik – Konzervatívok
-    colour: "#2f8f4e"
-    sort_order: 50
-  - id: KDNP
-    name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
-    sort_order: 60
+    sort_order: 10
+    wikidata_seats_2026_08_18: 141
   - id: Fidesz
     name: Fidesz – Magyar Polgári Szövetség
     colour: "#f36f21"
+    sort_order: 60
+    wikidata_seats_2026_08_18: 44
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
     sort_order: 70
+    wikidata_seats_2026_08_18: 8
   - id: "Mi Hazánk"
     name: Mi Hazánk Mozgalom
     colour: "#3b5e2b"
     sort_order: 80
+    wikidata_seats_2026_08_18: 6
   - id: független
     name: Független képviselők
     colour: "#8a8a8a"
     sort_order: 90
+    wikidata_seats_2026_08_18: 0
 
 # Vote positions — the four states are fixed by the Országgyűlés's own vocabulary.
+# tartózkodott (abstain) IS present: it counts against a motion under every present-based rule.
 positions:
   igen:          { label: "Igen",          glyph: "filled" }
   nem:           { label: "Nem",           glyph: "hollow" }
   tartozkodott:  { label: "Tartózkodott",  glyph: "half" }
   nem_szavazott: { label: "Nem szavazott", glyph: "faint" }
 
-# Majority rules — needed = f(present, seats). Which rule applies to a given vote must be
-# read from the vote payload (VERIFY field) or derived from the bill/vote type; never assumed.
+# Majority rules — implemented in karzat/majority.py (Rule enum); this block is documentation
+# for the front end. `needed` formulas: N = present MPs or all MPs (seats) as stated.
+# Citations are marked VERIFY in the module until read against the consolidated text (njt.hu).
 majority_rules:
-  egyszeru:            { label: "Egyszerű többség",             needed: "floor(present_voting/2)+1" }
-  abszolut:            { label: "Abszolút többség",             needed: "floor(seats/2)+1" }        # 100 of 199
-  ketharmad_jelenlevo: { label: "Jelenlévők kétharmada",        needed: "ceil(2*present/3)" }       # sarkalatos törvények
-  ketharmad_osszes:    { label: "Összes képviselő kétharmada",  needed: "ceil(2*seats/3)" }         # 133 — Alaptörvény
+  egyszeru:            { label: "Egyszerű többség",             base: present, needed: "floor(N/2)+1" }
+  abszolut:            { label: "Abszolút többség",             base: seats,   needed: "floor(N/2)+1" }   # 100 of 199
+  ketharmad_jelenlevo: { label: "Jelen lévők kétharmada",        base: present, needed: "ceil(2N/3)" }     # sarkalatos; sürgős tárgyalás
+  ketharmad_osszes:    { label: "Összes képviselő kétharmada",  base: seats,   needed: "ceil(2N/3)" }     # 133 — Alaptörvény, AB tagok, tisztségviselők
+  negyotod_jelenlevo:  { label: "Jelen lévők négyötöde",        base: present, needed: "ceil(4N/5)" }     # Házszabálytól eltérés
+  relativ:             { label: "Relatív többség",              base: candidates, needed: "n/a" }         # KE 2. forduló

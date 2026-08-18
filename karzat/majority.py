@@ -1,0 +1,311 @@
+"""Majority rules of the Országgyűlés: which threshold applied, how many votes it needed,
+and whether a tally clears it.
+
+This is the analytical core Konzol lacks (it shows every vote against a simple-majority
+marker). Here every vote gets an explicit rule, an explicit base (present MPs or all MPs), an
+explicit "needed" number and a margin against it.
+
+Legal basis — transcribed from memory of the Alaptörvény (Fundamental Law) and the
+Házszabály (10/2014. (II. 24.) OGY határozat, "HHSZ"). Every citation is a claim to be checked
+against the current consolidated text on njt.hu before it is trusted; the VERIFY flags below
+are not decoration. Nothing here should be presented to readers as authoritative until the
+citations have been read.
+
+Rules
+-----
+egyszeru              more than half of the MPs *present*                Alaptörvény 5. cikk (6)
+abszolut              more than half of *all* MPs                        16. cikk (4) PM election; 21. cikk
+                                                                          no-confidence/confidence; HHSZ kivételes
+                                                                          eljárás elrendelése (VERIFY §)
+ketharmad_jelenlevo   at least two-thirds of the MPs *present*           T) cikk (4) sarkalatos törvény;
+                                                                          5. cikk (7) Házszabály; HHSZ sürgős tárgyalás (VERIFY §)
+ketharmad_osszes      at least two-thirds of *all* MPs (133 of 199)      S) cikk (2) Alaptörvény; 24. cikk (8) AB tagok;
+                                                                          26. cikk (3), 29. cikk (4), 30. cikk (3), 43. cikk (2)
+                                                                          public officers; 11. cikk (3) KE 1st round (VERIFY each)
+negyotod_jelenlevo    at least four-fifths of the MPs *present*          HHSZ Házszabálytól eltérés (VERIFY §)
+relativ               plurality among candidates, no yes/no threshold    11. cikk (4) KE 2nd round
+
+Arithmetic
+----------
+"több mint a fele"  -> floor(N/2) + 1
+"kétharmada"        -> ceil(2N/3)      (2/3 of 199 = 132.67 -> 133)
+"négyötöde"         -> ceil(4N/5)
+
+What counts as "present" (jelen lévő) is the single most consequential modelling choice.
+Abstaining MPs (tartózkodott) ARE present, so an abstention counts against a motion under
+every present-based rule. Whether MPs recorded as "nem szavazott" count as present depends
+on how the payload defines its numbers — this module takes `present` explicitly when the
+source states it, and otherwise falls back to yes+no+abstain (voting-present) and says so
+in the verdict. VERIFY against real <tulajdonsagok> before relying on the fallback.
+
+The base for "all MPs" (összes képviselő) is the number of MPs holding a mandate at the time
+of the vote, 199 when no seat is vacant. `Tally.seats` carries it; VERIFY how the Országgyűlés
+counts vacancies for the two-thirds-of-all rules.
+"""
+
+from __future__ import annotations
+
+import math
+import re
+import unicodedata
+from dataclasses import asdict, dataclass, field
+from enum import Enum
+from typing import Any
+
+SEATS_DEFAULT = 199
+
+
+class Rule(str, Enum):
+    EGYSZERU = "egyszeru"
+    ABSZOLUT = "abszolut"
+    KETHARMAD_JELENLEVO = "ketharmad_jelenlevo"
+    KETHARMAD_OSSZES = "ketharmad_osszes"
+    NEGYOTOD_JELENLEVO = "negyotod_jelenlevo"
+    RELATIV = "relativ"
+
+
+@dataclass(frozen=True)
+class RuleInfo:
+    rule: Rule
+    label_hu: str
+    label_en: str
+    base: str                 # "present" | "seats" | "candidates"
+    formula: str
+    basis: tuple[str, ...]    # citations, each may end with "(VERIFY)"
+
+
+RULES: dict[Rule, RuleInfo] = {
+    Rule.EGYSZERU: RuleInfo(
+        Rule.EGYSZERU, "Egyszerű többség", "Simple majority (of those present)",
+        "present", "floor(present/2)+1",
+        ("Alaptörvény 5. cikk (6) (VERIFY)",),
+    ),
+    Rule.ABSZOLUT: RuleInfo(
+        Rule.ABSZOLUT, "Abszolút többség", "Absolute majority (of all MPs)",
+        "seats", "floor(seats/2)+1",
+        ("Alaptörvény 16. cikk (4) — miniszterelnök megválasztása (VERIFY)",
+         "Alaptörvény 21. cikk — bizalmatlansági indítvány, bizalmi szavazás (VERIFY)",
+         "HHSZ — kivételes eljárás elrendelése (VERIFY §)"),
+    ),
+    Rule.KETHARMAD_JELENLEVO: RuleInfo(
+        Rule.KETHARMAD_JELENLEVO, "Jelen lévők kétharmada", "Two-thirds of those present",
+        "present", "ceil(2*present/3)",
+        ("Alaptörvény T) cikk (4) — sarkalatos törvény (VERIFY)",
+         "Alaptörvény 5. cikk (7) — Házszabály elfogadása (VERIFY)",
+         "HHSZ — sürgős tárgyalás elrendelése (VERIFY §)"),
+    ),
+    Rule.KETHARMAD_OSSZES: RuleInfo(
+        Rule.KETHARMAD_OSSZES, "Összes képviselő kétharmada", "Two-thirds of all MPs",
+        "seats", "ceil(2*seats/3)",
+        ("Alaptörvény S) cikk (2) — Alaptörvény elfogadása/módosítása (VERIFY)",
+         "Alaptörvény 24. cikk (8) — alkotmánybírák (VERIFY)",
+         "Alaptörvény 26. cikk (3), 29. cikk (4), 30. cikk (3), 43. cikk (2) — Kúria elnöke, legfőbb ügyész, "
+         "alapvető jogok biztosa, ÁSZ elnöke (VERIFY each)",
+         "Alaptörvény 11. cikk (3) — köztársasági elnök, első forduló (VERIFY)"),
+    ),
+    Rule.NEGYOTOD_JELENLEVO: RuleInfo(
+        Rule.NEGYOTOD_JELENLEVO, "Jelen lévők négyötöde", "Four-fifths of those present",
+        "present", "ceil(4*present/5)",
+        ("HHSZ — Házszabálytól eltérés (VERIFY §)",),
+    ),
+    Rule.RELATIV: RuleInfo(
+        Rule.RELATIV, "Relatív többség", "Plurality among candidates",
+        "candidates", "n/a",
+        ("Alaptörvény 11. cikk (4) — köztársasági elnök, második forduló (VERIFY)",),
+    ),
+}
+
+
+# -- tallies and verdicts ---------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Tally:
+    """Counts as recorded for one vote.
+
+    present  — jelen lévő képviselők as stated by the source; None if the source does not say,
+               in which case yes+no+abstain (voting-present) is used and the verdict flags it.
+    seats    — MPs holding a mandate at the time (base of the "összes" rules); default 199.
+    """
+    yes: int
+    no: int
+    abstain: int = 0
+    not_voting: int = 0
+    present: int | None = None
+    seats: int = SEATS_DEFAULT
+
+    def __post_init__(self) -> None:
+        for name in ("yes", "no", "abstain", "not_voting", "seats"):
+            v = getattr(self, name)
+            if not isinstance(v, int) or v < 0:
+                raise ValueError(f"{name} must be a non-negative int, got {v!r}")
+        if self.present is not None:
+            if self.present < self.voting_present:
+                raise ValueError(
+                    f"present ({self.present}) is smaller than yes+no+abstain ({self.voting_present})"
+                )
+            if self.present > self.seats:
+                raise ValueError(f"present ({self.present}) exceeds seats ({self.seats})")
+        if self.voting_present > self.seats:
+            raise ValueError(f"yes+no+abstain ({self.voting_present}) exceeds seats ({self.seats})")
+
+    @property
+    def voting_present(self) -> int:
+        """MPs who pressed igen/nem/tartózkodott. Abstainers are present."""
+        return self.yes + self.no + self.abstain
+
+    @property
+    def effective_present(self) -> int:
+        return self.present if self.present is not None else self.voting_present
+
+    @property
+    def present_is_assumed(self) -> bool:
+        return self.present is None
+
+
+@dataclass(frozen=True)
+class Verdict:
+    rule: str
+    label_hu: str
+    base_kind: str            # "present" | "seats" | "candidates"
+    base: int | None
+    needed: int | None
+    yes: int
+    margin: int | None        # yes - needed (positive = cleared with room)
+    passed: bool | None       # None for relativ (not decidable from yes/no)
+    present_assumed: bool     # True when present fell back to yes+no+abstain
+    basis: tuple[str, ...]
+    note: str = ""
+
+    def to_dict(self) -> dict[str, Any]:
+        d = asdict(self)
+        d["basis"] = list(self.basis)
+        return d
+
+
+def _more_than_half(n: int) -> int:
+    return n // 2 + 1
+
+
+def _at_least_fraction(n: int, num: int, den: int) -> int:
+    return math.ceil(n * num / den)
+
+
+def base_of(rule: Rule, tally: Tally) -> int | None:
+    kind = RULES[rule].base
+    if kind == "present":
+        return tally.effective_present
+    if kind == "seats":
+        return tally.seats
+    return None
+
+
+def needed(rule: Rule, tally: Tally) -> int | None:
+    """Votes in favour required under `rule` for this tally (None for relativ)."""
+    b = base_of(rule, tally)
+    if b is None:
+        return None
+    if rule == Rule.EGYSZERU or rule == Rule.ABSZOLUT:
+        return _more_than_half(b)
+    if rule in (Rule.KETHARMAD_JELENLEVO, Rule.KETHARMAD_OSSZES):
+        return _at_least_fraction(b, 2, 3)
+    if rule == Rule.NEGYOTOD_JELENLEVO:
+        return _at_least_fraction(b, 4, 5)
+    raise AssertionError(rule)
+
+
+def evaluate(rule: Rule | str, tally: Tally) -> Verdict:
+    """Full verdict for one vote under one rule. Never guesses the rule — see classify()."""
+    rule = Rule(rule)
+    info = RULES[rule]
+    b = base_of(rule, tally)
+    n = needed(rule, tally)
+    note = ""
+    if info.base == "present" and tally.present_is_assumed:
+        note = "present not stated by source; using yes+no+abstain (VERIFY definition)"
+    if rule == Rule.RELATIV:
+        return Verdict(rule.value, info.label_hu, info.base, None, None, tally.yes, None, None,
+                       tally.present_is_assumed, info.basis,
+                       "plurality vote: not decidable from a yes/no tally")
+    assert n is not None and b is not None
+    return Verdict(rule.value, info.label_hu, info.base, b, n, tally.yes, tally.yes - n,
+                   tally.yes >= n, tally.present_is_assumed, info.basis, note)
+
+
+def evaluate_all(tally: Tally) -> dict[str, Verdict]:
+    """Every rule against one tally — useful for a 'what if' panel and for cross-checks."""
+    return {r.value: evaluate(r, tally) for r in Rule if r != Rule.RELATIV}
+
+
+# -- classification --------------------------------------------------------------------
+
+@dataclass(frozen=True)
+class Classification:
+    rule: Rule
+    source: str               # "payload" | "keyword" | "default"
+    evidence: str = ""        # the string that decided it
+
+    def to_dict(self) -> dict[str, Any]:
+        return {"rule": self.rule.value, "source": self.source, "evidence": self.evidence}
+
+
+def _norm(s: str | None) -> str:
+    """Casefold + NFC so accented Hungarian keywords match regardless of source normal form."""
+    return unicodedata.normalize("NFC", (s or "")).casefold()
+
+
+# Payload vocabulary -> rule. Filled in once real <tulajdonsagok> values are seen (VERIFY).
+# Keys are compared after _norm(); keep them lower-case.
+PAYLOAD_RULES: dict[str, Rule] = {
+    "egyszerű többség": Rule.EGYSZERU,
+    "abszolút többség": Rule.ABSZOLUT,
+    "jelen lévő képviselők kétharmada": Rule.KETHARMAD_JELENLEVO,
+    "jelenlévő képviselők kétharmada": Rule.KETHARMAD_JELENLEVO,
+    "országgyűlési képviselők kétharmada": Rule.KETHARMAD_OSSZES,
+    "összes képviselő kétharmada": Rule.KETHARMAD_OSSZES,
+    "jelen lévő képviselők négyötöde": Rule.NEGYOTOD_JELENLEVO,
+    "minősített többség": Rule.KETHARMAD_JELENLEVO,   # bare "minősített" on a bill = sarkalatos part (VERIFY)
+}
+
+# Keyword heuristics over the vote subject / bill title, first match wins (order matters).
+# These exist so the site can say *something* before the payload vocabulary is known; every
+# hit is reported with its evidence so a reader can disagree.
+KEYWORD_RULES: tuple[tuple[str, Rule], ...] = (
+    (r"házszabálytól (?:való )?eltérés", Rule.NEGYOTOD_JELENLEVO),
+    (r"alaptörvény[^,;]{0,40}módosít|módosít[^,;]{0,40}alaptörvény|alaptörvény[^,;]{0,20}elfogad", Rule.KETHARMAD_OSSZES),
+    (r"alkotmánybír[áo]|kúria elnök|legfőbb ügyész|alapvető jogok biztos|állami számvevőszék elnök", Rule.KETHARMAD_OSSZES),
+    (r"köztársasági elnök[^,;]{0,40}(?:választ|megválaszt)", Rule.KETHARMAD_OSSZES),
+    (r"miniszterelnök[^,;]{0,40}(?:választ|megválaszt)|bizalmatlansági|bizalmi szavazás", Rule.ABSZOLUT),
+    (r"kivételes eljárás", Rule.ABSZOLUT),
+    (r"sürgős(?:ségi)? tárgyalás|sürgős tárgyalásb", Rule.KETHARMAD_JELENLEVO),
+    (r"sarkalatos|minősített többség|kétharmad|két ?harmad|2/3", Rule.KETHARMAD_JELENLEVO),
+    (r"házszabály[^,;]{0,30}(?:elfogad|módosít)", Rule.KETHARMAD_JELENLEVO),
+)
+
+
+def classify(*, payload_rule: str | None = None, subject: str | None = None,
+             bill_title: str | None = None, vote_kind: str | None = None) -> Classification:
+    """Decide the rule for a vote.
+
+    Priority: an explicit statement in the payload (PAYLOAD_RULES) > keyword evidence in the
+    subject / bill title / vote kind (KEYWORD_RULES) > default egyszerű. The default is a
+    *default*, not knowledge; the verdict carries source="default" so the UI can say so.
+    """
+    if payload_rule:
+        p = _norm(payload_rule)
+        for key, rule in PAYLOAD_RULES.items():
+            if key in p:
+                return Classification(rule, "payload", payload_rule)
+    text = " | ".join(_norm(t) for t in (vote_kind, subject, bill_title) if t)
+    for pattern, rule in KEYWORD_RULES:
+        m = re.search(pattern, text)
+        if m:
+            return Classification(rule, "keyword", m.group(0))
+    return Classification(Rule.EGYSZERU, "default", "")
+
+
+def describe(rule: Rule | str) -> dict[str, Any]:
+    info = RULES[Rule(rule)]
+    d = asdict(info)
+    d["rule"] = info.rule.value
+    d["basis"] = list(info.basis)
+    return d

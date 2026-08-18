@@ -57,6 +57,8 @@ angle) is documented in the teardown as the fallback.
 - [x] W-API manual v2.5 obtained and transcribed; endpoints and parameters encoded in `karzat/api.py`
 - [x] Client + CLI + offline tests (`python3 -m unittest discover -s tests -t .`)
 - [x] Draft schema (`schema.sql`) and faction/majority config (`config/factions.yml`) — both marked VERIFY throughout
+- [x] Majority-rule module (`karzat/majority.py`): six rules with citations, explicit present/seats bases, classifier with provenance; 23 tests
+- [x] Cycle-43 faction list from Wikidata (199 members, four groups) as a placeholder to verify against the API
 - [ ] Access token (requested via parlament.hu/web-api-regisztracio, Aug 2026)
 - [ ] First `probe` against the live API; replace synthetic test fixtures with trimmed real XML
 - [ ] Ingest: `sync-mps`, `sync-votes` for ciklus 43, normalise into SQLite
@@ -65,7 +67,7 @@ angle) is documented in the teardown as the fallback.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 15 tests
+python3 -m unittest discover -s tests -t .      # offline; 38 tests
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
 python3 -m karzat probe                          # one call: encoding, root tag, counts, first record
@@ -109,6 +111,34 @@ been able to check. The mapping from Konzol's model to this one:
 | photo from congress.gov | `mp.photo_url` from parlament.hu (licence VERIFY) | |
 | 200-record directory cap | none; paginate | Hundreds of votes per sitting day |
 
+## Majority rules — the analytical core
+
+`karzat/majority.py` gives every vote an explicit rule, base, threshold and margin. The
+arithmetic is fixed ("több mint a fele" → ⌊N/2⌋+1; "kétharmada" → ⌈2N/3⌉; "négyötöde" →
+⌈4N/5⌉); the legal citations are transcribed from memory and **every one is flagged VERIFY**
+in the module until it has been read against the consolidated text on njt.hu.
+
+| Rule | Base | Needed (N=199 / present 176) | Applies to (citation, VERIFY) |
+|---|---|---|---|
+| `egyszeru` | present | 100 / 89 | default — Alaptörvény 5. cikk (6) |
+| `abszolut` | all MPs | 100 | miniszterelnök választás 16. cikk (4); bizalmatlansági / bizalmi szavazás 21. cikk; kivételes eljárás elrendelése (HHSZ) |
+| `ketharmad_jelenlevo` | present | 133 / 118 | sarkalatos törvény T) cikk (4); Házszabály 5. cikk (7); sürgős tárgyalás (HHSZ) |
+| `ketharmad_osszes` | all MPs | 133 | Alaptörvény módosítás S) cikk (2); alkotmánybírák 24. cikk (8); Kúria elnöke, legfőbb ügyész, ombudsman, ÁSZ elnöke; KE 1. forduló 11. cikk (3) |
+| `negyotod_jelenlevo` | present | 160 / 141 | Házszabálytól eltérés (HHSZ) |
+| `relativ` | candidates | — | KE 2. forduló 11. cikk (4); not decidable from a yes/no tally |
+
+Two modelling choices, both deliberate and both flagged in every verdict: **abstainers are
+present** (tartózkodás counts against a motion under every present-based rule), and when the
+source does not state the number present the module falls back to yes+no+abstain and says so
+(`present_assumed`). Which rule applies is decided by, in order: an explicit statement in the
+payload (vocabulary table to be filled from real XML), keyword evidence in the vote subject or
+bill title (each hit reported with the matched text), and only then the *default* of simple
+majority — recorded as such, so the site can never quietly show a default as a fact.
+
+Per Wikidata on 2026-08-18, the 199 members of cycle 43 sit in four groups — TISZA 141,
+Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one group above the
+133-seat line on its own. That is why this module comes before any pixel of UI.
+
 ## Decisions taken before the token arrived
 
 - **Votes are keyed by timestamp**, URL slug `YYYY-MM-DDTHH-MM-SS`; no invented roll numbers.
@@ -126,7 +156,9 @@ been able to check. The mapping from Konzol's model to this one:
 4. `kepviselo.cgi` for a former MP's `p_azon` — does history work? What does `<ulohely>` look like, and is there a public seat map to digitise?
 5. Earliest date `szavazasok.cgi` serves; typical payload sizes; whether any throttling appears in practice (none is documented).
 6. The manual's URL for the committee *list* is a broken link; `bizottsagok.cgi` is my guess.
-7. Which factions exist in ciklus 43 and how the API spells them — `config/factions.yml` is a placeholder until then.
+7. How the API spells the four cycle-43 factions Wikidata reports — `config/factions.yml` ids are placeholders until then.
+8. Whether `<tulajdonsagok>` states the required majority in words (fills `PAYLOAD_RULES` in `majority.py`) or the rule must be inferred from the subject line — and how "jelen lévő" is counted in the payload's own numbers (does `nem szavazott` count as present?).
+9. Whether the sarkalatos parts of a bill are voted separately ("minősített többséget igénylő rendelkezések") as the subject text suggests, so one bill yields two zárószavazás records with different rules.
 
 ## What this does not show
 
@@ -137,8 +169,8 @@ cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · __main__.py
-tests/             offline tests with synthetic fixtures (to be replaced by trimmed real XML)
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · majority.py (rules, thresholds, classifier)
+tests/             offline tests: client/XML (synthetic fixtures, to be replaced by real XML) · majority arithmetic
 schema.sql         draft normalised store (SQLite)
 config/factions.yml faction colours/order, position vocabulary, majority rules — placeholders
 reference/         parlament-webapi/ (manual v2.5, PDF + text) · konzol/ (teardown + notes)

@@ -81,8 +81,14 @@ CREATE TABLE IF NOT EXISTS vote (
     tartozkodott   INTEGER,
     nem_szavazott  INTEGER,
     present        INTEGER,                       -- jelenlévők, if the payload gives it   VERIFY
-    majority_rule  TEXT CHECK (majority_rule IN ('egyszeru', 'abszolut', 'ketharmad_jelenlevo', 'ketharmad_osszes', 'unknown')),
-    needed         INTEGER,                       -- votes needed under majority_rule (derived, explicit)
+    -- karzat/majority.py: Rule enum, classification provenance, and the derived threshold
+    majority_rule  TEXT CHECK (majority_rule IN ('egyszeru', 'abszolut', 'ketharmad_jelenlevo',
+                                                 'ketharmad_osszes', 'negyotod_jelenlevo', 'relativ')),
+    majority_source TEXT CHECK (majority_source IN ('payload', 'keyword', 'default')),  -- how the rule was decided
+    majority_evidence TEXT,                       -- payload string or matched keyword, for the reader to disagree with
+    needed         INTEGER,                       -- votes needed under majority_rule (majority.needed(); NULL for relativ)
+    margin         INTEGER,                       -- igen − needed
+    present_assumed INTEGER,                      -- 1 if `present` was NULL and yes+no+abstain was used as the base
     raw_json       TEXT
 );
 
