@@ -131,7 +131,8 @@ CREATE TABLE IF NOT EXISTS vote_faction_tally (
 );
 
 CREATE TABLE IF NOT EXISTS bill (
-    izon           TEXT PRIMARY KEY,              -- iromany p_izon (= the number in szam for cycle 43)
+    key            TEXT PRIMARY KEY,              -- izon, or 'izon#n' when the list repeats an izon (A/254 appears three times in cycle 43)
+    izon           TEXT NOT NULL,                 -- iromany p_izon (= the number in szam for cycle 43); NOT unique for azonnali kérdések
     number         TEXT,                          -- irományszám 'T/71', 'H/84', 'S/3', 'I/…'; amendments are 'N/M'
     kind           TEXT,                          -- letter of the szam (T/H/S/I/B/…) or 'amendment'
     type           TEXT,                          -- "Típus" ('törvényjavaslat nemzetközi szerződésről', …)
@@ -155,14 +156,17 @@ CREATE TABLE IF NOT EXISTS bill (
     raw_json       TEXT
 );
 
+CREATE INDEX IF NOT EXISTS bill_izon ON bill(izon);
+
 CREATE TABLE IF NOT EXISTS bill_event (
-    izon           TEXT NOT NULL REFERENCES bill(izon),
+    bill_key       TEXT NOT NULL REFERENCES bill(key),
+    izon           TEXT NOT NULL,
     seq            INTEGER NOT NULL,
     on_date        TEXT,
     text           TEXT,                          -- <esemeny><leiras> (free text: 'kivételességi javaslat elfogadva', …)
     related        TEXT,                          -- <kapcsolodik> (committee name etc.)
     speech         TEXT,                          -- <felszolalas> ref '3/43'
-    PRIMARY KEY (izon, seq)
+    PRIMARY KEY (bill_key, seq)
 );
 
 -- <inditvanyok> on a vote / <szavazasok> on a bill: many-to-many (one motion per vote observed)

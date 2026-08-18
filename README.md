@@ -77,12 +77,13 @@ Konzol's algorithm stays as the fallback.
 - [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
-- [ ] SQLite loader over `normalise.py`; per-vote pages; cycle 42 for comparison
+- [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v1 built from scratch from the cache in about a second — 259 votes, 50,906 roll-call positions with 0 unresolved names, 374 faction-history rows, 369 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
+- [ ] Per-vote pages; cycle 42 for comparison
 
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 102 tests
+python3 -m unittest discover -s tests -t .      # offline; 111 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -94,6 +95,8 @@ python3 -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached X
 python3 -m karzat fingerprint tests/fixtures/*.xml   # digest table for tests/test_golden.py
 python3 -m scripts.pull_wikidata                 # re-pull the Wikidata member snapshot (deliberately)
 python3 -m scripts.derive_first_light            # cache → data/derived/{first_light,votes_index,hero_vote}.json
+python3 -m karzat load --since 2026-05-01        # cache → data/karzat.sqlite (rebuilt from scratch, git-ignored)
+python3 -m karzat stats --json                   # counts + sanity queries; writes data/derived/db_summary.json
 python3 -m scripts.derive_seating                # kepviselo records → data/derived/seating.json (the chamber)
 python3 -m scripts.build_site                    # data/derived + config → site/index.html (--check to verify)
 python3 -m http.server 4174 --directory site     # then open http://localhost:4174/
@@ -181,6 +184,21 @@ numbers) the caption says.
 
 Built by `scripts/build_site.py` from committed inputs only, with no clock read, so a
 clean checkout reproduces it byte for byte; `tests/test_site.py` fails if it does not.
+
+## The database
+
+`schema.sql` is the contract and `karzat/load.py` the only writer. `python3 -m karzat load`
+rebuilds `data/karzat.sqlite` from the raw cache in about a second, atomically, and runs a
+foreign-key check at the end; nothing is ever edited in place. Loaded today: 201 MPs (199
+seated, 199 with a Wikidata QID, plus 2 stub rows for former MPs the roll calls name), 374
+faction-history rows and 369 mandates back to 1990, 23 sitting days, 259 votes of which
+256 carry a roll call — 50,906 positions, 0 unresolved names — 254 motions, 507 bills, and
+997 rows of `vote_faction_majority` (each faction's plurality position per vote). Two views
+make the analytics the README promised into queries: `v_vote` (vote + motion + rule) and
+`v_mp_alignment` (per MP: cast, abstained, absent, with / against own faction). The
+consistency check that matters is in `stats`: 0 votes where the computed threshold and the
+recorded result disagree. Numbers here come from `data/derived/db_summary.json`, written by
+`python3 -m karzat stats --json`.
 
 ## The identity spine
 
@@ -292,11 +310,11 @@ this section will say what the numbers cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
 scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py — cache → data/derived · build_site.py — data/derived → site/index.html
 site/              index.html — the first page, generated, guarded by --check and tests/test_site.py
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
-schema.sql         normalised store (SQLite), v1 after the first real payloads
+schema.sql         normalised store (SQLite), v1 after the first real payloads — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels
 reference/         parlament-webapi/ (manual v2.5, PDF + text) · konzol/ (teardown + notes) · wikidata/ (member snapshot + README)
 data/raw/          git-ignored XML cache · data/derived/ committed summaries the README is gated on

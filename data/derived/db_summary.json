@@ -1,0 +1,70 @@
+{
+ "mp": 201,
+ "mp_with_seat": 199,
+ "mp_with_qid": 199,
+ "mp_faction_rows": 374,
+ "mp_mandates": 369,
+ "factions": 8,
+ "sitting_days": 23,
+ "votes": 259,
+ "votes_with_roll_call": 256,
+ "positions": 50906,
+ "positions_unresolved": 0,
+ "vote_motions": 254,
+ "bills": 507,
+ "bills_detailed": 1,
+ "bill_events": 26,
+ "faction_majorities": 997,
+ "rule_source_disagreements": 0,
+ "by_rule": {
+  "egyszeru": 191,
+  "ketharmad_jelenlevo": 47,
+  "ketharmad_osszes": 9,
+  "abszolut": 6,
+  "negyotod_jelenlevo": 5,
+  "—": 1
+ },
+ "alignment_top_deviators": [
+  [
+   "Bencsik János",
+   "Fidesz",
+   240,
+   18,
+   35,
+   14
+  ],
+  [
+   "Nacsa Lőrinc",
+   "KDNP",
+   205,
+   12,
+   35,
+   50
+  ],
+  [
+   "Dr. Simicskó István",
+   "KDNP",
+   212,
+   11,
+   30,
+   43
+  ],
+  [
+   "Dr. Tilki Attila",
+   "Fidesz",
+   219,
+   9,
+   23,
+   36
+  ],
+  [
+   "Héjj Dávid",
+   "Fidesz",
+   230,
+   8,
+   26,
+   19
+  ]
+ ],
+ "db": "/Users/host/Claude - Projects/karzat/data/karzat.sqlite"
+}

@@ -118,6 +118,7 @@ def build() -> list[tuple[str, list]]:
     vi = _json.loads((ROOT / "data" / "derived" / "votes_index.json").read_text(encoding="utf-8"))
     hero = _json.loads((ROOT / "data" / "derived" / "hero_vote.json").read_text(encoding="utf-8"))
     seat_plan = _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))
+    dbs = _json.loads((ROOT / "data" / "derived" / "db_summary.json").read_text(encoding="utf-8"))
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -178,6 +179,15 @@ def build() -> list[tuple[str, list]]:
         ("All {:,.0f} cycle-43 vote details synced ({:,.0f} calls)", [vi["details_cached"], 254]),
         ("With all {:,.0f} roll\ncalls in hand", [vi["details_cached"]]),
         ("needed {:,.0f}, {:,.0f} igen, margin +{:,.0f}, and", [hero["majority"]["needed"], hero["igen"], hero["majority"]["margin"]]),
+        # the database — data/derived/db_summary.json (python3 -m karzat stats --json)
+        ("{:,.0f} votes, {:,.0f} roll-call positions with {:,.0f} unresolved names, {:,.0f} faction-history rows, {:,.0f} mandates across cycles, {:,.0f} bills",
+         [dbs["votes"], dbs["positions"], dbs["positions_unresolved"], dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["bills"]]),
+        ("Loaded today: {:,.0f} MPs ({:,.0f}\nseated, {:,.0f} with a Wikidata QID, plus {:,.0f} stub rows",
+         [dbs["mp"], dbs["mp_with_seat"], dbs["mp_with_qid"], dbs["mp"] - 199]),
+        ("{:,.0f}\nfaction-history rows and {:,.0f} mandates back to 1990, {:,.0f} sitting days, {:,.0f} votes of which\n{:,.0f} carry a roll call — {:,.0f} positions, {:,.0f} unresolved names — {:,.0f} motions, {:,.0f} bills, and\n{:,.0f} rows of `vote_faction_majority`",
+         [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
+          dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
+        ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree", [dbs["rule_source_disagreements"]]),
         # the chamber — data/derived/seating.json
         ("widest rows {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f}",
          [seat_plan["analysis"]["sectors"][str(k)]["widest_row"] for k in (1, 2, 3, 4, 5, 6)]),

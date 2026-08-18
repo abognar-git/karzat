@@ -7,6 +7,8 @@
     python -m karzat freshness [--ckl 43] [--fetch]   # the sentence the site is allowed to show
     python -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML -> JSON
     python -m karzat fingerprint tests/fixtures/*.xml # digest table for tests/test_golden.py
+    python -m karzat load [--db data/karzat.sqlite] [--since 2026-05-01]   # rebuild SQLite from the cache
+    python -m karzat stats [--db data/karzat.sqlite]  # counts and sanity queries
 
 The token comes from PARLAMENT_API_TOKEN (environment or a local .env file).
 Successful sync runs record data/sync_state.json; `freshness` reads it and writes
@@ -261,6 +263,36 @@ def cmd_inspect(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_load(args: argparse.Namespace) -> int:
+    from .load import DEFAULT_DB, build_from_cache
+    from pathlib import Path as _P
+    snap = _P(__file__).resolve().parent.parent / "reference" / "wikidata" / "members_ckl43.json"
+    stats = build_from_cache(args.cache, args.db or DEFAULT_DB, wikidata_snapshot=snap, since=args.since)
+    for k, v in stats.items():
+        print(f"{k:24} {v}")
+    print(f"written {args.db or DEFAULT_DB}")
+    return 1 if stats.get("fk_problems") else 0
+
+
+def cmd_stats(args: argparse.Namespace) -> int:
+    from .load import DEFAULT_DB, summary
+    db = args.db or DEFAULT_DB
+    if not Path(db).exists():
+        print(f"{db} not found — run `python3 -m karzat load` first", file=sys.stderr)
+        return 2
+    st = summary(Path(db))
+    for k, v in st.items():
+        print(f"{k:28} {v}")
+    if args.json:
+        out = _data_dir(args.cache) / "derived" / "db_summary.json"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        st_json = {k: (v if not isinstance(v, list) else [list(r) for r in v]) for k, v in st.items()}
+        st_json["db"] = str(db)
+        out.write_text(json.dumps(st_json, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"written {out}")
+    return 0
+
+
 def cmd_fingerprint(args: argparse.Namespace) -> int:
     from .fingerprint import table
     paths = sorted(Path(f) for f in args.files)
@@ -308,6 +340,16 @@ def main(argv: list[str] | None = None) -> int:
     sg = sub.add_parser("fingerprint", help="digest table for tests/test_golden.py")
     sg.add_argument("files", nargs="+")
     sg.set_defaults(fn=cmd_fingerprint)
+
+    sl = sub.add_parser("load", help="rebuild the SQLite database from the cache")
+    sl.add_argument("--db", type=Path, default=None, help="output path (default data/karzat.sqlite)")
+    sl.add_argument("--since", default=None, help="ignore vote lists/details before this ISO date")
+    sl.set_defaults(fn=cmd_load)
+
+    ss = sub.add_parser("stats", help="counts and sanity queries over the database")
+    ss.add_argument("--db", type=Path, default=None)
+    ss.add_argument("--json", action="store_true", help="also write data/derived/db_summary.json (committed; the README is gated on it)")
+    ss.set_defaults(fn=cmd_stats)
 
     args = p.parse_args(argv)
     needs_token = args.cmd in ("probe", "sync-votes", "sync-mps") or (args.cmd == "freshness" and args.fetch)
