@@ -27,3 +27,4 @@ data/*.json
 
 # generated per-vote pages (rebuilt by scripts/build_site.py from committed data/derived inputs)
 site/szavazas/
+site/kepviselo/

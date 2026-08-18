@@ -8,7 +8,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import HERO_TS, SITE, build, build_vote_page, factions, hemicycle_layout, load_inputs, vote_view
+from scripts.build_site import HERO_TS, SITE, build, build_mp_index, build_mp_page, build_vote_page, factions, hemicycle_layout, load_inputs, vote_view
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -85,6 +85,54 @@ class VotePages(unittest.TestCase):
         self.assertEqual(len(v["positions"]), 199)
         self.assertEqual(sum(1 for p in v["positions"] if p["position"] == "igen"), 135)
         self.assertTrue(all(p["mp_azon"] for p in v["positions"]))    # every name resolved (aliases included)
+
+
+class MPPages(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_alignment_definitions_hold(self):
+        al = self.inp["alignment"]["per_mp"]
+        self.assertEqual(len(al), 201)
+        a = al["a011"]
+        self.assertEqual(a["in_roll"], 256)                       # every non-secret roll call of the cycle
+        self.assertEqual(a["cast"], a["counts"].get("igen", 0) + a["counts"].get("nem", 0) + a["counts"].get("tartozkodott", 0))
+        self.assertLessEqual(a["with"] + a["against"], a["cast"])
+        # a former MP only appears while seated
+        self.assertLess(al["b076"]["in_roll"], 256)
+        # per-vote pluralities exist for every roll call and every faction that cast a vote
+        plur = self.inp["alignment"]["plurality_by_vote"]
+        self.assertEqual(len(plur), 256)
+        self.assertEqual(plur[HERO_TS]["Fidesz"][0], "nem")
+        self.assertEqual(plur[HERO_TS]["TISZA"][0], "igen")
+
+    def test_mp_page_content(self):
+        page = build_mp_page(self.inp, "a011")
+        self.assertIn("Ágh Péter", page)
+        self.assertIn("2. szektor, 5. sor, 7. szék", page)
+        self.assertIn("Vas 2. OEVK", page)
+        self.assertIn("kepviselok_mobil", page)                     # parlament.hu profile link
+        self.assertIn("wikidata.org/wiki/Q", page)
+        self.assertIn("Szavazatok a frakció többségével szemben", page)
+        self.assertIn('id="mine"', page)
+        self.assertEqual(page.count('href="../szavazas/'), 256 + self.inp["alignment"]["per_mp"]["a011"]["against"])
+        self.assertNotIn('<img', page)                                # portraits are linked, not embedded (licence unverified)
+
+    def test_former_mp_page_says_so(self):
+        page = build_mp_page(self.inp, "b076")
+        self.assertIn("Mandátuma megszűnt", page)
+        self.assertIn("nincs ülőhely-adat", page)
+
+    def test_mp_index(self):
+        page = build_mp_index(self.inp)
+        self.assertEqual(page.count("<tr data-f="), 201)
+        self.assertIn("volt képviselő", page)
+        self.assertIn('href="a011.html"', page)
+
+    def test_vote_page_links_names_to_mp_pages(self):
+        page = build_vote_page(self.inp, HERO_TS)
+        self.assertEqual(page.count('href="../kepviselo/'), 199)
 
 
 class Helpers(unittest.TestCase):

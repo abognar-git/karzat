@@ -11,7 +11,11 @@ Inputs (all committed, all produced by scripts/derive_* from the cache):
   data/derived/seating.json          the reconstructed chamber (coordinates per p_azon)
   data/derived/first_light.json      the headline counts
   data/derived/hero_vote.json        kept for the README gate; the hero itself is rendered like any vote page
+  data/derived/mps.json              every person in the roll calls: mandate, seat, faction history, elections
   config/factions.yml                faction colours and left→right order
+
+Outputs: site/index.html (committed), site/szavazas/<slug>.html × votes and site/kepviselo/<p_azon>.html
+× MPs + site/kepviselo/index.html (generated, git-ignored).
 
 Deterministic: no clock is read (the freshness sentence is computed at the derive timestamp
 stored in the inputs). site/index.html is committed and guarded by --check + tests; the vote
@@ -40,6 +44,7 @@ SEATING = DERIVED / "seating.json"
 SITE_DIR = ROOT / "site"
 SITE = SITE_DIR / "index.html"
 VOTES_DIR = SITE_DIR / "szavazas"
+MPS_DIR = SITE_DIR / "kepviselo"
 FACTIONS = ROOT / "config" / "factions.yml"
 
 POSITION_ORDER = ["igen", "tartozkodott", "jelen_nem_szavazott", "nem", "nem_szavazott", "bejelentett_hianyzo"]
@@ -75,9 +80,62 @@ def load_inputs() -> dict:
     store = json.loads((DERIVED / "votes_positions.json").read_text(encoding="utf-8"))
     fl = json.loads((DERIVED / "first_light.json").read_text(encoding="utf-8"))
     plan = json.loads(SEATING.read_text(encoding="utf-8")) if SEATING.exists() else None
+    mps = json.loads((DERIVED / "mps.json").read_text(encoding="utf-8"))["mps"] if (DERIVED / "mps.json").exists() else {}
     facs = factions()
-    return {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs,
-            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps,
+           "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
+    inp["alignment"] = compute_alignment(inp)
+    return inp
+
+
+CAST = ("igen", "nem", "tartozkodott")
+
+
+def compute_alignment(inp: dict) -> dict:
+    """One pass over every roll call: per vote the faction pluralities, per MP the record.
+
+    Definitions (also printed on the pages): an MP voted *with* their faction when their cast
+    position (igen / nem / tartózkodott) equals the plurality of the faction's cast positions in
+    that vote; *against* when it differs; positions that are not a cast vote (jelen, nem szavazott;
+    nem szavazott; előre bejelentett hiányzó) are participation, not alignment.
+    """
+    st = inp["store"]
+    codes = st["codes"]
+    per_mp: dict[str, dict] = {}
+    plur_by_vote: dict[str, dict[str, tuple[str, int, int]]] = {}
+    for ts in inp["order"]:
+        rows = st["positions"].get(ts) or []
+        if not rows:
+            continue
+        v = inp["by_ts"][ts]
+        by_f: dict[str, dict[str, int]] = {}
+        expanded = []
+        for key, fi, code in rows:
+            f = st["factions"][fi]
+            pos = codes.get(code, code)
+            expanded.append((key, f, pos))
+            if pos in CAST:
+                by_f.setdefault(f, {}).setdefault(pos, 0)
+                by_f[f][pos] += 1
+        plur = {}
+        for f, c in by_f.items():
+            pos, n = max(c.items(), key=lambda kv: (kv[1], CAST.index(kv[0])))
+            plur[f] = (pos, n, sum(c.values()))
+        plur_by_vote[ts] = plur
+        for key, f, pos in expanded:
+            rec = per_mp.setdefault(key, {"votes": [], "counts": {}, "with": 0, "against": 0, "cast": 0, "in_roll": 0})
+            rec["in_roll"] += 1
+            rec["counts"][pos] = rec["counts"].get(pos, 0) + 1
+            fp = plur.get(f)
+            align = None
+            if pos in CAST:
+                rec["cast"] += 1
+                if fp and fp[2] > 0:
+                    align = "with" if pos == fp[0] else "against"
+                    rec[align] += 1
+            rec["votes"].append({"ts": ts, "faction": f, "position": pos, "faction_plurality": fp[0] if fp else None,
+                                 "align": align, "kind": v["kind"], "secret": v.get("secret")})
+    return {"per_mp": per_mp, "plurality_by_vote": plur_by_vote}
 
 
 def vote_view(inp: dict, ts: str) -> dict:
@@ -462,8 +520,9 @@ def roll_call_table(view: dict, inp: dict) -> str:
         else:
             seat_full, seatkey = "—", "999999"
         c = colour.get(p["faction"] or "", "#8a8a8a")
+        name_html = f'<a href="../kepviselo/{esc(p["mp_azon"])}.html">{esc(p["name"])}</a>' if p.get("mp_azon") else esc(p["name"])
         trs.append(f'<tr data-f="{esc(p["faction"])}" data-p="{esc(p["position"])}" data-name="{esc(p["name"])}" data-fac="{esc(p["faction"])}" data-pos="{pos_rank.get(p["position"], 9)}" data-seat="{seatkey}">'
-                   f'<td>{esc(p["name"])}</td><td><span class="pos"><i style="width:9px;height:9px;border-radius:50%;background:{c};display:inline-block"></i>{esc(p["faction"])}</span></td>'
+                   f'<td>{name_html}</td><td><span class="pos"><i style="width:9px;height:9px;border-radius:50%;background:{c};display:inline-block"></i>{esc(p["faction"])}</span></td>'
                    f'<td><span class="pos">{_glyph(p["position"], c)}{esc(POSITION_LABEL.get(p["position"], p["position"]))}</span></td><td class="mono">{esc(seat_full)}</td></tr>')
     fac_buttons = '<button data-fac="all" class="on">minden frakció</button>' + "".join(f'<button data-fac="{esc(t["faction"])}">{esc(t["faction"])}</button>' for t in view.get("faction_tallies") or [])
     pos_buttons = '<button data-posf="all" class="on">minden szavazat</button>' + "".join(f'<button data-posf="{p}">{esc(POSITION_LABEL[p])}</button>' for p in POSITION_ORDER if (view.get("position_counts") or {}).get(p))
@@ -529,6 +588,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
                      "Az Országgyűlés szavazásai a 43. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás ülőhelyenként kirajzolva. Forrás: parlament.hu Web API.") + f"""
 <header>
   <h1>karzat <small>az Országgyűlés szavazásai, ülőhelyenként — a szükséges többséggel együtt</small></h1>
+  <p class="crumbs">szavazások (lent) · <a href="kepviselo/index.html">képviselők</a></p>
   <p class="lede">Első oldal. Egy szavazás kirajzolva, {fl["votes"]} szavazás listázva a 43. ciklus első {fl["sitting_days"]["count"]} ülésnapjáról — mindegyik a saját oldalán, ülőhelyenként — minden döntés mellett azzal a többségi szabállyal, amelyet az Országgyűlés maga jelöl meg. Forrás: parlament.hu Web API; a személyek azonosítása Wikidatával egyeztetve.</p>
   {freshness_html(inp)}
 </header>
@@ -624,6 +684,185 @@ def build_vote_page(inp: dict, ts: str) -> str:
 """
 
 
+# -- MP pages ---------------------------------------------------------------------------------
+
+def chamber_mini_svg(inp: dict, azon: str) -> str:
+    """The whole chamber in faint dots with this MP's seat highlighted."""
+    plan = inp["plan"]
+    if not plan or azon not in plan["coords"]:
+        return ""
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    geo = plan["geometry"]
+    R = geo["outer_radius"] + 14
+    parts = []
+    for a, xy in plan["coords"].items():
+        if a == azon:
+            continue
+        parts.append(f'<circle cx="{xy["x"]}" cy="{xy["y"]}" r="3.6" fill="currentColor" fill-opacity=".12"/>')
+    me = plan["coords"][azon]
+    c = colour.get(inp["mps"].get(azon, {}).get("faction") or "", "#8a8a8a")
+    parts.append(f'<circle cx="{me["x"]}" cy="{me["y"]}" r="9" fill="{c}" fill-opacity=".25"/><circle cx="{me["x"]}" cy="{me["y"]}" r="5" fill="{c}"/>')
+    return (f'<svg viewBox="-172 -{R+12:.0f} 344 {R+30:.0f}" role="img" aria-label="Ülőhely az ülésteremben">'
+            f'<rect x="-16" y="-7" width="32" height="8" rx="1.5" class="rostrum"/>' + "".join(parts) + '</svg>')
+
+
+def mandate_text(mp: dict) -> str:
+    if mp.get("mandate_kind") == "egyeni":
+        return f'egyéni választókerület — {mp.get("county")} {mp.get("constituency_no")}. OEVK'
+    if mp.get("mandate_kind") == "lista":
+        return "országos lista"
+    return "—"
+
+
+def seat_text(mp: dict) -> str:
+    s = mp.get("seat") or {}
+    if s.get("sector") is None:
+        return "nincs ülőhely-adat"
+    if s["sector"] == 0:
+        return f'miniszteri pad, {s["seat"]}. szék'
+    return f'{s["sector"]}. szektor, {s["row"]}. sor, {s["seat"]}. szék'
+
+
+def build_mp_page(inp: dict, azon: str) -> str:
+    mp = inp["mps"][azon]
+    al = inp["alignment"]["per_mp"].get(azon) or {"votes": [], "counts": {}, "with": 0, "against": 0, "cast": 0, "in_roll": 0}
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    c = colour.get(mp.get("faction") or "", "#8a8a8a")
+    counts = al["counts"]
+    in_roll = al["in_roll"] or 0
+    cast = al["cast"]
+    part = f"{100*cast/in_roll:.0f}%" if in_roll else "—"
+    aligned_total = al["with"] + al["against"]
+    with_pct = f"{100*al['with']/aligned_total:.0f}%" if aligned_total else "—"
+
+    # deviations: votes where the MP cast a different position from the faction's plurality
+    devs = [v for v in al["votes"] if v["align"] == "against"]
+    def vote_row(v, extra=""):
+        vv = inp["by_ts"][v["ts"]]
+        mo = vv["motions"][0] if vv["motions"] else {}
+        subj = f'{esc(mo.get("iromany") or "")} {esc((mo.get("title") or vv.get("remark") or ("Jelenlét megállapítása" if vv["kind"] == "jelenlet" else ""))[:80])}'
+        pos_html = f'<span class="pos">{_glyph(v["position"], c)}{esc(POSITION_LABEL.get(v["position"], v["position"]))}</span>'
+        fp = POSITION_LABEL.get(v["faction_plurality"] or "", "—") if v["faction_plurality"] else "—"
+        flag = {"with": '<span class="badge ok">frakcióval</span>', "against": '<span class="badge no">frakció ellen</span>'}.get(v["align"] or "", '<span class="badge mid">nem szavazott</span>' if v["position"] not in CAST else "")
+        return (f'<tr data-al="{esc(v["align"] or "none")}" data-p="{esc(v["position"])}"><td class="ts mono"><a href="../szavazas/{esc(vv["slug"])}.html">{esc(vv["on_date"])} {esc(vv["time"])}</a></td>'
+                f'<td>{subj}<span class="sub">{esc(rule_short((vv.get("majority") or {}).get("rule")))} · {esc(vv["result_raw"])}</span></td><td>{pos_html}</td><td>{esc(fp)}</td><td>{flag}</td></tr>')
+    dev_rows = "".join(vote_row(v) for v in reversed(devs))
+    all_rows = "".join(vote_row(v) for v in reversed(al["votes"]))
+
+    fac_hist = "".join(f'<tr><td class="mono">{esc(f["ciklus"])}</td><td>{esc(f["faction"])}</td><td class="mono">{esc(f["from"] or "")} – {esc(f["to"] or "")}</td></tr>' for f in mp.get("factions") or [])
+    elections = "".join(f'<tr><td class="mono">{esc(e["ciklus"])}</td><td>{esc(e["constituency"] or "—")}</td><td class="mono">{esc(e["elected_on"] or "")}</td><td class="mono">{esc(e["mandate_from"] or "")} – {esc(e["mandate_to"] or "")}</td></tr>' for e in mp.get("elections") or [])
+    motions = "".join(f'<tr><td class="mono">{esc(m["ciklus"])}</td><td class="num mono">{esc(m["onallo"])}</td><td class="num mono">{esc(m["nem_onallo"])}</td></tr>' for m in mp.get("motion_stats") or [])
+    former_note = "" if mp.get("current") else f'<div class="hero-meta">Mandátuma megszűnt{(" " + hu_date(mp["wikidata_end"])) if mp.get("wikidata_end") else ""}; a képviselői adatlap ma már nem tartalmaz ülőhelyet.</div>'
+    links = " · ".join(x for x in [
+        f'<a href="{esc(mp["parlament_url"])}" target="_blank" rel="noopener">parlament.hu adatlap</a>',
+        f'<a href="{esc(mp["photo_url"])}" target="_blank" rel="noopener">fénykép (parlament.hu)</a>' if mp.get("photo_url") else "",
+        f'<a href="https://www.wikidata.org/wiki/{esc(mp["wikidata_qid"])}" target="_blank" rel="noopener">Wikidata {esc(mp["wikidata_qid"])}</a>' if mp.get("wikidata_qid") else "",
+        f'<a href="https://{esc(mp["website"])}" target="_blank" rel="noopener">{esc(mp["website"])}</a>' if mp.get("website") and "." in mp["website"] else "",
+    ] if x)
+    pos_cells = "".join(f'<div><b class="mono">{counts.get(p, 0)}</b><span>{esc(POSITION_LABEL[p])}</span></div>' for p in POSITION_ORDER)
+    return page_head(f'{mp["name"]} ({mp.get("faction") or "—"}) · karzat',
+                     f'{mp["name"]} — {mp.get("faction") or ""}, {mandate_text(mp)}: szavazási részvétel és a frakcióval való egyezés a 43. ciklusban.') + f"""
+<header>
+  <p class="crumbs"><a href="../index.html">karzat</a> › <a href="index.html">képviselők</a> › {esc(mp["name"])}</p>
+  <h1>{esc(mp["name"])} <small><span class="pos"><i style="width:10px;height:10px;border-radius:50%;background:{c};display:inline-block"></i>{esc(mp.get("faction") or "—")}</span> · {esc(mandate_text(mp))} · {esc(seat_text(mp))}</small></h1>
+  <p class="hero-meta">{links}</p>
+  {former_note}
+</header>
+<section class="grid">
+  <div class="card">
+    <h2>Szavazási részvétel a 43. ciklusban — {in_roll} név szerinti szavazásból</h2>
+    <div class="tally" style="grid-template-columns:repeat(3,1fr)">{pos_cells}</div>
+    <dl class="verdict">
+      <dt>Leadott szavazat</dt><dd class="mono">{cast} / {in_roll} ({part})</dd>
+      <dt>Frakciójával</dt><dd class="mono">{al["with"]} · ellene {al["against"]} · egyezés {with_pct}</dd>
+    </dl>
+    <div class="hero-meta" style="margin-top:8px">„Frakciójával”: a leadott szavazata (igen / nem / tartózkodott) megegyezik a frakciója leadott szavazatainak többségi álláspontjával az adott szavazáson; „ellene”: eltér attól. A nem leadott állapotok (jelen, nem szavazott; nem szavazott; előre bejelentett hiányzó) részvétel, nem egyezés. Ezek számok, nem minősítések: egy „ellene” lehet lelkiismereti szavazás, egy „nem szavazott” lehet betegség.</div>
+  </div>
+  <div class="card">
+    <h2>Ülőhely az ülésteremben</h2>
+    <div class="chart">{chamber_mini_svg(inp, azon) or '<div class="hero-meta">Nincs ülőhely-adat.</div>'}</div>
+    <div class="hero-meta">{esc(seat_text(mp))} · az elnöki emelvény felől nézve; a rekonstrukció feltevéseit a szavazás-oldalak jegyzete sorolja.</div>
+  </div>
+</section>
+<section class="grid" style="margin-top:20px">
+  <div class="card">
+    <h2>Frakciótagság és mandátum — a képviselői adatlap szerint</h2>
+    <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th>Frakció</th><th>Időszak</th></tr></thead><tbody>{fac_hist or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+    <div class="tablewrap" style="border:0;margin-top:10px"><table><thead><tr><th>Ciklus</th><th>Választókerület / lista</th><th>Választás</th><th>Mandátum</th></tr></thead><tbody>{elections or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
+  </div>
+  <div class="card">
+    <h2>Benyújtott indítványok ciklusonként</h2>
+    <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+    <div class="hero-meta" style="margin-top:8px">Az API <span class="mono">&lt;inditvanyok&gt;</span> összesítése; a tételek maguk még nincsenek betöltve.</div>
+  </div>
+</section>
+<section class="dir">
+  <div class="card">
+    <h2>Szavazatok a frakció többségével szemben — {len(devs)}</h2>
+    <div class="tablewrap"><table><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
+  </div>
+</section>
+<section class="dir">
+  <div class="card">
+    <h2>Minden szavazása — {in_roll} tétel, a legfrissebb elöl</h2>
+    <div class="filters"><button data-alf="all" class="on">mind</button><button data-alf="with">frakcióval</button><button data-alf="against">frakció ellen</button><button data-alf="none">nem adott le szavazatot</button><span class="n" id="rn"></span></div>
+    <div class="tablewrap"><table id="mine"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{all_rows}</tbody></table></div>
+  </div>
+</section>
+{footer_html(inp)}
+</div>
+<script>
+(function(){{
+  var t = document.getElementById('mine'); if (!t) return;
+  var rows = Array.prototype.slice.call(t.tBodies[0].rows), n = document.getElementById('rn');
+  function apply(f){{ var k = 0; rows.forEach(function(r){{ var ok = f === 'all' || r.getAttribute('data-al') === f; r.style.display = ok ? '' : 'none'; if (ok) k++; }}); n.textContent = k + ' / ' + rows.length; }}
+  document.querySelectorAll('[data-alf]').forEach(function(b){{ b.addEventListener('click', function(){{ document.querySelectorAll('[data-alf]').forEach(function(x){{x.classList.toggle('on', x===b);}}); apply(b.getAttribute('data-alf')); }}); }});
+  apply('all');
+}})();
+</script>
+</body>
+</html>
+"""
+
+
+def build_mp_index(inp: dict) -> str:
+    facs = inp["facs"]
+    colour = {f["id"]: f["colour"] for f in facs}
+    order = {f["id"]: f["sort_order"] for f in facs}
+    mps = sorted(inp["mps"].values(), key=lambda m: (not m["current"], order.get(m.get("faction") or "", 999), m["name"]))
+    trs = []
+    for mp in mps:
+        al = inp["alignment"]["per_mp"].get(mp["p_azon"]) or {"with": 0, "against": 0, "cast": 0, "in_roll": 0}
+        c = colour.get(mp.get("faction") or "", "#8a8a8a")
+        part = f'{100*al["cast"]/al["in_roll"]:.0f}%' if al["in_roll"] else "—"
+        former_badge = "" if mp["current"] else ' <span class="badge mid">volt képviselő</span>'
+        part_key = f'{al["cast"]/al["in_roll"]:.4f}' if al["in_roll"] else "-1"
+        trs.append(f'<tr data-f="{esc(mp.get("faction") or "")}" data-name="{esc(mp["name"])}" data-fac="{esc(mp.get("faction") or "")}" data-part="{part_key}" data-against="{al["against"]}" data-cur="{1 if mp["current"] else 0}">'
+                   f'<td><a href="{esc(mp["p_azon"])}.html">{esc(mp["name"])}</a>{former_badge}</td>'
+                   f'<td><span class="pos"><i style="width:9px;height:9px;border-radius:50%;background:{c};display:inline-block"></i>{esc(mp.get("faction") or "—")}</span></td>'
+                   f'<td>{esc(mandate_text(mp))}</td><td class="mono">{esc(seat_text(mp))}</td>'
+                   f'<td class="num mono">{al["cast"]} / {al["in_roll"]}</td><td class="num mono">{part}</td><td class="num mono">{al["against"]}</td></tr>')
+    fac_buttons = '<button data-fac="all" class="on">minden frakció</button>' + "".join(f'<button data-fac="{esc(f["id"])}">{esc(f["id"])}</button>' for f in facs if any(m.get("faction") == f["id"] for m in mps))
+    return page_head("Képviselők · karzat", "Az Országgyűlés képviselői a 43. ciklusban: mandátum, ülőhely, szavazási részvétel és a frakcióval való egyezés.") + f"""
+<header>
+  <p class="crumbs"><a href="../index.html">karzat</a> › képviselők</p>
+  <h1><a href="../index.html">karzat</a> <small>képviselők — {sum(1 for m in mps if m["current"])} jelenlegi és {sum(1 for m in mps if not m["current"])} volt képviselő a névsorokból</small></h1>
+</header>
+<section class="dir" style="margin-top:14px">
+  <div class="card">
+    <div class="filters">{fac_buttons}<span class="n" id="rn"></span></div>
+    <div class="tablewrap"><table id="roll"><thead><tr><th class="sortable" data-key="name">Képviselő</th><th class="sortable" data-key="fac">Frakció</th><th>Mandátum</th><th>Ülőhely</th><th class="sortable num" data-key="cast">Leadott / névsor</th><th class="sortable num" data-key="part">Részvétel</th><th class="sortable num" data-key="against">Frakció ellen</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+    <div class="hero-meta" style="margin-top:8px">„Leadott”: igen / nem / tartózkodott a név szerinti szavazásokon; „részvétel”: leadott / névsorban szereplő; „frakció ellen”: a frakció leadott szavazatainak többségétől eltérő leadott szavazatok száma. Számok, nem minősítések.</div>
+  </div>
+</section>
+{footer_html(inp)}
+</div>
+<script>{JS_VOTE}</script>
+</body>
+</html>
+"""
+
+
 # -- main -------------------------------------------------------------------------------------
 
 HERO_TS = "2026.06.15.17:20:04"
@@ -638,14 +877,20 @@ def build_all(out_dir: Path, index_only: bool = False) -> dict:
     inp = load_inputs()
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(build_index(inp, HERO_TS), encoding="utf-8")
-    n = 0
+    n = k = 0
     if not index_only:
         vd = out_dir / "szavazas"
         vd.mkdir(parents=True, exist_ok=True)
         for ts in inp["order"]:
             (vd / f'{inp["by_ts"][ts]["slug"]}.html').write_text(build_vote_page(inp, ts), encoding="utf-8")
             n += 1
-    return {"index": str(out_dir / "index.html"), "vote_pages": n}
+        md = out_dir / "kepviselo"
+        md.mkdir(parents=True, exist_ok=True)
+        (md / "index.html").write_text(build_mp_index(inp), encoding="utf-8")
+        for azon in inp["mps"]:
+            (md / f"{azon}.html").write_text(build_mp_page(inp, azon), encoding="utf-8")
+            k += 1
+    return {"index": str(out_dir / "index.html"), "vote_pages": n, "mp_pages": k}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -663,7 +908,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ok: {SITE} matches a fresh build ({len(page):,} bytes)")
         return 0
     res = build_all(args.out, index_only=args.index_only)
-    print(f"written {res['index']} + {res['vote_pages']} vote pages under {args.out / 'szavazas'}")
+    print(f"written {res['index']} + {res['vote_pages']} vote pages under {args.out / 'szavazas'} + {res['mp_pages']} MP pages under {args.out / 'kepviselo'}")
     return 0
 
 
