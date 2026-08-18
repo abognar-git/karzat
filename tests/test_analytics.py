@@ -2,8 +2,9 @@
 
 import unittest
 
-from karzat.analytics import agreement_index, bill_key, bills, close_votes, cohesion, monthly, rice
+from karzat.analytics import agreement_index, bill_key, bills, close_votes, cohesion, monthly, motion_is_own_stage, rice
 from scripts.build_site import HERO_TS, load_inputs
+
 
 
 class Formulas(unittest.TestCase):
@@ -22,7 +23,19 @@ class Bills(unittest.TestCase):
         self.assertEqual(bill_key("T/51"), (51, "T"))
         self.assertEqual(bill_key("11152/8"), (11152, None))
         self.assertEqual(bill_key("S/482"), (482, "S"))
+        self.assertEqual(bill_key("Ü/2217"), (2217, "Ü"))                            # accented prefixes exist (cycle 42)
         self.assertEqual(bill_key(None), (None, None))
+
+    def test_a_votes_stage_is_told_by_the_outcome_not_the_number_form(self):
+        # the closing vote on T/122's egységes javaslat is printed as '122/12' with an 'önálló indítvány' outcome
+        self.assertTrue(motion_is_own_stage({"iromany": "122/12", "outcome": "önálló indítvány elfogadva"}, None))
+        self.assertFalse(motion_is_own_stage({"iromany": "122/3", "outcome": "módosító javaslat elutasítva"}, None))
+        self.assertTrue(motion_is_own_stage({"iromany": "T/122", "outcome": "kivételességi javaslat elfogadva"}, "T"))
+        self.assertFalse(motion_is_own_stage({"iromany": "122/4", "outcome": ""}, None))
+        inp = load_inputs()
+        b = bills(inp)[122]
+        self.assertEqual(b["own_votes"] + b["amendment_votes"], len(b["votes"]))       # counted per vote, not per motion
+        self.assertGreater(b["own_votes"], 0)                                          # …and its own passage is its own
 
     def test_bills_group_every_roll_call_by_number(self):
         inp = load_inputs()
@@ -72,6 +85,37 @@ class Cycle43(unittest.TestCase):
         fk = pairs.get("TISZA", {}).get("Fidesz") or pairs.get("Fidesz", {}).get("TISZA")
         self.assertTrue(fk and 0 <= fk["share"] <= 1 and fk["votes"] > 200)
         self.assertTrue(all(r["shared"] >= 20 for rows in self.co["mp_pairs"].values() for r in rows))
+
+    def test_ties_are_no_plurality_and_nobody_dissents(self):
+        # per-faction "kisebbségi szavazatok" must equal the sum of the MP pages' "frakció ellen": both apply the
+        # tie rule (no plurality → nobody against) and both leave quorum checks out
+        from scripts.build_site import compute_alignment
+        al = compute_alignment(self.inp)
+        against = {}
+        for rec in al["per_mp"].values():
+            for v in rec["votes"]:
+                if v["align"] == "against":
+                    against[v["faction"]] = against.get(v["faction"], 0) + 1
+        for f, v in self.co["per_faction"].items():
+            self.assertEqual(v["dissenting_votes"], against.get(f, 0), f)
+        self.assertEqual(against.get("Mi Hazánk"), 3)                     # was 4 while the quorum check counted as a vote
+        # the quorum check of 2026-05-09 has a roll call but no pluralities
+        self.assertEqual(al["plurality_by_vote"].get("2026.05.09.10:45:47"), {})
+        self.assertNotIn("2026.05.09.10:45:47", self.co["per_vote"])
+
+    def test_absence_counterfactual_does_not_double_count_the_present(self):
+        # a 2/3-of-present decision: 126–51–4 with 5 present-not-voting and 13 absent among the roll call
+        # hypothetical presence = 186 + 13 (not 186 + 18): the present-not-voting are already in the base
+        for r in self.cl["decisions"]:
+            if r["hypo_igen"] is not None and r["rule"] in ("ketharmad_jelenlevo", "egyszeru", "negyotod_jelenlevo"):
+                self.assertLessEqual(r["hypo_igen"], 199)
+        # cycle 42's H/13745 (2026-03-10 10:35) was the reviewer's repro: it must not be listed as absence-decisive
+        inp42 = load_inputs(42)
+        co42 = cohesion(inp42); cl42 = close_votes(inp42, co42["plurality"])
+        self.assertNotIn("2026.03.10.10:35:41", [r["ts"] for r in cl42["absence_decisive"]])
+        for r in cl42["decisions"]:
+            if r["ts"].startswith("2026.03.10.10:35"):
+                self.assertFalse(r["flips_if_all_voted"], r)
 
     def test_close_votes_shapes(self):
         cl = self.cl

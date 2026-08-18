@@ -160,6 +160,7 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("position, position_label", "igen | nem | tartozkodott | jelen_nem_szavazott | nem_szavazott | bejelentett_hianyzo | igazoltan_tavol — és ugyanez magyarul (a szavazás-oldal .csv-jében)"),
             ("align, against_faction", "with = a frakciója leadott szavazatainak többségével · against = ellene · üres = nem adott le szavazatot; a szavazás-oldal .csv-jében igaz/hamis"),
             ("sector, row, seat", "ülőhely a parlament.hu alaprajza szerint (csak a jelenlegi ciklusban)"),
+            ("faction_tallies (a szavazás-oldal .json-jában)", "az API frakciósorai: igen, nem, tartozkodott, nem_szavazott (= nem szavazott + jelen, nem szavazott), igazoltan_tavol (= igazoltan távol + előre bejelentett hiányzó), osszesen"),
         ]),
         ("kepviselok.csv / kepviselok.json — a ciklus névsoraiban szereplő személyek", [
             ("p_azon, name, faction, faction_first", "azonosító, név, frakció az utolsó, illetve az első név szerinti szavazásán"),

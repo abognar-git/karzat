@@ -256,14 +256,6 @@ def record_histories(cache: "Path") -> dict[str, dict[str, Any]]:
     return out
 
 
-def record_name_aliases(cache: "Path") -> dict[str, str]:
-    """name -> p_azon from the cached records (first wins on a duplicate name; prefer record_histories + NameResolver)."""
-    out: dict[str, str] = {}
-    for azon, h in record_histories(cache).items():
-        out.setdefault(h["name"], azon)
-    return out
-
-
 # -- sitting days ---------------------------------------------------------------------------
 
 def parse_ulesnap(payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -284,7 +276,7 @@ def parse_iromany_szam(szam: str | None) -> dict[str, Any]:
     """'T/71' -> {kind:'T', number:71}; '56/4' -> {kind:'amendment', parent:56, number:4}."""
     if not szam:
         return {"kind": None}
-    m = re.match(r"^([A-Za-z]+)/(\d+)$", szam.strip())
+    m = re.match(r"^([A-Za-zÁÉÍÓÖŐÚÜŰáéíóöőúüű]+)/(\d+)$", szam.strip())
     if m:
         return {"kind": m.group(1).upper(), "number": int(m.group(2))}
     m = re.match(r"^(\d+)/(\d+)$", szam.strip())

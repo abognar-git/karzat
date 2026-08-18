@@ -38,3 +38,6 @@ site/szoros/
 site/szamok/
 site/modszer/
 site/kereses/
+
+# editor/session config
+.claude/

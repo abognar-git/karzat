@@ -120,6 +120,10 @@ class WebApi:
     def cache_path(self, service: str, params: dict[str, Any]) -> Path:
         return self.cache_dir / service / f"{cache_key(service, params)}.xml"
 
+    retries: int = 2                   # extra attempts on a 5xx / timeout / connection error, with backoff
+    max_consecutive_failures: int = 5  # after this many failed live calls in a row, stop asking (circuit breaker)
+    consecutive_failures: int = field(default=0, init=False)
+
     def fetch(self, service: str, *, refresh: bool = False, **params: Any) -> bytes:
         """Return raw XML bytes for a service call, from cache when possible."""
         path = self.cache_path(service, params)
@@ -130,22 +134,43 @@ class WebApi:
             raise MissingToken(
                 f"no access token: set {TOKEN_ENV} in the environment (see .env.example)"
             )
+        if self.consecutive_failures >= self.max_consecutive_failures:
+            raise ApiError(f"{service}: {self.consecutive_failures} live calls failed in a row — stopping rather than hammering the API")
         url = build_url(service, params, self.token)
-        wait = self.min_interval - (time.monotonic() - self._last_call)
-        if wait > 0:
-            time.sleep(wait)
-        resp = self.session.get(url, timeout=self.timeout)
-        self._last_call = time.monotonic()
-        self.live_calls += 1
-        if resp.status_code != 200:
-            raise ApiError(f"{service}: HTTP {resp.status_code} for {mask_token(url)}")
+        masked = mask_token(url)
+        attempt = 0
+        while True:
+            wait = self.min_interval - (time.monotonic() - self._last_call)
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                resp = self.session.get(url, timeout=self.timeout)
+                self._last_call = time.monotonic()
+                self.live_calls += 1
+                status = resp.status_code
+                err = None if status == 200 else f"HTTP {status}"
+            except requests.RequestException as e:
+                # requests embeds the full URL (token included) in its messages: never let that text out
+                self._last_call = time.monotonic()
+                self.live_calls += 1
+                resp, status, err = None, None, type(e).__name__
+            if err is None:
+                break
+            transient = status is None or status >= 500 or status == 429
+            if transient and attempt < self.retries:
+                attempt += 1
+                time.sleep(min(30.0, self.min_interval * (2 ** attempt)))
+                continue
+            self.consecutive_failures += 1
+            raise ApiError(f"{service}: {err} for {masked}")
         raw = resp.content
-        if not raw.lstrip().startswith(b"<"):
+        head = raw.lstrip()[:512].lower()
+        if not head.startswith(b"<") or b"<html" in head or b"<!doctype" in head:
             # The CGI answers HTML (or a bare error string) for bad tokens/params; do not cache it.
-            raise ApiError(
-                f"{service}: non-XML response ({len(raw)} bytes) for {mask_token(url)}: "
-                f"{raw[:160]!r}"
-            )
+            self.consecutive_failures += 1
+            snippet = raw[:160].decode("utf-8", "replace").replace(self.token, "***")
+            raise ApiError(f"{service}: non-XML response ({len(raw)} bytes) for {masked}: {snippet!r}")
+        self.consecutive_failures = 0
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(raw)
         return raw

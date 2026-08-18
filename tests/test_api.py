@@ -85,6 +85,17 @@ class XmlConversion(unittest.TestCase):
         self.assertEqual(xmlutil.as_list("x"), ["x"])
         self.assertEqual(xmlutil.as_list(["x"]), ["x"])
 
+    def test_source_defects_are_repaired(self):
+        # 1990: an unescaped quote inside an attribute; 2003: a bare '&' ("K&H Equities Rt.").
+        quote = b'<a><t nev="x" ertek="hogy "kell-e" tovabb"/></a>'
+        self.assertEqual(xmlutil.parse_xml(quote).find("t").get("ertek"), 'hogy "kell-e" tovabb')
+        amp = b'<a><t nev="x" ertek="a K&amp;H Equities Rt.-n\xc3\xa9l K&H tov&#225;bb"/></a>'
+        self.assertEqual(xmlutil.parse_xml(amp).find("t").get("ertek"), "a K&H Equities Rt.-nél K&H tovább")
+        # real entities are left alone; a document that is fine is untouched
+        self.assertEqual(xmlutil.repair_bare_ampersands(b"&amp; &#225; &#x41; & &&x"), b"&amp; &#225; &#x41; &amp; &amp;&amp;x")
+        good = b"<a><t ertek='1 &amp; 2'/></a>"
+        self.assertEqual(xmlutil.parse_xml(good).find("t").get("ertek"), "1 & 2")
+
 
 class _FakeResp:
     def __init__(self, content: bytes, status: int = 200):
@@ -112,14 +123,40 @@ class Caching(unittest.TestCase):
     def test_non_xml_response_is_not_cached(self):
         with tempfile.TemporaryDirectory() as tmp:
             client = api.WebApi(token="TOK", cache_dir=Path(tmp), min_interval=0)
-            with mock.patch.object(client.session, "get", return_value=_FakeResp(b"<html>bad token</html>")):
-                # HTML *does* start with '<' — the client only rejects non-markup; the probe command
-                # is what tells a human that the root tag is <html>. Simulate a bare error string:
-                pass
-            with mock.patch.object(client.session, "get", return_value=_FakeResp(b"ERROR: invalid token")):
-                with self.assertRaises(api.ApiError):
+            # an HTML error page starts with '<' too: it must be refused, not cached and later parsed as data
+            for body in (b"<!DOCTYPE html>\n<html><body>Invalid access token TOK</body></html>", b"<html>bad token</html>",
+                         b"ERROR: invalid token"):
+                with mock.patch.object(client.session, "get", return_value=_FakeResp(body)):
+                    with self.assertRaises(api.ApiError) as cm:
+                        client.fetch("kepviselok")
+                    self.assertNotIn("TOK", str(cm.exception))            # the token never reaches a log line
+                self.assertFalse(client.cache_path("kepviselok", {}).exists())
+
+    def test_transport_errors_are_masked_retried_and_eventually_stop(self):
+        import requests
+        with tempfile.TemporaryDirectory() as tmp:
+            client = api.WebApi(token="TOK", cache_dir=Path(tmp), min_interval=0, retries=1)
+            boom = requests.ConnectionError("Max retries exceeded with url: /cgi-bin/x.cgi?access_token=TOK&p=1")
+            with mock.patch.object(client.session, "get", side_effect=boom) as g, mock.patch("karzat.api.time.sleep"):
+                with self.assertRaises(api.ApiError) as cm:
                     client.fetch("kepviselok")
-            self.assertFalse(client.cache_path("kepviselok", {}).exists())
+                self.assertEqual(g.call_count, 2)                          # one retry
+            self.assertNotIn("TOK", str(cm.exception))
+            self.assertIn("ConnectionError", str(cm.exception))
+            # a 503 then a 200: served after the retry, and the failure counter is reset
+            with mock.patch.object(client.session, "get", side_effect=[_FakeResp(b"x", 503), _FakeResp(REAL_LIST)]), mock.patch("karzat.api.time.sleep"):
+                self.assertEqual(client.fetch("szavazasok", p_datum_tol="2026.09.01", p_datum_ig="2026.09.30"), REAL_LIST)
+            self.assertEqual(client.consecutive_failures, 0)
+            # a 404 is not retried; five failures in a row open the circuit
+            with mock.patch.object(client.session, "get", return_value=_FakeResp(b"", 404)) as g:
+                for _ in range(5):
+                    with self.assertRaises(api.ApiError):
+                        client.fetch("kepviselo", p_azon=f"x{_}")
+                self.assertEqual(g.call_count, 5)
+                with self.assertRaises(api.ApiError) as cm:
+                    client.fetch("kepviselo", p_azon="y")
+                self.assertEqual(g.call_count, 5)                          # no sixth request
+            self.assertIn("in a row", str(cm.exception))
 
     def test_missing_token_is_a_clear_error(self):
         with tempfile.TemporaryDirectory() as tmp:

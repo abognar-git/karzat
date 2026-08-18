@@ -9,7 +9,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, load_inputs, mp_exports, vote_exports, vote_view
+from scripts.build_site import HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -28,6 +28,20 @@ class Build(unittest.TestCase):
         self.assertTrue(SITE.exists(), "site/index.html missing — run python3 -m scripts.build_site")
         self.assertEqual(SITE.read_text(encoding="utf-8"), self.page,
                          "site/index.html is stale — rebuild with python3 -m scripts.build_site")
+
+    def test_only_the_index_and_assets_are_tracked(self):
+        # everything else under site/ is generated and git-ignored; a tracked page would silently go stale
+        import subprocess
+        try:
+            out = subprocess.run(["git", "ls-files", "site"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
+        except (OSError, subprocess.CalledProcessError):
+            self.skipTest("not a git checkout")
+        self.assertEqual(sorted(out), ["site/assets/karzat.css", "site/assets/karzat.js", "site/index.html"])
+
+    def test_links_stay_inside_the_tree(self):
+        # the current cycle lives at the site root: nothing on its directory may climb out of it
+        self.assertNotIn('href="../', self.page)
+        self.assertIn('href="iromany/', self.page)                            # the hero's bill link (rendered at depth 0)
 
     def test_page_is_self_contained(self):
         # every external reference is a parlament.hu link on a motion; the only stylesheet and script are our
@@ -64,10 +78,11 @@ class Build(unittest.TestCase):
         self.assertIn("ezen az oldalon: 43. ciklus · 259 szavazás · 23 ülésnap · 199 képviselő", self.page)
         self.assertRegex(self.page, r"&gt; \d+ ciklus · \d{4}\. \w+ \d+\. – 2026\. augusztus 11\. · [\d\u00a0]+ szavazás · [\d\u00a0]+ név szerinti lista · [\d\u00a0]+ képviselő")
         self.assertIn("a számított eredmény minden szavazásnál egyezik a jegyzőkönyvivel", self.page)
-        self.assertIn("frissítve 2026. augusztus 18. 10:49", self.page)
+        stamp = sync_stamp(load_inputs())                                       # the last sync, whatever it was
+        self.assertIn(f"frissítve {hu_date(stamp[:10])} {stamp[11:]}", self.page)
         self.assertNotIn("SYSTEM_READY", self.page)
         self.assertNotIn(".cgi", self.page.split("<footer")[1])          # the footer talks about the data, not the plumbing
-        self.assertIn("Frissítve: 2026. augusztus 18. 10:49 (budapesti idő).", self.page)   # absolute, not a frozen "15 perce"
+        self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", self.page)   # absolute, not a frozen "15 perce"
         for word in ("live", "élő", "real-time"):
             self.assertNotIn(word, visible_text(self.page))
         # the footer is a landmark of its own, outside <main>
@@ -76,7 +91,7 @@ class Build(unittest.TestCase):
     def test_hero_and_directory_are_present(self):
         self.assertEqual(self.page.count('<g class="seat"'), 199)
         self.assertIn("különbség +2", self.page)              # T/51: 135 igen, 133 needed
-        self.assertIn("133 a 199-ból", self.page)
+        self.assertIn("133 / 199", self.page)
         self.assertEqual(self.page.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
         self.assertNotIn('data-year="', self.page)                      # one year only → no year filter
         self.assertIn('title="2022-05-02 – 2026-05-08">42</a>', self.page)      # the other cycles, one click away
@@ -138,7 +153,7 @@ class VotePages(unittest.TestCase):
         self.assertEqual(len(a011[9]), 20)                                    # the last 20 roll calls up to this vote
         self.assertEqual(a011[9][-1], "a")                                    # …ending in this vote: against
         self.assertEqual(page.count('class="seat"'), 198)
-        self.assertEqual(page.count('tabindex="0"'), 198)                     # every seat is keyboard-reachable
+        self.assertEqual(page.count('tabindex="-1"'), 198)                    # one tab stop for the chamber; the script walks the seats
         self.assertEqual(page.count("<tr data-f="), len(re.findall(r'<tr data-f="[^>]*data-az="', page)))   # every roll-call row is linked to a seat
         # the hero vote has no dissenters and says nothing about rings
         hero = build_vote_page(self.inp, HERO_TS)
@@ -216,7 +231,7 @@ class MPPages(unittest.TestCase):
 
     def test_former_mp_page_says_so(self):
         page = build_mp_page(self.inp, "b076")
-        self.assertIn("Mandátuma megszűnt", page)
+        self.assertIn("Mandátum vége:", page)
         self.assertIn("nincs ülőhely-adat", page)
 
     def test_mp_index(self):
@@ -256,6 +271,9 @@ class Cycle42(unittest.TestCase):
         self.assertNotIn("Frissítve 1", page)                                 # no relative age anywhere
         self.assertIn("214 képviselő", page)                                  # the cycle's own roster, not today's list
         self.assertNotIn("TISZA: 141", page)
+        # links leave the cycle root only for the shared trees (assets, people, method, search, other cycles)
+        for h in re.findall(r'href="\.\./([^"#]+)', page):
+            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
         self.assertIn('href="../index.html" class="near">43</a>', page)       # the cycle switch (43 is the neighbour of 42)
         self.assertIn('ciklusok: <a href="../index.html" title="2026-05-09 –">43</a> · <b>42</b>', page)   # …and in the section nav
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
@@ -272,7 +290,7 @@ class Cycle42(unittest.TestCase):
         self.assertIn("tizenötödik módosítása", page)
         self.assertIn("különbség +7", page)                                   # 140 igen, 133 needed
         self.assertEqual(page.count('<g class="seat"'), 199)
-        self.assertIn("Ülésrend csak a jelenlegi ciklusról ismert", page)
+        self.assertIn("Ülésrend csak a jelenlegi ciklusból ismert", page)
         self.assertNotIn(">Ülőhely</th>", page)                               # no seat column without a plan
         self.assertIn('href="../../assets/karzat.css"', page)
         self.assertEqual(page.count('href="../kepviselo/'), 199)
@@ -286,7 +304,7 @@ class Cycle42(unittest.TestCase):
         page = build_mp_page(self.inp, "z012")                                # Z. Kárpát Dániel, Jobbik, list mandate
         self.assertIn("Z. Kárpát Dániel", page)
         self.assertIn("Jobbik", page)
-        self.assertIn("A 42. ciklus lezárult; mandátuma megszűnt", page)
+        self.assertIn("A 42. ciklus lezárult · mandátum vége:", page)
         self.assertNotIn("Ülőhely az ülésteremben", page)                # no seat panel on a closed cycle
         self.assertNotIn("../../kepviselo/z012.html", page)                   # no cycle-43 page for him
         page2 = build_mp_page(self.inp, "a011")                              # Ágh Péter sits in both cycles
@@ -310,7 +328,7 @@ class Cycle42(unittest.TestCase):
 
     def test_mandate_end_comes_from_the_record_not_wikidatas_first_statement(self):
         page = build_mp_page(self.inp, "j020")                                # Jakab Péter: Jobbik → független in 2022
-        self.assertIn("mandátuma megszűnt 2026. május 8", page)
+        self.assertIn("mandátum vége: 2026. május 8.", page)
         self.assertNotIn("2022. augusztus 12", page)
         self.assertEqual(self.inp["mps"]["j020"]["mandate_to"], "2026-05-08")
 
@@ -346,12 +364,12 @@ class Exports(unittest.TestCase):
         self.assertIn('href="2026-06-15T17-20-04.csv">CSV</a>', page)
         self.assertIn('href="2026-06-15T17-20-04.json">JSON</a>', page)
         self.assertIn("@misc{karzat-43-2026-06-15T17-20-04,", page)         # the citation box
-        self.assertIn("frissítve 2026-08-18 10:49", page)
+        self.assertIn(f"frissítve {sync_stamp(self.inp)}", page)
 
     def test_mp_exports_match_the_page(self):
         j, c = mp_exports(self.inp, "a011")
         obj = json.loads(j)
-        self.assertEqual(obj["summary"], {"in_roll": 256, "cast": 239, "with": 232, "against": 7})
+        self.assertEqual(obj["summary"], {"in_roll": 256, "cast": 239, "with": 231, "against": 7})   # the quorum check is participation, not "with"
         self.assertEqual(len(obj["votes"]), 256)
         self.assertEqual(len(obj["motions"]), 5)
         lines = c.lstrip("\ufeff").splitlines()
@@ -375,7 +393,7 @@ class CareerPages(unittest.TestCase):
         stints = [{"cycle": 43, "name": "Ágh Péter", "faction": "Fidesz", "faction_first": "Fidesz", "mandate": "egyéni választókerület — Vas 2. OEVK",
                    "mandate_from": "2026-05-09", "mandate_to": None, "current": True, "wikidata_qid": "Q1469363", "parlament_url": "https://www.parlament.hu/x",
                    "factions": [{"ciklus": "2026-", "faction": "Fidesz", "from": "2026-05-09", "to": None}], "elections": [], "motion_stats": [],
-                   "in_roll": 256, "cast": 239, "with": 232, "against": 7, "href": "kepviselo/a011.html"},
+                   "in_roll": 256, "cast": 239, "with": 231, "against": 7, "href": "kepviselo/a011.html"},
                   {"cycle": 42, "name": "Ágh Péter", "faction": "Fidesz", "faction_first": "Fidesz", "mandate": "egyéni választókerület — Vas 2. OEVK",
                    "mandate_from": "2022-05-02", "mandate_to": "2026-05-08", "current": True, "wikidata_qid": "Q1469363", "parlament_url": None,
                    "factions": [], "elections": [], "motion_stats": [], "in_roll": 2579, "cast": 2495, "with": 2487, "against": 8, "href": "ckl42/kepviselo/a011.html"}]
@@ -383,7 +401,7 @@ class CareerPages(unittest.TestCase):
         self.assertIn("2 betöltött ciklus", page)
         self.assertIn('href="../kepviselo/a011.html">43. ciklus</a>', page)
         self.assertIn('href="../ckl42/kepviselo/a011.html">42. ciklus</a>', page)
-        self.assertIn("2835 névsor · leadott 2734 · frakciójával 2719 · ellene 15", page)
+        self.assertIn("2\u00a0835 névsorban · leadott 2\u00a0734 · frakciójával 2\u00a0718 · ellene 15", page)   # the two stints above, added up
         self.assertIn("@misc{karzat-szemely-a011,", page)
         idx = build_person_index(inp, {"a011": stints})
         self.assertIn('href="a011.html">Ágh Péter</a>', idx)
@@ -423,6 +441,85 @@ class AllCycles(unittest.TestCase):
                 self.assertIn('id="insp-data"', hero)
                 # nobody in a roll call resolved to a person outside this cycle's roster
                 self.assertEqual(set(inp["store"]["members"]) - set(inp["mps"]), set())
+
+
+class ResearchPages(unittest.TestCase):
+    """The newer builders: each renders, names itself, carries its data links and its definitions."""
+
+    @classmethod
+    def setUpClass(cls):
+        from karzat import analytics as an
+        cls.inp = load_inputs()
+        cls.inp["facs_all"] = {f["id"]: f["colour"] for c in available_cycles() for f in factions(c)}
+        cls.co = an.cohesion(cls.inp)
+        cls.cl = an.close_votes(cls.inp, cls.co["plurality"])
+        cls.bs = an.bills(cls.inp)
+        cls.ms = an.monthly(cls.inp, cls.co)["months"]
+
+    def test_cohesion_page(self):
+        from scripts.build_site import build_cohesion_page
+        page = build_cohesion_page(self.inp, self.co)
+        self.assertIn("<title>Kohézió · 43. ciklus · karzat</title>", page)
+        self.assertIn("egyöntetűség", page)                                             # Rice explained the right way round
+        self.assertIn('href="szavazasonkent.csv">CSV</a>', page)                       # every export linked
+        self.assertNotIn("„független” sor", page)                                       # no független row in cycle 43 → no note about it
+        self.assertIn("döntetlennél nincs többség", page)
+        self.assertRegex(page, r"\d,\d\d</td>")                                         # Hungarian decimals
+
+    def test_close_votes_page(self):
+        from scripts.build_site import build_close_page
+        page = build_close_page(self.inp, self.cl)
+        self.assertIn("<title>Szoros szavazások · 43. ciklus · karzat</title>", page)
+        self.assertIn("feltevés, nem tény", page)                                       # the counterfactual is labelled
+        self.assertIn('href="dontesek.csv"', page)
+
+    def test_bill_pages(self):
+        from scripts.build_site import build_bill_index, build_bill_page
+        idx = build_bill_index(self.inp, self.bs)
+        self.assertIn('data-key="num">Szám', idx)                                       # numeric sort, not lexicographic
+        self.assertIn('href="iromanyok.csv">CSV</a>', idx)
+        self.assertIn('data-filter-table="roll"', idx)
+        page = build_bill_page(self.inp, self.bs[122])
+        self.assertIn("a javaslatról magáról:", page)                                   # T/122's own passage counts as its own
+        self.assertIn("<tr class=own>", page)
+
+    def test_numbers_page(self):
+        from scripts.build_site import build_numbers_page
+        page = build_numbers_page(self.inp, self.ms)
+        self.assertIn("<title>Számok · 43. ciklus · karzat</title>", page)
+        self.assertEqual(page.count('role="img" aria-label="'), 5)                     # every chart is named
+        self.assertIn('class="tswrap"', page)
+
+    def test_data_page(self):
+        from scripts.build_site import build_data_page
+        page = build_data_page(self.inp)
+        for f in ("iromanyok.csv", "szavazasonkent.csv", "dontesek.csv", "havonta.csv", "nevsorok.csv"):
+            self.assertIn(f, page)
+        self.assertIn("faction_tallies", page)                                          # documented
+
+    def test_search_and_method_pages(self):
+        from scripts.build_site import build_method_page, build_search_page
+        s = build_search_page(self.inp, 2088)
+        self.assertIn("<noscript>", s)
+        self.assertIn('id="sq"', s)
+        m = build_method_page(self.inp)
+        self.assertIn("<title>Módszer · karzat</title>", m)
+        self.assertIn("jelöltek", m)                                                    # no English leaks in the rule table
+        self.assertNotIn("n/a", m)
+        self.assertIn("ülőhely-vizsgáló", m)
+
+    def test_hostile_strings_are_escaped_everywhere(self):
+        # a title with markup and a comment opener: never live markup, and the JSON island stays parseable
+        from scripts.build_site import chart_block, esc, cut, ext_url, name_key
+        bad = '</script><img src=x onerror=alert(1)><!--&"'
+        self.assertNotIn("<img", esc(bad))
+        self.assertEqual(ext_url("javascript:alert(1)"), "")
+        self.assertEqual(ext_url("hendematepest13.hu"), "https://hendematepest13.hu")
+        self.assertEqual(ext_url("https://www.facebook.com/x"), "https://www.facebook.com/x")
+        self.assertEqual(cut("egy kettő három négy", 12), "egy kettő…")
+        self.assertEqual(name_key("Dr. Bódis Péter"), "bodis peter")
+        self.assertLess(name_key("Bódis"), name_key("Bujdosó"))                            # ó sorts with o
+        self.assertGreater(name_key("Öri"), name_key("Ozsvát"))                            # ö after every o
 
 
 class Helpers(unittest.TestCase):

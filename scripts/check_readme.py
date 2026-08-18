@@ -181,7 +181,6 @@ def build() -> list[tuple[str, list]]:
         # agreement of computed verdicts with the recorded results — from votes_index.json
         ("on {:,.0f} of {:,.0f} — {:,.0f} disagreements", [vi["details_cached"] - len(vi["disagreements"]), vi["details_cached"], len(vi["disagreements"])]),
         ("All {:,.0f} cycle-43 vote details synced ({:,.0f} calls)", [vi["details_cached"], 254]),
-        ("With all {:,.0f} roll\ncalls in hand", [vi["details_cached"]]),
         ("needed {:,.0f}, {:,.0f} igen, margin +{:,.0f}, and", [hero["majority"]["needed"], hero["igen"], hero["majority"]["margin"]]),
         # the database — data/derived/db_summary.json (python3 -m karzat stats --json)
         ("{:,.0f} votes, {:,.0f} roll-call positions with {:,.0f} unresolved names, {:,.0f} faction-history rows, {:,.0f} mandates across cycles, {:,.0f} bills",

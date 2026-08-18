@@ -104,7 +104,8 @@ def main(argv: list[str] | None = None) -> int:
     prefixes = collections.Counter((m["iromany_parsed"].get("kind") or "?") for v in votes for m in v["motions"])
     by_month = collections.Counter(v["on_date"][:7] for v in votes if v["on_date"])
     decisions = [v for v in votes if v["kind"] == "dontes"]
-    qualified = sum(1 for v in decisions if v["mode"] != "Listás" and not v["mode"].startswith("Titkos"))
+    # by the rule the mode names, not by the mode's spelling: a secret ballot with a two-thirds rule is qualified too
+    qualified = sum(1 for v in decisions if classify(payload_rule=v["mode"]).rule not in (Rule.EGYSZERU, Rule.RELATIV))
 
     mps = parse_kepviselok(load(RAW / "kepviselok" / "all.xml")) if (RAW / "kepviselok" / "all.xml").exists() else []
     days = []
@@ -112,8 +113,16 @@ def main(argv: list[str] | None = None) -> int:
         days.extend(parse_ulesnap(load(f)))
     days = sorted([d for d in days if d["date"] and d["date"] >= args.since and (not args.until or d["date"] <= args.until)], key=lambda x: (x["date"], x["ulnap"] or 0))
 
+    # "as of" the last sync, not the wall clock: a re-derive from the same cache is then byte-identical
+    sync_state = ROOT / "data" / "sync_state.json"
+    last_sync_at = None
+    if sync_state.exists():
+        try:
+            last_sync_at = json.loads(sync_state.read_text(encoding="utf-8")).get("last_sync_at")
+        except json.JSONDecodeError:
+            last_sync_at = None
     out = {
-        "derived_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "derived_at": last_sync_at or datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "window": {"from": votes[0]["on_date"], "to": votes[-1]["on_date"], "list_files": len(list((RAW / "szavazasok").glob("*.xml")))},
         "votes": len(votes),
         "decisions": len(decisions),
@@ -128,7 +137,8 @@ def main(argv: list[str] | None = None) -> int:
         "kiveteles_votes": outcomes.get("kivételességi javaslat elfogadva", 0),
         "surgos_votes": outcomes.get("sürgősségi javaslat elfogadva", 0),
         "interpellation_answers": outcomes.get("Országgyűlés az interpellációs választ elfogadta", 0),
-        "hazszabalytol_elteres_votes": sum(n for k, n in outcomes.items() if "házszabályi rendelkezésektől való eltérés" in k),
+        # accepted only, like the exceptional-procedure and urgency cards beside it
+        "hazszabalytol_elteres_votes": sum(n for k, n in outcomes.items() if "házszabályi rendelkezésektől való eltérés" in k and k.endswith("elfogadva")),
         "mps": {"total": len(mps),
                 "by_faction": dict(collections.Counter(m["faction"] for m in mps).most_common()),
                 "by_mandate": dict(collections.Counter(m["mandate_kind"] for m in mps).most_common())} if mps else None,
@@ -186,13 +196,6 @@ def main(argv: list[str] | None = None) -> int:
             row["detail"] = False
             row["majority"] = list_majority(v)
         index_rows.append(row)
-    sync_state = ROOT / "data" / "sync_state.json"
-    last_sync_at = None
-    if sync_state.exists():
-        try:
-            last_sync_at = json.loads(sync_state.read_text(encoding="utf-8")).get("last_sync_at")
-        except json.JSONDecodeError:
-            last_sync_at = None
     idx = {
         "derived_at": out["derived_at"], "last_sync_at": last_sync_at, "seats": seats_for(votes[0]["on_date"]),
         "since": args.since, "window": out["window"],

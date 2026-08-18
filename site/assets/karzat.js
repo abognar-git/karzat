@@ -11,7 +11,7 @@
     wrap.parentNode.insertBefore(nav, wrap.nextSibling);
     function render(reset){
       if (reset) page = 1;
-      var rows = Array.prototype.slice.call(tbody.rows), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
+      var rows = Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty'); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
       var total = vis.length, pages = Math.max(1, Math.ceil(total / per));
       if (page > pages) page = pages;
       rows.forEach(function(r){ r.hidden = true; });
@@ -29,20 +29,49 @@
       html += '<button type="button" data-pg="all" class="all' + (per > per0 ? ' on' : '') + '">' + (per > per0 ? per0 + ' / oldal' : 'mind') + '</button>';
       nav.innerHTML = html;
     }
+    var empty = null;
+    function emptyRow(total){
+      // an emptied table keeps its header and says so, instead of ending in a blank
+      if (!total) { if (!empty) { empty = document.createElement('tr'); empty.className = 'empty'; var td = document.createElement('td'); td.colSpan = (table.tHead && table.tHead.rows[0] ? table.tHead.rows[0].cells.length : 1); td.textContent = 'Nincs találat.'; empty.appendChild(td); } if (empty.parentNode !== tbody) tbody.appendChild(empty); }
+      else if (empty && empty.parentNode) empty.parentNode.removeChild(empty);
+    }
+    var render0 = render;
+    render = function(reset){ render0(reset); emptyRow(tbody.querySelectorAll('tr:not([data-x]):not(.empty)').length); };
     nav.addEventListener('click', function(e){
       var b = e.target.closest('button[data-pg]'); if (!b) return;
-      var v = b.getAttribute('data-pg');
+      var v = b.getAttribute('data-pg'), had = document.activeElement === b;
       if (v === 'prev') page--; else if (v === 'next') page++;
       else if (v === 'all') { per = per > per0 ? per0 : 100000; page = 1; }
       else page = parseInt(v, 10);
       render(false);
-      var top = wrap.getBoundingClientRect().top; if (top < 60) wrap.scrollIntoView({block: 'start'});
+      if (had) { var again = nav.querySelector('button[data-pg="' + v + '"]:not([disabled])') || nav.querySelector('button[data-pg="' + (v === 'prev' ? 'next' : v === 'next' ? 'prev' : 'all') + '"]') || nav.querySelector('button.on'); if (again) again.focus(); }
+      var top = wrap.getBoundingClientRect().top; if (top < 60) window.scrollTo({top: window.pageYOffset + top - 64, behavior: 'auto'});
     });
     table.__pager = {render: render};
     render(false);
   }
   document.querySelectorAll('table[data-page-size]').forEach(paginate);
   window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ r.hidden = r.hasAttribute('data-x'); }); } };
+})();
+
+
+(function(){
+  // <input data-filter-table="id"> narrows a table by text (accent-insensitive); the button filters of the same
+  // table consult table.__textMatch, so both narrow together.
+  function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  document.querySelectorAll('input[data-filter-table]').forEach(function(inp){
+    var table = document.getElementById(inp.getAttribute('data-filter-table')); if (!table || !table.tBodies[0]) return;
+    var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+    rows.forEach(function(r){ r.__hay = fold(r.textContent); });
+    table.__textq = '';
+    table.__textMatch = function(r){ return !table.__textq || (r.__hay || fold(r.textContent)).indexOf(table.__textq) >= 0; };
+    inp.addEventListener('input', function(){
+      table.__textq = fold(inp.value).trim();
+      if (table.__reapply) { table.__reapply(); return; }
+      rows.forEach(function(r){ if (table.__textMatch(r)) r.removeAttribute('data-x'); else r.setAttribute('data-x', ''); });
+      if (window.__karzatRerender) window.__karzatRerender(table, true);
+    });
+  });
 })();
 
 
@@ -74,7 +103,19 @@
   var data; try { data = JSON.parse(src.textContent); } catch (e) { return; }
   var svg = chart.querySelector('svg'); if (!svg) return;
   var hint = box.innerHTML, pinned = null, colours = {};
-  document.querySelectorAll('.legend .f i').forEach(function(i){ var t = i.parentNode.textContent.trim().split(' ')[0]; if (t) colours[t] = i.style.background; });
+  document.querySelectorAll('.legend .f[data-f] i').forEach(function(i){ colours[i.parentNode.getAttribute('data-f')] = i.style.background; });
+  svg.querySelectorAll('.seat[data-az]').forEach(function(g){ if (g.hasAttribute('data-f') && !colours[g.getAttribute('data-f')]) { var c = g.querySelector('[fill]:not([fill="none"])'); if (c) colours[g.getAttribute('data-f')] = c.getAttribute('fill'); } });
+  // keyboard: the chamber is one tab stop; ← → ↑ ↓ / Home / End walk the seats, Enter pins
+  var seats = Array.prototype.slice.call(svg.querySelectorAll('.seat[data-az]'));
+  seats.forEach(function(g, i){ g.setAttribute('tabindex', i === 0 ? '0' : '-1'); });
+  function focusSeat(i){ if (!seats.length) return; i = (i + seats.length) % seats.length; seats.forEach(function(g, k){ g.setAttribute('tabindex', k === i ? '0' : '-1'); }); seats[i].focus(); }
+  svg.addEventListener('keydown', function(e){
+    var g = e.target.closest('.seat[data-az]'); if (!g) return; var i = seats.indexOf(g); if (i < 0) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); focusSeat(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); focusSeat(i - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); focusSeat(0); }
+    else if (e.key === 'End') { e.preventDefault(); focusSeat(seats.length - 1); }
+  });
   var POS = {igen:'igen', nem:'nem', tartozkodott:'tartózkodott', jelen_nem_szavazott:'jelen, nem szavazott', nem_szavazott:'nem szavazott', bejelentett_hianyzo:'előre bejelentett hiányzó', igazoltan_tavol:'igazoltan távol'};
   var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\.html$/, '') : '';
   var mpBase = (svg.closest('body').querySelector('.pager') ? '../kepviselo/' : 'kepviselo/');
@@ -128,15 +169,19 @@
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   function apply(){
     var k = 0;
-    rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos); if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); });
+    rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos) && (!table.__textMatch || table.__textMatch(r)); if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); });
     if (window.__karzatRerender) window.__karzatRerender(table, true); else document.getElementById('rn').textContent = k + ' / ' + rows.length;
     if (window.__karzatDimSeats) window.__karzatDimSeats(fac, pos);
   }
+  table.__reapply = apply;
   document.querySelectorAll('button[data-fac]').forEach(function(b){ b.addEventListener('click', function(){ fac = b.getAttribute('data-fac'); press('button[data-fac]', b); apply(); }); });
   document.querySelectorAll('button[data-posf]').forEach(function(b){ b.addEventListener('click', function(){ pos = b.getAttribute('data-posf'); press('button[data-posf]', b); apply(); }); });
   var heads = table.querySelectorAll('th.sortable');
   heads.forEach(function(th, i){
-    th.setAttribute('tabindex', '0'); th.setAttribute('role', 'button'); th.setAttribute('aria-sort', 'none');
+    th.setAttribute('aria-sort', 'none');
+    var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'sortbtn';
+    while (th.firstChild) btn.appendChild(th.firstChild);
+    th.appendChild(btn);
     function sort(){
       var d = dir[i] = -(dir[i] || -1);
       var key = th.getAttribute('data-key');
@@ -146,8 +191,7 @@
       heads.forEach(function(h){ h.setAttribute('aria-sort', h === th ? (d > 0 ? 'ascending' : 'descending') : 'none'); });
       if (window.__karzatRerender) window.__karzatRerender(table, false);
     }
-    th.addEventListener('click', sort);
-    th.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sort(); } });
+    btn.addEventListener('click', sort);
   });
   apply();
 })();
@@ -156,7 +200,8 @@
 (function(){
   var t = document.getElementById('mine'); if (!t) return;
   var rows = Array.prototype.slice.call(t.tBodies[0].rows), n = document.getElementById('rn'), al = 'all', yr = 'all';
-  function apply(){ var k = 0; rows.forEach(function(r){ var ok = (al === 'all' || r.getAttribute('data-al') === al) && (yr === 'all' || r.getAttribute('data-y') === yr); if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); }); if (window.__karzatRerender) window.__karzatRerender(t, true); else n.textContent = k + ' / ' + rows.length; }
+  function apply(){ var k = 0; rows.forEach(function(r){ var ok = (al === 'all' || r.getAttribute('data-al') === al) && (yr === 'all' || r.getAttribute('data-y') === yr) && (!t.__textMatch || t.__textMatch(r)); if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); }); if (window.__karzatRerender) window.__karzatRerender(t, true); else n.textContent = k + ' / ' + rows.length; }
+  t.__reapply = apply;
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   document.querySelectorAll('button[data-alf]').forEach(function(b){ b.addEventListener('click', function(){ al = b.getAttribute('data-alf'); press('button[data-alf]', b); apply(); }); });
   document.querySelectorAll('button[data-yf]').forEach(function(b){ b.addEventListener('click', function(){ yr = b.getAttribute('data-yf'); press('button[data-yf]', b); apply(); }); });
@@ -165,6 +210,14 @@
 
 
 (function(){
+  // The citation names the page by its site-root path when no deployed origin was configured at build time;
+  // in a browser the origin is known, so print the address the reader is actually looking at.
+  var sc = document.querySelector('script[src$="assets/karzat.js"]'), root = sc ? sc.getAttribute('src').replace(/assets\/karzat\.js$/, '') : '';
+  document.querySelectorAll('.cite[data-path]').forEach(function(sec){
+    var p = sec.getAttribute('data-path'); if (!p || /^[a-z]+:/i.test(p)) return;
+    var abs; try { abs = new URL(root + p, location.href).href; } catch (e) { return; }
+    sec.querySelectorAll('pre').forEach(function(pre){ pre.textContent = pre.textContent.split(p).join(abs); });
+  });
   document.querySelectorAll('.cite [data-copy]').forEach(function(b){
     b.addEventListener('click', function(){
       var pre = b.parentNode.querySelector('pre'); if (!pre) return;
@@ -181,11 +234,15 @@
   var items = null, loading = false, kind = 'all', cyc = 'all';
   function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; cb(); }; x.send(); }
+  var failed = false;
+  function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; failed = true; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; failed = true; cb(); }; x.send(); }
+  var urlTimer = null;
+  function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
   var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép'};
   function render(){
     var terms = fold(q.value).split(/\s+/).filter(Boolean);
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
+    if (failed) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">A keresőindex (index.json) nem tölthető be — a listák külön oldalakon: irományok, képviselők, személyek.</td></tr>'; n.textContent = ''; return; }
     var hits = [];
     for (var i = 0; i < items.length; i++) {
       var it = items[i];
@@ -200,7 +257,7 @@
     out.innerHTML = shown.map(function(h){ var it = h[1]; return '<tr><td><a href="../' + esc(it.u) + '">' + esc(it.t) + '</a><span class="sub">' + esc(it.s) + '</span></td><td class="mono">' + esc(KIND[it.k] || it.k) + (it.n ? ' · ' + it.n + ' szavazás' : '') + '</td><td class="mono">' + (it.c ? it.c + '.' : '—') + '</td></tr>'; }).join('') || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
     n.textContent = hits.length + ' találat' + (hits.length > 200 ? ' (az első 200)' : '');
   }
-  q.addEventListener('input', function(){ load(render); });
+  q.addEventListener('input', function(){ syncUrl(); load(render); });
   document.querySelectorAll('button[data-sk]').forEach(function(b){ b.addEventListener('click', function(){ kind = b.getAttribute('data-sk'); document.querySelectorAll('button[data-sk]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
   document.querySelectorAll('button[data-sc]').forEach(function(b){ b.addEventListener('click', function(){ cyc = b.getAttribute('data-sc'); document.querySelectorAll('button[data-sc]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
   if (location.search) { var m = /[?&]q=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); load(render); } }

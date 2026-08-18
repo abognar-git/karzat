@@ -413,8 +413,14 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
         conn.commit()
         stats = dict(L.stats)
         stats["fk_problems"] = problems
-    finally:
+    except BaseException:
         conn.close()
+        try:
+            os.unlink(tmp)                      # a failed build leaves no half-written database behind
+        except OSError:
+            pass
+        raise
+    conn.close()
     os.replace(tmp, db_path)
     return stats
 

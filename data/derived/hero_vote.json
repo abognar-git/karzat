@@ -37,7 +37,7 @@
    "igen": 135,
    "nem": 0,
    "tartozkodott": 0,
-   "bejelentett_hianyzo": 1,
+   "igazoltan_tavol": 1,
    "nem_szavazott": 5,
    "osszesen": 141
   },
@@ -46,7 +46,7 @@
    "igen": 0,
    "nem": 42,
    "tartozkodott": 0,
-   "bejelentett_hianyzo": 0,
+   "igazoltan_tavol": 0,
    "nem_szavazott": 2,
    "osszesen": 44
   },
@@ -55,7 +55,7 @@
    "igen": 0,
    "nem": 8,
    "tartozkodott": 0,
-   "bejelentett_hianyzo": 0,
+   "igazoltan_tavol": 0,
    "nem_szavazott": 0,
    "osszesen": 8
   },
@@ -64,7 +64,7 @@
    "igen": 0,
    "nem": 0,
    "tartozkodott": 6,
-   "bejelentett_hianyzo": 0,
+   "igazoltan_tavol": 0,
    "nem_szavazott": 0,
    "osszesen": 6
   }
@@ -73,7 +73,7 @@
   "igen": 135,
   "nem": 50,
   "tartozkodott": 6,
-  "bejelentett_hianyzo": 1,
+  "igazoltan_tavol": 1,
   "nem_szavazott": 7,
   "osszesen": 199
  },
@@ -1494,5 +1494,5 @@
   "agrees_with_source": true,
   "present_assumed": false
  },
- "derived_at": "2026-08-18T09:05:21+00:00"
+ "derived_at": "2026-08-18T18:56:12.989859+02:00"
 }

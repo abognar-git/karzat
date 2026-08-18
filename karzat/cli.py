@@ -287,7 +287,10 @@ def cmd_stats(args: argparse.Namespace) -> int:
         out = _data_dir(args.cache) / "derived" / "db_summary.json"
         out.parent.mkdir(parents=True, exist_ok=True)
         st_json = {k: (v if not isinstance(v, list) else [list(r) for r in v]) for k, v in st.items()}
-        st_json["db"] = str(db)
+        try:
+            st_json["db"] = str(Path(db).resolve().relative_to(Path.cwd()))   # a committed file must not name this machine's home
+        except ValueError:
+            st_json["db"] = Path(db).name
         out.write_text(json.dumps(st_json, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         print(f"written {out}")
     return 0

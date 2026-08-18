@@ -69,13 +69,22 @@ def repair_attribute_quotes(raw: bytes) -> bytes:
     return _ATTR_LAST.sub(fix, raw)
 
 
+_BARE_AMP = re.compile(rb"&(?!(?:[A-Za-z][A-Za-z0-9]*|#[0-9]+|#x[0-9A-Fa-f]+);)")
+
+
+def repair_bare_ampersands(raw: bytes) -> bytes:
+    """The API also prints '&' unescaped ("K&H Equities Rt." in a 2003 vote title). An ampersand that
+    does not start an entity reference is text — escape it."""
+    return _BARE_AMP.sub(b"&amp;", raw)
+
+
 def parse_xml(raw: bytes) -> ET.Element:
     """Parse API bytes. Honours the XML declaration's encoding (UTF-8 or ISO-8859-2); repairs the
-    source's own unescaped quotes inside attribute values when the first parse fails."""
+    source's own unescaped quotes and ampersands inside attribute values when the first parse fails."""
     try:
         return ET.fromstring(raw)
     except ET.ParseError:
-        repaired = repair_attribute_quotes(raw)
+        repaired = repair_bare_ampersands(repair_attribute_quotes(raw))
         if repaired == raw:
             raise
         return ET.fromstring(repaired)

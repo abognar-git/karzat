@@ -55,6 +55,8 @@ def cohesion(inp: dict[str, Any]) -> dict[str, Any]:
     plur: dict[str, dict[str, str]] = {}
     mp_votes: dict[str, dict[str, str]] = {}          # faction -> azon -> {ts: pos}
     for ts in order:
+        if (inp["by_ts"].get(ts) or {}).get("kind") == "jelenlet":   # a quorum check is presence, not agreement
+            continue
         tallies = faction_tallies_from_store(store, ts)
         if not tallies:
             continue
@@ -64,9 +66,11 @@ def cohesion(inp: dict[str, Any]) -> dict[str, Any]:
             cast = t["igen"] + t["nem"] + t["tartozkodott"]
             if cast:
                 pos, n = max(((p, t[p]) for p in CAST), key=lambda kv: kv[1])
-                if sum(1 for p in CAST if t[p] == n) == 1:      # a tie is no plurality
+                if sum(1 for p in CAST if t[p] == n) == 1:      # a tie is no plurality — and then nobody dissents
                     plur.setdefault(ts, {})[f] = pos
-                dissent = cast - n
+                    dissent = cast - n
+                else:
+                    dissent = 0
             else:
                 dissent = 0
             pv[f] = {"igen": t["igen"], "nem": t["nem"], "tartozkodott": t["tartozkodott"], "cast": cast, "rice": r, "ai": ai, "dissent": dissent}
@@ -144,7 +148,8 @@ def close_votes(inp: dict[str, Any], plurality: dict[str, dict[str, str]] | None
             extra_yes = extra_present = 0
             for _, f, pos in exp:
                 if pos not in CAST and f in plur:
-                    extra_present += 1
+                    if pos != "jelen_nem_szavazott":            # the present-not-voting are already in the presence base
+                        extra_present += 1
                     if plur[f] == "igen":
                         extra_yes += 1
             hypo_igen = v["igen"] + extra_yes
@@ -167,14 +172,11 @@ def close_votes(inp: dict[str, Any], plurality: dict[str, dict[str, str]] | None
 
 
 def _needed(rule: str, base: int) -> int | None:
-    import math
-    if rule == "egyszeru" or rule == "abszolut":
-        return base // 2 + 1
-    if rule in ("ketharmad_jelenlevo", "ketharmad_osszes"):
-        return math.ceil(2 * base / 3)
-    if rule in ("negyotod_jelenlevo", "negyotod_osszes"):
-        return math.ceil(4 * base / 5)
-    return None
+    from .majority import Rule, needed_for_base
+    try:
+        return needed_for_base(Rule(rule), base)
+    except ValueError:
+        return None
 
 
 # -- bill journeys ------------------------------------------------------------------------------
@@ -182,7 +184,7 @@ def _needed(rule: str, base: int) -> int | None:
 import re as _re
 
 _NUM = _re.compile(r"(\d+)")
-_PREFIX = _re.compile(r"^([A-Z]+)/(\d+)$")
+_PREFIX = _re.compile(r"^([A-ZÁÉÍÓÖŐÚÜŰ]+)/(\d+)$")
 
 
 def bill_key(iromany: str | None) -> tuple[int | None, str | None]:
@@ -197,6 +199,19 @@ def bill_key(iromany: str | None) -> tuple[int | None, str | None]:
     return (int(m.group(1)), None) if m else (None, None)
 
 
+def motion_is_own_stage(mo: dict[str, Any], prefix: str | None) -> bool:
+    """Is this motion the bill itself (a stage of it: general debate, closing vote, egységes javaslat …) or one of its
+    amendments? The API prints the bill's own number ('T/51') for some stages and the 'N/k' form for others (the closing
+    vote on the egységes javaslat is '51/12' too), so the number's shape does not tell; the outcome text does:
+    'önálló indítvány …' names the bill, 'módosító …' names an amendment."""
+    outcome = (mo.get("outcome") or "").casefold()
+    if "önálló" in outcome:
+        return True
+    if "módosító" in outcome:
+        return False
+    return prefix is not None
+
+
 def bills(inp: dict[str, Any]) -> dict[int, dict[str, Any]]:
     """Every bill with at least one roll call: its own number/prefix/title/href where a vote named the bill itself,
     and every vote about it (the bill's own stages and its amendments) in order."""
@@ -208,18 +223,22 @@ def bills(inp: dict[str, Any]) -> dict[int, dict[str, Any]]:
             if n is None:
                 continue
             b = out.setdefault(n, {"number": n, "prefix": None, "title": None, "href": None, "votes": [], "amendment_votes": 0, "own_votes": 0})
+            own = motion_is_own_stage(mo, prefix)
             if prefix:
                 b["prefix"] = b["prefix"] or prefix
-                b["title"] = b["title"] or mo.get("title")
                 b["href"] = b["href"] or mo.get("href")
-                b["own_votes"] += 1
-            else:
-                b["amendment_votes"] += 1
-                b["title"] = b["title"] or mo.get("title")
+            b["title"] = b["title"] or mo.get("title")
             if not b["votes"] or b["votes"][-1]["ts"] != ts:
                 b["votes"].append({"ts": ts, "slug": v["slug"], "date": v["on_date"], "time": v.get("time"), "iromany": mo.get("iromany"), "outcome": mo.get("outcome"),
                                    "igen": v.get("igen"), "nem": v.get("nem"), "tartozkodott": v.get("tartozkodott"), "result": v.get("result_raw"),
-                                   "rule": (v.get("majority") or {}).get("rule"), "mode": v.get("mode"), "kind": v.get("kind")})
+                                   "rule": (v.get("majority") or {}).get("rule"), "mode": v.get("mode"), "kind": v.get("kind"), "own": own})
+                if own:
+                    b["own_votes"] += 1
+                else:
+                    b["amendment_votes"] += 1
+            elif own and not b["votes"][-1]["own"]:
+                b["votes"][-1]["own"] = True                     # one vote, several motions: the bill's own stage wins
+                b["own_votes"] += 1; b["amendment_votes"] -= 1
     for b in out.values():
         b["first"] = b["votes"][0]["date"]; b["last"] = b["votes"][-1]["date"]
         b["final_outcome"] = b["votes"][-1]["outcome"]; b["final_result"] = b["votes"][-1]["result"]

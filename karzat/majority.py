@@ -92,7 +92,7 @@ RULES: dict[Rule, RuleInfo] = {
          "HHSZ — kivételes eljárás elrendelése (VERIFY §)"),
     ),
     Rule.KETHARMAD_JELENLEVO: RuleInfo(
-        Rule.KETHARMAD_JELENLEVO, "Jelen lévők kétharmada", "Two-thirds of those present",
+        Rule.KETHARMAD_JELENLEVO, "Jelenlévők kétharmada", "Two-thirds of those present",
         "present", "ceil(2*present/3)",
         ("Alaptörvény T) cikk (4) — sarkalatos törvény (VERIFY)",
          "Alaptörvény 5. cikk (7) — Házszabály elfogadása (VERIFY)",
@@ -108,7 +108,7 @@ RULES: dict[Rule, RuleInfo] = {
          "Alaptörvény 11. cikk (3) — köztársasági elnök, első forduló (VERIFY)"),
     ),
     Rule.NEGYOTOD_JELENLEVO: RuleInfo(
-        Rule.NEGYOTOD_JELENLEVO, "Jelen lévők négyötöde", "Four-fifths of those present",
+        Rule.NEGYOTOD_JELENLEVO, "Jelenlévők négyötöde", "Four-fifths of those present",
         "present", "ceil(4*present/5)",
         ("HHSZ — Házszabálytól eltérés (VERIFY §)",),
     ),
@@ -119,7 +119,7 @@ RULES: dict[Rule, RuleInfo] = {
     ),
     Rule.RELATIV: RuleInfo(
         Rule.RELATIV, "Relatív többség", "Plurality among candidates",
-        "candidates", "n/a",
+        "candidates", "—",
         ("Alaptörvény 11. cikk (4) — köztársasági elnök, második forduló (VERIFY)",),
     ),
 }
@@ -208,18 +208,27 @@ def base_of(rule: Rule, tally: Tally) -> int | None:
     return None
 
 
+def needed_for_base(rule: Rule | str, base: int) -> int | None:
+    """Votes in favour required under `rule` when the base (present or seats) is `base` — the one place the
+    thresholds live; the site, the analytics and the loader all call this. None for relativ."""
+    rule = Rule(rule)
+    if rule == Rule.EGYSZERU or rule == Rule.ABSZOLUT:
+        return _more_than_half(base)
+    if rule in (Rule.KETHARMAD_JELENLEVO, Rule.KETHARMAD_OSSZES):
+        return _at_least_fraction(base, 2, 3)
+    if rule in (Rule.NEGYOTOD_JELENLEVO, Rule.NEGYOTOD_OSSZES):
+        return _at_least_fraction(base, 4, 5)
+    if rule == Rule.RELATIV:
+        return None
+    raise AssertionError(rule)
+
+
 def needed(rule: Rule, tally: Tally) -> int | None:
     """Votes in favour required under `rule` for this tally (None for relativ)."""
     b = base_of(rule, tally)
     if b is None:
         return None
-    if rule == Rule.EGYSZERU or rule == Rule.ABSZOLUT:
-        return _more_than_half(b)
-    if rule in (Rule.KETHARMAD_JELENLEVO, Rule.KETHARMAD_OSSZES):
-        return _at_least_fraction(b, 2, 3)
-    if rule in (Rule.NEGYOTOD_JELENLEVO, Rule.NEGYOTOD_OSSZES):
-        return _at_least_fraction(b, 4, 5)
-    raise AssertionError(rule)
+    return needed_for_base(rule, b)
 
 
 def evaluate(rule: Rule | str, tally: Tally) -> Verdict:

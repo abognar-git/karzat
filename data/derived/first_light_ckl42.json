@@ -1,15 +1,15 @@
 {
- "derived_at": "2026-08-18T15:00:30+00:00",
+ "derived_at": "2026-08-18T18:56:12.989859+02:00",
  "window": {
   "from": "2022-05-02",
   "to": "2026-03-10",
-  "list_files": 70
+  "list_files": 147
  },
  "votes": 2599,
  "decisions": 2583,
  "quorum_checks": 16,
  "secret_ballots": 20,
- "qualified_majority_votes": 545,
+ "qualified_majority_votes": 556,
  "by_mode": {
   "Listás": 2018,
   "Listás a jelenlevők 2/3-ával": 493,
@@ -90,12 +90,12 @@
   "B": 83,
   "V": 8,
   "P": 5,
-  "other": 4
+  "Ü": 4
  },
  "kiveteles_votes": 28,
  "surgos_votes": 13,
  "interpellation_answers": 406,
- "hazszabalytol_elteres_votes": 11,
+ "hazszabalytol_elteres_votes": 5,
  "mps": {
   "total": 199,
   "by_faction": {
