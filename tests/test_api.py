@@ -1,8 +1,9 @@
 """Offline tests for the W-API client scaffolding.
 
-Nothing here touches the network. The XML fixtures below are SYNTHETIC — shaped after the
-manual's section names (<szavazas idopont=...>, <tulajdonsagok>, <nev_szerint>), not after
-real payloads. Once a token exists, replace them with trimmed real responses from data/raw/.
+Nothing here touches the network. The XML fixtures in tests/fixtures/ are SYNTHETIC — shaped
+after the manual's section names (<szavazas idopont=...>, <tulajdonsagok>, <nev_szerint>),
+not after real payloads. Once a token exists, replace them with trimmed real responses from
+data/raw/ (see tests/fixtures/README.md); tests/test_golden.py pins how they are read.
 """
 
 import tempfile
@@ -12,6 +13,10 @@ from pathlib import Path
 from unittest import mock
 
 from karzat import api, xmlutil
+
+FIXTURES = Path(__file__).parent / "fixtures"
+SYNTHETIC_LIST = (FIXTURES / "synthetic_szavazasok_list.xml").read_bytes()
+SYNTHETIC_LATIN2 = (FIXTURES / "synthetic_kepviselok_latin2.xml").read_bytes()
 
 
 class UrlBuilding(unittest.TestCase):
@@ -59,21 +64,6 @@ class DatesAndSlugs(unittest.TestCase):
             xmlutil.parse_ts("2026-09-15 09:37")
 
 
-SYNTHETIC_LIST = b"""<?xml version="1.0" encoding="UTF-8"?>
-<szavazasok>
-  <szavazas idopont="2026.09.15.09:37:07">
-    <tulajdonsagok><tipus>Z\xc3\xa1r\xc3\xb3szavaz\xc3\xa1s</tipus><eredmeny>Elfogadva</eredmeny></tulajdonsagok>
-    <inditvanyok><inditvany izon="123">T/1234 valami</inditvany></inditvanyok>
-  </szavazas>
-  <szavazas idopont="2026.09.15.09:38:11">
-    <tulajdonsagok><tipus>M\xc3\xb3dos\xc3\xadt\xc3\xb3</tipus><eredmeny>Elutas\xc3\xadtva</eredmeny></tulajdonsagok>
-  </szavazas>
-</szavazasok>
-"""
-
-SYNTHETIC_LATIN2 = "<?xml version='1.0' encoding='ISO-8859-2'?><k><nev>Ő Ű Á</nev></k>".encode("iso-8859-2")
-
-
 class XmlConversion(unittest.TestCase):
     def test_to_dict_lists_and_attributes(self):
         root = xmlutil.parse_xml(SYNTHETIC_LIST)
@@ -88,7 +78,8 @@ class XmlConversion(unittest.TestCase):
     def test_declared_encoding_and_latin2_parse(self):
         self.assertEqual(xmlutil.declared_encoding(SYNTHETIC_LATIN2), "ISO-8859-2")
         d = xmlutil.to_dict(xmlutil.parse_xml(SYNTHETIC_LATIN2))
-        self.assertEqual(d["nev"], "Ő Ű Á")
+        self.assertEqual(d["kepviselo"]["nev"], "Ő Ű Á Példa")
+        self.assertEqual(d["kepviselo"]["@p_azon"], "z004")
 
     def test_as_list_normalises(self):
         self.assertEqual(xmlutil.as_list(None), [])

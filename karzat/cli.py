@@ -6,6 +6,7 @@
     python -m karzat sync-mps                     # kepviselok + kepviselo for every p_azon
     python -m karzat freshness [--ckl 43] [--fetch]   # the sentence the site is allowed to show
     python -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML -> JSON
+    python -m karzat fingerprint tests/fixtures/*.xml # digest table for tests/test_golden.py
 
 The token comes from PARLAMENT_API_TOKEN (environment or a local .env file).
 Successful sync runs record data/sync_state.json; `freshness` reads it and writes
@@ -260,6 +261,17 @@ def cmd_inspect(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_fingerprint(args: argparse.Namespace) -> int:
+    from .fingerprint import table
+    paths = sorted(Path(f) for f in args.files)
+    missing = [p for p in paths if not p.exists()]
+    if missing:
+        print(f"no such file(s): {', '.join(map(str, missing))}", file=sys.stderr)
+        return 2
+    print(table(paths))
+    return 0
+
+
 # -- entry point ------------------------------------------------------------------------
 
 def main(argv: list[str] | None = None) -> int:
@@ -292,6 +304,10 @@ def main(argv: list[str] | None = None) -> int:
     si = sub.add_parser("inspect", help="print a cached XML file as JSON")
     si.add_argument("file")
     si.set_defaults(fn=cmd_inspect)
+
+    sg = sub.add_parser("fingerprint", help="digest table for tests/test_golden.py")
+    sg.add_argument("files", nargs="+")
+    sg.set_defaults(fn=cmd_fingerprint)
 
     args = p.parse_args(argv)
     needs_token = args.cmd in ("probe", "sync-votes", "sync-mps") or (args.cmd == "freshness" and args.fetch)
