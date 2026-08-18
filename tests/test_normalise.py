@@ -93,6 +93,15 @@ class SittingDays(unittest.TestCase):
 
 
 class VoteLists(unittest.TestCase):
+    def test_empty_month_parses_to_no_votes(self):
+        # <szavazasok/> for a month without sittings — to_dict() yields "" for the empty root
+        self.assertEqual(parse_szavazasok({"szavazasok": ""}), [])
+
+    def test_result_vocabulary_includes_inquorate(self):
+        from karzat.normalise import RESULTS
+        self.assertIn("Határozatképtelen", RESULTS)
+        self.assertIsNone(RESULTS["Határozatképtelen"])
+
     def test_list_records(self):
         votes = parse_szavazasok(load("real_szavazasok_2026-05_head3.xml"))
         self.assertEqual(len(votes), 3)

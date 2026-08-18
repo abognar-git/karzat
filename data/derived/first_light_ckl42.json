@@ -1,0 +1,137 @@
+{
+ "derived_at": "2026-08-18T09:36:44+00:00",
+ "window": {
+  "from": "2022-05-02",
+  "to": "2026-03-10",
+  "list_files": 56
+ },
+ "votes": 2599,
+ "decisions": 2583,
+ "quorum_checks": 16,
+ "secret_ballots": 20,
+ "qualified_majority_votes": 545,
+ "by_mode": {
+  "Listás": 2018,
+  "Listás a jelenlevők 2/3-ával": 493,
+  "Listás az összes képviselő felével": 31,
+  "Jelenlét megállapítás": 16,
+  "Listás az összes képviselő 2/3-ával": 14,
+  "Titkos az összes képviselő 2/3-ával": 11,
+  "Titkos": 9,
+  "Listás a jelenlevők 4/5-ével": 7
+ },
+ "by_result": {
+  "Elfogadva": 2302,
+  "Elutasítva": 276,
+  "Határozatképes": 11,
+  "Határozatképtelen": 10
+ },
+ "by_month": {
+  "2022-05": 126,
+  "2022-06": 79,
+  "2022-07": 150,
+  "2022-08": 1,
+  "2022-09": 31,
+  "2022-10": 86,
+  "2022-11": 74,
+  "2022-12": 133,
+  "2023-02": 21,
+  "2023-03": 60,
+  "2023-04": 21,
+  "2023-05": 123,
+  "2023-06": 75,
+  "2023-07": 92,
+  "2023-09": 22,
+  "2023-10": 62,
+  "2023-11": 62,
+  "2023-12": 181,
+  "2024-02": 27,
+  "2024-03": 13,
+  "2024-04": 97,
+  "2024-05": 11,
+  "2024-06": 38,
+  "2024-09": 17,
+  "2024-10": 30,
+  "2024-11": 83,
+  "2024-12": 168,
+  "2025-02": 30,
+  "2025-03": 24,
+  "2025-04": 96,
+  "2025-05": 68,
+  "2025-06": 137,
+  "2025-08": 1,
+  "2025-09": 43,
+  "2025-10": 52,
+  "2025-11": 28,
+  "2025-12": 182,
+  "2026-02": 23,
+  "2026-03": 32
+ },
+ "motion_outcomes_top": {
+  "önálló indítvány elfogadva": 554,
+  "Országgyűlés az interpellációs választ elfogadta": 406,
+  "módosító javaslat fenntartása elutasítva": 231,
+  "összegző módosító javaslat elfogadva": 197,
+  "önálló indítvány minősített többséget igénylő része elfogadva": 184,
+  "önálló indítvány egyszerű többséget igénylő része elfogadva": 168,
+  "összegző módosító javaslat minősített többséget igénylő része elfogadva": 140,
+  "összegző módosító javaslat egyszerű többséget igénylő része elfogadva": 132,
+  "beszámolóról történő határozathozatalra felkérés elfogadva": 77,
+  "túlterjeszkedő módosító javaslat elfogadva": 70,
+  "összegző módosító javaslat külön szavazásra kért pontja elfogadva": 57,
+  "túlterjeszkedő módosító javaslat szabályszerű": 53
+ },
+ "motion_prefixes": {
+  "amendment": 1447,
+  "I": 406,
+  "T": 219,
+  "H": 217,
+  "S": 136,
+  "B": 83,
+  "V": 8,
+  "P": 5,
+  "other": 4
+ },
+ "kiveteles_votes": 28,
+ "surgos_votes": 13,
+ "interpellation_answers": 406,
+ "hazszabalytol_elteres_votes": 11,
+ "mps": {
+  "total": 199,
+  "by_faction": {
+   "TISZA": 141,
+   "Fidesz": 44,
+   "KDNP": 8,
+   "Mi Hazánk": 6
+  },
+  "by_mandate": {
+   "egyeni": 106,
+   "lista": 93
+  }
+ },
+ "sitting_days": {
+  "count": 192,
+  "first": "2022-05-02",
+  "last": "2026-03-10",
+  "by_session": {
+   "2023. tavaszi": 28,
+   "2025. tavaszi": 24,
+   "2023. őszi": 21,
+   "2022. őszi": 20,
+   "2025. őszi": 20,
+   "2024. tavaszi": 19,
+   "2024. őszi": 15,
+   "2022. nyári": 14,
+   "2022. tavaszi": 11,
+   "2026. tavaszi": 7,
+   "2023. nyári": 5,
+   "2024. téli": 4,
+   "2025. nyári": 2,
+   "2025. téli": 2
+  },
+  "by_kind": {
+   "Rendes": 157,
+   "Rendkívüli": 35
+  }
+ }
+}

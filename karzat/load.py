@@ -178,13 +178,16 @@ class Loader:
         self.stats["mp_records"] += 1
 
     # -- sitting days -----------------------------------------------------------------------
-    def load_ulesnap(self, payload: dict[str, Any], ckl: int = 43) -> int:
+    def load_ulesnap(self, payload: dict[str, Any], ckl: int | None = None) -> int:
+        """Sitting days; the cycle comes from each day's date unless given (ulesnap.cgi is per cycle)."""
         n = 0
         for d in parse_ulesnap(payload):
             if d["ulnap"] is None or not d["date"]:
                 continue
+            c = ckl if ckl is not None else cycle_of_date(d["date"])
+            self._ciklus(c)
             self.conn.execute("INSERT OR REPLACE INTO sitting_day(ckl, nap, on_date, weekday, session_label, kind) VALUES (?,?,?,?,?,?)",
-                              (ckl, d["ulnap"], d["date"], d["weekday"], d["session"], d["kind"]))
+                              (c, d["ulnap"], d["date"], d["weekday"], d["session"], d["kind"]))
             n += 1
         self.stats["sitting_days"] += n
         return n
@@ -375,8 +378,11 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
         L.create_schema()
         aliases: dict[str, str] = {}
         qid_by_azon: dict[str, str] = {}
+        snaps = []
         if wikidata_snapshot and wikidata_snapshot.exists():
-            for m in json.loads(wikidata_snapshot.read_text(encoding="utf-8"))["members"]:
+            snaps = sorted(wikidata_snapshot.parent.glob("members_*.json"))   # every cycle snapshot alongside
+        for sp in snaps:
+            for m in json.loads(sp.read_text(encoding="utf-8"))["members"]:
                 for oid in m.get("ogy_ids") or []:
                     qid_by_azon.setdefault(oid, m["qid"])
                 if m.get("name_hu") and m.get("ogy_ids"):

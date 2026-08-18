@@ -80,12 +80,12 @@ Konzol's algorithm stays as the fallback.
 - [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v1 built from scratch from the cache in about a second — 259 votes, 50,906 roll-call positions with 0 unresolved names, 374 faction-history rows, 369 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
 - [x] **Per-vote pages**: `site/szavazas/<slug>.html` for all 259 votes — the reconstructed chamber for that vote, the verdict card, faction bars, and a sortable, filterable roll call with every MP's seat; prev/next; the directory links to them. Generated from the committed `data/derived/votes_positions.json` (git-ignored output, 0.6 s for all 259)
 - [x] **MP pages**: `site/kepviselo/<p_azon>.html` for all 201 people in the roll calls plus an index — mandate, seat highlighted on the chamber, faction history and mandates back to 1990, motion counts, this cycle's participation and with/against-own-faction record with definitions on the page, the votes cast against the faction plurality, and every vote linked. Portraits linked, not embedded (licence unverified). Names on vote pages link here
-- [ ] Cycle 42 for comparison
+- [~] **Cycle 42 backfill** (2022-05-02 → 2026-05-08): 2,599 votes over 192 sitting days listed, the roll calls being fetched one call at a time at the polite pace (about 26 a minute); a second Wikidata snapshot for the names; the list-level summary in `data/derived/first_light_ckl42.json`, the comparison below. When the details are in: `load --since 2022-05-01`, `stats --json`, and the database paragraph above changes
 
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 121 tests
+python3 -m unittest discover -s tests -t .      # offline; 123 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -312,6 +312,22 @@ bill reversing Hungary's withdrawal from the International Criminal Court — wa
 submitted on 25 May, voted through in exceptional procedure in 2 days, and
 promulgated as 2026. évi XV. törvény in Magyar Közlöny 60 on 28 May: 3 days from
 submission to promulgation.
+
+## Two cycles side by side — counts, not conclusions
+
+The same derive, run over the previous term (`--since 2022-05-02 --until 2026-05-08
+--suffix ckl42`), gives cycle 42 as a baseline for cycle 43's first months. Cycle 42:
+2,599 votes over 192 sitting days — 13.5 per sitting day — of which 2,583 decisions and 16
+quorum checks (10 of them inquorate, "Határozatképtelen"), 20 secret ballots; 545
+qualified-majority votes, 21% of decisions; 28 exceptional-procedure orders and 13 urgent
+ones in four years; 406 interpellation answers accepted; 11 departures from the House
+rules. Cycle 43 so far: 259 votes over 23 sitting days — 11.3 per sitting day — 65
+qualified-majority votes, 25% of decisions; 5 exceptional-procedure orders and 10 urgent ones
+in the first three months. The mode vocabulary is identical across both cycles (the
+four-fifths-of-all form appears only in 2014). What these counts mean — a busier or a more
+rushed parliament, a larger or a smaller share of two-thirds legislation — is exactly what
+this repository does not yet claim; cycle 43's roll calls are in the database and cycle
+42's are joining them as they download, for whoever wants to ask properly.
 
 ## What this does not show
 

@@ -67,7 +67,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--hero", default=HERO_DEFAULT, help="idopont of the vote to write out in full")
     ap.add_argument("--since", default="2026-05-01", help="ignore listed votes before this ISO date (cycle 43 starts 2026-05-09)")
     ap.add_argument("--until", default=None, help="ignore listed votes after this ISO date")
+    ap.add_argument("--suffix", default="", help="write first_light_<suffix>.json instead of first_light.json")
+    ap.add_argument("--summary-only", action="store_true", help="only the first_light summary (no votes_index / positions / hero)")
     args = ap.parse_args(argv)
+    global OUT
+    if args.suffix:
+        OUT = DERIVED / f"first_light_{args.suffix}.json"
 
     votes = []
     for f in sorted((RAW / "szavazasok").glob("*.xml")):
@@ -86,7 +91,10 @@ def main(argv: list[str] | None = None) -> int:
     qualified = sum(1 for v in decisions if v["mode"] != "Listás" and not v["mode"].startswith("Titkos"))
 
     mps = parse_kepviselok(load(RAW / "kepviselok" / "all.xml")) if (RAW / "kepviselok" / "all.xml").exists() else []
-    days = parse_ulesnap(load(next((RAW / "ulesnap").glob("*.xml")))) if (RAW / "ulesnap").exists() and any((RAW / "ulesnap").glob("*.xml")) else []
+    days = []
+    for f in sorted((RAW / "ulesnap").glob("*.xml")) if (RAW / "ulesnap").exists() else []:
+        days.extend(parse_ulesnap(load(f)))
+    days = sorted([d for d in days if d["date"] and d["date"] >= args.since and (not args.until or d["date"] <= args.until)], key=lambda x: (x["date"], x["ulnap"] or 0))
 
     out = {
         "derived_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -120,12 +128,13 @@ def main(argv: list[str] | None = None) -> int:
     # -- votes_index.json ---------------------------------------------------------------
     # aliases from the Wikidata snapshot cover former MPs (ended statements) — P4966 = p_azon
     aliases = {}
-    snap_path = ROOT / "reference" / "wikidata" / "members_ckl43.json"
-    if snap_path.exists():
+    for snap_path in sorted((ROOT / "reference" / "wikidata").glob("members_*.json")):
         for m in json.loads(snap_path.read_text(encoding="utf-8"))["members"]:
             if m.get("name_hu") and m.get("ogy_ids"):
                 aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
     resolver = NameResolver(mps, aliases=aliases) if mps else None
+    if args.summary_only:
+        return 0
     bill_links = {}
     if (RAW / "iromanyok" / "all.xml").exists():
         root = parse_xml((RAW / "iromanyok" / "all.xml").read_bytes())

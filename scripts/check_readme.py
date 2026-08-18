@@ -119,6 +119,7 @@ def build() -> list[tuple[str, list]]:
     hero = _json.loads((ROOT / "data" / "derived" / "hero_vote.json").read_text(encoding="utf-8"))
     seat_plan = _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))
     dbs = _json.loads((ROOT / "data" / "derived" / "db_summary.json").read_text(encoding="utf-8"))
+    f42 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl42.json").read_text(encoding="utf-8"))
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -188,6 +189,17 @@ def build() -> list[tuple[str, list]]:
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
         ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree", [dbs["rule_source_disagreements"]]),
+        # cycle 42 vs 43 — data/derived/first_light_ckl42.json + first_light.json
+        ("Cycle 42:\n{:,.0f} votes over {:,.0f} sitting days — {:.1f} per sitting day — of which {:,.0f} decisions and {:,.0f}\nquorum checks ({:,.0f} of them inquorate",
+         [f42["votes"], f42["sitting_days"]["count"], f42["votes"] / f42["sitting_days"]["count"], f42["decisions"], f42["quorum_checks"],
+          f42["by_result"].get("Határozatképtelen", 0)]),
+        ("{:,.0f} secret ballots; {:,.0f}\nqualified-majority votes, {:,.0f}% of decisions; {:,.0f} exceptional-procedure orders and {:,.0f} urgent\nones in four years; {:,.0f} interpellation answers accepted; {:,.0f} departures from the House\nrules",
+         [f42["secret_ballots"], f42["qualified_majority_votes"], round(100 * f42["qualified_majority_votes"] / f42["decisions"]),
+          f42["kiveteles_votes"], f42["surgos_votes"], f42["interpellation_answers"], f42["hazszabalytol_elteres_votes"]]),
+        ("Cycle 43 so far: {:,.0f} votes over {:,.0f} sitting days — {:.1f} per sitting day — {:,.0f}\nqualified-majority votes, {:,.0f}% of decisions; {:,.0f} exceptional-procedure orders and {:,.0f} urgent ones\nin the first three months",
+         [fl["votes"], fl["sitting_days"]["count"], fl["votes"] / fl["sitting_days"]["count"], fl["qualified_majority_votes"],
+          round(100 * fl["qualified_majority_votes"] / fl["decisions"]), fl["kiveteles_votes"], fl["surgos_votes"]]),
+        ("**Cycle 42 backfill** (2022-05-02 → 2026-05-08): {:,.0f} votes over {:,.0f} sitting days", [f42["votes"], f42["sitting_days"]["count"]]),
         # the chamber — data/derived/seating.json
         ("widest rows {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f}",
          [seat_plan["analysis"]["sectors"][str(k)]["widest_row"] for k in (1, 2, 3, 4, 5, 6)]),

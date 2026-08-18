@@ -42,7 +42,8 @@ POSITIONS: dict[str, str] = {
 PRESENT_POSITIONS = ("igen", "nem", "tartozkodott", "jelen_nem_szavazott")   # the "jelen lévő" base — interpretation, VERIFY legally
 
 RESULTS: dict[str, bool | None] = {"Elfogadva": True, "Elutasítva": False, "Határozatképes": None,
-                                   "Érvénytelen": None}   # invalid vote (seen 1990, 1998)
+                                   "Határozatképtelen": None,   # quorum check failed (10 times in cycle 42)
+                                   "Érvénytelen": None}         # invalid vote (seen 1990, 1998)
 
 SEATS_199_FROM = "2014-05-06"   # the 2014–2018 term is the first with 199 seats; 386 before that
 
@@ -266,6 +267,8 @@ def _vote_core(el: dict[str, Any]) -> dict[str, Any]:
 def parse_szavazasok(payload: dict[str, Any]) -> list[dict[str, Any]]:
     """szavazasok.cgi list -> summary records (no per-MP positions)."""
     root = payload.get("szavazasok", payload)
+    if not isinstance(root, dict):          # an empty month: <szavazasok/> parses to ""
+        return []
     return [_vote_core(el) for el in as_list(root.get("szavazas")) if isinstance(el, dict)]
 
 
