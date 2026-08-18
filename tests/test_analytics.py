@@ -2,7 +2,7 @@
 
 import unittest
 
-from karzat.analytics import agreement_index, close_votes, cohesion, rice
+from karzat.analytics import agreement_index, bill_key, bills, close_votes, cohesion, rice
 from scripts.build_site import HERO_TS, load_inputs
 
 
@@ -15,6 +15,25 @@ class Formulas(unittest.TestCase):
         self.assertAlmostEqual(agreement_index(0, 23, 16), (23 - 16 / 2) / 39, places=6)      # Fidesz on 2026-07-28 10:35
         self.assertAlmostEqual(agreement_index(10, 10, 10), 0.0, places=9)
         self.assertIsNone(agreement_index(0, 0, 0))
+
+
+class Bills(unittest.TestCase):
+    def test_bill_key_reads_own_numbers_and_amendments(self):
+        self.assertEqual(bill_key("T/51"), (51, "T"))
+        self.assertEqual(bill_key("11152/8"), (11152, None))
+        self.assertEqual(bill_key("S/482"), (482, "S"))
+        self.assertEqual(bill_key(None), (None, None))
+
+    def test_bills_group_every_roll_call_by_number(self):
+        inp = load_inputs()
+        bs = bills(inp)
+        self.assertEqual(bs[51]["label"], "T/51")
+        self.assertEqual(len(bs[51]["votes"]), 2)                                     # the 16th amendment: two roll calls
+        self.assertIn("tizenhatodik", bs[51]["title"])
+        self.assertTrue(all(b["first"] <= b["last"] for b in bs.values()))
+        # every vote with a motion number lands in exactly one bill
+        n_votes = sum(1 for ts in inp["order"] if inp["by_ts"][ts].get("motions") and bill_key(inp["by_ts"][ts]["motions"][0].get("iromany"))[0] is not None)
+        self.assertEqual(sum(len(b["votes"]) for b in bs.values()), n_votes)
 
 
 class Cycle43(unittest.TestCase):

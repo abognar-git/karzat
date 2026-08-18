@@ -179,6 +179,11 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("votes_both_cast, same_plurality, share", "frakciópáronként: hány szavazáson adott le mindkettő szavazatot · hányszor volt azonos a többségi álláspont · arány"),
             ("shared, same, share", "képviselőpáronként (frakción belül, ≥ 20 közös szavazás): közös leadott szavazások · azonos szavazat · arány"),
         ]),
+        ("iromany/iromanyok.csv — minden iromány, amelyről név szerint szavaztak", [
+            ("number, prefix, label", "az iromány száma (egy számtér ciklusonként), előtagja ha a névsor írta (T/, H/, I/…), a kettő együtt"),
+            ("votes, own_votes, amendment_votes", "hány szavazás · az iromány saját szakaszairól · a módosítóiról"),
+            ("first, last, final_outcome, final_result", "első és utolsó szavazás napja, az utolsó szavazás kimenetel-szövege és eredménye"),
+        ]),
         ("szoros/dontesek.csv — minden döntés a küszöbéhez mérve", [
             ("margin", "igen − szükséges"),
             ("yes_majority, qualified", "több igen, mint nem · minősített (nem egyszerű) többséget kívánt"),
@@ -224,3 +229,10 @@ def cohesion_votes_csv(co: dict[str, Any], cycle: int) -> str:
 def decisions_csv(cl: dict[str, Any], cycle: int) -> str:
     cols = ["ts", "date", "time", "rule", "needed", "base", "igen", "nem", "tartozkodott", "margin", "passed", "yes_majority", "qualified", "hypo_igen", "flips_if_all_voted", "iromany", "title"]
     return _csv([{**r, "cycle": cycle} for r in cl["decisions"]], ["cycle"] + cols)
+
+
+def bills_csv(bs: dict[int, dict[str, Any]], cycle: int) -> str:
+    rows = [{"cycle": cycle, "number": n, "prefix": b["prefix"], "label": b["label"], "title": b["title"], "votes": len(b["votes"]),
+             "own_votes": b["own_votes"], "amendment_votes": b["amendment_votes"], "first": b["first"], "last": b["last"],
+             "final_outcome": b["final_outcome"], "final_result": b["final_result"], "href": b["href"]} for n, b in sorted(bs.items())]
+    return _csv(rows, ["cycle", "number", "prefix", "label", "title", "votes", "own_votes", "amendment_votes", "first", "last", "final_outcome", "final_result", "href"])

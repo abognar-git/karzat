@@ -1063,8 +1063,11 @@ def motion_title_html(view: dict) -> tuple[str, str]:
     if not mo:
         title = "Jelenlét megállapítása" if view["kind"] == "jelenlet" else (view.get("remark") or "Szavazás")
         return f'<div class="hero-title">{esc(title)}</div>', ""
-    link = (f'<a href="{esc(mo.get("href"))}" target="_blank" rel="noopener">{esc(mo.get("iromany"))}</a> ' if mo.get("href") else esc(mo.get("iromany", "")) + " ")
+    n, _ = an.bill_key(mo.get("iromany"))
+    link = (f'<a href="../iromany/{n}.html" title="az iromány szavazásai">{esc(mo.get("iromany"))}</a> ' if n is not None else esc(mo.get("iromany", "")) + " ")
     meta = f'{esc(mo.get("outcome", ""))} · benyújtó: {esc(", ".join(mo.get("submitters") or []))}' if mo.get("submitters") else esc(mo.get("outcome", ""))
+    if mo.get("href"):
+        meta += f' · <a href="{esc(mo["href"])}" target="_blank" rel="noopener">parlament.hu ↗</a>'
     return f'<div class="hero-title">{link}{esc(mo.get("title", ""))}</div>', f'<div class="hero-meta">{meta}</div>'
 
 
@@ -1169,7 +1172,8 @@ def directory_row(v: dict) -> str:
     mo = v["motions"][0] if v.get("motions") else None
     if mo:
         full = mo.get("title") or ""
-        subj = ((f'<a href="{esc(mo["href"])}" target="_blank" rel="noopener">{esc(mo.get("iromany") or "")}</a>' if mo.get("href") else esc(mo.get("iromany") or ""))
+        bn, _ = an.bill_key(mo.get("iromany"))
+        subj = ((f'<a href="iromany/{bn}.html">{esc(mo.get("iromany") or "")}</a>' if bn is not None else esc(mo.get("iromany") or ""))
                 + " " + esc(full[:110]) + (f'<span class="more" title="{esc(full)}">…</span>' if len(full) > 110 else "")
                 + f'<span class="sub">{esc(mo.get("outcome") or "")}</span>')
     else:
@@ -1232,7 +1236,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1662,6 +1666,54 @@ def build_close_page(inp: dict, cl: dict) -> str:
 """ + page_tail(inp, 1)
 
 
+def build_bill_page(inp: dict, b: dict) -> str:
+    """iromany/<n>.html — one bill's roll calls in order: the bill's own stages and its amendments, each with rule,
+    counts and result; the parlament.hu record link when the list carries it (current cycle only)."""
+    rows = []
+    for v in b["votes"]:
+        badge = result_badge({"result_raw": v["result"], "kind": v["kind"]})
+        rows.append(f'<tr><td class="ts mono"><a href="../szavazas/{esc(v["slug"])}.html">{esc(v["date"])} {esc(v["time"] or "")}</a></td>'
+                    f'<td class="mono">{esc(v["iromany"] or "")}</td><td>{esc(v["outcome"] or "")}</td>'
+                    f'<td class="mono">{esc(rule_short(v["rule"]))}</td><td class="num mono">{v["igen"]} – {v["nem"]} – {v["tartozkodott"]}</td><td>{badge}</td></tr>')
+    label = b["label"]
+    title = b["title"] or "—"
+    ext = f' · <a href="{esc(b["href"])}" target="_blank" rel="noopener">parlament.hu ↗</a>' if b.get("href") else ""
+    span = f'{hu_date(b["first"])} – {hu_date(b["last"])}' if b["first"] != b["last"] else hu_date(b["first"])
+    return page_head(f'{label} — {title[:80]} · karzat', f'{label} {title}: a {inp["cycle"]}. ciklusban tartott név szerinti szavazásai sorban, az indítvány szakaszaival és módosítóival.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("irományok", "index.html"), (label, None)], 1) + f"""
+<div class="hero-h"><h1>{esc(label)}</h1><small class="label" data-kz-text>{len(b["votes"])} szavazás · {esc(span)}</small></div>
+<div class="hero-title">{esc(title)}</div>
+<p class="hero-meta">{"önálló indítvány szavazásai: " + str(b["own_votes"]) if b["own_votes"] else "csak módosítókról szavaztak név szerint"}{" · módosítókról: " + str(b["amendment_votes"]) if b["amendment_votes"] else ""}{ext}</p>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Az iromány útja a szavazásokon</span><span class="tag">utolsó: {esc(b["final_outcome"] or "")}</span></h2>
+  <div class="tablewrap"><table data-page-size="50"><thead><tr><th scope="col">Időpont</th><th scope="col">Szám</th><th scope="col">Szakasz</th><th scope="col">Szabály</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col">Eredmény</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">A „szakasz” az API kimenetel-szövege minden szavazásnál; a szám az iromány saját száma vagy egy módosítóé (szám/pont).</div>
+</section>
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}iromany/{b["number"]}.html', f'{label} — {title[:80]}', f'{inp["cycle"]}-iromany-{b["number"]}')}
+""" + page_tail(inp, 1)
+
+
+def build_bill_index(inp: dict, bs: dict) -> str:
+    trs = []
+    for n, b in sorted(bs.items(), key=lambda kv: -kv[0]):
+        badge = result_badge({"result_raw": b["final_result"], "kind": b["votes"][-1]["kind"]})
+        trs.append(f'<tr data-p="{esc(b["prefix"] or "")}"><td class="mono"><a href="{n}.html">{esc(b["label"])}</a></td><td>{esc((b["title"] or "—")[:110])}</td>'
+                   f'<td class="num mono">{len(b["votes"])}</td><td class="ts mono">{esc(b["first"])}{(" – " + esc(b["last"])) if b["last"] != b["first"] else ""}</td>'
+                   f'<td>{esc((b["final_outcome"] or "")[:60])}</td><td>{badge}</td></tr>')
+    prefixes = sorted({b["prefix"] for b in bs.values() if b["prefix"]})
+    pbuttons = '<button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>' + "".join(f'<button type="button" data-posf="{p}" aria-pressed="false">{p}/</button>' for p in prefixes)
+    return page_head(f'Irományok · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus irományai, amelyekről név szerint szavaztak: szavazásaik száma, első és utolsó szavazás, utolsó kimenetel.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("irományok", None)], 1) + f"""
+<div class="hero-h"><h1>Irományok</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(len(bs))} iromány, amelyről név szerint szavaztak</small></div>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Irományok</span><span class="tag">a legfrissebb szám elöl</span></h2>
+  <div class="filters" role="group" aria-label="Szűrés előtag szerint">{pbuttons}<span class="n" id="rn" aria-live="polite"></span></div>
+  <div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="text">Szám</th><th scope="col">Cím</th><th scope="col" class="num">Szavazás</th><th scope="col">Időszak</th><th scope="col">Utolsó szakasz</th><th scope="col">Eredmény</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Az előtag (T/ törvényjavaslat, H/ határozati javaslat, I/ interpelláció, K/ kérdés…) csak ott ismert, ahol a névsor az iromány saját számát írta; a csak módosítókról ismert irományok szám nélküli előtaggal szerepelnek.</div>
+</section>
+""" + page_tail(inp, 1)
+
+
 def build_data_page(inp: dict) -> str:
     """adatok/index.html — the cycle's downloads and the data dictionary."""
     files = [("szavazasok.csv", "szavazasok.json", "minden szavazás, egy sor egy szavazás"),
@@ -1739,6 +1791,12 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         sd = out_dir / "szoros"; sd.mkdir(parents=True, exist_ok=True)
         (sd / "index.html").write_text(build_close_page(inp, cl), encoding="utf-8")
         (sd / "dontesek.csv").write_text(ex.decisions_csv(cl, cycle), encoding="utf-8")
+        bs = an.bills(inp)
+        bd = out_dir / "iromany"; bd.mkdir(parents=True, exist_ok=True)
+        (bd / "index.html").write_text(build_bill_index(inp, bs), encoding="utf-8")
+        for bnum, b in bs.items():
+            (bd / f"{bnum}.html").write_text(build_bill_page(inp, b), encoding="utf-8")
+        (bd / "iromanyok.csv").write_text(ex.bills_csv(bs, cycle), encoding="utf-8")
     per_mp = {azon: {"cycle": cycle, "name": mp["name"], "faction": mp.get("faction"), "faction_first": mp.get("faction_first"),
                      "mandate": mandate_text(mp), "mandate_from": mp.get("mandate_from"), "mandate_to": mp.get("mandate_to"),
                      "current": mp.get("current"), "wikidata_qid": mp.get("wikidata_qid"), "parlament_url": mp.get("parlament_url"),

@@ -174,3 +174,53 @@ def _needed(rule: str, base: int) -> int | None:
     if rule in ("negyotod_jelenlevo", "negyotod_osszes"):
         return math.ceil(4 * base / 5)
     return None
+
+
+# -- bill journeys ------------------------------------------------------------------------------
+
+import re as _re
+
+_NUM = _re.compile(r"(\d+)")
+_PREFIX = _re.compile(r"^([A-Z]+)/(\d+)$")
+
+
+def bill_key(iromany: str | None) -> tuple[int | None, str | None]:
+    """'T/51' → (51, 'T'); '11152/8' (an amendment of bill 11152) → (11152, None); None → (None, None).
+    Iromány numbers are one number space per cycle, so the number alone identifies the bill."""
+    if not iromany:
+        return None, None
+    m = _PREFIX.match(iromany.strip())
+    if m:
+        return int(m.group(2)), m.group(1)
+    m = _NUM.match(iromany.strip())
+    return (int(m.group(1)), None) if m else (None, None)
+
+
+def bills(inp: dict[str, Any]) -> dict[int, dict[str, Any]]:
+    """Every bill with at least one roll call: its own number/prefix/title/href where a vote named the bill itself,
+    and every vote about it (the bill's own stages and its amendments) in order."""
+    out: dict[int, dict[str, Any]] = {}
+    for ts in inp["order"]:
+        v = inp["by_ts"][ts]
+        for mo in v.get("motions") or []:
+            n, prefix = bill_key(mo.get("iromany"))
+            if n is None:
+                continue
+            b = out.setdefault(n, {"number": n, "prefix": None, "title": None, "href": None, "votes": [], "amendment_votes": 0, "own_votes": 0})
+            if prefix:
+                b["prefix"] = b["prefix"] or prefix
+                b["title"] = b["title"] or mo.get("title")
+                b["href"] = b["href"] or mo.get("href")
+                b["own_votes"] += 1
+            else:
+                b["amendment_votes"] += 1
+                b["title"] = b["title"] or mo.get("title")
+            if not b["votes"] or b["votes"][-1]["ts"] != ts:
+                b["votes"].append({"ts": ts, "slug": v["slug"], "date": v["on_date"], "time": v.get("time"), "iromany": mo.get("iromany"), "outcome": mo.get("outcome"),
+                                   "igen": v.get("igen"), "nem": v.get("nem"), "tartozkodott": v.get("tartozkodott"), "result": v.get("result_raw"),
+                                   "rule": (v.get("majority") or {}).get("rule"), "mode": v.get("mode"), "kind": v.get("kind")})
+    for b in out.values():
+        b["first"] = b["votes"][0]["date"]; b["last"] = b["votes"][-1]["date"]
+        b["final_outcome"] = b["votes"][-1]["outcome"]; b["final_result"] = b["votes"][-1]["result"]
+        b["label"] = f'{b["prefix"]}/{b["number"]}' if b["prefix"] else str(b["number"])
+    return out
