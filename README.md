@@ -215,22 +215,24 @@ base, tally, margin and result, filterable by rule and result and searchable by 
 The seats are the chamber's own: every MP at their sector / row / seat from the API,
 seen from the Speaker's platform, opposition left and government right, ministers on the
 front bench, the empty seats faint; what is estimated (uniform seat width, row spacing,
-the direction of seat numbers) the caption says. Every vote in the directory has its own page of the same
+the direction of seat numbers) the footer says, in one line. Every vote in the directory has its own page of the same
 shape — chamber, verdict, faction bars — plus the full roll call as a table you can sort
 and filter by faction and position, each MP with their seat, and links to the previous
 and next vote. Secret ballots say plainly that there is no roll call; the quorum check
 says it is not a decision. Every MP has a page too: mandate and seat (highlighted on the
 chamber), faction history and mandates as far back as the API records them, motion counts
 per cycle, and this cycle's voting record — participation, and whether each cast vote
-matched the plurality of the MP's own faction — with the definitions printed next to the
+matched the plurality of the MP's own faction — the definition in one line next to the
 numbers, the votes cast against the faction listed, and every vote linked. These are
-counts, not verdicts, and the pages say so. The MP record's `<inditvanyok>` block is
+counts, not verdicts, and the pages say so — briefly: after a pass that cut every API
+field name, formula and method caveat out of the panels (they live in the footer's two short
+paragraphs and here), the pages carry labels and numbers, and little else. The MP record's `<inditvanyok>` block is
 counts per cycle only — önálló / nem önálló — so the pages also list *what* the MP
 submitted this cycle: `iromanyok.cgi` names submitters as "Név (Frakció)" and the same
 resolver turns those into people; 941 submissions across the current cycle's 507
 irományok, and for every one of the 201 people the list count equals the record's
 "önálló" count (a test keeps it so). Amendments ("nem önálló") are not in that list, and
-neither is any earlier cycle — the panel says both. Finding this exposed a parser bug:
+neither is any earlier cycle — the closed-cycle panel says so in one line. Finding this exposed a parser bug:
 `parse_iromanyok` kept one `<benyujto>` and dropped all of them when a bill had several.
 
 Built by `scripts/build_site.py` from committed inputs only, with no clock read, so a

@@ -35,7 +35,7 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .kz-corner.bl{bottom:-1px;left:-1px;border-bottom-width:1px;border-left-width:1px}.kz-corner.br{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
 .panel > h2{margin:0 0 10px;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);font-weight:400;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .panel > h2 .tag{color:var(--dim2);letter-spacing:.15em}
-.grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid .panel{margin-top:16px;min-width:0}
+.grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.02em;position:relative}
 .fresh .en{color:var(--dim2);display:block;margin-top:2px}
@@ -89,7 +89,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .bar{height:6px;background:var(--line2);position:relative;margin:8px 0 4px}
 .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--white);opacity:.9}
 .bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--dim)}
-.fbars{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}.fbars .row{display:grid;grid-template-columns:78px 1fr 96px;gap:8px;align-items:center;margin:5px 0;color:var(--dim)}
+.fbars{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}.fbars .row.hdr{color:var(--dim2);font-size:9px;margin-bottom:2px}.fbars .row{display:grid;grid-template-columns:78px 1fr 106px;gap:8px;align-items:center;margin:5px 0;color:var(--dim)}.fbars .row.hdr span{white-space:nowrap}
 .fbars .stack{display:flex;height:6px;overflow:hidden;background:var(--line2)}.fbars .stack i{display:block;height:100%}
 .counts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:16px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
 @media(max-width:1100px){.counts{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){.counts{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -435,7 +435,7 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .kz-corner.bl{bottom:-1px;left:-1px;border-bottom-width:1px;border-left-width:1px}.kz-corner.br{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
 .panel > h2{margin:0 0 10px;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);font-weight:400;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .panel > h2 .tag{color:var(--dim2);letter-spacing:.15em}
-.grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid .panel{margin-top:16px;min-width:0}
+.grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.02em;position:relative}
 .fresh .en{color:var(--dim2);display:block;margin-top:2px}
@@ -489,7 +489,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .bar{height:6px;background:var(--line2);position:relative;margin:8px 0 4px}
 .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--white);opacity:.9}
 .bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--dim)}
-.fbars{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}.fbars .row{display:grid;grid-template-columns:78px 1fr 96px;gap:8px;align-items:center;margin:5px 0;color:var(--dim)}
+.fbars{margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase}.fbars .row.hdr{color:var(--dim2);font-size:9px;margin-bottom:2px}.fbars .row{display:grid;grid-template-columns:78px 1fr 106px;gap:8px;align-items:center;margin:5px 0;color:var(--dim)}.fbars .row.hdr span{white-space:nowrap}
 .fbars .stack{display:flex;height:6px;overflow:hidden;background:var(--line2)}.fbars .stack i{display:block;height:100%}
 .counts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:16px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
 @media(max-width:1100px){.counts{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){.counts{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -810,27 +810,23 @@ def inspector_data(view: dict, inp: dict) -> tuple[dict, dict]:
 def chart_block(view: dict, inp: dict) -> str:
     plan, facs = inp["plan"], inp["facs"]
     if not view["roll_call_available"]:
-        return ('<div class="hero-meta" style="margin:14px 0">Titkos szavazás: nincs név szerinti lista, ezért ülésrend sincs — csak az összesített eredmény.</div>'
-                if view.get("secret") else '<div class="hero-meta" style="margin:14px 0">Ehhez a szavazáshoz nincs név szerinti lista.</div>')
+        return ('<div class="hero-meta" style="margin:14px 0">Titkos szavazás — nincs név szerinti lista.</div>'
+                if view.get("secret") else '<div class="hero-meta" style="margin:14px 0">Nincs név szerinti lista.</div>')
     data, align_here = inspector_data(view, inp)
     n_against = sum(1 for a in align_here.values() if a == "against")
     if plan:
         svg, info = seat_svg_real(view, facs, plan, align_here)
         geo = plan["geometry"]
-        note = (f'Az ülésrend a képviselői adatlapok szektor/sor/szék adataiból rekonstruálva ({info["placed"]} képviselő a helyén'
-                + (f', {info["unplaced"]} a bal alsó tálcán, ülőhely-adat nélkül' if info["unplaced"] else '') + '), az elnöki emelvény felől nézve: '
-                f'balra az ellenzék ({", ".join(str(x) for x in geo["sector_order_left_to_right"][:2])}. szektor), jobbra a kormányoldal; '
-                f'a 0. szektor a miniszteri pad. A halvány karikák a sorszámozásból kikövetkeztetett üres helyek ({info.get("empty", 0)}); a teljesen üres sorokat nem ismerjük. '
-                'Becsült: egységes székszélesség (egy szektor olyan széles, amilyet a legsűrűbb sora kíván), a sorok távolsága és a székek balról jobbra sorrendje.')
+        note = ('Valódi ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. '
+                f'Halvány karika: üres hely ({info.get("empty", 0)}).')
     else:
         svg = seat_svg_fallback(view, facs, align_here)
-        note = ("Sorrend: frakció, azon belül szavazat — nem az ülésrend. Az API az ülőhelyeket csak a jelenlegi ciklusra közli, "
-                "ezért egy lezárult ciklus szavazásait így, frakciónként rendezve rajzoljuk.")
+        note = "Sorrend: frakció, azon belül szavazat — nem az ülésrend (az csak a jelenlegi ciklusra ismert)."
     if n_against:
         note += f' Fehér gyűrű: {n_against} képviselő a saját frakciója többségével szemben szavazott.'
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     inspector = ('<div class="inspector" id="insp" aria-live="polite">'
-                 '<div class="insp-hint">Ülőhelyre mutatva vagy koppintva: a képviselő és a ciklusbeli mérlege. <span class="mono">Esc</span> old.</div></div>'
+                 '<div class="insp-hint">Ülőhelyre mutatva: a képviselő. Kattintás rögzít, <span class="mono">Esc</span> old.</div></div>'
                  f'<script type="application/json" id="insp-data">{payload}</script>')
     return f'<div class="chart">{svg}</div>{inspector}{legend_html(view, facs, n_against)}<div class="hero-meta" style="margin-top:8px">{note}</div>'
 
@@ -844,10 +840,9 @@ def verdict_block(view: dict, inp: dict) -> str:
     tally = (f'<div class="tally"><div><b class="mono" data-kz-number="{view["igen"]}">{view["igen"]}</b><span>igen</span></div><div><b class="mono" data-kz-number="{view["nem"]}">{view["nem"]}</b><span>nem</span></div>'
              f'<div><b class="mono" data-kz-number="{view["tartozkodott"]}">{view["tartozkodott"]}</b><span>tartózkodott</span></div></div>')
     if view["kind"] == "jelenlet":
-        return (tally + '<div class="hero-meta">Jelenlét megállapítása — nem döntés: a gombnyomások a jelenlétet rögzítik, eredménye „Határozatképes”. '
-                f'Jelen: {esc(view.get("present"))}.</div>')
+        return tally + f'<div class="hero-meta">Jelenlét megállapítása — nem döntés. Jelen: {esc(view.get("present"))}.</div>'
     if not m:
-        return tally + '<div class="hero-meta">Ehhez a szavazáshoz nincs számított többségi küszöb.</div>'
+        return tally + '<div class="hero-meta">Nincs számított küszöb.</div>'
     share = round(100 * view["igen"] / m["base"], 1) if m.get("base") else 0
     need_pct = round(100 * m["needed"] / m["base"], 1) if m.get("base") else 50
     verdict_ok = m.get("agrees_with_source")
@@ -863,19 +858,18 @@ def verdict_block(view: dict, inp: dict) -> str:
                   f'<i style="width:{100*rest/n:.1f}%;background:transparent" title="{esc(t["faction"])} nem szavazott / hiányzó: {rest}"></i></span>'
                   f'<span class="mono" style="text-align:right">{t["igen"]} – {t["nem"]} – {t["tartozkodott"]}</span></div>')
     base_word = "képviselő" if rule_info and rule_info.base == "seats" else "jelenlévő"
-    base_note = " · jelenlét = igen+nem+tartózkodott+jelen, nem szavazott" if rule_info and rule_info.base == "present" and view["roll_call_available"] else (
-        " · jelenlét = az „Összes szavazat” (nincs névsor)" if rule_info and rule_info.base == "present" else "")
+    base_note = ""
     return (tally +
             f'<div class="bar"><i style="width:{share}%"></i><em style="left:{need_pct}%"></em></div>'
-            f'<div class="hero-meta mono">{view["igen"]} igen · szükséges {m.get("needed")} a {m.get("base")}-ból ({esc(rule_info.label_hu if rule_info else "")}) · különbség {("+" if (m.get("margin") or 0) >= 0 else "") + str(m.get("margin"))}</div>'
+            f'<div class="hero-meta mono">{view["igen"]} igen · szükséges {m.get("needed")} a {m.get("base")}-ból · különbség {("+" if (m.get("margin") or 0) >= 0 else "") + str(m.get("margin"))}</div>'
             '<dl class="verdict">'
-            f'<dt>Szavazási mód</dt><dd>{esc(view["mode"])} <span class="hero-meta">(az API saját megjelölése)</span></dd>'
-            f'<dt>Szabály</dt><dd>{esc(rule_info.label_hu if rule_info else "—")} — {esc(rule_info.formula if rule_info else "")}</dd>'
+            f'<dt>Szavazási mód</dt><dd>{esc(view["mode"])}</dd>'
+            f'<dt>Szabály</dt><dd>{esc(rule_info.label_hu if rule_info else "—")}</dd>'
             f'<dt>Alap</dt><dd class="mono">{m.get("base")} {base_word}{base_note}</dd>'
-            f'<dt>Eredmény</dt><dd>{result_badge(view)} <span class="hero-meta">forrás szerint · számítás {"egyezik" if verdict_ok else ("eltér" if verdict_ok is False else "—")}</span></dd>'
+            f'<dt>Eredmény</dt><dd>{result_badge(view)} <span class="hero-meta">számítás {"egyezik" if verdict_ok else ("eltér" if verdict_ok is False else "—")}</span></dd>'
             + (f'<dt>Nem szavazott</dt><dd class="mono">{counts.get("nem_szavazott", 0)} · jelen, nem szavazott {counts.get("jelen_nem_szavazott", 0)} · előre bejelentett hiányzó {counts.get("bejelentett_hianyzo", 0)}' + (f' · igazoltan távol {counts["igazoltan_tavol"]}' if counts.get("igazoltan_tavol") else "") + '</dd>' if view["roll_call_available"] else '')
             + '</dl>'
-            + (f'<div class="fbars">{"".join(fb)}</div><div class="hero-meta" style="margin-top:10px">Frakciónként: igen (teli), tartózkodott (fél), nem (halvány), a maradék nem szavazott vagy hiányzott. Számok: igen – nem – tartózkodott.</div>' if fb else ''))
+            + (f'<div class="fbars"><div class="row hdr"><span></span><span></span><span class="mono" style="text-align:right">igen – nem – tart.</span></div>{"".join(fb)}</div>' if fb else ''))
 
 
 def needed_tag(view: dict) -> str:
@@ -930,7 +924,7 @@ def roll_call_table(view: dict, inp: dict) -> str:
             '<div class="tablewrap"><table id="roll"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th>'
             '<th scope="col" class="sortable" data-key="posrank">Szavazat</th>' + ('<th scope="col" class="sortable" data-key="seat">Ülőhely</th>' if plan else '') + '</tr></thead>'
             f'<tbody>{"".join(trs)}</tbody></table></div>'
-            '<div class="hero-meta" style="margin-top:8px">A fejlécre kattintva rendezhető' + (' · ülőhely: szektor, sor, szék a képviselői adatlapról; a miniszteri pad a 0. szektor.' if plan else ' · ülőhely nincs: az API csak a jelenlegi ciklus ülésrendjét közli.') + '</div></section>')
+            '</section>')
 
 
 def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
@@ -955,9 +949,9 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
   <div class="log">{log}</div>
   <div class="method">
     <h3>Forrás és módszer</h3>
-    Adatok: az Országgyűlés Web API-ja (parlament.hu, XML). A személyek azonosítása a Wikidata P4966 azonosítóján keresztül, ami megegyezik az API <span class="mono">p_azon</span> értékével. Ez az oldal a <span class="mono">{esc(derived_txt)}</span> (budapesti idő) időpontban levezetett adatokból épült, {idx["details_cached"]} szavazás részletével és {roll_calls} név szerinti listával.
+    Az Országgyűlés Web API-ja (parlament.hu); személyek Wikidatával egyeztetve. A többségi szabály az API saját „Szavazási mód” mezője; jelenlét = igen + nem + tartózkodott + jelen, nem szavazott (jogi értelmezése ellenőrzendő). Az ülésrend a képviselői adatlapokból; a szektorok szélessége, a sorok távolsága és a székek iránya becsült. Levezetve: {esc(derived_txt)} (budapesti idő).
     <h3>Amit az oldal nem állít</h3>
-    Semmit a képviselők szavazási szokásairól, a frakciófegyelemről vagy a törvényalkotás általános tempójáról — ezek számok, nem megállapítások. A „jelenlévő” fogalmának jogi értelmezése (jelenlét = igen + nem + tartózkodott + jelen, nem szavazott) még ellenőrzendő; a többségi szabályokat az API saját „Szavazási mód” mezője adja, a jogszabályi hivatkozások a kódban VERIFY jelöléssel szerepelnek. Színek: az oldal saját jelölései, nem a pártok arculata.
+    Semmit a szavazási szokásokról vagy a frakciófegyelemről — számok, nem megállapítások. Színek: az oldal saját jelölései.
   </div>
 </footer>"""
 
@@ -984,7 +978,7 @@ def roster_summary(inp: dict) -> dict:
     for m in inp["mps"].values():
         by_f[m.get("faction") or "—"] = by_f.get(m.get("faction") or "—", 0) + 1
     by_f = dict(sorted(by_f.items(), key=lambda kv: (order.get(kv[0], 999), kv[0])))
-    return {"total": len(inp["mps"]), "by_faction": by_f, "note": "mindenki, aki a ciklus névsoraiban szerepel (a pótlásokkal együtt), az utolsó név szerinti szavazásán feltüntetett frakciója szerint"}
+    return {"total": len(inp["mps"]), "by_faction": by_f, "note": "a ciklus névsoraiban szereplők, a pótlásokkal, utolsó frakciójuk szerint"}
 
 
 def directory_row(v: dict) -> str:
@@ -1041,13 +1035,12 @@ def build_index(inp: dict, hero_ts: str) -> str:
         months = "".join(f'<div class="row"><span>{esc(m)}</span><span class="stack"><i style="width:{100*v/top:.1f}%;background:var(--dim)"></i></span><span class="mono" style="text-align:right">{v}</span></div>' for m, v in month_rows)
         second_panel = (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Eredmények és a ciklus ritmusa</span><span class="tag">{fl["decisions"]} döntés</span></h2>'
                         f'<div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Eredmény</th><th scope="col" class="num">db</th></tr></thead><tbody>{result_rows}</tbody></table></div>'
-                        f'<div class="fbars" style="max-height:260px;overflow:auto">{months}</div>'
-                        f'<div class="hero-meta prose" style="margin-top:8px">Havonta: hány szavazás; a nulla hónapok a szünetek. Számok, nem megállapítások.</div></section>')
+                        f'<div class="hero-meta" style="margin-top:10px"><span class="lbl">szavazás havonta</span></div><div class="fbars" style="max-height:260px;overflow:auto;margin-top:4px">{months}</div></section>')
     else:
         second_panel = (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Egy törvény útja</span><span class="tag">T/71</span></h2>'
                         '<div class="hero-title" style="font-size:16px">A Nemzetközi Büntetőbíróság Statútumából való kilépés visszavonása — 2026. évi XV. törvény</div>'
                         '<div class="timeline"><div><b>máj. 25.</b>benyújtva (kormány)</div><div><b>máj. 26.</b>kivételes eljárás elrendelve</div><div><b>máj. 27.</b>zárószavazás</div><div><b>máj. 28.</b>kihirdetve, Magyar Közlöny 60</div></div>'
-                        '<div class="hero-meta prose" style="margin-top:8px">3 nap a benyújtástól a kihirdetésig. Az adatok — állapot, kihirdetés száma, MK száma, tárgyalási mód — mind az iromány-adatlapból jönnek; közlönyt nem kell böngészni.</div></section>')
+                        '<div class="hero-meta prose" style="margin-top:8px">3 nap a benyújtástól a kihirdetésig.</div></section>')
     cyc = f'{inp["cycle"]}. ciklus ({CYCLE_SPAN.get(inp["cycle"], "")})'
     closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">A {inp["cycle"]}. ciklus lezárult ({esc(CYCLE_SPAN.get(inp["cycle"], ""))}): ez a teljes lista, {fl["votes"]} szavazás. Frissítve: {esc(sync_stamp(inp))} (budapesti idő).</span>'
                    f'<span class="en" lang="en">Cycle {inp["cycle"]} is closed ({esc(CYCLE_SPAN.get(inp["cycle"], ""))}): this is the complete list, {fl["votes"]} votes. Synced {esc(sync_stamp(inp))} Budapest time.</span></div>') if inp["closed"] else freshness_html(inp)
@@ -1055,7 +1048,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
 <nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a></nav>
-<p class="lede">{"Egy szavazás kirajzolva, " if not inp["closed"] else ""}{fl["votes"]} szavazás listázva a {inp["cycle"]}. ciklus {"első " if not inp["closed"] else ""}{fl["sitting_days"]["count"]} ülésnapjáról — mindegyik a saját oldalán, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — minden döntés mellett azzal a többségi szabállyal, amelyet az Országgyűlés maga jelöl meg. Forrás: parlament.hu Web API; a személyek azonosítása Wikidatával egyeztetve.{" A ciklus ülésrendjét az API nem őrzi meg (csak a jelenlegit közli), ezért itt a szavazás-ábrák frakciónként rendezettek, nem ülőhelyenként." if inp["closed"] else ""}</p>
+<p class="lede">{fl["votes"]} szavazás a {inp["cycle"]}. ciklus {"első " if not inp["closed"] else ""}{fl["sitting_days"]["count"]} ülésnapjáról — mindegyik a saját oldalán, {"ülőhelyenként" if not inp["closed"] else "név szerint"}, a szükséges többséggel. Forrás: parlament.hu.</p>
 {closed_line}
 <section class="grid">
   <section class="panel">{CORNERS}
@@ -1071,9 +1064,8 @@ def build_index(inp: dict, hero_ts: str) -> str:
 <section class="counts">{counts_html}</section>
 <section class="grid">
   <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Szavazási módok</span><span class="tag">az API megjelölése szerint</span></h2>
+    <h2><span data-kz-text>Szavazási módok</span></h2>
     <div class="tablewrap" style="border:0"><table><thead><tr><th>Szavazási mód</th><th class="num">db</th></tr></thead><tbody>{mode_rows}</tbody></table></div>
-    <div class="hero-meta prose" style="margin-top:8px">A „Listás” az egyszerű többségű gépi szavazás; a többi a szükséges többséget nevezi meg. Titkos szavazásnál nincs név szerinti lista.</div>
   </section>
   {second_panel}
 </section>
@@ -1082,7 +1074,6 @@ def build_index(inp: dict, hero_ts: str) -> str:
   <div class="filters" role="group" aria-label="Szűrés szükséges többség szerint">{rule_buttons}</div>
   <div class="filters" role="group" aria-label="Szűrés eredmény szerint">{result_buttons}<input id="q" type="search" placeholder="keresés --tárgy" aria-label="Keresés a tárgyban"><span class="n" id="n" aria-live="polite"></span></div>
   <div class="tablewrap"><table><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows">{dir_rows}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">„Szükséges”: a szabály és a küszöb / az alap. A „?” jelzés azt jelenti, hogy a számított és a forrás szerinti eredmény eltér — ilyen jelenleg {len(idx["disagreements"])} van.</div>
 </section>
 """ + page_tail(inp, 0)
 
@@ -1208,16 +1199,11 @@ def build_mp_page(inp: dict, azon: str) -> str:
         return f'<tr><td class="ts mono">{num}</td><td>{esc(it["title"] or "")}{co}</td><td><span class="{badge}">{esc(it.get("status") or "—")}</span></td></tr>'
     item_rows = "".join(item_row(it) for it in items)
     if inp["closed"]:
-        motions_note = (f'Az API <span class="mono">&lt;inditvanyok&gt;</span> összesítése ciklusonként. A tételek csak a jelenlegi ciklusra kérdezhetők le '
-                        f'(<span class="mono">iromanyok.cgi</span>), a {inp["cycle"]}. ciklusé nem.')
+        motions_note = "A tételek csak a jelenlegi ciklusból érhetők el."
         items_html = ""
     else:
-        recon = ("" if stat_now is None or stat_now == len(items) else
-                 f' <b>Eltérés:</b> az adatlap {stat_now} önálló indítványt számol, a lista {len(items)} tételt talál.')
-        motions_note = ('Az API <span class="mono">&lt;inditvanyok&gt;</span> összesítése ciklusonként; alatta a jelenlegi ciklus irományai a '
-                        '<span class="mono">iromanyok.cgi</span> listából, benyújtó szerint — a lista tételszáma megegyezik az adatlap „önálló” számával. '
-                        'A „nem önálló” indítványok (módosító javaslatok) nincsenek a listában, csak a számuk. Előtagok: T/ törvényjavaslat, H/ határozati javaslat, '
-                        'I/ interpelláció, K/ kérdés, A/ azonnali kérdés — a többi az iromány saját száma szerint.' + recon)
+        motions_note = ("" if stat_now is None or stat_now == len(items) else
+                        f'Eltérés: az adatlap {stat_now} önálló indítványt számol, a lista {len(items)} tételt talál.')
         items_html = (f'<div class="hero-meta" style="margin:10px 0 4px"><span class="lbl">a jelenlegi ciklusban</span> {len(items)} iromány' + (f' · {kind_txt}' if kind_txt else '') + '</div>'
                       f'<div class="tablewrap" style="max-height:340px;overflow:auto"><table><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
                       + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
@@ -1230,7 +1216,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
                        + ("ma is képviselő" if mp.get("current") else f"mandátuma megszűnt{ended_txt}")
                        + (f' · ugyanez a személy: {other_links}' if other_links else "") + '.</div>')
     else:
-        former_note = ("" if mp.get("current") else f'<div class="hero-meta">Mandátuma megszűnt{(" " + hu_date(mp["wikidata_end"])) if mp.get("wikidata_end") else ""}; a képviselői adatlap ma már nem tartalmaz ülőhelyet.</div>') \
+        former_note = ("" if mp.get("current") else f'<div class="hero-meta">Mandátuma megszűnt{(" " + hu_date(mp["wikidata_end"])[:-1]) if mp.get("wikidata_end") else ""}.</div>') \
             + (f'<div class="hero-meta">Ugyanez a személy: {other_links}</div>' if other_links else "")
     links = " · ".join(x for x in [
         f'<a href="{esc(mp["parlament_url"])}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>',
@@ -1244,11 +1230,8 @@ def build_mp_page(inp: dict, azon: str) -> str:
     seat_panel = (f"""  <section class="panel">{CORNERS}
     <h2><span data-kz-text>Ülőhely az ülésteremben</span><span class="tag">{esc(seat_text(mp))}</span></h2>
     <div class="chart">{chamber_mini_svg(inp, azon) or '<div class="hero-meta">Nincs ülőhely-adat.</div>'}</div>
-    <div class="hero-meta">az elnöki emelvény felől nézve · a rekonstrukció feltevéseit a szavazás-oldalak jegyzete sorolja</div>
-  </section>""" if not inp["closed"] else f"""  <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Ülőhely</span><span class="tag">nem elérhető</span></h2>
-    <div class="hero-meta prose">Az API az ülőhelyet csak a jelenlegi ciklusra közli; a {inp["cycle"]}. ciklus ülésrendjét nem őrzi meg. Ezért itt nincs ülőhely, és a szavazás-oldalak ábrái frakciónként rendezettek.</div>
-  </section>""")
+    <div class="hero-meta">az emelvény felől nézve</div>
+  </section>""" if not inp["closed"] else "")
     seat_label = f' · {esc(seat_text(mp))}' if not inp["closed"] else ""
     return page_head(f'{mp["name"]} ({mp.get("faction") or "—"}){" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat',
                      f'{mp["name"]} — {mp.get("faction") or ""}, {mandate_text(mp)}: szavazási részvétel és a frakcióval való egyezés a {inp["cycle"]}. ciklusban.', 1 + inp["base_depth"]) + \
@@ -1256,7 +1239,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
 <div class="hero-h"><h1>{esc(mp["name"])}</h1><small class="label"><span class="pos"><i class="d" style="--c:{c}"></i>{esc(mp.get("faction") or "—")}</span> · {esc(mandate_text(mp))}{seat_label}</small></div>
 <p class="hero-meta">{links}</p>
 {former_note}
-<section class="grid">
+<section class="{"grid" if not inp["closed"] else "grid one"}">
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Szavazási részvétel a {inp["cycle"]}. ciklusban</span><span class="tag">{in_roll} név szerinti szavazás</span></h2>
     <div class="{tally_cls}">{pos_cells}</div>
@@ -1264,21 +1247,21 @@ def build_mp_page(inp: dict, azon: str) -> str:
       <dt>Leadott szavazat</dt><dd class="mono">{cast} / {in_roll} ({part})</dd>
       <dt>Frakciójával</dt><dd class="mono">{al["with"]} · ellene {al["against"]} · egyezés {with_pct}</dd>
     </dl>
-    <div class="hero-meta prose" style="margin-top:8px">„Frakciójával”: a leadott szavazata (igen / nem / tartózkodott) megegyezik a frakciója leadott szavazatainak többségi álláspontjával az adott szavazáson; „ellene”: eltér attól. A nem leadott állapotok (jelen, nem szavazott; nem szavazott; előre bejelentett hiányzó; igazoltan távol) részvétel, nem egyezés. Ezek számok, nem minősítések: egy „ellene” lehet lelkiismereti szavazás, egy „nem szavazott” lehet betegség.</div>
+    <div class="hero-meta prose" style="margin-top:8px">„Frakciójával”: a frakciója leadott szavazatainak többségével egyezően. Számok, nem minősítések.</div>
   </section>
 {seat_panel}
 </section>
 <section class="grid">
   <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Frakciótagság és mandátum</span><span class="tag">a képviselői adatlap szerint</span></h2>
+    <h2><span data-kz-text>Frakciótagság és mandátum</span></h2>
     <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th>Frakció</th><th>Időszak</th></tr></thead><tbody>{fac_hist or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
     <div class="tablewrap" style="border:0;margin-top:10px"><table><thead><tr><th>Ciklus</th><th>Választókerület / lista</th><th>Választás</th><th>Mandátum</th></tr></thead><tbody>{elections or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
   </section>
   <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Benyújtott indítványok</span><span class="tag">ciklusonként</span></h2>
+    <h2><span data-kz-text>Benyújtott indítványok</span></h2>
     <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
     {items_html}
-    <div class="hero-meta prose" style="margin-top:8px">{motions_note}</div>
+    {f'<div class="hero-meta prose" style="margin-top:8px">{motions_note}</div>' if motions_note else ''}
   </section>
 </section>
 <section class="panel deep">{CORNERS}
@@ -1320,7 +1303,6 @@ def build_mp_index(inp: dict) -> str:
   <h2><span data-kz-text>Névsor</span><span class="tag">a fejlécre kattintva rendezhető</span></h2>
   <div class="filters" role="group" aria-label="Szűrés frakció szerint">{fac_buttons}<span class="n" id="rn" aria-live="polite"></span></div>
   <div class="tablewrap"><table id="roll"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th><th scope="col">Mandátum</th>{'' if inp["closed"] else '<th scope="col">Ülőhely</th>'}<th scope="col" class="sortable num" data-key="cast">Leadott / névsor</th><th scope="col" class="sortable num" data-key="part">Részvétel</th><th scope="col" class="sortable num" data-key="against">Frakció ellen</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">„Leadott”: igen / nem / tartózkodott a név szerinti szavazásokon; „részvétel”: leadott / névsorban szereplő; „frakció ellen”: a frakció leadott szavazatainak többségétől eltérő leadott szavazatok száma. Számok, nem minősítések.</div>
 </section>
 """ + page_tail(inp, 1)
 

@@ -195,7 +195,7 @@ class MPPages(unittest.TestCase):
         self.assertNotIn("még nincsenek betöltve", page)
         # a closed cycle only has the counts, and says why
         page42 = build_mp_page(load_inputs(42), "a011")
-        self.assertIn("A tételek csak a jelenlegi ciklusra kérdezhetők le", page42)
+        self.assertIn("A tételek csak a jelenlegi ciklusból érhetők el.", page42)
         self.assertNotIn("iromanyok_mobil", page42)
 
     def test_former_mp_page_says_so(self):
@@ -268,8 +268,7 @@ class Cycle42(unittest.TestCase):
         self.assertIn("Z. Kárpát Dániel", page)
         self.assertIn("Jobbik", page)
         self.assertIn("A 42. ciklus lezárult; mandátuma megszűnt", page)
-        self.assertNotIn("Ülőhely az ülésteremben", page)
-        self.assertIn("nem elérhető", page)
+        self.assertNotIn("Ülőhely az ülésteremben", page)                # no seat panel on a closed cycle
         self.assertNotIn("../../kepviselo/z012.html", page)                   # no cycle-43 page for him
         page2 = build_mp_page(self.inp, "a011")                              # Ágh Péter sits in both cycles
         self.assertIn('href="../../kepviselo/a011.html">43. ciklus ↗</a>', page2)
