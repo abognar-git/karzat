@@ -55,9 +55,30 @@ def slug_to_ts(slug: str) -> str:
     return datetime.strptime(slug, "%Y-%m-%dT%H-%M-%S").strftime(TS_FMT)
 
 
+_ATTR_LAST = re.compile(rb'(\s(?:nev|ertek|kepviselo|szavazat|frakcio|cim)=")((?:[^"<>]|"(?!\s*(?:/>|>|\s[A-Za-z_]+=")))*)(")')
+
+
+def repair_attribute_quotes(raw: bytes) -> bytes:
+    """The API sometimes prints an unescaped double quote inside an attribute value (1990:
+    ertek="Érvénytelen szavazás azon kérdésre, hogy "kíván-e a ház további vitát a"/>). Escape the inner
+    quotes — a quote followed by whitespace, '/>' or '>' or another attribute is a real terminator, any
+    other quote inside a value is text — so the document parses."""
+    def fix(m):
+        val = m.group(2).replace(b'"', b"&quot;")
+        return m.group(1) + val + m.group(3)
+    return _ATTR_LAST.sub(fix, raw)
+
+
 def parse_xml(raw: bytes) -> ET.Element:
-    """Parse API bytes. Honours the XML declaration's encoding (UTF-8 or ISO-8859-2)."""
-    return ET.fromstring(raw)
+    """Parse API bytes. Honours the XML declaration's encoding (UTF-8 or ISO-8859-2); repairs the
+    source's own unescaped quotes inside attribute values when the first parse fails."""
+    try:
+        return ET.fromstring(raw)
+    except ET.ParseError:
+        repaired = repair_attribute_quotes(raw)
+        if repaired == raw:
+            raise
+        return ET.fromstring(repaired)
 
 
 def declared_encoding(raw: bytes) -> str | None:

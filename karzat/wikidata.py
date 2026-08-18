@@ -32,12 +32,14 @@ COMMONS_API = "https://commons.wikimedia.org/w/api.php"
 USER_AGENT = "karzat/0.0.1 (https://github.com/abognar-git; civic data project; contact via GitHub)"
 
 
-def members_query(since: str = "2026-04-01") -> str:
-    """SPARQL for one row per (person, position statement) started on/after `since`.
+def members_query(since: str = "2026-04-01", until: str | None = None) -> str:
+    """SPARQL for one row per (person, position statement) started on/after `since` (and before `until`
+    when given — one parliamentary cycle at a time; Wikidata keeps one P39 statement per term).
 
     Multi-valued optionals (several P4966 ids, several images) can multiply rows; parse_rows()
     folds them back into one record per statement.
     """
+    until_filter = f'FILTER(?start < "{until}T00:00:00Z"^^xsd:dateTime)' if until else ""
     return f"""
 SELECT ?p ?nameHu ?nameEn ?ogyId ?group ?groupLabel ?start ?end ?district ?districtLabel
        ?party ?partyLabel ?dob ?sex ?sexLabel ?image
@@ -46,6 +48,7 @@ WHERE {{
   ?st ps:P39 wd:{MEMBER_POSITION} ;
       pq:P580 ?start .
   FILTER(?start >= "{since}T00:00:00Z"^^xsd:dateTime)
+  {until_filter}
   OPTIONAL {{ ?st pq:P582 ?end }}
   OPTIONAL {{ ?st pq:P4100 ?group }}
   OPTIONAL {{ ?st pq:P768 ?district }}

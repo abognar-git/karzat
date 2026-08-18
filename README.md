@@ -108,7 +108,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 141 tests
+python3 -m unittest discover -s tests -t .      # offline; 142 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -201,8 +201,14 @@ deliberately — the console I studied before starting: a near-black ground with
 24 px dot grid, zinc-bordered panels with 16 px corner brackets, tiny upper-case
 monospace labels, big light-weight numbers, a 48 px top bar (brand square, breadcrumb,
 cycle, and the sync time — never a "live" pulse, because nothing here is live), and a
-footer that is a terminal: a boot log whose lines are real values from the inputs
-(counts, window, disagreements, sync time) followed by the source-and-method notes.
+footer that is a terminal: five lines that describe the corpus first and the page's cycle
+second — how many cycles and votes and roll calls and people the site holds, then this
+cycle's numbers, the one verification worth saying (the computed result agrees with the
+record on every vote, or the count that disagrees), that the seat plan exists only for the
+current cycle, and the sync time — followed by a two-paragraph colophon in plain words
+("Honnan" / "Mit nem"). The lines are computed at build time from every cycle's inputs, so
+they grow as cycles are loaded and never say more than is loaded; an earlier version listed
+API endpoints and called itself a boot log, which read as a machine talking about itself.
 The boot choreography — panels settling in, mono labels scrambling into place, numbers
 counting up to exactly what is printed, the log typing itself — is vanilla JS on
 `data-kz-*` attributes; the whole sequence is skipped under `prefers-reduced-motion` and

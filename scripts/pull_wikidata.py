@@ -50,11 +50,12 @@ def _get_json(url: str, params: dict[str, str], accept: str = "application/json"
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--since", default="2026-04-01", help="P39 start date lower bound (default 2026-04-01 = ciklus 43)")
+    ap.add_argument("--until", default=None, help="P39 start date upper bound (exclusive) — one cycle at a time")
     ap.add_argument("--out", type=Path, default=ROOT / "reference" / "wikidata" / "members_ckl43.json")
     ap.add_argument("--no-licences", action="store_true", help="skip the Commons licence lookups")
     args = ap.parse_args(argv)
 
-    query = members_query(args.since)
+    query = members_query(args.since, args.until)
     t0 = time.monotonic()
     data = _get_json(SPARQL_ENDPOINT, {"query": query, "format": "json"}, accept="application/sparql-results+json")
     bindings = data["results"]["bindings"]
@@ -77,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
     out = {
         "source": "Wikidata (CC0) + Wikimedia Commons extmetadata for image licences",
         "retrieved_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "since": args.since,
+        "since": args.since, "until": args.until,
         "sparql": query,
         "summary": summary,
         "members": [m.to_dict() for m in members],

@@ -60,10 +60,13 @@ class Build(unittest.TestCase):
         js = build_assets()["karzat.js"]
         self.assertIn("prefers-reduced-motion", js)                  # the whole boot choreography is skipped for reduced motion
         self.assertTrue(js.lstrip().startswith("(function(){"))
-        # the terminal log is real values from the inputs (256 roll calls, not 259: three secret ballots), and no page claims to be live
-        self.assertIn("kész — 259 szavazás-oldal", self.page)
-        self.assertIn("259 részlet, 256 név szerinti lista", self.page)
+        # the terminal log is real values: the corpus, then this page's cycle; no page claims to be live
+        self.assertIn("ezen az oldalon: 43. ciklus · 259 szavazás · 23 ülésnap · 199 képviselő", self.page)
+        self.assertRegex(self.page, r"&gt; \d+ ciklus · \d{4}\. \w+ \d+\. – 2026\. augusztus 11\. · [\d\u00a0]+ szavazás · [\d\u00a0]+ név szerinti lista · [\d\u00a0]+ képviselő")
+        self.assertIn("a számított eredmény minden szavazásnál egyezik a jegyzőkönyvivel", self.page)
+        self.assertIn("frissítve 2026. augusztus 18. 10:49", self.page)
         self.assertNotIn("SYSTEM_READY", self.page)
+        self.assertNotIn(".cgi", self.page.split("<footer")[1])          # the footer talks about the data, not the plumbing
         self.assertIn("Frissítve: 2026. augusztus 18. 10:49 (budapesti idő).", self.page)   # absolute, not a frozen "15 perce"
         for word in ("live", "élő", "real-time"):
             self.assertNotIn(word, visible_text(self.page))
@@ -76,7 +79,7 @@ class Build(unittest.TestCase):
         self.assertIn("133 a 199-ból", self.page)
         self.assertEqual(self.page.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
         self.assertNotIn('data-year="', self.page)                      # one year only → no year filter
-        self.assertIn('42. ciklus (2022-05-02 – 2026-05-08)</a>', self.page)
+        self.assertIn('title="2022-05-02 – 2026-05-08">42</a>', self.page)      # the other cycles, one click away
         self.assertIn('<span class="more" title="', self.page)          # long titles keep their tail for the search
         self.assertIn('lang="hu"', self.page)
         for word in ("live", "élő", "real-time"):
@@ -249,12 +252,12 @@ class Cycle42(unittest.TestCase):
         page = build_index(self.inp, HERO_BY_CYCLE[42])
         self.assertEqual(page.count("<tr data-rule="), 2599)
         self.assertIn('href="../assets/karzat.css"', page)                   # site/ckl42/index.html → ../assets
-        self.assertIn("A 42. ciklus lezárult (2022-05-02 – 2026-05-08)", page)
+        self.assertIn("Lezárt ciklus, 2022-05-02 – 2026-05-08: mind a 2\u00a0599 szavazás itt van.", page)
         self.assertNotIn("Frissítve 1", page)                                 # no relative age anywhere
         self.assertIn("214 képviselő", page)                                  # the cycle's own roster, not today's list
         self.assertNotIn("TISZA: 141", page)
-        self.assertIn('href="../index.html">43</a>', page)                    # the cycle switch
-        self.assertIn('43. ciklus (2026-05-09 –)</a>', page)                   # …and in words, in the section nav
+        self.assertIn('href="../index.html" class="near">43</a>', page)       # the cycle switch (43 is the neighbour of 42)
+        self.assertIn('ciklusok: <a href="../index.html" title="2026-05-09 –">43</a> · <b>42</b>', page)   # …and in the section nav
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
         self.assertEqual(page.count('data-y="2023"'), 719)
         self.assertIn("Egy szavazás, frakciónként", page)                     # not "ülőhelyenként": no chamber for a closed cycle
@@ -269,7 +272,7 @@ class Cycle42(unittest.TestCase):
         self.assertIn("tizenötödik módosítása", page)
         self.assertIn("különbség +7", page)                                   # 140 igen, 133 needed
         self.assertEqual(page.count('<g class="seat"'), 199)
-        self.assertIn("nem az ülésrend", page)
+        self.assertIn("Ülésrend csak a jelenlegi ciklusról ismert", page)
         self.assertNotIn(">Ülőhely</th>", page)                               # no seat column without a plan
         self.assertIn('href="../../assets/karzat.css"', page)
         self.assertEqual(page.count('href="../kepviselo/'), 199)
@@ -319,6 +322,41 @@ class Cycle42(unittest.TestCase):
         self.assertEqual(idx.count("<tr data-f="), 214)
         self.assertNotIn(">Ülőhely</th>", idx)
         self.assertIn("ma is képviselő", idx)
+
+
+class AllCycles(unittest.TestCase):
+    """Whatever cycles have derived inputs: the same invariants hold for each of them."""
+
+    def test_every_cycle_builds_and_reconciles(self):
+        from karzat.normalise import CYCLE_LABELS
+        from scripts.build_site import pick_hero
+        cycles = available_cycles()
+        self.assertEqual(cycles[0], 43)
+        for c in cycles:
+            inp = load_inputs(c)
+            with self.subTest(cycle=c):
+                self.assertEqual(inp["cycle"], c)
+                self.assertGreater(len(inp["order"]), 0)
+                # every group the roll calls print has a colour and an order for this cycle
+                printed = set(inp["store"]["factions"]) - {""}
+                configured = {f["id"] for f in inp["facs"]}
+                self.assertEqual(printed - configured, set(), f"cycle {c}: groups without a factions.yml entry")
+                # every person in the roster sits in that cycle per their own record, under the roster's faction
+                label = CYCLE_LABELS[c]
+                for azon, m in inp["mps"].items():
+                    if not m.get("factions"):
+                        continue                                                    # no record fetched (should not happen after the record sync)
+                    rows = {(f["ciklus"], f["faction"]) for f in m["factions"]}
+                    self.assertTrue(any(cl == label for cl, _ in rows), f"cycle {c}: {azon} {m['name']} has no {label} row")
+                    self.assertIn((label, m["faction"]), rows, f"cycle {c}: {azon} {m['name']} roster faction {m['faction']} not in record")
+                # the index and the hero page build, and the directory is complete
+                page = build_index(inp, pick_hero(inp))
+                self.assertEqual(page.count("<tr data-rule="), len(inp["order"]))
+                self.assertIn(f"{c}. ciklus" if c != 43 else "karzat", page)
+                hero = build_vote_page(inp, pick_hero(inp))
+                self.assertIn('id="insp-data"', hero)
+                # nobody in a roll call resolved to a person outside this cycle's roster
+                self.assertEqual(set(inp["store"]["members"]) - set(inp["mps"]), set())
 
 
 class Helpers(unittest.TestCase):

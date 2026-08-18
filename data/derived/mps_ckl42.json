@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-08-18T11:31:13+00:00",
+ "derived_at": "2026-08-18T15:00:42+00:00",
  "cycle": 42,
  "count": 214,
  "current": 41,
@@ -64,6 +64,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63224232",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%220002%22%7D"
@@ -126,6 +127,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q131287967",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%220005%22%7D"
@@ -170,6 +172,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31091937",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22000D%22%7D"
@@ -227,6 +230,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q135119197",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22000E%22%7D"
@@ -325,6 +329,7 @@
      "nem_onallo": 167
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q776150",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22a008%22%7D"
@@ -459,6 +464,7 @@
      "nem_onallo": 104
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1469363",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22a011%22%7D"
@@ -557,6 +563,7 @@
      "nem_onallo": 168
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q4759767",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22a016%22%7D"
@@ -680,6 +687,7 @@
      "nem_onallo": 377
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q774389",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22a018%22%7D"
@@ -761,6 +769,7 @@
      "nem_onallo": 84
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q17530757",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22a716%22%7D"
@@ -932,6 +941,7 @@
      "nem_onallo": 17
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q5625635",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b007%22%7D"
@@ -1102,6 +1112,7 @@
      "nem_onallo": 17
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q6845361",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b008%22%7D"
@@ -1255,6 +1266,7 @@
      "nem_onallo": 24
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q616234",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b009%22%7D"
@@ -1407,6 +1419,7 @@
      "nem_onallo": 44
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q791792",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b013%22%7D"
@@ -1560,6 +1573,7 @@
      "nem_onallo": 170
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q792654",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b034%22%7D"
@@ -1676,6 +1690,7 @@
      "nem_onallo": 71
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q5625722",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b053%22%7D"
@@ -1793,6 +1808,7 @@
      "nem_onallo": 6
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q850818",
    "wikidata_end": "2026-08-03",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b076%22%7D"
@@ -1892,6 +1908,7 @@
      "nem_onallo": 15
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q6950267",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b087%22%7D"
@@ -1990,6 +2007,7 @@
      "nem_onallo": 14
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q7665258",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b103%22%7D"
@@ -2053,6 +2071,7 @@
      "nem_onallo": 103
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753801",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b120%22%7D"
@@ -2115,6 +2134,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55752783",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b121%22%7D"
@@ -2173,6 +2193,7 @@
      "nem_onallo": 6
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753797",
    "wikidata_end": "2023-04-22",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b122%22%7D"
@@ -2224,6 +2245,7 @@
      "nem_onallo": 276
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111671131",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b138%22%7D"
@@ -2269,6 +2291,7 @@
      "nem_onallo": 24
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111804219",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b139%22%7D"
@@ -2314,6 +2337,7 @@
      "nem_onallo": 8
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111804452",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b163%22%7D"
@@ -2358,6 +2382,7 @@
      "nem_onallo": 48
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q109043860",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b170%22%7D"
@@ -2409,6 +2434,7 @@
      "nem_onallo": 157
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q7264681",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b171%22%7D"
@@ -2454,6 +2480,7 @@
      "nem_onallo": 37
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111804263",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b172%22%7D"
@@ -2534,6 +2561,7 @@
      "nem_onallo": 4
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q29861529",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b764%22%7D"
@@ -2686,6 +2714,7 @@
      "nem_onallo": 79
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q383427",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22c003%22%7D"
@@ -2820,6 +2849,7 @@
      "nem_onallo": 198
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q871892",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22c014%22%7D"
@@ -2918,6 +2948,7 @@
      "nem_onallo": 35
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q20895279",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22c029%22%7D"
@@ -3016,6 +3047,7 @@
      "nem_onallo": 29
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q6375052",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22c030%22%7D"
@@ -3084,6 +3116,7 @@
      "nem_onallo": 699
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q17487544",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22c044%22%7D"
@@ -3135,6 +3168,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q56390799",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22c047%22%7D"
@@ -3233,6 +3267,7 @@
      "nem_onallo": 58
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q8073651",
    "wikidata_end": "2022-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d026%22%7D"
@@ -3356,6 +3391,7 @@
      "nem_onallo": 229
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q639328",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d028%22%7D"
@@ -3454,6 +3490,7 @@
      "nem_onallo": 18
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q5005010",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d030%22%7D"
@@ -3517,6 +3554,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55752813",
    "wikidata_end": "2024-09-30",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d035%22%7D"
@@ -3580,6 +3618,7 @@
      "nem_onallo": 119
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63224258",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d039%22%7D"
@@ -3643,6 +3682,7 @@
      "nem_onallo": 95
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63224381",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d040%22%7D"
@@ -3688,6 +3728,7 @@
      "nem_onallo": 42
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q84133217",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d041%22%7D"
@@ -3733,6 +3774,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111812869",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d042%22%7D"
@@ -3813,6 +3855,7 @@
      "nem_onallo": 13
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16519202",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d751%22%7D"
@@ -3911,6 +3954,7 @@
      "nem_onallo": 294
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q7050311",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22e006%22%7D"
@@ -3955,6 +3999,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q747190",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22e016%22%7D"
@@ -4107,6 +4152,7 @@
      "nem_onallo": 82
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q7665264",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f001%22%7D"
@@ -4242,6 +4288,7 @@
      "nem_onallo": 28
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q549568",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f002%22%7D"
@@ -4390,6 +4437,7 @@
      "nem_onallo": 257
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q264055",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f006%22%7D"
@@ -4554,6 +4602,7 @@
      "nem_onallo": 394
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q746355",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f010%22%7D"
@@ -4652,6 +4701,7 @@
      "nem_onallo": 29
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16729034",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f026%22%7D"
@@ -4715,6 +4765,7 @@
      "nem_onallo": 3
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q5625576",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f031%22%7D"
@@ -4760,6 +4811,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q104628126",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f043%22%7D"
@@ -4805,6 +4857,7 @@
      "nem_onallo": 10
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q28842902",
    "wikidata_end": "2024-11-25",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f047%22%7D"
@@ -4850,6 +4903,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q108756034",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f049%22%7D"
@@ -4895,6 +4949,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q105079853",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22f051%22%7D"
@@ -4976,6 +5031,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q369766",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g022%22%7D"
@@ -5057,6 +5113,7 @@
      "nem_onallo": 42
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1029066",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g024%22%7D"
@@ -5180,6 +5237,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q191337",
    "wikidata_end": "2025-05-09",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g030%22%7D"
@@ -5314,6 +5372,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q589138",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g048%22%7D"
@@ -5412,6 +5471,7 @@
      "nem_onallo": 11
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q4818401",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g049%22%7D"
@@ -5529,6 +5589,7 @@
      "nem_onallo": 78
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q5550584",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g053%22%7D"
@@ -5628,6 +5689,7 @@
      "nem_onallo": 12
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q4853187",
    "wikidata_end": "2024-07-09",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g057%22%7D"
@@ -5691,6 +5753,7 @@
      "nem_onallo": 6
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q980486",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g070%22%7D"
@@ -5736,6 +5799,7 @@
      "nem_onallo": 14
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111817271",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22g077%22%7D"
@@ -5889,6 +5953,7 @@
      "nem_onallo": 136
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q613904",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h004%22%7D"
@@ -6059,6 +6124,7 @@
      "nem_onallo": 66
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16729643",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h006%22%7D"
@@ -6207,6 +6273,7 @@
      "nem_onallo": 221
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q946121",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h007%22%7D"
@@ -6353,6 +6420,7 @@
      "nem_onallo": 40
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q220909",
    "wikidata_end": "2025-05-31",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h021%22%7D"
@@ -6482,6 +6550,7 @@
      "nem_onallo": 4
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q458925",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h026%22%7D"
@@ -6598,6 +6667,7 @@
      "nem_onallo": 86
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q6089241",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h042%22%7D"
@@ -6714,6 +6784,7 @@
      "nem_onallo": 37
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1959858",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h050%22%7D"
@@ -6813,6 +6884,7 @@
      "nem_onallo": 430
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1033823",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h056%22%7D"
@@ -6894,6 +6966,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q15229428",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h074%22%7D"
@@ -6975,6 +7048,7 @@
      "nem_onallo": 7
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q28722039",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h078%22%7D"
@@ -7020,6 +7094,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q123681095",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h079%22%7D"
@@ -7106,6 +7181,7 @@
      "nem_onallo": 139
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q26802740",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h080%22%7D"
@@ -7168,6 +7244,7 @@
      "nem_onallo": 2
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753757",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h081%22%7D"
@@ -7249,6 +7326,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55752876",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h083%22%7D"
@@ -7293,6 +7371,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q110716161",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h089%22%7D"
@@ -7337,6 +7416,7 @@
      "nem_onallo": 23
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q42881086",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h090%22%7D"
@@ -7382,6 +7462,7 @@
      "nem_onallo": 36
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111818850",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h091%22%7D"
@@ -7552,6 +7633,7 @@
      "nem_onallo": 10
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q252267",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h275%22%7D"
@@ -7728,6 +7810,7 @@
      "nem_onallo": 246
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16194594",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h366%22%7D"
@@ -7808,6 +7891,7 @@
      "nem_onallo": 25
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q28745275",
    "wikidata_end": "2026-05-09",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22h743%22%7D"
@@ -7853,6 +7937,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111477086",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22i011%22%7D"
@@ -7970,6 +8055,7 @@
      "nem_onallo": 62
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q607401",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22j010%22%7D"
@@ -8039,6 +8125,7 @@
      "nem_onallo": 83
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q17361708",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22j020%22%7D"
@@ -8083,6 +8170,7 @@
      "nem_onallo": 34
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q107508919",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22j024%22%7D"
@@ -8235,6 +8323,7 @@
      "nem_onallo": 149
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1034272",
    "wikidata_end": "2025-05-31",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k018%22%7D"
@@ -8369,6 +8458,7 @@
      "nem_onallo": 284
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1106808",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k029%22%7D"
@@ -8414,6 +8504,7 @@
      "nem_onallo": 10
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q109617522",
    "wikidata_end": "2023-01-30",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k058%22%7D"
@@ -8531,6 +8622,7 @@
      "nem_onallo": 55
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1121571",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k072%22%7D"
@@ -8629,6 +8721,7 @@
      "nem_onallo": 74
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q6321143",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k093%22%7D"
@@ -8727,6 +8820,7 @@
      "nem_onallo": 101
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q8076628",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k098%22%7D"
@@ -8826,6 +8920,7 @@
      "nem_onallo": 28
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q3331988",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k100%22%7D"
@@ -8906,6 +9001,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753818",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k151%22%7D"
@@ -8968,6 +9064,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753722",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k153%22%7D"
@@ -9037,6 +9134,7 @@
      "nem_onallo": 683
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q47507181",
    "wikidata_end": "2026-05-09",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k154%22%7D"
@@ -9118,6 +9216,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753231",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k155%22%7D"
@@ -9198,6 +9297,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q99980592",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k163%22%7D"
@@ -9242,6 +9342,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111822460",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k166%22%7D"
@@ -9287,6 +9388,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111829645",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k167%22%7D"
@@ -9338,6 +9440,7 @@
      "nem_onallo": 301
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q47507185",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k168%22%7D"
@@ -9383,6 +9486,7 @@
      "nem_onallo": 54
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63224431",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k169%22%7D"
@@ -9428,6 +9532,7 @@
      "nem_onallo": 42
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1122986",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k170%22%7D"
@@ -9473,6 +9578,7 @@
      "nem_onallo": 37
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111828939",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k171%22%7D"
@@ -9657,6 +9763,7 @@
      "nem_onallo": 47
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q465476",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k308%22%7D"
@@ -9840,6 +9947,7 @@
      "nem_onallo": 71
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1124989",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k325%22%7D"
@@ -9920,6 +10028,7 @@
      "nem_onallo": 133
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16521368",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k762%22%7D"
@@ -10018,6 +10127,7 @@
      "nem_onallo": 8
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31094741",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k765%22%7D"
@@ -10196,6 +10306,7 @@
      "nem_onallo": 83
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q269131",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l001%22%7D"
@@ -10348,6 +10459,7 @@
      "nem_onallo": 34
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q750646",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l016%22%7D"
@@ -10418,6 +10530,7 @@
      "nem_onallo": 111
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q8074825",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l034%22%7D"
@@ -10499,6 +10612,7 @@
      "nem_onallo": 94
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31092251",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l042%22%7D"
@@ -10544,6 +10658,7 @@
      "nem_onallo": 16
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111831958",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l046%22%7D"
@@ -10715,6 +10830,7 @@
      "nem_onallo": 258
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1129709",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l269%22%7D"
@@ -10868,6 +10984,7 @@
      "nem_onallo": 22
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16121838",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m006%22%7D"
@@ -11002,6 +11119,7 @@
      "nem_onallo": 45
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q22007029",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m028%22%7D"
@@ -11119,6 +11237,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16206215",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m037%22%7D"
@@ -11236,6 +11355,7 @@
      "nem_onallo": 125
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q12815357",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m039%22%7D"
@@ -11304,6 +11424,7 @@
      "nem_onallo": 49
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1175738",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m064%22%7D"
@@ -11348,6 +11469,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q97342844",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m066%22%7D"
@@ -11392,6 +11514,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111835433",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m071%22%7D"
@@ -11436,6 +11559,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111736508",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22m072%22%7D"
@@ -11612,6 +11736,7 @@
      "nem_onallo": 50
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1400478",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n004%22%7D"
@@ -11747,6 +11872,7 @@
      "nem_onallo": 137
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1219426",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n018%22%7D"
@@ -11882,6 +12008,7 @@
      "nem_onallo": 128
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q13813421",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n020%22%7D"
@@ -11981,6 +12108,7 @@
      "nem_onallo": 39
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q832221",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n026%22%7D"
@@ -12079,6 +12207,7 @@
      "nem_onallo": 6
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16197131",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n031%22%7D"
@@ -12159,6 +12288,7 @@
      "nem_onallo": 28
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16212450",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n032%22%7D"
@@ -12258,6 +12388,7 @@
      "nem_onallo": 309
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1218911",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n036%22%7D"
@@ -12339,6 +12470,7 @@
      "nem_onallo": 4
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753721",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n048%22%7D"
@@ -12401,6 +12533,7 @@
      "nem_onallo": 2
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111836018",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n053%22%7D"
@@ -12603,6 +12736,7 @@
      "nem_onallo": 83
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1220884",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n322%22%7D"
@@ -12725,6 +12859,7 @@
      "nem_onallo": 14
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31092525",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22o007%22%7D"
@@ -12787,6 +12922,7 @@
      "nem_onallo": 3
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q53341941",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22o014%22%7D"
@@ -12850,6 +12986,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q59417334",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22o015%22%7D"
@@ -12894,6 +13031,7 @@
      "nem_onallo": 16
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q29406323",
    "wikidata_end": "2025-05-05",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22o017%22%7D"
@@ -13073,6 +13211,7 @@
      "nem_onallo": 6
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q57641",
    "wikidata_end": "2026-05-09",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22o320%22%7D"
@@ -13225,6 +13364,7 @@
      "nem_onallo": 38
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16194248",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p003%22%7D"
@@ -13359,6 +13499,7 @@
      "nem_onallo": 2
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16195749",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p006%22%7D"
@@ -13511,6 +13652,7 @@
      "nem_onallo": 11
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16197170",
    "wikidata_end": "2024-10-17",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p009%22%7D"
@@ -13663,6 +13805,7 @@
      "nem_onallo": 38
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16196219",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p012%22%7D"
@@ -13780,6 +13923,7 @@
      "nem_onallo": 162
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1233411",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p032%22%7D"
@@ -13896,6 +14040,7 @@
      "nem_onallo": 7
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16195271",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p041%22%7D"
@@ -13940,6 +14085,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111837045",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p066%22%7D"
@@ -14093,6 +14239,7 @@
      "nem_onallo": 167
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1249804",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r008%22%7D"
@@ -14227,6 +14374,7 @@
      "nem_onallo": 104
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1253088",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D"
@@ -14325,6 +14473,7 @@
      "nem_onallo": 10
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16187286",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r027%22%7D"
@@ -14388,6 +14537,7 @@
      "nem_onallo": 2
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q51079133",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r036%22%7D"
@@ -14433,6 +14583,7 @@
      "nem_onallo": 10
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63225379",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r042%22%7D"
@@ -14478,6 +14629,7 @@
      "nem_onallo": 33
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63225381",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r046%22%7D"
@@ -14649,6 +14801,7 @@
      "nem_onallo": 28
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1288461",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s011%22%7D"
@@ -14801,6 +14954,7 @@
      "nem_onallo": 12
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16194811",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s012%22%7D"
@@ -14965,6 +15119,7 @@
      "nem_onallo": 67
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1301603",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s013%22%7D"
@@ -15117,6 +15272,7 @@
      "nem_onallo": 65
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16195821",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s038%22%7D"
@@ -15252,6 +15408,7 @@
      "nem_onallo": 414
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1289879",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s051%22%7D"
@@ -15405,6 +15562,7 @@
      "nem_onallo": 359
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q685293",
    "wikidata_end": "2026-07-15",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s054%22%7D"
@@ -15522,6 +15680,7 @@
      "nem_onallo": 158
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q15844871",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s070%22%7D"
@@ -15638,6 +15797,7 @@
      "nem_onallo": 67
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16201211",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s093%22%7D"
@@ -15707,6 +15867,7 @@
      "nem_onallo": 153
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1293745",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s111%22%7D"
@@ -15811,6 +15972,7 @@
      "nem_onallo": 468
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1293787",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s113%22%7D"
@@ -15909,6 +16071,7 @@
      "nem_onallo": 17
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16195353",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s124%22%7D"
@@ -15971,6 +16134,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q511580",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s148%22%7D"
@@ -16033,6 +16197,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q30134885",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s154%22%7D"
@@ -16090,6 +16255,7 @@
      "nem_onallo": 99
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753382",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s156%22%7D"
@@ -16153,6 +16319,7 @@
      "nem_onallo": 14
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1286684",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s175%22%7D"
@@ -16197,6 +16364,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111846807",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s182%22%7D"
@@ -16242,6 +16410,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111847170",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s183%22%7D"
@@ -16305,6 +16474,7 @@
      "nem_onallo": 82
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63224348",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s184%22%7D"
@@ -16350,6 +16520,7 @@
      "nem_onallo": 16
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q72092408",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s185%22%7D"
@@ -16395,6 +16566,7 @@
      "nem_onallo": 35
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111841107",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s186%22%7D"
@@ -16440,6 +16612,7 @@
      "nem_onallo": 3
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111844810",
    "wikidata_end": "2022-09-19",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s187%22%7D"
@@ -16606,6 +16779,7 @@
      "nem_onallo": 112
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1286949",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s322%22%7D"
@@ -16766,6 +16940,7 @@
      "nem_onallo": 114
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55574",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s323%22%7D"
@@ -16852,6 +17027,7 @@
      "nem_onallo": 60
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31094962",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s771%22%7D"
@@ -16932,6 +17108,7 @@
      "nem_onallo": 2
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31091594",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s772%22%7D"
@@ -17012,6 +17189,7 @@
      "nem_onallo": 46
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q31094958",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s773%22%7D"
@@ -17092,6 +17270,7 @@
      "nem_onallo": 11
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q30103059",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s774%22%7D"
@@ -17244,6 +17423,7 @@
      "nem_onallo": 167
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1326139",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t002%22%7D"
@@ -17392,6 +17572,7 @@
      "nem_onallo": 108
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1325390",
    "wikidata_end": "2023-11-03",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t004%22%7D"
@@ -17526,6 +17707,7 @@
      "nem_onallo": 146
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16194836",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t017%22%7D"
@@ -17660,6 +17842,7 @@
      "nem_onallo": 66
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q15126327",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t021%22%7D"
@@ -17794,6 +17977,7 @@
      "nem_onallo": 66
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1321047",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t023%22%7D"
@@ -17893,6 +18077,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q23561873",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t025%22%7D"
@@ -17991,6 +18176,7 @@
      "nem_onallo": 8
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16194839",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t036%22%7D"
@@ -18089,6 +18275,7 @@
      "nem_onallo": 27
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16197309",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t038%22%7D"
@@ -18188,6 +18375,7 @@
      "nem_onallo": 105
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16215589",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t044%22%7D"
@@ -18250,6 +18438,7 @@
      "nem_onallo": 91
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16523396",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t054%22%7D"
@@ -18313,6 +18502,7 @@
      "nem_onallo": 27
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q832910",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t058%22%7D"
@@ -18358,6 +18548,7 @@
      "nem_onallo": 16
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111852081",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t060%22%7D"
@@ -18402,6 +18593,7 @@
      "nem_onallo": 29
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q109010782",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t061%22%7D"
@@ -18500,6 +18692,7 @@
      "nem_onallo": 3
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q20438122",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22t687%22%7D"
@@ -18569,6 +18762,7 @@
      "nem_onallo": 589
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q47507180",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22u006%22%7D"
@@ -18739,6 +18933,7 @@
      "nem_onallo": 42
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16152024",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v008%22%7D"
@@ -18880,6 +19075,7 @@
      "nem_onallo": 57
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q15710456",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v013%22%7D"
@@ -19027,6 +19223,7 @@
      "nem_onallo": 22
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q23561959",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v018%22%7D"
@@ -19143,6 +19340,7 @@
      "nem_onallo": 17
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16194381",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v038%22%7D"
@@ -19241,6 +19439,7 @@
      "nem_onallo": 5
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q15991655",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v044%22%7D"
@@ -19339,6 +19538,7 @@
      "nem_onallo": 4
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16193417",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v045%22%7D"
@@ -19455,6 +19655,7 @@
      "nem_onallo": 1
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16201735",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v048%22%7D"
@@ -19554,6 +19755,7 @@
      "nem_onallo": 23
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16195844",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v055%22%7D"
@@ -19652,6 +19854,7 @@
      "nem_onallo": 4
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q16193422",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v056%22%7D"
@@ -19697,6 +19900,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q63224253",
    "wikidata_end": "2024-02-16",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v069%22%7D"
@@ -19760,6 +19964,7 @@
      "nem_onallo": 15
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q87798644",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v070%22%7D"
@@ -19804,6 +20009,7 @@
      "nem_onallo": 65
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q109008317",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v073%22%7D"
@@ -19855,6 +20061,7 @@
      "nem_onallo": 39
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111866278",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v074%22%7D"
@@ -19900,6 +20107,7 @@
      "nem_onallo": 29
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111879026",
    "wikidata_end": "2022-09-19",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v075%22%7D"
@@ -20079,6 +20287,7 @@
      "nem_onallo": 133
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1401791",
    "wikidata_end": "2025-02-21",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22v331%22%7D"
@@ -20177,6 +20386,7 @@
      "nem_onallo": 8
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q30093130",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22w704%22%7D"
@@ -20347,6 +20557,7 @@
      "nem_onallo": 8
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1468102",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22z004%22%7D"
@@ -20446,6 +20657,7 @@
      "nem_onallo": 103
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q1468057",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22z012%22%7D"
@@ -20526,6 +20738,7 @@
      "nem_onallo": 0
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q111884634",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22z014%22%7D"
@@ -20589,6 +20802,7 @@
      "nem_onallo": 6
     }
    ],
+   "motions": [],
    "wikidata_qid": "Q55753740",
    "wikidata_end": "2026-05-08",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22z015%22%7D"

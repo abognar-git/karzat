@@ -1,0 +1,7689 @@
+{
+ "source": "Wikidata (CC0) + Wikimedia Commons extmetadata for image licences",
+ "retrieved_at": "2026-08-18T14:46:39+00:00",
+ "since": "2010-04-01",
+ "until": "2014-04-01",
+ "sparql": "SELECT ?p ?nameHu ?nameEn ?ogyId ?group ?groupLabel ?start ?end ?district ?districtLabel\n       ?party ?partyLabel ?dob ?sex ?sexLabel ?image\nWHERE {\n  ?p p:P39 ?st .\n  ?st ps:P39 wd:Q17590876 ;\n      pq:P580 ?start .\n  FILTER(?start >= \"2010-04-01T00:00:00Z\"^^xsd:dateTime)\n  FILTER(?start < \"2014-04-01T00:00:00Z\"^^xsd:dateTime)\n  OPTIONAL { ?st pq:P582 ?end }\n  OPTIONAL { ?st pq:P4100 ?group }\n  OPTIONAL { ?st pq:P768 ?district }\n  OPTIONAL { ?p wdt:P4966 ?ogyId }\n  OPTIONAL { ?p wdt:P102 ?party }\n  OPTIONAL { ?p wdt:P569 ?dob }\n  OPTIONAL { ?p wdt:P21 ?sex }\n  OPTIONAL { ?p wdt:P18 ?image }\n  OPTIONAL { ?p rdfs:label ?nameHu FILTER(LANG(?nameHu) = \"hu\") }\n  OPTIONAL { ?p rdfs:label ?nameEn FILTER(LANG(?nameEn) = \"en\") }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"hu,en\" . }\n}\nORDER BY ?nameHu ?start",
+ "summary": {
+  "statements": 333,
+  "current_members": 0,
+  "ended_statements": 333,
+  "by_group_current": {},
+  "with_ogy_id": 0,
+  "with_image": 0,
+  "with_district": 0,
+  "duplicate_ogy_ids": []
+ },
+ "members": [
+  {
+   "qid": "Q774389",
+   "name_hu": "Apáti István",
+   "name_en": "István Apáti",
+   "ogy_ids": [
+    "a018"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1978-03-23",
+   "sex": "férfi",
+   "images": [
+    "István Apáti Senate of Poland (cropped).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Istv%C3%A1n%20Ap%C3%A1ti%20Senate%20of%20Poland%20%28cropped%29.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4759767",
+   "name_hu": "Aradszki András",
+   "name_en": "András Aradszki",
+   "ogy_ids": [
+    "a016"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842124",
+   "district": "Pest megyei 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1956-05-22",
+   "sex": "férfi",
+   "images": [
+    "Doorstep 2016-07-13 Informal Meeting of Energy Ministers (27998022060).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Doorstep%202016-07-13%20Informal%20Meeting%20of%20Energy%20Ministers%20%2827998022060%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q729174",
+   "name_hu": "Arnóth Sándor",
+   "name_en": "Sándor Arnóth",
+   "ogy_ids": [
+    "a005"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2011-03-16",
+   "district_qid": "Q50842081",
+   "district": "Hajdú-Bihar megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1960-02-22",
+   "sex": "férfi",
+   "images": [
+    "Arnóth Sándor 2005 Dabas.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Arn%C3%B3th%20S%C3%A1ndor%202005%20Dabas.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6710633",
+   "name_hu": "B. Nagy László",
+   "name_en": "László B. Nagy",
+   "ogy_ids": [
+    "b078"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1958-02-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15991371",
+   "name_hu": "Bagdy Gábor",
+   "name_en": "Gábor Bagdy",
+   "ogy_ids": [
+    "b080"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1957-11-05",
+   "sex": "férfi",
+   "images": [
+    "BagdyGaborFotoThalerTamas.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/BagdyGaborFotoThalerTamas.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q218872",
+   "name_hu": "Balczó Zoltán",
+   "name_en": "Zoltán Balczó",
+   "ogy_ids": [
+    "b022"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1948-03-24",
+   "sex": "férfi",
+   "images": [
+    "Balczo Zoltan.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Balczo%20Zoltan.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880453",
+   "name_hu": "Balla Gergő",
+   "name_en": "Gergő Balla",
+   "ogy_ids": [
+    "b082"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1977-02-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625635",
+   "name_hu": "Balla György",
+   "name_en": "György Balla",
+   "ogy_ids": [
+    "b007"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-08-11",
+   "sex": "férfi",
+   "images": [
+    "Balla György sajtótájékoztatója.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Balla%20Gy%C3%B6rgy%20sajt%C3%B3t%C3%A1j%C3%A9koztat%C3%B3ja.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6321060",
+   "name_hu": "Balogh József",
+   "name_en": "József Balogh",
+   "ogy_ids": [
+    "b023"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-05-02",
+   "end": "2014-05-05",
+   "district_qid": "Q50842013",
+   "district": "Bács-Kiskun megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-12-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q14917703",
+   "name_hu": "Balázs József",
+   "name_en": "József Balázs",
+   "ogy_ids": [
+    "b081"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q15891201",
+   "district": "Heves vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1965-10-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q18616026",
+   "name_hu": "Bana Tibor",
+   "name_en": "Tibor Bana",
+   "ogy_ids": [
+    "b084"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1985-12-01",
+   "sex": "férfi",
+   "images": [
+    "BanaTibor2018.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/BanaTibor2018.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880454",
+   "name_hu": "Baracskai József",
+   "name_en": "József Baracskai",
+   "ogy_ids": [
+    "b085"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2011-10-23",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1973-06-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880454",
+   "name_hu": "Baracskai József",
+   "name_en": "József Baracskai",
+   "ogy_ids": [
+    "b085"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1973-06-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6950267",
+   "name_hu": "Bartos Mónika",
+   "name_en": "Mónika Bartos",
+   "ogy_ids": [
+    "b087"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2022-05-01",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-12-24",
+   "sex": "nő",
+   "images": [
+    "Bartos Mónika képviselői fotó.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bartos%20M%C3%B3nika%20k%C3%A9pvisel%C5%91i%20fot%C3%B3.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880456",
+   "name_hu": "Baráth Zsolt",
+   "name_en": "Zsolt Baráth",
+   "ogy_ids": [
+    "b086"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1956-07-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q791792",
+   "name_hu": "Becsó Zsolt",
+   "name_en": "Zsolt Becsó",
+   "ogy_ids": [
+    "b013"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842112",
+   "district": "Nógrád megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-06-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q792654",
+   "name_hu": "Bencsik János",
+   "name_en": "János Bencsik",
+   "ogy_ids": [
+    "b034"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842103",
+   "district": "Komárom-Esztergom megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1965-07-31",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5997346",
+   "name_hu": "Bene Ildikó",
+   "name_en": "Ildikó Bene",
+   "ogy_ids": [
+    "j012"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842097",
+   "district": "Jász-Nagykun-Szolnok megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-08-21",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880458",
+   "name_hu": "Bertha Szilvia",
+   "name_en": "Szilvia Bertha",
+   "ogy_ids": [
+    "b095"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1977-07-04",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6710644",
+   "name_hu": "Berényi László",
+   "name_en": "László Berényi",
+   "ogy_ids": [
+    "b088"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1961-11-24",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6008273",
+   "name_hu": "Bodó Imre",
+   "name_en": "Imre Bodó",
+   "ogy_ids": [
+    "b064"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842049",
+   "district": "Csongrád megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-05-08",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7665258",
+   "name_hu": "Bodó Sándor",
+   "name_en": "Sándor Bodó",
+   "ogy_ids": [
+    "b103"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": "Q50842081",
+   "district": "Hajdú-Bihar megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-11-25",
+   "sex": "férfi",
+   "images": [
+    "Bodó Sándor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bod%C3%B3%20S%C3%A1ndor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q833620",
+   "name_hu": "Bohács Zsolt",
+   "name_en": "Zsolt Bohács",
+   "ogy_ids": [
+    "b090"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842052",
+   "district": "Csongrád megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-03-22",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6089175",
+   "name_hu": "Boldog István",
+   "name_en": "István Boldog",
+   "ogy_ids": [
+    "b091"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842100",
+   "district": "Jász-Nagykun-Szolnok megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-11-10",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q31092771",
+   "name_hu": "Boldvai László",
+   "name_en": "László Boldvai",
+   "ogy_ids": [
+    "b162"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1960-12-23",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6710979",
+   "name_hu": "Borbély Lénárd",
+   "name_en": "Lénárd Borbély",
+   "ogy_ids": [
+    "b096"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842000",
+   "district": "Budapesti 30. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-08-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q227338",
+   "name_hu": "Borkai Zsolt",
+   "name_en": "Zsolt Borkai",
+   "ogy_ids": [
+    "b077"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842069",
+   "district": "Győr-Moson-Sopron megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1965-08-31",
+   "sex": "férfi",
+   "images": [
+    "Borkai Zsolt.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Borkai%20Zsolt.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q848456",
+   "name_hu": "Botka László",
+   "name_en": "László Botka",
+   "ogy_ids": [
+    "b164"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1973-02-21",
+   "sex": "férfi",
+   "images": [
+    "Horn Gyula temetése Botka László.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Horn%20Gyula%20temet%C3%A9se%20Botka%20L%C3%A1szl%C3%B3.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6949787",
+   "name_hu": "Braun Márton",
+   "name_en": "Márton Braun",
+   "ogy_ids": [
+    "b018"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-06-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8078522",
+   "name_hu": "Brájer Éva",
+   "name_en": "Éva Brájer",
+   "ogy_ids": [
+    "b093"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-09-02",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q850818",
+   "name_hu": "Budai Gyula",
+   "name_en": "Gyula Budai",
+   "ogy_ids": [
+    "b076"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-04-11",
+   "end": "2014-05-05",
+   "district_qid": "Q50842142",
+   "district": "Szabolcs-Szatmár-Bereg megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-04-02",
+   "sex": "férfi",
+   "images": [
+    "Budai Gyula (crop).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Budai%20Gyula%20%28crop%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q852244",
+   "name_hu": "Burány Sándor",
+   "name_en": "Sándor Burány",
+   "ogy_ids": [
+    "b166"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1956-08-19",
+   "sex": "férfi",
+   "images": [
+    "Burány Sándor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bur%C3%A1ny%20S%C3%A1ndor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5516032",
+   "name_hu": "Bábiné Szottfried Gabriella",
+   "name_en": "Gabriella Bábi-Szottfried",
+   "ogy_ids": [
+    "b079"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842117",
+   "district": "Pest megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q616234",
+   "name_hu": "Bánki Erik",
+   "name_en": "Erik Bánki",
+   "ogy_ids": [
+    "b009"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2012-06-10",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1970-05-26",
+   "sex": "férfi",
+   "images": [
+    "Bánki, Erik-1282.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/B%C3%A1nki%2C%20Erik-1282.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q853496",
+   "name_hu": "Bárándy Gergely",
+   "name_en": "Gergely Bárándy",
+   "ogy_ids": [
+    "b055"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1976-11-28",
+   "sex": "férfi",
+   "images": [
+    "Bárándy Gergely 2013.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/B%C3%A1r%C3%A1ndy%20Gergely%202013.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6949762",
+   "name_hu": "Bíró Márk",
+   "name_en": "Márk Bíró",
+   "ogy_ids": [
+    "b089"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2022-05-01",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880457",
+   "name_hu": "Bödecs Barna",
+   "name_en": "Barna Bödecs",
+   "ogy_ids": [
+    "b092"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2012-12-04",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1962-02-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16014293",
+   "name_hu": "Bús Balázs",
+   "name_en": "Balázs Bús",
+   "ogy_ids": [
+    "b094"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841967",
+   "district": "Budapesti 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1966-01-29",
+   "sex": "férfi",
+   "images": [
+    "Bús Balázs.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/B%C3%BAs%20Bal%C3%A1zs.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8074806",
+   "name_hu": "Csampa Zsolt",
+   "name_en": "Zsolt Csampa",
+   "ogy_ids": [
+    "c016"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-11-27",
+   "sex": "férfi",
+   "images": [
+    "Zsolt Csampa podium 2013 Fencing WCH EFS-IN t214231.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zsolt%20Csampa%20podium%202013%20Fencing%20WCH%20EFS-IN%20t214231.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8074805",
+   "name_hu": "Csenger-Zalán Zsolt",
+   "name_en": "Zsolt Csenger-Zalán",
+   "ogy_ids": [
+    "c028"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842125",
+   "district": "Pest megyei 9. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1957-08-22",
+   "sex": "férfi",
+   "images": [
+    "Csenger-Zalán Zsolt (2013).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Csenger-Zal%C3%A1n%20Zsolt%20%282013%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q871789",
+   "name_hu": "Cser-Palkovics András",
+   "name_en": "András Cser-Palkovics",
+   "ogy_ids": [
+    "c024"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842058",
+   "district": "Fejér megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-09-25",
+   "sex": "férfi",
+   "images": [
+    "CserPalkovicsProfilePicture.png"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/CserPalkovicsProfilePicture.png?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q871892",
+   "name_hu": "Cseresnyés Péter",
+   "name_en": "Péter Cseresnyés",
+   "ogy_ids": [
+    "c014"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842174",
+   "district": "Zala megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1960-01-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625725",
+   "name_hu": "Cserna Gábor",
+   "name_en": "Gábor Cserna",
+   "ogy_ids": [
+    "c015"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2011-03-07",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-10-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7264689",
+   "name_hu": "Csizi Péter",
+   "name_en": "Péter Csizi",
+   "ogy_ids": [
+    "c032"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1982-08-24",
+   "sex": "férfi",
+   "images": [
+    "Csizi Péter.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Csizi%20P%C3%A9ter.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q876268",
+   "name_hu": "Csóti György",
+   "name_en": "György Csóti",
+   "ogy_ids": [
+    "c123"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2011-12-23",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1940-11-24",
+   "sex": "férfi",
+   "images": [
+    "Csóti György fortepan 138511.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cs%C3%B3ti%20Gy%C3%B6rgy%20fortepan%20138511.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6375052",
+   "name_hu": "Csöbör Katalin",
+   "name_en": "Katalin Csöbör",
+   "ogy_ids": [
+    "c030"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842033",
+   "district": "Borsod-Abaúj-Zemplén megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1965-01-20",
+   "sex": "nő",
+   "images": [
+    "Csöbör Katalin (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cs%C3%B6b%C3%B6r%20Katalin%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q20895279",
+   "name_hu": "Czunyiné Bertalan Judit",
+   "name_en": "Judit Czunyi-Bertalan",
+   "ogy_ids": [
+    "c029"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842106",
+   "district": "Komárom-Esztergom megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-08-06",
+   "sex": "nő",
+   "images": [
+    "Czunyiné Bertalan Judit cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Czunyin%C3%A9%20Bertalan%20Judit%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q901170",
+   "name_hu": "Daher Pierre",
+   "name_en": "Pierre Daher",
+   "ogy_ids": [
+    "d029"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-06-28",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1960-07-10",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6321080",
+   "name_hu": "Dancsó József",
+   "name_en": "József Dancsó",
+   "ogy_ids": [
+    "d002"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-02-01",
+   "district_qid": "Q50842030",
+   "district": "Békés megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-11-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5005010",
+   "name_hu": "Dankó Béla",
+   "name_en": "Béla Dankó",
+   "ogy_ids": [
+    "d030"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-10-11",
+   "end": "2014-05-05",
+   "district_qid": "Q50842029",
+   "district": "Békés megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-05-13",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8073651",
+   "name_hu": "Demeter Zoltán",
+   "name_en": "Zoltán Demeter",
+   "ogy_ids": [
+    "d026"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842039",
+   "district": "Borsod-Abaúj-Zemplén megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-12-01",
+   "sex": "férfi",
+   "images": [
+    "Demeter Zoltán.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Demeter%20Zolt%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5191525",
+   "name_hu": "Dióssi Csaba",
+   "name_en": "Csaba Dióssi",
+   "ogy_ids": [
+    "d025"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842118",
+   "district": "Pest megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-11-11",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6474383",
+   "name_hu": "Dorkota Lajos",
+   "name_en": "Lajos Dorkota",
+   "ogy_ids": [
+    "d004"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2013-06-30",
+   "district_qid": "Q15888856",
+   "district": "Fejér vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1958-07-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q169275",
+   "name_hu": "Dorosz Dávid",
+   "name_en": "Dávid Dorosz",
+   "ogy_ids": [
+    "d027"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1985-10-06",
+   "sex": "férfi",
+   "images": [
+    "Dorosz david.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dorosz%20david.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q639328",
+   "name_hu": "Dúró Dóra",
+   "name_en": "Dóra Dúró",
+   "ogy_ids": [
+    "d028"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1987-03-05",
+   "sex": "nő",
+   "images": [
+    "Dóra Dúró.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/D%C3%B3ra%20D%C3%BAr%C3%B3.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q31092212",
+   "name_hu": "Egyed Zsolt",
+   "name_en": "Zsolt Egyed",
+   "ogy_ids": [
+    "e010"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1974-04-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880534",
+   "name_hu": "Endrésik Zsolt",
+   "name_en": "Zsolt Endrésik",
+   "ogy_ids": [
+    "e011"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2012-05-01",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1976-03-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880534",
+   "name_hu": "Endrésik Zsolt",
+   "name_en": "Zsolt Endrésik",
+   "ogy_ids": [
+    "e011"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2012-05-02",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1976-03-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q991027",
+   "name_hu": "Ertsey Katalin",
+   "name_en": "Katalin Ertsey",
+   "ogy_ids": [
+    "e012"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1966-08-01",
+   "sex": "nő",
+   "images": [
+    "Ertsey Katalin LMP 2012.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ertsey%20Katalin%20LMP%202012.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q991027",
+   "name_hu": "Ertsey Katalin",
+   "name_en": "Katalin Ertsey",
+   "ogy_ids": [
+    "e012"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2013-08-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1966-08-01",
+   "sex": "nő",
+   "images": [
+    "Ertsey Katalin LMP 2012.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ertsey%20Katalin%20LMP%202012.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q991027",
+   "name_hu": "Ertsey Katalin",
+   "name_en": "Katalin Ertsey",
+   "ogy_ids": [
+    "e012"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2013-09-01",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1966-08-01",
+   "sex": "nő",
+   "images": [
+    "Ertsey Katalin LMP 2012.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ertsey%20Katalin%20LMP%202012.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q996213",
+   "name_hu": "Farkas Flórián",
+   "name_en": "Flórián Farkas",
+   "ogy_ids": [
+    "f015"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1957-09-04",
+   "sex": "férfi",
+   "images": [
+    "Farkas Flórián.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Farkas%20Fl%C3%B3ri%C3%A1n.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q996210",
+   "name_hu": "Farkas Gergely",
+   "name_en": "Gergely Farkas",
+   "ogy_ids": [
+    "f028"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1986-11-03",
+   "sex": "férfi",
+   "images": [
+    "Farkas Gergely wikipedia.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Farkas%20Gergely%20wikipedia.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7665264",
+   "name_hu": "Farkas Sándor",
+   "name_en": "Sándor Farkas",
+   "ogy_ids": [
+    "f001"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842054",
+   "district": "Csongrád megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1953-09-18",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8073655",
+   "name_hu": "Farkas Zoltán",
+   "name_en": "Zoltán Farkas",
+   "ogy_ids": [
+    "f027"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842027",
+   "district": "Békés megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-11-07",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4754542",
+   "name_hu": "Fejér Andor",
+   "name_en": "Andor Fejér",
+   "ogy_ids": [
+    "f029"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842101",
+   "district": "Jász-Nagykun-Szolnok megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1960-01-25",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16519688",
+   "name_hu": "Ferenczi Gábor",
+   "name_en": "Gábor Ferenczi",
+   "ogy_ids": [
+    "f030"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1977-05-28",
+   "sex": "férfi",
+   "images": [
+    "Ferenczi Gábor politikus.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ferenczi%20G%C3%A1bor%20politikus.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1001178",
+   "name_hu": "Ficsor Ádám",
+   "name_en": "Ádám Ficsor",
+   "ogy_ids": [
+    "f021"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2011-10-23",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1980-06-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1001178",
+   "name_hu": "Ficsor Ádám",
+   "name_en": "Ádám Ficsor",
+   "ogy_ids": [
+    "f021"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1980-06-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q264055",
+   "name_hu": "Fónagy János",
+   "name_en": "János Fónagy",
+   "ogy_ids": [
+    "f006"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841976",
+   "district": "Budapesti 10. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1942-07-11",
+   "sex": "férfi",
+   "images": [
+    "Eredményváró - Bálna, 2014.04.06 (50).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Eredm%C3%A9nyv%C3%A1r%C3%B3%20-%20B%C3%A1lna%2C%202014.04.06%20%2850%29.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625576",
+   "name_hu": "Földesi Gyula",
+   "name_en": "Gyula Földesi",
+   "ogy_ids": [
+    "f031"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841999",
+   "district": "Budapesti 29. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1983-08-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16729034",
+   "name_hu": "Földi László",
+   "name_en": "László Földi",
+   "ogy_ids": [
+    "f026"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842131",
+   "district": "Pest megyei 15. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-09-07",
+   "sex": "férfi",
+   "images": [
+    "Földi László (2).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/F%C3%B6ldi%20L%C3%A1szl%C3%B3%20%282%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6089208",
+   "name_hu": "Fülöp István",
+   "name_en": "István Fülöp",
+   "ogy_ids": [
+    "f016"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842147",
+   "district": "Szabolcs-Szatmár-Bereg megyei 9. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1958-05-04",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16216558",
+   "name_hu": "Gaal Gergely",
+   "name_en": "Gergely Gaal",
+   "ogy_ids": [
+    "g065"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2013-03-04",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1977-06-03",
+   "sex": "férfi",
+   "images": [
+    "Gaal Gergely in 2018.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gaal%20Gergely%20in%202018.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7386477",
+   "name_hu": "Gajda Róbert",
+   "name_en": "Róbert Gajda",
+   "ogy_ids": [
+    "g051"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-03-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q50232496",
+   "name_hu": "Garai István Levente",
+   "name_en": "István Levente Garai",
+   "ogy_ids": [
+    "g199"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1955-06-15",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1008528",
+   "name_hu": "Gaudi-Nagy Tamás",
+   "name_en": null,
+   "ogy_ids": [
+    "g052"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1971-08-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4818401",
+   "name_hu": "Gelencsér Attila",
+   "name_en": "Attila Gelencsér",
+   "ogy_ids": [
+    "g049"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842134",
+   "district": "Somogy megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1968-01-14",
+   "sex": "férfi",
+   "images": [
+    "Gelencserattila.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gelencserattila.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5550584",
+   "name_hu": "Gulyás Gergely",
+   "name_en": "Gergely Gulyás",
+   "ogy_ids": [
+    "g053"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-09-21",
+   "sex": "férfi",
+   "images": [
+    "Gulyás Gergely.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Guly%C3%A1s%20Gergely.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880579",
+   "name_hu": "Gyenes Géza",
+   "name_en": "Géza Gyenes",
+   "ogy_ids": [
+    "g055"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1949-06-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q191337",
+   "name_hu": "Gyurcsány Ferenc",
+   "name_en": "Ferenc Gyurcsány",
+   "ogy_ids": [
+    "g030"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1961-06-04",
+   "sex": "férfi",
+   "images": [
+    "Ferenc Gyurcsany 2012.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ferenc%20Gyurcsany%202012.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5191533",
+   "name_hu": "Gyutai Csaba",
+   "name_en": "Csaba Gyutai",
+   "ogy_ids": [
+    "g059"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-10-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q172301",
+   "name_hu": "Gyöngyösi Márton",
+   "name_en": "Márton Gyöngyösi",
+   "ogy_ids": [
+    "g056"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1977-06-08",
+   "sex": "férfi",
+   "images": [
+    "Márton Gyöngyösi Sejm 2016.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/M%C3%A1rton%20Gy%C3%B6ngy%C3%B6si%20Sejm%202016.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q785188",
+   "name_hu": "György István",
+   "name_en": "István György",
+   "ogy_ids": [
+    "g058"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841982",
+   "district": "Budapesti 14. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-10-31",
+   "sex": "férfi",
+   "images": [
+    "György István.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gy%C3%B6rgy%20Istv%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1030572",
+   "name_hu": "Gyüre Csaba",
+   "name_en": "Csaba Gyüre",
+   "ogy_ids": [
+    "g060"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1965-05-19",
+   "sex": "férfi",
+   "images": [
+    "Gyüre Csaba.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gy%C3%BCre%20Csaba.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4853187",
+   "name_hu": "Győrffy Balázs",
+   "name_en": "Balázs Győrffy",
+   "ogy_ids": [
+    "g057"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2022-05-01",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1979-04-21",
+   "sex": "férfi",
+   "images": [
+    "1719559896055 20240627 GYORFFY Balazs HU 008.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/1719559896055%2020240627%20GYORFFY%20Balazs%20HU%20008.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1031557",
+   "name_hu": "Göndör István",
+   "name_en": "István Göndör",
+   "ogy_ids": [
+    "g205"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1950-03-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q12814518",
+   "name_hu": "Gúr Nándor",
+   "name_en": "Nándor Gúr",
+   "ogy_ids": [
+    "g023"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1957-12-25",
+   "sex": "férfi",
+   "images": [
+    "Gúr Nándor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/G%C3%BAr%20N%C3%A1ndor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16729541",
+   "name_hu": "Habis László",
+   "name_en": "László Habis",
+   "ogy_ids": [
+    "h055"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842086",
+   "district": "Heves megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1952-06-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6850024",
+   "name_hu": "Hanó Miklós",
+   "name_en": "Miklós Hanó",
+   "ogy_ids": [
+    "h010"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1957-02-06",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625744",
+   "name_hu": "Harangozó Gábor",
+   "name_en": "Gábor Harangozó",
+   "ogy_ids": [
+    "h033"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1975-09-27",
+   "sex": "férfi",
+   "images": [
+    "Harangozó Gábor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Harangoz%C3%B3%20G%C3%A1bor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1033823",
+   "name_hu": "Harangozó Tamás",
+   "name_en": "Tamás Harangozó",
+   "ogy_ids": [
+    "h056"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1979-06-27",
+   "sex": "férfi",
+   "images": [
+    "Harangozó Tamás 2013-03.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Harangoz%C3%B3%20Tam%C3%A1s%202013-03.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q946121",
+   "name_hu": "Harrach Péter",
+   "name_en": "Péter Harrach",
+   "ogy_ids": [
+    "h007"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842116",
+   "district": "Pest megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1947-11-02",
+   "sex": "férfi",
+   "images": [
+    "Harrach Péter (KDNP.hu).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Harrach%20P%C3%A9ter%20%28KDNP.hu%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q31092223",
+   "name_hu": "Hegedűs Lórántné",
+   "name_en": "Lorántné Hegedűs",
+   "ogy_ids": [
+    "h057"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2019-02-26",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q327591",
+   "party": "független politikus",
+   "dob": "1970-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1034819",
+   "name_hu": "Hegedűs Tamás",
+   "name_en": "Tamás Hegedűs",
+   "ogy_ids": [
+    "h058"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1968-10-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1035055",
+   "name_hu": "Heintz Tamás",
+   "name_en": "Tamás Heintz",
+   "ogy_ids": [
+    "h037"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842133",
+   "district": "Somogy megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-02-06",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6089232",
+   "name_hu": "Herman István",
+   "name_en": "István Herman",
+   "ogy_ids": [
+    "h059"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842092",
+   "district": "Heves megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1947-10-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15229428",
+   "name_hu": "Hidvéghi Balázs",
+   "name_en": "Balázs Hidvéghi",
+   "ogy_ids": [
+    "h074"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2013-07-05",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1970-11-28",
+   "sex": "férfi",
+   "images": [
+    "Hidvéghi Balázs.jpg",
+    "Member of the European Parliament Balázs Hidvéghi.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hidv%C3%A9ghi%20Bal%C3%A1zs.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q458925",
+   "name_hu": "Hiller István",
+   "name_en": "István Hiller",
+   "ogy_ids": [
+    "h026"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1964-05-07",
+   "sex": "férfi",
+   "images": [
+    "Hiller István.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hiller%20Istv%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1036797",
+   "name_hu": "Hirt Ferenc",
+   "name_en": "Ferenc Hirt",
+   "ogy_ids": [
+    "h038"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842155",
+   "district": "Tolna megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-09-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16121232",
+   "name_hu": "Hoffman Pál",
+   "name_en": "Pál Hoffman",
+   "ogy_ids": [
+    "h062"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842128",
+   "district": "Pest megyei 12. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1948-10-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4770917",
+   "name_hu": "Hollósi Antal Gábor",
+   "name_en": "Antal Gábor Hollósi",
+   "ogy_ids": [
+    "h060"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841968",
+   "district": "Budapesti 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1946-08-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1959858",
+   "name_hu": "Hoppál Péter",
+   "name_en": "Péter Hoppál",
+   "ogy_ids": [
+    "h050"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842003",
+   "district": "Baranya megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-11-15",
+   "sex": "férfi",
+   "images": [
+    "Hoppál Péter 4 cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hopp%C3%A1l%20P%C3%A9ter%204%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195593",
+   "name_hu": "Horváth András Tibor",
+   "name_en": "András Tibor Horváth",
+   "ogy_ids": [
+    "h061"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1964-03-22",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6089241",
+   "name_hu": "Horváth István",
+   "name_en": "István Horváth",
+   "ogy_ids": [
+    "h042"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842150",
+   "district": "Tolna megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1970-02-28",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194594",
+   "name_hu": "Horváth László",
+   "name_en": "László Horváth",
+   "ogy_ids": [
+    "h366"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842087",
+   "district": "Heves megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1962-04-24",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8073664",
+   "name_hu": "Horváth Zoltán",
+   "name_en": "Zoltán Horváth",
+   "ogy_ids": [
+    "h071"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2012-06-18",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-04-30",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q75266",
+   "name_hu": "Illés Zoltán",
+   "name_en": "Zoltán Illés",
+   "ogy_ids": [
+    "i001"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841972",
+   "district": "Budapesti 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1961-01-17",
+   "sex": "férfi",
+   "images": [
+    "Illés Zoltán cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ill%C3%A9s%20Zolt%C3%A1n%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q240169",
+   "name_hu": "Ivády Gábor",
+   "name_en": "Gábor Ivády",
+   "ogy_ids": [
+    "i007"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2010-10-20",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1973-07-15",
+   "sex": "férfi",
+   "images": [
+    "Ivády Gábor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Iv%C3%A1dy%20G%C3%A1bor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q240169",
+   "name_hu": "Ivády Gábor",
+   "name_en": "Gábor Ivády",
+   "ogy_ids": [
+    "i007"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2010-10-21",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1973-07-15",
+   "sex": "férfi",
+   "images": [
+    "Ivády Gábor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Iv%C3%A1dy%20G%C3%A1bor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q82853",
+   "name_hu": "Iván László",
+   "name_en": "László Iván",
+   "ogy_ids": [
+    "i005"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1933-05-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q50191177",
+   "name_hu": "Iváncsik Imre",
+   "name_en": "Imre Iváncsik",
+   "ogy_ids": [
+    "i225"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1956-06-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q607401",
+   "name_hu": "Jakab István",
+   "name_en": "István Jakab",
+   "ogy_ids": [
+    "j010"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1949-09-17",
+   "sex": "férfi",
+   "images": [
+    "Jakab István cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Jakab%20Istv%C3%A1n%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q843149",
+   "name_hu": "Juhász Ferenc",
+   "name_en": "Ferenc Juhász",
+   "ogy_ids": [
+    "j230"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1960-07-06",
+   "sex": "férfi",
+   "images": [
+    "Juhász Ferenc 2005.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Juh%C3%A1sz%20Ferenc%202005.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q23908189",
+   "name_hu": "Jámbor Nándor",
+   "name_en": "Nándor Jámbor",
+   "ogy_ids": [
+    "j017"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2011-06-06",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1971-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q659323",
+   "name_hu": "Jávor Benedek",
+   "name_en": "Benedek Jávor",
+   "ogy_ids": [
+    "j013"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1972-07-02",
+   "sex": "férfi",
+   "images": [
+    "DOOR STEP 2016-07-12 (28259447695).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/DOOR%20STEP%202016-07-12%20%2828259447695%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q659323",
+   "name_hu": "Jávor Benedek",
+   "name_en": "Benedek Jávor",
+   "ogy_ids": [
+    "j013"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1972-07-02",
+   "sex": "férfi",
+   "images": [
+    "DOOR STEP 2016-07-12 (28259447695).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/DOOR%20STEP%202016-07-12%20%2828259447695%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16521102",
+   "name_hu": "Józsa István",
+   "name_en": "István Józsa",
+   "ogy_ids": [
+    "j005"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1953-09-07",
+   "sex": "férfi",
+   "images": [
+    "Józsa István Országgyűlés 2016.09.12.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/J%C3%B3zsa%20Istv%C3%A1n%20Orsz%C3%A1ggy%C5%B1l%C3%A9s%202016.09.12.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15991356",
+   "name_hu": "Kalmár Ferenc",
+   "name_en": "Ferenc Kalmár",
+   "ogy_ids": [
+    "k102"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1955-05-18",
+   "sex": "férfi",
+   "images": [
+    "Kalmár Ferenc in 2025.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kalm%C3%A1r%20Ferenc%20in%202025.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6438540",
+   "name_hu": "Kapus Krisztián",
+   "name_en": "Krisztián Kapus",
+   "ogy_ids": [
+    "k097"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842014",
+   "district": "Bács-Kiskun megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-01-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8076628",
+   "name_hu": "Kara Ákos",
+   "name_en": "Ákos Kara",
+   "ogy_ids": [
+    "k098"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842067",
+   "district": "Győr-Moson-Sopron megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-05-21",
+   "sex": "férfi",
+   "images": [
+    "Kara Ákos ITU Telecom World 2015.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kara%20%C3%81kos%20ITU%20Telecom%20World%202015.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6710693",
+   "name_hu": "Karakó László",
+   "name_en": "László Karakó",
+   "ogy_ids": [
+    "k046"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842141",
+   "district": "Szabolcs-Szatmár-Bereg megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1955-03-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16115476",
+   "name_hu": "Karvalics Ottó",
+   "name_en": "Ottó Karvalics",
+   "ogy_ids": [
+    "k092"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842138",
+   "district": "Somogy megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1947-08-07",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1105049",
+   "name_hu": "Karácsony Gergely",
+   "name_en": "Gergely Karácsony",
+   "ogy_ids": [
+    "k104"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1975-06-11",
+   "sex": "férfi",
+   "images": [
+    "Várhelyi Karácsony 2024 (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%A1rhelyi%20Kar%C3%A1csony%202024%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1105049",
+   "name_hu": "Karácsony Gergely",
+   "name_en": "Gergely Karácsony",
+   "ogy_ids": [
+    "k104"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1975-06-11",
+   "sex": "férfi",
+   "images": [
+    "Várhelyi Karácsony 2024 (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%A1rhelyi%20Kar%C3%A1csony%202024%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7935318",
+   "name_hu": "Kaufer Virág",
+   "name_en": "Virág Kaufer",
+   "ogy_ids": [
+    "k106"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2012-02-01",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1975-09-01",
+   "sex": "nő",
+   "images": [
+    "Kaufer Virág.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kaufer%20Vir%C3%A1g.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q31092228",
+   "name_hu": "Kepli Lajos",
+   "name_en": "Lajos Kepli",
+   "ogy_ids": [
+    "k107"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2019-06-25",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1978-10-11",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6319767",
+   "name_hu": "Kerényi János",
+   "name_en": "János Kerényi",
+   "ogy_ids": [
+    "k012"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1945-12-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1111980",
+   "name_hu": "Kiss Péter",
+   "name_en": "Péter Kiss",
+   "ogy_ids": [
+    "k382"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1959-06-11",
+   "sex": "férfi",
+   "images": [
+    "Kiss Péter 2008-09-20.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kiss%20P%C3%A9ter%202008-09-20.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q107228212",
+   "name_hu": "Kiss Sándor",
+   "name_en": "Sándor Kiss",
+   "ogy_ids": [
+    "k109"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1962-03-31",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q3331988",
+   "name_hu": "Kocsis Máté",
+   "name_en": "Máté Kocsis",
+   "ogy_ids": [
+    "k100"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841977",
+   "district": "Budapesti 11. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-05-06",
+   "sex": "férfi",
+   "images": [
+    "Kocsis Máté 20190831 100918542.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kocsis%20M%C3%A1t%C3%A9%2020190831%20100918542.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q20480418",
+   "name_hu": "Kolber István",
+   "name_en": "István Kolber",
+   "ogy_ids": [
+    "k041"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2011-10-23",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1954-06-26",
+   "sex": "férfi",
+   "images": [
+    "DK 2012-09-11 15.10.25.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/DK%202012-09-11%2015.10.25.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q20480418",
+   "name_hu": "Kolber István",
+   "name_en": "István Kolber",
+   "ogy_ids": [
+    "k041"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1954-06-26",
+   "sex": "férfi",
+   "images": [
+    "DK 2012-09-11 15.10.25.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/DK%202012-09-11%2015.10.25.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q339099",
+   "name_hu": "Koncz Ferenc",
+   "name_en": "Ferenc Koncz",
+   "ogy_ids": [
+    "k015"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842045",
+   "district": "Borsod-Abaúj-Zemplén megyei 11. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-10-02",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1119241",
+   "name_hu": "Korondi Miklós",
+   "name_en": "Miklós Korondi",
+   "ogy_ids": [
+    "k118"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1955-04-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16193201",
+   "name_hu": "Kovács Ernő",
+   "name_en": "Ernő Kovács",
+   "ogy_ids": [
+    "k110"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-02-02",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5444028",
+   "name_hu": "Kovács Ferenc",
+   "name_en": "Ferenc Kovács",
+   "ogy_ids": [
+    "k111"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842139",
+   "district": "Szabolcs-Szatmár-Bereg megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1960-01-11",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6321143",
+   "name_hu": "Kovács József",
+   "name_en": "József Kovács",
+   "ogy_ids": [
+    "k093"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842024",
+   "district": "Békés megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1951-07-15",
+   "sex": "férfi",
+   "images": [
+    "Kovács, József (politican).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kov%C3%A1cs%2C%20J%C3%B3zsef%20%28politican%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q345634",
+   "name_hu": "Kovács László",
+   "name_en": null,
+   "ogy_ids": [
+    "k108"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1939-07-03",
+   "sex": "férfi",
+   "images": [
+    "MSZP Congress July 2014-07.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/MSZP%20Congress%20July%202014-07.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7264701",
+   "name_hu": "Kovács Péter",
+   "name_en": "Péter Kovács",
+   "ogy_ids": [
+    "k095"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841994",
+   "district": "Budapesti 24. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1971-10-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16193202",
+   "name_hu": "Kozma Péter",
+   "name_en": "Péter Kozma",
+   "ogy_ids": [
+    "k019"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-09-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1121571",
+   "name_hu": "Kubatov Gábor",
+   "name_en": "Gábor Kubatov",
+   "ogy_ids": [
+    "k072"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-02-17",
+   "sex": "férfi",
+   "images": [
+    "Kubatov.gabor1.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kubatov.gabor1.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6710706",
+   "name_hu": "Kucsák László",
+   "name_en": "László Kucsák",
+   "ogy_ids": [
+    "k113"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841996",
+   "district": "Budapesti 26. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-01-07",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q213059",
+   "name_hu": "Kukorelly Endre",
+   "name_en": "Endre Kukorelly",
+   "ogy_ids": [
+    "k114"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2012-09-23",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1951-04-26",
+   "sex": "férfi",
+   "images": [
+    "Kukorelly Endre-Szilágyi Lenke.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kukorelly%20Endre-Szil%C3%A1gyi%20Lenke.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q30103066",
+   "name_hu": "Kulcsár Gergely",
+   "name_en": "Gergely Kulcsár",
+   "ogy_ids": [
+    "k115"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1979-08-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6321145",
+   "name_hu": "Kulcsár József",
+   "name_en": "József Kulcsár",
+   "ogy_ids": [
+    "k116"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841992",
+   "district": "Budapesti 22. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1954-01-31",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6474422",
+   "name_hu": "Kupcsok Lajos",
+   "name_en": "Lajos Kupcsok",
+   "ogy_ids": [
+    "k117"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1961-06-22",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4759783",
+   "name_hu": "Kupper András",
+   "name_en": "András Kupper",
+   "ogy_ids": [
+    "k073"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841986",
+   "district": "Budapesti 17. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-02-23",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q742415",
+   "name_hu": "Káli Sándor",
+   "name_en": "Sándor Káli",
+   "ogy_ids": [
+    "k036"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1951-07-03",
+   "sex": "férfi",
+   "images": [
+    "MSZP Congress July 2014-17.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/MSZP%20Congress%20July%202014-17.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8073673",
+   "name_hu": "Kőszegi Zoltán",
+   "name_en": "Zoltán Kőszegi",
+   "ogy_ids": [
+    "k112"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q6319782",
+   "name_hu": "Kővári János",
+   "name_en": "János Kővári",
+   "ogy_ids": [
+    "k094"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842005",
+   "district": "Baranya megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1971-04-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1126905",
+   "name_hu": "L. Simon László",
+   "name_en": "László L. Simon",
+   "ogy_ids": [
+    "l032"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842063",
+   "district": "Fejér megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-03-28",
+   "sex": "férfi",
+   "images": [
+    "L. Simon László (DEA).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L.%20Simon%20L%C3%A1szl%C3%B3%20%28DEA%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195640",
+   "name_hu": "Lakatos-Sira Magdolna",
+   "name_en": "Magdolna Lakatos-Sira",
+   "ogy_ids": [
+    "l033"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-09-22",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q976803",
+   "name_hu": "Lamperth Mónika",
+   "name_en": "Mónika Lamperth",
+   "ogy_ids": [
+    "l263"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1957-09-05",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q269131",
+   "name_hu": "Latorcai János",
+   "name_en": "János Latorcai",
+   "ogy_ids": [
+    "l001"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1944-05-09",
+   "sex": "férfi",
+   "images": [
+    "János Latorcai Senate of Poland 02.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/J%C3%A1nos%20Latorcai%20Senate%20of%20Poland%2002.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q897549",
+   "name_hu": "Lendvai Ildikó",
+   "name_en": "Ildikó Lendvai",
+   "ogy_ids": [
+    "l267"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1946-07-20",
+   "sex": "nő",
+   "images": [
+    "Lendvai Ildikó 2010-02-20 (crop).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lendvai%20Ildik%C3%B3%202010-02-20%20%28crop%29.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7664677",
+   "name_hu": "Lengyel Szilvia",
+   "name_en": "Szilvia Lengyel",
+   "ogy_ids": [
+    "l038"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2012-10-08",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1971-01-01",
+   "sex": "nő",
+   "images": [
+    "Lengyel Szilvia LMP 2012-10-08.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lengyel%20Szilvia%20LMP%202012-10-08.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7664677",
+   "name_hu": "Lengyel Szilvia",
+   "name_en": "Szilvia Lengyel",
+   "ogy_ids": [
+    "l038"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2013-08-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1971-01-01",
+   "sex": "nő",
+   "images": [
+    "Lengyel Szilvia LMP 2012-10-08.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lengyel%20Szilvia%20LMP%202012-10-08.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7664677",
+   "name_hu": "Lengyel Szilvia",
+   "name_en": "Szilvia Lengyel",
+   "ogy_ids": [
+    "l038"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2013-09-01",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1971-01-01",
+   "sex": "nő",
+   "images": [
+    "Lengyel Szilvia LMP 2012-10-08.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lengyel%20Szilvia%20LMP%202012-10-08.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880777",
+   "name_hu": "Lenhardt Balázs",
+   "name_en": "Balázs Lenhardt",
+   "ogy_ids": [
+    "l036"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2012-11-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1975-07-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880777",
+   "name_hu": "Lenhardt Balázs",
+   "name_en": "Balázs Lenhardt",
+   "ogy_ids": [
+    "l036"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2012-11-08",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1975-07-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16205903",
+   "name_hu": "Lipők Sándor",
+   "name_en": "Sándor Lipők",
+   "ogy_ids": [
+    "l031"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842143",
+   "district": "Szabolcs-Szatmár-Bereg megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-01-12",
+   "sex": "férfi",
+   "images": [
+    "Lipők Sándor.png"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Lip%C5%91k%20S%C3%A1ndor.png?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1159794",
+   "name_hu": "Lukács László",
+   "name_en": "László Lukács",
+   "ogy_ids": [
+    "l035"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842018",
+   "district": "Bács-Kiskun megyei 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-12-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8074825",
+   "name_hu": "Láng Zsolt",
+   "name_en": "Zsolt Láng",
+   "ogy_ids": [
+    "l034"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2011-06-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1973-04-04",
+   "sex": "férfi",
+   "images": [
+    "Láng Zsolt 2007 november.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%C3%A1ng%20Zsolt%202007%20november.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q8074825",
+   "name_hu": "Láng Zsolt",
+   "name_en": "Zsolt Láng",
+   "ogy_ids": [
+    "l034"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2011-06-06",
+   "end": "2014-05-05",
+   "district_qid": "Q50841965",
+   "district": "Budapesti 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1973-04-04",
+   "sex": "férfi",
+   "images": [
+    "Láng Zsolt 2007 november.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%C3%A1ng%20Zsolt%202007%20november.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1160274",
+   "name_hu": "László Tamás",
+   "name_en": "Tamás László",
+   "ogy_ids": [
+    "l026"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841993",
+   "district": "Budapesti 23. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1950-10-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q750646",
+   "name_hu": "Lázár János",
+   "name_en": "János Lázár",
+   "ogy_ids": [
+    "l016"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842056",
+   "district": "Csongrád megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-02-19",
+   "sex": "férfi",
+   "images": [
+    "Lázár János 2 cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%C3%A1z%C3%A1r%20J%C3%A1nos%202%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4767271",
+   "name_hu": "Magyar Anna",
+   "name_en": "Anna Magyar",
+   "ogy_ids": [
+    "m050"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1950-01-01",
+   "sex": "nő",
+   "images": [
+    "Anna Magyar at the 136th Plenary Session of the European Committee of the Regions (48874555841).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anna%20Magyar%20at%20the%20136th%20Plenary%20Session%20of%20the%20European%20Committee%20of%20the%20Regions%20%2848874555841%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1162305",
+   "name_hu": "Magyar Zoltán",
+   "name_en": "Zoltán Magyar",
+   "ogy_ids": [
+    "m051"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1982-02-28",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1175446",
+   "name_hu": "Meggyes Tamás",
+   "name_en": "Tamás Meggyes",
+   "ogy_ids": [
+    "m032"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842109",
+   "district": "Komárom-Esztergom megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-03-07",
+   "sex": "férfi",
+   "images": [
+    "Esztergom Meggyes Tamas.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Esztergom%20Meggyes%20Tamas.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194202",
+   "name_hu": "Menczer Erzsébet",
+   "name_en": "Erzsébet Menczer",
+   "ogy_ids": [
+    "m052"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841966",
+   "district": "Budapesti 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1961-09-29",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1176768",
+   "name_hu": "Michl József",
+   "name_en": "József Michl",
+   "ogy_ids": [
+    "m048"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842105",
+   "district": "Komárom-Esztergom megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1960-11-15",
+   "sex": "férfi",
+   "images": [
+    "MichlJozsefFotoThalerTamas.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/MichlJozsefFotoThalerTamas.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16222322",
+   "name_hu": "Mihalovics Péter",
+   "name_en": "Péter Mihalovics",
+   "ogy_ids": [
+    "m053"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1983-08-08",
+   "sex": "férfi",
+   "images": [
+    "Lázár János és Mihalovics Péter.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%C3%A1z%C3%A1r%20J%C3%A1nos%20%C3%A9s%20Mihalovics%20P%C3%A9ter.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1177207",
+   "name_hu": "Mile Lajos",
+   "name_en": "Lajos Mile",
+   "ogy_ids": [
+    "m299"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1958-12-14",
+   "sex": "férfi",
+   "images": [
+    "Mile Lajos.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mile%20Lajos.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1177207",
+   "name_hu": "Mile Lajos",
+   "name_en": "Lajos Mile",
+   "ogy_ids": [
+    "m299"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2013-08-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1958-12-14",
+   "sex": "férfi",
+   "images": [
+    "Mile Lajos.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mile%20Lajos.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1177207",
+   "name_hu": "Mile Lajos",
+   "name_en": "Lajos Mile",
+   "ogy_ids": [
+    "m299"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2013-09-01",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1958-12-14",
+   "sex": "férfi",
+   "images": [
+    "Mile Lajos.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mile%20Lajos.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1177629",
+   "name_hu": "Mirkóczki Ádám",
+   "name_en": "Ádám Mirkóczki",
+   "ogy_ids": [
+    "m057"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1978-06-23",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16213665",
+   "name_hu": "Molnár Attila",
+   "name_en": "Attila Molnár",
+   "ogy_ids": [
+    "m054"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1971-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q967118",
+   "name_hu": "Molnár Csaba",
+   "name_en": "Csaba Molnár",
+   "ogy_ids": [
+    "m038"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-06-20",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1975-12-04",
+   "sex": "férfi",
+   "images": [
+    "Molnár Csaba 2013-03.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Moln%C3%A1r%20Csaba%202013-03.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q750152",
+   "name_hu": "Molnár Oszkár",
+   "name_en": "Oszkár Molnár",
+   "ogy_ids": [
+    "m010"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842042",
+   "district": "Borsod-Abaúj-Zemplén megyei 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1956-06-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16206215",
+   "name_hu": "Molnár Zsolt",
+   "name_en": "Zsolt Molnár",
+   "ogy_ids": [
+    "m037"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1974-10-04",
+   "sex": "férfi",
+   "images": [
+    "Molnár Zsolt 2013-03.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Moln%C3%A1r%20Zsolt%202013-03.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1179975",
+   "name_hu": "Murányi Levente",
+   "name_en": "Levente Murányi",
+   "ogy_ids": [
+    "m055"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1939-12-13",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q4755200",
+   "name_hu": "Mágori Józsefné",
+   "name_en": "Andrea Mágori",
+   "ogy_ids": [
+    "m049"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842057",
+   "district": "Csongrád megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-05-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16121838",
+   "name_hu": "Mátrai Márta",
+   "name_en": "Márta Mátrai",
+   "ogy_ids": [
+    "m006"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1948-02-22",
+   "sex": "nő",
+   "images": [
+    "Marta Matrai 2009 09.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Marta%20Matrai%202009%2009.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q14922928",
+   "name_hu": "Nagy Andor",
+   "name_en": "Andor Nagy",
+   "ogy_ids": [
+    "n010"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2013-08-22",
+   "district_qid": "Q50842113",
+   "district": "Nógrád megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1963-02-25",
+   "sex": "férfi",
+   "images": [
+    "Nagy Andor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Nagy%20Andor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16212450",
+   "name_hu": "Nagy Csaba",
+   "name_en": "Csaba Nagy",
+   "ogy_ids": [
+    "n032"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842004",
+   "district": "Baranya megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1970-08-13",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16197131",
+   "name_hu": "Nagy István",
+   "name_en": "István Nagy",
+   "ogy_ids": [
+    "n031"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842071",
+   "district": "Győr-Moson-Sopron megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-10-06",
+   "sex": "férfi",
+   "images": [
+    "Nagy István (agrármérnök).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Nagy%20Istv%C3%A1n%20%28agr%C3%A1rm%C3%A9rn%C3%B6k%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1214263",
+   "name_hu": "Nagy István",
+   "name_en": "István Nagy",
+   "ogy_ids": [
+    "n023"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1954-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q20437947",
+   "name_hu": "Nagy Kálmán",
+   "name_en": "Kálmán Nagy",
+   "ogy_ids": [
+    "n022"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842035",
+   "district": "Borsod-Abaúj-Zemplén megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1946-08-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q832221",
+   "name_hu": "Navracsics Tibor",
+   "name_en": "Tibor Navracsics",
+   "ogy_ids": [
+    "n026"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842172",
+   "district": "Veszprém megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-06-13",
+   "sex": "férfi",
+   "images": [
+    "Navracsics Tibor Portrait.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Navracsics%20Tibor%20Portrait.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16215972",
+   "name_hu": "Nemény András",
+   "name_en": "András Nemény",
+   "ogy_ids": [
+    "n034"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1976-06-07",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1218911",
+   "name_hu": "Novák Előd",
+   "name_en": "Előd Novák",
+   "ogy_ids": [
+    "n036"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1980-04-25",
+   "sex": "férfi",
+   "images": [
+    "Novák Előd2019.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Nov%C3%A1k%20El%C5%91d2019.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880837",
+   "name_hu": "Nyakó István",
+   "name_en": "István Nyakó",
+   "ogy_ids": [
+    "n003"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1968-05-13",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1219351",
+   "name_hu": "Nyikos László",
+   "name_en": "László Nyikos",
+   "ogy_ids": [
+    "n002"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1943-11-22",
+   "sex": "férfi",
+   "images": [
+    "Nyikos László.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Nyikos%20L%C3%A1szl%C3%B3.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q13813421",
+   "name_hu": "Németh Szilárd",
+   "name_en": "Szilárd Németh",
+   "ogy_ids": [
+    "n020"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842001",
+   "district": "Budapesti 31. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-04-24",
+   "sex": "férfi",
+   "images": [
+    "Németh Szilárd tiszteletbeli székely - Várkert Bazár, 2015.02.14.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/N%C3%A9meth%20Szil%C3%A1rd%20tiszteletbeli%20sz%C3%A9kely%20-%20V%C3%A1rkert%20Baz%C3%A1r%2C%202015.02.14.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1220876",
+   "name_hu": "Németh Zoltán",
+   "name_en": "Zoltán Németh",
+   "ogy_ids": [
+    "n033"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842002",
+   "district": "Budapesti 32. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-05-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1220880",
+   "name_hu": "Németh Zsolt",
+   "name_en": "Zsolt Németh",
+   "ogy_ids": [
+    "n035"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1984-12-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1220884",
+   "name_hu": "Németh Zsolt",
+   "name_en": "Zsolt Németh",
+   "ogy_ids": [
+    "n322"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-10-14",
+   "sex": "férfi",
+   "images": [
+    "Németh Zsolt.JPG",
+    "Németh Zsolt - 2014.02.16 (6).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/N%C3%A9meth%20Zsolt.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16206358",
+   "name_hu": "Nógrádi Zoltán",
+   "name_en": "Zoltán Nógrádi",
+   "ogy_ids": [
+    "n017"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842051",
+   "district": "Csongrád megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-08-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16145599",
+   "name_hu": "Obreczán Ferenc",
+   "name_en": "Ferenc Obreczán",
+   "ogy_ids": [
+    "o010"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1950-01-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q31092525",
+   "name_hu": "Oláh Lajos",
+   "name_en": "Lajos Oláh",
+   "ogy_ids": [
+    "o007"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1969-06-17",
+   "sex": "férfi",
+   "images": [
+    "Dr. Oláh Lajos fotója.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Dr.%20Ol%C3%A1h%20Lajos%20fot%C3%B3ja.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q57641",
+   "name_hu": "Orbán Viktor",
+   "name_en": "Viktor Orbán",
+   "ogy_ids": [
+    "o320"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-05-31",
+   "sex": "férfi",
+   "images": [
+    "President Donald Trump hosts a bilateral lunch meeting with Hungarian Prime Minister Viktor Orban.2 (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/President%20Donald%20Trump%20hosts%20a%20bilateral%20lunch%20meeting%20with%20Hungarian%20Prime%20Minister%20Viktor%20Orban.2%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1226805",
+   "name_hu": "Osztolykán Ágnes",
+   "name_en": "Ágnes Osztolykán",
+   "ogy_ids": [
+    "o011"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1974-11-03",
+   "sex": "nő",
+   "images": [
+    "Osztolykán Ágnes.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Osztolyk%C3%A1n%20%C3%81gnes.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1226805",
+   "name_hu": "Osztolykán Ágnes",
+   "name_en": "Ágnes Osztolykán",
+   "ogy_ids": [
+    "o011"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2013-08-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1974-11-03",
+   "sex": "nő",
+   "images": [
+    "Osztolykán Ágnes.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Osztolyk%C3%A1n%20%C3%81gnes.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1226805",
+   "name_hu": "Osztolykán Ágnes",
+   "name_en": "Ágnes Osztolykán",
+   "ogy_ids": [
+    "o011"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2013-09-01",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1974-11-03",
+   "sex": "nő",
+   "images": [
+    "Osztolykán Ágnes.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Osztolyk%C3%A1n%20%C3%81gnes.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1229474",
+   "name_hu": "Papcsák Ferenc",
+   "name_en": "Ferenc Papcsák",
+   "ogy_ids": [
+    "p022"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841991",
+   "district": "Budapesti 21. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-02-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16734243",
+   "name_hu": "Patay Vilmos",
+   "name_en": "Vilmos Patay",
+   "ogy_ids": [
+    "p040"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842154",
+   "district": "Tolna megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1956-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1233411",
+   "name_hu": "Pesti Imre",
+   "name_en": "Imre Pesti",
+   "ogy_ids": [
+    "p032"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-09-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16116395",
+   "name_hu": "Pichler Imre",
+   "name_en": "Imre Pichler",
+   "ogy_ids": [
+    "p024"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842009",
+   "district": "Baranya megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1947-01-22",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16145644",
+   "name_hu": "Pintér László",
+   "name_en": "László Pintér",
+   "ogy_ids": [
+    "p039"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842177",
+   "district": "Zala megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1950-11-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195749",
+   "name_hu": "Pogácsás Tibor",
+   "name_en": "Tibor Pogácsás",
+   "ogy_ids": [
+    "p006"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842123",
+   "district": "Pest megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-04-04",
+   "sex": "férfi",
+   "images": [
+    "Pogácsás Tibor (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pog%C3%A1cs%C3%A1s%20Tibor%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16186842",
+   "name_hu": "Polics József",
+   "name_en": "József Polics",
+   "ogy_ids": [
+    "p043"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842006",
+   "district": "Baranya megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1955-11-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16196662",
+   "name_hu": "Puskás Imre",
+   "name_en": "Imre Puskás",
+   "ogy_ids": [
+    "p046"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-07-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1241696",
+   "name_hu": "Puskás Tivadar",
+   "name_en": "Tivadar Puskás",
+   "ogy_ids": [
+    "p033"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842156",
+   "district": "Vas megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1952-08-16",
+   "sex": "férfi",
+   "images": [
+    "Puskás Tivadar (politician).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Pusk%C3%A1s%20Tivadar%20%28politician%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1241960",
+   "name_hu": "Pál Béla",
+   "name_en": "Béla Pál",
+   "ogy_ids": [
+    "p299"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1953-10-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q60735253",
+   "name_hu": "Pál Tibor",
+   "name_en": "Tibor Pál",
+   "ogy_ids": [
+    "p017"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1959-05-16",
+   "sex": "férfi",
+   "images": [
+    "Pál Tibor.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%A1l%20Tibor.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1242067",
+   "name_hu": "Pálffy István",
+   "name_en": "István Pálffy",
+   "ogy_ids": [
+    "p047"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1959-11-21",
+   "sex": "férfi",
+   "images": [
+    "Pálffy István (crop).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%A1lffy%20Istv%C3%A1n%20%28crop%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194248",
+   "name_hu": "Pánczél Károly",
+   "name_en": "Károly Pánczél",
+   "ogy_ids": [
+    "p003"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842129",
+   "district": "Pest megyei 13. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1961-03-03",
+   "sex": "férfi",
+   "images": [
+    "Panczel Karoly parlament.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Panczel%20Karoly%20parlament.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195271",
+   "name_hu": "Pócs János",
+   "name_en": "János Pócs",
+   "ogy_ids": [
+    "p041"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842095",
+   "district": "Jász-Nagykun-Szolnok megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-11-17",
+   "sex": "férfi",
+   "images": [
+    "Pócs János Jászság.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%B3cs%20J%C3%A1nos%20J%C3%A1szs%C3%A1g.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1243435",
+   "name_hu": "Pörzse Sándor",
+   "name_en": "Sándor Pörzse",
+   "ogy_ids": [
+    "p044"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1959-01-01",
+   "sex": "férfi",
+   "images": [
+    "Pörzse Sándor.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%B6rzse%20S%C3%A1ndor.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1243523",
+   "name_hu": "Pősze Lajos",
+   "name_en": "Lajos Pősze",
+   "ogy_ids": [
+    "p045"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2010-12-12",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q327591",
+   "party": "független politikus",
+   "dob": "1954-09-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1243523",
+   "name_hu": "Pősze Lajos",
+   "name_en": "Lajos Pősze",
+   "ogy_ids": [
+    "p045"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2010-12-13",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q327591",
+   "party": "független politikus",
+   "dob": "1954-09-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16187286",
+   "name_hu": "Riz Gábor",
+   "name_en": "Gábor Riz",
+   "ogy_ids": [
+    "r027"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842038",
+   "district": "Borsod-Abaúj-Zemplén megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1956-03-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1249381",
+   "name_hu": "Riz Levente",
+   "name_en": "Levente Riz",
+   "ogy_ids": [
+    "r026"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841995",
+   "district": "Budapesti 25. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-12-02",
+   "sex": "férfi",
+   "images": [
+    "Levente Riz.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Levente%20Riz.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1249804",
+   "name_hu": "Rogán Antal",
+   "name_en": "Antal Rogán",
+   "ogy_ids": [
+    "r008"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841971",
+   "district": "Budapesti 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-01-29",
+   "sex": "férfi",
+   "images": [
+    "Rogán Antal 2009 Solymár.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Rog%C3%A1n%20Antal%202009%20Solym%C3%A1r.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16215519",
+   "name_hu": "Román István",
+   "name_en": "István Román",
+   "ogy_ids": [
+    "r030"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-08-10",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q50356269",
+   "name_hu": "Rozgonyi Ernő",
+   "name_en": "Ernő Rozgonyi",
+   "ogy_ids": [
+    "r009"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2012-12-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1933-08-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q50356269",
+   "name_hu": "Rozgonyi Ernő",
+   "name_en": "Ernő Rozgonyi",
+   "ogy_ids": [
+    "r009"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2012-12-06",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1933-08-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51880929",
+   "name_hu": "Rubi Gergely",
+   "name_en": "Gergely Rubi",
+   "ogy_ids": [
+    "r029"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1979-07-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1253225",
+   "name_hu": "Révész Máriusz",
+   "name_en": "Máriusz Révész",
+   "ogy_ids": [
+    "r005"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-05-31",
+   "sex": "férfi",
+   "images": [
+    "Révész Máriusz 2016.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%A9v%C3%A9sz%20M%C3%A1riusz%202016.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194775",
+   "name_hu": "Rónaszékiné Keresztes Monika",
+   "name_en": "Monika Rónaszéki-Keresztes",
+   "ogy_ids": [
+    "r028"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-04-25",
+   "end": "2014-05-14",
+   "district_qid": "Q50841974",
+   "district": "Budapesti 9. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-05-17",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1255491",
+   "name_hu": "Samu Tamás Gergő",
+   "name_en": "Tamás Samu",
+   "ogy_ids": [
+    "s096"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2011-05-12",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1986-03-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625769",
+   "name_hu": "Scheiring Gábor",
+   "name_en": "Gábor Scheiring",
+   "ogy_ids": [
+    "s099"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1981-03-14",
+   "sex": "férfi",
+   "images": [
+    "Scheiring Gábor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Scheiring%20G%C3%A1bor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625769",
+   "name_hu": "Scheiring Gábor",
+   "name_en": "Gábor Scheiring",
+   "ogy_ids": [
+    "s099"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1981-03-14",
+   "sex": "férfi",
+   "images": [
+    "Scheiring Gábor.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Scheiring%20G%C3%A1bor.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q516102",
+   "name_hu": "Schiffer András",
+   "name_en": "András Schiffer",
+   "ogy_ids": [
+    "s100"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1971-06-19",
+   "sex": "férfi",
+   "images": [
+    "Schiffer András.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Schiffer%20Andr%C3%A1s.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q516102",
+   "name_hu": "Schiffer András",
+   "name_en": "András Schiffer",
+   "ogy_ids": [
+    "s100"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2013-08-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1971-06-19",
+   "sex": "férfi",
+   "images": [
+    "Schiffer András.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Schiffer%20Andr%C3%A1s.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q516102",
+   "name_hu": "Schiffer András",
+   "name_en": "András Schiffer",
+   "ogy_ids": [
+    "s100"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2013-09-01",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1971-06-19",
+   "sex": "férfi",
+   "images": [
+    "Schiffer András.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Schiffer%20Andr%C3%A1s.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q9196924",
+   "name_hu": "Schmidt Csaba",
+   "name_en": "Csaba Schmidt",
+   "ogy_ids": [
+    "s101"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1979-05-03",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q184810",
+   "name_hu": "Schmitt Pál",
+   "name_en": "Pál Schmitt",
+   "ogy_ids": [
+    "s059"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2010-08-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1942-05-13",
+   "sex": "férfi",
+   "images": [
+    "Official Portrait Pál Schmitt MEP.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Official%20Portrait%20P%C3%A1l%20Schmitt%20MEP.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51881608",
+   "name_hu": "Schön Péter",
+   "name_en": "Péter Schön",
+   "ogy_ids": [
+    "s122"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1977-07-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16187304",
+   "name_hu": "Sebestyén László",
+   "name_en": "László Sebestyén",
+   "ogy_ids": [
+    "s103"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842037",
+   "district": "Borsod-Abaúj-Zemplén megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1956-05-22",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1286949",
+   "name_hu": "Selmeczi Gabriella",
+   "name_en": "Gabriella Selmeczi",
+   "ogy_ids": [
+    "s322"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1965-06-21",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16201211",
+   "name_hu": "Seszták Miklós",
+   "name_en": "Miklós Seszták",
+   "ogy_ids": [
+    "s093"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842145",
+   "district": "Szabolcs-Szatmár-Bereg megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1968-10-31",
+   "sex": "férfi",
+   "images": [
+    "Seszták Miklós miniszter.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Seszt%C3%A1k%20Mikl%C3%B3s%20miniszter.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16196253",
+   "name_hu": "Seszták Oszkár",
+   "name_en": "Oszkár Seszták",
+   "ogy_ids": [
+    "s105"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1965-05-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1288461",
+   "name_hu": "Simicskó István",
+   "name_en": "István Simicskó",
+   "ogy_ids": [
+    "s011"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841984",
+   "district": "Budapesti 16. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1961-11-29",
+   "sex": "férfi",
+   "images": [
+    "Simicskó István (KDNP).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Simicsk%C3%B3%20Istv%C3%A1n%20%28KDNP%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16214195",
+   "name_hu": "Simon Gábor",
+   "name_en": "Gábor Simon",
+   "ogy_ids": [
+    "s041"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1972-02-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q12816021",
+   "name_hu": "Simon Gábor",
+   "name_en": "Gábor Simon",
+   "ogy_ids": [
+    "s040"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-02-12",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1964-06-15",
+   "sex": "férfi",
+   "images": [
+    "Simon Gábor MSZP I. Országos Apparátusi Értekezlet 2012-09-14.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Simon%20G%C3%A1bor%20MSZP%20I.%20Orsz%C3%A1gos%20Appar%C3%A1tusi%20%C3%89rtekezlet%202012-09-14.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194811",
+   "name_hu": "Simon Miklós",
+   "name_en": "Miklós Simon",
+   "ogy_ids": [
+    "s012"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842144",
+   "district": "Szabolcs-Szatmár-Bereg megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-01-20",
+   "sex": "férfi",
+   "images": [
+    "Koszorús Ferenc vezérkari ezredes emléktáblájának megkoszorúzása - 2014.07.04 (15) (cropped).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Koszor%C3%BAs%20Ferenc%20vez%C3%A9rkari%20ezredes%20eml%C3%A9kt%C3%A1bl%C3%A1j%C3%A1nak%20megkoszor%C3%BAz%C3%A1sa%20-%202014.07.04%20%2815%29%20%28cropped%29.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16215101",
+   "name_hu": "Simonka György",
+   "name_en": "György Simonka",
+   "ogy_ids": [
+    "s106"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-03-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1289595",
+   "name_hu": "Sneider Tamás",
+   "name_en": "Tamás Sneider",
+   "ogy_ids": [
+    "s107"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1972-06-11",
+   "sex": "férfi",
+   "images": [
+    "Sneidertamas2014.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sneidertamas2014.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1289879",
+   "name_hu": "Soltész Miklós",
+   "name_en": "Miklós Soltész",
+   "ogy_ids": [
+    "s051"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1963-07-23",
+   "sex": "férfi",
+   "images": [
+    "Soltész Miklós 2006.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Solt%C3%A9sz%20Mikl%C3%B3s%202006.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16216771",
+   "name_hu": "Spaller Endre",
+   "name_en": "Endre Spaller",
+   "ogy_ids": [
+    "s108"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-01-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1977-09-06",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q18233447",
+   "name_hu": "Staudt Gábor",
+   "name_en": "Gábor Staudt",
+   "ogy_ids": [
+    "s109"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1983-05-10",
+   "sex": "férfi",
+   "images": [
+    "Staudt Gábor 2014-06.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Staudt%20G%C3%A1bor%202014-06.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16217638",
+   "name_hu": "Stágel Bence",
+   "name_en": "Bence Stágel",
+   "ogy_ids": [
+    "s132"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-09-13",
+   "end": "2013-05-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1978-12-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51881026",
+   "name_hu": "Suhajda Krisztián",
+   "name_en": "Krisztián Suhajda",
+   "ogy_ids": [
+    "s139"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2012-12-17",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1976-03-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16201464",
+   "name_hu": "Szabó Csaba",
+   "name_en": "Csaba Szabó",
+   "ogy_ids": [
+    "s110"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1968-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1293465",
+   "name_hu": "Szabó Erika",
+   "name_en": "Erika Szabó",
+   "ogy_ids": [
+    "s352"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1959-01-19",
+   "sex": "nő",
+   "images": [
+    "Szabo erika.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szabo%20erika.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1293535",
+   "name_hu": "Szabó Gábor",
+   "name_en": "Gábor Szabó",
+   "ogy_ids": [
+    "s123"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1979-11-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1293745",
+   "name_hu": "Szabó Rebeka",
+   "name_en": "Rebeka Szabó",
+   "ogy_ids": [
+    "s111"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1977-11-20",
+   "sex": "nő",
+   "images": [
+    "Szabó Rebeka.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szab%C3%B3%20Rebeka.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1293745",
+   "name_hu": "Szabó Rebeka",
+   "name_en": "Rebeka Szabó",
+   "ogy_ids": [
+    "s111"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1977-11-20",
+   "sex": "nő",
+   "images": [
+    "Szabó Rebeka.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szab%C3%B3%20Rebeka.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16189537",
+   "name_hu": "Szabó Tamás",
+   "name_en": "Tamás Szabó",
+   "ogy_ids": [
+    "s112"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842093",
+   "district": "Jász-Nagykun-Szolnok megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1957-05-02",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1293787",
+   "name_hu": "Szabó Tímea",
+   "name_en": "Tímea Szabó",
+   "ogy_ids": [
+    "s113"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1976-01-18",
+   "sex": "nő",
+   "images": [
+    "Szabó Tímea (MSZP.hu).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szab%C3%B3%20T%C3%ADmea%20%28MSZP.hu%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1293787",
+   "name_hu": "Szabó Tímea",
+   "name_en": "Tímea Szabó",
+   "ogy_ids": [
+    "s113"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1976-01-18",
+   "sex": "nő",
+   "images": [
+    "Szabó Tímea (MSZP.hu).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szab%C3%B3%20T%C3%ADmea%20%28MSZP.hu%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195353",
+   "name_hu": "Szabó Zsolt",
+   "name_en": "Zsolt Szabó",
+   "ogy_ids": [
+    "s124"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842090",
+   "district": "Heves megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-10-20",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1294268",
+   "name_hu": "Szalay Ferenc",
+   "name_en": "Ferenc Szalay",
+   "ogy_ids": [
+    "s053"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842096",
+   "district": "Jász-Nagykun-Szolnok megyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1955-03-30",
+   "sex": "férfi",
+   "images": [
+    "Szalay Ferenc.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szalay%20Ferenc.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15780888",
+   "name_hu": "Szalay Péter",
+   "name_en": "Péter Szalay",
+   "ogy_ids": [
+    "s134"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2011-02-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1940-06-29",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q14918704",
+   "name_hu": "Szedlák Attila",
+   "name_en": "Attila Szedlák",
+   "ogy_ids": [
+    "s116"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-10-26",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q676268",
+   "name_hu": "Szekeres Imre",
+   "name_en": "Imre Szekeres",
+   "ogy_ids": [
+    "s358"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1950-09-09",
+   "sex": "férfi",
+   "images": [
+    "Imre Szekeres 070426-D-9880W-014 0VWWF.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Imre%20Szekeres%20070426-D-9880W-014%200VWWF.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15844840",
+   "name_hu": "Szekó József",
+   "name_en": "József Szekó",
+   "ogy_ids": [
+    "s117"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1954-12-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15127335",
+   "name_hu": "Szemereyné Pataki Klaudia",
+   "name_en": "Klaudia Szemerey-Pataki",
+   "ogy_ids": [
+    "s140"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2013-04-08",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1976-03-04",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q685293",
+   "name_hu": "Szijjártó Péter",
+   "name_en": "Péter Szijjártó",
+   "ogy_ids": [
+    "s054"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-10-30",
+   "sex": "férfi",
+   "images": [
+    "Péter Szijjártó in (2025) (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%A9ter%20Szijj%C3%A1rt%C3%B3%20in%20%282025%29%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q469578",
+   "name_hu": "Szili Katalin",
+   "name_en": "Katalin Szili",
+   "ogy_ids": [
+    "s372"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2010-10-03",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1956-05-13",
+   "sex": "nő",
+   "images": [
+    "Katalin Szili.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Katalin%20Szili.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q469578",
+   "name_hu": "Szili Katalin",
+   "name_en": "Katalin Szili",
+   "ogy_ids": [
+    "s372"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2010-10-04",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1956-05-13",
+   "sex": "nő",
+   "images": [
+    "Katalin Szili.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Katalin%20Szili.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1298491",
+   "name_hu": "Szilágyi György",
+   "name_en": "György Szilágyi",
+   "ogy_ids": [
+    "s118"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1966-11-11",
+   "sex": "férfi",
+   "images": [
+    "Szilágyi György (Jobbik.hu).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szil%C3%A1gyi%20Gy%C3%B6rgy%20%28Jobbik.hu%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16196291",
+   "name_hu": "Szilágyi László",
+   "name_en": "László Szilágyi",
+   "ogy_ids": [
+    "s121"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1965-08-29",
+   "sex": "férfi",
+   "images": [
+    "Szilágyi László LMP.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szil%C3%A1gyi%20L%C3%A1szl%C3%B3%20LMP.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16196291",
+   "name_hu": "Szilágyi László",
+   "name_en": "László Szilágyi",
+   "ogy_ids": [
+    "s121"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1965-08-29",
+   "sex": "férfi",
+   "images": [
+    "Szilágyi László LMP.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szil%C3%A1gyi%20L%C3%A1szl%C3%B3%20LMP.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7264722",
+   "name_hu": "Szilágyi Péter",
+   "name_en": "Péter Szilágyi",
+   "ogy_ids": [
+    "s119"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1981-01-06",
+   "sex": "férfi",
+   "images": [
+    "Szilágyi Péter LMP.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szil%C3%A1gyi%20P%C3%A9ter%20LMP.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q7264722",
+   "name_hu": "Szilágyi Péter",
+   "name_en": "Péter Szilágyi",
+   "ogy_ids": [
+    "s119"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1981-01-06",
+   "sex": "férfi",
+   "images": [
+    "Szilágyi Péter LMP.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szil%C3%A1gyi%20P%C3%A9ter%20LMP.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1301751",
+   "name_hu": "Szávay István",
+   "name_en": "István Szávay",
+   "ogy_ids": [
+    "s115"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2019-01-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1981-03-08",
+   "sex": "férfi",
+   "images": [
+    "Szávay István.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sz%C3%A1vay%20Istv%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1302502",
+   "name_hu": "Székyné Sztrémi Melinda",
+   "name_en": "Melinda Széky-Sztrémi",
+   "ogy_ids": [
+    "s125"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842111",
+   "district": "Nógrád megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1958-03-16",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1109835",
+   "name_hu": "Szél Bernadett",
+   "name_en": "Bernadett Szél",
+   "ogy_ids": [
+    "s136"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2012-02-13",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1977-03-09",
+   "sex": "nő",
+   "images": [
+    "Szél Bernadett.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Sz%C3%A9l%20Bernadett.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15844814",
+   "name_hu": "Szólláth Tibor",
+   "name_en": "Tibor Szólláth",
+   "ogy_ids": [
+    "s126"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-04-04",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1314293",
+   "name_hu": "Szűcs Erika",
+   "name_en": "Erika Szűcs",
+   "ogy_ids": [
+    "s056"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1951-04-02",
+   "sex": "nő",
+   "images": [
+    "DK 2012-09-11 14.53.46.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/DK%202012-09-11%2014.53.46.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16197212",
+   "name_hu": "Sági István",
+   "name_en": "István Sági",
+   "ogy_ids": [
+    "s094"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842098",
+   "district": "Jász-Nagykun-Szolnok megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-12-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194310",
+   "name_hu": "Sáringer-Kenyeres Tamás",
+   "name_en": "Tamás Sáringer-Kenyeres",
+   "ogy_ids": [
+    "s120"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1961-11-13",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1315379",
+   "name_hu": "Sós Tamás",
+   "name_en": "Tamás Sós",
+   "ogy_ids": [
+    "s042"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1954-04-05",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16214230",
+   "name_hu": "Talabér Márta",
+   "name_en": "Márta Talabér",
+   "ogy_ids": [
+    "t039"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842168",
+   "district": "Veszprém megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-01-27",
+   "sex": "nő",
+   "images": [
+    "Talabér Márta.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Talab%C3%A9r%20M%C3%A1rta.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1316455",
+   "name_hu": "Tamás Barnabás",
+   "name_en": "Barnabás Tamás",
+   "ogy_ids": [
+    "t043"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842040",
+   "district": "Borsod-Abaúj-Zemplén megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-09-26",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16215589",
+   "name_hu": "Tapolczai Gergely",
+   "name_en": "Gergely Tapolczai",
+   "ogy_ids": [
+    "t044"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-12-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q923540",
+   "name_hu": "Tarlós István",
+   "name_en": "István Tarlós",
+   "ogy_ids": [
+    "t040"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2010-12-03",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1948-05-26",
+   "sex": "férfi",
+   "images": [
+    "TarlósIstván.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tarl%C3%B3sIstv%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16214231",
+   "name_hu": "Tarnai Richárd",
+   "name_en": "Richárd Tarnai",
+   "ogy_ids": [
+    "t041"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841998",
+   "district": "Budapesti 28. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1972-11-03",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16197309",
+   "name_hu": "Tessely Zoltán",
+   "name_en": "Zoltán Tessely",
+   "ogy_ids": [
+    "t038"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842066",
+   "district": "Fejér megyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-07-20",
+   "sex": "férfi",
+   "images": [
+    "Tessely Zoltán.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tessely%20Zolt%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194836",
+   "name_hu": "Tiba István",
+   "name_en": "István Tiba",
+   "ogy_ids": [
+    "t017"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842084",
+   "district": "Hajdú-Bihar megyei 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-05-06",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q17057169",
+   "name_hu": "Tiffán Zsolt",
+   "name_en": "Zsolt Tiffán",
+   "ogy_ids": [
+    "t037"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842008",
+   "district": "Baranya megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1965-08-23",
+   "sex": "férfi",
+   "images": [
+    "Tiffán Zsolt.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tiff%C3%A1n%20Zsolt.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15123628",
+   "name_hu": "Tukacs István",
+   "name_en": "István Tukacs",
+   "ogy_ids": [
+    "t028"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1958-07-10",
+   "sex": "férfi",
+   "images": [
+    "Tukacs István - 2016.05.02.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tukacs%20Istv%C3%A1n%20-%202016.05.02.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1325390",
+   "name_hu": "Turi-Kovács Béla",
+   "name_en": "Béla Turi-Kovács",
+   "ogy_ids": [
+    "t004"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q766275",
+   "party": "Magyar Demokrata Fórum",
+   "dob": "1935-12-02",
+   "sex": "férfi",
+   "images": [
+    "Béla Turi-Kovács.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/B%C3%A9la%20Turi-Kov%C3%A1cs.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16193903",
+   "name_hu": "Tóth Csaba",
+   "name_en": "Csaba Tóth",
+   "ogy_ids": [
+    "t045"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-10-18",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1960-04-22",
+   "sex": "férfi",
+   "images": [
+    "Tóth Csaba (MSZP.hu).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/T%C3%B3th%20Csaba%20%28MSZP.hu%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16185637",
+   "name_hu": "Tóth József",
+   "name_en": "József Tóth",
+   "ogy_ids": [
+    "t042"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842091",
+   "district": "Heves megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1953-02-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194839",
+   "name_hu": "Törő Gábor",
+   "name_en": "Gábor Törő",
+   "ogy_ids": [
+    "t036"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-06",
+   "district_qid": "Q50842064",
+   "district": "Fejér megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-03-07",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16207412",
+   "name_hu": "Ughy Attila",
+   "name_en": "Attila Ughy",
+   "ogy_ids": [
+    "u001"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841997",
+   "district": "Budapesti 27. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1969-09-03",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q253020",
+   "name_hu": "Ujhelyi István",
+   "name_en": "István Ujhelyi",
+   "ogy_ids": [
+    "u004"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1975-02-28",
+   "sex": "férfi",
+   "images": [
+    "Secure and seamless travel defining a vision for the future (40653330735) (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Secure%20and%20seamless%20travel%20defining%20a%20vision%20for%20the%20future%20%2840653330735%29%20%28cropped%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15710456",
+   "name_hu": "Vadai Ágnes",
+   "name_en": "Ágnes Vadai",
+   "ogy_ids": [
+    "v013"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1974-02-11",
+   "sex": "nő",
+   "images": [
+    "Vadai Ágnes 2013.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vadai%20%C3%81gnes%202013.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1401561",
+   "name_hu": "Vantara Gyula",
+   "name_en": "Gyula Vantara",
+   "ogy_ids": [
+    "v043"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": "Q50842023",
+   "district": "Békés megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1954-11-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16201735",
+   "name_hu": "Varga Gábor",
+   "name_en": "Gábor Varga",
+   "ogy_ids": [
+    "v048"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842065",
+   "district": "Fejér megyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1968-01-08",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q20438222",
+   "name_hu": "Varga Géza",
+   "name_en": "Géza Varga",
+   "ogy_ids": [
+    "v052"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1946-04-03",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16185643",
+   "name_hu": "Varga István",
+   "name_en": "István Varga",
+   "ogy_ids": [
+    "v399"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1953-10-18",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16104573",
+   "name_hu": "Varga László",
+   "name_en": "László Varga",
+   "ogy_ids": [
+    "v053"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1936-04-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16193417",
+   "name_hu": "Vargha Tamás",
+   "name_en": "Tamás Vargha",
+   "ogy_ids": [
+    "v045"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842059",
+   "district": "Fejér megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-02-02",
+   "sex": "férfi",
+   "images": [
+    "Informal meeting of defence ministers (FAC). Arrivals Tamás Vargha (36910146752).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Informal%20meeting%20of%20defence%20ministers%20%28FAC%29.%20Arrivals%20Tam%C3%A1s%20Vargha%20%2836910146752%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q23561959",
+   "name_hu": "Varju László",
+   "name_en": "László Varju",
+   "ogy_ids": [
+    "v018"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1961-08-22",
+   "sex": "férfi",
+   "images": [
+    "Varju László 2013.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Varju%20L%C3%A1szl%C3%B3%202013.JPG?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16196750",
+   "name_hu": "Vas Imre",
+   "name_en": "Imre Vas",
+   "ogy_ids": [
+    "v054"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841981",
+   "district": "Budapesti 13. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-01-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195844",
+   "name_hu": "Vejkey Imre",
+   "name_en": "Imre Vejkey",
+   "ogy_ids": [
+    "v055"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1964-01-15",
+   "sex": "férfi",
+   "images": [
+    "Vejkey Imre (KDNP.hu).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vejkey%20Imre%20%28KDNP.hu%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1421019",
+   "name_hu": "Veres János",
+   "name_en": "János Veres",
+   "ogy_ids": [
+    "v403"
+   ],
+   "group_qid": "Q753223",
+   "group": "Magyar Szocialista Párt",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q16412",
+   "party": "Magyar Szocialista Munkáspárt",
+   "dob": "1957-02-05",
+   "sex": "férfi",
+   "images": [
+    "Veres János 2008-12-13.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Veres%20J%C3%A1nos%202008-12-13.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15964412",
+   "name_hu": "Vincze László",
+   "name_en": "László Vincze",
+   "ogy_ids": [
+    "v007"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842053",
+   "district": "Csongrád megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-02-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16193422",
+   "name_hu": "Vinnai Győző",
+   "name_en": "Győző Vinnai",
+   "ogy_ids": [
+    "v056"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842140",
+   "district": "Szabolcs-Szatmár-Bereg megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1959-12-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16152024",
+   "name_hu": "Vitányi István",
+   "name_en": "István Vitányi",
+   "ogy_ids": [
+    "v008"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842080",
+   "district": "Hajdú-Bihar megyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-12-18",
+   "sex": "férfi",
+   "images": [
+    "Vitányi István.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vit%C3%A1nyi%20Istv%C3%A1n.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1460506",
+   "name_hu": "Vitányi Iván",
+   "name_en": "Iván Vitányi",
+   "ogy_ids": [
+    "v047"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2011-10-24",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q753223",
+   "party": "Magyar Szocialista Párt",
+   "dob": "1925-07-03",
+   "sex": "férfi",
+   "images": [
+    "Vitányi Iván fortepan 146674.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vit%C3%A1nyi%20Iv%C3%A1n%20fortepan%20146674.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1460900",
+   "name_hu": "Volner János",
+   "name_en": "János Volner",
+   "ogy_ids": [
+    "v057"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1969-09-28",
+   "sex": "férfi",
+   "images": [
+    "Volner János cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Volner%20J%C3%A1nos%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q555669",
+   "name_hu": "Vona Gábor",
+   "name_en": "Gábor Vona",
+   "ogy_ids": [
+    "v058"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-08-20",
+   "sex": "férfi",
+   "images": [
+    "Gabor vona 2017.png"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gabor%20vona%202017.png?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16223517",
+   "name_hu": "Vágó Gábor",
+   "name_en": "Gábor Vágó",
+   "ogy_ids": [
+    "v049"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2010-05-14",
+   "end": "2013-02-11",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1984-01-10",
+   "sex": "férfi",
+   "images": [
+    "Vágó Gábor 2011-12.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%A1g%C3%B3%20G%C3%A1bor%202011-12.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16223517",
+   "name_hu": "Vágó Gábor",
+   "name_en": "Gábor Vágó",
+   "ogy_ids": [
+    "v049"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2013-02-12",
+   "end": "2013-08-31",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1984-01-10",
+   "sex": "férfi",
+   "images": [
+    "Vágó Gábor 2011-12.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%A1g%C3%B3%20G%C3%A1bor%202011-12.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16223517",
+   "name_hu": "Vágó Gábor",
+   "name_en": "Gábor Vágó",
+   "ogy_ids": [
+    "v049"
+   ],
+   "group_qid": "Q54801",
+   "group": "Lehet Más a Politika",
+   "start": "2013-09-01",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q54801",
+   "party": "Lehet Más a Politika",
+   "dob": "1984-01-10",
+   "sex": "férfi",
+   "images": [
+    "Vágó Gábor 2011-12.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%A1g%C3%B3%20G%C3%A1bor%202011-12.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q30093134",
+   "name_hu": "Vágó Sebestyén",
+   "name_en": "Sebestyén Vágó",
+   "ogy_ids": [
+    "v050"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2018-05-07",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1976-09-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15991655",
+   "name_hu": "Vécsey László",
+   "name_en": "László Vécsey",
+   "ogy_ids": [
+    "v044"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842119",
+   "district": "Pest megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1958-09-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1463083",
+   "name_hu": "Völner Pál",
+   "name_en": "Pál Völner",
+   "ogy_ids": [
+    "v046"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842108",
+   "district": "Komárom-Esztergom megyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-11-30",
+   "sex": "férfi",
+   "images": [
+    "Völner Pál (2011).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V%C3%B6lner%20P%C3%A1l%20%282011%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1465207",
+   "name_hu": "Wintermantel Zsolt",
+   "name_en": "Zsolt Wintermantel",
+   "ogy_ids": [
+    "w003"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50841970",
+   "district": "Budapesti 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-02-26",
+   "sex": "férfi",
+   "images": [
+    "Wintermantel zsolt.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Wintermantel%20zsolt.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1465265",
+   "name_hu": "Wittner Mária",
+   "name_en": "Mária Wittner",
+   "ogy_ids": [
+    "g036"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1937-06-09",
+   "sex": "nő",
+   "images": [
+    "WittnerMariaFotoThalerTamas.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/WittnerMariaFotoThalerTamas.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q472550",
+   "name_hu": "Zagyva György Gyula",
+   "name_en": "György Gyula Zagyva",
+   "ogy_ids": [
+    "z010"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1976-05-18",
+   "sex": "férfi",
+   "images": [
+    "Zagyva Gyorgy Gyula.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zagyva%20Gyorgy%20Gyula.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q51881194",
+   "name_hu": "Zakó László",
+   "name_en": "László Zakó",
+   "ogy_ids": [
+    "z001"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1959-12-16",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195884",
+   "name_hu": "Zombor Gábor",
+   "name_en": "Gábor Zombor",
+   "ogy_ids": [
+    "z008"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842010",
+   "district": "Bács-Kiskun megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1964-03-12",
+   "sex": "férfi",
+   "images": [
+    "Zombor Gábor cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zombor%20G%C3%A1bor%20cropped.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16218947",
+   "name_hu": "Zsiga Marcell",
+   "name_en": "Marcell Zsiga",
+   "ogy_ids": [
+    "z011"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842034",
+   "district": "Borsod-Abaúj-Zemplén megyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1979-02-22",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1468057",
+   "name_hu": "Zsiga-Kárpát Dániel",
+   "name_en": "Dániel Zsiga-Kárpát",
+   "ogy_ids": [
+    "z012"
+   ],
+   "group_qid": "Q633442",
+   "group": "Jobbik",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1979-06-01",
+   "sex": "férfi",
+   "images": [
+    "Z. Kárpát Dániel (Jobbik).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Z.%20K%C3%A1rp%C3%A1t%20D%C3%A1niel%20%28Jobbik%29.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q280567",
+   "name_hu": "Ángyán József",
+   "name_en": "József Ángyán",
+   "ogy_ids": [
+    "a014"
+   ],
+   "group_qid": "Q327591",
+   "group": "független politikus",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q327591",
+   "party": "független politikus",
+   "dob": "1952-09-20",
+   "sex": "férfi",
+   "images": [
+    "Ángyán József.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/%C3%81ngy%C3%A1n%20J%C3%B3zsef.jpg?width=400",
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q954270",
+   "name_hu": "Ékes József",
+   "name_en": "József Ékes",
+   "ogy_ids": [
+    "e002"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2010-05-14",
+   "end": "2014-05-05",
+   "district_qid": "Q50842163",
+   "district": "Veszprém megyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1951-08-15",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  }
+ ]
+}

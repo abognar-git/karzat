@@ -9,3 +9,8 @@
   the source; the `p` seats sit at the outer ends of sectors 1–2 / 5–6 and none is occupied by an
   MP), and `svgpath`, the seat's outline in parlament.hu's own coordinate space. This is the floor
   plan `karzat/seating.py` lays MPs on; nothing about the room's geometry is estimated any more.
+- `kepviselok_1990_2026.json` — every MP since 1990 (1,612 people) as parlament.hu's Képviselők list
+  query returns them (`kepviselo-query-provider/kepviselo-lista-idopontban`, with the period filter
+  off): p_azon, the API's own spelling of the name, and their faction stints / offices (undated).
+  Fetched 2026-08-18. This is what tells the name resolver which ids exist for a name and which
+  `kepviselo.cgi` records to fetch for the dated faction history.

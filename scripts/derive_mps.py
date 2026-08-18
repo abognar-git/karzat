@@ -49,7 +49,7 @@ def load_json(path: Path) -> dict:
         return json.load(fh)
 
 
-CYCLE_LABEL = {43: "2026-", 42: "2022-2026", 41: "2018-2022", 40: "2014-2018"}
+from karzat.normalise import CYCLE_LABELS as CYCLE_LABEL  # noqa: E402  — 34: "1990-1994" … 43: "2026-" as kepviselo.cgi prints ciklus
 
 
 def mandate_from_record(rec: dict | None, cycle: int) -> dict:

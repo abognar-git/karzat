@@ -76,7 +76,7 @@ def write_json(path: Path, obj, indent=1, sort_keys=False) -> None:
 def main(argv: list[str] | None = None) -> int:
     import argparse
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--hero", default=HERO_DEFAULT, help="idopont of the vote to write out in full")
+    ap.add_argument("--hero", default=HERO_DEFAULT, help="idopont of the vote to write out in full; 'auto' = the window's last decision passed with two thirds of all MPs, else its last roll call")
     ap.add_argument("--since", default="2026-05-01", help="ignore listed votes before this ISO date (cycle 43 starts 2026-05-09)")
     ap.add_argument("--until", default=None, help="ignore listed votes after this ISO date")
     ap.add_argument("--suffix", default="", help="write first_light_<suffix>.json instead of first_light.json")
@@ -230,6 +230,16 @@ def main(argv: list[str] | None = None) -> int:
     print(f"written {p_positions}: {len(positions)} roll calls, {len(members)} members")
 
     # -- hero_vote.json -----------------------------------------------------------------
+    if args.hero == "auto":
+        pick = None
+        for r in reversed(index_rows):
+            m = r.get("majority") or {}
+            if m.get("rule") == "ketharmad_osszes" and r.get("passed") and positions.get(r["ts"]):
+                pick = r["ts"]; break
+        if pick is None:
+            pick = next((r["ts"] for r in reversed(index_rows) if positions.get(r["ts"])), index_rows[-1]["ts"] if index_rows else HERO_DEFAULT)
+        args.hero = pick
+        print(f"hero (auto): {pick}")
     hero_path = RAW / "szavazas" / f"{ts_to_slug(args.hero)}.xml"
     if hero_path.exists():
         hero = parse_szavazas(load(hero_path), resolver=resolver)

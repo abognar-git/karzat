@@ -127,3 +127,251 @@ majority_rules:
   negyotod_jelenlevo:  { label: "Jelen lévők négyötöde",        base: present, needed: "ceil(4N/5)", api: ["Listás a jelenlevők 4/5-ével"] }     # Házszabálytól eltérés
   negyotod_osszes:     { label: "Összes képviselő négyötöde",   base: seats,   needed: "ceil(4N/5)", api: ["Listás az összes képviselő 4/5-ével"] }  # 160 — seen in 2014 lists; basis VERIFY
   relativ:             { label: "Relatív többség",              base: candidates, needed: "n/a" }         # KE 2. forduló
+
+# Ciklus 41 (2018-05-08 → 2022-05-01; Fidesz–KDNP government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl41:
+  - id: DK
+    name: Demokratikus Koalíció
+    colour: "#5b8def"
+    sort_order: 10
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 20
+  - id: Párbeszéd
+    name: Párbeszéd – A Zöldek Pártja
+    colour: "#45b39d"
+    sort_order: 30
+  - id: LMP
+    name: Lehet Más a Politika
+    colour: "#a4c639"
+    sort_order: 40
+  - id: Jobbik
+    name: Jobbik Magyarországért Mozgalom
+    colour: "#e0c341"
+    sort_order: 50
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 60
+  - id: "Nemzetiségi képviselő"
+    name: Nemzetiségi képviselő
+    colour: "#b3a58c"
+    sort_order: 70
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 80
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 90
+
+# Ciklus 40 (2014-05-06 → 2018-05-07; Fidesz–KDNP government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl40:
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 10
+  - id: LMP
+    name: Lehet Más a Politika
+    colour: "#a4c639"
+    sort_order: 20
+  - id: Jobbik
+    name: Jobbik Magyarországért Mozgalom
+    colour: "#e0c341"
+    sort_order: 30
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 40
+  - id: "Nemzetiségi képviselő"
+    name: Nemzetiségi képviselő
+    colour: "#b3a58c"
+    sort_order: 50
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 60
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 70
+
+# Ciklus 39 (2010-05-14 → 2014-05-05; Fidesz–KDNP government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl39:
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 10
+  - id: LMP
+    name: Lehet Más a Politika
+    colour: "#a4c639"
+    sort_order: 20
+  - id: Jobbik
+    name: Jobbik Magyarországért Mozgalom
+    colour: "#e0c341"
+    sort_order: 30
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 40
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 50
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 60
+
+# Ciklus 38 (2006-05-16 → 2010-05-13; MSZP–SZDSZ, then MSZP minority government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl38:
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 10
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 20
+  - id: MDF
+    name: Magyar Demokrata Fórum
+    colour: "#4a9a4a"
+    sort_order: 30
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 40
+  - id: SZDSZ
+    name: Szabad Demokraták Szövetsége
+    colour: "#7fb2e6"
+    sort_order: 50
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 60
+
+# Ciklus 37 (2002-05-15 → 2006-05-15; MSZP–SZDSZ government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl37:
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 10
+  - id: MDF
+    name: Magyar Demokrata Fórum
+    colour: "#4a9a4a"
+    sort_order: 20
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 30
+  - id: SZDSZ
+    name: Szabad Demokraták Szövetsége
+    colour: "#7fb2e6"
+    sort_order: 40
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 50
+
+# Ciklus 36 (1998-06-18 → 2002-05-14; Fidesz–FKGP–MDF government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl36:
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 10
+  - id: SZDSZ
+    name: Szabad Demokraták Szövetsége
+    colour: "#7fb2e6"
+    sort_order: 20
+  - id: MIÉP
+    name: Magyar Igazság és Élet Pártja
+    colour: "#7d5ba6"
+    sort_order: 30
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 40
+  - id: MDF
+    name: Magyar Demokrata Fórum
+    colour: "#4a9a4a"
+    sort_order: 50
+  - id: FKGP
+    name: Független Kisgazda-, Földmunkás- és Polgári Párt
+    colour: "#6fae5c"
+    sort_order: 60
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 70
+
+# Ciklus 35 (1994-06-28 → 1998-06-17; MSZP–SZDSZ government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl35:
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 10
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 20
+  - id: FKGP
+    name: Független Kisgazda-, Földmunkás- és Polgári Párt
+    colour: "#6fae5c"
+    sort_order: 30
+  - id: MDF
+    name: Magyar Demokrata Fórum
+    colour: "#4a9a4a"
+    sort_order: 40
+  - id: "Néppárt-MDNP"
+    name: Magyar Demokrata Néppárt
+    colour: "#2e7d6b"
+    sort_order: 50
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 60
+  - id: SZDSZ
+    name: Szabad Demokraták Szövetsége
+    colour: "#7fb2e6"
+    sort_order: 70
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 80
+
+# Ciklus 34 (1990-05-02 → 1994-06-27; MDF–FKGP–KDNP government). Group ids as the roll calls print them; colours the project's own, one per party across cycles.
+factions_ckl34:
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#e05252"
+    sort_order: 10
+  - id: SZDSZ
+    name: Szabad Demokraták Szövetsége
+    colour: "#7fb2e6"
+    sort_order: 20
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 30
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 40
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 50
+  - id: EKgP
+    name: Egyesült Kisgazdapárt
+    colour: "#a9c98a"
+    sort_order: 60
+  - id: FKGP
+    name: Független Kisgazda-, Földmunkás- és Polgári Párt
+    colour: "#6fae5c"
+    sort_order: 70
+  - id: MDF
+    name: Magyar Demokrata Fórum
+    colour: "#4a9a4a"
+    sort_order: 80
