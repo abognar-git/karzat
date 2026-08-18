@@ -77,15 +77,15 @@ Konzol's algorithm stays as the fallback.
 - [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
-- [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v1 built from scratch from the cache in about a second — 259 votes, 50,906 roll-call positions with 0 unresolved names, 374 faction-history rows, 369 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
+- [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v2 built from scratch from the cache in about twelve seconds for two cycles — 2,858 votes, 563,216 roll-call positions with 0 unresolved names, 395 faction-history rows, 389 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
 - [x] **Per-vote pages**: `site/szavazas/<slug>.html` for all 259 votes — the reconstructed chamber for that vote, the verdict card, faction bars, and a sortable, filterable roll call with every MP's seat; prev/next; the directory links to them. Generated from the committed `data/derived/votes_positions.json` (git-ignored output, 0.6 s for all 259)
 - [x] **MP pages**: `site/kepviselo/<p_azon>.html` for all 201 people in the roll calls plus an index — mandate, seat highlighted on the chamber, faction history and mandates back to 1990, motion counts, this cycle's participation and with/against-own-faction record with definitions on the page, the votes cast against the faction plurality, and every vote linked. Portraits linked, not embedded (licence unverified). Names on vote pages link here
-- [~] **Cycle 42 backfill** (2022-05-02 → 2026-05-08): 2,599 votes over 192 sitting days listed, the roll calls being fetched one call at a time at the polite pace (about 26 a minute); a second Wikidata snapshot for the names; the list-level summary in `data/derived/first_light_ckl42.json`, the comparison below. When the details are in: `load --since 2022-05-01`, `stats --json`, and the database paragraph above changes
+- [x] **Cycle 42 backfilled** (2022-05-02 → 2026-05-08): 2,599 votes over 192 sitting days listed and every roll call fetched (2,445 calls at the polite pace, about 26 a minute, in one afternoon); a second Wikidata snapshot for the names; the list-level summary in `data/derived/first_light_ckl42.json`, the comparison below; both cycles in the database. What the backfill taught the vocabulary: a **seventh** roll-call state, `Ig.távol` (excused absence — 1,223 entries in 288 of cycle 42's roll calls, none in cycle 43's first 259), and how the faction rows aggregate the seven into five columns (`igtav_db` = Ig.távol + Előre bejelentett hiányzó, `nemszav_db` = Nem szav. + Jelen, nem szav.) — schema v2, one real fixture, one test
 
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 123 tests
+python3 -m unittest discover -s tests -t .      # offline; 124 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -131,7 +131,7 @@ been able to check. The mapping from Konzol's model to this one:
 | `chamber` House/Senate | — (one chamber) | Országgyűlés is unicameral |
 | `congress`, `session` (119-2) | `ckl` (43), `session_label` (tavaszi/őszi), `sitting_day` | parlament.hu numbers terms from 34 (1990); 43 = 2026– |
 | `rollNumber` | `vote.ts` (idopont) + `slug` | The API identifies a vote by timestamp |
-| `vote: yea/nay/nv` | `position:` igen / nem / tartozkodott / jelen_nem_szavazott / nem_szavazott / bejelentett_hianyzo | Abstention is first-class; presence is recorded separately from voting |
+| `vote: yea/nay/nv` | `position:` igen / nem / tartozkodott / jelen_nem_szavazott / nem_szavazott / bejelentett_hianyzo / igazoltan_tavol | Abstention is first-class; presence is recorded separately from voting; two kinds of excused absence |
 | `party: DEM/REP/IND` | `faction_id` + `mp_faction` history | N factions, MPs move |
 | `thresholdLabel` (always SIMPLE) | `majority_rule` from the API's "Szavazási mód" + `needed`, per vote | The rule differs and matters — and the source states it |
 | `district` | `mp_mandate.kind` egyéni/lista + constituency | Mixed electoral system |
@@ -173,9 +173,11 @@ Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one grou
 
 `site/index.html` is one self-contained file (no CDN, no fonts fetched, one external
 link type: parlament.hu bill pages), Hungarian-first with the freshness sentence in both
-languages, light and dark. Top: the freshness contract's sentence. Hero: T/51, the 16th
-amendment of the Alaptörvény, 15 June 2026 — 199 seats drawn by faction and by the six
-recorded positions, with the verdict card: mode as the API states it, rule, base 199,
+languages, light and dark. Top: the freshness contract's
+sentence. Hero: T/51, the 16th
+amendment of the Alaptörvény, 15 June 2026 — 199 seats drawn by faction and by the
+recorded positions (six occur in cycle 43; the seventh, excused absence, is drawn only where
+it occurs), with the verdict card: mode as the API states it, rule, base 199,
 needed 133, 135 igen, margin +2, and "számítás egyezik" because the computed verdict
 agrees with the recorded result. Then the headline counts, the mode table, T/71's four
 days, and the directory: all 259 votes, newest first, each with its rule, threshold /
@@ -202,18 +204,23 @@ depend on the raw cache.
 
 ## The database
 
-`schema.sql` is the contract and `karzat/load.py` the only writer. `python3 -m karzat load`
-rebuilds `data/karzat.sqlite` from the raw cache in about a second, atomically, and runs a
-foreign-key check at the end; nothing is ever edited in place. Loaded today: 201 MPs (199
-seated, 199 with a Wikidata QID, plus 2 stub rows for former MPs the roll calls name), 374
-faction-history rows and 369 mandates back to 1990, 23 sitting days, 259 votes of which
-256 carry a roll call — 50,906 positions, 0 unresolved names — 254 motions, 507 bills, and
-997 rows of `vote_faction_majority` (each faction's plurality position per vote). Two views
-make the analytics the README promised into queries: `v_vote` (vote + motion + rule) and
-`v_mp_alignment` (per MP: cast, abstained, absent, with / against own faction). The
+`schema.sql` is the contract and `karzat/load.py` the only writer. `python3 -m karzat load
+--since 2022-05-01` rebuilds `data/karzat.sqlite` from the raw cache — both cycles, about
+twelve seconds — atomically, and runs a foreign-key check at the end; nothing is ever
+edited in place. Loaded today: 371 MPs (199
+seated, 205 with a Wikidata QID, plus 172 stub rows for former MPs the roll calls name), 395
+faction-history rows and 389 mandates back to 1990, 215 sitting days, 2,858 votes of which
+2,835 carry a roll call — 563,216 positions, 0 unresolved names — 2,746 motions, 507 bills, and
+27,343 rows of `vote_faction_majority` (each faction's plurality position per vote). The
+zero is earned, not assumed: six former MPs resolved to nobody until their own
+`kepviselo.cgi` records were fetched, because the roll call prints the API's spelling
+("Z. Kárpát Dániel", "Czunyiné Dr. Bertalan Judit", "Szabó Timea") where Wikidata's label
+differs — so every cached record now feeds the resolver, and the API's spelling wins. Two
+views make the analytics the README promised into queries: `v_vote` (vote + motion + rule)
+and `v_mp_alignment` (per MP: cast, abstained, absent, with / against own faction). The
 consistency check that matters is in `stats`: 0 votes where the computed threshold and the
-recorded result disagree. Numbers here come from `data/derived/db_summary.json`, written by
-`python3 -m karzat stats --json`.
+recorded result disagree — now across two cycles and 2,835 roll calls, not 259. Numbers here
+come from `data/derived/db_summary.json`, written by `python3 -m karzat stats --json`.
 
 ## The identity spine
 

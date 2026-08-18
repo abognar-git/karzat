@@ -188,7 +188,7 @@ def build() -> list[tuple[str, list]]:
         ("{:,.0f}\nfaction-history rows and {:,.0f} mandates back to 1990, {:,.0f} sitting days, {:,.0f} votes of which\n{:,.0f} carry a roll call — {:,.0f} positions, {:,.0f} unresolved names — {:,.0f} motions, {:,.0f} bills, and\n{:,.0f} rows of `vote_faction_majority`",
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
-        ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree", [dbs["rule_source_disagreements"]]),
+        ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across two cycles and {:,.0f} roll calls, not {:,.0f}", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"]]),
         # cycle 42 vs 43 — data/derived/first_light_ckl42.json + first_light.json
         ("Cycle 42:\n{:,.0f} votes over {:,.0f} sitting days — {:.1f} per sitting day — of which {:,.0f} decisions and {:,.0f}\nquorum checks ({:,.0f} of them inquorate",
          [f42["votes"], f42["sitting_days"]["count"], f42["votes"] / f42["sitting_days"]["count"], f42["decisions"], f42["quorum_checks"],
@@ -199,7 +199,7 @@ def build() -> list[tuple[str, list]]:
         ("Cycle 43 so far: {:,.0f} votes over {:,.0f} sitting days — {:.1f} per sitting day — {:,.0f}\nqualified-majority votes, {:,.0f}% of decisions; {:,.0f} exceptional-procedure orders and {:,.0f} urgent ones\nin the first three months",
          [fl["votes"], fl["sitting_days"]["count"], fl["votes"] / fl["sitting_days"]["count"], fl["qualified_majority_votes"],
           round(100 * fl["qualified_majority_votes"] / fl["decisions"]), fl["kiveteles_votes"], fl["surgos_votes"]]),
-        ("**Cycle 42 backfill** (2022-05-02 → 2026-05-08): {:,.0f} votes over {:,.0f} sitting days", [f42["votes"], f42["sitting_days"]["count"]]),
+        ("**Cycle 42 backfilled** (2022-05-02 → 2026-05-08): {:,.0f} votes over {:,.0f} sitting days", [f42["votes"], f42["sitting_days"]["count"]]),
         # the chamber — data/derived/seating.json
         ("widest rows {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f} · {:,.0f}",
          [seat_plan["analysis"]["sectors"][str(k)]["widest_row"] for k in (1, 2, 3, 4, 5, 6)]),

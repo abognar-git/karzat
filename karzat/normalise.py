@@ -28,9 +28,13 @@ from .xmlutil import as_list, parse_date, ts_to_slug
 
 # -- vocabularies (observed) --------------------------------------------------------------
 
-# nev_szerint / kepvcsop_szerint position labels -> schema position values.
+# nev_szerint position labels -> schema position values: SEVEN recorded states.
 # "Jelen, nem szav." (present, not voting) and "Nem szav." (not voting, presence not registered)
-# are distinct in the source; "Előre bejelentett hiányzó" is announced absence (igtav_db).
+# are distinct in the source; "Előre bejelentett hiányzó" is absence announced in advance and
+# "Ig.távol" (igazoltan távol) is excused absence — the seventh state, absent from cycle 43's
+# first 259 roll calls and present in 288 of cycle 42's (first seen 2022-10-03). The faction
+# rows aggregate them: igtav_db = Ig.távol + Előre bejelentett hiányzó (287 of 288 votes; one
+# off-by-one in the source on 2025-05-19), nemszav_db = Nem szav. + Jelen, nem szav.
 POSITIONS: dict[str, str] = {
     "Igen": "igen",
     "Nem": "nem",
@@ -38,7 +42,9 @@ POSITIONS: dict[str, str] = {
     "Jelen, nem szav.": "jelen_nem_szavazott",
     "Nem szav.": "nem_szavazott",
     "Előre bejelentett hiányzó": "bejelentett_hianyzo",
+    "Ig.távol": "igazoltan_tavol",
 }
+ABSENT_POSITIONS = ("nem_szavazott", "bejelentett_hianyzo", "igazoltan_tavol")
 PRESENT_POSITIONS = ("igen", "nem", "tartozkodott", "jelen_nem_szavazott")   # the "jelen lévő" base — interpretation, VERIFY legally
 
 RESULTS: dict[str, bool | None] = {"Elfogadva": True, "Elutasítva": False, "Határozatképes": None,
@@ -165,6 +171,30 @@ class NameResolver:
         return self.aliases.get(bare)
 
 
+def record_name_aliases(cache: "Path") -> dict[str, str]:
+    """name -> p_azon from every cached kepviselo.cgi record (data/raw/kepviselo/mp_<azon>.xml).
+
+    The API's own record prints the same spelling as the roll call ("Z. Kárpát Dániel",
+    "Czunyiné Dr. Bertalan Judit", "Szabó Timea"), where Wikidata's label differs — so a
+    former MP's record, once fetched, resolves every roll call they ever appear in.
+    """
+    from pathlib import Path  # noqa: F811 — local import keeps this module free of a Path dependency at import
+    from .xmlutil import parse_xml, to_dict
+    out: dict[str, str] = {}
+    folder = Path(cache) / "kepviselo"
+    if not folder.exists():
+        return out
+    for p in sorted(folder.glob("mp_*.xml")):
+        try:
+            root = parse_xml(p.read_bytes())
+            rec = parse_kepviselo({root.tag: to_dict(root)})
+        except Exception:      # a truncated download must not take the whole build down
+            continue
+        if rec.get("name"):
+            out.setdefault(rec["name"], p.stem[3:])
+    return out
+
+
 # -- sitting days ---------------------------------------------------------------------------
 
 def parse_ulesnap(payload: dict[str, Any]) -> list[dict[str, Any]]:
@@ -280,8 +310,10 @@ def _faction_tallies(kcs: Any) -> tuple[list[dict[str, Any]], dict[str, int] | N
         if not isinstance(s, dict):
             continue
         rec = {"faction": s.get("@frakcio"), "igen": _int(s.get("igen_db")), "nem": _int(s.get("nem_db")),
-               "tartozkodott": _int(s.get("tart_db")), "bejelentett_hianyzo": _int(s.get("igtav_db")),
-               "nem_szavazott": _int(s.get("nemszav_db")), "osszesen": _int(s.get("osszesen"))}
+               "tartozkodott": _int(s.get("tart_db")),
+               "igazoltan_tavol": _int(s.get("igtav_db")),        # = Ig.távol + Előre bejelentett hiányzó (see POSITIONS)
+               "nem_szavazott": _int(s.get("nemszav_db")),        # = Nem szav. + Jelen, nem szav.
+               "osszesen": _int(s.get("osszesen"))}
         if (rec["faction"] or "").startswith("Összesen"):
             totals = {k: v for k, v in rec.items() if k != "faction"}
         else:

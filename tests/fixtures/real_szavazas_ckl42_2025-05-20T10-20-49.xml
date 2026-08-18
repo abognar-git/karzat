@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<szavazas>
+            <szavazas idopont="2025.05.20.10:20:49">
+            <tulajdonsagok>
+                <tulajdonsag nev="Szavazási mód" ertek="Listás"/>
+                <tulajdonsag nev="&quot;Igen&quot;-ek száma" ertek="52"/>
+                <tulajdonsag nev="&quot;Nem&quot;-ek száma" ertek="130"/>
+                <tulajdonsag nev="Tartózkodások" ertek="2"/>
+                <tulajdonsag nev="Összes szavazat" ertek="184"/>
+                <tulajdonsag nev="Elfogadás" ertek="Elutasítva"/>
+                <tulajdonsag nev="Megjegyzés" ertek=""/>
+            </tulajdonsagok>
+            <inditvanyok>
+                        <inditvany>
+                            <iromany>11360/3</iromany>
+                            <pont></pont>
+                            <cim>Az állami építési beruházások rendjéről szóló 2023. évi LXIX. törvény módosításáról</cim>
+                            <benyujto nev="Arató Gergely (DK)"/>
+                            <ok>módosító javaslat fenntartása elutasítva</ok>
+                            <kepviselo></kepviselo>
+                        </inditvany>
+            </inditvanyok>
+            <kepvcsop_szerint>
+                        <szavazat frakcio="Fidesz">
+                                <igen_db>3</igen_db>
+                                <nem_db>111</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>2</nemszav_db>
+                                <osszesen>116</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="KDNP">
+                                <igen_db>0</igen_db>
+                                <nem_db>19</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>19</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="DK">
+                                <igen_db>14</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>1</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>15</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="MSZP">
+                                <igen_db>9</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>1</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>10</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Momentum">
+                                <igen_db>4</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>5</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>9</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Jobbik">
+                                <igen_db>7</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>7</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Mi Hazánk">
+                                <igen_db>4</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>2</nemszav_db>
+                                <osszesen>6</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Párbeszéd">
+                                <igen_db>4</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>1</tart_db>
+                                <igtav_db>1</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>6</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="független">
+                                <igen_db>7</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>2</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>9</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Nemzetiségi képviselő">
+                                <igen_db>0</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>1</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>1</osszesen>
+                        </szavazat>
+                    <szavazat frakcio="Összesen (arányok a képviselők száma alapján)">
+                            <igen_db>52</igen_db>
+                            <nem_db>130</nem_db>
+                            <tart_db>2</tart_db>
+                            <igtav_db>10</igtav_db>
+                            <nemszav_db>4</nemszav_db>
+                            <osszesen>198</osszesen>
+                    </szavazat>
+            </kepvcsop_szerint>
+            <nev_szerint>
+                        <szavazat kepviselo="Ágh Péter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Balla György (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Balla Mihály (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bánki Erik (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bányai Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Barcza Attila (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bartos Mónika (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Becsó Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bencsik János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bodó Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bóna Zoltán (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Budai Gyula (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Czerván György (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Czunyiné Dr. Bertalan Judit (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Cseresnyés Péter (Fidesz)" szavazat="Jelen, nem szav."/>
+                        <szavazat kepviselo="Dr. Csibi Krisztina (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Csöbör Katalin (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dankó Béla (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Demeter András (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Demeter Zoltán (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dunai Mónika (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Erdős Norbert (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Erős Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Farkas Örs (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Farkas Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Fazekas Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Ferencz Orsolya (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="F. Kovács Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Fónagy János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Font Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Földesi Gyula (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Fülöp Attila (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gelencsér Attila (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gulyás Gergely (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gyopáros Alpár (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Halász János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hegedűs Barbara (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Héjj Dávid (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hende Csaba (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Herczeg Tamás (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Herczeg Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hidvéghi Balázs (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hoppál Péter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hornung Ágnes (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Horváth István (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Horváth László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hörcsik Richárd (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Illés Boglárka (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Jakab István (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kállai Mária (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kara Ákos (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kiss János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kocsis Máté (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Koncz Zsófia (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kontrát Károly (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kósa Lajos (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kovács József (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kovács Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kovács Zoltán (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kovács Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kövér László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kubatov Gábor (Fidesz)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Láng Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Lázár János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Lezsák Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Mátrai Márta (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Menczer Tamás (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Mészáros Lajos (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Molnár Ágnes (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nagy Bálint (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nagy Csaba (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Nagy István (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Németh Szilárd István (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Németh Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nyitrai Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Orbán Balázs (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Orbán Viktor (Fidesz)" szavazat="Nem szav."/>
+                        <szavazat kepviselo="Ovádi Péter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Pajtók Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Pánczél Károly (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Pesti Imre (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Pócs János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Pogácsás Tibor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Pósán László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Riz Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Rogán Antal (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Salacz László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Selmeczi Gabriella (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Simon Miklós (Fidesz)" szavazat="Igen"/>
+                        <szavazat kepviselo="Simon Róbert Balázs (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Szabó Tünde (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szabó Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szatmáry Kristóf (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Szeberényi Gyula Tamás (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szijjártó Péter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Sztojka Attila (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Szűcs Lajos (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tállai András (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Tapolczai Gergely (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tasó László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tessely Zoltán (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Tiba István (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Tilki Attila (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Törő Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tuzson Bence (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Varga Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Vargha Tamás (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Vécsey László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Vigh László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Vinnai Győző (Fidesz)" szavazat="Igen"/>
+                        <szavazat kepviselo="Vitályos Eszter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Vitányi István József (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="V. Németh Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Witzmann Mihály (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Zsigmond Barna Pál (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Zsigó Róbert (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Aradszki András (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Földi László (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hargitai János (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Harrach Péter (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hollik István (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Juhász Hajnalka (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Latorcai János (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Mihálffy Béla (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Móring József Attila (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nacsa Lőrinc (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Navracsics Tibor (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Rétvári Bence (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Semjén Zsolt (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Seszták Miklós (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Simicskó István (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Soltész Miklós (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Süli János (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szászfalvi László (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Vejkey Imre (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Arató Gergely (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Barkóczi Balázs (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Dávid Ferenc (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Földi Judit (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Gréczy Zsolt (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Gy. Németh Erzsébet (DK)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Hegedüs Andrea (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Kálmán Olga (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Komáromi Zoltán (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Oláh Lajos (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Rónai Sándor (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Sebián-Petrovszki László (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Vadai Ágnes (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Varga Zoltán (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Varju László (DK)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Gurmai Zita (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Harangozó Tamás (MSZP)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Dr. Hiller István (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Hiszékeny Dezső (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Komjáthi Imre (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Kunhalmi Ágnes (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Molnár Zsolt (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Szabó Sándor (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Tóth Bertalan (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Vajda Zoltán (MSZP)" szavazat="Igen"/>
+                        <szavazat kepviselo="Bedő Dávid (Momentum)" szavazat="Ig.távol"/>
+                        <szavazat kepviselo="Dr. Cseh Katalin (Momentum)" szavazat="Igen"/>
+                        <szavazat kepviselo="Gelencsér Ferenc (Momentum)" szavazat="Ig.távol"/>
+                        <szavazat kepviselo="Hajnal Miklós (Momentum)" szavazat="Igen"/>
+                        <szavazat kepviselo="Lőcsei Lajos (Momentum)" szavazat="Ig.távol"/>
+                        <szavazat kepviselo="Sebők Éva (Momentum)" szavazat="Ig.távol"/>
+                        <szavazat kepviselo="Szabó Szabolcs (Momentum)" szavazat="Igen"/>
+                        <szavazat kepviselo="Tompos Márton Kristóf (Momentum)" szavazat="Igen"/>
+                        <szavazat kepviselo="Tóth Endre (Momentum)" szavazat="Ig.távol"/>
+                        <szavazat kepviselo="Ander Balázs (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Bencze János (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Brenner Koloman (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dudás Róbert (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Lukács László György (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Sas Zoltán (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Z. Kárpát Dániel (Jobbik)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Apáti István (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dócs Dávid (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dúró Dóra (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Novák Előd (Mi Hazánk)" szavazat="Nem szav."/>
+                        <szavazat kepviselo="Szabadi István (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Toroczkai László (Mi Hazánk)" szavazat="Nem szav."/>
+                        <szavazat kepviselo="Berki Sándor (Párbeszéd)" szavazat="Igen"/>
+                        <szavazat kepviselo="Jámbor András Imre (Párbeszéd)" szavazat="Tart."/>
+                        <szavazat kepviselo="Dr. Mellár Tamás (Párbeszéd)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Szabó Rebeka (Párbeszéd)" szavazat="Igen"/>
+                        <szavazat kepviselo="Szabó Timea (Párbeszéd)" szavazat="Igen"/>
+                        <szavazat kepviselo="Tordai Bence (Párbeszéd)" szavazat="Igen"/>
+                        <szavazat kepviselo="Bakos Bernadett (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Balassa Péter (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Csárdi Antal (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Hadházy Ákos (független)" szavazat="Ig.távol"/>
+                        <szavazat kepviselo="Jakab Péter (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Kanász-Nagy Máté (független)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Dr. Keresztes László Lóránt (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Ungár Péter (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Varga Ferenc (független)" szavazat="Igen"/>
+                        <szavazat kepviselo="Ritter Imre (Nemzetiségi képviselő)" szavazat="Tart."/>
+            </nev_szerint>
+        </szavazas>
+</szavazas>

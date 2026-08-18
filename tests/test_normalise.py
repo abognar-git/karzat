@@ -11,6 +11,7 @@ from pathlib import Path
 from karzat.freshness import sitting_days_from_ulesnap
 from karzat.majority import Rule, classify
 from karzat.normalise import (
+    POSITIONS,
     NameResolver,
     parse_iromany,
     parse_iromany_szam,
@@ -132,7 +133,7 @@ class VoteDetails(unittest.TestCase):
         self.assertEqual(v["totals_row"]["osszesen"], 199)
         # tallies agree with the roll call
         self.assertEqual(sum(t["igen"] for t in v["faction_tallies"]), 9)
-        self.assertEqual(sum(t["bejelentett_hianyzo"] for t in v["faction_tallies"]), 5)
+        self.assertEqual(sum(t["igazoltan_tavol"] for t in v["faction_tallies"]), 5)   # igtav_db; here all "Előre bejelentett hiányzó"
         m = v["majority"]
         self.assertEqual(m["rule"], "ketharmad_jelenlevo")
         self.assertEqual(m["source"], "payload")
@@ -264,6 +265,30 @@ class RealModeVocabulary(unittest.TestCase):
                 c = classify(payload_rule=mode)
                 self.assertEqual(c.rule, rule)
                 self.assertEqual(c.source, "payload")
+
+
+class SeventhState(unittest.TestCase):
+    """Cycle 42's roll calls carry a seventh position, "Ig.távol" (excused absence), and the faction
+    rows aggregate the seven into five columns. The fixture is a 2025-05-20 vote with both absence states."""
+
+    def test_all_seven_positions_map_and_the_faction_rows_aggregate_them(self):
+        self.assertEqual(len(POSITIONS), 7)
+        self.assertEqual(POSITIONS["Ig.távol"], "igazoltan_tavol")
+        v = parse_szavazas(load("real_szavazas_ckl42_2025-05-20T10-20-49.xml"))
+        self.assertEqual(v["on_date"], "2025-05-20")
+        self.assertEqual(v["seats"], 199)
+        self.assertEqual(v["position_counts"], {"nem": 130, "igen": 52, "tartozkodott": 2, "jelen_nem_szavazott": 1,
+                                                "nem_szavazott": 3, "bejelentett_hianyzo": 4, "igazoltan_tavol": 6})
+        self.assertFalse(any(p["position"].startswith("unknown:") for p in v["positions"]))
+        tot = v["totals_row"]
+        self.assertEqual(tot["igazoltan_tavol"], 4 + 6)          # igtav_db  = Előre bejelentett hiányzó + Ig.távol
+        self.assertEqual(tot["nem_szavazott"], 3 + 1)            # nemszav_db = Nem szav. + Jelen, nem szav.
+        self.assertEqual(tot["osszesen"], 198)                   # one seat vacant that day
+        self.assertEqual(v["present"], 52 + 130 + 2 + 1)         # the excused are not present
+        self.assertEqual([t["faction"] for t in v["faction_tallies"]][:4], ["Fidesz", "KDNP", "DK", "MSZP"])
+        self.assertIn("Nemzetiségi képviselő", [t["faction"] for t in v["faction_tallies"]])
+        self.assertEqual(v["majority"]["rule"], "egyszeru")
+        self.assertFalse(v["passed"])
 
 
 if __name__ == "__main__":

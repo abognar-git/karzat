@@ -28,6 +28,7 @@ sys.path.insert(0, str(ROOT))
 from karzat.majority import RULES, Rule, Tally, classify, evaluate  # noqa: E402
 from karzat.normalise import (  # noqa: E402
     NameResolver,
+    record_name_aliases,
     parse_kepviselok,
     parse_szavazas,
     parse_szavazasok,
@@ -132,6 +133,7 @@ def main(argv: list[str] | None = None) -> int:
         for m in json.loads(snap_path.read_text(encoding="utf-8"))["members"]:
             if m.get("name_hu") and m.get("ogy_ids"):
                 aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
+    aliases.update(record_name_aliases(RAW))               # the API's own spelling wins over Wikidata's label
     resolver = NameResolver(mps, aliases=aliases) if mps else None
     if args.summary_only:
         return 0
@@ -188,8 +190,8 @@ def main(argv: list[str] | None = None) -> int:
           f"{len(idx['disagreements'])} rule/source disagreements")
 
     # -- votes_positions.json: every roll call, compact -----------------------------------
-    # positions: {ts: [[azon_or_name, faction_index, code], ...]}; codes: i/n/t/j/s/h
-    CODES = {"igen": "i", "nem": "n", "tartozkodott": "t", "jelen_nem_szavazott": "j", "nem_szavazott": "s", "bejelentett_hianyzo": "h"}
+    # positions: {ts: [[azon_or_name, faction_index, code], ...]}; codes: i/n/t/j/s/h/v (v = igazoltan távol, cycle 42 onwards)
+    CODES = {"igen": "i", "nem": "n", "tartozkodott": "t", "jelen_nem_szavazott": "j", "nem_szavazott": "s", "bejelentett_hianyzo": "h", "igazoltan_tavol": "v"}
     factions_list: list[str] = []
     members: dict[str, dict] = {}
     positions: dict[str, list] = {}

@@ -1,4 +1,4 @@
--- karzat — SQLite schema (v1, after the first real payloads, 2026-08-18).
+-- karzat — SQLite schema (v2: seven roll-call states after the cycle-42 backfill, 2026-08-18; v1 after the first real payloads).
 --
 -- Target shape for the normalised store the front end reads from. Columns are named after
 -- what the W-API actually returns (see karzat/normalise.py for the payload → record mapping);
@@ -7,8 +7,8 @@
 --
 -- Design decisions:
 --   * a vote is identified by its timestamp (the API's idopont), not by a roll number;
---   * six recorded positions are first-class: igen / nem / tartozkodott / jelen_nem_szavazott /
---     nem_szavazott / bejelentett_hianyzo (the API's Igen / Nem / Tart. / "Jelen, nem szav." /
+--   * seven recorded positions are first-class: igen / nem / tartozkodott / jelen_nem_szavazott /
+--     nem_szavazott / bejelentett_hianyzo / igazoltan_tavol (the API's Igen / Nem / Tart. / "Jelen, nem szav." /
 --     "Nem szav." / "Előre bejelentett hiányzó");
 --   * the majority rule is stored per vote from the API's own "Szavazási mód", never assumed;
 --   * faction membership is a history, not a single field, because MPs move.
@@ -92,8 +92,9 @@ CREATE TABLE IF NOT EXISTS vote (
     tartozkodott   INTEGER,
     osszes_szavazat INTEGER,                      -- "Összes szavazat" = igen+nem+tartozkodott (verified on 259 votes)
     jelen_nem_szavazott INTEGER,                  -- from the roll call ("Jelen, nem szav.")
-    nem_szavazott  INTEGER,                       -- from the roll call / totals row nemszav_db
-    bejelentett_hianyzo INTEGER,                  -- totals row igtav_db ("Előre bejelentett hiányzó")
+    nem_szavazott  INTEGER,                       -- from the roll call ("Nem szav.")
+    bejelentett_hianyzo INTEGER,                  -- from the roll call ("Előre bejelentett hiányzó")
+    igazoltan_tavol INTEGER,                      -- from the roll call ("Ig.távol", cycle 42 onwards) — v2
     present        INTEGER,                       -- igen+nem+tartozkodott+jelen_nem_szavazott — interpretation, VERIFY legally
     present_basis  TEXT,                          -- how `present` was derived
     -- karzat/majority.py: Rule enum, classification provenance, and the derived threshold
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS vote_position (
     mp_name        TEXT NOT NULL,                 -- as printed, kept for auditing the mapping
     faction_id     TEXT,                          -- faction at the moment of the vote (from <kepvcsop_szerint> or history)
     position       TEXT NOT NULL CHECK (position IN ('igen', 'nem', 'tartozkodott', 'jelen_nem_szavazott',
-                                                     'nem_szavazott', 'bejelentett_hianyzo')),
+                                                     'nem_szavazott', 'bejelentett_hianyzo', 'igazoltan_tavol')),
     PRIMARY KEY (vote_ts, mp_name)
 );
 
@@ -126,7 +127,10 @@ CREATE INDEX IF NOT EXISTS vote_position_mp ON vote_position(mp_azon);
 CREATE TABLE IF NOT EXISTS vote_faction_tally (
     vote_ts        TEXT NOT NULL REFERENCES vote(ts),
     faction_id     TEXT NOT NULL,
-    igen           INTEGER, nem INTEGER, tartozkodott INTEGER, nem_szavazott INTEGER, bejelentett_hianyzo INTEGER, osszesen INTEGER,
+    igen           INTEGER, nem INTEGER, tartozkodott INTEGER,
+    nem_szavazott  INTEGER,                       -- nemszav_db = "Nem szav." + "Jelen, nem szav." (the API's own aggregation)
+    igazoltan_tavol INTEGER,                      -- igtav_db  = "Ig.távol" + "Előre bejelentett hiányzó" (287 of 288 votes; one off-by-one 2025-05-19)
+    osszesen       INTEGER,
     PRIMARY KEY (vote_ts, faction_id)
 );
 

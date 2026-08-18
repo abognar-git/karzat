@@ -2,7 +2,9 @@
 
 Payloads the tests and the golden fingerprints run against.
 
-- `real_<service>_<key>.xml` — real W-API responses captured on 2026-08-18 (cycle 43), trimmed
+- `real_<service>_<key>.xml` — real W-API responses captured on 2026-08-18 (cycle 43, plus one
+  cycle-42 roll call, `real_szavazas_ckl42_2025-05-20T10-20-49.xml`, kept whole because it carries
+  the seventh position state "Ig.távol" and both absence states at once: igtav_db 10 = 6 + 4), trimmed
   where the whole payload is not the point (`_head5`, `_head3`, `_trimmed`) and kept whole
   where it is (the four `real_szavazas_*` roll calls, `real_ulesnap_43`, `real_iromany_71`).
   Trimming was done with ElementTree, so element order and content are the API's; only the

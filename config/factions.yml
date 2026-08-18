@@ -49,9 +49,11 @@ factions:
     sort_order: 90
     wikidata_seats_2026_08_18: 0
 
-# Vote positions — the six recorded states, exactly as the API's roll call prints them
+# Vote positions — the seven recorded states, exactly as the API's roll call prints them
 # (karzat/normalise.py POSITIONS). tartózkodott IS present and counts against a motion under
-# every present-based rule; "Jelen, nem szav." is present too; the last two are absences.
+# every present-based rule; "Jelen, nem szav." is present too; the last three are absences.
+# "Ig.távol" (excused absence) never occurs in cycle 43's first 259 roll calls; it does in 288
+# of cycle 42's, so a page for cycle 42 must draw it.
 positions:
   igen:                 { api: "Igen",                        label: "Igen",                          glyph: "filled" }
   nem:                  { api: "Nem",                         label: "Nem",                           glyph: "hollow" }
@@ -59,6 +61,7 @@ positions:
   jelen_nem_szavazott:  { api: "Jelen, nem szav.",            label: "Jelen, nem szavazott",          glyph: "ring" }
   nem_szavazott:        { api: "Nem szav.",                   label: "Nem szavazott",                 glyph: "faint" }
   bejelentett_hianyzo:  { api: "Előre bejelentett hiányzó",   label: "Előre bejelentett hiányzó",     glyph: "dot" }
+  igazoltan_tavol:      { api: "Ig.távol",                    label: "Igazoltan távol",               glyph: "dot-ring" }
 
 # Majority rules — implemented in karzat/majority.py (Rule enum); this block is documentation
 # for the front end. `needed` formulas: N = present MPs or all MPs (seats) as stated.

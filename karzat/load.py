@@ -28,6 +28,7 @@ from typing import Any, Iterable
 from .majority import RULES, Rule
 from .normalise import (
     NameResolver,
+    record_name_aliases,
     parse_iromany,
     parse_iromanyok,
     parse_kepviselo,
@@ -55,7 +56,7 @@ SELECT p.mp_azon, mp.name, p.faction_id,
        COUNT(*)                                                     AS votes_in_roll,
        SUM(CASE WHEN p.position IN ('igen','nem','tartozkodott') THEN 1 ELSE 0 END)   AS cast_votes,
        SUM(CASE WHEN p.position = 'tartozkodott' THEN 1 ELSE 0 END)                    AS abstained,
-       SUM(CASE WHEN p.position IN ('nem_szavazott','bejelentett_hianyzo') THEN 1 ELSE 0 END) AS absent,
+       SUM(CASE WHEN p.position IN ('nem_szavazott','bejelentett_hianyzo','igazoltan_tavol') THEN 1 ELSE 0 END) AS absent,
        SUM(CASE WHEN p.position IN ('igen','nem','tartozkodott') AND p.position = fm.majority_position THEN 1 ELSE 0 END) AS with_faction,
        SUM(CASE WHEN p.position IN ('igen','nem','tartozkodott') AND p.position <> fm.majority_position THEN 1 ELSE 0 END) AS against_faction
 FROM vote_position p
@@ -197,15 +198,16 @@ class Loader:
         maj = v.get("majority") or {}
         self.conn.execute(
             "INSERT INTO vote(ts, slug, ckl, on_date, sitting_nap, kind, mode, secret, result_raw, passed, remark, igen, nem, tartozkodott, "
-            "osszes_szavazat, jelen_nem_szavazott, nem_szavazott, bejelentett_hianyzo, present, present_basis, "
+            "osszes_szavazat, jelen_nem_szavazott, nem_szavazott, bejelentett_hianyzo, igazoltan_tavol, present, present_basis, "
             "majority_rule, majority_source, majority_evidence, needed, margin, present_assumed, raw_json) "
-            "VALUES (?,?,?,?,(SELECT nap FROM sitting_day WHERE on_date=? LIMIT 1),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
+            "VALUES (?,?,?,?,(SELECT nap FROM sitting_day WHERE on_date=? LIMIT 1),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
             "ON CONFLICT(ts) DO UPDATE SET kind=excluded.kind, mode=excluded.mode, secret=excluded.secret, result_raw=excluded.result_raw, "
             "passed=excluded.passed, remark=excluded.remark, igen=excluded.igen, nem=excluded.nem, tartozkodott=excluded.tartozkodott, "
             "osszes_szavazat=excluded.osszes_szavazat, "
             "jelen_nem_szavazott=COALESCE(excluded.jelen_nem_szavazott, vote.jelen_nem_szavazott), "
             "nem_szavazott=COALESCE(excluded.nem_szavazott, vote.nem_szavazott), "
             "bejelentett_hianyzo=COALESCE(excluded.bejelentett_hianyzo, vote.bejelentett_hianyzo), "
+            "igazoltan_tavol=COALESCE(excluded.igazoltan_tavol, vote.igazoltan_tavol), "
             "present=COALESCE(excluded.present, vote.present), present_basis=COALESCE(excluded.present_basis, vote.present_basis), "
             "majority_rule=COALESCE(excluded.majority_rule, vote.majority_rule), majority_source=COALESCE(excluded.majority_source, vote.majority_source), "
             "majority_evidence=COALESCE(excluded.majority_evidence, vote.majority_evidence), needed=COALESCE(excluded.needed, vote.needed), "
@@ -214,9 +216,12 @@ class Loader:
             (v["ts"], v["slug"], self._vote_ckl(v["on_date"]), v["on_date"], v["on_date"], v["kind"], v["mode"], 1 if v["secret"] else 0,
              v["result_raw"], None if v["passed"] is None else int(v["passed"]), v.get("remark"),
              v["igen"], v["nem"], v["tartozkodott"], v["osszes_szavazat"],
+             # the four non-cast counts come from the roll call itself (the totals row aggregates them differently:
+             # nemszav_db lumps "Jelen, nem szav." in, igtav_db lumps "Előre bejelentett hiányzó" in)
              (v.get("position_counts") or {}).get("jelen_nem_szavazott") if detail else None,
-             ((v.get("totals_row") or {}).get("nem_szavazott") if detail else None),
-             ((v.get("totals_row") or {}).get("bejelentett_hianyzo") if detail else None),
+             (v.get("position_counts") or {}).get("nem_szavazott") if detail else None,
+             (v.get("position_counts") or {}).get("bejelentett_hianyzo") if detail else None,
+             (v.get("position_counts") or {}).get("igazoltan_tavol") if detail else None,
              v.get("present") if detail else None, v.get("present_basis") if detail else None,
              maj.get("rule"), maj.get("source"), maj.get("evidence"), maj.get("needed"), maj.get("margin"),
              (1 if maj.get("present_assumed") else 0) if maj else None,
@@ -274,8 +279,8 @@ class Loader:
             self._faction(p["faction"])
         for t in v["faction_tallies"]:
             self._faction(t["faction"])
-            self.conn.execute("INSERT OR REPLACE INTO vote_faction_tally(vote_ts, faction_id, igen, nem, tartozkodott, nem_szavazott, bejelentett_hianyzo, osszesen) VALUES (?,?,?,?,?,?,?,?)",
-                              (ts, t["faction"], t["igen"], t["nem"], t["tartozkodott"], t["nem_szavazott"], t["bejelentett_hianyzo"], t["osszesen"]))
+            self.conn.execute("INSERT OR REPLACE INTO vote_faction_tally(vote_ts, faction_id, igen, nem, tartozkodott, nem_szavazott, igazoltan_tavol, osszesen) VALUES (?,?,?,?,?,?,?,?)",
+                              (ts, t["faction"], t["igen"], t["nem"], t["tartozkodott"], t["nem_szavazott"], t["igazoltan_tavol"], t["osszesen"]))
         # faction plurality among cast positions
         by_f: dict[str, Counter] = {}
         for p in v["positions"]:
@@ -387,6 +392,7 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
                     qid_by_azon.setdefault(oid, m["qid"])
                 if m.get("name_hu") and m.get("ogy_ids"):
                     aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
+        aliases.update(record_name_aliases(cache))          # the API's own spelling wins over Wikidata's label
         mps = []
         kl = cache / "kepviselok" / "all.xml"
         if kl.exists():
