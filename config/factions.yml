@@ -1,10 +1,12 @@
 # Faction (képviselőcsoport) presentation config for ciklus 43 (elected April 2026).
 #
-# SOURCE OF THE LIST: Wikidata, queried 2026-08-18 — 199 items hold P39 "member of the National
-# Assembly of Hungary" (Q17590876) with start 2026-05-09 and no end date, and the P4100
-# parliamentary-group qualifier gives: TISZA 141 · Fidesz 44 · KDNP 8 · Mi Hazánk 6.
-# That is community-maintained data. VERIFY against kepviselok.cgi / <kepvcsop-tagsagok>
-# before publishing anything, and match `id` to the exact string the API prints.
+# SOURCE OF THE LIST: reference/wikidata/members_ckl43.json (pulled by scripts/pull_wikidata.py,
+# 2026-08-18): 199 current holders of P39 "member of the National Assembly of Hungary" whose
+# statement started on/after 2026-04-01, grouped by the P4100 parliamentary-group qualifier —
+# TISZA 141 · Fidesz 44 · KDNP 8 · Mi Hazánk 6. Use P4100, not P102 (party membership lags:
+# it still says Jobbik for Mi Hazánk MPs). Community-maintained data: VERIFY against
+# kepviselok.cgi / <kepvcsop-tagsagok> before publishing, and match `id` to the API's spelling.
+# tests/test_wikidata.py asserts the seat counts below equal the snapshot's summary.
 #
 # Colours are conventional party colours so the diagram renders; replace with the palette you
 # settle on. sort_order: left→right seating in the chamber diagram (parlament.hu: government
@@ -17,21 +19,29 @@ factions:
     name: Tisztelet és Szabadság Párt
     colour: "#7b3f00"
     sort_order: 10
+    wikidata_group: Tisztelet és Szabadság Párt
+    wikidata_group_qid: Q125418097
     wikidata_seats_2026_08_18: 141
   - id: Fidesz
     name: Fidesz – Magyar Polgári Szövetség
     colour: "#f36f21"
     sort_order: 60
+    wikidata_group: Fidesz
+    wikidata_group_qid: Q387006
     wikidata_seats_2026_08_18: 44
   - id: KDNP
     name: Kereszténydemokrata Néppárt
     colour: "#2c6db2"
     sort_order: 70
+    wikidata_group: Kereszténydemokrata Néppárt
+    wikidata_group_qid: Q277879
     wikidata_seats_2026_08_18: 8
   - id: "Mi Hazánk"
     name: Mi Hazánk Mozgalom
     colour: "#3b5e2b"
     sort_order: 80
+    wikidata_group: Mi Hazánk Mozgalom
+    wikidata_group_qid: Q55443054
     wikidata_seats_2026_08_18: 6
   - id: független
     name: Független képviselők

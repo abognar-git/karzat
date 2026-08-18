@@ -58,7 +58,7 @@ angle) is documented in the teardown as the fallback.
 - [x] Client + CLI + offline tests (`python3 -m unittest discover -s tests -t .`)
 - [x] Draft schema (`schema.sql`) and faction/majority config (`config/factions.yml`) — both marked VERIFY throughout
 - [x] Majority-rule module (`karzat/majority.py`): six rules with citations, explicit present/seats bases, classifier with provenance; 23 tests
-- [x] Cycle-43 faction list from Wikidata (199 members, four groups) as a placeholder to verify against the API
+- [x] Wikidata identity spine (`scripts/pull_wikidata.py` → `reference/wikidata/members_ckl43.json`): 199 members, four groups, and the P4966 ↔ `p_azon` crosswalk for 197 of them; to verify against the API
 - [x] Freshness contract (`karzat/freshness.py` + `python3 -m karzat freshness`): status and a bilingual sentence from sitting days, newest vote, last sync; 16 tests
 - [x] Harness: golden fingerprints of every fixture (`tests/test_golden.py`, `python3 -m karzat fingerprint`) and the README gate (`scripts/check_readme.py`, run by the suite) — the numbers in this file are recomputed, not typed
 - [ ] Access token (requested via parlament.hu/web-api-regisztracio, Aug 2026)
@@ -69,7 +69,7 @@ angle) is documented in the teardown as the fallback.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 60 tests
+python3 -m unittest discover -s tests -t .      # offline; 71 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -79,6 +79,7 @@ python3 -m karzat sync-mps                       # MP list + one call per MP, ca
 python3 -m karzat freshness --fetch              # one ulesnap call; writes data/freshness.json + the sentence
 python3 -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML → JSON
 python3 -m karzat fingerprint tests/fixtures/*.xml   # digest table for tests/test_golden.py
+python3 -m scripts.pull_wikidata                 # re-pull the Wikidata member snapshot (deliberately)
 ```
 
 Everything the client fetches is cached as raw XML under `data/raw/<service>/` with
@@ -91,7 +92,8 @@ is git-ignored. Live requests are paced at ≥ 0.6 s.
 | Source | Role | Status |
 |---|---|---|
 | parlament.hu Web API (`web-api-pub/*.cgi`) | Everything in phase 1: MPs, votes, bills, committees, sittings, speeches | Token pending; requests logged, personal, non-transferable; republishing is an intended use per the manual |
-| parlament.hu ülésrend (seating map) | Coordinates for real seats, if `<ulohely>` maps onto a public plan | Not yet looked at |
+| Wikidata (CC0) + Commons | Identity spine: QIDs, P4966 = `p_azon`, P4100 group, constituency, portraits with per-file licences | Snapshot pulled 2026-08-18 into `reference/wikidata/`; re-pull deliberately |
+| parlament.hu ülésrend (seating map) | Coordinates for real seats, if `<ulohely>` maps onto a public plan | Looked for; the public page is prose only, no machine-readable plan found |
 | Magyar Közlöny (magyarkozlony.hu, single PDF per issue, RSS at `/feed`) | Phase 2 only: promulgation and decrees | Deliberately out of scope for now |
 | njt.hu (Nemzeti Jogszabálytár) | Better structured than the gazette for "what the law says" | Phase 2 candidate |
 | valasztas.hu | Constituency results per MP (margin, egyéni vs. lista) | Nice-to-have enrichment |
@@ -144,6 +146,23 @@ Per Wikidata on 2026-08-18, the 199 members of cycle 43 sit in four groups — T
 Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one group above the
 133-seat line on its own. That is why this module comes before any pixel of UI.
 
+## The identity spine
+
+`reference/wikidata/members_ckl43.json` is a dated snapshot of Wikidata's view of the
+chamber, pulled by `scripts/pull_wikidata.py` (one SPARQL query, plus Commons lookups for
+image licences). It hedges two things the W-API may or may not give me — per-MP ids in the
+roll and reusable portraits — and it turned out to carry more than a hedge: **P4966
+"Hungarian National Assembly ID" is the W-API's `p_azon`** (its formatter URL ends in
+`kepv_adat?p_azon=$1`), so the crosswalk between the two worlds exists before the token does.
+On the first pull: 201 statements, 199 current members and 2 ended (two Fidesz seats changed
+hands in July and August), 197 of the 199 with a P4966 id — the two without are the
+replacements seated on 10 August, whom Wikidata has not caught up with — 106 with a
+constituency (P768; exactly the number of single-member districts, so that is the egyéni set)
+and 49 with a Commons portrait, under a mix of licences that has to be honoured per file.
+Group comes from the P4100 qualifier, not from P102 party membership, which lags. All of it
+is to be verified against `kepviselok.cgi`; the numbers in this paragraph are gated by
+`scripts/check_readme.py` on the snapshot itself.
+
 ## Generated, not typed
 
 Two mechanisms carried over from the sibling repos, both live before any real data exists:
@@ -189,7 +208,7 @@ unavailable, say that currency cannot be told rather than imply it. `sync-votes`
 1. XML declared encoding (UTF-8 vs. ISO-8859-2) and whether any fields contain HTML.
 2. `szavazas.cgi`: does `<tulajdonsagok>` state the vote type, the result *and the majority rule*? Does `<nev_szerint>` carry `p_azon` per MP or only names (name collisions)? How do absentees appear — as `nem szavazott` or missing?
 3. `iromany.cgi`: does `<tulajdonsagok>` carry the promulgation ("… évi … törvény", MK issue)? What is the `<esemenyek>` taxonomy?
-4. `kepviselo.cgi` for a former MP's `p_azon` — does history work? What does `<ulohely>` look like, and is there a public seat map to digitise?
+4. `kepviselo.cgi` for a former MP's `p_azon` — does history work? What does `<ulohely>` look like, and is there a public seat map to digitise? And do the 197 P4966 ids in the Wikidata snapshot resolve one-for-one to `kepviselok.cgi` (then find the two missing ones)?
 5. Earliest date `szavazasok.cgi` serves; typical payload sizes; whether any throttling appears in practice (none is documented).
 6. The manual's URL for the committee *list* is a broken link; `bizottsagok.cgi` is my guess.
 7. How the API spells the four cycle-43 factions Wikidata reports — `config/factions.yml` ids are placeholders until then.
@@ -205,12 +224,12 @@ cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · majority.py (rules, thresholds, classifier) · freshness.py (what the site may say about currency) · fingerprint.py
-scripts/           check_readme.py — the README gate ("Generated, not typed")
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · majority.py (rules, thresholds, classifier) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
+scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot
 tests/             offline tests: client/XML · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (synthetic now, real later)
 schema.sql         draft normalised store (SQLite)
 config/factions.yml faction colours/order, position vocabulary, majority rules — placeholders
-reference/         parlament-webapi/ (manual v2.5, PDF + text) · konzol/ (teardown + notes)
+reference/         parlament-webapi/ (manual v2.5, PDF + text) · konzol/ (teardown + notes) · wikidata/ (member snapshot + README)
 data/raw/          git-ignored XML cache
 ```
 

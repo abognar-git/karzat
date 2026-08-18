@@ -1,0 +1,4545 @@
+{
+ "source": "Wikidata (CC0) + Wikimedia Commons extmetadata for image licences",
+ "retrieved_at": "2026-08-18T07:08:45+00:00",
+ "since": "2026-04-01",
+ "sparql": "SELECT ?p ?nameHu ?nameEn ?ogyId ?group ?groupLabel ?start ?end ?district ?districtLabel\n       ?party ?partyLabel ?dob ?sex ?sexLabel ?image\nWHERE {\n  ?p p:P39 ?st .\n  ?st ps:P39 wd:Q17590876 ;\n      pq:P580 ?start .\n  FILTER(?start >= \"2026-04-01T00:00:00Z\"^^xsd:dateTime)\n  OPTIONAL { ?st pq:P582 ?end }\n  OPTIONAL { ?st pq:P4100 ?group }\n  OPTIONAL { ?st pq:P768 ?district }\n  OPTIONAL { ?p wdt:P4966 ?ogyId }\n  OPTIONAL { ?p wdt:P102 ?party }\n  OPTIONAL { ?p wdt:P569 ?dob }\n  OPTIONAL { ?p wdt:P21 ?sex }\n  OPTIONAL { ?p wdt:P18 ?image }\n  OPTIONAL { ?p rdfs:label ?nameHu FILTER(LANG(?nameHu) = \"hu\") }\n  OPTIONAL { ?p rdfs:label ?nameEn FILTER(LANG(?nameEn) = \"en\") }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"hu,en\" . }\n}\nORDER BY ?nameHu ?start",
+ "summary": {
+  "statements": 201,
+  "current_members": 199,
+  "ended_statements": 2,
+  "by_group_current": {
+   "Tisztelet és Szabadság Párt": 141,
+   "Fidesz": 44,
+   "Kereszténydemokrata Néppárt": 8,
+   "Mi Hazánk Mozgalom": 6
+  },
+  "with_ogy_id": 197,
+  "with_image": 49,
+  "with_district": 106,
+  "duplicate_ogy_ids": []
+ },
+ "members": [
+  {
+   "qid": "Q774389",
+   "name_hu": "Apáti István",
+   "name_en": "István Apáti",
+   "ogy_ids": [
+    "a018"
+   ],
+   "group_qid": "Q55443054",
+   "group": "Mi Hazánk Mozgalom",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1978-03-23",
+   "sex": "férfi",
+   "images": [
+    "István Apáti Senate of Poland (cropped).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Istv%C3%A1n%20Ap%C3%A1ti%20Senate%20of%20Poland%20%28cropped%29.JPG?width=400",
+   "licence": "CC BY-SA 3.0 pl",
+   "image_author": "Michał Józefaciuk"
+  },
+  {
+   "qid": "Q139387156",
+   "name_hu": "Bakos Csaba Attila",
+   "name_en": "Csaba Attila Bakos",
+   "ogy_ids": [
+    "002M"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15719285",
+   "district": "Somogy vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139457752",
+   "name_hu": "Balajti István",
+   "name_en": "István Balajti",
+   "ogy_ids": [
+    "002T"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443687",
+   "district": "Pest vármegyei 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139387469",
+   "name_hu": "Balatincz Péter",
+   "name_en": "Péter Balatincz",
+   "ogy_ids": [
+    "003C"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725765",
+   "district": "Veszprém vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1970-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5625635",
+   "name_hu": "Balla György",
+   "name_en": "György Balla",
+   "ogy_ids": [
+    "b007"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1962-08-11",
+   "sex": "férfi",
+   "images": [
+    "Balla György sajtótájékoztatója.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Balla%20Gy%C3%B6rgy%20sajt%C3%B3t%C3%A1j%C3%A9koztat%C3%B3ja.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Felhasznalo158"
+  },
+  {
+   "qid": "Q6845361",
+   "name_hu": "Balla Mihály",
+   "name_en": "Mihály Balla",
+   "ogy_ids": [
+    "b008"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15719279",
+   "district": "Nógrád vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1965-05-21",
+   "sex": "férfi",
+   "images": [
+    "Balla Mihály országgyűlési képviselő.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Balla%20Mih%C3%A1ly%20orsz%C3%A1ggy%C5%B1l%C3%A9si%20k%C3%A9pvisel%C5%91.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Kempi"
+  },
+  {
+   "qid": "Q139715442",
+   "name_hu": "Balogh Mihály",
+   "name_en": "Mihály Balogh",
+   "ogy_ids": [
+    "001P"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139418132",
+   "name_hu": "Barna-Szabó Tímea",
+   "name_en": null,
+   "ogy_ids": [
+    "002J"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16522864",
+   "district": "Szabolcs-Szatmár-Bereg vármegyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q792654",
+   "name_hu": "Bencsik János",
+   "name_en": "János Bencsik",
+   "ogy_ids": [
+    "b034"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1965-07-31",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139488375",
+   "name_hu": "Benke József",
+   "name_en": "József Benke",
+   "ogy_ids": [
+    "0046"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15719287",
+   "district": "Somogy vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139665230",
+   "name_hu": "Berki Ákos",
+   "name_en": "Ákos Berki",
+   "ogy_ids": [
+    "001R"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "2005-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139669802",
+   "name_hu": "Bicskei László",
+   "name_en": "László Bicskei",
+   "ogy_ids": [
+    "0031"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139286063",
+   "name_hu": "Bihari Zoltán",
+   "name_en": "Zoltán Bihari",
+   "ogy_ids": [
+    "0043"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15876867",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1968-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139458506",
+   "name_hu": "Bilisics Zita",
+   "name_en": "Zita Bilisics",
+   "ogy_ids": [
+    "002Z"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443688",
+   "district": "Pest vármegyei 9. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/baabf0d5ecf9852a7c52cb166367a693",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139461519",
+   "name_hu": "Boda Nikoletta",
+   "name_en": "Nikoletta Boda",
+   "ogy_ids": [
+    "001Z"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445571",
+   "district": "Budapesti 11. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139329000",
+   "name_hu": "Bodóczi István",
+   "name_en": "István Bodóczi",
+   "ogy_ids": [
+    "0028"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15838188",
+   "district": "Békés vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1990-03-04",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139329002",
+   "name_hu": "Borics Mihály",
+   "name_en": "Mihály Borics",
+   "ogy_ids": [
+    "002O"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888853",
+   "district": "Fejér vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1981-12-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139553246",
+   "name_hu": "Borsós Gabriella",
+   "name_en": "Gabriella Borsós",
+   "ogy_ids": [
+    "001C"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q850818",
+   "name_hu": "Budai Gyula",
+   "name_en": "Gyula Budai",
+   "ogy_ids": [
+    "b076"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": "2026-08-03",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-04-02",
+   "sex": "férfi",
+   "images": [
+    "Budai Gyula (crop).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Budai%20Gyula%20%28crop%29.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Elekes Andor"
+  },
+  {
+   "qid": "Q139670788",
+   "name_hu": "Bugya László",
+   "name_en": "László Bugya",
+   "ogy_ids": [
+    "0039"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1971-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q125707304",
+   "name_hu": "Bujdosó Andrea",
+   "name_en": "Andrea Bujdosó",
+   "ogy_ids": [
+    "000T"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443681",
+   "district": "Pest vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1970-02-03",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139292267",
+   "name_hu": "Bárkányi Bence",
+   "name_en": "Bence Bárkányi",
+   "ogy_ids": [
+    "003Y"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888750",
+   "district": "Csongrád-Csanád vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1995-11-21",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q854883",
+   "name_hu": "Bódis Kriszta",
+   "name_en": "Kriszta Bódis",
+   "ogy_ids": [
+    "000W"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445562",
+   "district": "Budapesti 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1967-06-09",
+   "sex": "nő",
+   "images": [
+    "Kriszta.Bodis.jpeg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kriszta.Bodis.jpeg?width=400",
+   "licence": "CC BY-SA 3.0",
+   "image_author": "András Hász hungarian  photographer"
+  },
+  {
+   "qid": "Q139328999",
+   "name_hu": "Bódis Péter",
+   "name_en": "Péter Bódis",
+   "ogy_ids": [
+    "0026"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891181",
+   "district": "Heves vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q118369556",
+   "name_hu": "Bóka János",
+   "name_en": "János Bóka",
+   "ogy_ids": [
+    "b130"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1978-07-27",
+   "sex": "férfi",
+   "images": [
+    "János Bóka GAC 24Sept2024.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/J%C3%A1nos%20B%C3%B3ka%20GAC%2024Sept2024.jpg?width=400",
+   "licence": "Attribution",
+   "image_author": "European Union"
+  },
+  {
+   "qid": "Q139670361",
+   "name_hu": "Bóka Zsolt",
+   "name_en": "Zsolt Bóka",
+   "ogy_ids": [
+    "0037"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139460132",
+   "name_hu": "Bögi Viktória",
+   "name_en": "Viktória Bögi",
+   "ogy_ids": [
+    "002F"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888856",
+   "district": "Fejér vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139488516",
+   "name_hu": "Csatári Ernő",
+   "name_en": "Ernő Csatári",
+   "ogy_ids": [
+    "002L"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15719282",
+   "district": "Somogy vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1976-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139395986",
+   "name_hu": "Cseh Tamás",
+   "name_en": "Tamás Cseh",
+   "ogy_ids": [
+    "0045"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16523385",
+   "district": "Tolna vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1974-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q131287967",
+   "name_hu": "Csibi Krisztina",
+   "name_en": "Krisztina Csibi",
+   "ogy_ids": [
+    "0005"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-06-27",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139286168",
+   "name_hu": "Csiszár Béla",
+   "name_en": "Béla Csiszár",
+   "ogy_ids": [
+    "003R"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888847",
+   "district": "Fejér vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1975-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139393042",
+   "name_hu": "Csontos Bence",
+   "name_en": "Bence Csontos",
+   "ogy_ids": [
+    "0034"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15734020",
+   "district": "Bács-Kiskun vármegyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1998-05-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q135119197",
+   "name_hu": "Csuzda Gábor",
+   "name_en": "Gábor Csuzda",
+   "ogy_ids": [
+    "000E"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15875501",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1989-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139460393",
+   "name_hu": "Csák László",
+   "name_en": "László Csák",
+   "ogy_ids": [
+    "003W"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891152",
+   "district": "Hajdú-Bihar vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139678412",
+   "name_hu": "Császár Martin",
+   "name_en": "Martin Császár",
+   "ogy_ids": [
+    "001Q"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1997-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q257826",
+   "name_hu": "Csézy",
+   "name_en": "Csézy",
+   "ogy_ids": [
+    "000U"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15876906",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1979-10-09",
+   "sex": "nő",
+   "images": [
+    "Csézy, Hungary, Eurovision 2008, 2nd semifinal.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cs%C3%A9zy%2C%20Hungary%2C%20Eurovision%202008%2C%202nd%20semifinal.jpg?width=400",
+   "licence": "CC BY 2.0",
+   "image_author": "Daniel Aragay"
+  },
+  {
+   "qid": "Q139328995",
+   "name_hu": "Csőszi Attila",
+   "name_en": "Attila Csőszi",
+   "ogy_ids": [
+    "002P"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15732107",
+   "district": "Bács-Kiskun vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/17431fb9f87377b490285813258dceaf",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139678390",
+   "name_hu": "Czakó-Czirbus Pál",
+   "name_en": "Pál Czakó-Czirbus",
+   "ogy_ids": [
+    "003H"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139328993",
+   "name_hu": "Czipa András",
+   "name_en": "András Czipa",
+   "ogy_ids": [
+    "0049"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15838557",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/0c2bf93e901adc32b111cffc6e0086e4",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139579187",
+   "name_hu": "Czirbus Gábor",
+   "name_en": "Gábor Czirbus",
+   "ogy_ids": [
+    "004U"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1980-06-28",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139379941",
+   "name_hu": "Dicső Viktória",
+   "name_en": "Viktória Dicső",
+   "ogy_ids": [
+    "003G"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16522860",
+   "district": "Szabolcs-Szatmár-Bereg vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139328997",
+   "name_hu": "Diószegi Judit",
+   "name_en": "Judit Diószegi",
+   "ogy_ids": [
+    "0027"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891114",
+   "district": "Győr-Moson-Sopron vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q63224381",
+   "name_hu": "Dócs Dávid",
+   "name_en": "Dávid Dócs",
+   "ogy_ids": [
+    "d040"
+   ],
+   "group_qid": "Q55443054",
+   "group": "Mi Hazánk Mozgalom",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1987-02-25",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q639328",
+   "name_hu": "Dúró Dóra",
+   "name_en": "Dóra Dúró",
+   "ogy_ids": [
+    "d028"
+   ],
+   "group_qid": "Q55443054",
+   "group": "Mi Hazánk Mozgalom",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1987-03-05",
+   "sex": "nő",
+   "images": [
+    "Dóra Dúró.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/D%C3%B3ra%20D%C3%BAr%C3%B3.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Jobbik Magyarországért Mozgalom"
+  },
+  {
+   "qid": "Q55753818",
+   "name_hu": "F. Kovács Sándor",
+   "name_en": "Sándor F. Kovács",
+   "ogy_ids": [
+    "k151"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16521084",
+   "district": "Jász-Nagykun-Szolnok vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1968-06-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139383839",
+   "name_hu": "Farkas Csongor",
+   "name_en": "Csongor Farkas",
+   "ogy_ids": [
+    "003V"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891594",
+   "district": "Jász-Nagykun-Szolnok vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1992-01-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139286091",
+   "name_hu": "Ferenczi Gábor",
+   "name_en": "Gábor Ferenczi",
+   "ogy_ids": [
+    "003Z"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888710",
+   "district": "Csongrád-Csanád vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1984-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q136408471",
+   "name_hu": "Forsthoffer Ágnes",
+   "name_en": "Ágnes Forsthoffer",
+   "ogy_ids": [
+    "000P"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725759",
+   "district": "Veszprém vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1980-03-24",
+   "sex": "nő",
+   "images": [
+    "Ágnes Forsthoffer i Włodzimierz Czarzasty (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/%C3%81gnes%20Forsthoffer%20i%20W%C5%82odzimierz%20Czarzasty%20%28cropped%29.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "Sejm_RP"
+  },
+  {
+   "qid": "Q139286062",
+   "name_hu": "Gajda Attila",
+   "name_en": "Attila Gajda",
+   "ogy_ids": [
+    "004G"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888679",
+   "district": "Csongrád-Csanád vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1972-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q138773478",
+   "name_hu": "Gajdos László",
+   "name_en": "László Gajdos",
+   "ogy_ids": [
+    "000O"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16522858",
+   "district": "Szabolcs-Szatmár-Bereg vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1962-07-31",
+   "sex": "férfi",
+   "images": [
+    "László Gajdos.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%C3%A1szl%C3%B3%20Gajdos.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Kölcsey Televízió"
+  },
+  {
+   "qid": "Q139372072",
+   "name_hu": "Gombár Dávid",
+   "name_en": null,
+   "ogy_ids": [
+    "003E"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15838191",
+   "district": "Békés vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q5550584",
+   "name_hu": "Gulyás Gergely",
+   "name_en": "Gergely Gulyás",
+   "ogy_ids": [
+    "g053"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-09-21",
+   "sex": "férfi",
+   "images": [
+    "Gulyás Gergely.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Guly%C3%A1s%20Gergely.JPG?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": null
+  },
+  {
+   "qid": "Q139328994",
+   "name_hu": "Gurzó Mária",
+   "name_en": "Mária Gurzó",
+   "ogy_ids": [
+    "002H"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15838199",
+   "district": "Békés vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1956-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q589138",
+   "name_hu": "Gyopáros Alpár",
+   "name_en": "Alpár Gyopáros",
+   "ogy_ids": [
+    "g048"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891131",
+   "district": "Győr-Moson-Sopron vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-05-15",
+   "sex": "férfi",
+   "images": [
+    "Gyoparosalpar.png"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gyoparosalpar.png?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Titi49ster"
+  },
+  {
+   "qid": "Q139678858",
+   "name_hu": "Gyuk Zsolt",
+   "name_en": "Zsolt Gyuk",
+   "ogy_ids": [
+    "001F"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1969-02-15",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139678659",
+   "name_hu": "Gyömbér Dávid",
+   "name_en": "Dávid Gyömbér",
+   "ogy_ids": [
+    "003O"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1991-08-17",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139678805",
+   "name_hu": "Gyöngyösi István",
+   "name_en": "István Gyöngyösi",
+   "ogy_ids": [
+    "001N"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1998-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139376119",
+   "name_hu": "Gáspár Levente",
+   "name_en": "Levente Gáspár",
+   "ogy_ids": [
+    "0041"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725748",
+   "district": "Veszprém vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139328996",
+   "name_hu": "Göröghné Bocskai Éva",
+   "name_en": "Éva Göröghné Bocskai",
+   "ogy_ids": [
+    "000Z"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891176",
+   "district": "Hajdú-Bihar vármegyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/d78a2934550e39a8b7df89e604e0edb0",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139679793",
+   "name_hu": "Hajdu Márton Ádám",
+   "name_en": "Ádám Márton Hajdu",
+   "ogy_ids": [
+    "001K"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139380408",
+   "name_hu": "Hallerné Nagy Anikó",
+   "name_en": "Anikó Hallerné Nagy",
+   "ogy_ids": [
+    "0042"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16520155",
+   "district": "Győr-Moson-Sopron vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1968-01-03",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139383551",
+   "name_hu": "Halmai Ferenc",
+   "name_en": "Ferenc Halmai",
+   "ogy_ids": [
+    "002E"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891583",
+   "district": "Jász-Nagykun-Szolnok vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q126488073",
+   "name_hu": "Hankó Balázs",
+   "name_en": "Balázs Hankó",
+   "ogy_ids": [
+    "h092"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-03-20",
+   "sex": "férfi",
+   "images": [
+    "Hankó Balázs in 2025 01.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hank%C3%B3%20Bal%C3%A1zs%20in%202025%2001.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "Elekes Andor"
+  },
+  {
+   "qid": "Q139681168",
+   "name_hu": "Hantosi István",
+   "name_en": "István Hantosi",
+   "ogy_ids": [
+    "001M"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16729643",
+   "name_hu": "Hargitai János",
+   "name_en": "János Hargitai",
+   "ogy_ids": [
+    "h006"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1958-04-24",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372061",
+   "name_hu": "Hatala-Orosz Csaba",
+   "name_en": null,
+   "ogy_ids": [
+    "0047"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15875545",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139693965",
+   "name_hu": "Havasi Balázs Márk",
+   "name_en": "Balázs Márk Havasi",
+   "ogy_ids": [
+    "003P"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q63224232",
+   "name_hu": "Hegedűs Barbara",
+   "name_en": "Barbara Hegedűs",
+   "ogy_ids": [
+    "0002"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1991-03-14",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q138376658",
+   "name_hu": "Hegedűs Zsolt",
+   "name_en": "Zsolt Hegedűs",
+   "ogy_ids": [
+    "000V"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1969-10-11",
+   "sex": "férfi",
+   "images": [
+    "Zsolt Hegedűs (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zsolt%20Heged%C5%B1s%20%28cropped%29.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "European Commission Audiovisual Service"
+  },
+  {
+   "qid": "Q139413103",
+   "name_hu": "Hende Máté",
+   "name_en": "Máté Hende",
+   "ogy_ids": [
+    "002S"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443692",
+   "district": "Pest vármegyei 13. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q15229428",
+   "name_hu": "Hidvéghi Balázs",
+   "name_en": "Balázs Hidvéghi",
+   "ogy_ids": [
+    "h074"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1970-11-28",
+   "sex": "férfi",
+   "images": [
+    "Hidvéghi Balázs.jpg",
+    "Member of the European Parliament Balázs Hidvéghi.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Hidv%C3%A9ghi%20Bal%C3%A1zs.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Tibor Vermes, Demokrata"
+  },
+  {
+   "qid": "Q140884675",
+   "name_hu": "Hortay Olivér",
+   "name_en": "Olivér Hortay",
+   "ogy_ids": [],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-08-10",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1992-02-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16194594",
+   "name_hu": "Horváth László",
+   "name_en": "László Horváth",
+   "ogy_ids": [
+    "h366"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q200599",
+   "party": "Szabad Demokraták Szövetsége",
+   "dob": "1962-04-24",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139694201",
+   "name_hu": "Horváth N. Zsolt",
+   "name_en": "Nándor Zsolt Horváth",
+   "ogy_ids": [
+    "003K"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q55752876",
+   "name_hu": "Héjj Dávid",
+   "name_en": "Dávid Héjj",
+   "ogy_ids": [
+    "h083"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1983-03-11",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139551702",
+   "name_hu": "Jakab Zsuzsanna",
+   "name_en": "Zsuzsanna Jakab",
+   "ogy_ids": [
+    "0011"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445572",
+   "district": "Budapesti 12. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1977-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139393131",
+   "name_hu": "Jelencsik József",
+   "name_en": "József Jelencsik",
+   "ogy_ids": [
+    "002C"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443679",
+   "district": "Pest vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "http://www.wikidata.org/.well-known/genid/48e4a83e0a966470f5e0013189d72b34",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372063",
+   "name_hu": "Judák Zsolt",
+   "name_en": null,
+   "ogy_ids": [
+    "004C"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15732112",
+   "district": "Bács-Kiskun vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q55753231",
+   "name_hu": "Juhász Hajnalka",
+   "name_en": "Hajnalka Juhász",
+   "ogy_ids": [
+    "k155"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1980-07-28",
+   "sex": "nő",
+   "images": [
+    "Juhász Hajnalka.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Juh%C3%A1sz%20Hajnalka.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "KDNP.hu"
+  },
+  {
+   "qid": "Q139372076",
+   "name_hu": "Juhász Roland",
+   "name_en": null,
+   "ogy_ids": [
+    "004A"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15838551",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139328998",
+   "name_hu": "Juhász Áron",
+   "name_en": "Áron Juhász",
+   "ogy_ids": [
+    "003M"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891201",
+   "district": "Heves vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139694574",
+   "name_hu": "Járosi Péter",
+   "name_en": "Péter Járosi",
+   "ogy_ids": [
+    "003D"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139505216",
+   "name_hu": "Jójárt Erika",
+   "name_en": "Erika Jójárt",
+   "ogy_ids": [
+    "0018"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139568479",
+   "name_hu": "Kalázdi-Kerekes Kinga",
+   "name_en": "Kinga Kalázdi-Kerekes",
+   "ogy_ids": [
+    "001E"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q138302593",
+   "name_hu": "Kapitány István",
+   "name_en": "István Kapitány",
+   "ogy_ids": [
+    "000Q"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1961-12-17",
+   "sex": "férfi",
+   "images": [
+    "PIMO5904 (croppedd).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/PIMO5904%20%28croppedd%29.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "Kancelaria Sejmu"
+  },
+  {
+   "qid": "Q139715458",
+   "name_hu": "Kaprinyák Tibor",
+   "name_en": "Tibor Kaprinyák",
+   "ogy_ids": [
+    "001X"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372068",
+   "name_hu": "Kapronczai Balázs",
+   "name_en": null,
+   "ogy_ids": [
+    "003L"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15747336",
+   "district": "Baranya vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139488794",
+   "name_hu": "Karsai-Juhász Katalin",
+   "name_en": "Katalin Karsai-Juhász",
+   "ogy_ids": [
+    "004B"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15734020",
+   "district": "Bács-Kiskun vármegyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139328115",
+   "name_hu": "Kincse Csongor",
+   "name_en": "Csongor Kincse",
+   "ogy_ids": [
+    "001B"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "2000-04-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372107",
+   "name_hu": "Kiss János",
+   "name_en": null,
+   "ogy_ids": [
+    "003N"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891583",
+   "district": "Jász-Nagykun-Szolnok vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139701422",
+   "name_hu": "Kiss Máté",
+   "name_en": "Máté Kiss",
+   "ogy_ids": [
+    "001V"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1990-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q3331988",
+   "name_hu": "Kocsis Máté",
+   "name_en": "Máté Kocsis",
+   "ogy_ids": [
+    "k100"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-05-06",
+   "sex": "férfi",
+   "images": [
+    "Kocsis Máté 20190831 100918542.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Kocsis%20M%C3%A1t%C3%A9%2020190831%20100918542.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Vauia Rex"
+  },
+  {
+   "qid": "Q99980592",
+   "name_hu": "Koncz Zsófia",
+   "name_en": "Zsófia Koncz",
+   "ogy_ids": [
+    "k163"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1990-01-01",
+   "sex": "nő",
+   "images": [
+    "Zsofia Koncz demography 19-11-2024.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Zsofia%20Koncz%20demography%2019-11-2024.jpg?width=400",
+   "licence": "Public domain",
+   "image_author": "European Union"
+  },
+  {
+   "qid": "Q139250693",
+   "name_hu": "Koncz Áron",
+   "name_en": "Áron Koncz",
+   "ogy_ids": [
+    "0020"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445564",
+   "district": "Budapesti 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372084",
+   "name_hu": "Kovács Gyula",
+   "name_en": null,
+   "ogy_ids": [
+    "003J"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15733968",
+   "district": "Bács-Kiskun vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1974-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139710248",
+   "name_hu": "Kovács Petra Judit",
+   "name_en": "Petra Judit Kovács",
+   "ogy_ids": [
+    "0038"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q31094741",
+   "name_hu": "Kovács Sándor",
+   "name_en": "Sándor Kovács",
+   "ogy_ids": [
+    "k765"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16522863",
+   "district": "Szabolcs-Szatmár-Bereg vármegyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1966-07-15",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372109",
+   "name_hu": "Kovács Áron",
+   "name_en": null,
+   "ogy_ids": [
+    "003Q"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15747074",
+   "district": "Baranya vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1979-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q2448503",
+   "name_hu": "Kulcsár Krisztián",
+   "name_en": "Krisztián Kulcsár",
+   "ogy_ids": [
+    "0016"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445570",
+   "district": "Budapesti 10. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1971-06-28",
+   "sex": "férfi",
+   "images": [
+    "Krisztian Kulcsar podium 2013 Fencing WCH FMS-EQ t214543.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Krisztian%20Kulcsar%20podium%202013%20Fencing%20WCH%20FMS-EQ%20t214543.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Marie-Lan Nguyen"
+  },
+  {
+   "qid": "Q1123346",
+   "name_hu": "Kármán András",
+   "name_en": "András Kármán",
+   "ogy_ids": [
+    "k122"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1973-05-25",
+   "sex": "férfi",
+   "images": [
+    "Karmanandras.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Karmanandras.jpg?width=400",
+   "licence": "CC BY-SA 3.0",
+   "image_author": "Whaka"
+  },
+  {
+   "qid": "Q139470145",
+   "name_hu": "Kátai-Németh Vilmos",
+   "name_en": "Vilmos Kátai-Németh",
+   "ogy_ids": [
+    "0019"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445569",
+   "district": "Budapesti 9. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1973-01-01",
+   "sex": "férfi",
+   "images": [
+    "Vilmos Katai-Nemeth in 2026.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vilmos%20Katai-Nemeth%20in%202026.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "Ferenc Isza"
+  },
+  {
+   "qid": "Q139663238",
+   "name_hu": "Kőszegi Krisztián",
+   "name_en": "Krisztián Kőszegi",
+   "ogy_ids": [
+    "001U"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1993-01-19",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q115631482",
+   "name_hu": "Latorcai Csaba",
+   "name_en": "Csaba Latorcai",
+   "ogy_ids": [
+    "l049"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1976-09-11",
+   "sex": "férfi",
+   "images": [
+    "Latorcai Csaba.tif"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Latorcai%20Csaba.tif?width=400",
+   "licence": "CC0",
+   "image_author": "Szovka"
+  },
+  {
+   "qid": "Q139372069",
+   "name_hu": "Lontay László",
+   "name_en": null,
+   "ogy_ids": [
+    "0044"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15876829",
+   "district": "Borsod-Abaúj-Zemplén vármegyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139452591",
+   "name_hu": "Lovkó Csaba",
+   "name_en": "Csaba Lovkó",
+   "ogy_ids": [
+    "003A"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725968",
+   "district": "Zala vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139710611",
+   "name_hu": "Lukács Gábor",
+   "name_en": "Gábor Lukács",
+   "ogy_ids": [
+    "001W"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139377660",
+   "name_hu": "László Endre Márton",
+   "name_en": "Endre Márton László",
+   "ogy_ids": [
+    "0021"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443684",
+   "district": "Pest vármegyei 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1971-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q750646",
+   "name_hu": "Lázár János",
+   "name_en": "János Lázár",
+   "ogy_ids": [
+    "l016"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1975-02-19",
+   "sex": "férfi",
+   "images": [
+    "Lázár János 2 cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/L%C3%A1z%C3%A1r%20J%C3%A1nos%202%20cropped.jpg?width=400",
+   "licence": "CC BY-SA 3.0",
+   "image_author": "original author: VEHIR.HU, a Veszprémi Hírportál; cropped and retouched by: Rlevente"
+  },
+  {
+   "qid": "Q139488830",
+   "name_hu": "Lőrincz Viktória",
+   "name_en": "Viktória Lőrincz",
+   "ogy_ids": [
+    "002I"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15719288",
+   "district": "Somogy vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1982-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q124488292",
+   "name_hu": "Magyar Péter",
+   "name_en": "Péter Magyar",
+   "ogy_ids": [
+    "m076"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445563",
+   "district": "Budapesti 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-03-16",
+   "sex": "férfi",
+   "images": [
+    "Péter Magyar MEP (2024).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%A9ter%20Magyar%20MEP%20%282024%29.jpg?width=400",
+   "licence": "European Parliament",
+   "image_author": "© European Union 2024 - Source : EP"
+  },
+  {
+   "qid": "Q139329164",
+   "name_hu": "Melléthei-Barna Márton",
+   "name_en": "Márton Melléthei-Barna",
+   "ogy_ids": [
+    "0017"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139392665",
+   "name_hu": "Miskolczi Orsolya",
+   "name_en": "Orsolya Miskolczi",
+   "ogy_ids": [
+    "002B"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136444063",
+   "district": "Pest vármegyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372085",
+   "name_hu": "Molnár János",
+   "name_en": null,
+   "ogy_ids": [
+    "004H"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15732109",
+   "district": "Bács-Kiskun vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1975-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139380122",
+   "name_hu": "Molnár Zoltán",
+   "name_en": "Zoltán Molnár",
+   "ogy_ids": [
+    "001A"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139499459",
+   "name_hu": "Molnárné Lezsák Anna",
+   "name_en": "Anna Molnárné Lezsák",
+   "ogy_ids": [
+    "004R"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "http://www.wikidata.org/.well-known/genid/22224a20277c1ad0ede60c7f592a3eb7",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139488921",
+   "name_hu": "Muhari Gergely",
+   "name_en": "Gergely Muhari",
+   "ogy_ids": [
+    "002U"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443694",
+   "district": "Pest vármegyei 14. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q129947609",
+   "name_hu": "Máthé Zsuzsa",
+   "name_en": "Zsuzsa Máthé",
+   "ogy_ids": [
+    "004Q"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1975-12-18",
+   "sex": "nő",
+   "images": [
+    "Mathe-zsuzsa-m5-img.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Mathe-zsuzsa-m5-img.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Obenedek"
+  },
+  {
+   "qid": "Q139372104",
+   "name_hu": "Müller Anna",
+   "name_en": null,
+   "ogy_ids": [
+    "0029"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445573",
+   "district": "Budapesti 13. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q55753721",
+   "name_hu": "Nacsa Lőrinc",
+   "name_en": "Lőrinc Nacsa",
+   "ogy_ids": [
+    "n048"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1990-04-05",
+   "sex": "férfi",
+   "images": [
+    "Kép Nacsa Lőrinc.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/K%C3%A9p%20Nacsa%20L%C5%91rinc.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "PbBalazs"
+  },
+  {
+   "qid": "Q111836018",
+   "name_hu": "Nagy Bálint",
+   "name_en": "Bálint Nagy",
+   "ogy_ids": [
+    "n053"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1985-02-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1214130",
+   "name_hu": "Nagy Ervin",
+   "name_en": "Ervin Nagy",
+   "ogy_ids": [
+    "0012"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15889068",
+   "district": "Fejér vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1976-09-25",
+   "sex": "férfi",
+   "images": [
+    "Ervin Nagy Photo Call On Body and Soul Berlinale 2017 02.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ervin%20Nagy%20Photo%20Call%20On%20Body%20and%20Soul%20Berlinale%202017%2002.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Maximilian Bühn"
+  },
+  {
+   "qid": "Q139373685",
+   "name_hu": "Nagy Márta",
+   "name_en": "Márta Nagy",
+   "ogy_ids": [
+    "0040"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725966",
+   "district": "Zala vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1984-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1218911",
+   "name_hu": "Novák Előd",
+   "name_en": "Előd Novák",
+   "ogy_ids": [
+    "n036"
+   ],
+   "group_qid": "Q55443054",
+   "group": "Mi Hazánk Mozgalom",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1980-04-25",
+   "sex": "férfi",
+   "images": [
+    "Novák Előd2019.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Nov%C3%A1k%20El%C5%91d2019.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Kocsis Antal"
+  },
+  {
+   "qid": "Q139496161",
+   "name_hu": "Néher András",
+   "name_en": "András Néher",
+   "ogy_ids": [
+    "003X"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891122",
+   "district": "Győr-Moson-Sopron vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/e24e367704390bb8c1c9ded062d6716e",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q133728717",
+   "name_hu": "Németh Balázs",
+   "name_en": "Balázs Németh",
+   "ogy_ids": [
+    "004S"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-08-24",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139329001",
+   "name_hu": "Németh Csilla",
+   "name_en": "Csilla Németh",
+   "ogy_ids": [
+    "003I"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1220884",
+   "name_hu": "Németh Zsolt",
+   "name_en": "Zsolt Németh",
+   "ogy_ids": [
+    "n322"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-10-14",
+   "sex": "férfi",
+   "images": [
+    "Németh Zsolt.JPG",
+    "Németh Zsolt - 2014.02.16 (6).JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/N%C3%A9meth%20Zsolt.JPG?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Szabi237"
+  },
+  {
+   "qid": "Q137866666",
+   "name_hu": "Orbán Anita",
+   "name_en": "Anita Orbán",
+   "ogy_ids": [
+    "000R"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1974-07-03",
+   "sex": "nő",
+   "images": [
+    "Anita Orbán.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Anita%20Orb%C3%A1n.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "Bundesministerium für europäische und internationale Angelegenheiten"
+  },
+  {
+   "qid": "Q59417334",
+   "name_hu": "Orbán Balázs",
+   "name_en": "Balázs Orbán",
+   "ogy_ids": [
+    "o015"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1986-02-13",
+   "sex": "férfi",
+   "images": [
+    "Balázs Orbán in 2025 2.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bal%C3%A1zs%20Orb%C3%A1n%20in%202025%202.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Holla Dániel"
+  },
+  {
+   "qid": "Q140885002",
+   "name_hu": "Palóc André",
+   "name_en": "André Palóc",
+   "ogy_ids": [],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-08-10",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139579283",
+   "name_hu": "Panyi Miklós",
+   "name_en": "Miklós Panyi",
+   "ogy_ids": [
+    "p067"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "http://www.wikidata.org/.well-known/genid/548245ad34ecd4db710e82bb03624dde",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139292052",
+   "name_hu": "Papp Zsolt",
+   "name_en": "Zsolt Papp",
+   "ogy_ids": [
+    "004W"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1981-05-10",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139437024",
+   "name_hu": "Perticsné Kácsor Andrea",
+   "name_en": "Andrea Perticsné Kácsor",
+   "ogy_ids": [
+    "0022"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443689",
+   "district": "Pest vármegyei 10. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139492462",
+   "name_hu": "Polgár György",
+   "name_en": "György Polgár",
+   "ogy_ids": [
+    "004D"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443691",
+   "district": "Pest vármegyei 12. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/9c41eae6c346d63dc44bde157fa4d5a7",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q126173925",
+   "name_hu": "Porcher Áron Sommerville",
+   "name_en": "Áron Sommerville Porcher",
+   "ogy_ids": [
+    "001Y"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445575",
+   "district": "Budapesti 15. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1990-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139495984",
+   "name_hu": "Porpáczy Krisztina",
+   "name_en": "Krisztina Porpáczy",
+   "ogy_ids": [
+    "0030"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891108",
+   "district": "Győr-Moson-Sopron vármegyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/6b3b2d1a1edce03e062eb5ae94afcfe7",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139710826",
+   "name_hu": "Pásztor Anett",
+   "name_en": "Anett Pásztor",
+   "ogy_ids": [
+    "001L"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1980-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16195271",
+   "name_hu": "Pócs János",
+   "name_en": "János Pócs",
+   "ogy_ids": [
+    "p041"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-11-17",
+   "sex": "férfi",
+   "images": [
+    "Pócs János Jászság.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%B3cs%20J%C3%A1nos%20J%C3%A1szs%C3%A1g.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "H.andras"
+  },
+  {
+   "qid": "Q137752192",
+   "name_hu": "Pósfai Gábor",
+   "name_en": "Gábor Pósfai",
+   "ogy_ids": [
+    "000X"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443680",
+   "district": "Pest vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1982-04-19",
+   "sex": "férfi",
+   "images": [
+    "Gabor Posfai in 2026.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Gabor%20Posfai%20in%202026.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "Ferenc Isza"
+  },
+  {
+   "qid": "Q126180597",
+   "name_hu": "Radics Béla",
+   "name_en": "Béla Radics",
+   "ogy_ids": [
+    "004X"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "http://www.wikidata.org/.well-known/genid/073d0dd3284e7e8478b2893da3a5d93d",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q47506736",
+   "name_hu": "Radnai Márk",
+   "name_en": "Márk Radnai",
+   "ogy_ids": [
+    "000S"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891611",
+   "district": "Komárom-Esztergom vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1988-03-26",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q494955",
+   "name_hu": "Rost Andrea",
+   "name_en": "Andrea Rost",
+   "ogy_ids": [
+    "000N"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891581",
+   "district": "Jász-Nagykun-Szolnok vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1962-06-15",
+   "sex": "nő",
+   "images": [
+    "RostAndreaFotoThalerTamas.JPG"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/RostAndreaFotoThalerTamas.JPG?width=400",
+   "licence": "CC BY-SA 3.0",
+   "image_author": "Thaler Tamas"
+  },
+  {
+   "qid": "Q107171051",
+   "name_hu": "Ruszin-Szendi Romulusz",
+   "name_en": "Romulusz Ruszin-Szendi",
+   "ogy_ids": [
+    "0010"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891170",
+   "district": "Hajdú-Bihar vármegyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1973-05-04",
+   "sex": "férfi",
+   "images": [
+    "Romolusz Ruszin-Szendi.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Romolusz%20Ruszin-Szendi.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Kölcsey Televízió"
+  },
+  {
+   "qid": "Q139372102",
+   "name_hu": "Ruzsa Diána",
+   "name_en": "Diána Ruzsa",
+   "ogy_ids": [
+    "0024"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15747036",
+   "district": "Baranya vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1979-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139382379",
+   "name_hu": "Rák Richárd",
+   "name_en": "Richárd Rák",
+   "ogy_ids": [
+    "001J"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1989-01-01",
+   "sex": "férfi",
+   "images": [
+    "Rák Richárd.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%A1k%20Rich%C3%A1rd.jpg?width=400",
+   "licence": "CC0",
+   "image_author": null
+  },
+  {
+   "qid": "Q139286170",
+   "name_hu": "Ráki Zsolt",
+   "name_en": "Zsolt Ráki",
+   "ogy_ids": [
+    "0036"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15838196",
+   "district": "Békés vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1967-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139380365",
+   "name_hu": "Rápli Róbert",
+   "name_en": "Róbert Rápli",
+   "ogy_ids": [
+    "003T"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725578",
+   "district": "Vas vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1968-08-28",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1253088",
+   "name_hu": "Rétvári Bence",
+   "name_en": "Bence Rétvári",
+   "ogy_ids": [
+    "r023"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1979-12-10",
+   "sex": "férfi",
+   "images": [
+    "Rétvári Bence 2010.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/R%C3%A9tv%C3%A1ri%20Bence%202010.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Solymári"
+  },
+  {
+   "qid": "Q139328992",
+   "name_hu": "Rózsahegyi Áron",
+   "name_en": "Áron Rózsahegyi",
+   "ogy_ids": [
+    "0048"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15747237",
+   "district": "Baranya vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/349356f4fefbf6c7ee1ef60d3ca9eba3",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139713462",
+   "name_hu": "Sasi-Nagy Edit",
+   "name_en": "Edit Sasi-Nagy",
+   "ogy_ids": [
+    "001O"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139577039",
+   "name_hu": "Schummer Orsolya",
+   "name_en": "Orsolya Schummer",
+   "ogy_ids": [
+    "001G"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16201211",
+   "name_hu": "Seszták Miklós",
+   "name_en": "Miklós Seszták",
+   "ogy_ids": [
+    "s093"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1968-10-31",
+   "sex": "férfi",
+   "images": [
+    "Seszták Miklós miniszter.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Seszt%C3%A1k%20Mikl%C3%B3s%20miniszter.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": null
+  },
+  {
+   "qid": "Q1288461",
+   "name_hu": "Simicskó István",
+   "name_en": "István Simicskó",
+   "ogy_ids": [
+    "s011"
+   ],
+   "group_qid": "Q277879",
+   "group": "Kereszténydemokrata Néppárt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q277879",
+   "party": "Kereszténydemokrata Néppárt",
+   "dob": "1961-11-29",
+   "sex": "férfi",
+   "images": [
+    "Simicskó István (KDNP).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Simicsk%C3%B3%20Istv%C3%A1n%20%28KDNP%29.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "image_author": "KDNP.hu"
+  },
+  {
+   "qid": "Q139713515",
+   "name_hu": "Simon Krisztián Márk",
+   "name_en": "Krisztián Márk Simon",
+   "ogy_ids": [
+    "001S"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139710299",
+   "name_hu": "Simon Zsuzsánna",
+   "name_en": "Zsuzsánna Simon",
+   "ogy_ids": [
+    "0035"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q125709804",
+   "name_hu": "Sopov Ildikó",
+   "name_en": "Ildikó Sopov",
+   "ogy_ids": [
+    "0025"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q40087498",
+   "district": "Komárom-Esztergom vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1986-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139305831",
+   "name_hu": "Strompová Viktória",
+   "name_en": "Viktória Strompová",
+   "ogy_ids": [
+    "002N"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1987-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372054",
+   "name_hu": "Stumpf Péter",
+   "name_en": null,
+   "ogy_ids": [
+    "004F"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15888678",
+   "district": "Csongrád-Csanád vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q63224348",
+   "name_hu": "Szabadi István",
+   "name_en": "István Szabadi",
+   "ogy_ids": [
+    "s184"
+   ],
+   "group_qid": "Q55443054",
+   "group": "Mi Hazánk Mozgalom",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q55443054",
+   "party": "Mi Hazánk Mozgalom",
+   "dob": "1971-08-12",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139372042",
+   "name_hu": "Szabó Alexandra",
+   "name_en": null,
+   "ogy_ids": [
+    "002D"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445574",
+   "district": "Budapesti 14. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139718225",
+   "name_hu": "Szabó Tibor",
+   "name_en": "Tibor Szabó",
+   "ogy_ids": [
+    "002R"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139495897",
+   "name_hu": "Szafkó Zoltán",
+   "name_en": "Zoltán Szafkó",
+   "ogy_ids": [
+    "001D"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15719280",
+   "district": "Nógrád vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139417086",
+   "name_hu": "Szakács Péter Lajos",
+   "name_en": null,
+   "ogy_ids": [
+    "003F"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16522859",
+   "district": "Szabolcs-Szatmár-Bereg vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1977-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q126179181",
+   "name_hu": "Szalai Piroska",
+   "name_en": "Piroska Szalai",
+   "ogy_ids": [
+    "004T"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1960-01-01",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q80545244",
+   "name_hu": "Szentkirályi Alexandra",
+   "name_en": "Alexandra Szalay-Bobrovniczky",
+   "ogy_ids": [
+    "004Y"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1987-11-11",
+   "sex": "nő",
+   "images": [
+    "Szentkirályi Alexandra 2022.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Szentkir%C3%A1lyi%20Alexandra%202022.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Tolnatáj Televízió"
+  },
+  {
+   "qid": "Q139492952",
+   "name_hu": "Szijjártó Gábor",
+   "name_en": "Gábor Szijjártó",
+   "ogy_ids": [
+    "003S"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16523384",
+   "district": "Tolna vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q685293",
+   "name_hu": "Szijjártó Péter",
+   "name_en": "Péter Szijjártó",
+   "ogy_ids": [
+    "s054"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": "2026-07-15",
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1978-10-30",
+   "sex": "férfi",
+   "images": [
+    "Péter Szijjártó in (2025) (cropped).jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/P%C3%A9ter%20Szijj%C3%A1rt%C3%B3%20in%20%282025%29%20%28cropped%29.jpg?width=400",
+   "licence": "Public domain",
+   "image_author": "Polish presidency of the Council of the EU 2025"
+  },
+  {
+   "qid": "Q139495873",
+   "name_hu": "Szimon Renáta",
+   "name_en": "Renáta Szimon",
+   "ogy_ids": [
+    "002Y"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443690",
+   "district": "Pest vármegyei 11. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/d620cc4cf5ced3db8e31177a69ac30a1",
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139494826",
+   "name_hu": "Szűcs Dóra",
+   "name_en": "Dóra Szűcs",
+   "ogy_ids": [
+    "0013"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139579441",
+   "name_hu": "Szűcs Gábor",
+   "name_en": "Gábor Szűcs",
+   "ogy_ids": [
+    "004Z"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "http://www.wikidata.org/.well-known/genid/460ee18dd94b0ebaae07e28a3ae9a7db",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139494348",
+   "name_hu": "Sárosi József",
+   "name_en": "József Sárosi",
+   "ogy_ids": [
+    "002K"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16523382",
+   "district": "Tolna vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1975-09-27",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139666352",
+   "name_hu": "Sóti Anikó",
+   "name_en": "Anikó Sóti",
+   "ogy_ids": [
+    "001I"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q115596613",
+   "name_hu": "Takács Péter",
+   "name_en": "Péter Takács",
+   "ogy_ids": [
+    "t062"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1979-12-14",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q105086584",
+   "name_hu": "Takács Árpád",
+   "name_en": "Árpád Takács",
+   "ogy_ids": [
+    "004V"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-06-07",
+   "sex": "férfi",
+   "images": [
+    "TÁ2019.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/T%C3%812019.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Lehoczky Péter"
+  },
+  {
+   "qid": "Q138659964",
+   "name_hu": "Tanács Zoltán",
+   "name_en": "Zoltán Tanács",
+   "ogy_ids": [
+    "000Y"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15726431",
+   "district": "Budapesti 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1975-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q125542353",
+   "name_hu": "Tarr Zoltán",
+   "name_en": "Zoltán Tarr",
+   "ogy_ids": [
+    "t067"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445575",
+   "district": "Budapesti 15. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1972-02-12",
+   "sex": "férfi",
+   "images": [
+    "Tarr Zoltan.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tarr%20Zoltan.jpg?width=400",
+   "licence": "European Parliament",
+   "image_author": "© European Union 2024 - Source : EP"
+  },
+  {
+   "qid": "Q1321047",
+   "name_hu": "Tilki Attila",
+   "name_en": "Attila Tilki",
+   "ogy_ids": [
+    "t023"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q16522861",
+   "district": "Szabolcs-Szatmár-Bereg vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-05-09",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139492821",
+   "name_hu": "Tompa Enikő",
+   "name_en": "Enikő Tompa",
+   "ogy_ids": [
+    "002G"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891146",
+   "district": "Hajdú-Bihar vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q832910",
+   "name_hu": "Toroczkai László",
+   "name_en": "László Toroczkai",
+   "ogy_ids": [
+    "t058"
+   ],
+   "group_qid": "Q55443054",
+   "group": "Mi Hazánk Mozgalom",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q633442",
+   "party": "Jobbik",
+   "dob": "1978-03-10",
+   "sex": "férfi",
+   "images": [
+    "Toroczkai László frakcióvezető.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Toroczkai%20L%C3%A1szl%C3%B3%20frakci%C3%B3vezet%C5%91.jpg?width=400",
+   "licence": "CC0",
+   "image_author": "Ipipedia"
+  },
+  {
+   "qid": "Q139372088",
+   "name_hu": "Trentin Balázs",
+   "name_en": null,
+   "ogy_ids": [
+    "002X"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445567",
+   "district": "Budapesti 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1975-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139495806",
+   "name_hu": "Trompler Ildikó",
+   "name_en": "Ildikó Trompler",
+   "ogy_ids": [
+    "002A"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443685",
+   "district": "Pest vármegyei 7. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q20438122",
+   "name_hu": "Tuzson Bence",
+   "name_en": "Bence Tuzson",
+   "ogy_ids": [
+    "t687"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1972-01-31",
+   "sex": "férfi",
+   "images": [
+    "Tuzson Bence.png"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Tuzson%20Bence.png?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Tolnatáj Televízió"
+  },
+  {
+   "qid": "Q139380168",
+   "name_hu": "Tárkányi Zsolt",
+   "name_en": "Zsolt Tárkányi",
+   "ogy_ids": [
+    "004E"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891141",
+   "district": "Hajdú-Bihar vármegyei 1. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1986-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139718133",
+   "name_hu": "Tóth Norbert",
+   "name_en": "Norbert Tóth",
+   "ogy_ids": [
+    "003B"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "http://www.wikidata.org/.well-known/genid/4dd11e967ecd3aa9ec9d00a8250fdc33",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139718284",
+   "name_hu": "Tóth Tamás",
+   "name_en": "Tamás Tóth",
+   "ogy_ids": [
+    "001T"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139436933",
+   "name_hu": "Tóthmajor Balázs",
+   "name_en": "Balázs Tóthmajor",
+   "ogy_ids": [
+    "0023"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136443682",
+   "district": "Pest vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1987-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139382669",
+   "name_hu": "Ujvári Szilvia",
+   "name_en": "Szilvia Ujvári",
+   "ogy_ids": [
+    "003U"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725771",
+   "district": "Veszprém vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1400478",
+   "name_hu": "V. Németh Zsolt",
+   "name_en": "Zsolt V. Németh",
+   "ogy_ids": [
+    "n004"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725581",
+   "district": "Vas vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1963-07-12",
+   "sex": "férfi",
+   "images": [
+    "V. Németh Zsolt cropped.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/V.%20N%C3%A9meth%20Zsolt%20cropped.jpg?width=400",
+   "licence": "CC BY-SA 3.0",
+   "image_author": "original author: VEHIR.HU, a Veszprémi Hírportál (fotó: Domján Attila); cropped by: Rlevente"
+  },
+  {
+   "qid": "Q139382375",
+   "name_hu": "Varga Balázs",
+   "name_en": "Balázs Varga",
+   "ogy_ids": [
+    "0033"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725967",
+   "district": "Zala vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q16201735",
+   "name_hu": "Varga Gábor",
+   "name_en": "Gábor Varga",
+   "ogy_ids": [
+    "v048"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15889120",
+   "district": "Fejér vármegyei 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1968-01-08",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139338810",
+   "name_hu": "Varga Lőrinc",
+   "name_en": "Lőrinc Varga",
+   "ogy_ids": [
+    "001H"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "2001-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139374531",
+   "name_hu": "Velkey György László",
+   "name_en": "György László Velkey",
+   "ogy_ids": [
+    "0014"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445566",
+   "district": "Budapesti 6. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139715538",
+   "name_hu": "Veres Ádám",
+   "name_en": "Ádám Veres",
+   "ogy_ids": [
+    "002Q"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": "1987-01-01",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q139373240",
+   "name_hu": "Virágh Gabriella",
+   "name_en": "Gabriella Virágh",
+   "ogy_ids": [
+    "002W"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445568",
+   "district": "Budapesti 8. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q111884634",
+   "name_hu": "Vitályos Eszter",
+   "name_en": "Eszter Vitályos",
+   "ogy_ids": [
+    "z014"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1979-02-23",
+   "sex": "nő",
+   "images": [
+    "Eszter Vitályos GAC 12-04-2018.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Eszter%20Vit%C3%A1lyos%20GAC%2012-04-2018.jpg?width=400",
+   "licence": "Attribution",
+   "image_author": "European Union"
+  },
+  {
+   "qid": "Q16152024",
+   "name_hu": "Vitányi István",
+   "name_en": "István Vitányi",
+   "ogy_ids": [
+    "v008"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891158",
+   "district": "Hajdú-Bihar vármegyei 4. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1952-12-18",
+   "sex": "férfi",
+   "images": [
+    "Vitányi István.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vit%C3%A1nyi%20Istv%C3%A1n.jpg?width=400",
+   "licence": "CC BY-SA 3.0",
+   "image_author": "Lehet Más a Politika"
+  },
+  {
+   "qid": "Q139251164",
+   "name_hu": "Weigand István",
+   "name_en": "István Weigand",
+   "ogy_ids": [
+    "002V"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q136445565",
+   "district": "Budapesti 5. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q30093130",
+   "name_hu": "Witzmann Mihály",
+   "name_en": "Mihály Witzmann",
+   "ogy_ids": [
+    "w704"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1977-06-02",
+   "sex": "férfi",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  },
+  {
+   "qid": "Q1468102",
+   "name_hu": "Zsigó Róbert",
+   "name_en": "Róbert Zsigó",
+   "ogy_ids": [
+    "z004"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": null,
+   "district": null,
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1967-11-10",
+   "sex": "férfi",
+   "images": [
+    "ZsigoRobert.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/ZsigoRobert.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "image_author": "Bajawiki (Zsigó Róbert)"
+  },
+  {
+   "qid": "Q1469363",
+   "name_hu": "Ágh Péter",
+   "name_en": "Péter Ágh",
+   "ogy_ids": [
+    "a011"
+   ],
+   "group_qid": "Q387006",
+   "group": "Fidesz",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15725579",
+   "district": "Vas vármegyei 2. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q387006",
+   "party": "Fidesz",
+   "dob": "1982-01-30",
+   "sex": "férfi",
+   "images": [
+    "Ágh Péter profilkép.jpg"
+   ],
+   "image_url": "https://commons.wikimedia.org/wiki/Special:FilePath/%C3%81gh%20P%C3%A9ter%20profilk%C3%A9p.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "image_author": "Ohr Tibor, fotóriporter"
+  },
+  {
+   "qid": "Q139386675",
+   "name_hu": "Árvay Nikolett",
+   "name_en": "Nikolett Árvay",
+   "ogy_ids": [
+    "0032"
+   ],
+   "group_qid": "Q125418097",
+   "group": "Tisztelet és Szabadság Párt",
+   "start": "2026-05-09",
+   "end": null,
+   "district_qid": "Q15891612",
+   "district": "Komárom-Esztergom vármegyei 3. sz. országgyűlési egyéni választókerület",
+   "party_qid": "Q125418097",
+   "party": "Tisztelet és Szabadság Párt",
+   "dob": null,
+   "sex": "nő",
+   "images": [],
+   "image_url": null,
+   "licence": null,
+   "image_author": null
+  }
+ ]
+}

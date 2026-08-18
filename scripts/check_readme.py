@@ -58,20 +58,31 @@ def test_counts() -> dict[str, int]:
     return per
 
 
+SNAPSHOT = ROOT / "reference" / "wikidata" / "members_ckl43.json"
+
+
+def snapshot() -> dict:
+    """The Wikidata member snapshot — the source of the README's census numbers.
+    (config/factions.yml restates its per-group counts; tests/test_wikidata.py keeps them equal.)"""
+    import json
+    return json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+
+
 def faction_seats() -> dict[str, int]:
-    """Wikidata seat counts from config/factions.yml without a YAML dependency."""
+    """Per-group current members from the snapshot, keyed by the config's short ids."""
+    by_label = snapshot()["summary"]["by_group_current"]
     text = FACTIONS.read_text(encoding="utf-8")
-    out: dict[str, int] = {}
+    ids: dict[str, str] = {}
     current = None
     for line in text.splitlines():
         m = re.match(r"\s*-\s*id:\s*\"?([^\"#]+?)\"?\s*(?:#.*)?$", line)
         if m:
             current = m.group(1).strip()
             continue
-        m = re.match(r"\s*wikidata_seats_2026_08_18:\s*(\d+)", line)
+        m = re.match(r"\s*wikidata_group:\s*(.+?)\s*$", line)
         if m and current:
-            out[current] = int(m.group(1))
-    return out
+            ids[current] = m.group(1)
+    return {short: by_label.get(label, 0) for short, label in ids.items()}
 
 
 def config_seats() -> int:
@@ -83,6 +94,7 @@ def build() -> list[tuple[str, list]]:
     tc = test_counts()
     seats = config_seats()
     fs = faction_seats()
+    sm = snapshot()["summary"]
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -108,12 +120,18 @@ def build() -> list[tuple[str, list]]:
          [n("negyotod_jelenlevo", full), n("negyotod_jelenlevo", p176)]),
         ("(N={:,.0f} / present 176)", [seats]),
 
-        # Wikidata census as registered in the config
-        ("the {:,.0f} members of cycle 43 sit in four groups", [sum(fs.values())]),
+        # Wikidata census — from the snapshot
+        ("the {:,.0f} members of cycle 43 sit in four groups", [sm["current_members"]]),
         ("TISZA {:,.0f},\nFidesz {:,.0f}, KDNP {:,.0f}, Mi Hazánk {:,.0f}",
          [fs.get("TISZA", 0), fs.get("Fidesz", 0), fs.get("KDNP", 0), fs.get("Mi Hazánk", 0)]),
         ("above the\n{:,.0f}-seat line", [n("ketharmad_osszes", full)]),
-        ("Cycle-43 faction list from Wikidata ({:,.0f} members, four groups)", [sum(fs.values())]),
+        ("`reference/wikidata/members_ckl43.json`): {:,.0f} members, four groups, and the P4966 ↔ `p_azon` crosswalk for {:,.0f} of them",
+         [sm["current_members"], sm["with_ogy_id"]]),
+        ("On the first pull: {:,.0f} statements, {:,.0f} current members and {:,.0f} ended",
+         [sm["statements"], sm["current_members"], sm["ended_statements"]]),
+        ("{:,.0f} of the {:,.0f} with a P4966 id", [sm["with_ogy_id"], sm["current_members"]]),
+        ("{:,.0f} with a\nconstituency (P768", [sm["with_district"]]),
+        ("and {:,.0f} with a Commons portrait", [sm["with_image"]]),
     ]
 
 
