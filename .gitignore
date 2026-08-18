@@ -1,0 +1,23 @@
+# secrets
+.env
+.env.*
+!.env.example
+
+# raw API cache and derived database (rebuildable; the token's requests are logged, so keep the cache but out of git)
+data/raw/*
+!data/raw/.gitkeep
+data/*.sqlite
+data/*.sqlite-journal
+data/*.db
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+
+# editors / os
+.cursor/
+.vscode/
+.DS_Store

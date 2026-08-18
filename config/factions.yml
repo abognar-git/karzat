@@ -1,0 +1,70 @@
+# Faction (képviselőcsoport) presentation config — PLACEHOLDER, NOT VERIFIED.
+#
+# The real list of factions for ciklus 43 (elected April 2026) must come from the API
+# (kepviselok.cgi / kepviselo.cgi <kepvcsop-tagsagok>) — do not trust this file until the
+# ids below have been matched against real payloads. Colours are conventional party colours
+# and are here so the diagram has *something* to render; replace with the palette you settle on.
+#
+# id must equal the short faction code as the API prints it (VERIFY exact spelling/casing).
+# sort_order: left→right seating in the chamber diagram (lower = further left).
+
+factions:
+  - id: DK
+    name: Demokratikus Koalíció
+    colour: "#1f6ac6"
+    sort_order: 10
+  - id: MSZP
+    name: Magyar Szocialista Párt
+    colour: "#c8102e"
+    sort_order: 20
+  - id: Párbeszéd
+    name: Párbeszéd–Zöldek
+    colour: "#3aa655"
+    sort_order: 25
+  - id: LMP
+    name: LMP – Magyarország Zöld Pártja
+    colour: "#6cbf3d"
+    sort_order: 30
+  - id: Momentum
+    name: Momentum Mozgalom
+    colour: "#8e44ad"
+    sort_order: 35
+  - id: TISZA
+    name: Tisztelet és Szabadság Párt
+    colour: "#7b3f00"
+    sort_order: 40
+  - id: Jobbik
+    name: Jobbik – Konzervatívok
+    colour: "#2f8f4e"
+    sort_order: 50
+  - id: KDNP
+    name: Kereszténydemokrata Néppárt
+    colour: "#2c6db2"
+    sort_order: 60
+  - id: Fidesz
+    name: Fidesz – Magyar Polgári Szövetség
+    colour: "#f36f21"
+    sort_order: 70
+  - id: "Mi Hazánk"
+    name: Mi Hazánk Mozgalom
+    colour: "#3b5e2b"
+    sort_order: 80
+  - id: független
+    name: Független képviselők
+    colour: "#8a8a8a"
+    sort_order: 90
+
+# Vote positions — the four states are fixed by the Országgyűlés's own vocabulary.
+positions:
+  igen:          { label: "Igen",          glyph: "filled" }
+  nem:           { label: "Nem",           glyph: "hollow" }
+  tartozkodott:  { label: "Tartózkodott",  glyph: "half" }
+  nem_szavazott: { label: "Nem szavazott", glyph: "faint" }
+
+# Majority rules — needed = f(present, seats). Which rule applies to a given vote must be
+# read from the vote payload (VERIFY field) or derived from the bill/vote type; never assumed.
+majority_rules:
+  egyszeru:            { label: "Egyszerű többség",             needed: "floor(present_voting/2)+1" }
+  abszolut:            { label: "Abszolút többség",             needed: "floor(seats/2)+1" }        # 100 of 199
+  ketharmad_jelenlevo: { label: "Jelenlévők kétharmada",        needed: "ceil(2*present/3)" }       # sarkalatos törvények
+  ketharmad_osszes:    { label: "Összes képviselő kétharmada",  needed: "ceil(2*seats/3)" }         # 133 — Alaptörvény

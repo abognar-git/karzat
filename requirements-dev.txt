@@ -1,0 +1,2 @@
+-r requirements.txt
+# nothing else yet — tests use unittest from the standard library
