@@ -78,7 +78,9 @@ row lights its seat. All of it is build-time JSON in the page (no network), and 
 chart is what it was: seats, rings and titles. Long tables — the vote directory, roll calls,
 the MP index, an MP's votes and motions — show 25 rows at a time with a pager (prev / next /
 page numbers / "mind" for everything) that composes with the filters, the search and the
-sorting; the whole table is still in the page, so without JS nothing is missing.
+sorting; the whole table is still in the page, so without JS nothing is missing. Where a list
+spans years — cycle 42's directory, an MP's votes over a term — a year filter sits above it,
+and each index links the other cycle in words, not just in the top bar's switch.
 
 ## Status
 

@@ -75,6 +75,8 @@ class Build(unittest.TestCase):
         self.assertIn("különbség +2", self.page)              # T/51: 135 igen, 133 needed
         self.assertIn("133 a 199-ból", self.page)
         self.assertEqual(self.page.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
+        self.assertNotIn('data-year="', self.page)                      # one year only → no year filter
+        self.assertIn('42. ciklus (2022-05-02 – 2026-05-08)</a>', self.page)
         self.assertIn('<span class="more" title="', self.page)          # long titles keep their tail for the search
         self.assertIn('lang="hu"', self.page)
         for word in ("live", "élő", "real-time"):
@@ -252,6 +254,9 @@ class Cycle42(unittest.TestCase):
         self.assertIn("214 képviselő", page)                                  # the cycle's own roster, not today's list
         self.assertNotIn("TISZA: 141", page)
         self.assertIn('href="../index.html">43</a>', page)                    # the cycle switch
+        self.assertIn('43. ciklus (2026-05-09 –)</a>', page)                   # …and in words, in the section nav
+        self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
+        self.assertEqual(page.count('data-y="2023"'), 719)
         self.assertIn("Egy szavazás, frakciónként", page)                     # not "ülőhelyenként": no chamber for a closed cycle
         self.assertIn("az Országgyűlés szavazásai, név szerint —", page)
         self.assertIn("név szerint, frakciónként rendezve kirajzolva", page)  # the meta description
