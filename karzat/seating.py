@@ -88,57 +88,95 @@ def infer_orientation(analysis: dict[str, Any], government: str, front_bench: in
 
 
 def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_order: list[int],
-           r0: float = 70.0, row_gap: float = 17.0, aisle: float = 0.06, span: float = math.pi * 1.06,
+           r0: float = 64.0, row_gap: float = 9.0, aisle: float = 0.06, span: float = math.pi * 1.06,
            seat_numbers_left_to_right: bool = True, front_bench: int | None = FRONT_BENCH,
-           front_bench_span: float = 1.9) -> dict[str, Any]:
+           front_bench_span: float | None = None) -> dict[str, Any]:
     """Coordinates for every seat. Speaker's platform at the origin, seats above the x axis;
     Speaker's left = negative x. `span` slightly over π: a horseshoe, not a strict semicircle.
-    The front bench (sector `front_bench`) is an inner arc of `front_bench_span` radians centred
-    on the platform, at radius r0 − 1.4·row_gap."""
+
+    Geometry (all estimated — the API gives sector / row / seat numbers, nothing metric):
+    seats are the same width everywhere, so a sector's wedge is as wide as its tightest row
+    needs (max over rows of seats ÷ radius) and the common seat pitch `w` (arc length) is what
+    the span allows; rows are concentric, `row_gap` apart. The seat numbers a row skips are the
+    room's empty seats (they are drawn faint), and rows nobody sits in are unknown. The front
+    bench (sector `front_bench`) is an inner arc centred on the platform at radius
+    r0 − 1.4·row_gap, spread to the same pitch (or `front_bench_span` if given)."""
     secs = analysis["sectors"]
     sector_order = [i for i in sector_order if i != front_bench]
-    widths = [max(1, secs[i]["widest_row"]) for i in sector_order]
-    total_w = sum(widths)
     n_ais = len(sector_order) - 1
     usable = span - aisle * n_ais
+
+    def radius(row: int) -> float:
+        return r0 + (row - 1) * row_gap
+
+    # angular need per sector: its tightest row (most seats per unit radius), in units of the seat pitch
+    need = {}
+    for sec in sector_order:
+        rows = secs[sec]["max_seat_by_row"] or {1: 1}
+        need[sec] = max(max(1, k) / radius(row) for row, k in rows.items())
+    pitch = usable / sum(need.values())          # arc length of one seat, uniform across the room
     # angle from the Speaker's left (π + (span-π)/2) sweeping clockwise to the right
     start = math.pi / 2 + span / 2
     wedges = {}
     a = start
-    for sec, w in zip(sector_order, widths):
-        wa = usable * w / total_w
+    for sec in sector_order:
+        wa = need[sec] * pitch
         wedges[sec] = (a, a - wa)          # (left edge angle, right edge angle) — angles decrease left→right
         a = a - wa - aisle
-    coords = {}
     fb_r = r0 - 1.4 * row_gap
     fb_max = max((s["seat"] for s in seats.values() if s["sector"] == front_bench), default=1) if front_bench is not None else 1
-    for azon, s in seats.items():
-        sec, row, seat_no = s["sector"], s["row"], s["seat"]
+    fb_span = front_bench_span if front_bench_span is not None else min(math.pi - 0.4, fb_max * pitch / fb_r)
+
+    def place(sec: int, row: int, seat_no: int) -> tuple[float, float, bool]:
         if front_bench is not None and sec == front_bench:
             frac = (seat_no - 0.5) / fb_max
             if not seat_numbers_left_to_right:
                 frac = 1 - frac
-            ang = (math.pi / 2 + front_bench_span / 2) - front_bench_span * frac
-            coords[azon] = {"x": round(fb_r * math.cos(ang), 2), "y": round(-fb_r * math.sin(ang), 2),
-                            "sector": sec, "row": row, "seat": seat_no, "front_bench": True}
-            continue
+            ang = (math.pi / 2 + fb_span / 2) - fb_span * frac
+            return round(fb_r * math.cos(ang), 2), round(-fb_r * math.sin(ang), 2), True
         left, right = wedges[sec]
         k = secs[sec]["max_seat_by_row"].get(row, seat_no) or 1
-        # evenly spread within the wedge, inset by half a slot so seats don't sit on the aisle
+        # centred in the wedge at the row's own pitch, so short inner rows are not stretched to the aisles
+        row_span = min(right - left, -(k * pitch / radius(row)))          # angles decrease left→right (negative span)
+        mid = (left + right) / 2
         frac = (seat_no - 0.5) / k if k else 0.5
         if not seat_numbers_left_to_right:
             frac = 1 - frac
-        ang = left + (right - left) * frac
-        r = r0 + (row - 1) * row_gap
-        coords[azon] = {"x": round(r * math.cos(ang), 2), "y": round(-r * math.sin(ang), 2), "sector": sec, "row": row, "seat": seat_no}
+        ang = mid - row_span / 2 + row_span * frac
+        r = radius(row)
+        return round(r * math.cos(ang), 2), round(-r * math.sin(ang), 2), False
+
+    coords = {}
+    for azon, s in seats.items():
+        x, y, fb = place(s["sector"], s["row"], s["seat"])
+        coords[azon] = {"x": x, "y": y, "sector": s["sector"], "row": s["row"], "seat": s["seat"], **({"front_bench": True} if fb else {})}
+    # empty seats: numbers a row skips below its highest occupied seat (front bench: below fb_max)
+    occupied = {(s["sector"], s["row"], s["seat"]) for s in seats.values()}
+    empty = []
+    rows_by_sector = {sec: secs[sec]["max_seat_by_row"] for sec in secs}
+    for sec, rows in rows_by_sector.items():
+        if front_bench is not None and sec == front_bench:
+            for n in range(1, fb_max + 1):
+                if (sec, 0, n) not in occupied and (sec, 1, n) not in occupied:
+                    x, y, _ = place(sec, 0, n)
+                    empty.append({"x": x, "y": y, "sector": sec, "row": 0, "seat": n, "front_bench": True})
+            continue
+        for row, k in rows.items():
+            for n in range(1, (k or 0) + 1):
+                if (sec, row, n) not in occupied:
+                    x, y, _ = place(sec, row, n)
+                    empty.append({"x": x, "y": y, "sector": sec, "row": row, "seat": n})
     max_row = max((s["row"] for s in seats.values()), default=1)
-    return {"coords": coords,
-            "geometry": {"r0": r0, "row_gap": row_gap, "aisle_rad": aisle, "span_rad": round(span, 4),
+    return {"coords": coords, "empty_seats": empty,
+            "geometry": {"r0": r0, "row_gap": row_gap, "aisle_rad": aisle, "span_rad": round(span, 4), "seat_pitch": round(pitch, 3),
+                         "node_radius": round(0.42 * pitch, 2),
                          "sector_order_left_to_right": sector_order, "sector_wedges_rad": {k: [round(v[0], 4), round(v[1], 4)] for k, v in wedges.items()},
-                         "front_bench_sector": front_bench, "front_bench_radius": fb_r, "front_bench_span_rad": front_bench_span, "front_bench_max_seat": fb_max,
+                         "front_bench_sector": front_bench, "front_bench_radius": fb_r, "front_bench_span_rad": round(fb_span, 4), "front_bench_max_seat": fb_max,
                          "max_row": max_row, "outer_radius": r0 + (max_row - 1) * row_gap,
                          "seat_numbers_left_to_right": seat_numbers_left_to_right,
-                         "assumptions": ["sector width ∝ widest row (+ aisle)", "rows concentric, row 1 nearest the platform",
+                         "assumptions": ["seats are the same width everywhere: a sector's wedge is as wide as its tightest row needs, and every row sits at one common pitch (+ aisles)",
+                                         "rows concentric, row 1 nearest the platform; row spacing is a drawing constant",
                                          "seat numbers left→right within a row (Speaker's view)",
+                                         "the seat numbers a row skips are empty seats; rows nobody occupies are unknown and not drawn",
                                          "orientation: government to the Speaker's right (parlament.hu description)",
-                                         "sector 0 / row 0 = ministerial front bench, drawn as an inner arc"]}}
+                                         "sector 0 / row 0 = ministerial front bench, drawn as an inner arc at the same pitch"]}}

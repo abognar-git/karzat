@@ -65,6 +65,7 @@ def main(argv: list[str] | None = None) -> int:
         "geometry": L["geometry"],
         "seats": {a: {**s} for a, s in seats.items()},
         "coords": L["coords"],
+        "empty_seats": L["empty_seats"],
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")

@@ -237,28 +237,32 @@ def hemicycle_layout(n: int, rows: int = 7, r0: float = 78.0, gap: float = 17.0)
     return seats[:n]
 
 
-def _node(cx: float, cy: float, pos: str, c: str) -> str:
+def _node(cx: float, cy: float, pos: str, c: str, k: float = 1.0) -> str:
+    """One MP as a glyph; `k` scales the 5.2-unit design radius to the layout's seat pitch."""
+    R, r, d, sw, sw1 = 5.2 * k, 4.6 * k, 2.2 * k, 1.6 * k, 1.0 * k
+    f = lambda v: f"{v:.2f}"
     if pos == "igen":
-        return f'<circle cx="{cx}" cy="{cy}" r="5.2" fill="{c}"/>'
+        return f'<circle cx="{cx}" cy="{cy}" r="{f(R)}" fill="{c}"/>'
     if pos == "nem":
-        return f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-width="1.6"/>'
+        return f'<circle cx="{cx}" cy="{cy}" r="{f(r)}" fill="none" stroke="{c}" stroke-width="{f(sw)}"/>'
     if pos == "tartozkodott":
-        return (f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-width="1.6"/>'
-                f'<path d="M {cx-4.6} {cy} A 4.6 4.6 0 0 1 {cx+4.6} {cy} Z" fill="{c}"/>')
+        return (f'<circle cx="{cx}" cy="{cy}" r="{f(r)}" fill="none" stroke="{c}" stroke-width="{f(sw)}"/>'
+                f'<path d="M {f(cx-r)} {cy} A {f(r)} {f(r)} 0 0 1 {f(cx+r)} {cy} Z" fill="{c}"/>')
     if pos == "jelen_nem_szavazott":
-        return f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-width="1.6" stroke-dasharray="2.4 2"/>'
+        return f'<circle cx="{cx}" cy="{cy}" r="{f(r)}" fill="none" stroke="{c}" stroke-width="{f(sw)}" stroke-dasharray="{f(2.4*k)} {f(2*k)}"/>'
     if pos == "nem_szavazott":
-        return f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="{c}" fill-opacity="0.35" stroke="{c}" stroke-opacity="0.6" stroke-width="1"/>'
+        return f'<circle cx="{cx}" cy="{cy}" r="{f(r)}" fill="{c}" fill-opacity="0.35" stroke="{c}" stroke-opacity="0.6" stroke-width="{f(sw1)}"/>'
     if pos == "igazoltan_tavol":   # excused absence (cycle 42 onwards): the small dot inside a faint ring
-        return (f'<circle cx="{cx}" cy="{cy}" r="4.6" fill="none" stroke="{c}" stroke-opacity="0.5" stroke-width="1"/>'
-                f'<circle cx="{cx}" cy="{cy}" r="2.2" fill="{c}" fill-opacity="0.6"/>')
-    return f'<circle cx="{cx}" cy="{cy}" r="2.2" fill="{c}" fill-opacity="0.6"/>'
+        return (f'<circle cx="{cx}" cy="{cy}" r="{f(r)}" fill="none" stroke="{c}" stroke-opacity="0.5" stroke-width="{f(sw1)}"/>'
+                f'<circle cx="{cx}" cy="{cy}" r="{f(d)}" fill="{c}" fill-opacity="0.6"/>')
+    return f'<circle cx="{cx}" cy="{cy}" r="{f(d)}" fill="{c}" fill-opacity="0.6"/>'
 
 
 def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
     """The reconstructed chamber: every voting MP at their (sector,row,seat). Returns (svg, info)."""
     colour = {f["id"]: f["colour"] for f in facs}
     coords = plan["coords"]; geo = plan["geometry"]
+    k = geo.get("node_radius", 5.2) / 5.2                       # glyphs sized to the plan's seat pitch, never overlapping
     parts, unplaced = [], []
     for m in view["positions"]:
         azon = m.get("mp_azon")
@@ -269,29 +273,40 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
             xy = coords[azon]
             place = "miniszteri pad" if xy.get("front_bench") else str(xy["sector"]) + ". szektor"
             where = " · " + place + ", " + str(xy["row"]) + ". sor, " + str(xy["seat"]) + ". szék"
-            parts.append(f'<g class="seat" data-pos="{pos}" data-f="{html.escape(m["faction"] or "")}"><title>{title}{html.escape(where)}</title>{_node(xy["x"], xy["y"], pos, c)}</g>')
+            parts.append(f'<g class="seat" data-pos="{pos}" data-f="{html.escape(m["faction"] or "")}"><title>{title}{html.escape(where)}</title>{_node(xy["x"], xy["y"], pos, c, k)}</g>')
         else:
             unplaced.append(m)
-    for i, m in enumerate(unplaced):
-        c = colour.get(m["faction"] or "", "#8a8a8a")
-        why = "azonosítatlan név" if not m.get("mp_azon") else "nincs ülőhely a képviselői adatlapon (a mandátum azóta megszűnt)"
-        parts.append(f'<g class="seat" data-pos="{m["position"]}"><title>{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}</title>{_node(-150 + i * 12, 12, m["position"], c)}</g>')
-    R = geo["outer_radius"] + 14
+    # the room's empty seats (numbers a row skips), faint — so a half-empty bench reads as one
+    empties = "".join(f'<circle cx="{e["x"]}" cy="{e["y"]}" r="{4.6*k:.2f}" class="seat-empty"><title>üres hely · '
+                      + ("miniszteri pad" if e.get("front_bench") else f'{e["sector"]}. szektor, {e["row"]}. sor') + f', {e["seat"]}. szék</title></circle>'
+                      for e in plan.get("empty_seats") or [])
+    R = geo["outer_radius"] + 12
+    W = R + 20                                                    # half-width of the drawing
     labels = []
     for sec, (a0, a1) in geo["sector_wedges_rad"].items():
         mid = (a0 + a1) / 2
         labels.append(f'<text x="{R*math.cos(mid):.1f}" y="{-R*math.sin(mid):.1f}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>')
         for a in (a0, a1):
-            r_in, r_out = geo["r0"] - 8, geo["outer_radius"] + 6
+            r_in, r_out = geo["r0"] - 5, geo["outer_radius"] + 5
             labels.append(f'<line x1="{r_in*math.cos(a):.1f}" y1="{-r_in*math.sin(a):.1f}" x2="{r_out*math.cos(a):.1f}" y2="{-r_out*math.sin(a):.1f}" class="aisle"/>')
     fb = geo["front_bench_radius"]; fs = geo["front_bench_span_rad"]
     a0, a1 = math.pi / 2 + fs / 2, math.pi / 2 - fs / 2
     arc = (f'<path d="M {fb*math.cos(a0):.1f} {-fb*math.sin(a0):.1f} A {fb} {fb} 0 0 1 {fb*math.cos(a1):.1f} {-fb*math.sin(a1):.1f}" class="fbarc"/>'
-           f'<text x="0" y="{-fb+20:.1f}" class="seclabel" text-anchor="middle">miniszteri pad</text>')
-    svg = (f'<svg viewBox="-172 -{R+12:.0f} 344 {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
-           f'<rect x="-16" y="-7" width="32" height="8" rx="1.5" class="rostrum"/><text x="0" y="12" class="seclabel" text-anchor="middle">elnöki emelvény</text>'
-           + arc + "".join(labels) + "".join(parts) + '</svg>')
-    return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"]}
+           f'<text x="0" y="-13" class="seclabel s" text-anchor="middle">miniszteri pad</text>')
+    # MPs the plan cannot place: a small labelled tray, bottom left, outside the room
+    tray = ""
+    if unplaced:
+        x0, y0 = -W + 8, 14
+        tray = f'<text x="{x0:.1f}" y="{y0 - 4:.1f}" class="seclabel s">ülőhely nélkül</text>'
+        for i, m in enumerate(unplaced):
+            c = colour.get(m["faction"] or "", "#8a8a8a")
+            why = "azonosítatlan név" if not m.get("mp_azon") else "nincs ülőhely a képviselői adatlapon (a mandátum azóta megszűnt)"
+            tray += (f'<g class="seat" data-pos="{m["position"]}"><title>{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}</title>'
+                     f'{_node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k)}</g>')
+    svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
+           f'<rect x="-12" y="-5" width="24" height="6" rx="1.2" class="rostrum"/><text x="0" y="8" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
+           + arc + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
+    return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or [])}
 
 
 def seat_svg_fallback(view: dict, facs: list[dict]) -> str:
@@ -388,7 +403,7 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s,filter .2s;cursor:crosshair}
 .chart svg:hover .seat{opacity:.45}.chart svg .seat:hover{opacity:1;filter:drop-shadow(0 0 4px rgba(255,255,255,.6))}
-.rostrum{fill:var(--border)}.seclabel{font-size:10px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
+.rostrum{fill:var(--border)}.seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
 /* numbers */
@@ -627,9 +642,10 @@ def chart_block(view: dict, inp: dict) -> str:
         svg, info = seat_svg_real(view, facs, plan)
         geo = plan["geometry"]
         note = (f'Az ülésrend a képviselői adatlapok szektor/sor/szék adataiból rekonstruálva ({info["placed"]} képviselő a helyén'
-                + (f', {info["unplaced"]} balra lent, ülőhely-adat nélkül' if info["unplaced"] else '') + '), az elnöki emelvény felől nézve: '
+                + (f', {info["unplaced"]} a bal alsó tálcán, ülőhely-adat nélkül' if info["unplaced"] else '') + '), az elnöki emelvény felől nézve: '
                 f'balra az ellenzék ({", ".join(str(x) for x in geo["sector_order_left_to_right"][:2])}. szektor), jobbra a kormányoldal; '
-                'a 0. szektor a miniszteri pad. Becsült: a szektorok szélessége (a legszélesebb sorral arányos), a sorok távolsága és a székek balról jobbra sorrendje.')
+                f'a 0. szektor a miniszteri pad. A halvány karikák a sorszámozásból kikövetkeztetett üres helyek ({info.get("empty", 0)}); a teljesen üres sorokat nem ismerjük. '
+                'Becsült: egységes székszélesség (egy szektor olyan széles, amilyet a legsűrűbb sora kíván), a sorok távolsága és a székek balról jobbra sorrendje.')
     else:
         svg = seat_svg_fallback(view, facs)
         note = ("Sorrend: frakció, azon belül szavazat — nem az ülésrend. Az API az ülőhelyeket csak a jelenlegi ciklusra közli, "
@@ -938,15 +954,19 @@ def chamber_mini_svg(inp: dict, azon: str) -> str:
     geo = plan["geometry"]
     R = geo["outer_radius"] + 14
     parts = []
+    k = geo.get("node_radius", 5.2) / 5.2
     for a, xy in plan["coords"].items():
         if a == azon:
             continue
-        parts.append(f'<circle cx="{xy["x"]}" cy="{xy["y"]}" r="3.6" fill="#a1a1aa" fill-opacity=".14"/>')
+        parts.append(f'<circle cx="{xy["x"]}" cy="{xy["y"]}" r="{3.6*k:.2f}" fill="#a1a1aa" fill-opacity=".16"/>')
+    for e in plan.get("empty_seats") or []:
+        parts.append(f'<circle cx="{e["x"]}" cy="{e["y"]}" r="{3.6*k:.2f}" class="seat-empty"/>')
     me = plan["coords"][azon]
     c = colour.get(inp["mps"].get(azon, {}).get("faction") or "", "#8a8a8a")
-    parts.append(f'<circle cx="{me["x"]}" cy="{me["y"]}" r="9" fill="{c}" fill-opacity=".25"/><circle cx="{me["x"]}" cy="{me["y"]}" r="5" fill="{c}"/>')
-    return (f'<svg viewBox="-172 -{R+12:.0f} 344 {R+30:.0f}" role="img" aria-label="Ülőhely az ülésteremben">'
-            f'<rect x="-16" y="-7" width="32" height="8" rx="1.5" class="rostrum"/>' + "".join(parts) + '</svg>')
+    parts.append(f'<circle cx="{me["x"]}" cy="{me["y"]}" r="{9*k:.2f}" fill="{c}" fill-opacity=".25"/><circle cx="{me["x"]}" cy="{me["y"]}" r="{5*k:.2f}" fill="{c}"/>')
+    W = R + 20
+    return (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+24:.0f}" role="img" aria-label="Ülőhely az ülésteremben">'
+            f'<rect x="-12" y="-5" width="24" height="6" rx="1.2" class="rostrum"/>' + "".join(parts) + '</svg>')
 
 
 def mandate_text(mp: dict) -> str:

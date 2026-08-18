@@ -58,8 +58,14 @@ row and seat — and with all 199 records in hand the chamber's structure reads 
 off the data: sectors 1–6 of five rows (widest rows 6 · 9 · 12 · 12 · 8 · 6), the
 opposition in sectors 1–2 to the Speaker's left, TISZA in 3–6 to the right, and a sector 0
 / row 0 that is the ministerial front bench (12 TISZA MPs, seat numbers up to 21).
-`karzat/seating.py` turns that into coordinates and states its assumptions (sector width
-∝ widest row, seat numbers left→right, orientation per parlament.hu's own description).
+`karzat/seating.py` turns that into coordinates and states its assumptions: seats are the
+same width everywhere, so a sector's wedge is as wide as its tightest row needs and every
+row sits at one common pitch (5.2 units here); the seat numbers a row skips are the room's
+empty seats and are drawn faint (15 of them: nine on the front bench, six in sector 1's
+outer rows), while rows nobody occupies are unknown and not drawn; seat numbers run
+left→right; orientation per parlament.hu's own description. My first cut had sector wedges
+∝ their widest row and a fixed glyph size — sectors 1 and 6 came out cramped and the dots
+overlapped into ropes; the glyphs are now sized from the pitch, so no two seats can touch.
 Konzol's algorithm stays as the fallback.
 
 ## Status
@@ -200,8 +206,8 @@ days, and the directory: all 259 votes, newest first, each with its rule, thresh
 base, tally, margin and result, filterable by rule and result and searchable by subject.
 The seats are the chamber's own: every MP at their sector / row / seat from the API,
 seen from the Speaker's platform, opposition left and government right, ministers on the
-front bench; what is estimated (sector widths, row spacing, the direction of seat
-numbers) the caption says. Every vote in the directory has its own page of the same
+front bench, the empty seats faint; what is estimated (uniform seat width, row spacing,
+the direction of seat numbers) the caption says. Every vote in the directory has its own page of the same
 shape — chamber, verdict, faction bars — plus the full roll call as a table you can sort
 and filter by faction and position, each MP with their seat, and links to the previous
 and next vote. Secret ballots say plainly that there is no roll call; the quorum check
@@ -342,7 +348,7 @@ unavailable, say that currency cannot be told rather than imply it. `sync-votes`
 2. The citations in `karzat/majority.py` (Alaptörvény / HHSZ paragraphs) — the API's own rule labels make them unnecessary for classification, but they are still asserted in the docs.
 3. `bizottsagok.cgi` (the manual's link is broken; not called yet), and the earliest date `szavazasok.cgi` serves.
 4. Whether parlament.hu portraits (`…/kepviselo-kepek/{p_azon}`) may be republished.
-5. The exact geometry of the chamber: the sector structure and orientation are now read from the data, but sector widths, row spacing and the left→right direction of seat numbers within a row are assumptions in `karzat/seating.py` — a photograph of the chamber would settle them.
+5. The exact geometry of the chamber: the sector structure, the orientation and the empty seats within occupied rows are now read from the data, but uniform seat width, row spacing, the left→right direction of seat numbers within a row and the capacity of rows nobody occupies are assumptions in `karzat/seating.py` — a photograph of the chamber would settle them.
 
 ## First light — what the cached payloads say
 

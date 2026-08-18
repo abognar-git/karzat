@@ -193,6 +193,9 @@ def build() -> list[tuple[str, list]]:
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
         ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across two cycles and {:,.0f} roll calls, not {:,.0f}", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"]]),
+        # the chamber geometry — data/derived/seating.json
+        ("row sits at one common pitch ({:.1f} units here); the seat numbers a row skips are the room's\nempty seats and are drawn faint ({:,.0f} of them:",
+         [seat_plan["geometry"]["seat_pitch"], len(seat_plan["empty_seats"])]),
         # cycle 42 pages — data/derived/first_light_ckl42.json + mps_ckl42.json + hero_vote_ckl42.json
         ("its own index, {:,.0f} vote pages and {:,.0f} MP pages, a cycle switch", [f42["votes"], m42["count"]]),
         ("all\n{:,.0f} votes in the directory, the 15th Alaptörvény amendment's final vote — {:,.0f}–{:,.0f}–{:,.0f},\nneeded {:,.0f} — as the hero), {:,.0f} vote pages and {:,.0f} MP pages",
