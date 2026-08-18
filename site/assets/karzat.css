@@ -51,7 +51,9 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .chart svg .seat{transition:opacity .15s,filter .15s;outline:none;cursor:pointer}
 .chart svg .seat[data-pos="nem_szavazott"],.chart svg .seat[data-pos="bejelentett_hianyzo"],.chart svg .seat[data-pos="igazoltan_tavol"],.chart svg .seat[data-pos="jelen_nem_szavazott"]{opacity:.55}
 .chart svg .seat.dim{opacity:.12}
-.chart svg .seat.hl,.chart svg .seat:hover,.chart svg .seat:focus-visible{opacity:1;filter:drop-shadow(0 0 3px rgba(255,255,255,.75))}
+.chart svg .seat.hl,.chart svg .seat:hover,.chart svg .seat:focus-visible{opacity:1}
+.chart svg .hit{fill:#fff;fill-opacity:0;stroke:none;transition:fill-opacity .12s}
+.chart svg .seat.hl .hit,.chart svg .seat:hover .hit,.chart svg .seat:focus-visible .hit{fill-opacity:.22}
 .chart svg .against{fill:none;stroke:#fff;stroke-width:.55;stroke-opacity:.9}
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}

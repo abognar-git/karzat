@@ -63,7 +63,12 @@ same width everywhere, so a sector's wedge is as wide as its tightest row needs 
 row sits at one common pitch (5.0 units here); the seat numbers a row skips are the room's
 empty seats and are drawn faint (15 of them: nine on the front bench, six in sector 1's
 outer rows), while rows nobody occupies are unknown and not drawn; seat numbers run
-left→right; orientation per parlament.hu's own description. My first cut had sector wedges
+left→right; orientation per parlament.hu's own description; the ministerial front bench is
+the horseshoe's inner circle — parlament.hu says the ministers sit "a kormányzati patkó
+bársonyszékein", the Katolikus Lexikon that the chamber is "patkó alakú… a belső körben a
+mindenkori kormány miniszterei ülnek, középső részén az elnöki emelvény és a gyorsírók
+asztala" — so it is drawn as a semicircle round the platform, its 21 armchairs at a wider
+pitch than an MP's seat. My first cut had sector wedges
 ∝ their widest row and a fixed glyph size — sectors 1 and 6 came out cramped and the dots
 overlapped into ropes; the glyphs are now sized from the pitch, so no two seats can touch.
 Konzol's algorithm stays as the fallback. The chart is a console, not an

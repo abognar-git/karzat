@@ -284,11 +284,15 @@ def room_floor(geo: dict) -> str:
 PODIUM = '<path d="M -11 0 A 11 11 0 0 1 11 0 L 11 3 L -11 3 Z" class="rostrum"/><path d="M -6 -3 A 6 6 0 0 1 6 -3 L 6 0 L -6 0 Z" class="rostrum hi"/>'
 
 
-def _seat_group(pos: str, faction: str, azon: str | None, align: str | None, title: str, node: str, ring_r: float, k: float) -> str:
-    """One interactive seat: data hooks for the inspector and filters, and a white ring when the MP voted against their faction."""
-    ring = f'<circle cx="{node_cx(node)}" cy="{node_cy(node)}" r="{ring_r:.2f}" class="against"/>' if align == "against" else ""
+def _seat_group(pos: str, faction: str, azon: str | None, align: str | None, title: str, node: str, ring_r: float, k: float, hit_r: float | None = None) -> str:
+    """One interactive seat: an invisible hit circle the size of the whole seat cell (so hovering near the dot
+    is hovering the dot — Konzol's .kz-hit), data hooks for the inspector and filters, and a white ring when
+    the MP voted against their faction. The hover glow is the hit circle's own fill, not a CSS filter."""
+    cx, cy = node_cx(node), node_cy(node)
+    ring = f'<circle cx="{cx}" cy="{cy}" r="{ring_r:.2f}" class="against"/>' if align == "against" else ""
+    hit = f'<circle cx="{cx}" cy="{cy}" r="{(hit_r if hit_r else 5.2 * k * 1.7):.2f}" class="hit"/>'
     attrs = f'class="seat" data-pos="{pos}" data-f="{html.escape(faction or "")}"' + (f' data-az="{html.escape(azon)}"' if azon else "") + (f' data-al="{align}"' if align else "") + ' tabindex="0"'
-    return f'<g {attrs}><title>{title}</title>{ring}{node}</g>'
+    return f'<g {attrs}><title>{title}</title>{hit}{ring}{node}</g>'
 
 
 def node_cx(node: str) -> str:
@@ -306,6 +310,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
     k = geo.get("node_radius", 5.2) / 5.2                       # glyphs sized to the plan's seat pitch, never overlapping
     align = align or {}
     ring_r = 5.2 * k * 1.55
+    hit_r = geo.get("seat_pitch", 5.2 * k * 2) * 0.55            # the whole seat cell answers to the pointer
     parts, unplaced = [], []
     for m in view["positions"]:
         azon = m.get("mp_azon")
@@ -316,7 +321,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
             xy = coords[azon]
             place = "miniszteri pad" if xy.get("front_bench") else str(xy["sector"]) + ". szektor"
             where = " · " + place + ", " + str(xy["row"]) + ". sor, " + str(xy["seat"]) + ". szék"
-            parts.append(_seat_group(pos, m["faction"], azon, align.get(azon), title + html.escape(where), _node(xy["x"], xy["y"], pos, c, k), ring_r, k))
+            parts.append(_seat_group(pos, m["faction"], azon, align.get(azon), title + html.escape(where), _node(xy["x"], xy["y"], pos, c, k), ring_r, k, hit_r))
         else:
             unplaced.append(m)
     # the room's empty seats (numbers a row skips), faint — so a half-empty bench reads as one
@@ -341,7 +346,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
             why = "azonosítatlan név" if not m.get("mp_azon") else "nincs ülőhely a képviselői adatlapon (a mandátum azóta megszűnt)"
             tray += _seat_group(m["position"], m["faction"], m.get("mp_azon"), align.get(m.get("mp_azon") or ""),
                                 f'{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}',
-                                _node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k), ring_r, k)
+                                _node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k), ring_r, k, hit_r)
     svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
            + "".join(floor) + arc + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
            + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
@@ -451,7 +456,9 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .chart svg .seat{transition:opacity .15s,filter .15s;outline:none;cursor:pointer}
 .chart svg .seat[data-pos="nem_szavazott"],.chart svg .seat[data-pos="bejelentett_hianyzo"],.chart svg .seat[data-pos="igazoltan_tavol"],.chart svg .seat[data-pos="jelen_nem_szavazott"]{opacity:.55}
 .chart svg .seat.dim{opacity:.12}
-.chart svg .seat.hl,.chart svg .seat:hover,.chart svg .seat:focus-visible{opacity:1;filter:drop-shadow(0 0 3px rgba(255,255,255,.75))}
+.chart svg .seat.hl,.chart svg .seat:hover,.chart svg .seat:focus-visible{opacity:1}
+.chart svg .hit{fill:#fff;fill-opacity:0;stroke:none;transition:fill-opacity .12s}
+.chart svg .seat.hl .hit,.chart svg .seat:hover .hit,.chart svg .seat:focus-visible .hit{fill-opacity:.22}
 .chart svg .against{fill:none;stroke:#fff;stroke-width:.55;stroke-opacity:.9}
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}

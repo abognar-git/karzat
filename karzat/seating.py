@@ -90,7 +90,7 @@ def infer_orientation(analysis: dict[str, Any], government: str, front_bench: in
 def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_order: list[int],
            r0: float = 66.0, row_gap: float = 7.6, aisle: float = 0.07, span: float = math.pi * 1.06,
            seat_numbers_left_to_right: bool = True, front_bench: int | None = FRONT_BENCH,
-           front_bench_span: float | None = None) -> dict[str, Any]:
+           front_bench_span: float | None = None, front_bench_radius_rows: float = 2.1) -> dict[str, Any]:
     """Coordinates for every seat. Speaker's platform at the origin, seats above the x axis;
     Speaker's left = negative x. `span` slightly over π: a horseshoe, not a strict semicircle.
 
@@ -99,8 +99,12 @@ def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_or
     needs (max over rows of seats ÷ radius) and the common seat pitch `w` (arc length) is what
     the span allows; rows are concentric, `row_gap` apart. The seat numbers a row skips are the
     room's empty seats (they are drawn faint), and rows nobody sits in are unknown. The front
-    bench (sector `front_bench`) is an inner arc centred on the platform at radius
-    r0 − 1.4·row_gap, spread to the same pitch (or `front_bench_span` if given)."""
+    bench (sector `front_bench`) is the horseshoe's inner circle — parlament.hu: the ministers sit
+    "a kormányzati patkó bársonyszékein", the Katolikus Lexikon: "a belső körben a mindenkori
+    kormány miniszterei ülnek, középső részén az elnöki emelvény és a gyorsírók asztala" — so it is
+    drawn as a semicircle centred on the platform at radius r0 − front_bench_radius_rows·row_gap,
+    its 21 armchairs at whatever pitch the semicircle gives them (wider than an MP's seat, as
+    velvet armchairs are); `front_bench_span` overrides the semicircle."""
     secs = analysis["sectors"]
     sector_order = [i for i in sector_order if i != front_bench]
     n_ais = len(sector_order) - 1
@@ -123,9 +127,9 @@ def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_or
         wa = need[sec] * pitch
         wedges[sec] = (a, a - wa)          # (left edge angle, right edge angle) — angles decrease left→right
         a = a - wa - aisle
-    fb_r = r0 - 1.4 * row_gap
+    fb_r = r0 - front_bench_radius_rows * row_gap
     fb_max = max((s["seat"] for s in seats.values() if s["sector"] == front_bench), default=1) if front_bench is not None else 1
-    fb_span = front_bench_span if front_bench_span is not None else min(math.pi - 0.4, fb_max * pitch / fb_r)
+    fb_span = front_bench_span if front_bench_span is not None else math.pi
 
     def place(sec: int, row: int, seat_no: int) -> tuple[float, float, bool]:
         if front_bench is not None and sec == front_bench:
@@ -179,4 +183,4 @@ def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_or
                                          "seat numbers left→right within a row (Speaker's view)",
                                          "the seat numbers a row skips are empty seats; rows nobody occupies are unknown and not drawn",
                                          "orientation: government to the Speaker's right (parlament.hu description)",
-                                         "sector 0 / row 0 = ministerial front bench, drawn as an inner arc at the same pitch"]}}
+                                         "sector 0 / row 0 = the ministerial patkó: the horseshoe's inner circle, drawn as a semicircle round the platform"]}}

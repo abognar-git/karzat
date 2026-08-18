@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-08-18T12:02:42+00:00",
+ "derived_at": "2026-08-18T13:51:33+00:00",
  "government": "TISZA",
  "government_note": "largest faction unless --government given",
  "mps_listed": 199,
@@ -210,8 +210,8 @@
    ]
   },
   "front_bench_sector": 0,
-  "front_bench_radius": 55.36,
-  "front_bench_span_rad": 1.8985,
+  "front_bench_radius": 50.04,
+  "front_bench_span_rad": 3.1416,
   "front_bench_max_seat": 21,
   "max_row": 5,
   "outer_radius": 96.4,
@@ -222,7 +222,7 @@
    "seat numbers left→right within a row (Speaker's view)",
    "the seat numbers a row skips are empty seats; rows nobody occupies are unknown and not drawn",
    "orientation: government to the Speaker's right (parlament.hu description)",
-   "sector 0 / row 0 = ministerial front bench, drawn as an inner arc at the same pitch"
+   "sector 0 / row 0 = the ministerial patkó: the horseshoe's inner circle, drawn as a semicircle round the platform"
   ]
  },
  "seats": {
@@ -1972,8 +1972,8 @@
    "seat": 2
   },
   "000O": {
-   "x": -28.58,
-   "y": -47.41,
+   "x": -39.12,
+   "y": -31.2,
    "sector": 0,
    "row": 0,
    "seat": 5,
@@ -2106,8 +2106,8 @@
    "seat": 2
   },
   "000V": {
-   "x": -5.0,
-   "y": -55.13,
+   "x": -7.46,
+   "y": -49.48,
    "sector": 0,
    "row": 0,
    "seat": 10,
@@ -2219,8 +2219,8 @@
    "seat": 1
   },
   "000Q": {
-   "x": -24.18,
-   "y": -49.8,
+   "x": -34.04,
+   "y": -36.68,
    "sector": 0,
    "row": 0,
    "seat": 6,
@@ -2241,8 +2241,8 @@
    "seat": 1
   },
   "k122": {
-   "x": -14.83,
-   "y": -53.34,
+   "x": -21.71,
+   "y": -45.08,
    "sector": 0,
    "row": 0,
    "seat": 8,
@@ -2256,8 +2256,8 @@
    "seat": 2
   },
   "0019": {
-   "x": 43.5,
-   "y": -34.24,
+   "x": 49.9,
+   "y": -3.74,
    "sector": 0,
    "row": 0,
    "seat": 21,
@@ -2383,8 +2383,8 @@
    "seat": 5
   },
   "002I": {
-   "x": 32.74,
-   "y": -44.64,
+   "x": 43.34,
+   "y": -25.02,
    "sector": 0,
    "row": 0,
    "seat": 18,
@@ -2398,8 +2398,8 @@
    "seat": 2
   },
   "m076": {
-   "x": 5.0,
-   "y": -55.13,
+   "x": 7.46,
+   "y": -49.48,
    "sector": 0,
    "row": 0,
    "seat": 12,
@@ -2525,8 +2525,8 @@
    "seat": 2
   },
   "000R": {
-   "x": 9.95,
-   "y": -54.46,
+   "x": 14.75,
+   "y": -47.82,
    "sector": 0,
    "row": 0,
    "seat": 13,
@@ -2603,8 +2603,8 @@
    "seat": 4
   },
   "000X": {
-   "x": 24.18,
-   "y": -49.8,
+   "x": 34.04,
+   "y": -36.68,
    "sector": 0,
    "row": 0,
    "seat": 16,
@@ -2667,8 +2667,8 @@
    "seat": 7
   },
   "0010": {
-   "x": 28.58,
-   "y": -47.41,
+   "x": 39.12,
+   "y": -31.2,
    "sector": 0,
    "row": 0,
    "seat": 17,
@@ -2850,8 +2850,8 @@
    "seat": 3
   },
   "000Y": {
-   "x": 40.23,
-   "y": -38.02,
+   "x": 48.79,
+   "y": -11.13,
    "sector": 0,
    "row": 0,
    "seat": 20,
@@ -2865,8 +2865,8 @@
    "seat": 5
   },
   "t067": {
-   "x": 36.64,
-   "y": -41.5,
+   "x": 46.58,
+   "y": -18.28,
    "sector": 0,
    "row": 0,
    "seat": 19,
@@ -3029,48 +3029,48 @@
  },
  "empty_seats": [
   {
-   "x": -43.5,
-   "y": -34.24,
+   "x": -49.9,
+   "y": -3.74,
    "sector": 0,
    "row": 0,
    "seat": 1,
    "front_bench": true
   },
   {
-   "x": -40.23,
-   "y": -38.02,
+   "x": -48.79,
+   "y": -11.13,
    "sector": 0,
    "row": 0,
    "seat": 2,
    "front_bench": true
   },
   {
-   "x": -36.64,
-   "y": -41.5,
+   "x": -46.58,
+   "y": -18.28,
    "sector": 0,
    "row": 0,
    "seat": 3,
    "front_bench": true
   },
   {
-   "x": -32.74,
-   "y": -44.64,
+   "x": -43.34,
+   "y": -25.02,
    "sector": 0,
    "row": 0,
    "seat": 4,
    "front_bench": true
   },
   {
-   "x": -19.59,
-   "y": -51.78,
+   "x": -28.19,
+   "y": -41.34,
    "sector": 0,
    "row": 0,
    "seat": 7,
    "front_bench": true
   },
   {
-   "x": -9.95,
-   "y": -54.46,
+   "x": -14.75,
+   "y": -47.82,
    "sector": 0,
    "row": 0,
    "seat": 9,
@@ -3078,23 +3078,23 @@
   },
   {
    "x": 0.0,
-   "y": -55.36,
+   "y": -50.04,
    "sector": 0,
    "row": 0,
    "seat": 11,
    "front_bench": true
   },
   {
-   "x": 14.83,
-   "y": -53.34,
+   "x": 21.71,
+   "y": -45.08,
    "sector": 0,
    "row": 0,
    "seat": 14,
    "front_bench": true
   },
   {
-   "x": 19.59,
-   "y": -51.78,
+   "x": 28.19,
+   "y": -41.34,
    "sector": 0,
    "row": 0,
    "seat": 15,
