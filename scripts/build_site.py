@@ -258,6 +258,32 @@ def _node(cx: float, cy: float, pos: str, c: str, k: float = 1.0) -> str:
     return f'<circle cx="{cx}" cy="{cy}" r="{f(d)}" fill="{c}" fill-opacity="0.6"/>'
 
 
+def _annulus(ri: float, ro: float, a0: float, a1: float, cls: str) -> str:
+    """An annular wedge between radii ri < ro and angles a0 → a1 (angles decrease left→right)."""
+    return (f'<path d="M {ri*math.cos(a0):.1f} {-ri*math.sin(a0):.1f} L {ro*math.cos(a0):.1f} {-ro*math.sin(a0):.1f} '
+            f'A {ro:.1f} {ro:.1f} 0 0 1 {ro*math.cos(a1):.1f} {-ro*math.sin(a1):.1f} L {ri*math.cos(a1):.1f} {-ri*math.sin(a1):.1f} '
+            f'A {ri:.1f} {ri:.1f} 0 0 0 {ri*math.cos(a0):.1f} {-ri*math.sin(a0):.1f} Z" class="{cls}"/>')
+
+
+def room_floor(geo: dict) -> str:
+    """The room under the seats: each sector's floor with its row guides, and the front-bench band."""
+    gap, r0, r_out = geo["row_gap"], geo["r0"], geo["outer_radius"]
+    out = []
+    for sec, (a0, a1) in geo["sector_wedges_rad"].items():
+        out.append(_annulus(r0 - gap * 0.55, r_out + gap * 0.55, a0, a1, "floor"))
+        for row in range(1, geo["max_row"] + 1):
+            rr = r0 + (row - 1) * gap
+            out.append(f'<path d="M {rr*math.cos(a0):.1f} {-rr*math.sin(a0):.1f} A {rr:.1f} {rr:.1f} 0 0 1 {rr*math.cos(a1):.1f} {-rr*math.sin(a1):.1f}" class="rowline"/>')
+    fb, fs = geo["front_bench_radius"], geo["front_bench_span_rad"]
+    a0, a1 = math.pi / 2 + fs / 2, math.pi / 2 - fs / 2
+    out.append(_annulus(fb - gap * 0.5, fb + gap * 0.5, a0, a1, "floor"))
+    out.append(f'<path d="M {fb*math.cos(a0):.1f} {-fb*math.sin(a0):.1f} A {fb} {fb} 0 0 1 {fb*math.cos(a1):.1f} {-fb*math.sin(a1):.1f}" class="rowline"/>')
+    return "".join(out)
+
+
+PODIUM = '<path d="M -11 0 A 11 11 0 0 1 11 0 L 11 3 L -11 3 Z" class="rostrum"/><path d="M -6 -3 A 6 6 0 0 1 6 -3 L 6 0 L -6 0 Z" class="rostrum hi"/>'
+
+
 def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
     """The reconstructed chamber: every voting MP at their (sector,row,seat). Returns (svg, info)."""
     colour = {f["id"]: f["colour"] for f in facs}
@@ -286,13 +312,8 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
     for sec, (a0, a1) in geo["sector_wedges_rad"].items():
         mid = (a0 + a1) / 2
         labels.append(f'<text x="{R*math.cos(mid):.1f}" y="{-R*math.sin(mid):.1f}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>')
-        for a in (a0, a1):
-            r_in, r_out = geo["r0"] - 5, geo["outer_radius"] + 5
-            labels.append(f'<line x1="{r_in*math.cos(a):.1f}" y1="{-r_in*math.sin(a):.1f}" x2="{r_out*math.cos(a):.1f}" y2="{-r_out*math.sin(a):.1f}" class="aisle"/>')
-    fb = geo["front_bench_radius"]; fs = geo["front_bench_span_rad"]
-    a0, a1 = math.pi / 2 + fs / 2, math.pi / 2 - fs / 2
-    arc = (f'<path d="M {fb*math.cos(a0):.1f} {-fb*math.sin(a0):.1f} A {fb} {fb} 0 0 1 {fb*math.cos(a1):.1f} {-fb*math.sin(a1):.1f}" class="fbarc"/>'
-           f'<text x="0" y="-13" class="seclabel s" text-anchor="middle">miniszteri pad</text>')
+    floor = [room_floor(geo)]
+    arc = '<text x="0" y="-13" class="seclabel s" text-anchor="middle">miniszteri pad</text>'
     # MPs the plan cannot place: a small labelled tray, bottom left, outside the room
     tray = ""
     if unplaced:
@@ -304,8 +325,8 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict) -> tuple[str, dict]:
             tray += (f'<g class="seat" data-pos="{m["position"]}"><title>{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}</title>'
                      f'{_node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k)}</g>')
     svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
-           f'<rect x="-12" y="-5" width="24" height="6" rx="1.2" class="rostrum"/><text x="0" y="8" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
-           + arc + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
+           + "".join(floor) + arc + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
+           + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
     return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or [])}
 
 
@@ -320,8 +341,13 @@ def seat_svg_fallback(view: dict, facs: list[dict]) -> str:
         c = colour.get(m["faction"] or "", "#8a8a8a")
         title = html.escape(f'{m["name"]} ({m["faction"]}) — {POSITION_LABEL.get(m["position"], m["position"])}')
         parts.append(f'<g class="seat" data-pos="{m["position"]}"><title>{title}</title>{_node(seat["cx"], seat["cy"], m["position"], c)}</g>')
+    r0, gap, rows = 78.0, 17.0, 7
+    ri, ro = r0 - gap * 0.5, r0 + (rows - 1) * gap + gap * 0.5
+    floor = (f'<path d="M {-ri:.1f} 0 L {-ro:.1f} 0 A {ro:.1f} {ro:.1f} 0 0 1 {ro:.1f} 0 L {ri:.1f} 0 A {ri:.1f} {ri:.1f} 0 0 0 {-ri:.1f} 0 Z" class="floor"/>'
+             + "".join(f'<path d="M {-(r0 + i*gap):.1f} 0 A {r0 + i*gap:.1f} {r0 + i*gap:.1f} 0 0 1 {r0 + i*gap:.1f} 0" class="rowline"/>' for i in range(rows)))
+    podium = '<path d="M -14 0 A 14 14 0 0 1 14 0 L 14 4 L -14 4 Z" class="rostrum"/><path d="M -8 -4 A 8 8 0 0 1 8 -4 L 8 0 L -8 0 Z" class="rostrum hi"/>'
     return ('<svg viewBox="-200 -200 400 214" role="img" aria-label="Ülésrend-diagram">'
-            '<rect x="-14" y="-6" width="28" height="7" rx="1.5" class="rostrum"/>' + "".join(parts) + '</svg>')
+            + floor + podium + "".join(parts) + '</svg>')
 
 
 # -- helpers ----------------------------------------------------------------------------------
@@ -402,8 +428,9 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 /* chart */
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s,filter .2s;cursor:crosshair}
-.chart svg:hover .seat{opacity:.45}.chart svg .seat:hover{opacity:1;filter:drop-shadow(0 0 4px rgba(255,255,255,.6))}
-.rostrum{fill:var(--border)}.seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
+.chart svg:hover .seat{opacity:.4}.chart svg .seat:hover{opacity:1;filter:drop-shadow(0 0 3px rgba(255,255,255,.7))}.chart svg .seat{transition:opacity .15s}
+.rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
+.seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
 /* numbers */
@@ -966,7 +993,7 @@ def chamber_mini_svg(inp: dict, azon: str) -> str:
     parts.append(f'<circle cx="{me["x"]}" cy="{me["y"]}" r="{9*k:.2f}" fill="{c}" fill-opacity=".25"/><circle cx="{me["x"]}" cy="{me["y"]}" r="{5*k:.2f}" fill="{c}"/>')
     W = R + 20
     return (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+24:.0f}" role="img" aria-label="Ülőhely az ülésteremben">'
-            f'<rect x="-12" y="-5" width="24" height="6" rx="1.2" class="rostrum"/>' + "".join(parts) + '</svg>')
+            + room_floor(geo) + PODIUM + "".join(parts) + '</svg>')
 
 
 def mandate_text(mp: dict) -> str:

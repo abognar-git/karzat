@@ -88,7 +88,7 @@ def infer_orientation(analysis: dict[str, Any], government: str, front_bench: in
 
 
 def layout(seats: dict[str, dict[str, Any]], analysis: dict[str, Any], sector_order: list[int],
-           r0: float = 64.0, row_gap: float = 9.0, aisle: float = 0.06, span: float = math.pi * 1.06,
+           r0: float = 66.0, row_gap: float = 7.6, aisle: float = 0.07, span: float = math.pi * 1.06,
            seat_numbers_left_to_right: bool = True, front_bench: int | None = FRONT_BENCH,
            front_bench_span: float | None = None) -> dict[str, Any]:
     """Coordinates for every seat. Speaker's platform at the origin, seats above the x axis;

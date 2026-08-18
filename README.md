@@ -60,7 +60,7 @@ opposition in sectors 1–2 to the Speaker's left, TISZA in 3–6 to the right, 
 / row 0 that is the ministerial front bench (12 TISZA MPs, seat numbers up to 21).
 `karzat/seating.py` turns that into coordinates and states its assumptions: seats are the
 same width everywhere, so a sector's wedge is as wide as its tightest row needs and every
-row sits at one common pitch (5.2 units here); the seat numbers a row skips are the room's
+row sits at one common pitch (5.0 units here); the seat numbers a row skips are the room's
 empty seats and are drawn faint (15 of them: nine on the front bench, six in sector 1's
 outer rows), while rows nobody occupies are unknown and not drawn; seat numbers run
 left→right; orientation per parlament.hu's own description. My first cut had sector wedges
