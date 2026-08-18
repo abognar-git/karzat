@@ -88,7 +88,17 @@ agreement per cycle side by side, faction switches marked, then the record's fac
 mandate and motion history — linked from each cycle's MP page and listed at
 `szemely/index.html`. All of it is generated from the same inputs as the pages, by
 `karzat/export.py` and the builder, so a downloaded table and the page it came from can
-never disagree. Long tables — the vote directory, roll calls,
+never disagree. Two more pages per cycle are counts with their formulas named:
+`kohezio/` (Rice index |igen − nem| / (igen + nem); Hix–Noury–Roland agreement index
+(max − (Σ − max)/2) / Σ over igen–nem–tartózkodott; per faction per vote and cast-weighted per
+cycle; the faction × faction share of votes with the same plurality; within each faction the
+MP pairs that agree least, on ≥ 20 shared cast votes; "független" is flagged as not a faction)
+and `szoros/` (every decision's margin to the threshold the source names, the closest hundred;
+the qualified thresholds that sank a yes-majority; and, labelled as a computed assumption, the
+outcomes that would flip if every MP in the roll call who cast nothing had voted with their
+faction's plurality — presence-based thresholds growing with them). Each vote page shows each
+faction's agreement index beside its bar. Nothing here scales, weights or predicts; the one
+counterfactual says so in its heading. Long tables — the vote directory, roll calls,
 the MP index, an MP's votes and motions — show 25 rows at a time with a pager (prev / next /
 page numbers / "mind" for everything) that composes with the filters, the search and the
 sorting; the whole table is still in the page, so without JS nothing is missing. Where a list
@@ -112,6 +122,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 - [x] **The console look** — restyled in Konzol's visual language (dark ground, dot grid, corner-bracketed panels, mono labels, terminal footer, boot sequence); shared generated `site/assets/karzat.css` / `karzat.js`, checked like the index
 - [x] **Motions on the MP pages** — the record's `<inditvanyok>` is counts only, so `iromanyok.cgi` (the current cycle's 507 irományok, submitters as "Név (Frakció)") is resolved to people with the same resolver and listed under each current-cycle MP: 941 submissions, and for every one of the 201 people the list count equals the record's "önálló" count; a parser bug that dropped every submitter of a multi-submitter bill was found and fixed on the way
 - [x] **For researchers: export, citation, careers** — every table on a page has a CSV/JSON twin beside it (a vote's roll call, an MP's votes) and each cycle has `adatok/` (szavazasok, nevsorok, kepviselok, inditvanyok as CSV+JSON, with a data dictionary page); every vote, MP and career page carries a "Hivatkozás" box (plain and BibTeX, copy button); `szemely/<azon>.html` is one person across every loaded cycle, linked from each cycle's MP page
+- [x] **Cohesion and close votes** — `karzat/analytics.py`: Rice and Hix–Noury–Roland agreement indices per faction per vote and per cycle, the faction × faction plurality-agreement matrix, MP × MP agreement within a faction (≥ 20 shared votes), all with the formulas printed on `kohezio/`; and `szoros/`, the decisions ranked by margin to their threshold, the yes-majorities a qualified threshold sank, and — a labelled counterfactual — the outcomes that would flip if every non-caster had voted with their faction's plurality; every vote page shows each faction's AI beside its bar; CSVs for all of it
 - [x] **Cycle 42 pages** — the same builder, one level down (`site/ckl42/`): its own index, 2,599 vote pages and 214 MP pages, a cycle switch in the top bar and cross-links between an MP's two pages; inputs `votes_index_ckl42.json.gz` + `votes_positions_ckl42.json.gz` (deterministic gzip, 424 KB together) + `mps_ckl42.json`; the missing `kepviselo.cgi` records fetched (171 of the 214 people are not in the cycle-43 roster); factions attributed by each person's last roll call (10 switchers)
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
 - [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v2 built from scratch from the cache in about twelve seconds for two cycles — 2,858 votes, 563,216 roll-call positions with 0 unresolved names, 1,015 faction-history rows, 980 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
@@ -122,7 +133,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 146 tests
+python3 -m unittest discover -s tests -t .      # offline; 149 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -443,7 +454,7 @@ this section will say what the numbers cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber: parlament.hu's floor plan, or the estimate) · freshness.py (what the site may say about currency) · export.py (CSV/JSON shapes + data dictionary) · fingerprint.py · wikidata.py
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber: parlament.hu's floor plan, or the estimate) · freshness.py (what the site may say about currency) · export.py (CSV/JSON shapes + data dictionary) · analytics.py (cohesion indices, close votes) · fingerprint.py · wikidata.py
 scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py, derive_mps.py — cache → data/derived · build_site.py — data/derived → site/
 site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · assets/karzat.css, karzat.js — the shared look and the boot sequence, generated and checked the same way · szavazas/ — one page per vote (+ .json/.csv) · kepviselo/ — one page per MP (+ .json/.csv) + index · adatok/ — the cycle's tables and data dictionary · ckl<N>/ — the same for earlier cycles · szemely/ — one career page per person across cycles (all generated, git-ignored)
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)

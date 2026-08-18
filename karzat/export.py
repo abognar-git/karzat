@@ -172,6 +172,18 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("p_azon, mp_name", "a benyújtó"),
             ("szam, kind, number, title, status, href, co_submitters", "iromány száma, előtagja, sorszáma, címe, állapota, parlament.hu-link, további benyújtók száma"),
         ]),
+        ("kohezio/ — frakciok.csv, frakcio_parok.csv, kepviselo_parok.csv, szavazasonkent.csv", [
+            ("ai", "egyetértési index (Hix–Noury–Roland): (legnagyobb − (összes − legnagyobb)/2) / összes, az igen–nem–tartózkodott leadott szavazatokból"),
+            ("rice", "Rice-index: |igen − nem| / (igen + nem)"),
+            ("unanimous_votes, votes_with_dissent, dissenting_votes", "egyhangú szavazások · nem egyhangúak · a frakció többségétől eltérő leadott szavazatok összesen"),
+            ("votes_both_cast, same_plurality, share", "frakciópáronként: hány szavazáson adott le mindkettő szavazatot · hányszor volt azonos a többségi álláspont · arány"),
+            ("shared, same, share", "képviselőpáronként (frakción belül, ≥ 20 közös szavazás): közös leadott szavazások · azonos szavazat · arány"),
+        ]),
+        ("szoros/dontesek.csv — minden döntés a küszöbéhez mérve", [
+            ("margin", "igen − szükséges"),
+            ("yes_majority, qualified", "több igen, mint nem · minősített (nem egyszerű) többséget kívánt"),
+            ("hypo_igen, flips_if_all_voted", "számított feltevés: hány igen lenne, ha minden szavazatot le nem adó a frakciója többségével szavazott volna, és megfordulna-e a kimenetel"),
+        ]),
         ("egy szavazás oldala mellett: <slug>.json és <slug>.csv", [
             ("json", "a szavazás sora + indítványok + frakciónkénti összesítés + a teljes névsor (ülőhellyel, ahol ismert)"),
             ("csv", "a névsor: ts, p_azon, name, faction, position, position_label, against_faction, sector, row, seat"),
@@ -181,3 +193,34 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("csv", "minden szavazása: ts, date, time, iromany, title, rule, result, position, position_label, faction, faction_plurality, align"),
         ]),
     ]
+
+
+# -- analytics ---------------------------------------------------------------------------------
+
+def cohesion_factions_csv(co: dict[str, Any], cycle: int) -> str:
+    rows = [{"cycle": cycle, "faction": f, **{k: v.get(k) for k in ("votes", "cast", "ai", "rice", "unanimous_votes", "votes_with_dissent", "dissenting_votes")}}
+            for f, v in co["per_faction"].items()]
+    return _csv(rows, ["cycle", "faction", "votes", "cast", "ai", "rice", "unanimous_votes", "votes_with_dissent", "dissenting_votes"])
+
+
+def faction_pairs_csv(co: dict[str, Any], cycle: int) -> str:
+    rows = [{"cycle": cycle, "faction_a": a, "faction_b": b, "votes_both_cast": x["votes"], "same_plurality": x["same"], "share": x["share"]}
+            for a, d in co["faction_pairs"].items() for b, x in d.items()]
+    return _csv(rows, ["cycle", "faction_a", "faction_b", "votes_both_cast", "same_plurality", "share"])
+
+
+def mp_pairs_csv(co: dict[str, Any], mps: dict[str, dict], cycle: int) -> str:
+    rows = [{"cycle": cycle, "faction": f, "a": r["a"], "a_name": (mps.get(r["a"]) or {}).get("name"), "b": r["b"], "b_name": (mps.get(r["b"]) or {}).get("name"),
+             "shared": r["shared"], "same": r["same"], "share": r["share"]} for f, lst in co["mp_pairs"].items() for r in lst]
+    return _csv(rows, ["cycle", "faction", "a", "a_name", "b", "b_name", "shared", "same", "share"])
+
+
+def cohesion_votes_csv(co: dict[str, Any], cycle: int) -> str:
+    rows = [{"cycle": cycle, "ts": ts, "faction": f, **{k: d.get(k) for k in ("igen", "nem", "tartozkodott", "cast", "rice", "ai", "dissent")}}
+            for ts, per in co["per_vote"].items() for f, d in per.items()]
+    return _csv(rows, ["cycle", "ts", "faction", "igen", "nem", "tartozkodott", "cast", "rice", "ai", "dissent"])
+
+
+def decisions_csv(cl: dict[str, Any], cycle: int) -> str:
+    cols = ["ts", "date", "time", "rule", "needed", "base", "igen", "nem", "tartozkodott", "margin", "passed", "yes_majority", "qualified", "hypo_igen", "flips_if_all_voted", "iromany", "title"]
+    return _csv([{**r, "cycle": cycle} for r in cl["decisions"]], ["cycle"] + cols)

@@ -43,6 +43,7 @@ from karzat.freshness import BUDAPEST, assess  # noqa: E402
 from karzat.load import cycle_of_date  # noqa: E402
 from karzat.majority import RULES, Rule  # noqa: E402
 from karzat import export as ex  # noqa: E402
+from karzat import analytics as an  # noqa: E402
 
 DERIVED = ROOT / "data" / "derived"
 SEATING = DERIVED / "seating.json"
@@ -1031,9 +1032,10 @@ def verdict_block(view: dict, inp: dict) -> str:
         n = t["osszesen"] or 1
         seg = lambda k, op: f'<i style="width:{100*(t[k] or 0)/n:.1f}%;background:{f["colour"]};opacity:{op}" title="{esc(t["faction"])} {POSITION_LABEL.get(k,k)}: {t[k]}"></i>'
         rest = n - (t["igen"] or 0) - (t["tartozkodott"] or 0) - (t["nem"] or 0)
+        ai = an.agreement_index(t["igen"] or 0, t["nem"] or 0, t["tartozkodott"] or 0)
         fb.append(f'<div class="row"><span>{esc(t["faction"])}</span><span class="stack">{seg("igen",1)}{seg("tartozkodott",.6)}{seg("nem",.35)}'
                   f'<i style="width:{100*rest/n:.1f}%;background:transparent" title="{esc(t["faction"])} nem szavazott / hiányzó: {rest}"></i></span>'
-                  f'<span class="mono" style="text-align:right">{t["igen"]} – {t["nem"]} – {t["tartozkodott"]}</span></div>')
+                  f'<span class="mono" style="text-align:right">{t["igen"]} – {t["nem"]} – {t["tartozkodott"]}<span class="sub" title="egyetértési index (Hix–Noury–Roland)">{("AI " + f"{ai:.2f}") if ai is not None else ""}</span></span></div>')
     base_word = "képviselő" if rule_info and rule_info.base == "seats" else "jelenlévő"
     base_note = ""
     return (tally +
@@ -1230,7 +1232,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1558,6 +1560,108 @@ def build_assets() -> dict[str, str]:
     return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_BOOT).strip() + "\n"}
 
 
+def _pct(x, digits=0) -> str:
+    return "—" if x is None else f"{100 * x:.{digits}f}%"
+
+
+def _f2(x) -> str:
+    return "—" if x is None else f"{x:.2f}"
+
+
+def build_cohesion_page(inp: dict, co: dict) -> str:
+    """kohezio/index.html — per faction Rice and AI over the cycle, the faction × faction agreement matrix, and per
+    faction the least-agreeing MP pairs; formulas named on the page; CSVs beside it."""
+    facs = sorted(co["per_faction"], key=lambda f: -co["per_faction"][f]["cast"])
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    rows = "".join(
+        f'<tr><td><span class="pos"><i class="d" style="--c:{colour.get(f, "#8a8a8a")}"></i>{esc(f)}</span></td>'
+        f'<td class="num mono">{v["votes"]}</td><td class="num mono">{hu_num(v["cast"])}</td><td class="num mono">{_f2(v["ai"])}</td><td class="num mono">{_f2(v["rice"])}</td>'
+        f'<td class="num mono">{v["unanimous_votes"]}<span class="sub">{_pct(v["unanimous_votes"] / v["votes"] if v["votes"] else None)}</span></td>'
+        f'<td class="num mono">{v["votes_with_dissent"]}</td><td class="num mono">{hu_num(v["dissenting_votes"])}</td></tr>'
+        for f, v in ((f, co["per_faction"][f]) for f in facs))
+    # matrix
+    head = "".join(f'<th scope="col" class="num">{esc(b)}</th>' for b in facs)
+    mrows = []
+    for a in facs:
+        cells = []
+        for b in facs:
+            if a == b:
+                cells.append('<td class="num mono" style="color:var(--dim3)">·</td>')
+            else:
+                x = (co["faction_pairs"].get(a, {}).get(b) or co["faction_pairs"].get(b, {}).get(a))
+                sh = x["share"] if x else None
+                bg = f'background:rgba(255,255,255,{0.03 + 0.25 * sh:.2f})' if sh is not None else ""
+                cells.append(f'<td class="num mono" style="{bg}" title="{x["same"] if x else 0} / {x["votes"] if x else 0} szavazás">{_pct(sh)}</td>')
+        mrows.append(f'<tr><th scope="row">{esc(a)}</th>{"".join(cells)}</tr>')
+    # least agreeing pairs per faction (top 8), plus most against
+    pair_blocks = []
+    names = {a: m["name"] for a, m in inp["mps"].items()}
+    for f in facs:
+        pairs = sorted(co["mp_pairs"].get(f) or [], key=lambda r: r["share"])[:8]
+        if not pairs:
+            continue
+        prs = "".join(f'<tr><td><a href="../kepviselo/{esc(r["a"])}.html">{esc(names.get(r["a"], r["a"]))}</a> – <a href="../kepviselo/{esc(r["b"])}.html">{esc(names.get(r["b"], r["b"]))}</a></td>'
+                      f'<td class="num mono">{r["same"]} / {r["shared"]}</td><td class="num mono">{_pct(r["share"])}</td></tr>' for r in pairs)
+        pair_blocks.append(f'<h3 class="mono" style="font-size:10px;letter-spacing:.2em;color:var(--dim2);margin:12px 0 4px">{esc(f)} — a legkevésbé egyező párok</h3>'
+                           f'<div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Pár</th><th scope="col" class="num">Egyező / közös</th><th scope="col" class="num">Egyezés</th></tr></thead><tbody>{prs}</tbody></table></div>')
+    return page_head(f'Kohézió · {inp["cycle"]}. ciklus · karzat', f'Frakciók összetartása a {inp["cycle"]}. ciklusban: Rice-index, egyetértési index, frakciók közti egyezés, képviselőpárok.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("kohézió", None)], 1) + f"""
+<div class="hero-h"><h1>Kohézió</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · frakciók összetartása a név szerinti szavazásokon</small></div>
+<p class="lede">Két szokásos mérőszám, mindkettő csak számolás: a Rice-index az igen–nem megosztottság (|igen − nem| / (igen + nem)), az egyetértési index a három leadott opcióé ((legnagyobb − (összes − legnagyobb)/2) / összes; Hix–Noury–Roland). 1 = mindenki ugyanúgy szavazott.</p>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Frakciónként</span><span class="tag">leadott szavazatokkal súlyozott átlagok · <a href="frakciok.csv">CSV</a></span></h2>
+  <div class="tablewrap"><table><thead><tr><th scope="col">Frakció</th><th scope="col" class="num">Szavazás</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Egyetértési index</th><th scope="col" class="num">Rice</th><th scope="col" class="num">Egyhangú</th><th scope="col" class="num">Nem egyhangú</th><th scope="col" class="num">Kisebbségi szavazatok</th></tr></thead><tbody>{rows}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">„Egyhangú”: minden leadott szavazat azonos; „kisebbségi szavazatok”: a frakció többségétől eltérő leadott szavazatok összesen. A „független” sor nem frakció — egymástól független képviselők összesítése, a száma nem összetartás.</div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Frakciók egymással</span><span class="tag">a többségi álláspontok egyezése · <a href="frakcio_parok.csv">CSV</a></span></h2>
+  <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col"></th>{head}</tr></thead><tbody>{"".join(mrows)}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Azoknak a szavazásoknak a hányada, ahol a két frakció leadott szavazatainak többsége ugyanaz volt — csak ott számolva, ahol mindkettő adott le szavazatot.</div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Képviselőpárok</span><span class="tag">frakción belül · legalább 20 közös szavazás · <a href="kepviselo_parok.csv">CSV</a></span></h2>
+  {"".join(pair_blocks)}
+</section>
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}kohezio/index.html', f'Kohézió — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-kohezio')}
+""" + page_tail(inp, 1)
+
+
+def build_close_page(inp: dict, cl: dict) -> str:
+    """szoros/index.html — the closest decisions, qualified thresholds that sank a yes-majority, and (a labelled
+    counterfactual) outcomes that would flip if every non-caster had voted with their faction's plurality."""
+    def row(r, extra=""):
+        m = ("+" if r["margin"] >= 0 else "") + str(r["margin"])
+        subj = f'{esc(r["iromany"] or "")} {esc((r["title"] or "")[:90])}'
+        badge = '<span class="badge ok">Elfogadva</span>' if r["passed"] else '<span class="badge no">Elutasítva</span>'
+        return (f'<tr><td class="ts mono"><a href="../szavazas/{esc(r["slug"])}.html">{esc(r["date"])} {esc(r["time"] or "")}</a></td><td>{subj}</td>'
+                f'<td class="mono">{esc(rule_short(r["rule"]))}<span class="sub">{r["needed"]} / {r["base"]}</span></td>'
+                f'<td class="num mono">{r["igen"]} – {r["nem"]} – {r["tartozkodott"]}</td><td class="num mono">{m}</td><td>{badge}</td>{extra}</tr>')
+    closest = "".join(row(r) for r in cl["closest"][:100])
+    sunk = "".join(row(r) for r in cl["sunk_by_threshold"])
+    flips = "".join(row(r, f'<td class="num mono">{r["hypo_igen"]}</td>') for r in cl["absence_decisive"])
+    n = len(cl["decisions"])
+    return page_head(f'Szoros szavazások · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus legszorosabb döntései, a minősített küszöbön elbukott igen-többségek, és a hiányzókon múló kimenetelek.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("szoros", None)], 1) + f"""
+<div class="hero-h"><h1>Szoros szavazások</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(n)} döntés a küszöbéhez mérve</small></div>
+<p class="lede">Minden döntésnél az igenek és a szükséges többség különbsége (a „különbség” oszlop): mennyivel ment át, vagy mennyi hiányzott.</p>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>A legszorosabbak</span><span class="tag">a 100 legkisebb különbség · <a href="dontesek.csv">CSV, mind a {hu_num(n)}</a></span></h2>
+  <div class="tablewrap"><table data-page-size="25"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">Különbség</th><th scope="col">Eredmény</th></tr></thead><tbody>{closest or '<tr><td colspan="6">—</td></tr>'}</tbody></table></div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Több igen, mint nem — mégis elutasítva</span><span class="tag">{len(cl["sunk_by_threshold"])} döntés</span></h2>
+  <div class="tablewrap"><table data-page-size="25"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">Különbség</th><th scope="col">Eredmény</th></tr></thead><tbody>{sunk or '<tr><td colspan="6">Ebben a ciklusban nem volt ilyen.</td></tr>'}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Minősített többséget kívánó döntések, ahol az igenek meghaladták a nemeket, de a küszöböt nem érték el.</div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Ahol a hiányzók döntöttek</span><span class="tag">{len(cl["absence_decisive"])} döntés · feltevés, nem tény</span></h2>
+  <div class="tablewrap"><table data-page-size="25"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">Különbség</th><th scope="col">Eredmény</th><th scope="col" class="num">Igen, ha mindenki szavaz</th></tr></thead><tbody>{flips or '<tr><td colspan="7">Ebben a ciklusban nem volt ilyen.</td></tr>'}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Számított feltevés: ha a névsorban szereplő, de szavazatot le nem adó képviselők mind a frakciójuk többségével szavaztak volna, más lett volna-e a kimenetel. Jelenléthez kötött küszöbnél a jelenlét is nő velük.</div>
+</section>
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}szoros/index.html', f'Szoros szavazások — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-szoros')}
+""" + page_tail(inp, 1)
+
+
 def build_data_page(inp: dict) -> str:
     """adatok/index.html — the cycle's downloads and the data dictionary."""
     files = [("szavazasok.csv", "szavazasok.json", "minden szavazás, egy sor egy szavazás"),
@@ -1624,6 +1728,17 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
             j, c = ex.motions_export(inp["mps"], cycle)
             (ad / "inditvanyok.json").write_text(j, encoding="utf-8"); (ad / "inditvanyok.csv").write_text(c, encoding="utf-8")
         (ad / "index.html").write_text(build_data_page(inp), encoding="utf-8")
+        co = an.cohesion(inp)
+        cl = an.close_votes(inp, co["plurality"])
+        kd = out_dir / "kohezio"; kd.mkdir(parents=True, exist_ok=True)
+        (kd / "index.html").write_text(build_cohesion_page(inp, co), encoding="utf-8")
+        (kd / "frakciok.csv").write_text(ex.cohesion_factions_csv(co, cycle), encoding="utf-8")
+        (kd / "frakcio_parok.csv").write_text(ex.faction_pairs_csv(co, cycle), encoding="utf-8")
+        (kd / "kepviselo_parok.csv").write_text(ex.mp_pairs_csv(co, inp["mps"], cycle), encoding="utf-8")
+        (kd / "szavazasonkent.csv").write_text(ex.cohesion_votes_csv(co, cycle), encoding="utf-8")
+        sd = out_dir / "szoros"; sd.mkdir(parents=True, exist_ok=True)
+        (sd / "index.html").write_text(build_close_page(inp, cl), encoding="utf-8")
+        (sd / "dontesek.csv").write_text(ex.decisions_csv(cl, cycle), encoding="utf-8")
     per_mp = {azon: {"cycle": cycle, "name": mp["name"], "faction": mp.get("faction"), "faction_first": mp.get("faction_first"),
                      "mandate": mandate_text(mp), "mandate_from": mp.get("mandate_from"), "mandate_to": mp.get("mandate_to"),
                      "current": mp.get("current"), "wikidata_qid": mp.get("wikidata_qid"), "parlament_url": mp.get("parlament_url"),
