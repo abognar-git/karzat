@@ -177,6 +177,37 @@
 
 
 (function(){
+  var q = document.getElementById('sq'), out = document.getElementById('sres'), n = document.getElementById('sn'); if (!q || !out) return;
+  var items = null, loading = false, kind = 'all', cyc = 'all';
+  function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; cb(); }; x.send(); }
+  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép'};
+  function render(){
+    var terms = fold(q.value).split(/\s+/).filter(Boolean);
+    if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
+    var hits = [];
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      if (kind !== 'all' && it.k !== kind) continue;
+      if (cyc !== 'all' && String(it.c) !== cyc && it.k !== 'szemely') continue;
+      var ok = true, score = 0;
+      for (var j = 0; j < terms.length; j++) { var t = terms[j]; if (it.f.indexOf(t) < 0) { ok = false; break; } if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1; }
+      if (ok) hits.push([score, it]);
+    }
+    hits.sort(function(a, b){ return b[0] - a[0] || (b[1].d || '').localeCompare(a[1].d || ''); });
+    var shown = hits.slice(0, 200);
+    out.innerHTML = shown.map(function(h){ var it = h[1]; return '<tr><td><a href="../' + esc(it.u) + '">' + esc(it.t) + '</a><span class="sub">' + esc(it.s) + '</span></td><td class="mono">' + esc(KIND[it.k] || it.k) + (it.n ? ' · ' + it.n + ' szavazás' : '') + '</td><td class="mono">' + (it.c ? it.c + '.' : '—') + '</td></tr>'; }).join('') || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
+    n.textContent = hits.length + ' találat' + (hits.length > 200 ? ' (az első 200)' : '');
+  }
+  q.addEventListener('input', function(){ load(render); });
+  document.querySelectorAll('button[data-sk]').forEach(function(b){ b.addEventListener('click', function(){ kind = b.getAttribute('data-sk'); document.querySelectorAll('button[data-sk]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
+  document.querySelectorAll('button[data-sc]').forEach(function(b){ b.addEventListener('click', function(){ cyc = b.getAttribute('data-sc'); document.querySelectorAll('button[data-sc]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
+  if (location.search) { var m = /[?&]q=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); load(render); } }
+})();
+
+
+(function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (document.hidden) return;                       // a background tab gets the finished page, not a stalled boot
   var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

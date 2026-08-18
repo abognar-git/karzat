@@ -807,6 +807,38 @@ JS_CITE = """
 })();
 """
 
+JS_SEARCH = """
+(function(){
+  var q = document.getElementById('sq'), out = document.getElementById('sres'), n = document.getElementById('sn'); if (!q || !out) return;
+  var items = null, loading = false, kind = 'all', cyc = 'all';
+  function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; cb(); }; x.send(); }
+  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép'};
+  function render(){
+    var terms = fold(q.value).split(/\s+/).filter(Boolean);
+    if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
+    var hits = [];
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      if (kind !== 'all' && it.k !== kind) continue;
+      if (cyc !== 'all' && String(it.c) !== cyc && it.k !== 'szemely') continue;
+      var ok = true, score = 0;
+      for (var j = 0; j < terms.length; j++) { var t = terms[j]; if (it.f.indexOf(t) < 0) { ok = false; break; } if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1; }
+      if (ok) hits.push([score, it]);
+    }
+    hits.sort(function(a, b){ return b[0] - a[0] || (b[1].d || '').localeCompare(a[1].d || ''); });
+    var shown = hits.slice(0, 200);
+    out.innerHTML = shown.map(function(h){ var it = h[1]; return '<tr><td><a href="../' + esc(it.u) + '">' + esc(it.t) + '</a><span class="sub">' + esc(it.s) + '</span></td><td class="mono">' + esc(KIND[it.k] || it.k) + (it.n ? ' · ' + it.n + ' szavazás' : '') + '</td><td class="mono">' + (it.c ? it.c + '.' : '—') + '</td></tr>'; }).join('') || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
+    n.textContent = hits.length + ' találat' + (hits.length > 200 ? ' (az első 200)' : '');
+  }
+  q.addEventListener('input', function(){ load(render); });
+  document.querySelectorAll('button[data-sk]').forEach(function(b){ b.addEventListener('click', function(){ kind = b.getAttribute('data-sk'); document.querySelectorAll('button[data-sk]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
+  document.querySelectorAll('button[data-sc]').forEach(function(b){ b.addEventListener('click', function(){ cyc = b.getAttribute('data-sc'); document.querySelectorAll('button[data-sc]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
+  if (location.search) { var m = /[?&]q=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); load(render); } }
+})();
+"""
+
 JS_BOOT = """
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1245,7 +1277,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1570,7 +1602,7 @@ def build() -> str:
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_BOOT).strip() + "\n"}
+    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -1880,6 +1912,8 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         for bnum, b in bs.items():
             (bd / f"{bnum}.html").write_text(build_bill_page(inp, b), encoding="utf-8")
         (bd / "iromanyok.csv").write_text(ex.bills_csv(bs, cycle), encoding="utf-8")
+    search_items = ([{"k": "iromany", "c": cycle, "t": b["label"], "s": (b["title"] or "")[:140], "u": f"{cycle_dir(cycle)}iromany/{b['number']}.html", "d": b["first"], "n": len(b["votes"])} for b in bs.values()]
+                    + [{"k": "kepviselo", "c": cycle, "t": mp["name"], "s": f'{mp.get("faction") or "—"} · {mandate_text(mp)}', "u": f"{cycle_dir(cycle)}kepviselo/{azon}.html"} for azon, mp in inp["mps"].items()]) if not index_only else []
     per_mp = {azon: {"cycle": cycle, "name": mp["name"], "faction": mp.get("faction"), "faction_first": mp.get("faction_first"),
                      "mandate": mandate_text(mp), "mandate_from": mp.get("mandate_from"), "mandate_to": mp.get("mandate_to"),
                      "current": mp.get("current"), "wikidata_qid": mp.get("wikidata_qid"), "parlament_url": mp.get("parlament_url"),
@@ -1887,7 +1921,25 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
                      "in_roll": (inp["alignment"]["per_mp"].get(azon) or {}).get("in_roll", 0), "cast": (inp["alignment"]["per_mp"].get(azon) or {}).get("cast", 0),
                      "with": (inp["alignment"]["per_mp"].get(azon) or {}).get("with", 0), "against": (inp["alignment"]["per_mp"].get(azon) or {}).get("against", 0),
                      "href": f"{cycle_dir(cycle)}kepviselo/{azon}.html"} for azon, mp in inp["mps"].items()}
-    return {"cycle": cycle, "index": str(out_dir / "index.html"), "vote_pages": n, "mp_pages": k, "per_mp": per_mp}
+    return {"cycle": cycle, "index": str(out_dir / "index.html"), "vote_pages": n, "mp_pages": k, "per_mp": per_mp, "search": search_items}
+
+
+def build_search_page(inp: dict, n_items: int) -> str:
+    """kereses/index.html — one search box over every loaded cycle's bills, MPs and people; the index is a static
+    JSON beside the page, loaded on the first keystroke; accent-insensitive."""
+    cyc_buttons = '<button type="button" data-sc="all" class="on" aria-pressed="true">minden ciklus</button>' + "".join(f'<button type="button" data-sc="{c}" aria-pressed="false">{c}</button>' for c in inp["cycles"])
+    return page_head("Keresés · karzat", "Keresés az összes betöltött ciklus irományai, képviselői és személyei között; ékezetek nélkül is.", 1) + \
+        topbar(inp, [("keresés", None)], 1) + f"""
+<div class="hero-h"><h1>Keresés</h1><small class="label" data-kz-text>{hu_num(n_items)} tétel · irományok, képviselők, pályaképek · minden betöltött ciklus</small></div>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Keresés</span><span class="tag">ékezet nélkül is · szám, cím, név</span></h2>
+  <div class="filters"><input id="sq" type="search" placeholder="pl. T/51 · alaptörvény · Ágh" aria-label="Keresés" autofocus style="min-width:min(100%,420px)"><span class="n" id="sn" aria-live="polite"></span></div>
+  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button></div>
+  <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
+  <div class="tablewrap"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr></tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">A találatok listája a gépeléskor töltődik be (<span class="mono">kereses/index.json</span>); szavazások közvetlenül a ciklus címlapján kereshetők, tárgy szerint.</div>
+</section>
+""" + page_tail(inp, 1)
 
 
 def build_method_page(inp: dict) -> str:
@@ -2042,6 +2094,11 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
                 inp["facs_all"].setdefault(f["id"], f["colour"])
         md_ = out_dir / "modszer"; md_.mkdir(parents=True, exist_ok=True)
         (md_ / "index.html").write_text(build_method_page(inp), encoding="utf-8")
+        items = [it for r in res for it in r["search"]]
+        items += [{"k": "szemely", "c": 0, "t": stints[0]["name"], "s": f'pályakép · {", ".join(str(st["cycle"]) for st in sorted(stints, key=lambda r: r["cycle"]))}. ciklus', "u": f"szemely/{azon}.html"} for azon, stints in people.items()]
+        sd_ = out_dir / "kereses"; sd_.mkdir(parents=True, exist_ok=True)
+        (sd_ / "index.json").write_text(json.dumps(items, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+        (sd_ / "index.html").write_text(build_search_page(inp, len(items)), encoding="utf-8")
         pd = out_dir / "szemely"
         pd.mkdir(parents=True, exist_ok=True)
         (pd / "index.html").write_text(build_person_index(inp, people), encoding="utf-8")
