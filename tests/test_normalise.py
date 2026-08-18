@@ -321,5 +321,18 @@ class Resolver(unittest.TestCase):
         self.assertEqual(r2.resolve("Zsiga-Kárpát Dániel (Jobbik)", "2023-01-01"), "z012")
 
 
+class BillList(unittest.TestCase):
+    def test_every_submitter_is_kept_and_the_href_too(self):
+        payload = {"iromanyok": {"iromany": [
+            {"@szam": "T/1", "@izon": "1", "@href": "https://example.invalid/1", "cim": "Egy", "allapottipus": "folyamatban",
+             "benyujto": [{"@nev": "Kis Anna (X)"}, {"@nev": "Nagy Béla (Y)"}]},                       # several <benyujto>
+            {"@szam": "K/2", "@izon": "2", "cim": "Kettő", "allapottipus": "lezárt", "benyujto": {"@nev": "Kis Anna (X)"}},   # one
+        ]}}
+        bills = parse_iromanyok(payload)
+        self.assertEqual([b["submitters"] for b in bills], [["Kis Anna (X)", "Nagy Béla (Y)"], ["Kis Anna (X)"]])
+        self.assertEqual(bills[0]["href"], "https://example.invalid/1")
+        self.assertIsNone(bills[1]["href"])
+
+
 if __name__ == "__main__":
     unittest.main()

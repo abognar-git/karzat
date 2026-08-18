@@ -458,9 +458,13 @@ def parse_iromanyok(payload: dict[str, Any]) -> list[dict[str, Any]]:
     for i in as_list(root.get("iromany")):
         if not isinstance(i, dict):
             continue
-        b = i.get("benyujto")
-        names = [b["@nev"]] if isinstance(b, dict) and b.get("@nev") else ([b] if isinstance(b, str) and b else [])
-        out.append({"szam": i.get("@szam"), "izon": i.get("@izon"), "title": i.get("cim") or None,
+        names = []
+        for b in as_list(i.get("benyujto")):                 # one element or several: every submitter counts
+            if isinstance(b, dict) and b.get("@nev"):
+                names.append(b["@nev"])
+            elif isinstance(b, str) and b:
+                names.append(b)
+        out.append({"szam": i.get("@szam"), "izon": i.get("@izon"), "href": i.get("@href") or None, "title": i.get("cim") or None,
                     "status_type": i.get("allapottipus") or None, "submitters": names,
                     "submitter_kind": submitter_kind(names), **{"szam_parsed": parse_iromany_szam(i.get("@szam"))}})
     return out

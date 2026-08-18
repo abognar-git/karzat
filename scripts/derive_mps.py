@@ -28,7 +28,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from karzat.normalise import parse_kepviselo, parse_kepviselok  # noqa: E402
+from karzat.normalise import NameResolver, parse_iromanyok, parse_kepviselo, parse_kepviselok, record_histories  # noqa: E402
 from karzat.xmlutil import parse_xml, to_dict  # noqa: E402
 
 RAW = ROOT / "data" / "raw"
@@ -99,6 +99,24 @@ def main(argv: list[str] | None = None) -> int:
         azons = list(by_azon) + [a for a in store["members"] if a not in by_azon]
     else:
         azons = list(store["members"])                       # the people of that cycle's roll calls, nobody else
+    # the current cycle's irományok by submitter (iromanyok.cgi lists the current cycle only): the items behind
+    # the record's <inditvanyok> "önálló" count — the two reconcile MP by MP (tests/test_site.py)
+    motions_by_azon: dict[str, list] = {}
+    il = RAW / "iromanyok" / "all.xml"
+    if cycle == 43 and il.exists():
+        resolver = NameResolver(listed, histories=record_histories(RAW))
+        for b in parse_iromanyok(load(il)):
+            people = [n for n in b["submitters"] if "(" in n and not n.startswith("kormány")]
+            for n in people:
+                az = resolver.resolve(n, "2026-08-18")
+                if not az:
+                    continue
+                motions_by_azon.setdefault(az, []).append({
+                    "szam": b["szam"], "kind": (b.get("szam_parsed") or {}).get("kind"), "number": (b.get("szam_parsed") or {}).get("number"),
+                    "title": b["title"], "status": b["status_type"], "href": b.get("href"),
+                    "co_submitters": len(people) - 1})
+        for lst in motions_by_azon.values():
+            lst.sort(key=lambda m: -(m["number"] or 0))
     out_mps = {}
     for azon in azons:
         rec_path = RAW / "kepviselo" / f"mp_{azon}.xml"
@@ -131,6 +149,7 @@ def main(argv: list[str] | None = None) -> int:
             "factions": (rec or {}).get("factions") or [],
             "elections": (rec or {}).get("elections") or [],
             "motion_stats": (rec or {}).get("motion_stats") or [],
+            "motions": motions_by_azon.get(azon, []),           # this cycle's irományok (current cycle only; empty for earlier cycles)
             "wikidata_qid": wd.get("qid"),
             "wikidata_end": wd.get("end"),
             "parlament_url": f"https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22{azon}%22%7D",

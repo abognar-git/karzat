@@ -1195,6 +1195,32 @@ def build_mp_page(inp: dict, azon: str) -> str:
     fac_hist = "".join(f'<tr><td class="mono">{esc(f["ciklus"])}</td><td>{esc(f["faction"])}</td><td class="mono">{esc(f["from"] or "")} – {esc(f["to"] or "")}</td></tr>' for f in mp.get("factions") or [])
     elections = "".join(f'<tr><td class="mono">{esc(e["ciklus"])}</td><td>{esc(e["constituency"] or "—")}</td><td class="mono">{esc(e["elected_on"] or "")}</td><td class="mono">{esc(e["mandate_from"] or "")} – {esc(e["mandate_to"] or "")}</td></tr>' for e in mp.get("elections") or [])
     motions = "".join(f'<tr><td class="mono">{esc(m["ciklus"])}</td><td class="num mono">{esc(m["onallo"])}</td><td class="num mono">{esc(m["nem_onallo"])}</td></tr>' for m in mp.get("motion_stats") or [])
+    items = mp.get("motions") or []
+    kinds = {}
+    for it in items:
+        kinds[it.get("kind") or "?"] = kinds.get(it.get("kind") or "?", 0) + 1
+    kind_txt = " · ".join(f'{esc(k)}/ {n}' for k, n in sorted(kinds.items(), key=lambda kv: (-kv[1], kv[0])))
+    stat_now = next((x["onallo"] for x in mp.get("motion_stats") or [] if x.get("ciklus") == "2026-"), None)
+    def item_row(it: dict) -> str:
+        num = f'<a href="{esc(it["href"])}" target="_blank" rel="noopener">{esc(it["szam"])}</a>' if it.get("href") else esc(it["szam"])
+        co = f'<span class="sub">+{it["co_submitters"]} további benyújtó</span>' if it.get("co_submitters") else ""
+        badge = "badge mid" if it.get("status") == "lezárt" else "badge"
+        return f'<tr><td class="ts mono">{num}</td><td>{esc(it["title"] or "")}{co}</td><td><span class="{badge}">{esc(it.get("status") or "—")}</span></td></tr>'
+    item_rows = "".join(item_row(it) for it in items)
+    if inp["closed"]:
+        motions_note = (f'Az API <span class="mono">&lt;inditvanyok&gt;</span> összesítése ciklusonként. A tételek csak a jelenlegi ciklusra kérdezhetők le '
+                        f'(<span class="mono">iromanyok.cgi</span>), a {inp["cycle"]}. ciklusé nem.')
+        items_html = ""
+    else:
+        recon = ("" if stat_now is None or stat_now == len(items) else
+                 f' <b>Eltérés:</b> az adatlap {stat_now} önálló indítványt számol, a lista {len(items)} tételt talál.')
+        motions_note = ('Az API <span class="mono">&lt;inditvanyok&gt;</span> összesítése ciklusonként; alatta a jelenlegi ciklus irományai a '
+                        '<span class="mono">iromanyok.cgi</span> listából, benyújtó szerint — a lista tételszáma megegyezik az adatlap „önálló” számával. '
+                        'A „nem önálló” indítványok (módosító javaslatok) nincsenek a listában, csak a számuk. Előtagok: T/ törvényjavaslat, H/ határozati javaslat, '
+                        'I/ interpelláció, K/ kérdés, A/ azonnali kérdés — a többi az iromány saját száma szerint.' + recon)
+        items_html = (f'<div class="hero-meta" style="margin:10px 0 4px"><span class="lbl">a jelenlegi ciklusban</span> {len(items)} iromány' + (f' · {kind_txt}' if kind_txt else '') + '</div>'
+                      f'<div class="tablewrap" style="max-height:340px;overflow:auto"><table><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
+                      + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
     rel_root = "../" * (1 + inp["base_depth"])
     other_links = " · ".join(f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members)
     if inp["closed"]:
@@ -1251,7 +1277,8 @@ def build_mp_page(inp: dict, azon: str) -> str:
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Benyújtott indítványok</span><span class="tag">ciklusonként</span></h2>
     <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
-    <div class="hero-meta prose" style="margin-top:8px">Az API <span class="mono">&lt;inditvanyok&gt;</span> összesítése; a tételek maguk még nincsenek betöltve.</div>
+    {items_html}
+    <div class="hero-meta prose" style="margin-top:8px">{motions_note}</div>
   </section>
 </section>
 <section class="panel deep">{CORNERS}

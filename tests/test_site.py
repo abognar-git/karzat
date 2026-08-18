@@ -180,6 +180,24 @@ class MPPages(unittest.TestCase):
         self.assertEqual(page.count('href="../szavazas/'), 256 + self.inp["alignment"]["per_mp"]["a011"]["against"])
         self.assertNotIn('<img', page)                                # portraits are linked, not embedded (licence unverified)
 
+    def test_this_cycles_motions_reconcile_with_the_record_for_every_mp(self):
+        # iromanyok.cgi by submitter == the record's <inditvanyok> "önálló" for 2026-, for all 201 people
+        for azon, mp in self.inp["mps"].items():
+            stat = next((x["onallo"] for x in mp["motion_stats"] if x["ciklus"] == "2026-"), 0)
+            self.assertEqual(len(mp["motions"]), stat, f"{azon} {mp['name']}: list {len(mp['motions'])} vs record {stat}")
+        a = self.inp["mps"]["a011"]["motions"]
+        self.assertEqual(len(a), 5)
+        self.assertTrue(all(m["href"] and m["szam"] and m["title"] for m in a))
+        self.assertEqual([m["kind"] for m in a].count("K"), 4)
+        page = build_mp_page(self.inp, "a011")
+        self.assertIn("a jelenlegi ciklusban</span> 5 iromány · K/ 4 · H/ 1", page)
+        self.assertEqual(page.count("iromanyok_mobil"), 5)
+        self.assertNotIn("még nincsenek betöltve", page)
+        # a closed cycle only has the counts, and says why
+        page42 = build_mp_page(load_inputs(42), "a011")
+        self.assertIn("A tételek csak a jelenlegi ciklusra kérdezhetők le", page42)
+        self.assertNotIn("iromanyok_mobil", page42)
+
     def test_former_mp_page_says_so(self):
         page = build_mp_page(self.inp, "b076")
         self.assertIn("Mandátuma megszűnt", page)
