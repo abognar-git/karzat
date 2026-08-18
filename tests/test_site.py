@@ -9,7 +9,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_mp_index, build_mp_page, build_vote_page, factions, hemicycle_layout, load_inputs, vote_view
+from scripts.build_site import HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, load_inputs, mp_exports, vote_exports, vote_view
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -322,6 +322,72 @@ class Cycle42(unittest.TestCase):
         self.assertEqual(idx.count("<tr data-f="), 214)
         self.assertNotIn(">Ülőhely</th>", idx)
         self.assertIn("ma is képviselő", idx)
+
+
+class Exports(unittest.TestCase):
+    """Every table on a page has a CSV/JSON twin, and the twins say the same thing as the page."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_vote_exports_match_the_page(self):
+        j, c = vote_exports(self.inp, HERO_TS)
+        obj = json.loads(j)
+        self.assertEqual(obj["vote"]["needed"], 133)
+        self.assertEqual(obj["vote"]["igen"], 135)
+        self.assertEqual(len(obj["positions"]), 199)
+        self.assertEqual(sum(1 for p in obj["positions"] if p["position"] == "igen"), 135)
+        lines = c.lstrip("\ufeff").splitlines()
+        self.assertEqual(lines[0], "ts,p_azon,name,faction,position,position_label,against_faction,sector,row,seat")
+        self.assertEqual(len(lines), 200)                                    # header + 199 rows
+        self.assertTrue(all(l.startswith(HERO_TS + ",") for l in lines[1:]))
+        page = build_vote_page(self.inp, HERO_TS)
+        self.assertIn('href="2026-06-15T17-20-04.csv">CSV</a>', page)
+        self.assertIn('href="2026-06-15T17-20-04.json">JSON</a>', page)
+        self.assertIn("@misc{karzat-43-2026-06-15T17-20-04,", page)         # the citation box
+        self.assertIn("frissítve 2026-08-18 10:49", page)
+
+    def test_mp_exports_match_the_page(self):
+        j, c = mp_exports(self.inp, "a011")
+        obj = json.loads(j)
+        self.assertEqual(obj["summary"], {"in_roll": 256, "cast": 239, "with": 232, "against": 7})
+        self.assertEqual(len(obj["votes"]), 256)
+        self.assertEqual(len(obj["motions"]), 5)
+        lines = c.lstrip("\ufeff").splitlines()
+        self.assertEqual(len(lines), 257)
+        page = build_mp_page(self.inp, "a011")
+        self.assertIn('href="a011.csv">CSV</a>', page)
+        self.assertIn("@misc{karzat-43-a011,", page)
+        self.assertIn('szemely/a011.html">pályakép ↗</a>', page)              # the career page is one click away
+
+    def test_data_dictionary_names_every_exported_column(self):
+        from karzat import export as ex
+        text = " ".join(col for _, cols in ex.adatszotar() for col, _ in cols)
+        for column in ex.VOTE_COLUMNS + ex.POSITION_COLUMNS + ex.MP_COLUMNS + ex.MOTION_COLUMNS:
+            self.assertTrue(any(column == part.strip() for part in text.replace(",", " ").split()), f"{column} missing from the adatszótár")
+
+
+class CareerPages(unittest.TestCase):
+    def test_person_page_spans_the_loaded_cycles(self):
+        inp = load_inputs()
+        inp["facs_all"] = {f["id"]: f["colour"] for c in available_cycles() for f in factions(c)}
+        stints = [{"cycle": 43, "name": "Ágh Péter", "faction": "Fidesz", "faction_first": "Fidesz", "mandate": "egyéni választókerület — Vas 2. OEVK",
+                   "mandate_from": "2026-05-09", "mandate_to": None, "current": True, "wikidata_qid": "Q1469363", "parlament_url": "https://www.parlament.hu/x",
+                   "factions": [{"ciklus": "2026-", "faction": "Fidesz", "from": "2026-05-09", "to": None}], "elections": [], "motion_stats": [],
+                   "in_roll": 256, "cast": 239, "with": 232, "against": 7, "href": "kepviselo/a011.html"},
+                  {"cycle": 42, "name": "Ágh Péter", "faction": "Fidesz", "faction_first": "Fidesz", "mandate": "egyéni választókerület — Vas 2. OEVK",
+                   "mandate_from": "2022-05-02", "mandate_to": "2026-05-08", "current": True, "wikidata_qid": "Q1469363", "parlament_url": None,
+                   "factions": [], "elections": [], "motion_stats": [], "in_roll": 2579, "cast": 2495, "with": 2487, "against": 8, "href": "ckl42/kepviselo/a011.html"}]
+        page = build_person_page(inp, "a011", stints)
+        self.assertIn("2 betöltött ciklus", page)
+        self.assertIn('href="../kepviselo/a011.html">43. ciklus</a>', page)
+        self.assertIn('href="../ckl42/kepviselo/a011.html">42. ciklus</a>', page)
+        self.assertIn("2835 névsor · leadott 2734 · frakciójával 2719 · ellene 15", page)
+        self.assertIn("@misc{karzat-szemely-a011,", page)
+        idx = build_person_index(inp, {"a011": stints})
+        self.assertIn('href="a011.html">Ágh Péter</a>', idx)
+        self.assertIn("<td class=\"mono\">42 · 43</td>", idx)
 
 
 class AllCycles(unittest.TestCase):

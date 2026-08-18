@@ -75,7 +75,20 @@ faction) and the last twenty roll calls up to that vote as a streak strip; click
 releases. Seats where the MP voted against their faction's plurality wear a thin white ring,
 counted in the legend; the roll-call filters dim the seats they exclude, and hovering a table
 row lights its seat. All of it is build-time JSON in the page (no network), and without JS the
-chart is what it was: seats, rings and titles. Long tables — the vote directory, roll calls,
+chart is what it was: seats, rings and titles. **For researchers**, three things that
+compound: every table a page shows has a CSV/JSON twin next to it — a vote's roll call as
+`<slug>.csv` / `.json`, an MP's votes as `<azon>.csv` / `.json` — and each cycle has an
+`adatok/` page with the whole cycle as four tables (szavazasok, nevsorok, kepviselok,
+inditvanyok; CSV is UTF-8 with a BOM, comma-separated) and a data dictionary that names
+every column, so nothing has to be reverse-engineered; every vote, MP and career page
+has a "Hivatkozás" box with a plain citation and a BibTeX entry (copy button) that names
+the sync date, so a number quoted from here can be traced to a build; and
+`szemely/<azon>.html` is one person across every loaded cycle — participation and
+agreement per cycle side by side, faction switches marked, then the record's faction,
+mandate and motion history — linked from each cycle's MP page and listed at
+`szemely/index.html`. All of it is generated from the same inputs as the pages, by
+`karzat/export.py` and the builder, so a downloaded table and the page it came from can
+never disagree. Long tables — the vote directory, roll calls,
 the MP index, an MP's votes and motions — show 25 rows at a time with a pager (prev / next /
 page numbers / "mind" for everything) that composes with the filters, the search and the
 sorting; the whole table is still in the page, so without JS nothing is missing. Where a list
@@ -98,6 +111,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
 - [x] **The console look** — restyled in Konzol's visual language (dark ground, dot grid, corner-bracketed panels, mono labels, terminal footer, boot sequence); shared generated `site/assets/karzat.css` / `karzat.js`, checked like the index
 - [x] **Motions on the MP pages** — the record's `<inditvanyok>` is counts only, so `iromanyok.cgi` (the current cycle's 507 irományok, submitters as "Név (Frakció)") is resolved to people with the same resolver and listed under each current-cycle MP: 941 submissions, and for every one of the 201 people the list count equals the record's "önálló" count; a parser bug that dropped every submitter of a multi-submitter bill was found and fixed on the way
+- [x] **For researchers: export, citation, careers** — every table on a page has a CSV/JSON twin beside it (a vote's roll call, an MP's votes) and each cycle has `adatok/` (szavazasok, nevsorok, kepviselok, inditvanyok as CSV+JSON, with a data dictionary page); every vote, MP and career page carries a "Hivatkozás" box (plain and BibTeX, copy button); `szemely/<azon>.html` is one person across every loaded cycle, linked from each cycle's MP page
 - [x] **Cycle 42 pages** — the same builder, one level down (`site/ckl42/`): its own index, 2,599 vote pages and 214 MP pages, a cycle switch in the top bar and cross-links between an MP's two pages; inputs `votes_index_ckl42.json.gz` + `votes_positions_ckl42.json.gz` (deterministic gzip, 424 KB together) + `mps_ckl42.json`; the missing `kepviselo.cgi` records fetched (171 of the 214 people are not in the cycle-43 roster); factions attributed by each person's last roll call (10 switchers)
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
 - [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v2 built from scratch from the cache in about twelve seconds for two cycles — 2,858 votes, 563,216 roll-call positions with 0 unresolved names, 1,015 faction-history rows, 980 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
@@ -108,7 +122,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 142 tests
+python3 -m unittest discover -s tests -t .      # offline; 146 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -429,9 +443,9 @@ this section will say what the numbers cannot support.
 ## Layout
 
 ```
-karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
+karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber: parlament.hu's floor plan, or the estimate) · freshness.py (what the site may say about currency) · export.py (CSV/JSON shapes + data dictionary) · fingerprint.py · wikidata.py
 scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py, derive_mps.py — cache → data/derived · build_site.py — data/derived → site/
-site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · assets/karzat.css, karzat.js — the shared look and the boot sequence, generated and checked the same way · szavazas/ — one page per vote · kepviselo/ — one page per MP + index · ckl42/ — the same three for cycle 42 (all generated, git-ignored)
+site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · assets/karzat.css, karzat.js — the shared look and the boot sequence, generated and checked the same way · szavazas/ — one page per vote (+ .json/.csv) · kepviselo/ — one page per MP (+ .json/.csv) + index · adatok/ — the cycle's tables and data dictionary · ckl<N>/ — the same for earlier cycles · szemely/ — one career page per person across cycles (all generated, git-ignored)
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v1 after the first real payloads — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels

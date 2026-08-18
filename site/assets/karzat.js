@@ -165,6 +165,18 @@
 
 
 (function(){
+  document.querySelectorAll('.cite [data-copy]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentNode.querySelector('pre'); if (!pre) return;
+      var done = function(){ b.classList.add('done'); b.textContent = 'másolva'; setTimeout(function(){ b.classList.remove('done'); b.textContent = 'másolás'; }, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(pre.textContent).then(done, function(){});
+      else { var r = document.createRange(); r.selectNodeContents(pre); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); try { document.execCommand('copy'); done(); } catch (e) {} }
+    });
+  });
+})();
+
+
+(function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (document.hidden) return;                       // a background tab gets the finished page, not a stalled boot
   var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

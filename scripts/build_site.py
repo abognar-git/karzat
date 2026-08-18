@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import html
 import json
+import os
 import math
 import re
 import sys
@@ -41,6 +42,7 @@ sys.path.insert(0, str(ROOT))
 from karzat.freshness import BUDAPEST, assess  # noqa: E402
 from karzat.load import cycle_of_date  # noqa: E402
 from karzat.majority import RULES, Rule  # noqa: E402
+from karzat import export as ex  # noqa: E402
 
 DERIVED = ROOT / "data" / "derived"
 SEATING = DERIVED / "seating.json"
@@ -577,6 +579,10 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .filters input::placeholder{color:var(--dim2)}
 .filters .n{color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;margin-left:auto}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}
+.cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
+.cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
+.cite .copy{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;cursor:pointer;white-space:nowrap}
+.cite .copy:hover{color:var(--white);border-color:var(--border-hi)}.cite .copy.done{color:var(--ok);border-color:var(--okbd)}
 .pgr{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em}
 .pgr button{border:1px solid var(--border);background:transparent;color:var(--dim2);min-width:26px;padding:3px 7px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;cursor:pointer}
 .pgr button:hover{color:var(--white);border-color:var(--border-hi)}.pgr button.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}.pgr button:disabled{opacity:.35;cursor:default}
@@ -784,6 +790,19 @@ JS_MP = """
 })();
 """
 
+JS_CITE = """
+(function(){
+  document.querySelectorAll('.cite [data-copy]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var pre = b.parentNode.querySelector('pre'); if (!pre) return;
+      var done = function(){ b.classList.add('done'); b.textContent = 'másolva'; setTimeout(function(){ b.classList.remove('done'); b.textContent = 'másolás'; }, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(pre.textContent).then(done, function(){});
+      else { var r = document.createRange(); r.selectNodeContents(pre); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); try { document.execCommand('copy'); done(); } catch (e) {} }
+    });
+  });
+})();
+"""
+
 JS_BOOT = """
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -872,6 +891,23 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
             f'<span class="kv"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_txt)}</b></span></div></header>\n<main class="kz-main"><div class="wrap">')
 
 
+SITE_URL = os.environ.get("KARZAT_SITE_URL", "").rstrip("/")     # the deployed origin, when there is one; else paths are cited
+
+
+def cite_html(inp: dict, path: str, title: str, key: str, json_href: str | None = None, csv_href: str | None = None) -> str:
+    """A 'Hivatkozás' box: plain-text and BibTeX citations for this page, with a copy button, and the data twins."""
+    url = f"{SITE_URL}/{path}" if SITE_URL else path
+    stamp = sync_stamp(inp)
+    year = stamp[:4] if stamp != "—" else "s. a."
+    plain = f"karzat: {title}. Az Országgyűlés Web API-jának adataiból, frissítve {stamp}. {url}"
+    bib = ("@misc{karzat-" + key + ",\n  title = {" + title.replace("{", "").replace("}", "") + "},\n  howpublished = {\\url{" + url + "}},\n"
+           "  note = {karzat — az Országgyűlés szavazásai; az Országgyűlés Web API-jának adataiból, frissítve " + stamp + "},\n  year = {" + year + "}\n}")
+    links = " · ".join(x for x in [f'<a href="{esc(json_href)}">JSON</a>' if json_href else "", f'<a href="{esc(csv_href)}">CSV</a>' if csv_href else ""] if x)
+    return (f'<section class="panel cite">{CORNERS}<h2><span data-kz-text>Hivatkozás</span><span class="tag">{links}</span></h2>'
+            f'<div class="cite-row"><pre class="mono">{esc(plain)}</pre><button type="button" class="copy" data-copy>másolás</button></div>'
+            f'<details><summary class="mono">BibTeX</summary><div class="cite-row"><pre class="mono">{esc(bib)}</pre><button type="button" class="copy" data-copy>másolás</button></div></details></section>')
+
+
 def sync_stamp(inp: dict) -> str:
     """The last sync as a Budapest timestamp, or an honest dash: the derive time is not a sync."""
     ls = inp["idx"].get("last_sync_at")
@@ -910,18 +946,22 @@ def inspector_data(view: dict, inp: dict) -> tuple[dict, dict]:
     up to and including this one as a streak string (w = with faction, a = against, c = cast without a
     faction plurality, n = did not cast, . = not in that roll call). Also returns {azon: align} for this vote."""
     per_mp = inp["alignment"]["per_mp"]
-    pos_index = {ts: i for i, ts in enumerate(inp["order"])}
+    al = inp["alignment"]
+    if "by_mp_ts" not in al:                                   # index each MP's votes by ts once per cycle, not once per page
+        al["by_mp_ts"] = {azon: {v["ts"]: v for v in rec["votes"]} for azon, rec in per_mp.items()}
+        al["roll_order"] = [t for t in inp["order"] if inp["store"]["positions"].get(t)]
+        al["roll_pos"] = {t: i for i, t in enumerate(al["roll_order"])}
     ts = view["ts"]
-    here = pos_index.get(ts, 0)
+    here = al["roll_pos"].get(ts)
     # the roll calls of the cycle up to and including this one, newest last
-    window = [t for t in inp["order"][:here + 1] if inp["store"]["positions"].get(t)][-STREAK_LEN:]
+    window = al["roll_order"][max(0, here + 1 - STREAK_LEN):here + 1] if here is not None else []
     data, align_here = {}, {}
     for pnt in view["positions"]:
         azon = pnt.get("mp_azon")
         if not azon:
             continue
         rec = per_mp.get(azon) or {"votes": [], "cast": 0, "in_roll": 0, "with": 0, "against": 0}
-        by_ts = {v["ts"]: v for v in rec["votes"]}
+        by_ts = al["by_mp_ts"].get(azon) or {}
         streak = ""
         for t in window:
             v = by_ts.get(t)
@@ -948,7 +988,7 @@ def chart_block(view: dict, inp: dict) -> str:
     if not view["roll_call_available"]:
         return ('<div class="hero-meta" style="margin:14px 0">Titkos szavazás — nincs név szerinti lista.</div>'
                 if view.get("secret") else '<div class="hero-meta" style="margin:14px 0">Nincs név szerinti lista.</div>')
-    data, align_here = inspector_data(view, inp)
+    _, data, align_here = vote_bundle(inp, view["ts"])
     n_against = sum(1 for a in align_here.values() if a == "against")
     if plan:
         svg, info = seat_svg_real(view, facs, plan, align_here)
@@ -1056,7 +1096,8 @@ def roll_call_table(view: dict, inp: dict) -> str:
                    f'<td><span class="pos">{_glyph(p["position"], c)}{esc(POSITION_LABEL.get(p["position"], p["position"]))}</span></td>' + (f'<td class="mono">{esc(seat_full)}</td>' if plan else '') + '</tr>')
     fac_buttons = '<button type="button" data-fac="all" class="on" aria-pressed="true">minden frakció</button>' + "".join(f'<button type="button" data-fac="{esc(t["faction"])}" aria-pressed="false">{esc(t["faction"])}</button>' for t in view.get("faction_tallies") or [])
     pos_buttons = '<button type="button" data-posf="all" class="on" aria-pressed="true">minden szavazat</button>' + "".join(f'<button type="button" data-posf="{p}" aria-pressed="false">{esc(POSITION_LABEL[p])}</button>' for p in POSITION_ORDER if (view.get("position_counts") or {}).get(p))
-    return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Név szerinti lista</span><span class="tag">{len(rows)} képviselő</span></h2>'
+    dl = f' · <a href="{esc(view["slug"])}.csv">CSV</a> · <a href="{esc(view["slug"])}.json">JSON</a>'
+    return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Név szerinti lista</span><span class="tag">{len(rows)} képviselő{dl}</span></h2>'
             f'<div class="filters" role="group" aria-label="Szűrés frakció szerint">{fac_buttons}</div><div class="filters" role="group" aria-label="Szűrés szavazat szerint">{pos_buttons}<span class="n" id="rn" aria-live="polite"></span></div>'
             '<div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th>'
             '<th scope="col" class="sortable" data-key="posrank">Szavazat</th>' + ('<th scope="col" class="sortable" data-key="seat">Ülőhely</th>' if plan else '') + '</tr></thead>'
@@ -1142,7 +1183,7 @@ def directory_row(v: dict) -> str:
 
 def build_index(inp: dict, hero_ts: str) -> str:
     idx, fl = inp["idx"], inp["fl"]
-    hero = vote_view(inp, hero_ts)
+    hero, _, _ = vote_bundle(inp, hero_ts)
     title_html, meta_html = motion_title_html(hero)
     roster = roster_summary(inp)
     sessions = fl["sitting_days"]["by_session"]
@@ -1189,7 +1230,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1212,7 +1253,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
   {second_panel}
 </section>
 <section class="panel deep" id="dir">{CORNERS}
-  <h2><span data-kz-text>Szavazások</span><span class="tag">{fl["votes"]} tétel · a legfrissebb elöl · az időpontra kattintva a szavazás oldala</span></h2>
+  <h2><span data-kz-text>Szavazások</span><span class="tag">{fl["votes"]} tétel · a legfrissebb elöl · <a href="adatok/szavazasok.csv">CSV</a> · <a href="adatok/szavazasok.json">JSON</a> · <a href="adatok/index.html">minden adat</a></span></h2>
   {year_buttons}
   <div class="filters" role="group" aria-label="Szűrés szükséges többség szerint">{rule_buttons}</div>
   <div class="filters" role="group" aria-label="Szűrés eredmény szerint">{result_buttons}<input id="q" type="search" placeholder="keresés --tárgy" aria-label="Keresés a tárgyban"><span class="n" id="n" aria-live="polite"></span></div>
@@ -1221,12 +1262,29 @@ def build_index(inp: dict, hero_ts: str) -> str:
 """ + page_tail(inp, 0)
 
 
+def vote_bundle(inp: dict, ts: str) -> tuple[dict, dict, dict]:
+    """(view, inspector data, align) for one vote — computed once, shared by the page and its exports."""
+    cache = inp.setdefault("_bundle", {})
+    if ts not in cache:
+        view = vote_view(inp, ts)
+        data, align_here = inspector_data(view, inp)
+        cache.clear()                                        # one vote at a time is all a build needs
+        cache[ts] = (view, data, align_here)
+    return cache[ts]
+
+
+def vote_exports(inp: dict, ts: str) -> tuple[str, str]:
+    """(json, csv) for one vote, from the same view the page renders."""
+    view, _, align_here = vote_bundle(inp, ts)
+    return ex.vote_export(view, inp["cycle"], align_here, (inp["plan"] or {}).get("coords") if inp["plan"] else None)
+
+
 def build_vote_page(inp: dict, ts: str) -> str:
     order = inp["order"]
     i = order.index(ts)
     prev_ts = order[i - 1] if i > 0 else None
     next_ts = order[i + 1] if i + 1 < len(order) else None
-    view = vote_view(inp, ts)
+    view, _, _ = vote_bundle(inp, ts)
     title_html, meta_html = motion_title_html(view)
     mo = view["motions"][0] if view.get("motions") else {}
     label = f'{mo.get("iromany") or ""} {(mo.get("title") or "")[:90]}'.strip() if mo else ("Jelenlét megállapítása" if view["kind"] == "jelenlet" else "Szavazás")
@@ -1255,6 +1313,7 @@ def build_vote_page(inp: dict, ts: str) -> str:
   </section>
 </section>
 {roll_call_table(view, inp)}
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}szavazas/{view["slug"]}.html', f'{when} — {label}', f'{inp["cycle"]}-{view["slug"]}', f'{view["slug"]}.json', f'{view["slug"]}.csv' if view["roll_call_available"] else None)}
 <nav class="pager" aria-label="Előző és következő szavazás">{pager_link(prev_ts, True)}{pager_link(next_ts, False)}</nav>
 """ + page_tail(inp, 1)
 
@@ -1305,6 +1364,12 @@ def seat_text(mp: dict) -> str:
     if s["sector"] == 0:
         return f'miniszteri pad, {s["seat"]}. szék'
     return f'{s["sector"]}. szektor, {s["row"]}. sor, {s["seat"]}. szék'
+
+
+def mp_exports(inp: dict, azon: str) -> tuple[str, str]:
+    mp = inp["mps"][azon]
+    rec = inp["alignment"]["per_mp"].get(azon) or {"votes": [], "counts": {}, "with": 0, "against": 0, "cast": 0, "in_roll": 0}
+    return ex.mp_export(mp, rec, inp["by_ts"], inp["cycle"])
 
 
 def build_mp_page(inp: dict, azon: str) -> str:
@@ -1359,7 +1424,8 @@ def build_mp_page(inp: dict, azon: str) -> str:
                       f'<div class="tablewrap"><table data-page-size="25"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
                       + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
     rel_root = "../" * (1 + inp["base_depth"])
-    other_links = " · ".join(f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members)
+    other_links = " · ".join([f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members]
+                             + [f'<a href="{rel_root}szemely/{esc(azon)}.html">pályakép ↗</a>'])
     if inp["closed"]:
         ended = mp.get("mandate_to") or mp.get("wikidata_end")            # the record's own row for the cycle first
         ended_txt = f' {hu_date(ended)[:-1]}' if ended else ""             # hu_date ends with a full stop
@@ -1420,11 +1486,12 @@ def build_mp_page(inp: dict, azon: str) -> str:
   <div class="tablewrap"><table data-page-size="25"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
 </section>
 <section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Minden szavazása</span><span class="tag">{in_roll} tétel · a legfrissebb elöl</span></h2>
+  <h2><span data-kz-text>Minden szavazása</span><span class="tag">{in_roll} tétel · a legfrissebb elöl · <a href="{esc(azon)}.csv">CSV</a> · <a href="{esc(azon)}.json">JSON</a></span></h2>
   {mp_year_buttons}
   <div class="filters" role="group" aria-label="Szűrés egyezés szerint"><button type="button" data-alf="all" class="on" aria-pressed="true">mind</button><button type="button" data-alf="with" aria-pressed="false">frakcióval</button><button type="button" data-alf="against" aria-pressed="false">frakció ellen</button><button type="button" data-alf="none" aria-pressed="false">nem adott le szavazatot</button><span class="n" id="rn" aria-live="polite"></span></div>
   <div class="tablewrap"><table id="mine" data-page-size="25" data-counter="rn"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{all_rows}</tbody></table></div>
 </section>
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}kepviselo/{azon}.html', f'{mp["name"]} ({mp.get("faction") or "—"}), {inp["cycle"]}. ciklus', f'{inp["cycle"]}-{azon}', f'{azon}.json', f'{azon}.csv')}
 """ + page_tail(inp, 1)
 
 
@@ -1452,7 +1519,7 @@ def build_mp_index(inp: dict) -> str:
         topbar(inp, [("képviselők", None)], 1) + f"""
 <div class="hero-h"><h1>Képviselők</h1><small class="label" data-kz-text>{(f"{n_cur} jelenlegi és {n_former} volt képviselő a névsorokból") if not inp["closed"] else (f"{len(mps)} képviselő a {inp['cycle']}. ciklus névsoraiból, közülük {n_cur} ma is képviselő")}</small></div>
 <section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Névsor</span><span class="tag">a fejlécre kattintva rendezhető</span></h2>
+  <h2><span data-kz-text>Névsor</span><span class="tag">a fejlécre kattintva rendezhető · <a href="../adatok/kepviselok.csv">CSV</a> · <a href="../adatok/kepviselok.json">JSON</a></span></h2>
   <div class="filters" role="group" aria-label="Szűrés frakció szerint">{fac_buttons}<span class="n" id="rn" aria-live="polite"></span></div>
   <div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th><th scope="col">Mandátum</th>{'' if inp["closed"] else '<th scope="col">Ülőhely</th>'}<th scope="col" class="sortable num" data-key="cast">Leadott / névsor</th><th scope="col" class="sortable num" data-key="part">Részvétel</th><th scope="col" class="sortable num" data-key="against">Frakció ellen</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
 </section>
@@ -1488,11 +1555,36 @@ def build() -> str:
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_BOOT).strip() + "\n"}
+    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_BOOT).strip() + "\n"}
+
+
+def build_data_page(inp: dict) -> str:
+    """adatok/index.html — the cycle's downloads and the data dictionary."""
+    files = [("szavazasok.csv", "szavazasok.json", "minden szavazás, egy sor egy szavazás"),
+             ("nevsorok.csv", None, "minden név szerinti szavazat, egy sor egy képviselő egy szavazáson"),
+             ("kepviselok.csv", "kepviselok.json", "a ciklus névsoraiban szereplő személyek, összesítéssel"),
+             ] + ([("inditvanyok.csv", "inditvanyok.json", "a jelenlegi ciklus irományai benyújtó szerint")] if not inp["closed"] else [])
+    rows = "".join(f'<tr><td class="mono"><a href="{c}">{c}</a>{(" · <a href=" + chr(34) + j + chr(34) + ">" + j + "</a>") if j else ""}</td><td>{esc(d)}</td></tr>' for c, j, d in files)
+    dic = "".join(f'<h3 class="mono">{esc(title)}</h3><div class="tablewrap" style="border:0"><table><tbody>' + "".join(f'<tr><td class="mono" style="white-space:nowrap">{esc(col)}</td><td>{esc(mean)}</td></tr>' for col, mean in cols) + '</tbody></table></div>'
+                  for title, cols in ex.adatszotar())
+    return page_head(f'Adatok · {inp["cycle"]}. ciklus · karzat', f'Letölthető táblák és adatszótár a {inp["cycle"]}. ciklus szavazásaihoz.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("adatok", None)], 1) + f"""
+<div class="hero-h"><h1>Adatok</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · letölthető táblák és adatszótár</small></div>
+<p class="lede">Ugyanazok a táblák, amiket az oldalak mutatnak, CSV-ben (UTF-8, vesszővel) és JSON-ban. Egy szavazás és egy képviselő oldala mellett a saját <span class="mono">.csv</span> és <span class="mono">.json</span> párja is ott van.</p>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Letöltés</span><span class="tag">{inp["cycle"]}. ciklus</span></h2>
+  <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Fájl</th><th scope="col">Tartalom</th></tr></thead><tbody>{rows}</tbody></table></div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Adatszótár</span></h2>
+  {dic}
+</section>
+""" + page_tail(inp, 1)
 
 
 def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
-    """One cycle's tree: index.html, szavazas/<slug>.html, kepviselo/<azon>.html + index — under out_dir."""
+    """One cycle's tree: index.html, szavazas/<slug>.html (+ .json/.csv), kepviselo/<azon>.html (+ .json/.csv) + index,
+    adatok/ (the dump and its dictionary) — under out_dir. Returns per-MP summaries for the career pages."""
     inp = load_inputs(cycle)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(build_index(inp, pick_hero(inp)), encoding="utf-8")
@@ -1501,19 +1593,122 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         vd = out_dir / "szavazas"
         vd.mkdir(parents=True, exist_ok=True)
         for ts in inp["order"]:
-            (vd / f'{inp["by_ts"][ts]["slug"]}.html').write_text(build_vote_page(inp, ts), encoding="utf-8")
+            slug = inp["by_ts"][ts]["slug"]
+            (vd / f"{slug}.html").write_text(build_vote_page(inp, ts), encoding="utf-8")
+            j, c = vote_exports(inp, ts)
+            (vd / f"{slug}.json").write_text(j, encoding="utf-8")
+            if inp["store"]["positions"].get(ts):
+                (vd / f"{slug}.csv").write_text(c, encoding="utf-8")
             n += 1
         md = out_dir / "kepviselo"
         md.mkdir(parents=True, exist_ok=True)
         (md / "index.html").write_text(build_mp_index(inp), encoding="utf-8")
         for azon in inp["mps"]:
             (md / f"{azon}.html").write_text(build_mp_page(inp, azon), encoding="utf-8")
+            j, c = mp_exports(inp, azon)
+            (md / f"{azon}.json").write_text(j, encoding="utf-8")
+            (md / f"{azon}.csv").write_text(c, encoding="utf-8")
             k += 1
-    return {"cycle": cycle, "index": str(out_dir / "index.html"), "vote_pages": n, "mp_pages": k}
+        ad = out_dir / "adatok"
+        ad.mkdir(parents=True, exist_ok=True)
+        j, c = ex.directory_export(inp["idx"]["votes"], cycle)
+        (ad / "szavazasok.json").write_text(j, encoding="utf-8"); (ad / "szavazasok.csv").write_text(c, encoding="utf-8")
+        align_by_vote = {}
+        for azon, rec in inp["alignment"]["per_mp"].items():
+            for v in rec["votes"]:
+                align_by_vote.setdefault(v["ts"], {})[azon] = v.get("align")
+        (ad / "nevsorok.csv").write_text(ex.positions_csv(inp["store"], inp["order"], align_by_vote), encoding="utf-8")
+        j, c = ex.mps_export(inp["mps"], inp["alignment"]["per_mp"], cycle)
+        (ad / "kepviselok.json").write_text(j, encoding="utf-8"); (ad / "kepviselok.csv").write_text(c, encoding="utf-8")
+        if not inp["closed"]:
+            j, c = ex.motions_export(inp["mps"], cycle)
+            (ad / "inditvanyok.json").write_text(j, encoding="utf-8"); (ad / "inditvanyok.csv").write_text(c, encoding="utf-8")
+        (ad / "index.html").write_text(build_data_page(inp), encoding="utf-8")
+    per_mp = {azon: {"cycle": cycle, "name": mp["name"], "faction": mp.get("faction"), "faction_first": mp.get("faction_first"),
+                     "mandate": mandate_text(mp), "mandate_from": mp.get("mandate_from"), "mandate_to": mp.get("mandate_to"),
+                     "current": mp.get("current"), "wikidata_qid": mp.get("wikidata_qid"), "parlament_url": mp.get("parlament_url"),
+                     "factions": mp.get("factions") or [], "elections": mp.get("elections") or [], "motion_stats": mp.get("motion_stats") or [],
+                     "in_roll": (inp["alignment"]["per_mp"].get(azon) or {}).get("in_roll", 0), "cast": (inp["alignment"]["per_mp"].get(azon) or {}).get("cast", 0),
+                     "with": (inp["alignment"]["per_mp"].get(azon) or {}).get("with", 0), "against": (inp["alignment"]["per_mp"].get(azon) or {}).get("against", 0),
+                     "href": f"{cycle_dir(cycle)}kepviselo/{azon}.html"} for azon, mp in inp["mps"].items()}
+    return {"cycle": cycle, "index": str(out_dir / "index.html"), "vote_pages": n, "mp_pages": k, "per_mp": per_mp}
+
+
+def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
+    """szemely/<azon>.html — one person across every loaded cycle: the cycle rows side by side, then the record."""
+    stints = sorted(stints, key=lambda r: -r["cycle"])
+    latest = stints[0]
+    name = latest["name"]
+    facs = inp["facs_all"]
+    def col(f): return facs.get(f or "", "#8a8a8a")
+    rows = []
+    for st in stints:
+        part = f'{100 * st["cast"] / st["in_roll"]:.0f}%' if st["in_roll"] else "—"
+        agree = f'{100 * st["with"] / (st["with"] + st["against"]):.0f}%' if (st["with"] + st["against"]) else "—"
+        switched = f' <span class="sub">korábban {esc(st["faction_first"])}</span>' if st.get("faction_first") and st["faction_first"] != st["faction"] else ""
+        rows.append(f'<tr><td class="mono"><a href="../{esc(st["href"])}">{st["cycle"]}. ciklus</a><span class="sub">{esc(CYCLE_SPAN.get(st["cycle"], ""))}</span></td>'
+                    f'<td><span class="pos"><i class="d" style="--c:{col(st["faction"])}"></i>{esc(st["faction"] or "—")}</span>{switched}</td>'
+                    f'<td>{esc(st["mandate"])}<span class="sub">{esc(st.get("mandate_from") or "")} – {esc(st.get("mandate_to") or "")}</span></td>'
+                    f'<td class="num mono">{st["in_roll"]}</td><td class="num mono">{st["cast"]}<span class="sub">{part}</span></td>'
+                    f'<td class="num mono">{st["with"]}</td><td class="num mono">{st["against"]}<span class="sub">{agree} egyezés</span></td></tr>')
+    total_roll = sum(st["in_roll"] for st in stints); total_cast = sum(st["cast"] for st in stints)
+    total_with = sum(st["with"] for st in stints); total_against = sum(st["against"] for st in stints)
+    fac_hist = "".join(f'<tr><td class="mono">{esc(f["ciklus"])}</td><td>{esc(f["faction"])}</td><td class="mono">{esc(f["from"] or "")} – {esc(f["to"] or "")}</td></tr>' for f in latest["factions"])
+    elections = "".join(f'<tr><td class="mono">{esc(e["ciklus"])}</td><td>{esc(e["constituency"] or "—")}</td><td class="mono">{esc(e["elected_on"] or "")}</td><td class="mono">{esc(e["mandate_from"] or "")} – {esc(e["mandate_to"] or "")}</td></tr>' for e in latest["elections"])
+    motions = "".join(f'<tr><td class="mono">{esc(m["ciklus"])}</td><td class="num mono">{esc(m["onallo"])}</td><td class="num mono">{esc(m["nem_onallo"])}</td></tr>' for m in latest["motion_stats"])
+    links = " · ".join(x for x in [
+        f'<a href="{esc(latest["parlament_url"])}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>' if latest.get("parlament_url") else "",
+        f'<a href="https://www.wikidata.org/wiki/{esc(latest["wikidata_qid"])}" target="_blank" rel="noopener">Wikidata {esc(latest["wikidata_qid"])} ↗</a>' if latest.get("wikidata_qid") else ""] if x)
+    loaded = ", ".join(f"{st['cycle']}." for st in stints)
+    return page_head(f'{name} — pályakép · karzat', f'{name} az Országgyűlésben: ciklusonként a részvétele és a frakciójával való egyezése, a képviselői adatlap frakció- és mandátumtörténete.', 1) + \
+        topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
+<div class="hero-h"><h1>{esc(name)}</h1><small class="label" data-kz-text>pályakép · {len(stints)} betöltött ciklus{" · ma is képviselő" if latest.get("current") else ""}</small></div>
+<p class="hero-meta">{links}</p>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Ciklusonként</span><span class="tag">{total_roll} névsor · leadott {total_cast} · frakciójával {total_with} · ellene {total_against}</span></h2>
+  <div class="tablewrap"><table><thead><tr><th scope="col">Ciklus</th><th scope="col">Frakció</th><th scope="col">Mandátum</th><th scope="col" class="num">Névsor</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciójával</th><th scope="col" class="num">Ellene</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">A betöltött ciklusok ({loaded}) számai; a ciklus oldalán minden szavazása külön. „Frakciójával”: a frakciója leadott szavazatainak többségével egyezően.</div>
+</section>
+<section class="grid">
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Frakciótagság és mandátum</span></h2>
+    <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th>Frakció</th><th>Időszak</th></tr></thead><tbody>{fac_hist or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+    <div class="tablewrap" style="border:0;margin-top:10px"><table><thead><tr><th>Ciklus</th><th>Választókerület / lista</th><th>Választás</th><th>Mandátum</th></tr></thead><tbody>{elections or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
+  </section>
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Benyújtott indítványok</span></h2>
+    <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+  </section>
+</section>
+{cite_html(inp, f'szemely/{azon}.html', f'{name} — pályakép', f'szemely-{azon}')}
+""" + page_tail(inp, 1)
+
+
+def build_person_index(inp: dict, people: dict[str, list[dict]]) -> str:
+    facs = inp["facs_all"]
+    trs = []
+    for azon, stints in sorted(people.items(), key=lambda kv: kv[1][0]["name"]):
+        stints = sorted(stints, key=lambda r: -r["cycle"])
+        latest = stints[0]
+        cycles_txt = " · ".join(str(st["cycle"]) for st in reversed(stints))
+        roll = sum(st["in_roll"] for st in stints); cast = sum(st["cast"] for st in stints); ag = sum(st["against"] for st in stints)
+        trs.append(f'<tr data-f="{esc(latest["faction"] or "")}" data-n="{len(stints)}" data-against="{ag}"><td><a href="{esc(azon)}.html">{esc(latest["name"])}</a></td>'
+                   f'<td><span class="pos"><i class="d" style="--c:{facs.get(latest["faction"] or "", "#8a8a8a")}"></i>{esc(latest["faction"] or "—")}</span></td>'
+                   f'<td class="mono">{cycles_txt}</td><td class="num mono">{len(stints)}</td><td class="num mono">{cast} / {roll}</td><td class="num mono">{ag}</td></tr>')
+    return page_head("Személyek · karzat", "Mindenki, aki a betöltött ciklusok névsoraiban szerepel — egy pályakép-oldal személyenként, ciklusokon át.", 1) + \
+        topbar(inp, [("személyek", None)], 1) + f"""
+<div class="hero-h"><h1>Személyek</h1><small class="label" data-kz-text>{len(people)} képviselő a betöltött ciklusok névsoraiból · egy oldal személyenként, ciklusokon át</small></div>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Pályaképek</span><span class="tag">a fejlécre kattintva rendezhető</span></h2>
+  <div class="filters"><span class="n" id="rn" aria-live="polite"></span></div>
+  <div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="text">Név</th><th scope="col" class="sortable" data-key="f">Utolsó frakció</th><th scope="col">Ciklusok</th><th scope="col" class="sortable num" data-key="n">Ciklus</th><th scope="col" class="num">Leadott / névsor</th><th scope="col" class="sortable num" data-key="against">Frakció ellen</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+</section>
+""" + page_tail(inp, 1)
 
 
 def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None = None) -> dict:
-    """Every cycle with derived inputs: the current one at out_dir, earlier ones under out_dir/ckl<N>/."""
+    """Every cycle with derived inputs: the current one at out_dir, earlier ones under out_dir/ckl<N>/; then one
+    career page per person under out_dir/szemely/, assembled from every cycle's roster."""
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "assets").mkdir(parents=True, exist_ok=True)
     for name, body in build_assets().items():
@@ -1521,7 +1716,25 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
     res = []
     for cycle in (cycles or available_cycles()):
         res.append(build_cycle(out_dir / cycle_dir(cycle), cycle, index_only=index_only))
-    return {"index": res[0]["index"], "vote_pages": sum(r["vote_pages"] for r in res), "mp_pages": sum(r["mp_pages"] for r in res), "cycles": res}
+    people_n = 0
+    if not index_only:
+        people: dict[str, list[dict]] = {}
+        for r in res:
+            for azon, st in r["per_mp"].items():
+                people.setdefault(azon, []).append(st)
+        inp = load_inputs(CURRENT_CYCLE)
+        inp["facs_all"] = {}
+        for c in available_cycles():
+            for f in factions(c):
+                inp["facs_all"].setdefault(f["id"], f["colour"])
+        pd = out_dir / "szemely"
+        pd.mkdir(parents=True, exist_ok=True)
+        (pd / "index.html").write_text(build_person_index(inp, people), encoding="utf-8")
+        for azon, stints in people.items():
+            (pd / f"{azon}.html").write_text(build_person_page(inp, azon, stints), encoding="utf-8")
+            people_n += 1
+    return {"index": res[0]["index"], "vote_pages": sum(r["vote_pages"] for r in res), "mp_pages": sum(r["mp_pages"] for r in res),
+            "people": people_n, "cycles": res}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1546,7 +1759,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     res = build_all(args.out, index_only=args.index_only, cycles=args.cycle)
     for r in res["cycles"]:
-        print(f"cycle {r['cycle']}: {r['index']} + {r['vote_pages']} vote pages + {r['mp_pages']} MP pages")
+        print(f"cycle {r['cycle']}: {r['index']} + {r['vote_pages']} vote pages + {r['mp_pages']} MP pages (+ .json/.csv, adatok/)")
+    if res.get("people"):
+        print(f"szemely/: {res['people']} career pages")
     return 0
 
 
