@@ -45,6 +45,17 @@ class Build(unittest.TestCase):
             self.assertTrue(f.exists(), f"{f} missing — run python3 -m scripts.build_site")
             self.assertEqual(f.read_text(encoding="utf-8"), body, f"{f} is stale — rebuild")
 
+    def test_long_tables_paginate_and_stay_complete_without_js(self):
+        js = build_assets()["karzat.js"]
+        self.assertIn("table[data-page-size]", js)                       # the shared pager
+        self.assertIn('data-page-size="25" data-counter="n"', self.page)  # the directory: all 259 rows in the HTML, 25 shown at a time
+        self.assertEqual(self.page.count("<tr data-rule="), 259)
+        vote = build_vote_page(self.__class__.inp if hasattr(self.__class__, "inp") else load_inputs(), HERO_TS)
+        self.assertIn('id="roll" data-page-size="25" data-counter="rn"', vote)
+        mp = build_mp_page(load_inputs(), "a011")
+        self.assertIn('id="mine" data-page-size="25" data-counter="rn"', mp)
+        self.assertEqual(mp.count('data-page-size="25"'), 3)             # votes, dissents, motions
+
     def test_boot_sequence_is_honest_and_optional(self):
         js = build_assets()["karzat.js"]
         self.assertIn("prefers-reduced-motion", js)                  # the whole boot choreography is skipped for reduced motion

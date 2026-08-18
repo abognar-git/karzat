@@ -535,6 +535,10 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .filters input::placeholder{color:var(--dim2)}
 .filters .n{color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;margin-left:auto}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}
+.pgr{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em}
+.pgr button{border:1px solid var(--border);background:transparent;color:var(--dim2);min-width:26px;padding:3px 7px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;cursor:pointer}
+.pgr button:hover{color:var(--white);border-color:var(--border-hi)}.pgr button.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}.pgr button:disabled{opacity:.35;cursor:default}
+.pgr .gap{color:var(--dim3);padding:0 2px}.pgr .all{margin-left:8px;text-transform:uppercase}
 table{border-collapse:collapse;width:100%;font-size:12px}
 th,td{padding:7px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line2)}
 th{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.2em;color:var(--dim2);font-weight:400;background:rgba(5,5,5,.95)}
@@ -567,19 +571,69 @@ td a{color:#d4d4d8;text-decoration:underline;text-decoration-color:var(--dim3);t
 @media (prefers-reduced-motion:reduce){.kz-terminal .scan:after,.kz-terminal .cursor{animation:none}}
 """
 
+JS_PAGER = """
+(function(){
+  // Every table with data-page-size gets a pager: 25 rows at a time, prev / next / page numbers / 'mind'.
+  // Filters mark excluded rows with data-x and call table.__pager.render(true); sorters re-append rows and
+  // call render(false). Without JS the whole table is in the page.
+  function paginate(table){
+    var per0 = parseInt(table.getAttribute('data-page-size') || '25', 10), per = per0, page = 1;
+    var tbody = table.tBodies[0]; if (!tbody) return;
+    var counter = table.getAttribute('data-counter') ? document.getElementById(table.getAttribute('data-counter')) : null;
+    var wrap = table.closest('.tablewrap') || table;
+    var nav = document.createElement('nav'); nav.className = 'pgr'; nav.setAttribute('aria-label', 'Lapozás');
+    wrap.parentNode.insertBefore(nav, wrap.nextSibling);
+    function render(reset){
+      if (reset) page = 1;
+      var rows = Array.prototype.slice.call(tbody.rows), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
+      var total = vis.length, pages = Math.max(1, Math.ceil(total / per));
+      if (page > pages) page = pages;
+      rows.forEach(function(r){ r.hidden = true; });
+      var from = (page - 1) * per, to = Math.min(total, from + per);
+      vis.slice(from, to).forEach(function(r){ r.hidden = false; });
+      if (counter) counter.textContent = (total ? (from + 1) + '–' + to : '0') + ' / ' + total + (total !== rows.length ? ' (' + rows.length + ')' : '');
+      if (pages <= 1 && per === per0 && total <= per0) { nav.innerHTML = ''; nav.hidden = true; return; }
+      nav.hidden = false;
+      var nums = [], seen = {};
+      [1, 2, page - 2, page - 1, page, page + 1, page + 2, pages - 1, pages].forEach(function(n){ if (n >= 1 && n <= pages && !seen[n]) { seen[n] = 1; nums.push(n); } });
+      nums.sort(function(a, b){ return a - b; });
+      var html = '<button type="button" data-pg="prev"' + (page <= 1 ? ' disabled' : '') + ' aria-label="Előző oldal">‹</button>', last = 0;
+      nums.forEach(function(n){ if (n - last > 1) html += '<span class="gap">…</span>'; html += '<button type="button" data-pg="' + n + '"' + (n === page ? ' aria-current="page" class="on"' : '') + '>' + n + '</button>'; last = n; });
+      html += '<button type="button" data-pg="next"' + (page >= pages ? ' disabled' : '') + ' aria-label="Következő oldal">›</button>';
+      html += '<button type="button" data-pg="all" class="all' + (per > per0 ? ' on' : '') + '">' + (per > per0 ? per0 + ' / oldal' : 'mind') + '</button>';
+      nav.innerHTML = html;
+    }
+    nav.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-pg]'); if (!b) return;
+      var v = b.getAttribute('data-pg');
+      if (v === 'prev') page--; else if (v === 'next') page++;
+      else if (v === 'all') { per = per > per0 ? per0 : 100000; page = 1; }
+      else page = parseInt(v, 10);
+      render(false);
+      var top = wrap.getBoundingClientRect().top; if (top < 60) wrap.scrollIntoView({block: 'start'});
+    });
+    table.__pager = {render: render};
+    render(false);
+  }
+  document.querySelectorAll('table[data-page-size]').forEach(paginate);
+  window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ r.hidden = r.hasAttribute('data-x'); }); } };
+})();
+"""
+
 JS_INDEX = """
 (function(){
   var tbody = document.getElementById('rows'), n = document.getElementById('n'); if (!tbody) return;
   var rows = Array.prototype.slice.call(tbody.rows), rule = 'all', result = 'all', q = '';
   var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
+  var table = tbody.closest('table');
   function render(){
     var k = 0;
     rows.forEach(function(r, i){
       var ok = (rule === 'all' || r.getAttribute('data-rule') === rule) && (result === 'all' || r.getAttribute('data-result') === result) && (!q || hay[i].indexOf(q) >= 0);
-      if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', '');
+      if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', '');
     });
-    n.textContent = k + ' / ' + rows.length;
+    if (window.__karzatRerender) window.__karzatRerender(table, true); else n.textContent = k + ' / ' + rows.length;
   }
   document.querySelectorAll('button[data-rule]').forEach(function(b){ b.addEventListener('click', function(){ rule = b.getAttribute('data-rule'); press('button[data-rule]', b); render(); }); });
   document.querySelectorAll('button[data-result]').forEach(function(b){ b.addEventListener('click', function(){ result = b.getAttribute('data-result'); press('button[data-result]', b); render(); }); });
@@ -596,8 +650,8 @@ JS_VOTE = """
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   function apply(){
     var k = 0;
-    rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos); if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', ''); });
-    document.getElementById('rn').textContent = k + ' / ' + rows.length;
+    rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos); if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); });
+    if (window.__karzatRerender) window.__karzatRerender(table, true); else document.getElementById('rn').textContent = k + ' / ' + rows.length;
     if (window.__karzatDimSeats) window.__karzatDimSeats(fac, pos);
   }
   document.querySelectorAll('button[data-fac]').forEach(function(b){ b.addEventListener('click', function(){ fac = b.getAttribute('data-fac'); press('button[data-fac]', b); apply(); }); });
@@ -612,6 +666,7 @@ JS_VOTE = """
       rows.sort(function(a, b){ var x = val(a), y = val(b); var nx = parseFloat(x), ny = parseFloat(y); if (!isNaN(nx) && !isNaN(ny)) return (nx - ny) * d; return x.localeCompare(y, 'hu') * d; });
       rows.forEach(function(r){ tbody.appendChild(r); });
       heads.forEach(function(h){ h.setAttribute('aria-sort', h === th ? (d > 0 ? 'ascending' : 'descending') : 'none'); });
+      if (window.__karzatRerender) window.__karzatRerender(table, false);
     }
     th.addEventListener('click', sort);
     th.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sort(); } });
@@ -678,7 +733,7 @@ JS_MP = """
 (function(){
   var t = document.getElementById('mine'); if (!t) return;
   var rows = Array.prototype.slice.call(t.tBodies[0].rows), n = document.getElementById('rn');
-  function apply(f){ var k = 0; rows.forEach(function(r){ var ok = f === 'all' || r.getAttribute('data-al') === f; if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', ''); }); n.textContent = k + ' / ' + rows.length; }
+  function apply(f){ var k = 0; rows.forEach(function(r){ var ok = f === 'all' || r.getAttribute('data-al') === f; if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); }); if (window.__karzatRerender) window.__karzatRerender(t, true); else n.textContent = k + ' / ' + rows.length; }
   document.querySelectorAll('button[data-alf]').forEach(function(b){ b.addEventListener('click', function(){ document.querySelectorAll('button[data-alf]').forEach(function(x){ var isOn = x === b; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); apply(b.getAttribute('data-alf')); }); });
   apply('all');
 })();
@@ -954,7 +1009,7 @@ def roll_call_table(view: dict, inp: dict) -> str:
     pos_buttons = '<button type="button" data-posf="all" class="on" aria-pressed="true">minden szavazat</button>' + "".join(f'<button type="button" data-posf="{p}" aria-pressed="false">{esc(POSITION_LABEL[p])}</button>' for p in POSITION_ORDER if (view.get("position_counts") or {}).get(p))
     return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Név szerinti lista</span><span class="tag">{len(rows)} képviselő</span></h2>'
             f'<div class="filters" role="group" aria-label="Szűrés frakció szerint">{fac_buttons}</div><div class="filters" role="group" aria-label="Szűrés szavazat szerint">{pos_buttons}<span class="n" id="rn" aria-live="polite"></span></div>'
-            '<div class="tablewrap"><table id="roll"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th>'
+            '<div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th>'
             '<th scope="col" class="sortable" data-key="posrank">Szavazat</th>' + ('<th scope="col" class="sortable" data-key="seat">Ülőhely</th>' if plan else '') + '</tr></thead>'
             f'<tbody>{"".join(trs)}</tbody></table></div>'
             '</section>')
@@ -1108,7 +1163,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
   <h2><span data-kz-text>Szavazások</span><span class="tag">{fl["votes"]} tétel · a legfrissebb elöl · az időpontra kattintva a szavazás oldala</span></h2>
   <div class="filters" role="group" aria-label="Szűrés szükséges többség szerint">{rule_buttons}</div>
   <div class="filters" role="group" aria-label="Szűrés eredmény szerint">{result_buttons}<input id="q" type="search" placeholder="keresés --tárgy" aria-label="Keresés a tárgyban"><span class="n" id="n" aria-live="polite"></span></div>
-  <div class="tablewrap"><table><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows">{dir_rows}</tbody></table></div>
+  <div class="tablewrap"><table data-page-size="25" data-counter="n"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows">{dir_rows}</tbody></table></div>
 </section>
 """ + page_tail(inp, 0)
 
@@ -1245,7 +1300,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
         motions_note = ("" if stat_now is None or stat_now == len(items) else
                         f'Eltérés: az adatlap {stat_now} önálló indítványt számol, a lista {len(items)} tételt talál.')
         items_html = (f'<div class="hero-meta" style="margin:10px 0 4px"><span class="lbl">a jelenlegi ciklusban</span> {len(items)} iromány' + (f' · {kind_txt}' if kind_txt else '') + '</div>'
-                      f'<div class="tablewrap" style="max-height:340px;overflow:auto"><table><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
+                      f'<div class="tablewrap"><table data-page-size="25"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
                       + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
     rel_root = "../" * (1 + inp["base_depth"])
     other_links = " · ".join(f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members)
@@ -1306,12 +1361,12 @@ def build_mp_page(inp: dict, azon: str) -> str:
 </section>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Szavazatok a frakció többségével szemben</span><span class="tag">{len(devs)}</span></h2>
-  <div class="tablewrap"><table><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
+  <div class="tablewrap"><table data-page-size="25"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
 </section>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Minden szavazása</span><span class="tag">{in_roll} tétel · a legfrissebb elöl</span></h2>
   <div class="filters" role="group" aria-label="Szűrés egyezés szerint"><button type="button" data-alf="all" class="on" aria-pressed="true">mind</button><button type="button" data-alf="with" aria-pressed="false">frakcióval</button><button type="button" data-alf="against" aria-pressed="false">frakció ellen</button><button type="button" data-alf="none" aria-pressed="false">nem adott le szavazatot</button><span class="n" id="rn" aria-live="polite"></span></div>
-  <div class="tablewrap"><table id="mine"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{all_rows}</tbody></table></div>
+  <div class="tablewrap"><table id="mine" data-page-size="25" data-counter="rn"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{all_rows}</tbody></table></div>
 </section>
 """ + page_tail(inp, 1)
 
@@ -1342,7 +1397,7 @@ def build_mp_index(inp: dict) -> str:
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Névsor</span><span class="tag">a fejlécre kattintva rendezhető</span></h2>
   <div class="filters" role="group" aria-label="Szűrés frakció szerint">{fac_buttons}<span class="n" id="rn" aria-live="polite"></span></div>
-  <div class="tablewrap"><table id="roll"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th><th scope="col">Mandátum</th>{'' if inp["closed"] else '<th scope="col">Ülőhely</th>'}<th scope="col" class="sortable num" data-key="cast">Leadott / névsor</th><th scope="col" class="sortable num" data-key="part">Részvétel</th><th scope="col" class="sortable num" data-key="against">Frakció ellen</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+  <div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="text">Képviselő</th><th scope="col" class="sortable" data-key="f">Frakció</th><th scope="col">Mandátum</th>{'' if inp["closed"] else '<th scope="col">Ülőhely</th>'}<th scope="col" class="sortable num" data-key="cast">Leadott / névsor</th><th scope="col" class="sortable num" data-key="part">Részvétel</th><th scope="col" class="sortable num" data-key="against">Frakció ellen</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
 </section>
 """ + page_tail(inp, 1)
 
@@ -1360,7 +1415,7 @@ def build() -> str:
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_BOOT).strip() + "\n"}
+    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:

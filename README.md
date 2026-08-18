@@ -75,7 +75,10 @@ faction) and the last twenty roll calls up to that vote as a streak strip; click
 releases. Seats where the MP voted against their faction's plurality wear a thin white ring,
 counted in the legend; the roll-call filters dim the seats they exclude, and hovering a table
 row lights its seat. All of it is build-time JSON in the page (no network), and without JS the
-chart is what it was: seats, rings and titles.
+chart is what it was: seats, rings and titles. Long tables — the vote directory, roll calls,
+the MP index, an MP's votes and motions — show 25 rows at a time with a pager (prev / next /
+page numbers / "mind" for everything) that composes with the filters, the search and the
+sorting; the whole table is still in the page, so without JS nothing is missing.
 
 ## Status
 
@@ -103,7 +106,7 @@ chart is what it was: seats, rings and titles.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 140 tests
+python3 -m unittest discover -s tests -t .      # offline; 141 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token

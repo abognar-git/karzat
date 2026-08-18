@@ -1,15 +1,64 @@
 (function(){
+  // Every table with data-page-size gets a pager: 25 rows at a time, prev / next / page numbers / 'mind'.
+  // Filters mark excluded rows with data-x and call table.__pager.render(true); sorters re-append rows and
+  // call render(false). Without JS the whole table is in the page.
+  function paginate(table){
+    var per0 = parseInt(table.getAttribute('data-page-size') || '25', 10), per = per0, page = 1;
+    var tbody = table.tBodies[0]; if (!tbody) return;
+    var counter = table.getAttribute('data-counter') ? document.getElementById(table.getAttribute('data-counter')) : null;
+    var wrap = table.closest('.tablewrap') || table;
+    var nav = document.createElement('nav'); nav.className = 'pgr'; nav.setAttribute('aria-label', 'Lapozás');
+    wrap.parentNode.insertBefore(nav, wrap.nextSibling);
+    function render(reset){
+      if (reset) page = 1;
+      var rows = Array.prototype.slice.call(tbody.rows), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
+      var total = vis.length, pages = Math.max(1, Math.ceil(total / per));
+      if (page > pages) page = pages;
+      rows.forEach(function(r){ r.hidden = true; });
+      var from = (page - 1) * per, to = Math.min(total, from + per);
+      vis.slice(from, to).forEach(function(r){ r.hidden = false; });
+      if (counter) counter.textContent = (total ? (from + 1) + '–' + to : '0') + ' / ' + total + (total !== rows.length ? ' (' + rows.length + ')' : '');
+      if (pages <= 1 && per === per0 && total <= per0) { nav.innerHTML = ''; nav.hidden = true; return; }
+      nav.hidden = false;
+      var nums = [], seen = {};
+      [1, 2, page - 2, page - 1, page, page + 1, page + 2, pages - 1, pages].forEach(function(n){ if (n >= 1 && n <= pages && !seen[n]) { seen[n] = 1; nums.push(n); } });
+      nums.sort(function(a, b){ return a - b; });
+      var html = '<button type="button" data-pg="prev"' + (page <= 1 ? ' disabled' : '') + ' aria-label="Előző oldal">‹</button>', last = 0;
+      nums.forEach(function(n){ if (n - last > 1) html += '<span class="gap">…</span>'; html += '<button type="button" data-pg="' + n + '"' + (n === page ? ' aria-current="page" class="on"' : '') + '>' + n + '</button>'; last = n; });
+      html += '<button type="button" data-pg="next"' + (page >= pages ? ' disabled' : '') + ' aria-label="Következő oldal">›</button>';
+      html += '<button type="button" data-pg="all" class="all' + (per > per0 ? ' on' : '') + '">' + (per > per0 ? per0 + ' / oldal' : 'mind') + '</button>';
+      nav.innerHTML = html;
+    }
+    nav.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-pg]'); if (!b) return;
+      var v = b.getAttribute('data-pg');
+      if (v === 'prev') page--; else if (v === 'next') page++;
+      else if (v === 'all') { per = per > per0 ? per0 : 100000; page = 1; }
+      else page = parseInt(v, 10);
+      render(false);
+      var top = wrap.getBoundingClientRect().top; if (top < 60) wrap.scrollIntoView({block: 'start'});
+    });
+    table.__pager = {render: render};
+    render(false);
+  }
+  document.querySelectorAll('table[data-page-size]').forEach(paginate);
+  window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ r.hidden = r.hasAttribute('data-x'); }); } };
+})();
+
+
+(function(){
   var tbody = document.getElementById('rows'), n = document.getElementById('n'); if (!tbody) return;
   var rows = Array.prototype.slice.call(tbody.rows), rule = 'all', result = 'all', q = '';
   var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
+  var table = tbody.closest('table');
   function render(){
     var k = 0;
     rows.forEach(function(r, i){
       var ok = (rule === 'all' || r.getAttribute('data-rule') === rule) && (result === 'all' || r.getAttribute('data-result') === result) && (!q || hay[i].indexOf(q) >= 0);
-      if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', '');
+      if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', '');
     });
-    n.textContent = k + ' / ' + rows.length;
+    if (window.__karzatRerender) window.__karzatRerender(table, true); else n.textContent = k + ' / ' + rows.length;
   }
   document.querySelectorAll('button[data-rule]').forEach(function(b){ b.addEventListener('click', function(){ rule = b.getAttribute('data-rule'); press('button[data-rule]', b); render(); }); });
   document.querySelectorAll('button[data-result]').forEach(function(b){ b.addEventListener('click', function(){ result = b.getAttribute('data-result'); press('button[data-result]', b); render(); }); });
@@ -78,8 +127,8 @@
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   function apply(){
     var k = 0;
-    rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos); if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', ''); });
-    document.getElementById('rn').textContent = k + ' / ' + rows.length;
+    rows.forEach(function(r){ var ok = (fac === 'all' || r.getAttribute('data-f') === fac) && (pos === 'all' || r.getAttribute('data-p') === pos); if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); });
+    if (window.__karzatRerender) window.__karzatRerender(table, true); else document.getElementById('rn').textContent = k + ' / ' + rows.length;
     if (window.__karzatDimSeats) window.__karzatDimSeats(fac, pos);
   }
   document.querySelectorAll('button[data-fac]').forEach(function(b){ b.addEventListener('click', function(){ fac = b.getAttribute('data-fac'); press('button[data-fac]', b); apply(); }); });
@@ -94,6 +143,7 @@
       rows.sort(function(a, b){ var x = val(a), y = val(b); var nx = parseFloat(x), ny = parseFloat(y); if (!isNaN(nx) && !isNaN(ny)) return (nx - ny) * d; return x.localeCompare(y, 'hu') * d; });
       rows.forEach(function(r){ tbody.appendChild(r); });
       heads.forEach(function(h){ h.setAttribute('aria-sort', h === th ? (d > 0 ? 'ascending' : 'descending') : 'none'); });
+      if (window.__karzatRerender) window.__karzatRerender(table, false);
     }
     th.addEventListener('click', sort);
     th.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sort(); } });
@@ -105,7 +155,7 @@
 (function(){
   var t = document.getElementById('mine'); if (!t) return;
   var rows = Array.prototype.slice.call(t.tBodies[0].rows), n = document.getElementById('rn');
-  function apply(f){ var k = 0; rows.forEach(function(r){ var ok = f === 'all' || r.getAttribute('data-al') === f; if (ok) { r.removeAttribute('hidden'); k++; } else r.setAttribute('hidden', ''); }); n.textContent = k + ' / ' + rows.length; }
+  function apply(f){ var k = 0; rows.forEach(function(r){ var ok = f === 'all' || r.getAttribute('data-al') === f; if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', ''); }); if (window.__karzatRerender) window.__karzatRerender(t, true); else n.textContent = k + ' / ' + rows.length; }
   document.querySelectorAll('button[data-alf]').forEach(function(b){ b.addEventListener('click', function(){ document.querySelectorAll('button[data-alf]').forEach(function(x){ var isOn = x === b; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); apply(b.getAttribute('data-alf')); }); });
   apply('all');
 })();
