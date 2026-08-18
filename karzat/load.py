@@ -70,7 +70,7 @@ EXTRA_TABLES = """
 CREATE TABLE IF NOT EXISTS vote_faction_majority (
     vote_ts            TEXT NOT NULL REFERENCES vote(ts),
     faction_id         TEXT NOT NULL,
-    majority_position  TEXT,            -- plurality among igen/nem/tartozkodott within the faction
+    majority_position  TEXT,            -- plurality among igen/nem/tartozkodott within the faction; NULL when tied (a tie is no plurality)
     majority_share     REAL,            -- share of the faction's cast votes
     cast_votes         INTEGER,
     PRIMARY KEY (vote_ts, faction_id)
@@ -277,6 +277,8 @@ class Loader:
         for f, c in by_f.items():
             pos, n = c.most_common(1)[0]
             cast = sum(c.values())
+            if sum(1 for v_ in c.values() if v_ == n) > 1:
+                pos = None                                   # a tie is no plurality — the same rule the site's alignment uses
             self.conn.execute("INSERT OR REPLACE INTO vote_faction_majority(vote_ts, faction_id, majority_position, majority_share, cast_votes) VALUES (?,?,?,?,?)",
                               (ts, f, pos, n / cast if cast else None, cast))
         self.stats["votes_detailed"] += 1

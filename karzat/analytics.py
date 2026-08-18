@@ -63,8 +63,9 @@ def cohesion(inp: dict[str, Any]) -> dict[str, Any]:
             r, ai = rice(t["igen"], t["nem"]), agreement_index(t["igen"], t["nem"], t["tartozkodott"])
             cast = t["igen"] + t["nem"] + t["tartozkodott"]
             if cast:
-                pos, n = max(((p, t[p]) for p in CAST), key=lambda kv: (kv[1], -CAST.index(kv[0])))
-                plur.setdefault(ts, {})[f] = pos
+                pos, n = max(((p, t[p]) for p in CAST), key=lambda kv: kv[1])
+                if sum(1 for p in CAST if t[p] == n) == 1:      # a tie is no plurality
+                    plur.setdefault(ts, {})[f] = pos
                 dissent = cast - n
             else:
                 dissent = 0

@@ -41,7 +41,7 @@ sys.path.insert(0, str(ROOT))
 
 from karzat.freshness import BUDAPEST, assess  # noqa: E402
 from karzat.load import cycle_of_date  # noqa: E402
-from karzat.majority import RULES, Rule  # noqa: E402
+from karzat.majority import PAYLOAD_RULES, RULES, Rule  # noqa: E402
 from karzat import export as ex  # noqa: E402
 from karzat import analytics as an  # noqa: E402
 
@@ -215,7 +215,9 @@ def compute_alignment(inp: dict) -> dict:
                 by_f[f][pos] += 1
         plur = {}
         for f, c in by_f.items():
-            pos, n = max(c.items(), key=lambda kv: (kv[1], CAST.index(kv[0])))
+            pos, n = max(c.items(), key=lambda kv: kv[1])
+            if sum(1 for v in c.values() if v == n) > 1:
+                continue                                       # a tie is no plurality: nobody is with or against it
             plur[f] = (pos, n, sum(c.values()))
         plur_by_vote[ts] = plur
         for key, f, pos in expanded:
@@ -918,6 +920,7 @@ def sync_stamp(inp: dict) -> str:
 
 def page_tail(inp: dict, depth: int = 0, extra_script: str = "") -> str:
     rel = "../" * (depth + inp["base_depth"])
+    inp["_depth"] = depth
     return f'</div></main>\n{terminal_html(inp)}{extra_script}<script src="{rel}assets/karzat.js"></script>\n</body>\n</html>\n'
 
 
@@ -1111,6 +1114,11 @@ def roll_call_table(view: dict, inp: dict) -> str:
             '</section>')
 
 
+def rel_root_for_footer(inp: dict) -> str:
+    """The footer is emitted at every depth; the caller sets inp['_depth'] before rendering (build functions do)."""
+    return "../" * (inp.get("_depth", 0) + inp["base_depth"])
+
+
 def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     """The footer as a terminal: a boot log of true values, then the method notes."""
     idx, fl, plan = inp["idx"], inp["fl"], inp["plan"]
@@ -1136,7 +1144,7 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     <h3>Honnan</h3>
     Az Országgyűlés nyilvános Web API-jából, szavazásonként és név szerint; a képviselőket a Wikidata azonosítói kötik össze a ciklusokon át. A szükséges többség az, amit az Országgyűlés maga jelöl meg minden szavazásnál — az oldal csak utánaszámol. Jelenlévőnek azt vesszük, aki igennel, nemmel, tartózkodással szavazott, vagy jelen volt és nem szavazott.
     <h3>Mit nem</h3>
-    Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek az oldal jelölései, nem a pártokéi.
+    Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek az oldal jelölései, nem a pártokéi. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
   </div>
 </footer>"""
 
@@ -1237,7 +1245,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1315,7 +1323,7 @@ def build_vote_page(inp: dict, ts: str) -> str:
     {chart_block(view, inp)}
   </section>
   <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Eredmény és a szükséges többség</span><span class="tag">{esc(needed_tag(view))}</span></h2>
+    <h2><span data-kz-text>Eredmény és a szükséges többség</span><span class="tag">{esc(needed_tag(view))} · <a href="{"../" * (1 + inp["base_depth"])}modszer/index.html#tobbseg">módszer</a></span></h2>
     {verdict_block(view, inp)}
   </section>
 </section>
@@ -1882,6 +1890,63 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
     return {"cycle": cycle, "index": str(out_dir / "index.html"), "vote_pages": n, "mp_pages": k, "per_mp": per_mp}
 
 
+def build_method_page(inp: dict) -> str:
+    """modszer/index.html — how every number on the site is computed, generated from the code's own tables."""
+    api_by_rule: dict[str, list[str]] = {}
+    for label, rule in PAYLOAD_RULES.items():
+        api_by_rule.setdefault(rule.value, []).append(label)
+    rule_rows = "".join(
+        f'<tr><td class="mono">{esc(r.value)}</td><td>{esc(info.label_hu)}</td><td class="mono">{esc(info.formula)}</td><td>{"jelenlévők" if info.base == "present" else "összes képviselő" if info.base == "seats" else esc(info.base)}</td>'
+        f'<td class="mono">{esc(" · ".join(api_by_rule.get(r.value, [])))}</td></tr>' for r, info in RULES.items())
+    tot = site_totals()
+    return page_head("Módszer · karzat", "Hogyan számol az oldal: forrás, azonosítás, többségi szabályok, jelenlét, frakcióval és ellene, kohézió, szoros szavazások, ülésrend, frissesség, letöltések, adatbázis.", 1) + \
+        topbar(inp, [("módszer", None)], 1) + f"""
+<div class="hero-h"><h1>Módszer</h1><small class="label" data-kz-text>minden szám, ami az oldalon áll — honnan és hogyan</small></div>
+<p class="lede">Ez az oldal a kódból készül: a szabályok táblája ugyanaz, amivel az oldal számol. Ahol valami feltevés, oda az van írva.</p>
+
+<section class="panel" id="forras">{CORNERS}<h2><span data-kz-text>Forrás</span></h2>
+<div class="hero-meta prose">Az Országgyűlés nyilvános Web API-ja (parlament.hu, XML): a szavazások listája ciklusonként és a szavazások név szerinti listája (<span class="mono">szavazasok</span>, <span class="mono">szavazas</span>), a képviselők adatlapjai (<span class="mono">kepviselo</span>: frakciótörténet, választások, ülőhely — az utóbbi csak a jelenlegi ciklusra), az ülésnapok (<span class="mono">ulesnap</span>, 1998-tól), a jelenlegi ciklus irományai (<span class="mono">iromanyok</span>). Az ülésterem alaprajza a parlament.hu saját képviselő-oldalainak ülésrend-lekérdezéséből, {hu_num(274)} hellyel. A képviselők névsora 1990 óta a parlament.hu képviselőlistájából. Ami itt van: {hu_num(tot["votes"])} szavazás, {hu_num(tot["roll_calls"])} név szerinti lista, {hu_num(tot["people"])} képviselő, {len(tot["cycles"])} ciklus.</div></section>
+
+<section class="panel" id="azonositas">{CORNERS}<h2><span data-kz-text>Ki kicsoda</span></h2>
+<div class="hero-meta prose">A névsor „Név (Frakció)” alakban ír, azonosító nélkül. A feloldás sorrendje: (1) a jelenlegi képviselőlista pontos „Név (Frakció)” címkéje; (2) a képviselői adatlapok saját névírása (a Dr., a második keresztnév, az ékezet ott úgy szerepel, ahogy a névsorban); (3) a puszta név minden forrásból (adatlapok, Wikidata címkék). Ha többen jönnek szóba, az marad, akinek az adatlapja szerinti frakciótörténete az adott ciklusban a névsor frakcióját mutatja; aki így sem egyértelmű, feloldatlan marad, névvel. Egy ellenőrzés minden ciklusra: minden feloldott személynek van az adatlapján sora arra a ciklusra, a névsor frakciójával. A Wikidata P4966 azonosítója az API <span class="mono">p_azon</span>-ja.</div></section>
+
+<section class="panel" id="tobbseg">{CORNERS}<h2><span data-kz-text>Többségi szabály és jelenlét</span></h2>
+<div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">kód</th><th scope="col">szabály</th><th scope="col">küszöb</th><th scope="col">alap</th><th scope="col">az API „Szavazási mód” szövege</th></tr></thead><tbody>{rule_rows}</tbody></table></div>
+<div class="hero-meta prose" style="margin-top:8px">A szabályt minden szavazásnál az Országgyűlés maga jelöli meg a „Szavazási mód” mezőben; az oldal ebből számolja a küszöböt és összeveti az „Elfogadás” mezővel („számítás egyezik / eltér”). Jelenlévő: aki igennel, nemmel, tartózkodással szavazott, vagy jelen volt és nem szavazott — a névsorból; ahol nincs névsor, az API „Összes szavazat” mezője. Ez értelmezés; a jogszabályi hivatkozások a kódban ellenőrizendőnek jelölve. Az összes képviselő 2014. május 6-a előtt 386, azóta 199.</div></section>
+
+<section class="panel" id="frakcio">{CORNERS}<h2><span data-kz-text>Frakciójával és ellene</span></h2>
+<div class="hero-meta prose">Egy szavazáson egy frakció többségi álláspontja a leadott szavazatai (igen, nem, tartózkodott) közül a legtöbb; ha kettő egyenlő, nincs többségi álláspont, és senki sem „vele” vagy „ellene” azon a szavazáson. Egy képviselő „frakciójával”: leadott szavazata megegyezik a frakciója többségi álláspontjával; „ellene”: eltér. A le nem adott állapotok (jelen, nem szavazott; nem szavazott; előre bejelentett hiányzó; igazoltan távol) részvétel, nem egyezés. A frakció az, amit a névsor az adott szavazásnál ír; a személy oldalán az utolsó név szerinti szavazásán feltüntetett frakció. A „független” nem frakció: a független képviselők együtt számolt száma nem összetartás.</div></section>
+
+<section class="panel" id="kohezio">{CORNERS}<h2><span data-kz-text>Kohézió</span></h2>
+<div class="hero-meta prose">Rice-index: |igen − nem| / (igen + nem). Egyetértési index (Hix–Noury–Roland): (legnagyobb − (összes − legnagyobb)/2) / összes, az igen–nem–tartózkodott leadott szavazatokból. Ciklusra a leadott szavazatokkal súlyozott átlag. Frakciók egyezése: azon szavazások hányada, ahol mindkettő adott le szavazatot és a többségi álláspontjuk azonos. Képviselőpárok: közös leadott szavazásaikból az azonos szavazatok hányada, legalább 20 közös szavazásnál.</div></section>
+
+<section class="panel" id="szoros">{CORNERS}<h2><span data-kz-text>Szoros szavazások</span></h2>
+<div class="hero-meta prose">Különbség = igen − szükséges. „Több igen, mint nem — mégis elutasítva”: minősített többséget kívánó döntés, ahol igen &gt; nem és a küszöb nem teljesült. „Ahol a hiányzók döntöttek”: számított feltevés — ha a névsorban szereplő, szavazatot le nem adó képviselők mind a frakciójuk többségével szavaztak volna, más lenne-e a kimenetel; jelenléthez kötött küszöbnél a jelenlét is nő velük. Feltevés, nem tény, és így is van feliratozva.</div></section>
+
+<section class="panel" id="oldalak">{CORNERS}<h2><span data-kz-text>Az oldalak</span></h2>
+<div class="hero-meta prose">A ciklus címlapján a kiemelt szavazás a ciklus utolsó, összes képviselő kétharmadával elfogadott döntése (a 43. és 42. ciklusban kézzel választva: a tizenhatodik és a tizenötödik Alaptörvény-módosítás). Az ülésrend a 43. ciklusra a parlament.hu alaprajza; a korábbi ciklusokra nincs ülőhely-adat, ott a szavazás-ábra frakciónként rendezett. A képviselő oldalán az „utolsó 20” csík az addig tartott utolsó húsz név szerinti szavazása. Egy iromány oldala a szavazásait gyűjti a szám szerint: a módosító „n/k” az n-es irományhoz tartozik. A frissesség mondata a legutóbbi ülésnaphoz méri a betöltött szavazásokat, és a szinkron időpontját írja, nem eltelt időt.</div></section>
+
+<section class="panel" id="adat">{CORNERS}<h2><span data-kz-text>Letöltések és adatbázis</span></h2>
+<div class="hero-meta prose">Minden tábla CSV-ben (UTF-8, BOM, vessző) és JSON-ban a ciklus <span class="mono">adatok/</span> oldalán, az adatszótárral; egy szavazás és egy képviselő oldala mellett a saját párja. Az egész egy SQLite-adatbázisba is betölthető a tárból (<span class="mono">schema.sql</span>: mp, mp_faction, mp_mandate, sitting_day, vote, vote_position, vote_faction_tally, vote_faction_majority, bill, bill_event, vote_motion; nézetek: v_vote, v_mp_alignment) — <span class="mono">python3 -m karzat load --since 1990-01-01</span>, aztán például:</div>
+<pre class="mono" style="font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;white-space:pre-wrap">-- a legszorosabb elfogadott döntések
+SELECT ts, igen, needed, margin FROM vote WHERE passed = 1 ORDER BY margin, ts LIMIT 20;
+
+-- egy képviselő frakció elleni szavazatai
+SELECT p.vote_ts, p.position, m.majority_position
+FROM vote_position p JOIN vote_faction_majority m ON m.vote_ts = p.vote_ts AND m.faction_id = p.faction_id
+WHERE p.mp_azon = 'a011' AND p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT NULL AND p.position &lt;&gt; m.majority_position;
+
+-- frakciónkénti egyezés a saját többséggel, ciklusonként
+SELECT v.ckl, p.faction_id, SUM(p.position = m.majority_position) * 1.0 / COUNT(*) AS egyezes
+FROM vote_position p JOIN vote v ON v.ts = p.vote_ts JOIN vote_faction_majority m ON m.vote_ts = p.vote_ts AND m.faction_id = p.faction_id
+WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT NULL GROUP BY 1, 2 ORDER BY 1, 3;</pre></section>
+
+<section class="panel" id="nem">{CORNERS}<h2><span data-kz-text>Amit az oldal nem állít</span></h2>
+<div class="hero-meta prose">Semmit a szavazások okáról. Nem skáláz, nem súlyoz, nem jósol; egyetlen feltevését (a hiányzók) annak nevezi. A színek az oldal jelölései. A képviselői fényképeket nem ágyazza be, csak hivatkozza, mert a felhasználási feltételük nem tisztázott.</div></section>
+{cite_html(inp, 'modszer/index.html', 'Módszer', 'modszer')}
+""" + page_tail(inp, 1)
+
+
 def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
     """szemely/<azon>.html — one person across every loaded cycle: the cycle rows side by side, then the record."""
     stints = sorted(stints, key=lambda r: -r["cycle"])
@@ -1975,6 +2040,8 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         for c in available_cycles():
             for f in factions(c):
                 inp["facs_all"].setdefault(f["id"], f["colour"])
+        md_ = out_dir / "modszer"; md_.mkdir(parents=True, exist_ok=True)
+        (md_ / "index.html").write_text(build_method_page(inp), encoding="utf-8")
         pd = out_dir / "szemely"
         pd.mkdir(parents=True, exist_ok=True)
         (pd / "index.html").write_text(build_person_index(inp, people), encoding="utf-8")
