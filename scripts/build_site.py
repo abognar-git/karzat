@@ -547,6 +547,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
 .seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35}.seatshape.occ{fill:rgba(255,255,255,.06)}
+.ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
@@ -1236,7 +1237,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1714,6 +1715,76 @@ def build_bill_index(inp: dict, bs: dict) -> str:
 """ + page_tail(inp, 1)
 
 
+def svg_series(labels: list[str], series: list[tuple[str, str, list]], kind: str = "bars", ymax: float | None = None, fmt=lambda v: f"{v}", w: int = 640, h: int = 140) -> str:
+    """A small chart: bars (first series) or lines (all series), mono axis labels, hover titles per point. Values may be None."""
+    n = max(1, len(labels))
+    pad_l, pad_b, pad_t = 34, 22, 8
+    iw, ih = w - pad_l - 6, h - pad_b - pad_t
+    vals = [v for _, _, vs in series for v in vs if v is not None]
+    top = ymax if ymax is not None else (max(vals) if vals else 1) or 1
+    def x(i): return pad_l + iw * (i + 0.5) / n
+    def y(v): return pad_t + ih * (1 - (v / top if top else 0))
+    parts = [f'<line x1="{pad_l}" y1="{pad_t + ih:.1f}" x2="{w - 6}" y2="{pad_t + ih:.1f}" class="axis"/>',
+             f'<text x="{pad_l - 6}" y="{pad_t + 4}" class="axl" text-anchor="end">{esc(fmt(top))}</text><text x="{pad_l - 6}" y="{pad_t + ih:.1f}" class="axl" text-anchor="end">0</text>']
+    step = max(1, n // 8)
+    for i, lab in enumerate(labels):
+        if i % step == 0 or i == n - 1:
+            parts.append(f'<text x="{x(i):.1f}" y="{h - 6}" class="axl" text-anchor="middle">{esc(lab)}</text>')
+    if kind == "bars":
+        name, colour, vs = series[0]
+        bw = max(2.0, iw / n * 0.6)
+        for i, v in enumerate(vs):
+            if v is None: continue
+            parts.append(f'<rect x="{x(i) - bw / 2:.1f}" y="{y(v):.1f}" width="{bw:.1f}" height="{pad_t + ih - y(v):.1f}" fill="{colour}"><title>{esc(labels[i])}: {esc(fmt(v))}</title></rect>')
+    else:
+        for name, colour, vs in series:
+            pts = [(x(i), y(v)) for i, v in enumerate(vs) if v is not None]
+            if len(pts) > 1:
+                parts.append(f'<polyline points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" fill="none" stroke="{colour}" stroke-width="1.4"/>')
+            for i, v in enumerate(vs):
+                if v is None: continue
+                parts.append(f'<circle cx="{x(i):.1f}" cy="{y(v):.1f}" r="2.2" fill="{colour}"><title>{esc(name)} · {esc(labels[i])}: {esc(fmt(v))}</title></circle>')
+    return f'<svg viewBox="0 0 {w} {h}" class="ts" role="img">{"".join(parts)}</svg>'
+
+
+def build_numbers_page(inp: dict, ms: list[dict]) -> str:
+    """szamok/index.html — the cycle month by month: votes and the qualified share, participation, dissent and cohesion per faction."""
+    labels = [d["month"][2:] for d in ms]                     # 26-05
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    facs = [f["id"] for f in inp["facs"] if any(f["id"] in d["factions"] for d in ms)]
+    pct = lambda v: f"{100 * v:.0f}%"
+    ser = lambda key: [(f, colour.get(f, "#8a8a8a"), [((d["factions"].get(f) or {}).get(key)) for d in ms]) for f in facs]
+    charts = [
+        ("Szavazások havonta", svg_series(labels, [("szavazás", "#a1a1aa", [d["votes"] for d in ms])], "bars"), "minden szavazás, jelenlét-megállapítással együtt"),
+        ("Minősített többségű döntések aránya", svg_series(labels, [("minősített", "#a1a1aa", [(d["qualified"] / d["decisions"]) if d["decisions"] else None for d in ms])], "lines", 1.0, pct), "a hónap döntéseiből mennyi kívánt kétharmadot, négyötödöt vagy abszolút többséget"),
+        ("Részvétel frakciónként", svg_series(labels, ser("participation"), "lines", 1.0, pct), "leadott szavazat / névsorban szereplés, a frakció tagjaira összesítve"),
+        ("Frakció elleni szavazatok aránya", svg_series(labels, ser("dissent"), "lines", None, lambda v: f"{100 * v:.1f}%"), "a frakció többségétől eltérő leadott szavazatok aránya"),
+        ("Egyetértési index frakciónként", svg_series(labels, ser("ai"), "lines", 1.0, lambda v: f"{v:.2f}"), "leadott szavazatokkal súlyozott havi átlag"),
+    ]
+    blocks = "".join(f'<section class="panel">{CORNERS}<h2><span data-kz-text>{esc(t)}</span></h2><div class="chart">{svg}</div><div class="hero-meta" style="margin-top:6px">{esc(note)}</div></section>' for t, svg, note in charts)
+    legend = "".join(f'<span class="f"><i style="background:{colour.get(f, "#8a8a8a")}"></i>{esc(f)}</span>' for f in facs)
+    head = "".join(f'<th scope="col" class="num">{esc(f)}<span class="sub">részvétel · ellene</span></th>' for f in facs)
+    def cell(x):
+        part = pct(x["participation"]) if x and x["participation"] is not None else "—"
+        dis = f'{100 * x["dissent"]:.1f}%' if x and x["dissent"] is not None else "—"
+        return f'<td class="num mono">{part}<span class="sub">{dis}</span></td>'
+    trs = []
+    for d in ms:
+        cells = "".join(cell(d["factions"].get(f)) for f in facs)
+        trs.append(f'<tr><td class="mono">{esc(d["month"])}</td><td class="num mono">{d["votes"]}</td><td class="num mono">{d["decisions"]}</td><td class="num mono">{d["qualified"]}</td>{cells}</tr>')
+    return page_head(f'Számok · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus hónapról hónapra: szavazások, minősített többség, részvétel, frakció elleni szavazatok, egyetértési index.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("számok", None)], 1) + f"""
+<div class="hero-h"><h1>Számok</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · hónapról hónapra</small></div>
+<div class="legend">{legend}</div>
+{blocks}
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>A táblázat</span><span class="tag"><a href="havonta.csv">CSV</a></span></h2>
+  <div class="tablewrap"><table data-page-size="50"><thead><tr><th scope="col">Hónap</th><th scope="col" class="num">Szavazás</th><th scope="col" class="num">Döntés</th><th scope="col" class="num">Minősített</th>{head}</tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+</section>
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}szamok/index.html', f'Számok — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-szamok')}
+""" + page_tail(inp, 1)
+
+
 def build_data_page(inp: dict) -> str:
     """adatok/index.html — the cycle's downloads and the data dictionary."""
     files = [("szavazasok.csv", "szavazasok.json", "minden szavazás, egy sor egy szavazás"),
@@ -1791,6 +1862,10 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         sd = out_dir / "szoros"; sd.mkdir(parents=True, exist_ok=True)
         (sd / "index.html").write_text(build_close_page(inp, cl), encoding="utf-8")
         (sd / "dontesek.csv").write_text(ex.decisions_csv(cl, cycle), encoding="utf-8")
+        ms = an.monthly(inp, co)["months"]
+        nd = out_dir / "szamok"; nd.mkdir(parents=True, exist_ok=True)
+        (nd / "index.html").write_text(build_numbers_page(inp, ms), encoding="utf-8")
+        (nd / "havonta.csv").write_text(ex.monthly_csv(ms, cycle), encoding="utf-8")
         bs = an.bills(inp)
         bd = out_dir / "iromany"; bd.mkdir(parents=True, exist_ok=True)
         (bd / "index.html").write_text(build_bill_index(inp, bs), encoding="utf-8")

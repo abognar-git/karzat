@@ -224,3 +224,54 @@ def bills(inp: dict[str, Any]) -> dict[int, dict[str, Any]]:
         b["final_outcome"] = b["votes"][-1]["outcome"]; b["final_result"] = b["votes"][-1]["result"]
         b["label"] = f'{b["prefix"]}/{b["number"]}' if b["prefix"] else str(b["number"])
     return out
+
+
+# -- time series --------------------------------------------------------------------------------
+
+def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Per month of the cycle: votes, decisions, qualified-majority decisions, roll calls; per faction its members'
+    participation (cast / in roll), dissent (against / cast) and cast-weighted agreement index."""
+    store, order, by_ts = inp["store"], inp["order"], inp["by_ts"]
+    per_mp = inp["alignment"]["per_mp"]
+    months: dict[str, dict[str, Any]] = {}
+    for ts in order:
+        v = by_ts[ts]
+        m = v["on_date"][:7]
+        d = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "factions": {}})
+        d["votes"] += 1
+        if v.get("kind") == "dontes":
+            d["decisions"] += 1
+            if (v.get("majority") or {}).get("rule") not in (None, "egyszeru", "relativ"):
+                d["qualified"] += 1
+        if store["positions"].get(ts):
+            d["roll_calls"] += 1
+    # per faction per month from the alignment records (each MP's votes carry faction, position, align)
+    for azon, rec in per_mp.items():
+        for v in rec["votes"]:
+            m = v["ts"][:4] + "-" + v["ts"][5:7]
+            f = v.get("faction") or "—"
+            fd = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "factions": {}})["factions"].setdefault(f, {"in_roll": 0, "cast": 0, "with": 0, "against": 0})
+            fd["in_roll"] += 1
+            if v["position"] in CAST:
+                fd["cast"] += 1
+                if v.get("align") == "with":
+                    fd["with"] += 1
+                elif v.get("align") == "against":
+                    fd["against"] += 1
+    if co:
+        for ts, per in co["per_vote"].items():
+            m = ts[:4] + "-" + ts[5:7]
+            for f, x in per.items():
+                if m in months and f in months[m]["factions"] and x["cast"]:
+                    fd = months[m]["factions"][f]
+                    fd["ai_w"] = fd.get("ai_w", 0.0) + x["ai"] * x["cast"]; fd["ai_n"] = fd.get("ai_n", 0) + x["cast"]
+    out = []
+    for m in sorted(months):
+        d = months[m]
+        for f, fd in d["factions"].items():
+            fd["participation"] = fd["cast"] / fd["in_roll"] if fd["in_roll"] else None
+            fd["dissent"] = fd["against"] / fd["cast"] if fd["cast"] else None
+            fd["ai"] = (fd["ai_w"] / fd["ai_n"]) if fd.get("ai_n") else None
+            fd.pop("ai_w", None); fd.pop("ai_n", None)
+        out.append(d)
+    return {"months": out}

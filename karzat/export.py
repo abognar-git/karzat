@@ -179,6 +179,10 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("votes_both_cast, same_plurality, share", "frakciópáronként: hány szavazáson adott le mindkettő szavazatot · hányszor volt azonos a többségi álláspont · arány"),
             ("shared, same, share", "képviselőpáronként (frakción belül, ≥ 20 közös szavazás): közös leadott szavazások · azonos szavazat · arány"),
         ]),
+        ("szamok/havonta.csv — a ciklus hónapról hónapra, frakciónként egy sor", [
+            ("votes, decisions, qualified, roll_calls", "a hónap szavazásai · döntései · minősített többséget kívánó döntései · név szerinti listái"),
+            ("in_roll, cast, with, against, participation, dissent, ai", "a frakció tagjaira: névsorban · leadott · frakcióval · ellene · leadott/névsor · ellene/leadott · egyetértési index (súlyozott havi átlag)"),
+        ]),
         ("iromany/iromanyok.csv — minden iromány, amelyről név szerint szavaztak", [
             ("number, prefix, label", "az iromány száma (egy számtér ciklusonként), előtagja ha a névsor írta (T/, H/, I/…), a kettő együtt"),
             ("votes, own_votes, amendment_votes", "hány szavazás · az iromány saját szakaszairól · a módosítóiról"),
@@ -236,3 +240,13 @@ def bills_csv(bs: dict[int, dict[str, Any]], cycle: int) -> str:
              "own_votes": b["own_votes"], "amendment_votes": b["amendment_votes"], "first": b["first"], "last": b["last"],
              "final_outcome": b["final_outcome"], "final_result": b["final_result"], "href": b["href"]} for n, b in sorted(bs.items())]
     return _csv(rows, ["cycle", "number", "prefix", "label", "title", "votes", "own_votes", "amendment_votes", "first", "last", "final_outcome", "final_result", "href"])
+
+
+def monthly_csv(months: list[dict[str, Any]], cycle: int) -> str:
+    rows = []
+    for d in months:
+        for f, x in sorted(d["factions"].items()):
+            rows.append({"cycle": cycle, "month": d["month"], "votes": d["votes"], "decisions": d["decisions"], "qualified": d["qualified"], "roll_calls": d["roll_calls"],
+                         "faction": f, "in_roll": x["in_roll"], "cast": x["cast"], "with": x["with"], "against": x["against"],
+                         "participation": x["participation"], "dissent": x["dissent"], "ai": x.get("ai")})
+    return _csv(rows, ["cycle", "month", "votes", "decisions", "qualified", "roll_calls", "faction", "in_roll", "cast", "with", "against", "participation", "dissent", "ai"])

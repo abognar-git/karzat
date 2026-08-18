@@ -2,7 +2,7 @@
 
 import unittest
 
-from karzat.analytics import agreement_index, bill_key, bills, close_votes, cohesion, rice
+from karzat.analytics import agreement_index, bill_key, bills, close_votes, cohesion, monthly, rice
 from scripts.build_site import HERO_TS, load_inputs
 
 
@@ -34,6 +34,22 @@ class Bills(unittest.TestCase):
         # every vote with a motion number lands in exactly one bill
         n_votes = sum(1 for ts in inp["order"] if inp["by_ts"][ts].get("motions") and bill_key(inp["by_ts"][ts]["motions"][0].get("iromany"))[0] is not None)
         self.assertEqual(sum(len(b["votes"]) for b in bs.values()), n_votes)
+
+
+class Monthly(unittest.TestCase):
+    def test_months_add_up(self):
+        inp = load_inputs()
+        co = cohesion(inp)
+        ms = monthly(inp, co)["months"]
+        self.assertEqual([d["month"] for d in ms], ["2026-05", "2026-06", "2026-07", "2026-08"])
+        self.assertEqual(sum(d["votes"] for d in ms), 259)
+        self.assertEqual(sum(d["roll_calls"] for d in ms), 256)
+        for d in ms:
+            for f, x in d["factions"].items():
+                self.assertLessEqual(x["cast"], x["in_roll"])
+                self.assertLessEqual(x["with"] + x["against"], x["cast"])
+                if x["participation"] is not None:
+                    self.assertTrue(0 <= x["participation"] <= 1)
 
 
 class Cycle43(unittest.TestCase):
