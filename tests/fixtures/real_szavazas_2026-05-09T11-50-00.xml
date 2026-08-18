@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<szavazas>
+            <szavazas idopont="2026.05.09.11:50:00">
+            <tulajdonsagok>
+                <tulajdonsag nev="Szavazási mód" ertek="Titkos"/>
+                <tulajdonsag nev="&quot;Igen&quot;-ek száma" ertek="193"/>
+                <tulajdonsag nev="&quot;Nem&quot;-ek száma" ertek="2"/>
+                <tulajdonsag nev="Tartózkodások" ertek="0"/>
+                <tulajdonsag nev="Összes szavazat" ertek="195"/>
+                <tulajdonsag nev="Elfogadás" ertek="Elfogadva"/>
+                <tulajdonsag nev="Megjegyzés" ertek=""/>
+            </tulajdonsagok>
+            <inditvanyok>
+                        <inditvany>
+                            <iromany>S/3</iromany>
+                            <pont></pont>
+                            <cim>Az Országgyűlés elnökének megválasztásáról</cim>
+                            <benyujto nev="az Országgyűlés korelnöke"/>
+                            <ok>önálló indítvány elfogadva</ok>
+                            <kepviselo></kepviselo>
+                        </inditvany>
+            </inditvanyok>
+            <kepvcsop_szerint>
+                        <szavazat frakcio="TISZA">
+                        </szavazat>
+                        <szavazat frakcio="Fidesz">
+                        </szavazat>
+                        <szavazat frakcio="KDNP">
+                        </szavazat>
+                        <szavazat frakcio="Mi Hazánk">
+                        </szavazat>
+                    <szavazat frakcio="Összesen (arányok a képviselők száma alapján)">
+                    </szavazat>
+            </kepvcsop_szerint>
+            <nev_szerint>
+            </nev_szerint>
+        </szavazas>
+</szavazas>

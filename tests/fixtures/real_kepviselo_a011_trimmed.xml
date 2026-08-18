@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<kepviselo>
+            <nev>Ágh Péter</nev>
+        <fenykep>https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/a011</fenykep>
+        <honlap>aghpeter.hu</honlap>
+        <ulohely szektor="2" sor="5" szek="7" />
+        <kepvcsop-tagsagok>
+                <tagsag ciklus="2026-" kepvcsop="Fidesz" tol_datum="2026.05.09." ig_datum="" />
+                <tagsag ciklus="2022-2026" kepvcsop="Fidesz" tol_datum="2022.05.02." ig_datum="2026.05.08." />
+                <tagsag ciklus="2018-2022" kepvcsop="Fidesz" tol_datum="2018.05.08." ig_datum="2022.05.01." />
+                <tagsag ciklus="2014-2018" kepvcsop="Fidesz" tol_datum="2014.05.06." ig_datum="2018.05.07." />
+                <tagsag ciklus="2010-2014" kepvcsop="Fidesz" tol_datum="2010.05.14." ig_datum="2014.05.05." />
+                <tagsag ciklus="2006-2010" kepvcsop="Fidesz" tol_datum="2006.05.16." ig_datum="2010.05.13." />
+        </kepvcsop-tagsagok>
+        <valasztasok>
+                <valasztas ciklus="2026-" megvalasztas_napja="2026.04.12." valasztokerulet="Vas 2. OEVK" mandatum_kezdete="2026.05.09." mandatum_vege="" />
+                <valasztas ciklus="2022-2026" megvalasztas_napja="2022.04.03." valasztokerulet="Vas 2. OEVK" mandatum_kezdete="2022.05.02." mandatum_vege="2026.05.08." />
+                <valasztas ciklus="2018-2022" megvalasztas_napja="2018.04.08." valasztokerulet="Vas 2. OEVK" mandatum_kezdete="2018.05.08." mandatum_vege="2022.05.01." />
+                <valasztas ciklus="2014-2018" megvalasztas_napja="2014.04.06." valasztokerulet="Vas 2. OEVK" mandatum_kezdete="2014.05.06." mandatum_vege="2018.05.07." />
+                <valasztas ciklus="2010-2014" megvalasztas_napja="2010.04.25." valasztokerulet="Vas területi lista" mandatum_kezdete="2010.05.14." mandatum_vege="2014.05.05." />
+                <valasztas ciklus="2006-2010" megvalasztas_napja="2006.04.23." valasztokerulet="Országos lista" mandatum_kezdete="2006.05.16." mandatum_vege="2010.05.13." />
+        </valasztasok>
+        <inditvanyok>
+                <stat ciklus="2026-" onallo_db="5" nem_onallo_db="0" />
+                <stat ciklus="2022-2026" onallo_db="12" nem_onallo_db="0" />
+                <stat ciklus="2018-2022" onallo_db="40" nem_onallo_db="0" />
+                <stat ciklus="2014-2018" onallo_db="49" nem_onallo_db="3" />
+                <stat ciklus="2010-2014" onallo_db="19" nem_onallo_db="38" />
+                <stat ciklus="2006-2010" onallo_db="219" nem_onallo_db="104" />
+        </inditvanyok>
+        <felszolalasok>
+                <stat ciklus="2026-" felszolalas_db="1" technikai_db="0" />
+                <stat ciklus="2022-2026" felszolalas_db="91" technikai_db="2" />
+                <stat ciklus="2018-2022" felszolalas_db="69" technikai_db="1" />
+                <stat ciklus="2014-2018" felszolalas_db="68" technikai_db="1" />
+                <stat ciklus="2010-2014" felszolalas_db="134" technikai_db="1" />
+                <stat ciklus="2006-2010" felszolalas_db="53" technikai_db="2" />
+        </felszolalasok>
+        </kepviselo>

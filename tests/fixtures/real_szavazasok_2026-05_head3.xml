@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<szavazasok><szavazas idopont="2026.05.27.10:34:43">
+                <tulajdonsagok>
+                    <tulajdonsag nev="Szavazási mód" ertek="Listás" />
+                    <tulajdonsag nev="&quot;Igen&quot;-ek száma" ertek="133" />
+                    <tulajdonsag nev="&quot;Nem&quot;-ek száma" ertek="37" />
+                    <tulajdonsag nev="Tartózkodások" ertek="5" />
+                    <tulajdonsag nev="Összes szavazat" ertek="175" />
+                    <tulajdonsag nev="Elfogadás" ertek="Elfogadva" />
+                    <tulajdonsag nev="Megjegyzés" ertek="" />
+                </tulajdonsagok>
+                <inditvanyok>
+                            <inditvany>
+                                <iromany>T/71</iromany>
+                                <pont />
+                                <cim>Az Egyesült Nemzetek Diplomáciai Konferenciája által, a Nemzetközi Büntetőbíróság Rómában, 1998. július 17-én elfogadott Statútumának, és a Nemzetközi Büntetőbíróság kiváltságairól és mentességeiről szóló, New Yorkban, 2002. szeptember 10-én elfogadott Megállapodás felmondásának visszavonásáról </cim>
+                                <benyujtok>
+                                                <benyujto href="">kormány (igazságügyi miniszter)</benyujto>
+                                </benyujtok>
+                                <ok>önálló indítvány elfogadva</ok>
+                                <kepviselo />
+                            </inditvany>
+                </inditvanyok>
+            </szavazas>
+            <szavazas idopont="2026.05.27.10:34:05">
+                <tulajdonsagok>
+                    <tulajdonsag nev="Szavazási mód" ertek="Listás" />
+                    <tulajdonsag nev="&quot;Igen&quot;-ek száma" ertek="131" />
+                    <tulajdonsag nev="&quot;Nem&quot;-ek száma" ertek="2" />
+                    <tulajdonsag nev="Tartózkodások" ertek="39" />
+                    <tulajdonsag nev="Összes szavazat" ertek="172" />
+                    <tulajdonsag nev="Elfogadás" ertek="Elfogadva" />
+                    <tulajdonsag nev="Megjegyzés" ertek="" />
+                </tulajdonsagok>
+                <inditvanyok>
+                            <inditvany>
+                                <iromany>T/71</iromany>
+                                <pont />
+                                <cim>Az Egyesült Nemzetek Diplomáciai Konferenciája által, a Nemzetközi Büntetőbíróság Rómában, 1998. július 17-én elfogadott Statútumának, és a Nemzetközi Büntetőbíróság kiváltságairól és mentességeiről szóló, New Yorkban, 2002. szeptember 10-én elfogadott Megállapodás felmondásának visszavonásáról </cim>
+                                <benyujtok>
+                                                <benyujto href="">kormány (igazságügyi miniszter)</benyujto>
+                                </benyujtok>
+                                <ok>összegző módosító javaslat elfogadva</ok>
+                                <kepviselo />
+                            </inditvany>
+                </inditvanyok>
+            </szavazas>
+            <szavazas idopont="2026.05.26.16:33:43">
+                <tulajdonsagok>
+                    <tulajdonsag nev="Szavazási mód" ertek="Listás" />
+                    <tulajdonsag nev="&quot;Igen&quot;-ek száma" ertek="187" />
+                    <tulajdonsag nev="&quot;Nem&quot;-ek száma" ertek="1" />
+                    <tulajdonsag nev="Tartózkodások" ertek="0" />
+                    <tulajdonsag nev="Összes szavazat" ertek="188" />
+                    <tulajdonsag nev="Elfogadás" ertek="Elfogadva" />
+                    <tulajdonsag nev="Megjegyzés" ertek="" />
+                </tulajdonsagok>
+                <inditvanyok>
+                            <inditvany>
+                                <iromany>S/83</iromany>
+                                <pont />
+                                <cim>Az Országgyűlés bizottságainak létrehozásáról, tagjainak és tisztségviselőinek megválasztásáról szóló 17/2026. (V. 9.) OGY határozat módosításáról</cim>
+                                <benyujtok>
+                                                <benyujto href="">az Országgyűlés elnöke</benyujto>
+                                </benyujtok>
+                                <ok>önálló indítvány elfogadva</ok>
+                                <kepviselo />
+                            </inditvany>
+                </inditvanyok>
+            </szavazas>
+            </szavazasok>

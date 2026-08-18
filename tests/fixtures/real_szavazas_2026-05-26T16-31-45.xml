@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<szavazas>
+            <szavazas idopont="2026.05.26.16:31:45">
+            <tulajdonsagok>
+                <tulajdonsag nev="Szavazási mód" ertek="Listás a jelenlevők 2/3-ával"/>
+                <tulajdonsag nev="&quot;Igen&quot;-ek száma" ertek="9"/>
+                <tulajdonsag nev="&quot;Nem&quot;-ek száma" ertek="178"/>
+                <tulajdonsag nev="Tartózkodások" ertek="5"/>
+                <tulajdonsag nev="Összes szavazat" ertek="192"/>
+                <tulajdonsag nev="Elfogadás" ertek="Elutasítva"/>
+                <tulajdonsag nev="Megjegyzés" ertek=""/>
+            </tulajdonsagok>
+            <inditvanyok>
+                        <inditvany>
+                            <iromany>H/84</iromany>
+                            <pont></pont>
+                            <cim>Kocsis Máté országgyűlési képviselő mentelmi ügyében</cim>
+                            <benyujto nev="Mentelmi Bizottság"/>
+                            <ok>mentelmi jog fenntartva</ok>
+                            <kepviselo></kepviselo>
+                        </inditvany>
+            </inditvanyok>
+            <kepvcsop_szerint>
+                        <szavazat frakcio="TISZA">
+                                <igen_db>3</igen_db>
+                                <nem_db>133</nem_db>
+                                <tart_db>4</tart_db>
+                                <igtav_db>1</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>141</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Fidesz">
+                                <igen_db>1</igen_db>
+                                <nem_db>37</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>4</igtav_db>
+                                <nemszav_db>2</nemszav_db>
+                                <osszesen>44</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="KDNP">
+                                <igen_db>0</igen_db>
+                                <nem_db>8</nem_db>
+                                <tart_db>0</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>8</osszesen>
+                        </szavazat>
+                        <szavazat frakcio="Mi Hazánk">
+                                <igen_db>5</igen_db>
+                                <nem_db>0</nem_db>
+                                <tart_db>1</tart_db>
+                                <igtav_db>0</igtav_db>
+                                <nemszav_db>0</nemszav_db>
+                                <osszesen>6</osszesen>
+                        </szavazat>
+                    <szavazat frakcio="Összesen (arányok a képviselők száma alapján)">
+                            <igen_db>9</igen_db>
+                            <nem_db>178</nem_db>
+                            <tart_db>5</tart_db>
+                            <igtav_db>5</igtav_db>
+                            <nemszav_db>2</nemszav_db>
+                            <osszesen>199</osszesen>
+                    </szavazat>
+            </kepvcsop_szerint>
+            <nev_szerint>
+                        <szavazat kepviselo="Dr. Árvay Nikolett (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bakos Csaba Attila (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Balajti István (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Balatincz Péter (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Balogh Mihály (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bárkányi Bence (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Barna-Szabó Tímea (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Benke József (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Berki Ákos (TISZA)" szavazat="Tart."/>
+                        <szavazat kepviselo="Bicskei László (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Bihari Zoltán (TISZA)" szavazat="Tart."/>
+                        <szavazat kepviselo="Dr. Bilisics Zita (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Boda Nikoletta (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bódis Kriszta (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Bódis Péter (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bodóczi István (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Bóka Zsolt (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Borics Mihály (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Borsós Gabriella (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Bögi Viktória (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Bugya László (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bujdosó Andrea Anna (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Czakó Czirbus Pál (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Czipa András (TISZA)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Csák László (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Császár Martin (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Csatári Ernő (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Cseh Tamás (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Csézy Erzsébet (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Csiszár Béla (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Csontos Bence (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Csőszi Attila (TISZA)" szavazat="Tart."/>
+                        <szavazat kepviselo="Dr. Dicső Viktória (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Diószegi Judit (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Farkas Csongor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Ferenczi Gábor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Forsthoffer Ágnes (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gajda Attila (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gajdos László (TISZA)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Gáspár Levente (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gombár Dávid (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Göröghné Bocskai Éva (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Gurzó Mária (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gyömbér Dávid (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gyöngyösi István (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gyuk Zsolt (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hajdu Márton (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hallerné Dr. Nagy Anikó (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Halmai Ferenc (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hantosi István (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hatala-Orosz Csaba (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Havasi Balázs (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hegedűs Zsolt Csaba (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hende Máté (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Horváth Nándor Zsolt (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Jakab Zsuzsanna (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Járosi Péter (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Jelencsik József (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Jójárt Erika (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Judák Zsolt (TISZA)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Juhász Áron (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Juhász Roland Csongor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kalázdi-Kerekes Kinga (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kapitány István (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kaprinyák Tibor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kapronczai Balázs (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kármán András (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Karsai-Juhász Katalin (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kátai-Németh Vilmos (TISZA)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Kincse Csongor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kiss János (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kiss Máté Zsolt (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Koncz Áron (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kovács Áron (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Kovács Gyula (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kovács Petra Judit (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kőszegi Krisztián (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kulcsár Krisztián (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="László Endre Márton (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Lontay László (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Lovkó Csaba (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Lőrincz Viktória (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Lukács Gábor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Magyar Péter (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Melléthei-Barna Márton (TISZA)" szavazat="Tart."/>
+                        <szavazat kepviselo="Dr. Miskolczi Orsolya (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Molnár János (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Molnár Zoltán (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Muhari Gergely (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Müller Anna (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nagy Ervin (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Nagy Márta (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Néher András (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Németh Csilla (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Orbán Anita (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Pásztor Anett (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Perticsné Kácsor Andrea (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Polgár György (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Porcher Áron (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Porpáczy Krisztina (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Pósfai Gábor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Radnai Márk (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Ráki Zsolt (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Rák Richárd (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Rápli Róbert (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Rost Andrea (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Rózsahegyi Áron (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Ruszin-Szendi Romulusz (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Ruzsa Diána (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Sárosi József (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Sasi-Nagy Edit (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Schummer Orsolya (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Simon Krisztián Márk (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Simon Zsuzsánna (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Sopov Ildikó Éva (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Sóti Anikó Zsuzsanna (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Strompová Viktória (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Stumpf Péter (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Szabó Alexandra (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szabó Tibor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szafkó Zoltán Péter (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szakács Péter Lajos (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Szijjártó Gábor (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szimon Renáta (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szűcs Dóra (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tanács Zoltán (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tárkányi Zsolt (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tarr Zoltán (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tompa Enikő (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tóthmajor Balázs (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tóth Norbert (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tóth Tamás (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Trentin Balázs (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Trompler Ildikó (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Ujvári Szilvia (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Varga Balázs (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Varga Lőrinc Mihály (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Velkey György László (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Veres Ádám (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Virágh Gabriella Mária (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Weigand István (TISZA)" szavazat="Nem"/>
+                        <szavazat kepviselo="Ágh Péter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Balla György (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Balla Mihály (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Bencsik János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Bóka János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Budai Gyula (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Czirbus Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Csibi Krisztina (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Csuzda Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="F. Kovács Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gulyás Gergely (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Gyopáros Alpár (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hankó Balázs (Fidesz)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Dr. Hegedűs Barbara (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Héjj Dávid (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Hidvéghi Balázs (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Horváth László (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kocsis Máté (Fidesz)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dr. Koncz Zsófia (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Kovács Sándor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Lázár János (Fidesz)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Molnárné Dr. Lezsák Anna (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nagy Bálint (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Németh Balázs Lajos (Fidesz)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Németh Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Orbán Balázs (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Panyi Miklós (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Papp Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Pócs János (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Radics Béla (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szalai Piroska (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szentkirályi Alexandra (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Szijjártó Péter (Fidesz)" szavazat="Nem szav."/>
+                        <szavazat kepviselo="Szűcs Gábor (Fidesz)" szavazat="Előre bejelentett hiányzó"/>
+                        <szavazat kepviselo="Dr. Takács Árpád (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Takács Péter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Tilki Attila (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Tuzson Bence (Fidesz)" szavazat="Nem szav."/>
+                        <szavazat kepviselo="Varga Gábor (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Vitályos Eszter (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Vitányi István József (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="V. Németh Zsolt (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Witzmann Mihály (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Zsigó Róbert (Fidesz)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Hargitai János (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Juhász Hajnalka (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Latorcai Csaba (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Máthé Zsuzsa (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Nacsa Lőrinc (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Rétvári Bence (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Seszták Miklós (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Simicskó István (KDNP)" szavazat="Nem"/>
+                        <szavazat kepviselo="Dr. Apáti István (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dócs Dávid (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Dúró Dóra (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Novák Előd (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Szabadi István (Mi Hazánk)" szavazat="Igen"/>
+                        <szavazat kepviselo="Toroczkai László (Mi Hazánk)" szavazat="Tart."/>
+            </nev_szerint>
+        </szavazas>
+</szavazas>

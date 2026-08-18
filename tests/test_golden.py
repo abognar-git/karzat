@@ -23,11 +23,20 @@ from karzat.fingerprint import digest, fingerprint_file
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
-# Synthetic fixtures — replace with trimmed real payloads (see tests/fixtures/README.md).
+# real_* = trimmed W-API responses captured 2026-08-18 (see tests/fixtures/README.md);
+# synthetic_kepviselok_latin2.xml stays only to exercise the ISO-8859-2 path the API does not use.
 GOLDEN = {
-    "synthetic_kepviselok_latin2.xml":   "2ca340cdfa39b941",
-    "synthetic_szavazas_detail.xml":     "9c69755b565ae156",
-    "synthetic_szavazasok_list.xml":     "2879fa61d8ff72c7",
+    "real_iromany_71.xml":                     "fb700e8dff587bac",
+    "real_iromanyok_head3.xml":                "ebe00be955b15b82",
+    "real_kepviselo_a011_trimmed.xml":         "4322a43dbccb5b8a",
+    "real_kepviselok_head5.xml":               "fe5d4f1f3b6cb092",
+    "real_szavazas_2026-05-09T10-45-47.xml":   "9bd69cb450e23a85",
+    "real_szavazas_2026-05-09T11-50-00.xml":   "f54b3847abf049a7",
+    "real_szavazas_2026-05-26T16-31-45.xml":   "c3916aa8b91162a2",
+    "real_szavazas_2026-06-15T17-20-04.xml":   "5216b4de1165d62c",
+    "real_szavazasok_2026-05_head3.xml":       "7e164703fc8d7645",
+    "real_ulesnap_43.xml":                     "41067c37c03be90c",
+    "synthetic_kepviselok_latin2.xml":         "2ca340cdfa39b941",
 }
 
 

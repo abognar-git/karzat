@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<iromany szam="T/71" izon="71" href="/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%223ea1454a-068a-4451-8195-bb3ddfab923b%22%7D">
+    <cim>
+        Az Egyesült Nemzetek Diplomáciai Konferenciája által, a Nemzetközi Büntetőbíróság Rómában, 1998. július 17-én elfogadott Statútumának, és a Nemzetközi Büntetőbíróság kiváltságairól és mentességeiről szóló, New Yorkban, 2002. szeptember 10-én elfogadott Megállapodás felmondásának visszavonásáról 
+    </cim>
+    <tulajdonsagok>
+        <tulajdonsag nev="Típus" ertek="törvényjavaslat nemzetközi szerződésről"/>
+        <tulajdonsag nev="Főtípus" ertek="törvényjavaslat"/>
+        <tulajdonsag nev="Jelleg" ertek="új"/>
+        <tulajdonsag nev="Benyújtva" ertek="2026.05.25."/>
+        <tulajdonsag nev="Átiktatott változat" ertek=""/>
+        <tulajdonsag nev="Régi irományszám" ertek=""/>
+        <tulajdonsag nev="Állapot" ertek="kihirdetve"/>
+        <tulajdonsag nev="Tárgyalási mód" ertek="kivételes tárgyalásban"/>
+        <tulajdonsag nev="Kihirdetés száma" ertek="XV"/>
+        <tulajdonsag nev="MK száma" ertek="60"/>
+        <tulajdonsag nev="Kihirdetés dátuma"
+                     ertek="2026.05.28."/>
+        <tulajdonsag nev="Megjegyzés" ertek=""/>
+        <tulajdonsag nev="Benyújtó(k)" ertek="kormány (igazságügyi miniszter)"
+                     />
+            <tulajdonsag nev="Irományszöveg" ertek="szöveges PDF"
+                         href="https://www.parlament.hu/irom43/00071/00071.pdf"/>
+    </tulajdonsagok>
+    <nem_onallo_ind_stat utolso_sorszam="4">
+                    <stat tipus="Kivételességi javaslat" ervenyes="1" osszesen="1"/>
+                    <stat tipus="Köztársasági elnöknek aláírásra megküldött törvény szövege" ervenyes="1" osszesen="1"/>
+                    <stat tipus="Összegző jelentés" ervenyes="1" osszesen="1"/>
+                    <stat tipus="Összegző módosító javaslat" ervenyes="1" osszesen="1"/>
+    </nem_onallo_ind_stat>
+        <esemenyek>
+                <esemeny>
+                    <datum>2026.05.26.</datum>
+                    <leiras>kivételességi javaslat elfogadva</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>3/43</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.26.</datum>
+                    <leiras>bizottság kijelölve részletes vita lefolytatására kivételes eljárásban</leiras>
+                    <kapcsolodik>Törvényalkotási Bizottság</kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.26.</datum>
+                    <leiras>részletes vita kivételes eljárásban megkezdve</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.26.</datum>
+                    <leiras>A részletes vitát kivételes eljárásban lefolytatta</leiras>
+                    <kapcsolodik>Törvényalkotási Bizottság</kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.26.</datum>
+                    <leiras>a bizottság előadója</leiras>
+                    <kapcsolodik>Törvényalkotási Bizottság</kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.26.</datum>
+                    <leiras>részletes vita kivételes eljárásban lezárva</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>ülésvezetés</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/25</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>ülésvezetés</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/19</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>ülésvezetés</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/21</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>ülésvezetés</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/23</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>Összevont vita</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>összevont vita megkezdve</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/17</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>előterjesztő nyitóbeszéde</leiras>
+                    <kapcsolodik>államtitkár</kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/18</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>Ismerteti a bizottság véleményét</leiras>
+                    <kapcsolodik>Törvényalkotási Bizottság</kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/20</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>vezérszónoki felszólalás</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/22</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>vezérszónoki felszólalás</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/24</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>vezérszónoki felszólalás</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/26</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>Előadói válasz</leiras>
+                    <kapcsolodik>államtitkár</kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/28</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>összevont vita lezárva</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/27</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>összegző módosító javaslat elfogadva</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/29</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>Határozathozatal összegző módosító javaslatról</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>Zárószavazás önálló indítványról</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>önálló indítvány elfogadva</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas>4/29</felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.27.</datum>
+                    <leiras>Országgyűlés elnöke aláírta és megküldte a köztársasági elnöknek</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.28.</datum>
+                    <leiras>Köztársasági elnök aláírta</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+                <esemeny>
+                    <datum>2026.05.28.</datum>
+                    <leiras>Magyar Közlönyben kihirdetve</leiras>
+                    <kapcsolodik></kapcsolodik>
+                    <megjegyzes></megjegyzes>
+                    <felszolalas></felszolalas>
+                </esemeny>
+        </esemenyek>
+        <bizottsagi_esemenyek/>
+        <szavazasok>
+                <szavazas>
+                    <datum>2026.05.26.15:04:20</datum>
+                    <ok>kivételességi javaslat elfogadva</ok>
+                    <igen_db>139</igen_db>
+                    <nem_db>48</nem_db>
+                    <tart_db>0</tart_db>
+                    <eredmeny>Elfogadva</eredmeny>
+                </szavazas>
+                <szavazas>
+                    <datum>2026.05.27.10:34:05</datum>
+                    <ok>összegző módosító javaslat elfogadva</ok>
+                    <igen_db>131</igen_db>
+                    <nem_db>2</nem_db>
+                    <tart_db>39</tart_db>
+                    <eredmeny>Elfogadva</eredmeny>
+                </szavazas>
+                <szavazas>
+                    <datum>2026.05.27.10:34:43</datum>
+                    <ok>önálló indítvány elfogadva</ok>
+                    <igen_db>133</igen_db>
+                    <nem_db>37</nem_db>
+                    <tart_db>5</tart_db>
+                    <eredmeny>Elfogadva</eredmeny>
+                </szavazas>
+        </szavazasok>
+        <targyalao_bizottsagok>
+                <bizottsag>
+                    <nev>Törvényalkotási Bizottság</nev>
+                    <jogcim>Kijelölt bizottság (részletes vita lefolytatása kivételes eljárás során)</jogcim>
+                    <allapot></allapot>
+                    <allapottipus></allapottipus>
+                    <jogszab>62. § (5) bekezdés</jogszab>
+                    <targyresz>
+                    </targyresz>
+                </bizottsag>
+        </targyalao_bizottsagok>
+</iromany>

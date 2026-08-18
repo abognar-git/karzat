@@ -1,0 +1,86 @@
+{
+ "derived_at": "2026-08-18T07:57:16+00:00",
+ "window": {
+  "from": "2026-05-09",
+  "to": "2026-08-11",
+  "list_files": 4
+ },
+ "votes": 259,
+ "decisions": 258,
+ "quorum_checks": 1,
+ "secret_ballots": 3,
+ "qualified_majority_votes": 65,
+ "by_mode": {
+  "Listás": 190,
+  "Listás a jelenlevők 2/3-ával": 47,
+  "Listás az összes képviselő 2/3-ával": 7,
+  "Listás az összes képviselő felével": 6,
+  "Listás a jelenlevők 4/5-ével": 5,
+  "Titkos az összes képviselő 2/3-ával": 2,
+  "Jelenlét megállapítás": 1,
+  "Titkos": 1
+ },
+ "by_result": {
+  "Elfogadva": 236,
+  "Elutasítva": 22,
+  "Határozatképes": 1
+ },
+ "by_month": {
+  "2026-05": 57,
+  "2026-06": 90,
+  "2026-07": 75,
+  "2026-08": 37
+ },
+ "motion_outcomes_top": {
+  "önálló indítvány elfogadva": 70,
+  "Országgyűlés az interpellációs választ elfogadta": 53,
+  "összegző módosító javaslat elfogadva": 20,
+  "önálló indítvány minősített többséget igénylő része elfogadva": 18,
+  "módosító javaslat fenntartása elutasítva": 15,
+  "önálló indítvány egyszerű többséget igénylő része elfogadva": 14,
+  "összegző módosító javaslat minősített többséget igénylő része elfogadva": 12,
+  "sürgősségi javaslat elfogadva": 10,
+  "összegző módosító javaslat egyszerű többséget igénylő része elfogadva": 8,
+  "módosító javaslat(ok) elfogadva": 6,
+  "határozati házszabályi rendelkezésektől való eltéréshez hozzájárulás elfogadva": 5,
+  "kivételességi javaslat elfogadva": 5
+ },
+ "motion_prefixes": {
+  "amendment": 104,
+  "I": 53,
+  "S": 38,
+  "T": 38,
+  "H": 19,
+  "B": 2
+ },
+ "kiveteles_votes": 5,
+ "surgos_votes": 10,
+ "interpellation_answers": 53,
+ "hazszabalytol_elteres_votes": 5,
+ "mps": {
+  "total": 199,
+  "by_faction": {
+   "TISZA": 141,
+   "Fidesz": 44,
+   "KDNP": 8,
+   "Mi Hazánk": 6
+  },
+  "by_mandate": {
+   "egyeni": 106,
+   "lista": 93
+  }
+ },
+ "sitting_days": {
+  "count": 23,
+  "first": "2026-05-09",
+  "last": "2026-08-11",
+  "by_session": {
+   "2026. nyári": 15,
+   "2026. tavaszi": 8
+  },
+  "by_kind": {
+   "Rendkívüli": 15,
+   "Rendes": 8
+  }
+ }
+}

@@ -1,9 +1,8 @@
 """Offline tests for the W-API client scaffolding.
 
-Nothing here touches the network. The XML fixtures in tests/fixtures/ are SYNTHETIC — shaped
-after the manual's section names (<szavazas idopont=...>, <tulajdonsagok>, <nev_szerint>),
-not after real payloads. Once a token exists, replace them with trimmed real responses from
-data/raw/ (see tests/fixtures/README.md); tests/test_golden.py pins how they are read.
+Nothing here touches the network. Fixtures under tests/fixtures/real_* are trimmed real W-API
+responses captured on 2026-08-18; the one synthetic_* file exercises the ISO-8859-2 path the
+real API does not use. tests/test_golden.py pins how every fixture is read.
 """
 
 import tempfile
@@ -15,7 +14,7 @@ from unittest import mock
 from karzat import api, xmlutil
 
 FIXTURES = Path(__file__).parent / "fixtures"
-SYNTHETIC_LIST = (FIXTURES / "synthetic_szavazasok_list.xml").read_bytes()
+REAL_LIST = (FIXTURES / "real_szavazasok_2026-05_head3.xml").read_bytes()
 SYNTHETIC_LATIN2 = (FIXTURES / "synthetic_kepviselok_latin2.xml").read_bytes()
 
 
@@ -66,14 +65,14 @@ class DatesAndSlugs(unittest.TestCase):
 
 class XmlConversion(unittest.TestCase):
     def test_to_dict_lists_and_attributes(self):
-        root = xmlutil.parse_xml(SYNTHETIC_LIST)
+        root = xmlutil.parse_xml(REAL_LIST)
         d = xmlutil.to_dict(root)
         votes = xmlutil.as_list(d["szavazas"])
-        self.assertEqual(len(votes), 2)
-        self.assertEqual(votes[0]["@idopont"], "2026.09.15.09:37:07")
-        self.assertEqual(votes[0]["tulajdonsagok"]["tipus"], "Zárószavazás")
-        self.assertEqual(votes[0]["inditvanyok"]["inditvany"]["@izon"], "123")
-        self.assertEqual(votes[0]["inditvanyok"]["inditvany"]["#text"], "T/1234 valami")
+        self.assertEqual(len(votes), 3)
+        self.assertRegex(votes[0]["@idopont"], r"^\d{4}\.\d{2}\.\d{2}\.\d{2}:\d{2}:\d{2}$")
+        props = xmlutil.as_list(votes[0]["tulajdonsagok"]["tulajdonsag"])
+        self.assertEqual(props[0]["@nev"], "Szavazási mód")           # attributes -> '@' keys, repeated tags -> lists
+        self.assertIn("inditvanyok", votes[0])
 
     def test_declared_encoding_and_latin2_parse(self):
         self.assertEqual(xmlutil.declared_encoding(SYNTHETIC_LATIN2), "ISO-8859-2")
@@ -97,7 +96,7 @@ class Caching(unittest.TestCase):
     def test_second_fetch_is_served_from_disk_and_names_are_readable(self):
         with tempfile.TemporaryDirectory() as tmp:
             client = api.WebApi(token="TOK", cache_dir=Path(tmp), min_interval=0)
-            with mock.patch.object(client.session, "get", return_value=_FakeResp(SYNTHETIC_LIST)) as g:
+            with mock.patch.object(client.session, "get", return_value=_FakeResp(REAL_LIST)) as g:
                 a = client.fetch("szavazasok", p_datum_tol="2026.09.01", p_datum_ig="2026.09.30")
                 b = client.fetch("szavazasok", p_datum_tol="2026.09.01", p_datum_ig="2026.09.30")
                 self.assertEqual(g.call_count, 1)

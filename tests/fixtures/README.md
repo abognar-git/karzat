@@ -2,13 +2,20 @@
 
 Payloads the tests and the golden fingerprints run against.
 
-- `synthetic_*.xml` — invented by hand from the manual's section names before any real
-  response was seen. They exercise the parser and the golden mechanism; **they do not
-  describe the real API.** Delete each one the day a real counterpart lands.
-- `real_<service>_<key>.xml` — trimmed copies of actual W-API responses from `data/raw/`
-  (e.g. `real_szavazas_2026-09-15T09-37-07.xml`). Trim to the smallest payload that still
-  shows every element the code reads; keep the XML declaration so the encoding path is
-  tested; never include a URL with the access token (payloads do not carry it, but check).
+- `real_<service>_<key>.xml` — real W-API responses captured on 2026-08-18 (cycle 43), trimmed
+  where the whole payload is not the point (`_head5`, `_head3`, `_trimmed`) and kept whole
+  where it is (the four `real_szavazas_*` roll calls, `real_ulesnap_43`, `real_iromany_71`).
+  Trimming was done with ElementTree, so element order and content are the API's; only the
+  XML declaration/serialisation is ours. Public parliamentary data; no token appears anywhere.
+- `synthetic_kepviselok_latin2.xml` — invented; the API is UTF-8, this file exists so the
+  ISO-8859-2 branch of the parser stays tested.
+
+What the real ones cover: `kepviselok` (5 MPs incl. list and constituency mandates),
+`kepviselo` (a011: seat, faction history, elections, motion stats), `szavazasok` (3 list
+entries), `szavazas` × 4 (2/3-of-present rejected mentelmi vote; secret Speaker election;
+quorum check with "Jelen, nem szav."; 16th Alaptörvény amendment, 2/3 of all, 135–50–6),
+`ulesnap` (23 sitting days, tavaszi + nyári), `iromany` (T/71: kivételes eljárás, kihirdetve
+as 2026. évi XV. törvény, MK 60), `iromanyok` (3 entries).
 
 Every file here must be registered in `tests/test_golden.py`; the test fails on an
 unregistered fixture as well as on a changed digest, so nothing is pinned by accident.

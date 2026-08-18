@@ -90,11 +90,30 @@ def config_seats() -> int:
     return int(m.group(1)) if m else 199
 
 
+FIRST_LIGHT = ROOT / "data" / "derived" / "first_light.json"
+
+
+def first_light() -> dict:
+    import json
+    return json.loads(FIRST_LIGHT.read_text(encoding="utf-8"))
+
+
+def t71() -> dict:
+    """The T/71 fixture, normalised — the README's worked example of speed of legislation."""
+    from karzat.normalise import parse_iromany
+    from karzat.xmlutil import parse_xml, to_dict
+    root = parse_xml((ROOT / "tests" / "fixtures" / "real_iromany_71.xml").read_bytes())
+    return parse_iromany({root.tag: to_dict(root)})
+
+
 def build() -> list[tuple[str, list]]:
     tc = test_counts()
     seats = config_seats()
     fs = faction_seats()
     sm = snapshot()["summary"]
+    fl = first_light()
+    bm = fl["by_mode"]
+    bill = t71()
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -132,6 +151,24 @@ def build() -> list[tuple[str, list]]:
         ("{:,.0f} of the {:,.0f} with a P4966 id", [sm["with_ogy_id"], sm["current_members"]]),
         ("{:,.0f} with a\nconstituency (P768", [sm["with_district"]]),
         ("and {:,.0f} with a Commons portrait", [sm["with_image"]]),
+
+        # First light — data/derived/first_light.json
+        ("the Országgyűlés recorded {:,.0f} votes over {:,.0f} sitting\ndays: {:,.0f} decisions and {:,.0f} quorum check, {:,.0f} of them secret ballots",
+         [fl["votes"], fl["sitting_days"]["count"], fl["decisions"], fl["quorum_checks"], fl["secret_ballots"]]),
+        ("{:,.0f} were plain\n\"Listás\" votes; {:,.0f} needed two-thirds of those present, {:,.0f} two-thirds of all 199, {:,.0f}\nmore than half of all 199, {:,.0f} four-fifths of those present — {:,.0f} qualified-majority\nvotes",
+         [bm.get("Listás", 0), bm.get("Listás a jelenlevők 2/3-ával", 0), bm.get("Listás az összes képviselő 2/3-ával", 0),
+          bm.get("Listás az összes képviselő felével", 0), bm.get("Listás a jelenlevők 4/5-ével", 0), fl["qualified_majority_votes"]]),
+        ("{:,.0f} votes ordered exceptional procedure", [fl["kiveteles_votes"]]),
+        ("{:,.0f} ordered urgent procedure, {:,.0f} approved a departure from the\nHouse rules, and {:,.0f} accepted an interpellation answer",
+         [fl["surgos_votes"], fl["hazszabalytol_elteres_votes"], fl["interpellation_answers"]]),
+        ("The chamber holds {:,.0f} members:\n{:,.0f} elected in single-member districts and {:,.0f} from the national list",
+         [fl["mps"]["total"], fl["mps"]["by_mandate"].get("egyeni", 0), fl["mps"]["by_mandate"].get("lista", 0)]),
+        # T/71 — from the fixture via the normaliser
+        ("voted through in exceptional procedure in {:,.0f} days", [bill["days_submission_to_final_vote"]]),
+        ("Magyar Közlöny {:,.0f} on 28 May: {:,.0f} days from\nsubmission to promulgation",
+         [int(bill["promulgation"]["mk_issue"]), bill["days_submission_to_promulgation"]]),
+        # window: day numbers gated; if the month words stop matching, the fragment fails and says so
+        ("Between {:,.0f} May and {:,.0f} August 2026", [int(fl["window"]["from"][8:10]), int(fl["window"]["to"][8:10])]),
     ]
 
 

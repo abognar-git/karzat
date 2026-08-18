@@ -253,9 +253,21 @@ def _norm(s: str | None) -> str:
     return unicodedata.normalize("NFC", (s or "")).casefold()
 
 
-# Payload vocabulary -> rule. Filled in once real <tulajdonsagok> values are seen (VERIFY).
-# Keys are compared after _norm(); keep them lower-case.
+# Payload vocabulary -> rule, compared as substrings after _norm() in insertion order, so the
+# qualified forms must precede the bare ones. The first block is the W-API's own "Szavazási mód"
+# vocabulary as observed on 2026-08-18 across 259 votes of cycle 43:
+#   Listás (190) · Listás a jelenlevők 2/3-ával (47) · Listás az összes képviselő 2/3-ával (7)
+#   Listás az összes képviselő felével (6) · Listás a jelenlevők 4/5-ével (5)
+#   Titkos az összes képviselő 2/3-ával (2) · Titkos (1) · Jelenlét megállapítás (1, not a decision)
+# "Listás" is the plain electronic vote (simple majority); "Titkos" a secret ballot (no roll call).
 PAYLOAD_RULES: dict[str, Rule] = {
+    "a jelenlevők 2/3-ával": Rule.KETHARMAD_JELENLEVO,
+    "az összes képviselő 2/3-ával": Rule.KETHARMAD_OSSZES,
+    "az összes képviselő felével": Rule.ABSZOLUT,          # "felével" = (more than) half of all MPs
+    "a jelenlevők 4/5-ével": Rule.NEGYOTOD_JELENLEVO,
+    "listás": Rule.EGYSZERU,
+    "titkos": Rule.EGYSZERU,
+    # older / prose forms kept for text sources
     "egyszerű többség": Rule.EGYSZERU,
     "abszolút többség": Rule.ABSZOLUT,
     "jelen lévő képviselők kétharmada": Rule.KETHARMAD_JELENLEVO,
@@ -263,7 +275,7 @@ PAYLOAD_RULES: dict[str, Rule] = {
     "országgyűlési képviselők kétharmada": Rule.KETHARMAD_OSSZES,
     "összes képviselő kétharmada": Rule.KETHARMAD_OSSZES,
     "jelen lévő képviselők négyötöde": Rule.NEGYOTOD_JELENLEVO,
-    "minősített többség": Rule.KETHARMAD_JELENLEVO,   # bare "minősített" on a bill = sarkalatos part (VERIFY)
+    "minősített többség": Rule.KETHARMAD_JELENLEVO,   # bare "minősített" on a bill = sarkalatos part
 }
 
 # Keyword heuristics over the vote subject / bill title, first match wins (order matters).
