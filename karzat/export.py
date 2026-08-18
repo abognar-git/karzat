@@ -136,6 +136,20 @@ def motions_export(mps: dict[str, dict], cycle: int) -> tuple[str, str]:
     return _json({"cycle": cycle, "motions": rows}), _csv(rows, MOTION_COLUMNS)
 
 
+def dissents_csv(events: list[dict[str, Any]], cycle: int) -> str:
+    """adatok/kulonvelemenyek.csv — one row per dissent (an MP's cast vote against their faction's plurality), newest first;
+    the complete record behind the Atom feeds."""
+    rows = []
+    for e in events:
+        v = e["vote"]
+        for d in e["dissents"]:
+            rows.append({"ts": v["ts"], "date": v["on_date"], "time": v.get("time"), "cycle": cycle, "p_azon": d.get("azon"), "name": d["name"],
+                         "faction": d["faction"], "position": d["position"], "faction_plurality": d["plurality"],
+                         "iromany": v.get("iromany"), "title": v.get("title"), "igen": v.get("igen"), "nem": v.get("nem"), "tartozkodott": v.get("tartozkodott"),
+                         "result": v.get("result")})
+    return _csv(rows, ["ts", "date", "time", "cycle", "p_azon", "name", "faction", "position", "faction_plurality", "iromany", "title", "igen", "nem", "tartozkodott", "result"])
+
+
 def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
     """The data dictionary: file → (column, meaning). Rendered on adatok/index.html."""
     return [
@@ -161,6 +175,12 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("align, against_faction", "with = a frakciója leadott szavazatainak többségével · against = ellene · üres = nem adott le szavazatot; a szavazás-oldal .csv-jében igaz/hamis"),
             ("sector, row, seat", "ülőhely a parlament.hu alaprajza szerint (csak a jelenlegi ciklusban)"),
             ("faction_tallies (a szavazás-oldal .json-jában)", "az API frakciósorai: igen, nem, tartozkodott, nem_szavazott (= nem szavazott + jelen, nem szavazott), igazoltan_tavol (= igazoltan távol + előre bejelentett hiányzó), osszesen"),
+        ]),
+        ("kulonvelemenyek.csv — minden különvélemény, egy sor egy képviselő egy szavazáson: a különvélemény-csatornák teljes tartalma, a függetlenek soraival együtt (őket a csatornák nem viszik)", [
+            ("ts, date, time, cycle", "a szavazás azonosítója és ideje"),
+            ("p_azon, name, faction", "a képviselő; a frakció, amit a névsor annál a szavazásnál ír"),
+            ("position, faction_plurality", "a leadott szavazat és a frakció leadott szavazatainak többsége — eltérnek (ez a különvélemény)"),
+            ("iromany, title, igen, nem, tartozkodott, result", "a szavazás első indítványa és összesítése"),
         ]),
         ("kepviselok.csv / kepviselok.json — a ciklus névsoraiban szereplő személyek", [
             ("p_azon, name, faction, faction_first", "azonosító, név, frakció az utolsó, illetve az első név szerinti szavazásán"),

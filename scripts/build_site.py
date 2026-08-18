@@ -45,6 +45,7 @@ from karzat.load import cycle_of_date  # noqa: E402
 from karzat.majority import PAYLOAD_RULES, RULES, Rule  # noqa: E402
 from karzat import export as ex  # noqa: E402
 from karzat import analytics as an  # noqa: E402
+from karzat import feeds as fd  # noqa: E402
 
 DERIVED = ROOT / "data" / "derived"
 SEATING = DERIVED / "seating.json"
@@ -989,8 +990,10 @@ JS_BOOT = """
 
 # -- shared fragments -------------------------------------------------------------------------
 
-def page_head(title: str, description: str, depth: int = 0) -> str:
+def page_head(title: str, description: str, depth: int = 0, feeds: list[tuple[str, str]] = ()) -> str:
+    """`feeds`: (href, title) pairs announced for feed-reader autodiscovery."""
     rel = "../" * depth
+    alt = "".join(f'\n<link rel="alternate" type="application/atom+xml" href="{esc(h)}" title="{esc(t)}">' for h, t in feeds)
     return f"""<!doctype html>
 <html lang="hu">
 <head>
@@ -998,7 +1001,7 @@ def page_head(title: str, description: str, depth: int = 0) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
-<link rel="stylesheet" href="{rel}assets/karzat.css">
+<link rel="stylesheet" href="{rel}assets/karzat.css">{alt}
 </head>
 <body>"""
 
@@ -1378,9 +1381,10 @@ def build_index(inp: dict, hero_ts: str) -> str:
     closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: mind a {hu_num(fl["votes"])} szavazás itt van.</span>'
                    f'<span class="en" lang="en">A closed term, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: all {hu_num(fl["votes"])} votes are here.</span></div>') if inp["closed"] else freshness_html(inp)
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
-                     f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"]) + topbar(inp, [], 0) + f"""
+                     f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"],
+                     feeds=[("feed/kulonvelemeny.xml", f'karzat · különvélemények · {inp["cycle"]}. ciklus'), ("feed/szavazasok.xml", f'karzat · szavazások · {inp["cycle"]}. ciklus')]) + topbar(inp, [], 0) + f"""
 <div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
+<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="feed/index.html">értesítések</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
 <p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(fl["sitting_days"]["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: ki hogyan szavazott, és mennyi kellett hozzá.</p>
 {closed_line}
 <section class="grid">
@@ -1528,6 +1532,9 @@ def mp_exports(inp: dict, azon: str) -> tuple[str, str]:
 
 def build_mp_page(inp: dict, azon: str) -> str:
     mp = inp["mps"][azon]
+    # an MP has a dissent channel when a faction plurality exists to differ from: not for a person who ended the
+    # cycle as an independent — unless they dissented from a faction earlier in the cycle
+    has_channel = mp.get("faction") != fd.INDEPENDENT or any(d["azon"] == azon and d["faction"] != fd.INDEPENDENT for e in dissent_events(inp) for d in e["dissents"])
     al = inp["alignment"]["per_mp"].get(azon) or {"votes": [], "counts": {}, "with": 0, "against": 0, "cast": 0, "in_roll": 0}
     colour = {f["id"]: f["colour"] for f in inp["facs"]}
     c = colour.get(mp.get("faction") or "", "#8a8a8a")
@@ -1604,7 +1611,8 @@ def build_mp_page(inp: dict, azon: str) -> str:
   </section>""" if not inp["closed"] else "")
     seat_label = f' · {esc(seat_text(mp))}' if not inp["closed"] else ""
     return page_head(f'{mp["name"]} ({mp.get("faction") or "—"}){" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat',
-                     f'{mp["name"]} — {mp.get("faction") or ""}, {mandate_text(mp)}: szavazási részvétel és a frakcióval való egyezés a {inp["cycle"]}. ciklusban.', 1 + inp["base_depth"]) + \
+                     f'{mp["name"]} — {mp.get("faction") or ""}, {mandate_text(mp)}: szavazási részvétel és a frakcióval való egyezés a {inp["cycle"]}. ciklusban.', 1 + inp["base_depth"],
+                     feeds=[(f"{azon}.xml", f'karzat · {mp["name"]} — különvéleményei · {inp["cycle"]}. ciklus')] if has_channel else []) + \
         topbar(inp, [("képviselők", "index.html"), (mp["name"], None)], 1) + f"""
 <div class="hero-h"><h1>{esc(mp["name"])}</h1><small class="label"><span class="pos"><i class="d" style="--c:{c}"></i>{esc(mp.get("faction") or "—")}</span> · {esc(mandate_text(mp))}{seat_label}</small></div>
 <p class="hero-meta">{links}</p>
@@ -1635,7 +1643,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
   </section>
 </section>
 <section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Szavazatok a frakció többségével szemben</span><span class="tag">{len(devs)}</span></h2>
+  <h2><span data-kz-text>Szavazatok a frakció többségével szemben</span><span class="tag">{len(devs)}{f' · <a href="{esc(azon)}.xml" type="application/atom+xml" title="a képviselő különvéleményei Atom-csatornaként">Atom</a>' if has_channel else " · függetlenként nincs frakciótöbbség — csatorna nincs"}</span></h2>
   <div class="tablewrap"><table data-page-size="25"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
 </section>
 <section class="panel deep">{CORNERS}
@@ -1761,7 +1769,7 @@ def build_cohesion_page(inp: dict, co: dict) -> str:
 <div class="hero-h"><h1>Kohézió</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · frakciók összetartása a név szerinti szavazásokon</small></div>
 <p class="lede">Két szokásos mérőszám, mindkettő csak számolás: a Rice-index az igen–nem egyöntetűség (|igen − nem| / (igen + nem)), az egyetértési index a három leadott opcióé ((legnagyobb − (összes − legnagyobb)/2) / összes; Hix–Noury–Roland). 1 = mindenki ugyanúgy szavazott.</p>
 <section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Frakciónként</span><span class="tag">leadott szavazatokkal súlyozott átlagok · <a href="frakciok.csv">CSV</a> · szavazásonként: <a href="szavazasonkent.csv">CSV</a></span></h2>
+  <h2><span data-kz-text>Frakciónként</span><span class="tag">leadott szavazatokkal súlyozott átlagok · <a href="frakciok.csv">CSV</a> · szavazásonként: <a href="szavazasonkent.csv">CSV</a> · különvélemények csatornaként: <a href="../feed/index.html">értesítések</a></span></h2>
   <div class="tablewrap"><table><thead><tr><th scope="col">Frakció</th><th scope="col" class="num">Szavazás</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Egyetértési index</th><th scope="col" class="num">Rice</th><th scope="col" class="num">Egyhangú</th><th scope="col" class="num">Nem egyhangú</th><th scope="col" class="num">Kisebbségi szavazatok</th></tr></thead><tbody>{rows}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">„Egyhangú”: minden leadott szavazat azonos; „kisebbségi szavazatok”: a frakció többségétől eltérő leadott szavazatok (döntetlennél nincs többség, így ellene sincs — a képviselőoldalak „frakció ellen” összege). Jelenlét-megállapítás nem számít.{" A „független” sor nem frakció — egymástól független képviselők összesítése, a száma nem összetartás." if "független" in pf else ""}</div>
 </section>
@@ -1947,6 +1955,7 @@ def build_data_page(inp: dict, out_dir: Path | None = None) -> str:
     """adatok/index.html — every export of the cycle (with sizes, when the files are already on disk) and the data dictionary."""
     files = [("szavazasok.csv", "szavazasok.json", "minden szavazás, egy sor egy szavazás"),
              ("nevsorok.csv", None, "minden név szerinti szavazat, egy sor egy képviselő egy szavazáson"),
+             ("kulonvelemenyek.csv", None, "minden különvélemény — a frakció többségével szemben leadott szavazatok; a különvélemény-csatornák teljes tartalma (a függetlenek soraival, akiket a csatornák nem visznek)"),
              ("kepviselok.csv", "kepviselok.json", "a ciklus névsoraiban szereplő személyek, összesítéssel"),
              ] + ([("inditvanyok.csv", "inditvanyok.json", "a jelenlegi ciklus irományai benyújtó szerint")] if not inp["closed"] else []) + [
              ("../iromany/iromanyok.csv", None, "minden iromány, amelyről név szerint szavaztak"),
@@ -1979,7 +1988,112 @@ def build_data_page(inp: dict, out_dir: Path | None = None) -> str:
 """ + page_tail(inp, 1)
 
 
-def prune(dir_: Path, keep: set[Path], suffixes: tuple[str, ...] = (".html", ".json", ".csv")) -> int:
+# -- feeds ------------------------------------------------------------------------------------
+
+def feed_vote(inp: dict, ts: str) -> dict:
+    """The few fields a feed entry prints about a vote — the same view the pages use."""
+    v = inp["by_ts"][ts]
+    mo = v["motions"][0] if v.get("motions") else {}
+    m = v.get("majority") or {}
+    return {"ts": ts, "slug": v["slug"], "on_date": v["on_date"], "time": v.get("time"), "iromany": mo.get("iromany"), "title": mo.get("title"),
+            "igen": v.get("igen"), "nem": v.get("nem"), "tartozkodott": v.get("tartozkodott"), "result": v.get("result_raw"),
+            "rule_label": rule_short(m.get("rule")) if m.get("rule") else None, "needed": m.get("needed"), "base": m.get("base"), "margin": m.get("margin"),
+            "kind": v.get("kind")}
+
+
+def dissent_events(inp: dict) -> list[dict]:
+    """Every roll call with at least one dissent, newest first: {vote, dissents}, dissenters ordered by faction then
+    name — from the same alignment record the MP pages, the cohesion page and the CSVs print (tie = no plurality,
+    quorum checks excluded)."""
+    if "_dissent_events" in inp:
+        return inp["_dissent_events"]
+    st = inp["store"]
+    order = {f["id"]: i for i, f in enumerate(inp["facs"])}
+    by_ts: dict[str, list[dict]] = {}
+    for key, rec in inp["alignment"]["per_mp"].items():
+        azon = key if key in st["members"] else None
+        name = st["members"][key]["name"] if azon else key
+        for v in rec["votes"]:
+            if v["align"] == "against":
+                by_ts.setdefault(v["ts"], []).append({"azon": azon, "name": name, "faction": v["faction"], "position": v["position"], "plurality": v["faction_plurality"]})
+    events = []
+    for ts in reversed(inp["order"]):
+        if ts in by_ts:
+            events.append({"vote": feed_vote(inp, ts), "dissents": sorted(by_ts[ts], key=lambda d: (order.get(d["faction"], 999), name_key(d["name"])))})
+    inp["_dissent_events"] = events
+    return events
+
+
+def channel_events(events: list[dict]) -> list[dict]:
+    """The events as the channels carry them: without the independents — "független" is not a faction, so a vote
+    against the other independents' plurality is not a dissent from a faction (the MP pages keep that number, labelled)."""
+    out = []
+    for e in events:
+        ds = [d for d in e["dissents"] if d["faction"] != fd.INDEPENDENT]
+        if ds:
+            out.append({"vote": e["vote"], "dissents": ds})
+    return out
+
+
+def feed_updated(inp: dict) -> str:
+    """The feed's <updated>: the sync stamp; failing that, the newest vote's time. Never the wall clock."""
+    newest = max(inp["order"]) if inp["order"] else "2026.01.01.00:00:00"
+    return fd.rfc3339_iso(inp["idx"].get("last_sync_at"), fd.rfc3339(newest))
+
+
+def build_feed_page(inp: dict, events: list[dict], fac_counts: dict[str, int], n_independent: int = 0) -> str:
+    """feed/index.html — Értesítések: what the channels are, how to use one, and every channel of the cycle."""
+    cyc = inp["cycle"]
+    closed = inp["closed"]
+    n_votes = len(events); n_diss = sum(len(e["dissents"]) for e in events)
+    fac_rows = "".join(f'<tr><td><span class="pos"><i class="d" style="--c:{colour}"></i>{esc(f)}</span></td><td class="num mono">{hu_num(n)}</td>'
+                       f'<td class="mono"><a href="frakcio-{fd.slug(f)}.xml">frakcio-{fd.slug(f)}.xml</a></td></tr>'
+                       for f, n, colour in ((f, fac_counts[f], next((x["colour"] for x in inp["facs"] if x["id"] == f), "#8a8a8a")) for f in fac_counts))
+    latest = "".join(f'<tr><td class="ts mono"><a href="../szavazas/{esc(e["vote"]["slug"])}.html">{esc(e["vote"]["on_date"])} {esc(e["vote"]["time"] or "")}</a></td>'
+                     f'<td>{esc(cut(" ".join(x for x in [e["vote"].get("iromany") or "", e["vote"].get("title") or ""] if x) or "Szavazás", 90))}</td>'
+                     f'<td class="num mono">{len(e["dissents"])}</td><td>{esc(", ".join(sorted({d["faction"] for d in e["dissents"]})))}</td></tr>'
+                     for e in events[:25])
+    label = f'{cyc}. ciklus · Atom-csatornák · ' + ("lezárt ciklus, új tétel nem érkezik" if closed else "a szinkronnal frissülnek")
+    lede = ("Ugyanazok a számok, mint az oldalakon, csatornaként: egy hírolvasó (RSS/Atom) a címre iratkozik fel, és minden frissítés után megkapja az újat. Nincs szerver, nincs fiók — a fájlok az oldal részei."
+            if not closed else
+            "Ugyanazok a számok, mint az oldalakon, csatornaként. Lezárt ciklus: a csatornák nem változnak — a ciklus utolsó napjainak tételeit adják, a teljes lista a CSV; böngészni valók, nem értesítésre.")
+    how = ('<div class="hero-meta prose" style="margin-top:8px">Használat: a csatorna címét (a jobb gombbal másolva) a hírolvasóba kell beilleszteni — Feedly, NetNewsWire, Thunderbird, Miniflux mind ismeri az Atomot. '
+           f'Egy csatornában az utolsó {fd.MIN_ENTRIES} tétel van, de legalább az utolsó {fd.RECENT_DAYS} szavazási nap mindegyike; a teljes lista a CSV. '
+           'A tételek ideje a szavazásé, a csatorna frissítési ideje a szinkroné.' + (" A címlap csatornái mindig a folyó ciklust adják; a lezárt ciklusoké a ciklus saját könyvtárában marad." if not closed else "") + '</div>')
+    indep = (f'<div class="hero-meta prose" style="margin-top:8px">A független képviselők nincsenek a csatornákban: nem frakció, így frakciótöbbség sincs, amitől eltérnének — a képviselőoldalak a többi függetlenhez mért számukat mutatják, feliratozva; a CSV-ben ott vannak ({hu_num(n_independent)} sor, „független” frakcióval).</div>'
+             if n_independent else "")
+    return page_head(f'Értesítések · {cyc}. ciklus · karzat', f'Atom-csatornák a {cyc}. ciklusról: különvélemények ciklusra, frakcióra és képviselőre, és minden szavazás' + (" — a szinkronnal frissülnek." if not closed else " — lezárt ciklus, teljes lista."), 1 + inp["base_depth"],
+                     feeds=[("kulonvelemeny.xml", f"karzat · különvélemények · {cyc}. ciklus"), ("szavazasok.xml", f"karzat · szavazások · {cyc}. ciklus")]) + \
+        topbar(inp, [("értesítések", None)], 1) + f"""
+<div class="hero-h"><h1>Értesítések</h1><small class="label" data-kz-text>{esc(label)}</small></div>
+<p class="lede">{lede}</p>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Különvélemények</span><span class="tag">{hu_num(n_votes)} szavazás · {hu_num(n_diss)} különvélemény · <a href="../adatok/kulonvelemenyek.csv">CSV, mind</a></span></h2>
+  <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Kör</th><th scope="col">Mi van benne</th><th scope="col">Fájl</th></tr></thead><tbody>
+    <tr><td>a ciklus</td><td>minden szavazás, ahol legalább egy képviselő a frakciója többségével szemben szavazott — szavazásonként egy tétel, a különvéleményekkel</td><td class="mono"><a href="kulonvelemeny.xml">kulonvelemeny.xml</a></td></tr>
+    <tr><td>egy frakció</td><td>ugyanez, csak az adott frakció tagjainak különvéleményeivel</td><td class="mono">frakcio-…xml (lent)</td></tr>
+    <tr><td>egy képviselő</td><td>a képviselő saját különvéleményei — a címe a képviselő oldalán is ott van</td><td class="mono"><a href="../kepviselo/index.html">kepviselo/&lt;azonosító&gt;.xml</a></td></tr>
+  </tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">{esc(fd.CAVEATS)}</div>{indep}{how}
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Frakciónként</span><span class="tag">különvélemények száma a ciklusban</span></h2>
+  <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Frakció</th><th scope="col" class="num">Különvélemény</th><th scope="col">Fájl</th></tr></thead><tbody>{fac_rows or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Minden szavazás</span><span class="tag">a legfrissebb elöl · <a href="../adatok/szavazasok.csv">CSV, mind</a></span></h2>
+  <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Kör</th><th scope="col">Mi van benne</th><th scope="col">Fájl</th></tr></thead><tbody>
+    <tr><td>a ciklus</td><td>a ciklus minden szavazása: tárgy, arányok, szükséges többség, eredmény; a titkos szavazás és a jelenlét megállapítása jelölve</td><td class="mono"><a href="szavazasok.xml">szavazasok.xml</a></td></tr>
+  </tbody></table></div>
+</section>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>A legutóbbi különvélemények</span><span class="tag">a csatorna első {min(25, n_votes)} tétele</span></h2>
+  <div class="tablewrap"><table><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col" class="num">Különvélemény</th><th scope="col">Frakciók</th></tr></thead><tbody>{latest or '<tr><td colspan="4">Ebben a ciklusban nem volt.</td></tr>'}</tbody></table></div>
+</section>
+""" + page_tail(inp, 1)
+
+
+def prune(dir_: Path, keep: set[Path], suffixes: tuple[str, ...] = (".html", ".json", ".csv", ".xml")) -> int:
     """Remove generated files in dir_ that this build did not write (a vote or MP that left the inputs must not
     linger as a stale, wrongly attributed page). Only the listed extensions, only that directory."""
     n = 0
@@ -2022,6 +2136,36 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
                 w(vd / f"{slug}.csv", c)
             n += 1
         prune(vd, w.written)
+        # feeds: the alert channel — dissents per cycle / faction / MP, and every vote; rewritten at each build
+        all_events = dissent_events(inp)                       # every dissent, independents included (the CSV)
+        events = channel_events(all_events)                    # what the channels carry (factions only)
+        updated = feed_updated(inp)
+        cdir = cycle_dir(cycle)
+        # hrefs: the deployed origin when known, else relative to the feed file (feed/ and kepviselo/ sit one level
+        # below the cycle root, so '../' climbs to the cycle root and one more '../' per cycle level to the site root)
+        root = SITE_URL + "/" if SITE_URL else "../" * (inp["base_depth"] + 1)
+        fdir = out_dir / "feed"; fdir.mkdir(parents=True, exist_ok=True)
+        fw = _Writer()
+        fw(fdir / "kulonvelemeny.xml", fd.dissent_feed(cycle, events, updated, root, cdir, "feed/kulonvelemeny.xml", "feed/index.html"))
+        fac_counts: dict[str, int] = {}
+        for e in events:
+            for d in e["dissents"]:
+                fac_counts[d["faction"]] = fac_counts.get(d["faction"], 0) + 1
+        fac_order = {f["id"]: i for i, f in enumerate(inp["facs"])}
+        fac_counts = dict(sorted(fac_counts.items(), key=lambda kv: (fac_order.get(kv[0], 999), kv[0])))
+        for f in fac_counts:
+            ev_f = [{"vote": e["vote"], "dissents": [d for d in e["dissents"] if d["faction"] == f]} for e in events if any(d["faction"] == f for d in e["dissents"])]
+            fw(fdir / f"frakcio-{fd.slug(f)}.xml", fd.dissent_feed(cycle, ev_f, updated, root, cdir, f"feed/frakcio-{fd.slug(f)}.xml", "feed/index.html", faction=f))
+        n_diss_by_ts = {e["vote"]["ts"]: len(e["dissents"]) for e in events}
+        all_votes = [dict(feed_vote(inp, ts), n_dissent=n_diss_by_ts.get(ts, 0), secret=inp["by_ts"][ts].get("secret")) for ts in reversed(inp["order"])]
+        fw(fdir / "szavazasok.xml", fd.votes_feed(cycle, all_votes, updated, root, cdir, "feed/szavazasok.xml"))
+        fw(fdir / "index.html", build_feed_page(inp, events, fac_counts, n_independent=sum(1 for e in all_events for d in e["dissents"] if d["faction"] == fd.INDEPENDENT)))
+        prune(fdir, fw.written)
+        by_mp_events: dict[str, list[dict]] = {}
+        for e in events:
+            for d in e["dissents"]:
+                if d["azon"]:
+                    by_mp_events.setdefault(d["azon"], []).append({"vote": e["vote"], "dissents": [d]})
         md = out_dir / "kepviselo"
         md.mkdir(parents=True, exist_ok=True)
         w(md / "index.html", build_mp_index(inp))
@@ -2030,10 +2174,13 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
             j, c = mp_exports(inp, azon)
             w(md / f"{azon}.json", j)
             w(md / f"{azon}.csv", c)
+            w(md / f"{azon}.xml", fd.dissent_feed(cycle, by_mp_events.get(azon, []), updated, root, cdir, f"kepviselo/{azon}.xml", f"kepviselo/{azon}.html",
+                                                  mp={"azon": azon, "name": inp["mps"][azon]["name"]}))
             k += 1
         prune(md, w.written)
         ad = out_dir / "adatok"
         ad.mkdir(parents=True, exist_ok=True)
+        (ad / "kulonvelemenyek.csv").write_text(ex.dissents_csv(all_events, cycle), encoding="utf-8")
         j, c = ex.directory_export(inp["idx"]["votes"], cycle)
         (ad / "szavazasok.json").write_text(j, encoding="utf-8"); (ad / "szavazasok.csv").write_text(c, encoding="utf-8")
         align_by_vote = {}
@@ -2150,6 +2297,9 @@ WHERE p.mp_azon = 'a011' AND p.position IN ('igen','nem','tartozkodott') AND m.m
 SELECT v.ckl, p.faction_id, SUM(p.position = m.majority_position) * 1.0 / COUNT(*) AS egyezes
 FROM vote_position p JOIN vote v ON v.ts = p.vote_ts JOIN vote_faction_majority m ON m.vote_ts = p.vote_ts AND m.faction_id = p.faction_id
 WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT NULL GROUP BY 1, 2 ORDER BY 1, 3;</pre></section>
+
+<section class="panel" id="csatornak">{CORNERS}<h2><span data-kz-text>Csatornák</span></h2>
+<div class="hero-meta prose">Atom-csatornák minden ciklusban (<span class="mono">feed/</span>): a különvélemények ciklusra (<span class="mono">kulonvelemeny.xml</span>), frakciónként (<span class="mono">frakcio-&lt;név&gt;.xml</span>) és képviselőnként (<span class="mono">kepviselo/&lt;azonosító&gt;.xml</span>), és minden szavazás (<span class="mono">szavazasok.xml</span>). Egy tétel egy szavazás; a benne álló különvélemények ugyanabból a számításból jönnek, mint a képviselőoldalak „frakció ellen” oszlopa (döntetlen = nincs többség; jelenlét-megállapítás nem számít). A tétel ideje a szavazásé, a csatorna frissítése a szinkroné — soha nem az építés pillanata, így ugyanabból a tárból ugyanaz a fájl épül. Egy csatornában az utolsó {fd.MAX_ENTRIES} tétel; a teljes lista <span class="mono">adatok/kulonvelemenyek.csv</span>. Értesítés az, hogy az oldal újraépül és a hírolvasó újraolvassa: nincs szerver, nincs fiók.</div></section>
 
 <section class="panel" id="nem">{CORNERS}<h2><span data-kz-text>Amit az oldal nem állít</span></h2>
 <div class="hero-meta prose">Semmit a szavazások okáról. Nem skáláz, nem súlyoz, nem jósol; egyetlen feltevését (a hiányzók) annak nevezi. A színek az oldal jelölései. A képviselői fényképeket nem ágyazza be, csak hivatkozza, mert a felhasználási feltételük nem tisztázott.</div></section>
@@ -2299,6 +2449,8 @@ def main(argv: list[str] | None = None) -> int:
         print(f"szemely/: {res['people']} career pages")
     if res.get("partial") and not args.index_only:
         print("partial build: szemely/, kereses/ and modszer/ left as they were (they span every cycle)")
+    if not SITE_URL and not args.index_only:
+        print("note: KARZAT_SITE_URL is not set — feed links are relative to the feed file and citations resolve in the browser; set it for the published build")
     return 0
 
 

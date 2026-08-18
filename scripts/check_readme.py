@@ -123,6 +123,8 @@ def build() -> list[tuple[str, list]]:
     m42 = _json.loads((ROOT / "data" / "derived" / "mps_ckl42.json").read_text(encoding="utf-8"))
     m43 = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))
     h42 = _json.loads((ROOT / "data" / "derived" / "hero_vote_ckl42.json").read_text(encoding="utf-8"))
+    from scripts.build_site import dissent_events, load_inputs   # the feeds' numbers come from the builder's own alignment
+    ev43 = dissent_events(load_inputs())
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -192,6 +194,8 @@ def build() -> list[tuple[str, list]]:
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
         ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across two cycles and {:,.0f} roll calls, not {:,.0f}", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"]]),
+        # feeds — the same alignment record the MP pages print
+        ("Cycle 43: {:,.0f} roll calls with a dissent, {:,.0f} dissents in all", [len(ev43), sum(len(e["dissents"]) for e in ev43)]),
         # motions on the MP pages — data/derived/mps.json + first_light.json (bills listed)
         ("(the current cycle's {:,.0f} irományok, submitters as \"Név (Frakció)\") is resolved to people with the same resolver and listed under each current-cycle MP: {:,.0f} submissions, and for every one of the {:,.0f} people",
          [dbs["bills"], sum(len(m["motions"]) for m in m43["mps"].values()), m43["count"]]),

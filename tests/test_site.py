@@ -48,7 +48,8 @@ class Build(unittest.TestCase):
         # own generated files under site/assets/ (relative links, no CDN, no fonts fetched)
         for m in re.finditer(r'(?:src|href)="(https?://[^"]+)"', self.page):
             self.assertTrue(m.group(1).startswith("https://www.parlament.hu/"), m.group(1))
-        self.assertEqual(re.findall(r'<link [^>]*href="([^"]+)"', self.page), ["assets/karzat.css"])
+        self.assertEqual(re.findall(r'<link rel="stylesheet" [^>]*href="([^"]+)"', self.page), ["assets/karzat.css"])
+        self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.page), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml"])   # feed autodiscovery, own files
         self.assertEqual(re.findall(r'<script src="([^"]+)"', self.page), ["assets/karzat.js"])
         self.assertNotIn("@import", self.page)
         self.assertNotIn("url(http", build_assets()["karzat.css"])

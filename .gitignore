@@ -38,6 +38,7 @@ site/szoros/
 site/szamok/
 site/modszer/
 site/kereses/
+site/feed/
 
 # editor/session config
 .claude/
