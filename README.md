@@ -70,12 +70,13 @@ Konzol's algorithm stays as the fallback.
 - [x] Draft schema (`schema.sql`) and faction/majority config (`config/factions.yml`) — both marked VERIFY throughout
 - [x] Majority-rule module (`karzat/majority.py`): six rules with citations, explicit present/seats bases, classifier with provenance; 23 tests
 - [x] Wikidata identity spine (`scripts/pull_wikidata.py` → `reference/wikidata/members_ckl43.json`): 199 members, four groups, and the P4966 ↔ `p_azon` crosswalk for 197 of them; to verify against the API
-- [x] Freshness contract (`karzat/freshness.py` + `python3 -m karzat freshness`): status and a bilingual sentence from sitting days, newest vote, last sync; 16 tests
+- [x] Freshness contract (`karzat/freshness.py` + `python3 -m karzat freshness`): status and a bilingual sentence from sitting days, newest vote, last sync; 17 tests
 - [x] Harness: golden fingerprints of every fixture (`tests/test_golden.py`, `python3 -m karzat fingerprint`) and the README gate (`scripts/check_readme.py`, run by the suite) — the numbers in this file are recomputed, not typed
 - [x] Access token received 18 August 2026 (personal; `.env`, git-ignored)
 - [x] First live calls: MP list, four months of vote lists, five vote details, sitting days, one MP, the bill list, one bill — read, fixtured (`tests/fixtures/real_*`), normalised (`karzat/normalise.py`) and gated
 - [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
+- [x] **The console look** — restyled in Konzol's visual language (dark ground, dot grid, corner-bracketed panels, mono labels, terminal footer, boot sequence); shared generated `site/assets/karzat.css` / `karzat.js`, checked like the index
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
 - [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v2 built from scratch from the cache in about twelve seconds for two cycles — 2,858 votes, 563,216 roll-call positions with 0 unresolved names, 395 faction-history rows, 389 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
 - [x] **Per-vote pages**: `site/szavazas/<slug>.html` for all 259 votes — the reconstructed chamber for that vote, the verdict card, faction bars, and a sortable, filterable roll call with every MP's seat; prev/next; the directory links to them. Generated from the committed `data/derived/votes_positions.json` (git-ignored output, 0.6 s for all 259)
@@ -85,7 +86,7 @@ Konzol's algorithm stays as the fallback.
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 124 tests
+python3 -m unittest discover -s tests -t .      # offline; 127 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -171,9 +172,23 @@ Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one grou
 
 ## The first page
 
-`site/index.html` is one self-contained file (no CDN, no fonts fetched, one external
-link type: parlament.hu bill pages), Hungarian-first with the freshness sentence in both
-languages, light and dark. Top: the freshness contract's
+`site/index.html` plus two generated files under `site/assets/` (`karzat.css`,
+`karzat.js`; no CDN, no fonts fetched, one external link type: parlament.hu bill pages),
+Hungarian-first with the freshness sentence in both languages. The look is Konzol's,
+deliberately — the console I studied before starting: a near-black ground with a faint
+24 px dot grid, zinc-bordered panels with 16 px corner brackets, tiny upper-case
+monospace labels, big light-weight numbers, a 48 px top bar (brand square, breadcrumb,
+cycle, and the sync time — never a "live" pulse, because nothing here is live), and a
+footer that is a terminal: a boot log whose lines are real values from the inputs
+(counts, window, disagreements, sync time) followed by the source-and-method notes.
+The boot choreography — panels settling in, mono labels scrambling into place, numbers
+counting up to exactly what is printed, the log typing itself — is vanilla JS on
+`data-kz-*` attributes; the whole sequence is skipped under `prefers-reduced-motion` and
+in a hidden tab, and without JS the pages are complete, the vote directory included (its
+259 rows are rendered at build time; the script only filters). Dark only, like the
+original, with the label greys lifted above the reference's zinc-500 so 9–11 px text
+clears 4.5:1 on the black. The freshness sentence prints the sync as a Budapest
+timestamp, not "15 perce": a static page is read later than it is built. Top: the freshness contract's
 sentence. Hero: T/51, the 16th
 amendment of the Alaptörvény, 15 June 2026 — 199 seats drawn by faction and by the
 recorded positions (six occur in cycle 43; the seventh, excused absence, is drawn only where
@@ -350,7 +365,7 @@ this section will say what the numbers cannot support.
 ```
 karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
 scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py, derive_mps.py — cache → data/derived · build_site.py — data/derived → site/
-site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · szavazas/ — one page per vote · kepviselo/ — one page per MP + index (both generated, git-ignored)
+site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · assets/karzat.css, karzat.js — the shared look and the boot sequence, generated and checked the same way · szavazas/ — one page per vote · kepviselo/ — one page per MP + index (both generated, git-ignored)
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v1 after the first real payloads — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels

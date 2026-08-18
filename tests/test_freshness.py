@@ -8,7 +8,7 @@ sat on 22 and 23 July, sync last ran on 22 July, and the page is rendered on 18 
 import json
 import tempfile
 import unittest
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from karzat.freshness import (
@@ -66,6 +66,19 @@ class Sentences(unittest.TestCase):
         )
         self.assertEqual(fr.status, "stale")
         self.assertIn("Synced 5 days ago. The sync has not run on schedule.", fr.sentence_en)
+
+    def test_absolute_sync_stamp_for_static_pages(self):
+        # a static page read a week later must not say "15 perce": the stamp is a Budapest timestamp
+        fr = assess(sitting_days=[date(2026, 8, 11)], newest_vote_at=V(2026, 8, 11, 14, 13),
+                    last_sync_at=datetime(2026, 8, 18, 8, 49, tzinfo=timezone.utc), now=NOW + timedelta(hours=2), absolute_sync=True)
+        self.assertEqual(fr.status, "current")
+        self.assertIn("Frissítve: 2026. augusztus 18. 10:49 (budapesti idő).", fr.sentence_hu)
+        self.assertIn("Synced 18 August 2026 10:49 Budapest time.", fr.sentence_en)
+        self.assertNotIn("perce", fr.sentence_hu)
+        # the age wording is unchanged when the flag is off
+        fr2 = assess(sitting_days=[date(2026, 8, 11)], newest_vote_at=V(2026, 8, 11, 14, 13),
+                     last_sync_at=NOW - timedelta(minutes=15), now=NOW)
+        self.assertIn("Frissítve 15 perce.", fr2.sentence_hu)
 
     def test_future_sitting_days_are_announced_not_missed(self):
         fr = assess(

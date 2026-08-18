@@ -8,9 +8,14 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import HERO_TS, SITE, build, build_mp_index, build_mp_page, build_vote_page, factions, hemicycle_layout, load_inputs, vote_view
+from scripts.build_site import HERO_TS, SITE, build, build_assets, build_mp_index, build_mp_page, build_vote_page, factions, hemicycle_layout, load_inputs, vote_view
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def visible_text(page: str) -> str:
+    """What a reader sees: markup and attributes stripped (aria-live is not the word 'live')."""
+    return re.sub(r"<[^>]+>", " ", page).casefold()
 
 
 class Build(unittest.TestCase):
@@ -24,20 +29,43 @@ class Build(unittest.TestCase):
                          "site/index.html is stale — rebuild with python3 -m scripts.build_site")
 
     def test_page_is_self_contained(self):
-        # every external reference is a parlament.hu link on a motion; no scripts, styles or fonts fetched
+        # every external reference is a parlament.hu link on a motion; the only stylesheet and script are our
+        # own generated files under site/assets/ (relative links, no CDN, no fonts fetched)
         for m in re.finditer(r'(?:src|href)="(https?://[^"]+)"', self.page):
             self.assertTrue(m.group(1).startswith("https://www.parlament.hu/"), m.group(1))
-        self.assertNotIn("<link ", self.page)
+        self.assertEqual(re.findall(r'<link [^>]*href="([^"]+)"', self.page), ["assets/karzat.css"])
+        self.assertEqual(re.findall(r'<script src="([^"]+)"', self.page), ["assets/karzat.js"])
         self.assertNotIn("@import", self.page)
+        self.assertNotIn("url(http", build_assets()["karzat.css"])
+
+    def test_committed_assets_match_a_fresh_build(self):
+        for name, body in build_assets().items():
+            f = ROOT / "site" / "assets" / name
+            self.assertTrue(f.exists(), f"{f} missing — run python3 -m scripts.build_site")
+            self.assertEqual(f.read_text(encoding="utf-8"), body, f"{f} is stale — rebuild")
+
+    def test_boot_sequence_is_honest_and_optional(self):
+        js = build_assets()["karzat.js"]
+        self.assertIn("prefers-reduced-motion", js)                  # the whole boot choreography is skipped for reduced motion
+        self.assertTrue(js.lstrip().startswith("(function(){"))
+        # the terminal log is real values from the inputs (256 roll calls, not 259: three secret ballots), and no page claims to be live
+        self.assertIn("kész — 259 szavazás-oldal", self.page)
+        self.assertIn("259 részlet, 256 név szerinti lista", self.page)
+        self.assertNotIn("SYSTEM_READY", self.page)
+        self.assertIn("Frissítve: 2026. augusztus 18. 10:49 (budapesti idő).", self.page)   # absolute, not a frozen "15 perce"
+        for word in ("live", "élő", "real-time"):
+            self.assertNotIn(word, visible_text(self.page))
+        # the footer is a landmark of its own, outside <main>
+        self.assertLess(self.page.index("</main>"), self.page.index("<footer"))
 
     def test_hero_and_directory_are_present(self):
         self.assertEqual(self.page.count('<g class="seat"'), 199)
         self.assertIn("különbség +2", self.page)              # T/51: 135 igen, 133 needed
         self.assertIn("133 a 199-ból", self.page)
-        self.assertIn("__KARZAT_VOTES__", self.page)
+        self.assertEqual(self.page.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
         self.assertIn('lang="hu"', self.page)
         for word in ("live", "élő", "real-time"):
-            self.assertNotIn(word, self.page.split("<footer>")[0].casefold())   # freshness contract holds on the page
+            self.assertNotIn(word, visible_text(self.page))               # freshness contract holds on the page
 
     def test_freshness_sentence_is_the_contract_sentence(self):
         m = re.search(r'<span class="hu">(.*?)</span>', self.page)
@@ -67,7 +95,8 @@ class VotePages(unittest.TestCase):
         self.assertIn('href="2026-06-15T17-19-04.html"', page)      # previous vote
         self.assertIn('href="2026-06-15T17-21-24.html"', page)      # next vote
         self.assertIn("3. szektor", page)                            # seats from the reconstructed plan
-        self.assertIn('th class="sortable"', page)
+        self.assertIn('class="sortable"', page)
+        self.assertIn('data-posrank=', page)                                 # sort key kept apart from the filter attribute
 
     def test_secret_ballot_page_has_no_roll_call(self):
         page = build_vote_page(self.inp, "2026.05.09.11:50:00")

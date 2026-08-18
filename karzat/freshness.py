@@ -163,8 +163,12 @@ class Freshness:
 
 def assess(*, sitting_days: Iterable[date] | None, newest_vote_at: datetime | None,
            last_sync_at: datetime | None, now: datetime,
-           stale_after: timedelta = STALE_AFTER_DEFAULT) -> Freshness:
-    """Compute the freshness verdict. Pure; safe to call at build time and in tests."""
+           stale_after: timedelta = STALE_AFTER_DEFAULT, absolute_sync: bool = False) -> Freshness:
+    """Compute the freshness verdict. Pure; safe to call at build time and in tests.
+
+    absolute_sync=True prints the sync as a Budapest timestamp instead of an age ("15 perce"):
+    the age is right on a page rebuilt at every sync and wrong on a static page read later.
+    """
     today = now.date()
     days = sorted(set(sitting_days)) if sitting_days is not None else None
     occurred = [d for d in days if d <= today] if days is not None else None
@@ -192,15 +196,16 @@ def assess(*, sitting_days: Iterable[date] | None, newest_vote_at: datetime | No
     if status == "behind" and sync_stale:
         status = "behind"     # behind dominates; the sentence still mentions the stale sync
 
-    en = _sentence_en(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale)
-    hu = _sentence_hu(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale)
+    stamp = last_sync_at.astimezone(BUDAPEST) if (absolute_sync and last_sync_at) else None
+    en = _sentence_en(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale, stamp)
+    hu = _sentence_hu(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale, stamp)
     for w in FORBIDDEN_WORDS:
         assert w not in en.casefold() and w not in hu.casefold(), f"forbidden word in sentence: {w}"
     return Freshness(status, newest_vote_at, newest_day, latest_sitting, missed, scheduled,
                      last_sync_at, sync_age, sync_stale, en, hu, now)
 
 
-def _sentence_en(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale) -> str:
+def _sentence_en(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale, stamp=None) -> str:
     parts: list[str] = []
     if status == "empty":
         parts.append("No votes are held yet.")
@@ -220,12 +225,14 @@ def _sentence_en(status, newest_day, missed, scheduled, latest_sitting, sync_age
             parts.append(f"Next sitting day announced: {fmt_date_en(scheduled[0])}.")
     if sync_age is None:
         parts.append("The sync has never completed.")
+    elif stamp is not None:
+        parts.append(f"Synced {fmt_date_en(stamp.date())} {stamp:%H:%M} Budapest time." + (" The sync has not run on schedule." if sync_stale else ""))
     else:
         parts.append(f"Synced {_age_en(sync_age)}." + (" The sync has not run on schedule." if sync_stale else ""))
     return " ".join(parts)
 
 
-def _sentence_hu(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale) -> str:
+def _sentence_hu(status, newest_day, missed, scheduled, latest_sitting, sync_age, sync_stale, stamp=None) -> str:
     parts: list[str] = []
     if status == "empty":
         parts.append("Még nincs betöltött szavazás.")
@@ -245,6 +252,8 @@ def _sentence_hu(status, newest_day, missed, scheduled, latest_sitting, sync_age
             parts.append(f"Következő bejelentett ülésnap: {fmt_date_hu(scheduled[0])}")
     if sync_age is None:
         parts.append("A szinkronizálás még sosem futott le.")
+    elif stamp is not None:
+        parts.append(f"Frissítve: {fmt_date_hu(stamp.date())} {stamp:%H:%M} (budapesti idő)." + (" A frissítés nem futott le a menetrend szerint." if sync_stale else ""))
     else:
         parts.append(f"Frissítve {_age_hu(sync_age)}." + (" A frissítés nem futott le a menetrend szerint." if sync_stale else ""))
     return " ".join(parts)
