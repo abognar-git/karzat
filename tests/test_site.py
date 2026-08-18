@@ -8,7 +8,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import SITE, build, factions, hemicycle_layout
+from scripts.build_site import HERO_TS, SITE, build, build_vote_page, factions, hemicycle_layout, load_inputs, vote_view
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -43,6 +43,48 @@ class Build(unittest.TestCase):
         m = re.search(r'<span class="hu">(.*?)</span>', self.page)
         self.assertTrue(m)
         self.assertRegex(m.group(1), r"^Szavazások \d{4}\. \w+ \d+-ig\.")
+
+
+class VotePages(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_every_vote_builds_with_a_unique_slug(self):
+        slugs = [self.inp["by_ts"][ts]["slug"] for ts in self.inp["order"]]
+        self.assertEqual(len(slugs), len(set(slugs)))
+        self.assertEqual(len(slugs), 259)
+        for ts in self.inp["order"][:5] + self.inp["order"][-5:]:
+            page = build_vote_page(self.inp, ts)
+            self.assertIn('lang="hu"', page)
+            self.assertIn('class="pager"', page)
+
+    def test_hero_page_has_full_roll_call_and_neighbours(self):
+        page = build_vote_page(self.inp, HERO_TS)
+        self.assertEqual(page.count('<g class="seat"'), 199)
+        self.assertEqual(page.count("<tr data-f="), 199)
+        self.assertIn("különbség +2", page)
+        self.assertIn('href="2026-06-15T17-19-04.html"', page)      # previous vote
+        self.assertIn('href="2026-06-15T17-21-24.html"', page)      # next vote
+        self.assertIn("3. szektor", page)                            # seats from the reconstructed plan
+        self.assertIn('th class="sortable"', page)
+
+    def test_secret_ballot_page_has_no_roll_call(self):
+        page = build_vote_page(self.inp, "2026.05.09.11:50:00")
+        self.assertNotIn('id="roll"', page)
+        self.assertIn("Titkos szavazás", page)
+        self.assertEqual(page.count('<g class="seat"'), 0)
+
+    def test_quorum_page_explains_itself(self):
+        page = build_vote_page(self.inp, "2026.05.09.10:45:47")
+        self.assertIn("Jelenlét megállapítása — nem döntés", page)
+        self.assertEqual(page.count("<tr data-f="), 199)
+
+    def test_view_model_expands_positions_from_the_store(self):
+        v = vote_view(self.inp, HERO_TS)
+        self.assertEqual(len(v["positions"]), 199)
+        self.assertEqual(sum(1 for p in v["positions"] if p["position"] == "igen"), 135)
+        self.assertTrue(all(p["mp_azon"] for p in v["positions"]))    # every name resolved (aliases included)
 
 
 class Helpers(unittest.TestCase):

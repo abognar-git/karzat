@@ -178,6 +178,32 @@ def main(argv: list[str] | None = None) -> int:
     print(f"written {DERIVED / 'votes_index.json'}: {len(index_rows)} votes, {details_cached} with details, "
           f"{len(idx['disagreements'])} rule/source disagreements")
 
+    # -- votes_positions.json: every roll call, compact -----------------------------------
+    # positions: {ts: [[azon_or_name, faction_index, code], ...]}; codes: i/n/t/j/s/h
+    CODES = {"igen": "i", "nem": "n", "tartozkodott": "t", "jelen_nem_szavazott": "j", "nem_szavazott": "s", "bejelentett_hianyzo": "h"}
+    factions_list: list[str] = []
+    members: dict[str, dict] = {}
+    positions: dict[str, list] = {}
+    for v in votes:
+        detail_path = RAW / "szavazas" / f"{ts_to_slug(v['ts'])}.xml"
+        if not detail_path.exists():
+            continue
+        d = parse_szavazas(load(detail_path), resolver=resolver)
+        rows = []
+        for pnt in d["positions"]:
+            f = pnt["faction"] or ""
+            if f not in factions_list:
+                factions_list.append(f)
+            key = pnt.get("mp_azon") or pnt["name"]
+            if pnt.get("mp_azon"):
+                members.setdefault(pnt["mp_azon"], {"name": pnt["name"], "faction": f})
+            rows.append([key, factions_list.index(f), CODES.get(pnt["position"], "?")])
+        positions[v["ts"]] = rows
+    (DERIVED / "votes_positions.json").write_text(json.dumps(
+        {"derived_at": out["derived_at"], "codes": {v: k for k, v in CODES.items()}, "factions": factions_list,
+         "members": members, "positions": positions}, ensure_ascii=False, separators=(",", ":"), sort_keys=True) + "\n", encoding="utf-8")
+    print(f"written {DERIVED / 'votes_positions.json'}: {len(positions)} roll calls, {len(members)} members")
+
     # -- hero_vote.json -----------------------------------------------------------------
     hero_path = RAW / "szavazas" / f"{ts_to_slug(args.hero)}.xml"
     if hero_path.exists():

@@ -78,12 +78,13 @@ Konzol's algorithm stays as the fallback.
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
 - [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v1 built from scratch from the cache in about a second — 259 votes, 50,906 roll-call positions with 0 unresolved names, 374 faction-history rows, 369 mandates across cycles, 507 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
-- [ ] Per-vote pages; cycle 42 for comparison
+- [x] **Per-vote pages**: `site/szavazas/<slug>.html` for all 259 votes — the reconstructed chamber for that vote, the verdict card, faction bars, and a sortable, filterable roll call with every MP's seat; prev/next; the directory links to them. Generated from the committed `data/derived/votes_positions.json` (git-ignored output, 0.6 s for all 259)
+- [ ] Cycle 42 for comparison; MP pages
 
 ## Run it
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 111 tests
+python3 -m unittest discover -s tests -t .      # offline; 116 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -98,7 +99,7 @@ python3 -m scripts.derive_first_light            # cache → data/derived/{first
 python3 -m karzat load --since 2026-05-01        # cache → data/karzat.sqlite (rebuilt from scratch, git-ignored)
 python3 -m karzat stats --json                   # counts + sanity queries; writes data/derived/db_summary.json
 python3 -m scripts.derive_seating                # kepviselo records → data/derived/seating.json (the chamber)
-python3 -m scripts.build_site                    # data/derived + config → site/index.html (--check to verify)
+python3 -m scripts.build_site                    # data/derived + config → site/index.html + site/szavazas/*.html (--check verifies the index)
 python3 -m http.server 4174 --directory site     # then open http://localhost:4174/
 ```
 
@@ -180,10 +181,17 @@ base, tally, margin and result, filterable by rule and result and searchable by 
 The seats are the chamber's own: every MP at their sector / row / seat from the API,
 seen from the Speaker's platform, opposition left and government right, ministers on the
 front bench; what is estimated (sector widths, row spacing, the direction of seat
-numbers) the caption says.
+numbers) the caption says. Every vote in the directory has its own page of the same
+shape — chamber, verdict, faction bars — plus the full roll call as a table you can sort
+and filter by faction and position, each MP with their seat, and links to the previous
+and next vote. Secret ballots say plainly that there is no roll call; the quorum check
+says it is not a decision.
 
 Built by `scripts/build_site.py` from committed inputs only, with no clock read, so a
-clean checkout reproduces it byte for byte; `tests/test_site.py` fails if it does not.
+clean checkout reproduces the index byte for byte (`--check`, `tests/test_site.py`) and
+regenerates the 259 vote pages from `data/derived/votes_positions.json` — a compact store
+of every roll call (p_azon, faction, position) that is committed so the pages never
+depend on the raw cache.
 
 ## The database
 
@@ -312,7 +320,7 @@ this section will say what the numbers cannot support.
 ```
 karzat/            api.py (W-API client, cache) · xmlutil.py · cli.py · normalise.py (payload → records) · load.py (cache → SQLite) · majority.py (rules, thresholds, classifier) · seating.py (the chamber from <ulohely>) · freshness.py (what the site may say about currency) · fingerprint.py · wikidata.py
 scripts/           check_readme.py — the README gate ("Generated, not typed") · pull_wikidata.py — the identity-spine snapshot · derive_first_light.py, derive_seating.py — cache → data/derived · build_site.py — data/derived → site/index.html
-site/              index.html — the first page, generated, guarded by --check and tests/test_site.py
+site/              index.html — the first page, generated, guarded by --check and tests/test_site.py · szavazas/ — one page per vote, generated, git-ignored
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v1 after the first real payloads — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels

@@ -24,3 +24,6 @@ venv/
 
 # generated run state (rebuilt by sync/freshness commands)
 data/*.json
+
+# generated per-vote pages (rebuilt by scripts/build_site.py from committed data/derived inputs)
+site/szavazas/
