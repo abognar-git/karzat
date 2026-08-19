@@ -407,3 +407,71 @@ class Spokespersons(unittest.TestCase):
             self.assertIn("nemzetiségi szószóló", it["s"])
             self.assertTrue((SITE_DIR / it["u"]).exists(), it["u"])
 
+
+class MinisterialBench(unittest.TestCase):
+    """A minister need not be an MP. Those who are not hold seats on the ministerial bench, speak, and never vote —
+    karzat finds them by the id their own speeches carry, and says what it cannot find."""
+
+    def test_the_bench_members_are_not_mps_and_hold_bench_seats(self):
+        from scripts.build_site import build_landing, hall_data, kormany_seats, load_inputs
+        inp = load_inputs()
+        km = (inp["kormany"] or {}).get("people") or {}
+        if not km:
+            self.skipTest("no government bench derived")
+        sz = (inp["szoszolok"] or {}).get("people") or {}
+        for azon, r in km.items():
+            self.assertNotIn(azon, inp["mps"])                                  # they hold no mandate
+            self.assertNotIn(azon, sz)
+            self.assertEqual(r["seat"]["sector"], 0)                            # the ministerial bench, nowhere else
+            self.assertTrue(r["office"])
+            self.assertGreaterEqual(r["speeches"], 1)                           # found because they spoke
+        seats = kormany_seats(inp)
+        self.assertEqual(len(seats), len(km))
+        mp_seats = {(c["sector"], c["row"], c["seat"]) for c in inp["plan"]["coords"].values()}
+        sz_seats = {(r["seat"]["sector"], r["seat"]["row"], r["seat"]["seat"]) for r in sz.values() if r.get("seat")}
+        self.assertFalse(set(seats) & mp_seats)                                 # nobody is drawn on someone else's seat
+        self.assertFalse(set(seats) & sz_seats)
+        page = build_landing()
+        self.assertEqual(page.count('class="seat km"'), len(km))
+        self.assertIn("mandátum nélküli kormánytag", page)
+        data = hall_data(inp)
+        for azon, r in km.items():
+            self.assertEqual(data[azon][1], "kormánytag")
+            self.assertEqual(data[azon][4:8], [0, 0, 0, 0])                     # no vote exists to show
+
+    def test_a_stale_seat_claim_is_dropped(self):
+        # a former MP's record keeps its old seat; that is not a placement. The derive records the fact instead.
+        import json as _json
+        from scripts.build_site import DERIVED
+        path = DERIVED / "kormany.json"
+        if not path.exists():
+            self.skipTest("no government bench derived")
+        d = _json.loads(path.read_text(encoding="utf-8"))
+        self.assertIn("seat_not_on_the_bench", d)
+        self.assertIn("seen_without_seat", d)
+        self.assertTrue(all(p["seat"]["sector"] == 0 for p in d["people"].values()))
+
+    def test_they_have_a_page_and_are_findable(self):
+        import json as _json
+        from scripts.build_site import CURRENT_CYCLE, SITE_DIR, available_cycles, build_kormany_page, factions, load_inputs
+        inp = load_inputs()
+        km = (inp["kormany"] or {}).get("people") or {}
+        if not km:
+            self.skipTest("no government bench derived")
+        inp["facs_all"] = {}
+        for c in available_cycles():
+            for f in factions(c):
+                inp["facs_all"].setdefault(f["id"], f["colour"])
+        azon, r = next(iter(km.items()))
+        page = build_kormany_page(inp, azon, r)
+        self.assertIn("kormánytag, nem képviselő", page)
+        self.assertIn("nem szavaz", page)
+        self.assertIn(f'miniszteri pad, {r["seat"]["seat"]}. szék', page)
+        self.assertNotIn("Frakciójával", page)
+        path = SITE_DIR / "kereses" / "index.json"
+        if path.exists():
+            rows = [it for it in _json.loads(path.read_text(encoding="utf-8")) if it["k"] == "kormany"]
+            self.assertEqual(len(rows), len(km))
+            for it in rows:
+                self.assertTrue((SITE_DIR / it["u"]).exists(), it["u"])
+

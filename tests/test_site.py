@@ -55,10 +55,12 @@ class Build(unittest.TestCase):
     def test_landing_is_the_view_from_the_gallery(self):
         tot = site_totals()
         self.assertIn("<title>karzat — az Országgyűlés 1990 óta, ülőhelyenként</title>", self.page)
-        n_sz = len((load_inputs()["szoszolok"] or {}).get("people") or {})
-        self.assertEqual(self.page.count('class="today"'), 199 + n_sz)         # the chamber today: every MP by faction, every spokesperson as a ring
+        inp0 = load_inputs()
+        n_sz = len((inp0["szoszolok"] or {}).get("people") or {})
+        n_km = len((inp0["kormany"] or {}).get("people") or {})
+        self.assertEqual(self.page.count('class="today"'), 199 + n_sz + n_km)  # every MP by faction, every spokesperson as a ring, every non-MP minister as a disc
         self.assertIn("Az ülésterem ma", self.page)
-        self.assertIn(f'aria-label="Az ülésterem ma: 199 képviselő és {n_sz} nemzetiségi szószóló a helyén', self.page)
+        self.assertIn(f'aria-label="Az ülésterem ma: 199 képviselő, {n_sz} nemzetiségi szószóló és {n_km} mandátum nélküli kormánytag a helyén', self.page)
         self.assertEqual(self.page.count('<a class="cyc'), len(tot["cycles"]))  # one row per cycle, the current one marked
         self.assertIn('<a class="cyc now" href="ckl43/index.html"', self.page)
         self.assertIn('title="TISZA 141"', self.page)                           # the composition at the constituent sitting
@@ -82,17 +84,19 @@ class Build(unittest.TestCase):
         inp = load_inputs()
         data = hall_data(inp)
         n_sz = len((inp["szoszolok"] or {}).get("people") or {})
-        self.assertEqual(len(data), len(inp["plan"]["coords"]) + n_sz)          # one entry per person in the room, no more
+        n_km = len((inp["kormany"] or {}).get("people") or {})
+        self.assertEqual(len(data), len(inp["plan"]["coords"]) + n_sz + n_km)   # one entry per person in the room, no more
         self.assertEqual(self.page.count('<g class="seat" role="button"'), len(inp["plan"]["coords"]))
         self.assertEqual(self.page.count('<g class="seat sz" role="button"'), n_sz)
+        self.assertEqual(self.page.count('<g class="seat km" role="button"'), n_km)
         self.assertEqual(self.page.count('class="hit"'), len(data))             # the whole seat cell answers to the pointer
         self.assertIn('id="hall-data" data-mp-base="ckl43/kepviselo/"', self.page)
         self.assertIn('<div class="inspector" id="hall"', self.page)
         for azon, row in data.items():
             self.assertIn(f'data-az="{azon}"', self.page)
             name, fac, mandate, seat, cast, in_roll, w, a, sp = row[:9]
-            if fac == "szószóló":
-                continue                                                        # no roll call names them: checked in test_speeches.Spokespersons
+            if fac in ("szószóló", "kormánytag"):
+                continue                                                        # no roll call names them: checked in test_speeches
             rec = inp["alignment"]["per_mp"].get(azon) or {"cast": 0, "in_roll": 0, "with": 0, "against": 0}
             self.assertEqual([cast, in_roll, w, a], [rec["cast"], rec["in_roll"], rec["with"], rec["against"]])   # the MP page's own numbers
             self.assertLessEqual(w + a, in_roll)
@@ -127,6 +131,20 @@ class Build(unittest.TestCase):
         self.assertEqual(re.findall(r'<script src="([^"]+)"', self.page), ["assets/karzat.js"])
         self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.cyc), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml", "feed/heti.xml"])
         self.assertNotIn("url(http", build_assets()["karzat.css"])
+
+    def test_the_inspector_card_contains_its_portrait(self):
+        # the portrait floats beside the text; without containment the card's box ends above the photo and the
+        # picture hangs outside the rectangle (it did — a reader saw it before the tests did)
+        css = build_assets()["karzat.css"]
+        self.assertRegex(css, r"\.inspector\{[^}]*display:flow-root")
+        self.assertIn(".portrait.insp{width:48px;height:64px;float:left", css)
+
+    def test_the_three_door_forms_line_up(self):
+        # the doors' copy is one or two lines long; the search rows must still sit on one line across the three cards
+        css = build_assets()["karzat.css"]
+        self.assertRegex(css, r"\.door\{[^}]*display:flex[^}]*flex-direction:column")
+        self.assertRegex(css, r"\.door \.row\{[^}]*margin-top:auto")
+        self.assertRegex(css, r"\.door \.go\{[^}]*margin-top:auto")
 
     def test_committed_assets_match_a_fresh_build(self):
         for name, body in build_assets().items():

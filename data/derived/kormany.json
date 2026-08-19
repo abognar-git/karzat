@@ -1,0 +1,110 @@
+{
+ "cycle": 43,
+ "count": 5,
+ "front_bench": 5,
+ "seen_without_seat": [
+  "Dr. Baka András",
+  "Dr. Gerzsenyi Gabriella",
+  "Dr. Kövesdy Attila Zoltán",
+  "Dr. Nagy Attila Mihály",
+  "Dr. Sasvári Róbert László",
+  "Dr. Sulyok Tamás",
+  "Dr. Svéd Tamás",
+  "Szemerey Samu"
+ ],
+ "seat_not_on_the_bench": [
+  "Varga Mihály"
+ ],
+ "people": {
+  "0050": {
+   "p_azon": "0050",
+   "name": "Bóna Szabolcs János",
+   "offices": [
+    "agrár- és élelmiszergazdaságért felelős miniszter"
+   ],
+   "office": "agrár- és élelmiszergazdaságért felelős miniszter",
+   "seat": {
+    "sector": 0,
+    "row": 0,
+    "seat": 3
+   },
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0050",
+   "parlament_url": null,
+   "speeches": 15,
+   "last_spoke": "2026-07-27",
+   "front_bench": true
+  },
+  "0051": {
+   "p_azon": "0051",
+   "name": "Lannert Judit Orsolya",
+   "offices": [
+    "oktatási és gyermekügyi miniszter"
+   ],
+   "office": "oktatási és gyermekügyi miniszter",
+   "seat": {
+    "sector": 0,
+    "row": 0,
+    "seat": 4
+   },
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0051",
+   "parlament_url": null,
+   "speeches": 7,
+   "last_spoke": "2026-08-10",
+   "front_bench": true
+  },
+  "v076": {
+   "p_azon": "v076",
+   "name": "Vitézy Dávid László",
+   "offices": [
+    "közlekedési és beruházási miniszter"
+   ],
+   "office": "közlekedési és beruházási miniszter",
+   "seat": {
+    "sector": 0,
+    "row": 0,
+    "seat": 7
+   },
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/v076",
+   "parlament_url": null,
+   "speeches": 32,
+   "last_spoke": "2026-07-27",
+   "front_bench": true
+  },
+  "0053": {
+   "p_azon": "0053",
+   "name": "Dr. Ruff Bálint György",
+   "offices": [
+    "Miniszterelnökséget vezető miniszter"
+   ],
+   "office": "Miniszterelnökséget vezető miniszter",
+   "seat": {
+    "sector": 0,
+    "row": 0,
+    "seat": 11
+   },
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0053",
+   "parlament_url": null,
+   "speeches": 5,
+   "last_spoke": "2026-07-06",
+   "front_bench": true
+  },
+  "0052": {
+   "p_azon": "0052",
+   "name": "Dr. Törőcsikné Dr. Görög Márta",
+   "offices": [
+    "igazságügyi miniszter"
+   ],
+   "office": "igazságügyi miniszter",
+   "seat": {
+    "sector": 0,
+    "row": 0,
+    "seat": 15
+   },
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0052",
+   "parlament_url": null,
+   "speeches": 27,
+   "last_spoke": "2026-07-28",
+   "front_bench": true
+  }
+ }
+}

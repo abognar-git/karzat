@@ -242,7 +242,9 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     committees = load_json(cm_path) if (cycle == CURRENT_CYCLE and cm_path.exists()) else None                     # the API's committees are present-tense
     sz_path = DERIVED / "szoszolok.json"
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok,
+    km_path = DERIVED / "kormany.json"
+    kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -423,7 +425,8 @@ def node_cy(node: str) -> str:
     return re.search(r'cy="([^"]+)"', node).group(1)
 
 
-def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None = None, szoszolok: dict | None = None) -> tuple[str, dict]:
+def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None = None, szoszolok: dict | None = None,
+                  kormany: dict | None = None) -> tuple[str, dict]:
     """The reconstructed chamber: every voting MP at their (sector,row,seat). Returns (svg, info).
 
     `szoszolok`: (sector,row,seat) → the nationality spokesperson holding that seat. No roll call ever names them —
@@ -452,6 +455,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
         # parlament.hu's own floor plan: every seat's outline is the floor; empty seats stay outlines
         occupied = {(c["sector"], c["row"], c["seat"]) for c in coords.values()}
         sz = szoszolok or {}
+        km = kormany or {}
         def _empty_title(o):
             key = (o["sector"], o["row"], o["seat"])
             if key in occupied:
@@ -460,6 +464,9 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
             r = sz.get(key)
             if r:
                 return f'<title>{html.escape(r["name"] or "")} — {html.escape(r["nationality"] or "")} nemzetiségi szószóló, nem szavaz · {html.escape(place)}, {o["seat"]}. szék</title>'
+            g = km.get(key)
+            if g:
+                return f'<title>{html.escape(g["name"] or "")} — {html.escape(g.get("office") or "kormánytag")}, nem képviselő, nem szavaz · {html.escape(place)}, {o["seat"]}. szék</title>'
             return f'<title>üres hely · {html.escape(place)}, {o["seat"]}. szék</title>'
         empties = "".join(
             f'<polygon points="{o["points"]}" class="seatshape{" occ" if (o["sector"], o["row"], o["seat"]) in occupied else ""}">'
@@ -633,7 +640,7 @@ tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sa
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}
 /* seat inspector */
-.inspector{margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
+.inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
 .inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
@@ -718,13 +725,13 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .cyc .leg i{display:inline-block;width:7px;height:7px;margin-right:4px;vertical-align:0}.cyc .leg b{color:var(--text);font-weight:400}
 .cyc .stat{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim2);text-align:right}
 .doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
-.door{display:block;color:inherit;text-decoration:none;min-height:150px}
+.door{display:flex;flex-direction:column;color:inherit;text-decoration:none;min-height:150px}
 .door p{color:var(--dim);font-size:13px;margin:0 0 12px;line-height:1.5}
-.door .row{display:flex;gap:8px}.door .row input{flex:1 1 auto;min-width:0;border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:7px 10px;font-family:var(--mono);font-size:12px}
+.door .row{display:flex;gap:8px;margin-top:auto}.door .row input{flex:1 1 auto;min-width:0;border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:7px 10px;font-family:var(--mono);font-size:12px}
 .door .row input::placeholder{color:var(--dim2)}
 .door .row button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:6px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
 .door .row button:hover,.door .row button:focus-visible{color:var(--white);border-color:var(--border-hi)}
-.door .go{display:block;color:var(--dim2);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+.door .go{display:block;margin-top:auto;color:var(--dim2);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
 a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go{color:var(--white)}
 @media(max-width:900px){.landing .masthead{grid-template-columns:1fr;padding:18px 16px 14px}.landing .mast-h h1{font-size:40px}.counts.land{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.land{grid-template-columns:1fr}.doors{grid-template-columns:1fr}.cyc{grid-template-columns:40px minmax(0,1fr)}.cyc .stat{text-align:left}}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
@@ -978,14 +985,16 @@ JS_HALL = """
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
+    var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
     var c = colours[fac] || '#8a8a8a';
     var part = inroll ? Math.round(100 * cast / inroll) : null, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
-    var who = sz ? esc(name) : '<a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a>';
+    var who = (sz || km) ? esc(name) : '<a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a>';
     box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
       '<div class="row1"><span class="name">' + who + '</span>' +
-      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : esc(fac)) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +
       (sz ? 'nem szavaz — a szószóló felszólalhat és bizottságban dolgozik' + (com ? ' · bizottság <b>' + com + '</b>' : '')
+        : km ? 'nem szavaz — a kormány tagja mandátum nélkül; a miniszteri padban ül és felszólal'
           : (inroll ? 'leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyetért <b>' + agree + '%</b>' : '') : 'még nincs név szerinti szavazása')) +
       (sp ? ' · felszólalás <b>' + sp + '</b>' : '') + '</span>' +
       (pinned ? '<span class="pin">rögzítve<button type="button" data-unpin>Esc</button></span>' : '') + '</div>';
@@ -1199,7 +1208,7 @@ JS_SEARCH = """
   function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; failed = true; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; failed = true; cb(); }; x.send(); }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
-  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló'};
+  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló', kormany: 'kormánytag'};
   function render(){
     var terms = fold(q.value).split(/\s+/).filter(Boolean);
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
@@ -1415,13 +1424,13 @@ def chart_block(view: dict, inp: dict) -> str:
     _, data, align_here = vote_bundle(inp, view["ts"])
     n_against = sum(1 for a in align_here.values() if a == "against")
     if plan:
-        sz_seats = szoszolo_seats(inp)
-        svg, info = seat_svg_real(view, facs, plan, align_here, sz_seats)
+        sz_seats, km_seats = szoszolo_seats(inp), kormany_seats(inp)
+        svg, info = seat_svg_real(view, facs, plan, align_here, sz_seats, km_seats)
         geo = plan["geometry"]
-        n_sz = len(sz_seats)
+        n_sz, n_km = len(sz_seats), len(km_seats)
         note = ((f'Az Országház alaprajza, mindenki a saját helyén. Az emelvény felől nézve balra az ellenzék, jobbra a kormányoldal. '
-                 + (f'{hu_num(n_sz)} helyen nemzetiségi szószóló ül — ők nem szavaznak. ' if n_sz else "")
-                 + f'{info.get("empty", 0) - n_sz} üres hely.')
+                 + (f'{hu_num(n_sz)} helyen nemzetiségi szószóló, {hu_num(n_km)} helyen mandátum nélküli kormánytag ül — ők nem szavaznak. ' if n_sz or n_km else "")
+                 + f'{info.get("empty", 0) - n_sz - n_km} üres hely.')
                 if info.get("seats_in_plan") else
                 (f'Ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. Halvány karika: üres hely ({info.get("empty", 0)}).'))
     else:
@@ -3301,7 +3310,7 @@ def build_search_page(inp: dict, n_items: int) -> str:
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Keresés</span><span class="tag">ékezet nélkül is · szám, cím, név</span></h2>
   <div class="filters"><input id="sq" type="search" placeholder="pl. T/51 · alaptörvény · Ágh" aria-label="Keresés" autofocus style="min-width:min(100%,420px)"><span class="n" id="sn" aria-live="polite"></span></div>
-  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button><button type="button" data-sk="szoszolo" aria-pressed="false">szószólók</button></div>
+  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button><button type="button" data-sk="szoszolo" aria-pressed="false">szószólók</button><button type="button" data-sk="kormany" aria-pressed="false">kormánytagok</button></div>
   <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
   <div class="tablewrap"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr></tbody></table></div>
   <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../iromany/index.html">irományok</a> · <a href="../kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
@@ -3375,6 +3384,9 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
+
+<section class="panel" id="kormanytag">{CORNERS}<h2><span data-kz-text>Miniszteri pad: kormánytagok mandátum nélkül</span></h2>
+<div class="hero-meta prose">A kormány tagjának nem kell képviselőnek lennie: aki nem az, a miniszteri padban ül és felszólal, de nem szavaz. Ilyen névsort az API nem ad, ezért az oldal onnan ismeri fel őket, ahogy megszólalnak: a felszólalás jegyzőkönyvi payloadja azonosítóval nevezi meg a felszólalót (<span class="mono">felszolalas.cgi</span>), és ha ez az azonosító sem a képviselői, sem a szószólói listában nincs, de a saját adatlapján a miniszteri padban van ülőhelye, akkor ő a padban ülő kormánytag. A tisztség az, ahogy a jegyzőkönyv megnevezi (<span class="mono">beosztás</span>). Amit ez nem talál meg: aki a ciklusban még nem szólalt fel — ezért maradhat üres hely a padban. Egy adatlap régi ülőhelyet is őrizhet (egy volt képviselőé); az ilyen igényt az oldal eldobja, ha a helyet ma más foglalja el vagy nem a padban van. Jelenleg {hu_num(len(((inp.get("kormany") or {{}}).get("people") or {{}})))} kormánytag ül a padban mandátum nélkül.</div></section>
 
 <section class="panel" id="nem">{CORNERS}<h2><span data-kz-text>Amit az oldal nem állít</span></h2>
 <div class="hero-meta prose">Semmit a szavazások okáról. Nem skáláz, nem súlyoz, nem jósol; egyetlen feltevését (a hiányzók) annak nevezi. A színek az oldal jelölései.</div></section>
@@ -3484,7 +3496,50 @@ def build_spokesperson_page(inp: dict, azon: str, r: dict) -> str:
 """ + page_tail(inp, 1)
 
 
-def build_person_index(inp: dict, people: dict[str, list[dict]], szoszolok: dict | None = None) -> str:
+def build_kormany_page(inp: dict, azon: str, r: dict) -> str:
+    """szemely/<azon>.html for someone who sits in the House without a mandate — a minister who is not an MP. What
+    exists of them here: the office the record of their speeches prints, their seat on the ministerial bench, and
+    every speech of theirs in the current cycle. No vote, no faction, no participation: they hold no mandate."""
+    texts = (inp["texts"] or {}).get("texts") or {}
+    mine = sorted(((sid, t) for sid, t in texts.items() if t.get("azon") == azon), key=lambda kv: (kv[1].get("date") or "", kv[1].get("seq") or 0), reverse=True)
+    cdir = cycle_dir(CURRENT_CYCLE)
+    sp_rows = "".join(f'<tr><td class="ts mono"><a href="../{cdir}felszolalas/{esc(sid)}.html">{esc(t.get("date") or "")}</a></td>'
+                      f'<td>{esc(cut(t.get("position") or "", 60))}</td><td>{esc(t.get("kind") or "")}</td>'
+                      f'<td class="num mono">{hu_num(t.get("chars") or 0)}</td></tr>' for sid, t in mine)
+    seat = r.get("seat") or {}
+    seat_txt = f'miniszteri pad, {seat["seat"]}. szék' if seat.get("sector") == 0 else "—"
+    offices = " · ".join(r.get("offices") or ([r["office"]] if r.get("office") else [])) or "—"
+    links = " · ".join(x for x in [
+        f'<a href="{esc(ext_url(r.get("parlament_url")))}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>' if ext_url(r.get("parlament_url")) else "",
+        f'<a href="../{cdir}felszolalas/index.html">a ciklus felszólalásai ↗</a>'] if x)
+    name = r["name"]
+    return page_head(f'{name} — kormánytag, nem képviselő · karzat',
+                     f'{name} ({offices}) az Országgyűlésben: a miniszteri padban ül és felszólal, de nem képviselő — nem szavaz.', 1) + \
+        topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
+<div class="hero-h withpic">{portrait_html({"photo_url": r.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>kormánytag, nem képviselő · {esc(cut(offices, 90))}</small>
+<p class="hero-meta">{links}</p></div></div>
+<div class="fresh">{CORNERS}<span class="hu">A kormány tagjának nem kell képviselőnek lennie. Aki nem az, az ülésteremben a miniszteri padban ül és felszólal, de nem szavaz: a név szerinti listák sosem tartalmazzák, mandátuma, frakciója, választókerülete nincs.</span>
+<span class="en" lang="en">A minister need not hold a mandate. One who does not sits on the ministerial bench and speaks, but casts no vote: no roll call names them, and they have no mandate, faction or constituency.</span></div>
+<section class="grid">
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Tisztség és hely</span></h2>
+    <div class="tablewrap" style="border:0"><table><tbody>
+      <tr><td>Tisztség</td><td>{esc(offices)}</td></tr>
+      <tr><td>Ülőhely</td><td>{esc(seat_txt)} — a <a href="../index.html">nyitólap patkóján</a> halvány koronggal</td></tr>
+      <tr><td>Felszólalás a {CURRENT_CYCLE}. ciklusban</td><td class="mono">{hu_num(r.get("speeches") or 0)}{" · legutóbb " + esc(hu_date(r["last_spoke"])) if r.get("last_spoke") else ""}</td></tr>
+    </tbody></table></div>
+    <div class="hero-meta prose" style="margin-top:8px">A tisztség onnan van, ahogy a jegyzőkönyv a felszólalásainál megnevezi (<span class="mono">beosztás</span>); az oldal nem tart nyilván kormánynévsort. Aki a ciklusban nem szólalt fel, az így nem is látszik — ezért lehet, hogy a miniszteri padban marad üres hely.</div>
+  </section>
+  <section class="panel deep">{CORNERS}
+    <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(mine))} tétel · jegyzőkönyvi szöveggel</span></h2>
+    <div class="tablewrap"><table data-page-size="25"><thead><tr><th scope="col">Nap</th><th scope="col">Tisztség</th><th scope="col">Fajta</th><th scope="col" class="num">Karakter</th></tr></thead><tbody>{sp_rows or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
+  </section>
+</section>
+{cite_html(inp, f'szemely/{azon}.html', f'{name} — kormánytag, nem képviselő', f'szemely-{azon}')}
+""" + page_tail(inp, 1)
+
+
+def build_person_index(inp: dict, people: dict[str, list[dict]], szoszolok: dict | None = None, kormany: dict | None = None) -> str:
     facs = inp["facs_all"]
     trs = []
     for azon, stints in sorted(people.items(), key=lambda kv: name_key(kv[1][0]["name"])):
@@ -3502,11 +3557,17 @@ def build_person_index(inp: dict, people: dict[str, list[dict]], szoszolok: dict
         sz_rows.append(f'<tr data-f="szószóló" data-name="{esc(name_key(r["name"]))}" data-n="{len(cyc)}" data-against="0"><td><a href="{esc(azon)}.html">{esc(r["name"])}</a></td>'
                        f'<td><span class="pos"><i class="d" style="--c:{SZOSZOLO_COLOUR};background:transparent;box-shadow:inset 0 0 0 2px {SZOSZOLO_COLOUR}"></i>{esc(r["nationality"] or "")} szószóló</span></td>'
                        f'<td class="mono">{" · ".join(str(c) for c in sorted(cyc))}</td><td class="num mono">{len(cyc)}</td><td class="num mono">—</td><td class="num mono">—</td></tr>')
-    trs = sorted(trs + sz_rows, key=lambda t: name_key(re.search(r'data-name="([^"]*)"', t).group(1)))
+    km_rows = []
+    for azon, r in sorted((kormany or {}).items(), key=lambda kv: name_key(kv[1]["name"])):
+        km_rows.append(f'<tr data-f="kormánytag" data-name="{esc(name_key(r["name"]))}" data-n="1" data-against="0"><td><a href="{esc(azon)}.html">{esc(r["name"])}</a></td>'
+                       f'<td><span class="pos"><i class="d" style="--c:{KORMANY_COLOUR}"></i>{esc(cut(r.get("office") or "kormánytag", 40))}</span></td>'
+                       f'<td class="mono">{CURRENT_CYCLE}</td><td class="num mono">1</td><td class="num mono">—</td><td class="num mono">—</td></tr>')
+    trs = sorted(trs + sz_rows + km_rows, key=lambda t: name_key(re.search(r'data-name="([^"]*)"', t).group(1)))
     n_sz = len(szoszolok or {})
+    n_km = len(kormany or {})
     return page_head("Személyek · karzat", "Mindenki, aki a betöltött ciklusok névsoraiban szerepel, és a nemzetiségi szószólók — egy pályakép-oldal személyenként, ciklusokon át.", 1) + \
         topbar(inp, [("személyek", None)], 1) + f"""
-<div class="hero-h"><h1>Személyek</h1><small class="label" data-kz-text>{len(people)} képviselő a betöltött ciklusok névsoraiból{f" · {n_sz} nemzetiségi szószóló" if n_sz else ""} · egy oldal személyenként, ciklusokon át</small></div>
+<div class="hero-h"><h1>Személyek</h1><small class="label" data-kz-text>{len(people)} képviselő a betöltött ciklusok névsoraiból{f" · {n_sz} nemzetiségi szószóló" if n_sz else ""}{f" · {n_km} mandátum nélküli kormánytag" if n_km else ""} · egy oldal személyenként, ciklusokon át</small></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Pályaképek</span><span class="tag">a fejlécre kattintva rendezhető</span></h2>
   <div class="filters"><input type="search" data-filter-table="roll" placeholder="név" aria-label="Szűrés névre" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
@@ -3552,6 +3613,17 @@ def landing_inputs() -> dict:
 
 
 SZOSZOLO_COLOUR = "#b9a06a"      # the spokespersons' own tone: a faction colour would say they belong to one
+KORMANY_COLOUR = "#9aa7b8"       # the ministerial bench's non-MP members: a steel tone, again not a faction's
+
+
+def kormany_seats(cur: dict) -> dict[tuple[int, int, int], dict]:
+    """(sector, row, seat) → the government member sitting there who holds no mandate, from kormany.json."""
+    out = {}
+    for r in ((cur.get("kormany") or {}).get("people") or {}).values():
+        s = r.get("seat") or {}
+        if s.get("sector") is not None:
+            out[(s["sector"], s["row"], s["seat"])] = r
+    return out
 
 
 def szoszolo_seats(cur: dict) -> dict[tuple[int, int, int], dict]:
@@ -3577,6 +3649,7 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
     k = geo.get("node_radius", 5.2) / 5.2
     occupied = {(c["sector"], c["row"], c["seat"]) for c in plan["coords"].values()}
     sz_by_seat = szoszolo_seats(cur)
+    km_by_seat = kormany_seats(cur)
     def place(o):
         return "miniszteri pad" if o["sector"] == geo.get("front_bench_sector") else f'{o["sector"]}. szektor, {o["row"]}. sor'
     def outline_title(o):
@@ -3586,8 +3659,11 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
         r = sz_by_seat.get(key)
         if r:
             return f'<title>{esc(r["name"] or "")} — {esc(r["nationality"] or "")} nemzetiségi szószóló · {esc(place(o))}, {o["seat"]}. szék</title>'
+        g = km_by_seat.get(key)
+        if g:
+            return f'<title>{esc(g["name"] or "")} — {esc(g.get("office") or "kormánytag")}, nem képviselő · {esc(place(o))}, {o["seat"]}. szék</title>'
         return f'<title>üres hely · {esc(place(o))}, {o["seat"]}. szék</title>'
-    parts = [f'<polygon points="{o["points"]}" class="seatshape{" occ" if (o["sector"], o["row"], o["seat"]) in occupied or (o["sector"], o["row"], o["seat"]) in sz_by_seat else ""}">'
+    parts = [f'<polygon points="{o["points"]}" class="seatshape{" occ" if (o["sector"], o["row"], o["seat"]) in occupied or (o["sector"], o["row"], o["seat"]) in sz_by_seat or (o["sector"], o["row"], o["seat"]) in km_by_seat else ""}">'
              + outline_title(o) + "</polygon>" for o in plan["seat_outlines"]]
     by_seat = {(o["sector"], o["row"], o["seat"]): o for o in plan["seat_outlines"]}
     seated: Counter = Counter()
@@ -3611,6 +3687,16 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
                      f'<title>{esc(r["name"] or "")} — {esc(r["nationality"] or "")} nemzetiségi szószóló · {key[0]}. szektor, {key[1]}. sor, {key[2]}. szék</title>'
                      f'<circle cx="{o["x"]}" cy="{o["y"]}" r="{4.6 * k:.2f}" fill="none" stroke="{SZOSZOLO_COLOUR}" stroke-width="{1.6 * k:.2f}" class="today"/>'
                      f'<circle cx="{o["x"]}" cy="{o["y"]}" r="{hit_r:.2f}" class="hit"/></g>')
+    n_km = 0
+    for key, r in sorted(km_by_seat.items()):
+        o = by_seat.get(key)
+        if not o:
+            continue
+        n_km += 1
+        parts.append(f'<g class="seat km" role="button" data-az="{esc(r["p_azon"])}" data-f="kormánytag" aria-label="{esc(r["name"] or "")} ({esc(r.get("office") or "kormánytag")}, nem képviselő)">'
+                     f'<title>{esc(r["name"] or "")} — {esc(r.get("office") or "kormánytag")}, nem képviselő · miniszteri pad, {key[2]}. szék</title>'
+                     f'<circle cx="{o["x"]}" cy="{o["y"]}" r="{5.2 * k:.2f}" fill="{KORMANY_COLOUR}" fill-opacity="0.5" stroke="{KORMANY_COLOUR}" stroke-width="{1.2 * k:.2f}" class="today"/>'
+                     f'<circle cx="{o["x"]}" cy="{o["y"]}" r="{hit_r:.2f}" class="hit"/></g>')
     W = max(abs(geo["x_min"]), abs(geo["x_max"])) + 22
     R = -geo["y_min"] + 10
     labels = "".join(f'<text x="{ax}" y="{ay}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>'
@@ -3619,7 +3705,9 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
     legend = [(f, n, colour.get(f, "#8a8a8a")) for f, n in sorted(seated.items(), key=lambda kv: (order.get(kv[0], 999), kv[0]))]
     if n_sz:
         legend.append(("szószóló", n_sz, SZOSZOLO_COLOUR))
-    svg = (f'<svg viewBox="{-W:.0f} -{R + 8:.0f} {2 * W:.0f} {R + 26:.0f}" role="group" aria-label="Az ülésterem ma: {len(plan["coords"])} képviselő és {n_sz} nemzetiségi szószóló a helyén; {len(plan["seat_outlines"])} hely az Országház alaprajzán. Egy hely: a neve és a mérlege; kattintásra rögzül, nyilakkal is járható">'
+    if n_km:
+        legend.append(("kormánytag", n_km, KORMANY_COLOUR))
+    svg = (f'<svg viewBox="{-W:.0f} -{R + 8:.0f} {2 * W:.0f} {R + 26:.0f}" role="group" aria-label="Az ülésterem ma: {len(plan["coords"])} képviselő, {n_sz} nemzetiségi szószóló és {n_km} mandátum nélküli kormánytag a helyén; {len(plan["seat_outlines"])} hely az Országház alaprajzán. Egy hely: a neve és a mérlege; kattintásra rögzül, nyilakkal is járható">'
            + f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>' + PODIUM
            + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>' + labels + "".join(parts) + "</svg>")
     return svg, legend
@@ -3682,6 +3770,13 @@ def hall_data(cur: dict) -> dict[str, list]:
         out[azon] = [mp["name"], mp.get("faction") or "független", mandate_text(mp), seat_text(mp),
                      rec["cast"], rec["in_roll"], rec["with"], rec["against"],
                      sum(1 for r in speeches.get(azon, []) if not r["technical"])]
+    # the ministerial bench's non-MP members: a minister need not hold a mandate; the card names the office and says
+    # plainly that no vote of theirs exists. d[9] carries the office instead of a committee count.
+    for azon, r in ((cur.get("kormany") or {}).get("people") or {}).items():
+        s = r.get("seat") or {}
+        out[azon] = [r["name"], "kormánytag", r.get("office") or "kormánytag",
+                     (f'miniszteri pad, {s["seat"]}. szék' if s.get("sector") == 0 else ""),
+                     0, 0, 0, 0, r.get("speeches") or 0, r.get("office") or ""]
     # the spokespersons: no roll call ever names them, so the card says what they do instead — nationality,
     # committees, the record's speech count. The 0s in the vote slots are what the card reads as "no vote".
     for azon, r in ((cur.get("szoszolok") or {}).get("people") or {}).items():
@@ -3703,7 +3798,8 @@ def build_landing() -> str:
     legend_html = "".join(f'<button type="button" class="f" data-hf="{esc(f)}" data-f="{esc(f)}" aria-pressed="false" title="csak {esc(f)} — mégegyszer: mind">'
                           f'<i style="{"border:2px solid " + col + ";background:transparent" if f == "szószóló" else "background:" + col}"></i>{esc("nemzetiségi szószóló" if f == "szószóló" else f)} <span class="mono">{n}</span></button>' for f, n, col in legend)
     n_sz = next((n for f, n, _ in legend if f == "szószóló"), 0)
-    seated = sum(n for f, n, _ in legend if f != "szószóló")
+    n_km = next((n for f, n, _ in legend if f == "kormánytag"), 0)
+    seated = sum(n for f, n, _ in legend if f not in ("szószóló", "kormánytag"))
     plan = cur["plan"] or {}
     n_seats = len(plan.get("seat_outlines") or [])
     rows_html, last_day, n_day = latest_votes_html(cur)
@@ -3713,8 +3809,8 @@ def build_landing() -> str:
     unplaced = roster_now - seated
     hero_note = ((f'Mind a {hu_num(seated)} mandátummal rendelkező képviselő a helyén, ahogy az adatlapja megadja'
                   + (f' · {hu_num(unplaced)} képviselőnek nincs ülőhely az adatlapján' if unplaced else "")
-                  + (f' · velük a {hu_num(n_sz)} nemzetiségi szószóló (gyűrűvel: ülnek és felszólalnak, de nem szavaznak)' if n_sz else "")
-                  + f' · a terem {hu_num(n_seats)} széke közül {hu_num(n_seats - seated - n_sz)} üres: a Ház 2014 óta 199 mandátumos, a terem 386-ra épült'
+                  + (f' · velük a {hu_num(n_sz)} nemzetiségi szószóló (gyűrűvel) és {hu_num(n_km)} mandátum nélküli kormánytag a miniszteri padban (halvány koronggal) — ülnek és felszólalnak, de nem szavaznak' if n_sz or n_km else "")
+                  + f' · a terem {hu_num(n_seats)} széke közül {hu_num(n_seats - seated - n_sz - n_km)} üres: a Ház 2014 óta 199 mandátumos, a terem 386-ra épült'
                   + ' · a színek az oldal jelölései')
                  if chamber else "Az ülésrend csak a jelenlegi ciklusból ismert.")
     n_cyc = len(tot["cycles"])
@@ -3819,6 +3915,8 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         items += [{"k": "szoszolo", "c": CURRENT_CYCLE, "t": r["name"],
                    "s": f'{r["nationality"] or ""} nemzetiségi szószóló · {", ".join(str(st["cycle"]) for st in sorted(r.get("cycles") or [], key=lambda x: x["cycle"]))}. ciklus'.strip(),
                    "u": f"szemely/{azon}.html"} for azon, r in ((inp["szoszolok"] or {}).get("people") or {}).items()]
+        items += [{"k": "kormany", "c": CURRENT_CYCLE, "t": r["name"], "s": f'{r.get("office") or "kormánytag"} · kormánytag, nem képviselő',
+                   "u": f"szemely/{azon}.html"} for azon, r in ((inp["kormany"] or {}).get("people") or {}).items()]
         sd_ = out_dir / "kereses"; sd_.mkdir(parents=True, exist_ok=True)
         (sd_ / "index.json").write_text(json.dumps(items, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
         (sd_ / "index.html").write_text(build_search_page(inp, len(items)), encoding="utf-8")
@@ -3826,12 +3924,16 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         pd.mkdir(parents=True, exist_ok=True)
         pw = _Writer()
         sz_people = (inp["szoszolok"] or {}).get("people") or {}
-        pw(pd / "index.html", build_person_index(inp, people, sz_people))
+        km_people = (inp["kormany"] or {}).get("people") or {}
+        pw(pd / "index.html", build_person_index(inp, people, sz_people, km_people))
         for azon, stints in people.items():
             pw(pd / f"{azon}.html", build_person_page(inp, azon, stints))
             people_n += 1
         for azon, r in sz_people.items():
             pw(pd / f"{azon}.html", build_spokesperson_page(inp, azon, r))     # the same address, no vote to count
+            people_n += 1
+        for azon, r in km_people.items():
+            pw(pd / f"{azon}.html", build_kormany_page(inp, azon, r))          # a minister without a mandate: likewise
             people_n += 1
         prune(pd, pw.written)
     return {"index": res[0]["index"], "vote_pages": sum(r["vote_pages"] for r in res), "mp_pages": sum(r["mp_pages"] for r in res),

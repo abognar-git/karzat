@@ -225,6 +225,12 @@ def build() -> list[tuple[str, list]]:
         ("all {:,.0f} mandate-holders placed where their own record puts them,", [_landing().count('<g class="seat" role="button"')]),
         ("The {:,.0f} seats still left as outlines",
          [_landing().count('polygon points') - _landing().count('class="seatshape occ"')]),
+        # the ministerial bench — data/derived/kormany.json
+        ("takes the office from what the record of the speech prints. {:,.0f} of them (the deputy PM among them)",
+         [_json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["count"]]),
+        ("stays invisible, so {:,.0f} bench seats are still outlines",
+         [22 - len(_json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["people"])
+          - sum(1 for c in _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))["coords"].values() if c["sector"] == 0)]),
         # the archive cycles' speech lists — data/derived/speeches_ckl36..41.json.gz
         ("cycles 36–41 synced: {:,.0f} day lists, {:,.0f} rows, {:,.0f} substantive, {:,.0f} rows resolved to MPs",
          [old_days, old_rows, old_sub, old_res]),
