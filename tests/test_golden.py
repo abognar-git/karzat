@@ -39,6 +39,7 @@ GOLDEN = {
     "real_szavazas_2026-06-15T17-20-04.xml":   "5216b4de1165d62c",
     "real_szavazas_ckl42_2025-05-20T10-20-49.xml": "b272f119faf5b118",
     "real_szavazasok_2026-05_head3.xml":       "7e164703fc8d7645",
+    "real_szoszolok_trimmed.xml":              "310546c8bfe2a1eb",
     "real_ulesnap_43.xml":                     "41067c37c03be90c",
     "synthetic_kepviselok_latin2.xml":         "2ca340cdfa39b941",
 }

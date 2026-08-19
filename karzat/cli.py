@@ -203,8 +203,23 @@ def cmd_sync_mps(args: argparse.Namespace) -> int:
             ok += 1
         except ApiError as e:
             print(f"  {azon}: {e}", file=sys.stderr)
+    # the nationality spokespersons sit in the same chamber (they may speak, they may not vote): the list plus one
+    # record each, so their seats and their committees are known too
+    n_sz = 0
+    try:
+        from .normalise import parse_szoszolok
+        sz = parse_szoszolok(to_dict_payload(api.fetch("szoszolok", refresh=True)))
+        for r in sz:
+            try:
+                api.fetch("kepviselo", p_azon=r["p_azon"], refresh=args.refresh)
+                n_sz += 1
+            except ApiError as e:
+                print(f"  {r['p_azon']}: {e}", file=sys.stderr)
+        print(f"{len(sz)} nationality spokespersons listed, {n_sz} records cached")
+    except ApiError as e:
+        print(f"szoszolok: {e}", file=sys.stderr)
     print(f"done: {ok}/{len(ids)} MP records cached; live calls={api.live_calls} cache hits={api.cache_hits}")
-    state = _write_sync_state(args.cache, "sync-mps", api, mps=len(ids), ok=ok)
+    state = _write_sync_state(args.cache, "sync-mps", api, mps=len(ids), ok=ok, szoszolok=n_sz)
     print(f"sync state -> {state}")
     return 0
 

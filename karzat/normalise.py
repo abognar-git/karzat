@@ -498,6 +498,28 @@ def parse_felszolalas(raw: bytes) -> dict[str, Any]:
 #   bizottsag.cgi    <bizottsag nev tipus letrehozas><fobizottsag id nev/><elerhetoseg email telefon/><elnok p_azon nev frakcio/>
 #                    <alelnokok><alelnok …/></alelnokok><tagok><tag …/></tagok><albizottsagok/><meghivo_datum/><meghivo_URL/></bizottsag>
 
+def parse_szoszolok(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    """szoszolok.cgi → the nationality spokespersons, in the order the list prints them.
+
+      <kepviselok><szoszolo sorszam nev nemzetiseg p_azon kep lista/>…</kepviselok>
+
+    A spokesperson (nemzetiségi szószóló) is elected by a nationality's list, sits in the chamber, may speak and sit
+    on committees, but casts no vote — so they are kept apart from the MPs everywhere: their own file, their own
+    glyph, never in a roster count or an alignment. `lista` is empty in the payloads seen so far (a nationality that
+    wins a mandate sends an MP instead, and that MP is in kepviselok.cgi).
+    """
+    root = payload.get("kepviselok", payload)
+    out = []
+    for r in as_list(root.get("szoszolo")):
+        if not isinstance(r, dict) or not r.get("@p_azon"):
+            continue
+        out.append({"p_azon": r["@p_azon"], "name": (r.get("@nev") or "").strip() or None,
+                    "nationality": (r.get("@nemzetiseg") or "").strip() or None,
+                    "photo_url": r.get("@kep") or None, "order": _int(r.get("@sorszam")),
+                    "list_label": (r.get("@lista") or "").strip() or None})
+    return sorted(out, key=lambda x: (x["order"] if x["order"] is not None else 999, x["name"] or ""))
+
+
 def parse_bizottsagok(payload: dict[str, Any]) -> list[dict[str, Any]]:
     root = payload.get("bizottsagok", payload)
     out = []

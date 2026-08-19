@@ -7,7 +7,7 @@ from pathlib import Path
 
 from karzat import feeds as fd
 from karzat.export import adatszotar, speeches_csv, weekly_csv
-from karzat.normalise import SUBSTANTIVE_KINDS, parse_felszolalas, parse_felszolalasok, parse_kepviselo, parse_ulesnap
+from karzat.normalise import SUBSTANTIVE_KINDS, parse_felszolalas, parse_felszolalasok, parse_kepviselo, parse_szoszolok, parse_ulesnap
 from karzat.xmlutil import parse_xml, to_dict
 from scripts.build_site import (CAST, build_day_page, build_kepviselom_page, build_mp_page, build_speech_page, build_speech_search_page, build_speeches_page,
                                 committees_in_cycle, cycle_weekly_feed, digest_line, fold_tokens, hu_span, load_inputs, mp_weekly_feed, sitting_weeks,
@@ -330,4 +330,39 @@ class ArchiveSpeeches(unittest.TestCase):
         page = build_day_page(inp, rows[0]["ulnap"], rows, {})
         self.assertIn(f'id="s{rows[0]["ulnap"]}-', page)
         self.assertNotRegex(page, r'href="\d+-\d+\.html"')                              # no link to a page that is not built
+
+
+class Spokespersons(unittest.TestCase):
+    """The nationality spokespersons (nemzetiségi szószólók) sit in the chamber and speak, but cast no vote — so they
+    are drawn on the landing chamber as rings and kept out of every roster count and alignment."""
+
+    def test_the_list_parses_with_nationality_and_id(self):
+        rows = parse_szoszolok(payload(FIXTURES / "real_szoszolok_trimmed.xml"))
+        self.assertEqual([(r["p_azon"], r["name"], r["nationality"]) for r in rows],
+                         [("004O", "Aba-Horváth István", "roma"), ("a024", "Akopjan Nikogosz", "örmény")])
+        self.assertTrue(all(r["photo_url"].endswith(r["p_azon"]) for r in rows))
+        self.assertEqual([r["order"] for r in rows], [1, 2])
+
+    def test_they_are_on_the_chamber_but_in_no_roster(self):
+        from scripts.build_site import build_assets, build_landing, hall_data, szoszolo_seats
+        inp = load_inputs()
+        sz = (inp["szoszolok"] or {}).get("people") or {}
+        if not sz:
+            self.skipTest("no spokesperson list derived")
+        self.assertTrue(all(r["seat"] and r["seat"].get("sector") is not None for r in sz.values()))
+        seats = szoszolo_seats(inp)
+        self.assertEqual(len(seats), len(sz))                                   # one seat each, none shared
+        self.assertFalse(set(sz) & set(inp["mps"]))                             # never in the MP roster
+        self.assertFalse(set(sz) & set(inp["alignment"]["per_mp"]))             # never in an alignment
+        self.assertFalse(set(sz) & set(inp["plan"]["coords"]))                  # the MP seat plan does not carry them
+        page = build_landing()
+        self.assertEqual(page.count('class="seat sz"'), len(sz))
+        self.assertIn("nemzetiségi szószóló", page)
+        data = hall_data(inp)
+        for azon, r in sz.items():
+            row = data[azon]
+            self.assertEqual(row[1], "szószóló")
+            self.assertEqual(row[4:8], [0, 0, 0, 0])                            # no vote of any kind, ever
+            self.assertIn(r["nationality"], row[2])
+        self.assertIn("nem szavaz — a szószóló felszólalhat", build_assets()["karzat.js"])
 

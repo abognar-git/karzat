@@ -21,3 +21,4 @@ as 2026. évi XV. törvény, MK 60), `iromanyok` (3 entries).
 
 Every file here must be registered in `tests/test_golden.py`; the test fails on an
 unregistered fixture as well as on a changed digest, so nothing is pinned by accident.
+- `real_szoszolok_trimmed.xml` — the first two rows of `szoszolok.cgi` (12 nationality spokespersons on 2026-08-19): id, name, nationality, photo.

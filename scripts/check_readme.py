@@ -219,8 +219,10 @@ def build() -> list[tuple[str, list]]:
         # the landing page — scripts.build_site.build_landing()
         ("the arrow keys walk the seats; then the ten cycles since 1990 as stacked composition bars (mandates in force on each constituent sitting, read from the records' dated rows — {:,.0f} in the strip)",
          [_landing().count('<a class="cyc')]),
-        ("all {:,.0f} mandate-holders placed where their own record puts them (the {:,.0f} seats left as outlines",
-         [_landing().count('<g class="seat" role="button"'), _landing().count('polygon points') - _landing().count('class="seatshape occ"')]),
+        ("with them the **{:,.0f} nationality spokespersons**", [_json.loads((ROOT / "data" / "derived" / "szoszolok.json").read_text(encoding="utf-8"))["count"]]),
+        ("all {:,.0f} mandate-holders placed where their own record puts them,", [_landing().count('<g class="seat" role="button"')]),
+        ("The {:,.0f} seats still left as outlines",
+         [_landing().count('polygon points') - _landing().count('class="seatshape occ"')]),
         # the archive cycles' speech lists — data/derived/speeches_ckl36..41.json.gz
         ("cycles 36–41 synced: {:,.0f} day lists, {:,.0f} rows, {:,.0f} substantive, {:,.0f} rows resolved to MPs",
          [old_days, old_rows, old_sub, old_res]),

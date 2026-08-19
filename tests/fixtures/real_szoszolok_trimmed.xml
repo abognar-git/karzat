@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kepviselok>
+                <szoszolo
+                    sorszam="1"
+                    nev="Aba-Horváth István"
+                    nemzetiseg="roma"
+                    p_azon="004O"
+                    kep="https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004O"
+                    lista=""/>
+            <szoszolo
+                    sorszam="2"
+                    nev="Akopjan Nikogosz"
+                    nemzetiseg="örmény"
+                    p_azon="a024"
+                    kep="https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/a024"
+                    lista=""/>
+</kepviselok>

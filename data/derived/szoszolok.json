@@ -1,0 +1,489 @@
+{
+ "cycle": 43,
+ "count": 12,
+ "with_seat": 12,
+ "people": {
+  "004O": {
+   "p_azon": "004O",
+   "name": "Aba-Horváth István",
+   "nationality": "roma",
+   "order": 1,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004O",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 14
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  },
+  "a024": {
+   "p_azon": "a024",
+   "name": "Akopjan Nikogosz",
+   "nationality": "örmény",
+   "order": 2,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/a024",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 13
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Ellenőrző Albizottság",
+     "role": "alelnök",
+     "from": "2026-05-26",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Önkormányzati, Külügyi és Költségvetési Albizottság",
+     "role": "tag",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  },
+  "004L": {
+   "p_azon": "004L",
+   "name": "Gallai Gergely",
+   "nationality": "német",
+   "order": 3,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004L",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 12
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "elnök",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": 3,
+   "speeches_technical": 0,
+   "mandates": [],
+   "has_record": true
+  },
+  "g078": {
+   "p_azon": "g078",
+   "name": "Grexa Liliána",
+   "nationality": "ukrán",
+   "order": 4,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/g078",
+   "seat": {
+    "sector": 4,
+    "row": 6,
+    "seat": 4
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Ellenőrző Albizottság",
+     "role": "tag",
+     "from": "2026-05-26",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Önkormányzati, Külügyi és Költségvetési Albizottság",
+     "role": "alelnök",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "A Magyarországi Nemzetiségek Bizottsága feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság",
+     "role": "tag",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    }
+   ],
+   "speeches": 3,
+   "speeches_technical": 0,
+   "mandates": [],
+   "has_record": true
+  },
+  "004J": {
+   "p_azon": "004J",
+   "name": "Gugán János",
+   "nationality": "horvát",
+   "order": 5,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004J",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 10
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "alelnök",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": 1,
+   "speeches_technical": 0,
+   "mandates": [],
+   "has_record": true
+  },
+  "004P": {
+   "p_azon": "004P",
+   "name": "Holecz Károly",
+   "nationality": "szlovén",
+   "order": 6,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004P",
+   "seat": {
+    "sector": 4,
+    "row": 6,
+    "seat": 3
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": 1,
+   "speeches_technical": 0,
+   "mandates": [],
+   "has_record": true
+  },
+  "004N": {
+   "p_azon": "004N",
+   "name": "Kramarenko Viktor",
+   "nationality": "ruszin",
+   "order": 7,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004N",
+   "seat": {
+    "sector": 4,
+    "row": 6,
+    "seat": 1
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Ellenőrző Albizottság",
+     "role": "tag",
+     "from": "2026-05-26",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  },
+  "p059": {
+   "p_azon": "p059",
+   "name": "Paulik Antal",
+   "nationality": "szlovák",
+   "order": 8,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/p059",
+   "seat": {
+    "sector": 4,
+    "row": 6,
+    "seat": 2
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Ellenőrző Albizottság",
+     "role": "tag",
+     "from": "2026-05-26",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "alelnök",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Önkormányzati, Külügyi és Költségvetési Albizottság",
+     "role": "tag",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "A Magyarországi Nemzetiségek Bizottsága feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság",
+     "role": "elnök",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "Önkormányzati, külügyi és költségvetési albizottság",
+     "role": "tag",
+     "from": "2018-06-25",
+     "to": "2022-05-01"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "A Magyarországi nemzetiségek bizottsága feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság",
+     "role": "alelnök",
+     "from": "2018-06-25",
+     "to": "2022-05-01"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2018-05-09",
+     "to": "2022-05-01"
+    }
+   ],
+   "speeches": 2,
+   "speeches_technical": 0,
+   "mandates": [],
+   "has_record": true
+  },
+  "004I": {
+   "p_azon": "004I",
+   "name": "Purosz Alexandrosz",
+   "nationality": "görög",
+   "order": 9,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004I",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 9
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  },
+  "0065": {
+   "p_azon": "0065",
+   "name": "Dr. Szucsigán László",
+   "nationality": "román",
+   "order": 10,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/0065",
+   "seat": {
+    "sector": 4,
+    "row": 6,
+    "seat": 5
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-06-15",
+     "to": null
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  },
+  "004K": {
+   "p_azon": "004K",
+   "name": "Tóthné Szegedi Iwona Jolán",
+   "nationality": "lengyel",
+   "order": 11,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/004K",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 11
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  },
+  "v713": {
+   "p_azon": "v713",
+   "name": "Varga Szimeon",
+   "nationality": "bolgár",
+   "order": 12,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/v713",
+   "seat": {
+    "sector": 3,
+    "row": 6,
+    "seat": 8
+   },
+   "committees": [
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Ellenőrző Albizottság",
+     "role": "elnök",
+     "from": "2026-05-26",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "alelnök",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "alelnök",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": "Önkormányzati, Külügyi és Költségvetési Albizottság",
+     "role": "elnök",
+     "from": "2022-05-09",
+     "to": "2026-05-08"
+    },
+    {
+     "committee": "Magyarországi Nemzetiségek Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2022-05-02",
+     "to": "2022-05-09"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "Önkormányzati, külügyi és költségvetési albizottság",
+     "role": "elnök",
+     "from": "2018-06-25",
+     "to": "2022-05-01"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "Köznevelési, kulturális és egyházügyi albizottság",
+     "role": "tag",
+     "from": "2018-06-25",
+     "to": "2022-05-01"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2018-05-09",
+     "to": "2022-05-01"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "Önkormányzati, külügyi és költségvetési albizottság",
+     "role": "alelnök",
+     "from": "2014-10-15",
+     "to": "2018-05-07"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "A Magyarországi nemzetiségek bizottsága feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság (Ellenőrző albizottság)",
+     "role": "tag",
+     "from": "2014-06-12",
+     "to": "2018-05-07"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": "Önkormányzati, külügyi és költségvetési albizottság",
+     "role": "tag",
+     "from": "2014-06-12",
+     "to": "2014-10-15"
+    },
+    {
+     "committee": "Magyarországi nemzetiségek bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2014-05-26",
+     "to": "2018-05-07"
+    }
+   ],
+   "speeches": null,
+   "speeches_technical": null,
+   "mandates": [],
+   "has_record": true
+  }
+ }
+}

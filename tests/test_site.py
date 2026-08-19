@@ -55,9 +55,10 @@ class Build(unittest.TestCase):
     def test_landing_is_the_view_from_the_gallery(self):
         tot = site_totals()
         self.assertIn("<title>karzat — az Országgyűlés 1990 óta, ülőhelyenként</title>", self.page)
-        self.assertEqual(self.page.count('class="today"'), 199)                # the chamber today: every seated member, by faction
+        n_sz = len((load_inputs()["szoszolok"] or {}).get("people") or {})
+        self.assertEqual(self.page.count('class="today"'), 199 + n_sz)         # the chamber today: every MP by faction, every spokesperson as a ring
         self.assertIn("Az ülésterem ma", self.page)
-        self.assertIn('aria-label="Az ülésterem ma: 199 képviselő a helyén', self.page)
+        self.assertIn(f'aria-label="Az ülésterem ma: 199 képviselő és {n_sz} nemzetiségi szószóló a helyén', self.page)
         self.assertEqual(self.page.count('<a class="cyc'), len(tot["cycles"]))  # one row per cycle, the current one marked
         self.assertIn('<a class="cyc now" href="ckl43/index.html"', self.page)
         self.assertIn('title="TISZA 141"', self.page)                           # the composition at the constituent sitting
@@ -80,14 +81,18 @@ class Build(unittest.TestCase):
         from scripts.build_site import hall_data
         inp = load_inputs()
         data = hall_data(inp)
-        self.assertEqual(len(data), len(inp["plan"]["coords"]))                 # one entry per seated member, no more
-        self.assertEqual(self.page.count('<g class="seat" role="button"'), len(data))
+        n_sz = len((inp["szoszolok"] or {}).get("people") or {})
+        self.assertEqual(len(data), len(inp["plan"]["coords"]) + n_sz)          # one entry per person in the room, no more
+        self.assertEqual(self.page.count('<g class="seat" role="button"'), len(inp["plan"]["coords"]))
+        self.assertEqual(self.page.count('<g class="seat sz" role="button"'), n_sz)
         self.assertEqual(self.page.count('class="hit"'), len(data))             # the whole seat cell answers to the pointer
         self.assertIn('id="hall-data" data-mp-base="ckl43/kepviselo/"', self.page)
         self.assertIn('<div class="inspector" id="hall"', self.page)
         for azon, row in data.items():
             self.assertIn(f'data-az="{azon}"', self.page)
-            name, fac, mandate, seat, cast, in_roll, w, a, sp = row
+            name, fac, mandate, seat, cast, in_roll, w, a, sp = row[:9]
+            if fac == "szószóló":
+                continue                                                        # no roll call names them: checked in test_speeches.Spokespersons
             rec = inp["alignment"]["per_mp"].get(azon) or {"cast": 0, "in_roll": 0, "with": 0, "against": 0}
             self.assertEqual([cast, in_roll, w, a], [rec["cast"], rec["in_roll"], rec["with"], rec["against"]])   # the MP page's own numbers
             self.assertLessEqual(w + a, in_roll)
