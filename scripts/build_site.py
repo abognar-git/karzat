@@ -14,14 +14,18 @@ Inputs (all committed, all produced by scripts/derive_* from the cache):
   data/derived/mps.json              every person in the roll calls: mandate, seat, faction history, elections
   config/factions.yml                faction colours and left→right order
 
-Outputs: site/index.html and site/assets/karzat.css + karzat.js (committed, checked), site/szavazas/<slug>.html
-× votes and site/kepviselo/<p_azon>.html × MPs + site/kepviselo/index.html (generated, git-ignored). The look is
+Outputs: site/index.html — the landing page: the chamber as it sits today (every seat the member who holds it), the
+ten cycles since 1990, the last sitting day, the doors — and site/assets/karzat.css + karzat.js (committed, checked);
+then one tree per cycle under site/ckl<N>/ (index, szavazas/<slug>.html × votes, kepviselo/<p_azon>.html × MPs,
+felszolalas/, bizottsag/, feed/, adatok/ …) and the cross-cycle szemely/, kereses/, modszer/ (generated, git-ignored).
+Every cycle lives one level down, the current one included: a vote's address never changes when the next cycle
+starts. The look is
 Konzol's console language (see reference/konzol/): dark ground, dot grid, corner-bracketed panels, mono labels,
 a terminal footer whose log lines are real values, and a boot sequence that reduced-motion users never see.
 
 Deterministic: no clock is read (the freshness sentence is computed at the derive timestamp
-stored in the inputs). site/index.html is committed and guarded by --check + tests; the vote
-pages are generated (git-ignored) and reproducible from the committed inputs.
+stored in the inputs). site/index.html is committed and guarded by --check + tests; every other
+page is generated (git-ignored) and reproducible from the committed inputs.
 """
 
 from __future__ import annotations
@@ -99,7 +103,8 @@ def factions(cycle: int = 43) -> list[dict]:
 
 CURRENT_CYCLE = 43
 ARCHIVE_MAX_CYCLE = 41   # cycles up to this one are built light: 60 000 roll calls at full weight would be ~20 GB of pages
-CYCLE_DIR = {43: ""}                     # earlier cycles live one level down: site/ckl<N>/
+CYCLE_DIR: dict[int, str] = {}           # every cycle lives one level down, site/ckl<N>/ — the current one too, so a vote's
+                                         # address never changes when the next cycle starts; the site root is the landing page
 CYCLE_SPAN = {43: "2026-05-09 –", 42: "2022-05-02 – 2026-05-08", 41: "2018-05-08 – 2022-05-01", 40: "2014-05-06 – 2018-05-07",
               39: "2010-05-14 – 2014-05-05", 38: "2006-05-16 – 2010-05-13", 37: "2002-05-15 – 2006-05-15", 36: "1998-06-18 – 2002-05-14",
               35: "1994-06-28 – 1998-06-17", 34: "1990-05-02 – 1994-06-27"}
@@ -198,20 +203,25 @@ def site_totals() -> dict:
     cycles = available_cycles()
     votes = rolls = disagreements = 0
     starts, ends, people = [], [], set()
+    per_cycle: dict[int, dict] = {}
     for c in cycles:
         sfx = "" if c == CURRENT_CYCLE else f"_ckl{c}"
         fl = load_json(DERIVED / f"first_light{sfx}.json")
         idx = load_json(DERIVED / f"votes_index{sfx}.json")
         votes += fl["votes"]
         # a roll call is a vote whose record names the members: before 1998 the API prints none (empty <nev_szerint>)
-        rolls += sum(1 for v in idx["votes"] if (v.get("position_counts") or {}) and sum((v.get("position_counts") or {}).values()) > 0)
+        n_rolls = sum(1 for v in idx["votes"] if (v.get("position_counts") or {}) and sum((v.get("position_counts") or {}).values()) > 0)
+        rolls += n_rolls
         disagreements += len(idx.get("disagreements") or [])
         starts.append(fl["window"]["from"]); ends.append(fl["window"]["to"])
         mp_path = DERIVED / f"mps{sfx}.json"
-        if mp_path.exists():
-            people |= set(load_json(mp_path)["mps"])
+        roster = load_json(mp_path)["mps"] if mp_path.exists() else {}
+        people |= set(roster)
+        per_cycle[c] = {"votes": fl["votes"], "roll_calls": n_rolls, "from": fl["window"]["from"], "to": fl["window"]["to"],
+                        "people": len(roster), "sitting_days": (fl.get("sitting_days") or {}).get("count") or 0,
+                        "disagreements": len(idx.get("disagreements") or []), "last_sync_at": idx.get("last_sync_at")}
     _TOTALS.update({"cycles": cycles, "from": min(starts), "to": max(ends), "votes": votes, "roll_calls": rolls,
-                    "disagreements": disagreements, "people": len(people)})
+                    "disagreements": disagreements, "people": len(people), "per_cycle": per_cycle})
     return _TOTALS
 
 
@@ -236,7 +246,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     inp["cycle"] = cycle
     inp["closed"] = cycle != CURRENT_CYCLE
     inp["archive"] = cycle <= ARCHIVE_MAX_CYCLE                              # light pages: the roll calls live in adatok/ and the database
-    inp["base_depth"] = 0 if cycle == CURRENT_CYCLE else 1
+    inp["base_depth"] = 1                                                    # every cycle's tree is one level below the site root
     inp["cycles"] = available_cycles()
     # the same person in the other cycles' rosters, for cross-links between an MP's pages
     inp["also_in"] = {}
@@ -660,6 +670,48 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .filters input{border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:5px 9px;font-family:var(--mono);font-size:11px;min-width:220px}
 .filters input::placeholder{color:var(--dim2)}
 .filters .n{color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;margin-left:auto}
+/* the landing page */
+.landing .masthead{position:relative;border:1px solid var(--border);background:var(--panel-deep);padding:24px 26px 16px;display:grid;grid-template-columns:minmax(240px,.85fr) 1.7fr;gap:18px 32px;align-items:center}
+.landing .mast-h h1{font-size:52px;margin:0 0 12px}
+.landing .mast-lede{color:var(--dim);font-size:14px;max-width:40ch;margin:0;line-height:1.55}
+.landing .chamber-today{margin:0;min-width:0}.landing .chamber-today svg{width:100%;height:auto;display:block;outline:none}
+.landing .chamber-today figcaption{margin-top:4px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
+.landing .chamber-today figcaption .sub{text-transform:none;letter-spacing:.05em;margin-left:6px}.landing .chamber-today .legend{margin-top:6px}
+.landing .chamber-today .today{transition:opacity .15s}
+.landing .chamber-today .seat{transition:opacity .15s;outline:none;cursor:pointer}
+.landing .chamber-today .seat.dim{opacity:.12}
+.landing .chamber-today .seat.hl,.landing .chamber-today .seat:hover,.landing .chamber-today .seat:focus-visible{opacity:1}
+.landing .chamber-today .hit{fill:#fff;fill-opacity:0;stroke:none;transition:fill-opacity .12s}
+.landing .chamber-today .seat.hl .hit,.landing .chamber-today .seat:hover .hit,.landing .chamber-today .seat:focus-visible .hit{fill-opacity:.22}
+.landing .chamber-today .seat:focus-visible .hit{stroke:#fff;stroke-width:1.2;stroke-opacity:.9}
+.landing .chamber-today.pinned .seat:not(.hl){opacity:.35}
+.landing .chamber-today .legend button.f{border:1px solid transparent;background:transparent;color:inherit;font:inherit;padding:2px 6px 2px 2px;cursor:pointer}
+.landing .chamber-today .legend button.f:hover,.landing .chamber-today .legend button.f:focus-visible{border-color:var(--border-hi);color:var(--white)}
+.landing .chamber-today .legend button.f.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}
+.landing .inspector{min-height:74px}
+.counts.land{grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid.land{grid-template-columns:1.35fr .95fr;margin-top:16px}
+.cycles{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+.cyc{display:grid;grid-template-columns:44px minmax(0,1fr);gap:2px 14px;align-items:start;padding:9px 10px;border:1px solid transparent;color:inherit;text-decoration:none}
+.cyc .top{display:flex;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;align-items:baseline}
+.cyc:hover,.cyc:focus-visible{border-color:var(--border-hi);background:rgba(255,255,255,.025)}.cyc.now{border-color:var(--border)}
+.cyc .num{font-size:18px;color:var(--white);letter-spacing:-.02em;line-height:1.2}
+.cyc .body{display:block;min-width:0}
+.cyc .span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2)}
+.cyc .compbar{display:flex;height:12px;margin:6px 0 5px;overflow:hidden;background:var(--line2)}.cyc .compbar i{display:block;height:100%;position:static}
+.cyc .leg{display:block;font-size:9px;letter-spacing:.05em;color:var(--dim2);line-height:1.8}
+.cyc .leg i{display:inline-block;width:7px;height:7px;margin-right:4px;vertical-align:0}.cyc .leg b{color:var(--text);font-weight:400}
+.cyc .stat{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim2);text-align:right}
+.doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.door{display:block;color:inherit;text-decoration:none;min-height:150px}
+.door p{color:var(--dim);font-size:13px;margin:0 0 12px;line-height:1.5}
+.door .row{display:flex;gap:8px}.door .row input{flex:1 1 auto;min-width:0;border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:7px 10px;font-family:var(--mono);font-size:12px}
+.door .row input::placeholder{color:var(--dim2)}
+.door .row button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:6px 12px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
+.door .row button:hover,.door .row button:focus-visible{color:var(--white);border-color:var(--border-hi)}
+.door .go{display:block;color:var(--dim2);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
+a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go{color:var(--white)}
+@media(max-width:900px){.landing .masthead{grid-template-columns:1fr;padding:18px 16px 14px}.landing .mast-h h1{font-size:40px}.counts.land{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.land{grid-template-columns:1fr}.doors{grid-template-columns:1fr}.cyc{grid-template-columns:40px minmax(0,1fr)}.cyc .stat{text-align:left}}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
@@ -886,6 +938,69 @@ JS_INSPECT = """
   window.__karzatDimSeats = function(fac, pos){
     svg.querySelectorAll('.seat').forEach(function(g){ var ok = (fac === 'all' || g.getAttribute('data-f') === fac) && (pos === 'all' || g.getAttribute('data-pos') === pos); g.classList.toggle('dim', !ok); });
   };
+})();
+"""
+
+JS_HALL = """
+(function(){
+  // The landing page's chamber: every seat is the member who sits in it. Hover or focus names them and shows the
+  // cycle record the MP page prints; a click pins the card (Esc or a click on the floor releases it, a click on the
+  // name opens the page); the legend filters to one faction. Keyboard: the chamber is one tab stop, arrows walk the
+  // seats in seating order, Enter pins. Everything is in the page — no request is made.
+  var hall = document.querySelector('.chamber-today'), box = document.getElementById('hall'), src = document.getElementById('hall-data');
+  if (!hall || !box || !src) return;
+  var data; try { data = JSON.parse(src.textContent); } catch (e) { return; }
+  var svg = hall.querySelector('svg'); if (!svg) return;
+  var hint = box.innerHTML, pinned = null, colours = {};
+  document.querySelectorAll('.chamber-today .legend .f[data-f] i').forEach(function(i){ colours[i.parentNode.getAttribute('data-f')] = i.style.background; });
+  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
+  var mpBase = src.getAttribute('data-mp-base') || '';
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var seats = Array.prototype.slice.call(svg.querySelectorAll('.seat[data-az]'));
+  seats.forEach(function(g, i){ g.setAttribute('tabindex', i === 0 ? '0' : '-1'); });
+  function focusSeat(i){ if (!seats.length) return; i = (i + seats.length) % seats.length; seats.forEach(function(g, k){ g.setAttribute('tabindex', k === i ? '0' : '-1'); }); seats[i].focus(); }
+  function render(az){
+    var d = data[az]; if (!d) return;
+    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8];
+    var c = colours[fac] || '#8a8a8a';
+    var part = inroll ? Math.round(100 * cast / inroll) : null, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
+    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+      '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
+      '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +
+      (inroll ? 'leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyetért <b>' + agree + '%</b>' : '') : 'még nincs név szerinti szavazása') +
+      (sp ? ' · érdemi felszólalás <b>' + sp + '</b>' : '') + '</span>' +
+      (pinned ? '<span class="pin">rögzítve<button type="button" data-unpin>Esc</button></span>' : '') + '</div>';
+  }
+  function mark(az, on){ svg.querySelectorAll('.seat[data-az="' + az + '"]').forEach(function(g){ g.classList.toggle('hl', on); }); }
+  function show(az){ if (pinned && pinned !== az) return; render(az); }
+  function reset(){ if (pinned) return; box.innerHTML = hint; }
+  svg.addEventListener('mouseover', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; mark(g.getAttribute('data-az'), true); show(g.getAttribute('data-az')); });
+  svg.addEventListener('mouseout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
+  svg.addEventListener('focusin', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; mark(g.getAttribute('data-az'), true); show(g.getAttribute('data-az')); });
+  svg.addEventListener('focusout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
+  function pin(az){ if (pinned) mark(pinned, false); pinned = az; hall.classList.add('pinned'); mark(az, true); render(az); }
+  function unpin(){ if (pinned) mark(pinned, false); pinned = null; hall.classList.remove('pinned'); box.innerHTML = hint; }
+  svg.addEventListener('click', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) { unpin(); return; } var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); });
+  svg.addEventListener('keydown', function(e){
+    var g = e.target.closest('.seat[data-az]'); if (!g) return; var i = seats.indexOf(g);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); focusSeat(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); focusSeat(i - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); focusSeat(0); }
+    else if (e.key === 'End') { e.preventDefault(); focusSeat(seats.length - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); }
+  });
+  box.addEventListener('click', function(e){ if (e.target.closest('[data-unpin]')) unpin(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') unpin(); });
+  // the legend filters: one faction at a time, the rest dimmed (a second click clears it)
+  var fac = 'all';
+  document.querySelectorAll('.chamber-today .legend button[data-hf]').forEach(function(b){
+    b.addEventListener('click', function(){
+      fac = (fac === b.getAttribute('data-hf')) ? 'all' : b.getAttribute('data-hf');
+      document.querySelectorAll('.chamber-today .legend button[data-hf]').forEach(function(x){ var on = fac !== 'all' && x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      svg.querySelectorAll('.seat[data-f]').forEach(function(g){ g.classList.toggle('dim', fac !== 'all' && g.getAttribute('data-f') !== fac); });
+    });
+  });
 })();
 """
 
@@ -1163,8 +1278,7 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
     rel = "../" * depth
     sync_txt = sync_stamp(inp)
     parts = []
-    if inp["closed"]:
-        crumbs = [(f'{inp["cycle"]}. ciklus', f'{rel}{cycle_dir(inp["cycle"])}index.html' if crumbs else None)] + list(crumbs)
+    crumbs = [(f'{inp["cycle"]}. ciklus', f'{rel}{cycle_dir(inp["cycle"])}index.html' if crumbs else None)] + list(crumbs)
     for i, (name, href) in enumerate(crumbs):
         if i:
             parts.append('<span class="sl">/</span>')
@@ -1176,7 +1290,7 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
         near = ' class="near"' if abs(i - cur_i) == 1 else ""
         return f'<a href="{rel}{cycle_dir(c)}index.html"{near}>{c}</a>'
     switch = ' <span class="sl">·</span> '.join(cyc_link(i, c) for i, c in enumerate(inp["cycles"]))
-    return (f'<header class="kz-topbar"><div class="l"><a class="brand" href="{rel}{cycle_dir(inp["cycle"])}index.html"><i></i>karzat</a>'
+    return (f'<header class="kz-topbar"><div class="l"><a class="brand" href="{rel}index.html"><i></i>karzat</a>'
             + (f'<span class="sep"></span><nav aria-label="Útvonal">{"".join(parts)}</nav>' if crumbs else "")
             + f'</div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{switch}</nav><span class="sep hide-sm"></span>'
             f'<span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_txt)}</b></span></div></header>\n<main class="kz-main"><div class="wrap">')
@@ -1939,13 +2053,13 @@ def pick_hero(inp: dict) -> str:
 
 
 def build() -> str:
-    """The index page (the name tests and --check use)."""
-    return build_index(load_inputs(), HERO_TS)
+    """The site root — the landing page (the name tests and --check use)."""
+    return build_landing()
 
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
+    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -3315,8 +3429,232 @@ def build_person_index(inp: dict, people: dict[str, list[dict]]) -> str:
 """ + page_tail(inp, 1)
 
 
+# -- the landing page -----------------------------------------------------------------------------
+# The site root: the view from the gallery — the chamber as it sits today, the ten cycles since 1990 as the way in,
+# the last sitting day, the doors (my MP, search, the words, the channels, the data, the method). Every number on it
+# is computed from the same derived inputs as the cycle pages; nothing here is typed.
+
+CYCLE_START = {c: span.split(" – ")[0] for c, span in CYCLE_SPAN.items()}    # the constituent sitting = every mandate's first day
+
+
+def composition_on(mps: dict, day: str, facs: list[dict]) -> list[tuple[str, int, str]]:
+    """[(faction, mandates, colour)] in force on `day` from the records' dated mandate and faction rows — a mandate in
+    force without a faction row that day counts as független. Ordered as the cycle's faction config orders the
+    chamber (opposition left, government right); factions the config does not know come last, grey."""
+    order = {f["id"]: f["sort_order"] for f in facs}
+    colour = {f["id"]: f["colour"] for f in facs}
+    n: Counter = Counter()
+    for m in mps.values():
+        mf, mt = m.get("mandate_from"), m.get("mandate_to")
+        if not mf or mf > day or (mt and mt < day):
+            continue
+        fac = next((fr["faction"] for fr in m.get("factions") or [] if fr.get("from") and fr["from"] <= day and (not fr.get("to") or fr["to"] >= day)), None)
+        n[fac or "független"] += 1
+    return [(f, k, colour.get(f, "#8a8a8a")) for f, k in sorted(n.items(), key=lambda kv: (order.get(kv[0], 999), -kv[1], kv[0]))]
+
+
+def landing_inputs() -> dict:
+    """The current cycle in full (plan, votes, roster) and, for every cycle, the roster and the faction config."""
+    cur = load_inputs(CURRENT_CYCLE)
+    rows = []
+    for c in available_cycles():
+        sfx = "" if c == CURRENT_CYCLE else f"_ckl{c}"
+        mp_path = DERIVED / f"mps{sfx}.json"
+        mps = cur["mps"] if c == CURRENT_CYCLE else (load_json(mp_path)["mps"] if mp_path.exists() else {})
+        rows.append({"cycle": c, "mps": mps, "facs": factions(c)})
+    return {"cur": cur, "rows": rows, "totals": site_totals()}
+
+
+def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
+    """The chamber as the records place today's members: parlament.hu's seat outlines as the floor, each occupied seat
+    filled with its member's faction colour (the seat's title names the member and the place), empty seats as
+    outlines. Returns (svg, [(faction, seated, colour)])."""
+    plan = cur["plan"]
+    if not plan or not plan.get("seat_outlines"):
+        return "", []
+    geo = plan["geometry"]
+    colour = {f["id"]: f["colour"] for f in cur["facs"]}
+    order = {f["id"]: f["sort_order"] for f in cur["facs"]}
+    k = geo.get("node_radius", 5.2) / 5.2
+    occupied = {(c["sector"], c["row"], c["seat"]) for c in plan["coords"].values()}
+    parts = [f'<polygon points="{o["points"]}" class="seatshape{" occ" if (o["sector"], o["row"], o["seat"]) in occupied else ""}">'
+             + ("" if (o["sector"], o["row"], o["seat"]) in occupied else f'<title>üres hely · {"miniszteri pad" if o["sector"] == geo.get("front_bench_sector") else str(o["sector"]) + ". szektor, " + str(o["row"]) + ". sor"}, {o["seat"]}. szék</title>')
+             + "</polygon>" for o in plan["seat_outlines"]]
+    seated: Counter = Counter()
+    hit_r = geo.get("seat_pitch", 5.2 * k * 2) * 0.55            # the whole seat cell answers to the pointer, as on a vote page
+    for azon, xy in sorted(plan["coords"].items(), key=lambda kv: (kv[1]["sector"], kv[1]["row"], kv[1]["seat"])):
+        mp = cur["mps"].get(azon) or {}
+        fac = mp.get("faction") or "független"
+        seated[fac] += 1
+        place = "miniszteri pad" if xy.get("front_bench") else f'{xy["sector"]}. szektor, {xy["row"]}. sor'
+        parts.append(f'<g class="seat" role="button" data-az="{esc(azon)}" data-f="{esc(fac)}" aria-label="{esc(mp.get("name") or azon)} ({esc(fac)})">'
+                     f'<title>{esc(mp.get("name") or azon)} ({esc(fac)}) · {esc(place)}, {xy["seat"]}. szék</title>'
+                     f'<circle cx="{xy["x"]}" cy="{xy["y"]}" r="{5.2 * k:.2f}" fill="{colour.get(fac, "#8a8a8a")}" class="today"/>'
+                     f'<circle cx="{xy["x"]}" cy="{xy["y"]}" r="{hit_r:.2f}" class="hit"/></g>')
+    W = max(abs(geo["x_min"]), abs(geo["x_max"])) + 22
+    R = -geo["y_min"] + 10
+    labels = "".join(f'<text x="{ax}" y="{ay}" class="seclabel" text-anchor="middle" dominant-baseline="middle">{sec}</text>'
+                     for sec, (ax, ay) in geo["sector_label_anchors"].items() if int(sec) != geo.get("front_bench_sector"))
+    fx, fy = geo["sector_label_anchors"].get(str(geo.get("front_bench_sector")), (0, -40))
+    legend = [(f, n, colour.get(f, "#8a8a8a")) for f, n in sorted(seated.items(), key=lambda kv: (order.get(kv[0], 999), kv[0]))]
+    svg = (f'<svg viewBox="{-W:.0f} -{R + 8:.0f} {2 * W:.0f} {R + 26:.0f}" role="group" aria-label="Az ülésterem ma: {len(plan["coords"])} képviselő a helyén, frakciónként színezve; {len(plan["seat_outlines"])} hely az Országház alaprajzán. Egy hely: a képviselő neve és mérlege; kattintásra rögzül, nyilakkal is járható">'
+           + f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>' + PODIUM
+           + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>' + labels + "".join(parts) + "</svg>")
+    return svg, legend
+
+
+def cycle_strip_html(rows: list[dict], totals: dict) -> str:
+    """The ten cycles, newest first: the composition at the constituent sitting as a stacked bar, the span, the numbers."""
+    out = []
+    for r in rows:
+        c = r["cycle"]
+        pc = totals["per_cycle"].get(c) or {}
+        start = CYCLE_START.get(c)
+        comp = composition_on(r["mps"], start, r["facs"]) if start else []
+        total = sum(n for _, n, _ in comp)
+        segs = "".join(f'<i style="width:{100 * n / total:.2f}%;background:{col}" title="{esc(f)} {n}"></i>' for f, n, col in comp) if total else ""
+        legend = " · ".join(f'<span><i style="background:{col}"></i>{esc(f)} <b>{n}</b></span>' for f, n, col in comp)
+        span = CYCLE_SPAN.get(c, "")
+        nums = [f'{hu_num(pc.get("votes", 0))} szavazás']
+        if pc.get("roll_calls"):
+            nums.append(f'{hu_num(pc["roll_calls"])} név szerinti')
+        if pc.get("sitting_days"):
+            nums.append(f'{hu_num(pc["sitting_days"])} ülésnap')
+        nums.append(f'{hu_num(pc.get("people", 0))} képviselő')
+        cur = c == CURRENT_CYCLE
+        out.append(f'''<a class="cyc{" now" if cur else ""}" href="{cycle_dir(c)}index.html" aria-label="{c}. ciklus, {esc(span)}">
+  <span class="num mono">{c}.</span>
+  <span class="body"><span class="top"><span class="span mono">{esc(span)}{" · folyamatban" if cur else ""}</span><span class="stat mono">{" · ".join(nums)}</span></span>
+    <span class="compbar" role="img" aria-label="{esc(", ".join(f"{f} {n}" for f, n, _ in comp))} — mandátumok az alakuló ülés napján">{segs}</span>
+    <span class="leg mono">{legend}{(" · <b>" + hu_num(total) + "</b> mandátum") if total else ""}</span></span></a>''')
+    return "".join(out)
+
+
+def latest_votes_html(cur: dict, n_max: int = 8) -> tuple[str, str, int]:
+    """The current cycle's last sitting day with votes: (rows html, date, count)."""
+    votes = cur["idx"]["votes"]
+    if not votes:
+        return "", "", 0
+    last = max(v["on_date"] for v in votes)
+    day = [v for v in votes if v["on_date"] == last]
+    rows = []
+    for v in sorted(day, key=lambda v: v["ts"], reverse=True)[:n_max]:
+        mo = v["motions"][0] if v.get("motions") else None
+        subj = (f'{esc(mo.get("iromany") or "")} {esc(cut(mo.get("title") or "", 80))}'.strip() if mo
+                else ("<em>Jelenlét megállapítás</em>" if v["kind"] == "jelenlet" else esc(cut(v.get("remark") or "—", 80))))
+        rows.append(f'<tr><td class="ts mono"><a href="{cycle_dir(CURRENT_CYCLE)}szavazas/{esc(v["slug"])}.html">{esc(v["time"])}</a></td><td>{subj}</td><td>{result_badge(v)}</td></tr>')
+    return "".join(rows), last, len(day)
+
+
+def hall_data(cur: dict) -> dict[str, list]:
+    """What the landing chamber's card shows for each seated member, from the same alignment the MP pages print:
+    name, faction, mandate, seat, cast / in roll call, with / against the faction's plurality, substantive speeches."""
+    per_mp = cur["alignment"]["per_mp"]
+    speeches = speeches_by_mp(cur)
+    out = {}
+    for azon in (cur["plan"] or {}).get("coords", {}):
+        mp = cur["mps"].get(azon)
+        if not mp:
+            continue
+        rec = per_mp.get(azon) or {"cast": 0, "in_roll": 0, "with": 0, "against": 0}
+        out[azon] = [mp["name"], mp.get("faction") or "független", mandate_text(mp), seat_text(mp),
+                     rec["cast"], rec["in_roll"], rec["with"], rec["against"],
+                     sum(1 for r in speeches.get(azon, []) if not r["technical"])]
+    return out
+
+
+def build_landing() -> str:
+    li = landing_inputs()
+    cur, tot = li["cur"], li["totals"]
+    inp = cur                                                     # the footer and the top bar speak from the current cycle
+    inp["base_depth"] = 0                                         # this page is the root itself
+    cdir = cycle_dir(CURRENT_CYCLE)
+    chamber, legend = chamber_today_svg(cur)
+    legend_html = "".join(f'<button type="button" class="f" data-hf="{esc(f)}" data-f="{esc(f)}" aria-pressed="false" title="csak {esc(f)} — mégegyszer: mind"><i style="background:{col}"></i>{esc(f)} <span class="mono">{n}</span></button>' for f, n, col in legend)
+    seated = sum(n for _, n, _ in legend)
+    plan = cur["plan"] or {}
+    n_seats = len(plan.get("seat_outlines") or [])
+    rows_html, last_day, n_day = latest_votes_html(cur)
+    fl = cur["fl"]
+    roster_n = fl["mps"]["total"]
+    roster_now = sum(1 for m in cur["mps"].values() if m.get("current"))
+    unplaced = roster_now - seated
+    hero_note = ((f'Mind a {hu_num(seated)} mandátummal rendelkező képviselő a helyén, ahogy az adatlapja megadja'
+                  + (f' · {hu_num(unplaced)} képviselőnek nincs ülőhely az adatlapján' if unplaced else "")
+                  + f' · a terem {hu_num(n_seats)} széke közül {hu_num(n_seats - seated)} üres: a Ház 2014 óta 199 mandátumos, a terem 386-ra épült'
+                  + ' · a frakciók színei az oldal jelölései')
+                 if chamber else "Az ülésrend csak a jelenlegi ciklusból ismert.")
+    n_cyc = len(tot["cycles"])
+    lines = [
+        f"{n_cyc} ciklus · {hu_date(tot['from'])} – {hu_date(tot['to'])} · {hu_num(tot['votes'])} szavazás · {hu_num(tot['roll_calls'])} név szerinti lista · {hu_num(tot['people'])} képviselő",
+        ("a számított eredmény minden szavazásnál egyezik a jegyzőkönyvivel" if tot["disagreements"] == 0
+         else f"a számított eredmény {hu_num(tot['disagreements'])} szavazásnál eltér a jegyzőkönyvitől — jelölve"),
+        (f"ülésrend: az Országház alaprajza, {hu_num(n_seats)} hely — csak a jelenlegi ciklusból ismert" if n_seats else "ülésrend: csak a jelenlegi ciklusból ismert"),
+        (f"frissítve {hu_date(sync_stamp(inp)[:10])} {sync_stamp(inp)[11:]}" if sync_stamp(inp) != "—" else "frissítve —"),
+    ]
+    page = page_head("karzat — az Országgyűlés 1990 óta, ülőhelyenként",
+                     f"Az Országgyűlés szavazásai, név szerinti listái és felszólalásai {hu_date(tot['from'])[:4]} óta, ciklusonként: ki hogyan szavazott, mennyi kellett hozzá, ki mit mondott. Forrás: parlament.hu Web API.", 0,
+                     feeds=[(f"{cdir}feed/kulonvelemeny.xml", f'karzat · különvélemények · {CURRENT_CYCLE}. ciklus'), (f"{cdir}feed/heti.xml", f'karzat · a hét számokban · {CURRENT_CYCLE}. ciklus'),
+                            (f"{cdir}feed/felszolalasok.xml", f'karzat · felszólalások szövege · {CURRENT_CYCLE}. ciklus')]) + f"""
+<header class="kz-topbar"><div class="l"><a class="brand" href="index.html" aria-current="page"><i></i>karzat</a></div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{' <span class="sl">·</span> '.join(f'<a href="{cycle_dir(c)}index.html"{" class=near" if c == CURRENT_CYCLE else ""}>{c}</a>' for c in tot["cycles"])}</nav><span class="sep hide-sm"></span><span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_stamp(inp))}</b></span></div></header>
+<main class="kz-main"><div class="wrap landing">
+<section class="masthead">{CORNERS}
+  <div class="mast-h"><h1>karzat</h1><p class="mast-lede">Az Országgyűlés {hu_date(tot['from'])[:4]} óta, ülőhelyenként: ki hogyan szavazott, mennyi kellett hozzá, ki mit mondott. Számok, nem minősítések — az Országgyűlés saját adataiból.</p></div>
+  <figure class="chamber-today">{chamber}
+    <figcaption><span class="label" data-kz-text>Az ülésterem ma</span> <span class="sub">{esc(hero_note)}</span><div class="legend">{legend_html}</div></figcaption>
+    <div class="inspector" id="hall" aria-live="polite"><span class="insp-hint">Egy helyre mutatva: ki ül ott, és mit tett eddig a ciklusban. Kattintásra rögzül; a névre kattintva a képviselő oldala. Nyilakkal is járható.</span></div>
+    <script type="application/json" id="hall-data" data-mp-base="{cdir}kepviselo/">{json.dumps(hall_data(cur), ensure_ascii=False, separators=(",", ":"))}</script>
+  </figure>
+</section>
+<section class="counts land">
+  <div class="c">{CORNERS}<b class="mono" data-kz-number="{n_cyc}">{n_cyc}</b><span data-kz-text>ciklus</span><span class="sub">{hu_date(tot['from'])} – {hu_date(tot['to'])}</span></div>
+  <div class="c">{CORNERS}<b class="mono" data-kz-number="{tot['votes']}">{hu_num(tot['votes'])}</b><span data-kz-text>szavazás</span><span class="sub">mindegyik a saját oldalán, a szükséges többséggel</span></div>
+  <div class="c">{CORNERS}<b class="mono" data-kz-number="{tot['roll_calls']}">{hu_num(tot['roll_calls'])}</b><span data-kz-text>név szerinti lista</span><span class="sub">1998 óta; előtte az API csak frakciónként számol</span></div>
+  <div class="c">{CORNERS}<b class="mono" data-kz-number="{tot['people']}">{hu_num(tot['people'])}</b><span data-kz-text>képviselő</span><span class="sub">egy pályakép mindenkinek, ciklusokon át</span></div>
+</section>
+<section class="grid land">
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Ciklusok {hu_date(tot['from'])[:4]} óta</span><span class="tag">mandátumok az alakuló ülés napján · a képviselői adatlapokból</span></h2>
+    <div class="cycles">{cycle_strip_html(li["rows"], tot)}</div>
+  </section>
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>A legutóbbi ülésnap</span><span class="tag">{esc(hu_date(last_day)) if last_day else "—"} · {hu_num(n_day)} szavazás · <a href="{cdir}index.html#dir">a {CURRENT_CYCLE}. ciklus szavazásai</a></span></h2>
+    <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Idő</th><th scope="col">Tárgy</th><th scope="col">Eredmény</th></tr></thead><tbody>{rows_html or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+    {(f'<div class="hero-meta" style="margin-top:6px">és még {hu_num(n_day - 8)} a ciklus oldalán</div>' if n_day > 8 else "")}
+    {freshness_html(cur)}
+    <div class="hero-meta" style="margin-top:10px">Csatornák: <a href="{cdir}feed/kulonvelemeny.xml">különvélemények</a> · <a href="{cdir}feed/heti.xml">a hét számokban</a> · <a href="{cdir}feed/felszolalasok.xml">felszólalások szövege</a> · <a href="{cdir}feed/index.html">minden értesítés</a></div>
+  </section>
+</section>
+<section class="doors">
+  <form class="panel door" action="{cdir}kepviselom/index.html" method="get">{CORNERS}
+    <h2><span data-kz-text>Ki a képviselőm?</span></h2>
+    <p>Település vagy budapesti kerület → választókerület → a képviselő; a listás képviselők külön.</p>
+    <div class="row"><input type="search" name="t" placeholder="település" aria-label="Település vagy kerület" autocomplete="off"><button type="submit">keresés</button></div>
+  </form>
+  <form class="panel door" action="kereses/index.html" method="get">{CORNERS}
+    <h2><span data-kz-text>Keresés</span></h2>
+    <p>Képviselők, pályaképek és irományok minden ciklusból, egy mezőben.</p>
+    <div class="row"><input type="search" name="q" placeholder="név vagy iromány" aria-label="Keresés" autocomplete="off"><button type="submit">keresés</button></div>
+  </form>
+  <form class="panel door" action="{cdir}felszolalas/kereses.html" method="get">{CORNERS}
+    <h2><span data-kz-text>A szavak</span></h2>
+    <p>A felszólalások jegyzőkönyvi szövege szó szerint; a {CURRENT_CYCLE}. ciklus szövegeiben keres.</p>
+    <div class="row"><input type="search" name="q" placeholder="szó, legalább 3 betű" aria-label="Keresés a felszólalásokban" autocomplete="off"><button type="submit">keresés</button></div>
+  </form>
+  <a class="panel door" href="{cdir}index.html">{CORNERS}<h2><span data-kz-text>A {CURRENT_CYCLE}. ciklus</span></h2><p>{hu_num(fl["votes"])} szavazás, {hu_num(roster_n)} képviselő, a terem ülőhelyenként; szavazásonként a szükséges többség, képviselőnként a hét számokban.</p><span class="go mono">ckl{CURRENT_CYCLE}/ →</span></a>
+  <a class="panel door" href="szemely/index.html">{CORNERS}<h2><span data-kz-text>Pályaképek</span></h2><p>{hu_num(tot['people'])} személy {hu_date(tot['from'])[:4]} óta: mandátumok, frakciók, szavazási mérleg ciklusonként.</p><span class="go mono">szemely/ →</span></a>
+  <a class="panel door" href="modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer és adatok</span></h2><p>Minden szabály és számítás leírva; minden tábla letölthető CSV-ben és JSON-ban, ciklusonként az <span class="mono">adatok/</span> alatt.</p><span class="go mono">modszer/ →</span></a>
+</section>
+</div></main>
+{terminal_html(inp, lines)}<script src="assets/karzat.js"></script>
+</body>
+</html>
+"""
+    return page
+
+
 def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None = None) -> dict:
-    """Every cycle with derived inputs: the current one at out_dir, earlier ones under out_dir/ckl<N>/; then one
+    """Every cycle with derived inputs under out_dir/ckl<N>/, the landing page at out_dir/index.html, then one
     career page per person under out_dir/szemely/, assembled from every cycle's roster."""
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "assets").mkdir(parents=True, exist_ok=True)
@@ -3326,9 +3664,11 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
     for cycle in (cycles or available_cycles()):
         res.append(build_cycle(out_dir / cycle_dir(cycle), cycle, index_only=index_only))
     people_n = 0
+    full = not cycles or sorted(cycles) == sorted(available_cycles())
+    if full:
+        (out_dir / "index.html").write_text(build_landing(), encoding="utf-8")      # the site root: every cycle's door
     # the cross-cycle pages (careers, search index, method) are assembled from every cycle's build: a partial
     # `--cycle N` run leaves them alone rather than shrinking them to one cycle
-    full = not cycles or sorted(cycles) == sorted(available_cycles())
     if not index_only and full:
         people: dict[str, list[dict]] = {}
         for r in res:

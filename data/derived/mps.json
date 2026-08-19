@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-08-18T21:38:06.885113+02:00",
+ "derived_at": "2026-08-19T12:40:34.649620+02:00",
  "cycle": 43,
  "count": 201,
  "current": 199,
@@ -110,7 +110,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 5,
+     "onallo": 6,
      "nem_onallo": 0
     },
     {
@@ -314,6 +314,15 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/536",
+     "kind": "K",
+     "number": 536,
+     "title": "Mi lesz a területszerzéssel az M87 és M86 számú utak esetében?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2220c1e893-53ee-44a1-b113-9e1ad7b484c3%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/356",
      "kind": "K",
@@ -2244,7 +2253,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 5,
+     "onallo": 6,
      "nem_onallo": 1
     },
     {
@@ -2483,6 +2492,15 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/521",
+     "kind": "K",
+     "number": 521,
+     "title": "Ugye megtartják a 13. és 14. havi nyugdíjat?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%227ced2861-7582-40e9-9fd8-f7a40545d9e5%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/476",
      "kind": "K",
@@ -4375,7 +4393,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 2,
+     "onallo": 7,
      "nem_onallo": 1
     }
    ],
@@ -4410,6 +4428,51 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/526",
+     "kind": "K",
+     "number": 526,
+     "title": "Hogyan biztosítják az első alapdiploma tandíjmentessé tételét a társadalom legszélesebb körének?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221393fd94-3d20-4fc2-96d6-275ac3da7bbb%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/525",
+     "kind": "K",
+     "number": 525,
+     "title": "Akkor most minden egyetemistának hozzáférhető lesz ősztől az Erasmus?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%226baa434a-c588-428b-a5a2-b4b1ebef5b7e%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/524",
+     "kind": "K",
+     "number": 524,
+     "title": "A tankönyvpiac liberalizációja mellett megmarad-e a tankönyvek ingyenessége és az egyenlő hozzáférés?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22884343a8-17cb-481f-ac47-09b219477a65%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/523",
+     "kind": "K",
+     "number": 523,
+     "title": "Mikor valósul meg a nevelést-oktatást segítő dolgozók bérének 25%-os emelése?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22e222fd01-16d4-4064-884f-5d1a0df477fc%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/522",
+     "kind": "K",
+     "number": 522,
+     "title": "Biztosítják-e a továbbiakban is a megemelt tanulmányi ösztöndíjakat, folytatják-e azok emelését, és mikor valósul meg a rászoruló egyetemistáknak megígért magasabb szociális ösztöndíj?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2239351774-74a8-4a19-bc4c-adefb016b063%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "A/220",
      "kind": "A",
@@ -4818,7 +4881,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 3,
+     "speeches": 2,
      "technical": 0
     }
    ],
@@ -6651,7 +6714,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 3,
+     "onallo": 4,
      "nem_onallo": 0
     },
     {
@@ -6762,6 +6825,15 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/506",
+     "kind": "K",
+     "number": 506,
+     "title": "Hídépítés Kelet és Nyugat között: Hogyan lép szintet hazánk és a Türk Államok Szervezetének partnersége a következő években?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22c6c663fd-be57-4035-aa7c-c2f5e3b54269%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/238",
      "kind": "I",
@@ -7686,7 +7758,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 7,
+     "onallo": 8,
      "nem_onallo": 0
     },
     {
@@ -7793,11 +7865,20 @@
    ],
    "motions": [
     {
+     "szam": "K/532",
+     "kind": "K",
+     "number": 532,
+     "title": "Mikor és milyen feltételekkel tervezi a Kormány kiírni a 2026-os évre a szociális tüzelőanyag pályázatot?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2226a3abd3-c874-4c50-b356-b78b8569cc86%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "K/466",
      "kind": "K",
      "number": 466,
      "title": "Mikor várható, hogy a Magyar Falu Program keretében a kistelepülési civil szervezetek számára rendelkezésre álló 5 milliárd forint döntési listája is elérhető lesz?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2238164419-fa99-44a8-88bd-4fcbac023972%22%7D",
      "co_submitters": 0
     },
@@ -9494,7 +9575,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 12,
+     "onallo": 14,
      "nem_onallo": 2
     },
     {
@@ -9546,6 +9627,24 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/535",
+     "kind": "K",
+     "number": 535,
+     "title": "Kettős mérce a kormányzati hirdetésekben? Mikor lép életbe a meghirdetett hirdetési moratórium és a politikai hirdetések független felügyelete?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%223a5580ca-aee4-450d-9a89-df686754e2f1%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/519",
+     "kind": "K",
+     "number": 519,
+     "title": "Mikor duplázza meg a Kormány a családi pótlékot?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22a40c4122-9cef-4e64-ac17-1b3c451e1f05%22%7D",
+     "co_submitters": 1
+    },
     {
      "szam": "I/501",
      "kind": "I",
@@ -13138,7 +13237,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 7,
+     "onallo": 9,
      "nem_onallo": 0
     },
     {
@@ -13214,6 +13313,24 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/534",
+     "kind": "K",
+     "number": 534,
+     "title": "Milyen szakmai szempontok alapján döntöttek a Magyar Falu Program pályázatairól?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221ceab0df-7db9-4cdd-98f4-101835e5e154%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/533",
+     "kind": "K",
+     "number": 533,
+     "title": "Mikortól várható, hogy az új jogszabályok esetében kötelező lesz a vidékre gyakorolt hatások vizsgálata?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%227ba95196-af76-45c8-b9c6-e82b6d52e58e%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/462",
      "kind": "K",
@@ -13818,7 +13935,7 @@
     {
      "ciklus": "2026-",
      "speeches": 5,
-     "technical": 412
+     "technical": 404
     }
    ],
    "committees": [
@@ -14220,7 +14337,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 27,
+     "onallo": 28,
      "nem_onallo": 9
     }
    ],
@@ -14228,7 +14345,7 @@
     {
      "ciklus": "2026-",
      "speeches": 39,
-     "technical": 269
+     "technical": 262
     },
     {
      "ciklus": "2022-2026",
@@ -14238,6 +14355,15 @@
    ],
    "committees": [],
    "motions": [
+    {
+     "szam": "K/509",
+     "kind": "K",
+     "number": 509,
+     "title": "Számíthatnak arra a magyar emberek, hogy a Kormány segít megőrizni a trikolóros rendszámokat, vagy a járműtörténet ezen évei a feledés homályába merülnek?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%225b4b0910-09d2-40ef-82ed-9a15c2b3efd1%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "T/500",
      "kind": "T",
@@ -16472,7 +16598,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 3,
+     "onallo": 6,
      "nem_onallo": 0
     },
     {
@@ -16510,6 +16636,33 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/531",
+     "kind": "K",
+     "number": 531,
+     "title": "A Tisza Pártnak az egészségügyi intézmények politikai reklámfelületként szolgálnak?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ab8c3c1d-460f-40b4-afce-3783065a9952%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/530",
+     "kind": "K",
+     "number": 530,
+     "title": "Milyen azonnali beavatkozások történtek eddig egyes útszakaszok, közlekedési csomópontok balesetmentesítése érdekében?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%224f5595d6-79d2-4edf-a1c6-907d1999f2ae%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/529",
+     "kind": "K",
+     "number": 529,
+     "title": "Mikor indul el az országos hídfelújítási program, és mely hidak élveznek elsőbbséget?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22c6b031ee-9b58-4742-87f8-087273d0a02b%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "A/335",
      "kind": "A",
@@ -18519,7 +18672,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 4,
+     "onallo": 5,
      "nem_onallo": 0
     }
    ],
@@ -18540,6 +18693,15 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/507",
+     "kind": "K",
+     "number": 507,
+     "title": "Mikor számíthatnak döntésre a gazdálkodók?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22dc6fc0ea-4410-4e16-b322-1e41d356af69%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/426",
      "kind": "K",
@@ -18929,7 +19091,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 15,
+     "speeches": 13,
      "technical": 5
     },
     {
@@ -19542,7 +19704,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 2,
+     "onallo": 4,
      "nem_onallo": 0
     }
    ],
@@ -19577,6 +19739,24 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/528",
+     "kind": "K",
+     "number": 528,
+     "title": "Hogyan biztosítják a választási programban megígért minőségi oktatást minden roma gyermek számára?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%220354619a-750d-4156-8f71-669ea0931575%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/527",
+     "kind": "K",
+     "number": 527,
+     "title": "Hogyan biztosítják a választási programban megígért minőségi oktatást minden roma gyermek számára?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%228bc8385a-6d60-46ee-86be-58638fc32ffa%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "H/179",
      "kind": "H",
@@ -22455,7 +22635,7 @@
      "kind": "K",
      "number": 468,
      "title": "Hogyan fogja a kormány biztosítani az emberek és a környezet egészségét a szélenergia-termelés bővítése során?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ee54fe04-c060-412a-8760-046927c2348e%22%7D",
      "co_submitters": 0
     },
@@ -24093,7 +24273,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 4,
+     "onallo": 5,
      "nem_onallo": 1
     }
    ],
@@ -24126,6 +24306,15 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/537",
+     "kind": "K",
+     "number": 537,
+     "title": "Mikor lesz kézzelfogható eredménye a gyermekek egészségét védő választási ígéreteknek?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%220e8d90bd-5ce3-4bd8-bebc-f63556cb414b%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/411",
      "kind": "I",
@@ -26702,7 +26891,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 9,
+     "onallo": 10,
      "nem_onallo": 0
     },
     {
@@ -26740,6 +26929,15 @@
    ],
    "committees": [],
    "motions": [
+    {
+     "szam": "K/508",
+     "kind": "K",
+     "number": 508,
+     "title": "Tervezi a Kormány a kistelepüléseken lakók számára garantált készpénzfelvételi lehetőség kialakításának eltörlését?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2268a375f7-8aca-48ce-93ae-9d7750f6a607%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/369",
      "kind": "K",
@@ -27367,7 +27565,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 10,
      "nem_onallo": 0
     },
     {
@@ -27585,6 +27783,42 @@
    ],
    "motions": [
     {
+     "szam": "K/513",
+     "kind": "K",
+     "number": 513,
+     "title": "Mikor lesz a kampányígéretből víz a Homokhátságon?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22fde57afd-f7a4-440d-8372-23f286143bae%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/512",
+     "kind": "K",
+     "number": 512,
+     "title": "A kampányban a Velencei-tó gondjainak mérséklését ígérték – nem a tó vízmennyiségének mérséklését. Mikor kezdik teljesíteni az ígéretüket?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22770b9b73-66b0-4c18-9a9d-ef7c9720be26%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/511",
+     "kind": "K",
+     "number": 511,
+     "title": "Hol van a Balaton megmentésére a kampányban megígért program?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22afc9ce99-0c15-4d6b-935e-85242ef22b40%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/510",
+     "kind": "K",
+     "number": 510,
+     "title": "Mikor igazítják a nagy vízfelhasználók igényeit is a táj teherbírásához?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%226939d417-b6e4-41e0-8386-56c2d322b8de%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "K/477",
      "kind": "K",
      "number": 477,
@@ -27598,7 +27832,7 @@
      "kind": "K",
      "number": 467,
      "title": "A 3 milliárdos azbesztmentesítési alap eljárásrendjének kialakításakor figyelembe veszik-e az önkormányzatok véleményét?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22a27cd1c3-7db2-4f8d-bc7f-445ef11a3802%22%7D",
      "co_submitters": 0
     },
@@ -28153,7 +28387,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 13,
      "nem_onallo": 0
     },
     {
@@ -28370,6 +28604,69 @@
     }
    ],
    "motions": [
+    {
+     "szam": "K/520",
+     "kind": "K",
+     "number": 520,
+     "title": "Mikor kapják meg az édesanyák a megígért dupla anyasági támogatást?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22aba11f8a-4226-4fb3-8e56-70386315b8d2%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/519",
+     "kind": "K",
+     "number": 519,
+     "title": "Mikor duplázza meg a Kormány a családi pótlékot?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22a40c4122-9cef-4e64-ac17-1b3c451e1f05%22%7D",
+     "co_submitters": 1
+    },
+    {
+     "szam": "K/518",
+     "kind": "K",
+     "number": 518,
+     "title": "Miért maradt el a gyermekvédelmi dolgozóknak megígért azonnali béremelés?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22405bc170-92dc-4fb7-a8e4-0a9970f6a54a%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/517",
+     "kind": "K",
+     "number": 517,
+     "title": "Mikor kapják meg a szociális dolgozók a TISZA által megígért 25 százalékos béremelést?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ce9ae537-ad8c-404b-b7ee-e86338f917e8%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/516",
+     "kind": "K",
+     "number": 516,
+     "title": "Mely otthongondozási ellátásokat emeli meg a Kormány ötven százalékkal?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22e77e89bd-8165-4206-883a-fe75b1666b6d%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/515",
+     "kind": "K",
+     "number": 515,
+     "title": "Mikor emelik duplájára a GYES és a GYET/GYED összegét?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2288e3a812-744b-4581-92f3-bc04100d6825%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/514",
+     "kind": "K",
+     "number": 514,
+     "title": "Mikor teljesíti a Kormány az időskorúak járadékának megduplázására tett ígéretét?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%227da4e206-afa6-499a-b519-1de57686a14a%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/239",
      "kind": "I",

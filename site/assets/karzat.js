@@ -186,6 +186,68 @@
 
 
 (function(){
+  // The landing page's chamber: every seat is the member who sits in it. Hover or focus names them and shows the
+  // cycle record the MP page prints; a click pins the card (Esc or a click on the floor releases it, a click on the
+  // name opens the page); the legend filters to one faction. Keyboard: the chamber is one tab stop, arrows walk the
+  // seats in seating order, Enter pins. Everything is in the page — no request is made.
+  var hall = document.querySelector('.chamber-today'), box = document.getElementById('hall'), src = document.getElementById('hall-data');
+  if (!hall || !box || !src) return;
+  var data; try { data = JSON.parse(src.textContent); } catch (e) { return; }
+  var svg = hall.querySelector('svg'); if (!svg) return;
+  var hint = box.innerHTML, pinned = null, colours = {};
+  document.querySelectorAll('.chamber-today .legend .f[data-f] i').forEach(function(i){ colours[i.parentNode.getAttribute('data-f')] = i.style.background; });
+  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
+  var mpBase = src.getAttribute('data-mp-base') || '';
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var seats = Array.prototype.slice.call(svg.querySelectorAll('.seat[data-az]'));
+  seats.forEach(function(g, i){ g.setAttribute('tabindex', i === 0 ? '0' : '-1'); });
+  function focusSeat(i){ if (!seats.length) return; i = (i + seats.length) % seats.length; seats.forEach(function(g, k){ g.setAttribute('tabindex', k === i ? '0' : '-1'); }); seats[i].focus(); }
+  function render(az){
+    var d = data[az]; if (!d) return;
+    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8];
+    var c = colours[fac] || '#8a8a8a';
+    var part = inroll ? Math.round(100 * cast / inroll) : null, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
+    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+      '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
+      '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +
+      (inroll ? 'leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyetért <b>' + agree + '%</b>' : '') : 'még nincs név szerinti szavazása') +
+      (sp ? ' · érdemi felszólalás <b>' + sp + '</b>' : '') + '</span>' +
+      (pinned ? '<span class="pin">rögzítve<button type="button" data-unpin>Esc</button></span>' : '') + '</div>';
+  }
+  function mark(az, on){ svg.querySelectorAll('.seat[data-az="' + az + '"]').forEach(function(g){ g.classList.toggle('hl', on); }); }
+  function show(az){ if (pinned && pinned !== az) return; render(az); }
+  function reset(){ if (pinned) return; box.innerHTML = hint; }
+  svg.addEventListener('mouseover', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; mark(g.getAttribute('data-az'), true); show(g.getAttribute('data-az')); });
+  svg.addEventListener('mouseout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
+  svg.addEventListener('focusin', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; mark(g.getAttribute('data-az'), true); show(g.getAttribute('data-az')); });
+  svg.addEventListener('focusout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
+  function pin(az){ if (pinned) mark(pinned, false); pinned = az; hall.classList.add('pinned'); mark(az, true); render(az); }
+  function unpin(){ if (pinned) mark(pinned, false); pinned = null; hall.classList.remove('pinned'); box.innerHTML = hint; }
+  svg.addEventListener('click', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) { unpin(); return; } var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); });
+  svg.addEventListener('keydown', function(e){
+    var g = e.target.closest('.seat[data-az]'); if (!g) return; var i = seats.indexOf(g);
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); focusSeat(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); focusSeat(i - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); focusSeat(0); }
+    else if (e.key === 'End') { e.preventDefault(); focusSeat(seats.length - 1); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); }
+  });
+  box.addEventListener('click', function(e){ if (e.target.closest('[data-unpin]')) unpin(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') unpin(); });
+  // the legend filters: one faction at a time, the rest dimmed (a second click clears it)
+  var fac = 'all';
+  document.querySelectorAll('.chamber-today .legend button[data-hf]').forEach(function(b){
+    b.addEventListener('click', function(){
+      fac = (fac === b.getAttribute('data-hf')) ? 'all' : b.getAttribute('data-hf');
+      document.querySelectorAll('.chamber-today .legend button[data-hf]').forEach(function(x){ var on = fac !== 'all' && x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      svg.querySelectorAll('.seat[data-f]').forEach(function(g){ g.classList.toggle('dim', fac !== 'all' && g.getAttribute('data-f') !== fac); });
+    });
+  });
+})();
+
+
+(function(){
   var tbody = document.getElementById('rows'), n = document.getElementById('n'); if (!tbody) return;
   var rows = Array.prototype.slice.call(tbody.rows), rule = 'all', result = 'all', year = 'all', q = '';
   var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });

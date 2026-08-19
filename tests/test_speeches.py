@@ -200,7 +200,7 @@ class Digest(unittest.TestCase):
         self.assertEqual(ents[0].find("a:updated", NS).text, updated)                       # the newest week may still grow: the sync stamp
         self.assertRegex(ents[1].find("a:updated", NS).text, r"T23:59:59\+0[12]:00$")
         self.assertIn("névsorban", ents[0].find("a:title", NS).text)
-        self.assertEqual(ents[0].find("a:link", NS).get("href"), "../kepviselo/0026.html")
+        self.assertEqual(ents[0].find("a:link", NS).get("href"), "../ckl43/kepviselo/0026.html")      # root + the cycle's own directory
         ids = [e.find("a:id", NS).text for e in ents]
         self.assertEqual(len(set(ids)), len(ids))
         self.assertEqual(xml, mp_weekly_feed(self.inp, "0026", updated, "../"))            # deterministic

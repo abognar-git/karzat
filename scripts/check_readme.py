@@ -119,6 +119,12 @@ def build() -> list[tuple[str, list]]:
     hero = _json.loads((ROOT / "data" / "derived" / "hero_vote.json").read_text(encoding="utf-8"))
     seat_plan = _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))
     dbs = _json.loads((ROOT / "data" / "derived" / "db_summary.json").read_text(encoding="utf-8"))
+    _landing_cache = {}
+    def _landing():
+        if "p" not in _landing_cache:
+            from scripts.build_site import build_landing
+            _landing_cache["p"] = build_landing()
+        return _landing_cache["p"]
     f42 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl42.json").read_text(encoding="utf-8"))
     m42 = _json.loads((ROOT / "data" / "derived" / "mps_ckl42.json").read_text(encoding="utf-8"))
     m43 = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))
@@ -210,6 +216,11 @@ def build() -> list[tuple[str, list]]:
          [sp43.get("record_check", {}).get("agree", 0), sp43.get("record_check", {}).get("mps", 0), sp42.get("record_check", {}).get("agree", 0), sp42.get("record_check", {}).get("mps", 0)]),
         ("Cycle 43: {:,.0f} rows over {:,.0f} sitting days, {:,.0f} substantive; cycle 42: {:,.0f} rows over {:,.0f} days",
          [sp43.get("count", 0), len(sp43.get("days") or []), sp43.get("substantive", 0), sp42.get("count", 0), len(sp42.get("days") or [])]),
+        # the landing page — scripts.build_site.build_landing()
+        ("the arrow keys walk the seats; then the ten cycles since 1990 as stacked composition bars (mandates in force on each constituent sitting, read from the records' dated rows — {:,.0f} in the strip)",
+         [_landing().count('<a class="cyc')]),
+        ("all {:,.0f} mandate-holders placed where their own record puts them (the {:,.0f} seats left as outlines",
+         [_landing().count('<g class="seat" role="button"'), _landing().count('polygon points') - _landing().count('class="seatshape occ"')]),
         # the archive cycles' speech lists — data/derived/speeches_ckl36..41.json.gz
         ("cycles 36–41 synced: {:,.0f} day lists, {:,.0f} rows, {:,.0f} substantive, {:,.0f} rows resolved to MPs",
          [old_days, old_rows, old_sub, old_res]),

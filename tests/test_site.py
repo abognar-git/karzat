@@ -9,7 +9,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
+from scripts.build_site import CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -20,9 +20,11 @@ def visible_text(page: str) -> str:
 
 
 class Build(unittest.TestCase):
+    """The site root is the landing page; the current cycle's page sits under ckl43/ like every other cycle's."""
     @classmethod
     def setUpClass(cls):
-        cls.page = build()
+        cls.page = build()                                                  # the landing (site/index.html)
+        cls.cyc = build_index(load_inputs(), HERO_TS)                       # the current cycle's page (site/ckl43/index.html)
 
     def test_committed_page_matches_a_fresh_build(self):
         self.assertTrue(SITE.exists(), "site/index.html missing — run python3 -m scripts.build_site")
@@ -39,19 +41,86 @@ class Build(unittest.TestCase):
         self.assertEqual(sorted(out), ["site/assets/karzat.css", "site/assets/karzat.js", "site/index.html"])
 
     def test_links_stay_inside_the_tree(self):
-        # the current cycle lives at the site root: nothing on its directory may climb out of it
+        # the landing is the root: nothing on it climbs out; every cycle is one level down, the current one included,
+        # so a vote's address never changes when the next cycle starts
         self.assertNotIn('href="../', self.page)
-        self.assertIn('href="iromany/', self.page)                            # the hero's bill link (rendered at depth 0)
+        self.assertIn(f'href="{cycle_dir(CURRENT_CYCLE)}index.html"', self.page)
+        self.assertEqual(cycle_dir(CURRENT_CYCLE), "ckl43/")
+        self.assertIn('href="iromany/', self.cyc)                             # the hero's bill link on the cycle page (depth 0 in its tree)
+        self.assertIn('href="../assets/karzat.css"', self.cyc)                # site/ckl43/index.html → ../assets
+        self.assertIn('<a class="brand" href="../index.html">', self.cyc)     # the brand goes to the landing
+        for h in re.findall(r'href="\.\./([^"#]+)', self.cyc):
+            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
+
+    def test_landing_is_the_view_from_the_gallery(self):
+        tot = site_totals()
+        self.assertIn("<title>karzat — az Országgyűlés 1990 óta, ülőhelyenként</title>", self.page)
+        self.assertEqual(self.page.count('class="today"'), 199)                # the chamber today: every seated member, by faction
+        self.assertIn("Az ülésterem ma", self.page)
+        self.assertIn('aria-label="Az ülésterem ma: 199 képviselő a helyén', self.page)
+        self.assertEqual(self.page.count('<a class="cyc'), len(tot["cycles"]))  # one row per cycle, the current one marked
+        self.assertIn('<a class="cyc now" href="ckl43/index.html"', self.page)
+        self.assertIn('title="TISZA 141"', self.page)                           # the composition at the constituent sitting
+        self.assertIn('title="MDF 165"', self.page)                             # …back to 1990
+        for c in tot["cycles"]:
+            self.assertIn(f'href="{cycle_dir(c)}index.html"', self.page)
+        self.assertIn(f'data-kz-number="{tot["votes"]}"', self.page)            # the corpus numbers are the builder's own
+        self.assertIn(f'data-kz-number="{tot["roll_calls"]}"', self.page)
+        self.assertIn(f'data-kz-number="{tot["people"]}"', self.page)
+        self.assertIn("A legutóbbi ülésnap", self.page)
+        self.assertIn('action="ckl43/kepviselom/index.html" method="get"', self.page)   # the doors are plain forms: no JS needed
+        self.assertIn('action="kereses/index.html" method="get"', self.page)
+        self.assertIn('action="ckl43/felszolalas/kereses.html" method="get"', self.page)
+        self.assertIn('<link rel="alternate" type="application/atom+xml" href="ckl43/feed/kulonvelemeny.xml"', self.page)
+        for word in ("live", "élő", "real-time"):
+            self.assertNotIn(word, visible_text(self.page))
+        self.assertLess(self.page.index("</main>"), self.page.index("<footer"))
+
+    def test_the_chamber_on_the_landing_is_interactive_and_carries_its_own_data(self):
+        from scripts.build_site import hall_data
+        inp = load_inputs()
+        data = hall_data(inp)
+        self.assertEqual(len(data), len(inp["plan"]["coords"]))                 # one entry per seated member, no more
+        self.assertEqual(self.page.count('<g class="seat" role="button"'), len(data))
+        self.assertEqual(self.page.count('class="hit"'), len(data))             # the whole seat cell answers to the pointer
+        self.assertIn('id="hall-data" data-mp-base="ckl43/kepviselo/"', self.page)
+        self.assertIn('<div class="inspector" id="hall"', self.page)
+        for azon, row in data.items():
+            self.assertIn(f'data-az="{azon}"', self.page)
+            name, fac, mandate, seat, cast, in_roll, w, a, sp = row
+            rec = inp["alignment"]["per_mp"].get(azon) or {"cast": 0, "in_roll": 0, "with": 0, "against": 0}
+            self.assertEqual([cast, in_roll, w, a], [rec["cast"], rec["in_roll"], rec["with"], rec["against"]])   # the MP page's own numbers
+            self.assertLessEqual(w + a, in_roll)
+            self.assertTrue(seat)                                               # a seated member always has a place
+        js = build_assets()["karzat.js"]
+        for hook in ("chamber-today", "hall-data", "data-hf", "ArrowRight", "Escape"):
+            self.assertIn(hook, js)
+        self.assertEqual(len(json.loads(re.search(r'id="hall-data"[^>]*>(.*?)</script>', self.page, re.S).group(1))), len(data))
+        # a card names the member and links to their page; the legend doubles as a filter
+        self.assertIn("Egy helyre mutatva:", self.page)
+        for f, _, _ in [(f["id"], 0, 0) for f in factions()]:
+            if f"data-f=\"{f}\"" in self.page:
+                self.assertIn(f'data-hf="{f}"', self.page)
+
+    def test_composition_is_read_from_the_records_dated_rows(self):
+        mps = {"a": {"mandate_from": "2026-05-09", "mandate_to": None, "factions": [{"faction": "TISZA", "from": "2026-05-09", "to": None}]},
+               "b": {"mandate_from": "2026-05-09", "mandate_to": "2026-06-01", "factions": []},                 # a mandate without a faction row: független
+               "c": {"mandate_from": "2026-07-01", "mandate_to": None, "factions": [{"faction": "Fidesz", "from": "2026-07-01", "to": None}]},   # not yet
+               "d": {"mandate_from": None}}
+        comp = composition_on(mps, "2026-05-09", factions())
+        self.assertEqual([(f, n) for f, n, _ in comp], [("független", 1), ("TISZA", 1)])   # config order: opposition left, government right
 
     def test_page_is_self_contained(self):
         # every external reference is a parlament.hu link on a motion; the only stylesheet and script are our
         # own generated files under site/assets/ (relative links, no CDN, no fonts fetched)
-        for m in re.finditer(r'(?:src|href)="(https?://[^"]+)"', self.page):
-            self.assertTrue(m.group(1).startswith("https://www.parlament.hu/"), m.group(1))
+        for page in (self.page, self.cyc):
+            for m in re.finditer(r'(?:src|href)="(https?://[^"]+)"', page):
+                self.assertTrue(m.group(1).startswith("https://www.parlament.hu/"), m.group(1))
+            self.assertNotIn("@import", page)
         self.assertEqual(re.findall(r'<link rel="stylesheet" [^>]*href="([^"]+)"', self.page), ["assets/karzat.css"])
-        self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.page), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml", "feed/heti.xml"])   # feed autodiscovery, own files
+        self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.page), ["ckl43/feed/kulonvelemeny.xml", "ckl43/feed/heti.xml", "ckl43/feed/felszolalasok.xml"])   # feed autodiscovery, own files
         self.assertEqual(re.findall(r'<script src="([^"]+)"', self.page), ["assets/karzat.js"])
-        self.assertNotIn("@import", self.page)
+        self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.cyc), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml", "feed/heti.xml"])
         self.assertNotIn("url(http", build_assets()["karzat.css"])
 
     def test_committed_assets_match_a_fresh_build(self):
@@ -63,8 +132,8 @@ class Build(unittest.TestCase):
     def test_long_tables_paginate_and_stay_complete_without_js(self):
         js = build_assets()["karzat.js"]
         self.assertIn("table[data-page-size]", js)                       # the shared pager
-        self.assertIn('data-page-size="25" data-counter="n"', self.page)  # the directory: all 259 rows in the HTML, 25 shown at a time
-        self.assertEqual(self.page.count("<tr data-rule="), 259)
+        self.assertIn('data-page-size="25" data-counter="n"', self.cyc)   # the directory: all 259 rows in the HTML, 25 shown at a time
+        self.assertEqual(self.cyc.count("<tr data-rule="), 259)
         vote = build_vote_page(self.__class__.inp if hasattr(self.__class__, "inp") else load_inputs(), HERO_TS)
         self.assertIn('id="roll" data-page-size="25" data-counter="rn"', vote)
         mp = build_mp_page(load_inputs(), "a011")
@@ -76,35 +145,37 @@ class Build(unittest.TestCase):
         self.assertIn("prefers-reduced-motion", js)                  # the whole boot choreography is skipped for reduced motion
         self.assertTrue(js.lstrip().startswith("(function(){"))
         # the terminal log is real values: the corpus, then this page's cycle; no page claims to be live
-        self.assertIn("ezen az oldalon: 43. ciklus · 259 szavazás · 23 ülésnap · 199 képviselő", self.page)
-        self.assertRegex(self.page, r"&gt; \d+ ciklus · \d{4}\. \w+ \d+\. – 2026\. augusztus 11\. · [\d\u00a0]+ szavazás · [\d\u00a0]+ név szerinti lista · [\d\u00a0]+ képviselő")
-        self.assertRegex(self.page, r"a számított eredmény (minden szavazásnál egyezik a jegyzőkönyvivel|[\d\u00a0]+ szavazásnál eltér a jegyzőkönyvitől — jelölve)")   # corpus-wide, either honest form
+        self.assertIn("ezen az oldalon: 43. ciklus · 259 szavazás · 23 ülésnap · 199 képviselő", self.cyc)
         stamp = sync_stamp(load_inputs())                                       # the last sync, whatever it was
-        self.assertIn(f"frissítve {hu_date(stamp[:10])} {stamp[11:]}", self.page)
-        self.assertNotIn("SYSTEM_READY", self.page)
-        self.assertNotIn(".cgi", self.page.split("<footer")[1])          # the footer talks about the data, not the plumbing
-        self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", self.page)   # absolute, not a frozen "15 perce"
-        for word in ("live", "élő", "real-time"):
-            self.assertNotIn(word, visible_text(self.page))
-        # the footer is a landmark of its own, outside <main>
-        self.assertLess(self.page.index("</main>"), self.page.index("<footer"))
+        for page in (self.page, self.cyc):
+            self.assertRegex(page, r"&gt; \d+ ciklus · \d{4}\. \w+ \d+\. – 2026\. augusztus 11\. · [\d\u00a0]+ szavazás · [\d\u00a0]+ név szerinti lista · [\d\u00a0]+ képviselő")
+            self.assertRegex(page, r"a számított eredmény (minden szavazásnál egyezik a jegyzőkönyvivel|[\d\u00a0]+ szavazásnál eltér a jegyzőkönyvitől — jelölve)")   # corpus-wide, either honest form
+            self.assertIn(f"frissítve {hu_date(stamp[:10])} {stamp[11:]}", page)
+            self.assertNotIn("SYSTEM_READY", page)
+            self.assertNotIn(".cgi", page.split("<footer")[1])          # the footer talks about the data, not the plumbing
+            self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", page)   # absolute, not a frozen "15 perce"
+            for word in ("live", "élő", "real-time"):
+                self.assertNotIn(word, visible_text(page))
+            # the footer is a landmark of its own, outside <main>
+            self.assertLess(page.index("</main>"), page.index("<footer"))
 
     def test_hero_and_directory_are_present(self):
-        self.assertEqual(self.page.count('<g class="seat"'), 199)
-        self.assertIn("különbség +2", self.page)              # T/51: 135 igen, 133 needed
-        self.assertIn("133 / 199", self.page)
-        self.assertEqual(self.page.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
-        self.assertNotIn('data-year="', self.page)                      # one year only → no year filter
-        self.assertIn('title="2022-05-02 – 2026-05-08">42</a>', self.page)      # the other cycles, one click away
-        self.assertIn('<span class="more" title="', self.page)          # long titles keep their tail for the search
-        self.assertIn('lang="hu"', self.page)
+        self.assertEqual(self.cyc.count('<g class="seat"'), 199)
+        self.assertIn("különbség +2", self.cyc)              # T/51: 135 igen, 133 needed
+        self.assertIn("133 / 199", self.cyc)
+        self.assertEqual(self.cyc.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
+        self.assertNotIn('data-year="', self.cyc)                      # one year only → no year filter
+        self.assertIn('title="2022-05-02 – 2026-05-08">42</a>', self.cyc)      # the other cycles, one click away
+        self.assertIn('<span class="more" title="', self.cyc)          # long titles keep their tail for the search
+        self.assertIn('lang="hu"', self.cyc)
         for word in ("live", "élő", "real-time"):
-            self.assertNotIn(word, visible_text(self.page))               # freshness contract holds on the page
+            self.assertNotIn(word, visible_text(self.cyc))               # freshness contract holds on the page
 
     def test_freshness_sentence_is_the_contract_sentence(self):
-        m = re.search(r'<span class="hu">(.*?)</span>', self.page)
-        self.assertTrue(m)
-        self.assertRegex(m.group(1), r"^Szavazások \d{4}\. \w+ \d+-ig\.")
+        for page in (self.page, self.cyc):                                    # the landing and the cycle page carry the same sentence
+            m = re.search(r'<span class="hu">(.*?)</span>', page)
+            self.assertTrue(m)
+            self.assertRegex(m.group(1), r"^Szavazások \d{4}\. \w+ \d+-ig\.")
 
 
 class VotePages(unittest.TestCase):
@@ -219,12 +290,11 @@ class MPPages(unittest.TestCase):
             stat = next((x["onallo"] for x in mp["motion_stats"] if x["ciklus"] == "2026-"), 0)
             self.assertEqual(len(mp["motions"]), stat, f"{azon} {mp['name']}: list {len(mp['motions'])} vs record {stat}")
         a = self.inp["mps"]["a011"]["motions"]
-        self.assertEqual(len(a), 5)
+        n_k = [m["kind"] for m in a].count("K")
         self.assertTrue(all(m["href"] and m["szam"] and m["title"] for m in a))
-        self.assertEqual([m["kind"] for m in a].count("K"), 4)
         page = build_mp_page(self.inp, "a011")
-        self.assertIn("a jelenlegi ciklusban</span> 5 iromány · K/ 4 · H/ 1", page)
-        self.assertEqual(page.count("iromanyok_mobil"), 5)
+        self.assertIn(f'a jelenlegi ciklusban</span> {len(a)} iromány · K/ {n_k} · H/ {len(a) - n_k}', page)   # the list grows between syncs; the record and the list agree above
+        self.assertEqual(page.count("iromanyok_mobil"), len(a))
         self.assertNotIn("még nincsenek betöltve", page)
         # a closed cycle only has the counts, and says why
         page42 = build_mp_page(load_inputs(42), "a011")
@@ -276,15 +346,15 @@ class Cycle42(unittest.TestCase):
         # links leave the cycle root only for the shared trees (assets, people, method, search, other cycles)
         for h in re.findall(r'href="\.\./([^"#]+)', page):
             self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
-        self.assertIn('href="../index.html" class="near">43</a>', page)       # the cycle switch (43 is the neighbour of 42)
-        self.assertIn('ciklusok: <a href="../index.html" title="2026-05-09 –">43</a> · <b>42</b>', page)   # …and in the section nav
+        self.assertIn('href="../ckl43/index.html" class="near">43</a>', page)  # the cycle switch (43 is the neighbour of 42)
+        self.assertIn('ciklusok: <a href="../ckl43/index.html" title="2026-05-09 –">43</a> · <b>42</b>', page)   # …and in the section nav
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
         self.assertEqual(page.count('data-y="2023"'), 719)
         self.assertIn("Egy szavazás, frakciónként", page)                     # not "ülőhelyenként": no chamber for a closed cycle
         self.assertIn("az Országgyűlés szavazásai, név szerint —", page)
         self.assertIn("név szerint, frakciónként rendezve kirajzolva", page)  # the meta description
         self.assertIn("14 ülésszak, 2022. tavaszi … 2026. tavaszi", page)      # endpoints by date, not by string order
-        self.assertIn('<a class="brand" href="../ckl42/index.html">', page)   # the brand stays in its own tree
+        self.assertIn('<a class="brand" href="../index.html">', page)         # the brand goes to the landing
         self.assertIn("<title>karzat — 42. ciklus, az Országgyűlés szavazásai</title>", page)
 
     def test_hero_vote_page_uses_the_fallback_layout_and_says_so(self):
@@ -308,11 +378,11 @@ class Cycle42(unittest.TestCase):
         self.assertIn("Jobbik", page)
         self.assertIn("A 42. ciklus lezárult · mandátum vége:", page)
         self.assertNotIn("Ülőhely az ülésteremben", page)                # no seat panel on a closed cycle
-        self.assertNotIn("../../kepviselo/z012.html", page)                   # no cycle-43 page for him
+        self.assertNotIn("../../ckl43/kepviselo/z012.html", page)             # no cycle-43 page for him
         page2 = build_mp_page(self.inp, "a011")                              # Ágh Péter sits in both cycles
-        self.assertIn('href="../../kepviselo/a011.html">43. ciklus ↗</a>', page2)
+        self.assertIn('href="../../ckl43/kepviselo/a011.html">43. ciklus ↗</a>', page2)
         page3 = build_mp_page(load_inputs(43), "a011")
-        self.assertIn('href="../ckl42/kepviselo/a011.html">42. ciklus ↗</a>', page3)
+        self.assertIn('href="../../ckl42/kepviselo/a011.html">42. ciklus ↗</a>', page3)   # every cycle is one level down now
         self.assertIn("<title>Ágh Péter (Fidesz) · 42. ciklus · karzat</title>", page2)
         self.assertIn("<title>Ágh Péter (Fidesz) · karzat</title>", page3)
 
@@ -373,7 +443,7 @@ class Exports(unittest.TestCase):
         obj = json.loads(j)
         self.assertEqual(obj["summary"], {"in_roll": 256, "cast": 239, "with": 231, "against": 7})   # the quorum check is participation, not "with"
         self.assertEqual(len(obj["votes"]), 256)
-        self.assertEqual(len(obj["motions"]), 5)
+        self.assertEqual(len(obj["motions"]), len(self.inp["mps"]["a011"]["motions"]))   # the list grows between syncs; MPPages pins it against the record
         lines = c.lstrip("\ufeff").splitlines()
         self.assertEqual(len(lines), 257)
         page = build_mp_page(self.inp, "a011")
@@ -542,7 +612,7 @@ class Helpers(unittest.TestCase):
     def test_factions_reader_gets_colours_and_order(self):
         facs = factions()
         ids = [f["id"] for f in facs]
-        self.assertEqual(ids[:4], ["TISZA", "Fidesz", "KDNP", "Mi Hazánk"])
+        self.assertEqual(ids, ["Fidesz", "KDNP", "Mi Hazánk", "független", "TISZA"])   # left→right as the chamber is drawn: opposition, then the government
         for f in facs:
             self.assertRegex(f["colour"], r"^#[0-9a-fA-F]{6}$")   # the '#' bug: never again
 

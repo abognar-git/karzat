@@ -9,8 +9,10 @@
 # tests/test_wikidata.py asserts the seat counts below equal the snapshot's summary.
 #
 # Colours are this project's presentation colours, not the parties' brands (Fidesz orange is
-# the one conventional pick); TISZA is teal so it sits far from orange, blue and green. sort_order: left→right seating in the chamber diagram (parlament.hu: government
-# benches to the Speaker's right, opposition to the left — VERIFY which way the diagram faces).
+# the one conventional pick); TISZA is teal so it sits far from orange, blue and green. sort_order: left→right as the chamber is
+# drawn — the reconstructed floor plan (reference/parlament/patko_seats.json) puts the opposition in sectors 1–2 on the left and
+# the government (TISZA) in sectors 3–6 on the right, i.e. the government benches to the Speaker's right; the same
+# opposition-left, government-right order is what every earlier cycle's block below uses.
 
 seats: 199
 
@@ -18,7 +20,7 @@ factions:
   - id: TISZA
     name: Tisztelet és Szabadság Párt
     colour: "#1f8a70"
-    sort_order: 10
+    sort_order: 90
     wikidata_group: Tisztelet és Szabadság Párt
     wikidata_group_qid: Q125418097
     wikidata_seats_2026_08_18: 141
@@ -46,7 +48,7 @@ factions:
   - id: független
     name: Független képviselők
     colour: "#8a8a8a"
-    sort_order: 90
+    sort_order: 85
     wikidata_seats_2026_08_18: 0
 
 # Ciklus 42 (2022-05-02 → 2026-05-08) — the groups exactly as the roll calls print them
