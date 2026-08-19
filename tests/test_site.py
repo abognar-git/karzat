@@ -385,7 +385,7 @@ class Cycle42(unittest.TestCase):
         self.assertIn("tizenötödik módosítása", page)
         self.assertIn("különbség +7", page)                                   # 140 igen, 133 needed
         self.assertEqual(page.count('<g class="seat"'), 199)
-        self.assertIn("Ülésrend csak a jelenlegi ciklusból ismert", page)
+        self.assertIn("nem a valódi ülésrend", page)                                  # the drawing is the same, the placement is ours
         self.assertNotIn(">Ülőhely</th>", page)                               # no seat column without a plan
         self.assertIn('href="../../assets/karzat.css"', page)
         self.assertEqual(page.count('href="../kepviselo/'), 199)
@@ -638,6 +638,29 @@ class Helpers(unittest.TestCase):
         self.assertEqual(ids, ["Fidesz", "KDNP", "Mi Hazánk", "független", "TISZA"])   # left→right as the chamber is drawn: opposition, then the government
         for f in facs:
             self.assertRegex(f["colour"], r"^#[0-9a-fA-F]{6}$")   # the '#' bug: never again
+
+    def test_every_cycle_draws_the_same_chamber_language(self):
+        # cycle 43 has the real floor plan; the others cannot (the API gives ülőhely for today only) — but the drawing
+        # must read the same: seats as cells, the same glyphs, the platform, and a note that owns the difference
+        from scripts.build_site import build_vote_page, seat_svg_fallback, vote_view
+        for c in available_cycles():
+            inp = load_inputs(c)
+            if inp["archive"]:
+                continue                                                        # archive cycles print no chamber at all
+            ts = HERO_BY_CYCLE.get(c) or HERO_TS
+            view = vote_view(inp, ts)
+            svg = seat_svg_fallback(view, inp["facs"]) if not inp["plan"] else None
+            page = build_vote_page(inp, ts)
+            self.assertIn('class="seatshape', page)                             # the floor is drawn the same way
+            self.assertIn("rostrum", page)                                      # …and so is the Speaker's platform
+            self.assertIn("elnöki emelvény", page)
+            self.assertIn('<g class="seat"', page)
+            if svg is not None:
+                n = len(view["positions"])
+                self.assertEqual(svg.count('class="seatshape occ"'), n)         # one cell per member, none spare invented
+                self.assertEqual(svg.count('<g class="seat"'), n)
+                self.assertNotIn("rowline", svg)                                # the old guide arcs are gone
+                self.assertIn("nem a valódi ülésrend", build_vote_page(inp, ts))
 
     def test_layout_places_exactly_n_seats_left_to_right(self):
         seats = hemicycle_layout(199)

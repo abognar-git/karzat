@@ -514,6 +514,13 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
                  "seats_in_plan": len(outlines) if outlines else None}
 
 
+def _seat_cell(cx: float, cy: float, angle: float, w: float, h: float) -> str:
+    """One seat of the floor, drawn like the real plan's outline: a small rounded cell turned to face the platform."""
+    deg = math.degrees(math.atan2(-math.cos(angle), -math.sin(angle)))
+    return (f'<rect x="{-w / 2:.2f}" y="{-h / 2:.2f}" width="{w:.2f}" height="{h:.2f}" rx="{min(w, h) * 0.22:.2f}" class="seatshape occ" '
+            f'transform="translate({cx:.2f} {cy:.2f}) rotate({deg:.1f})"/>')
+
+
 def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None) -> str:
     order = {f["id"]: f["sort_order"] for f in facs}
     colour = {f["id"]: f["colour"] for f in facs}
@@ -529,19 +536,18 @@ def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None) -
             if 0 < d < dmin:
                 dmin = d
     k = min(1.0, dmin / 12.4)
+    # the floor first, so the glyphs sit in seats — the same reading as the reconstructed chamber, only the placement
+    # is ours (faction, then vote), which the note under the drawing says
+    cells = "".join(_seat_cell(seat["cx"], seat["cy"], seat["angle"], dmin * 1.04, dmin * 0.9) for seat in seats[:len(members)])
     parts = []
     for seat, m in zip(seats, members):
         c = colour.get(m["faction"] or "", "#8a8a8a")
         title = html.escape(f'{m["name"]} ({m["faction"]}) — {POSITION_LABEL.get(m["position"], m["position"])}')
         parts.append(_seat_group(m["position"], m["faction"], m.get("mp_azon"), align.get(m.get("mp_azon") or ""), title,
                                  _node(seat["cx"], seat["cy"], m["position"], c, k), 5.2 * k * 1.55, k, dmin * 0.55))
-    r0, gap, rows = 78.0, 17.0, 7
-    ri, ro = r0 - gap * 0.5, r0 + (rows - 1) * gap + gap * 0.5
-    floor = (f'<path d="M {-ri:.1f} 0 L {-ro:.1f} 0 A {ro:.1f} {ro:.1f} 0 0 1 {ro:.1f} 0 L {ri:.1f} 0 A {ri:.1f} {ri:.1f} 0 0 0 {-ri:.1f} 0 Z" class="floor"/>'
-             + "".join(f'<path d="M {-(r0 + i*gap):.1f} 0 A {r0 + i*gap:.1f} {r0 + i*gap:.1f} 0 0 1 {r0 + i*gap:.1f} 0" class="rowline"/>' for i in range(rows)))
-    podium = '<path d="M -14 0 A 14 14 0 0 1 14 0 L 14 4 L -14 4 Z" class="rostrum"/><path d="M -8 -4 A 8 8 0 0 1 8 -4 L 8 0 L -8 0 Z" class="rostrum hi"/>'
-    return ('<svg viewBox="-200 -200 400 214" role="img" aria-label="Ülésrend-diagram">'
-            + floor + podium + "".join(parts) + '</svg>')
+    return ('<svg viewBox="-200 -200 400 222" role="img" aria-label="Ülésrend-diagram: minden képviselő egy helyen, frakciónként és szavazat szerint">'
+            + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
+            + cells + "".join(parts) + '</svg>')
 
 
 # -- helpers ----------------------------------------------------------------------------------
@@ -658,7 +664,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .inspector .pin button:hover{color:var(--white);border-color:var(--border-hi)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
-.seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35}.seatshape.occ{fill:rgba(255,255,255,.06)}
+.seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35;vector-effect:non-scaling-stroke}.seatshape.occ{fill:rgba(255,255,255,.06)}
 .ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflow-x:auto}.tswrap svg{min-width:480px;display:block}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
@@ -1438,7 +1444,8 @@ def chart_block(view: dict, inp: dict) -> str:
                 (f'Ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. Halvány karika: üres hely ({info.get("empty", 0)}).'))
     else:
         svg = seat_svg_fallback(view, facs, align_here)
-        note = "Frakciónként, azon belül szavazat szerint rendezve. Ülésrend csak a jelenlegi ciklusból ismert."
+        note = ("Ugyanaz a terem ugyanúgy olvasva, de a helyek kiosztása a miénk: frakciónként, azon belül szavazat szerint. "
+                "Az ülésrendet az Országgyűlés csak a jelenlegi ciklusra adja meg — ez tehát nem a valódi ülésrend.")
     if n_against:
         note += f' Fehér gyűrű: {n_against} képviselő a frakciója többsége ellen szavazott.'
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/").replace("<!--", "<\\u0021--")
