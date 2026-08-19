@@ -23,6 +23,15 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .kz-main{padding:20px 16px 16px;background-image:radial-gradient(var(--grid) 1px,transparent 1px);background-size:24px 24px;background-position:50%}
 .wrap{max-width:1400px;margin:0 auto}
 .crumbs{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:0 0 10px}.crumbs a:hover{color:var(--white)}
+/* the cycle page's head: the term as the title, the cycle's pages grouped at the side */
+.cyc-head{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.9fr);gap:14px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.cyc-title .kicker{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
+.cyc-title h1{font-size:34px;line-height:1.1;letter-spacing:-.02em}.cyc-title .lede{margin-top:10px;max-width:58ch}
+.cyc-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;padding-top:8px}
+.cyc-nav .grp{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:11px;letter-spacing:.04em}
+.cyc-nav .lbl{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim3);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.cyc-nav a{color:var(--dim);padding:2px 0;border-bottom:1px solid transparent}.cyc-nav a:hover,.cyc-nav a:focus-visible{color:var(--white)}
+@media(max-width:900px){.cyc-head{grid-template-columns:1fr}.cyc-nav{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
 a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
 .hero-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;margin:0 0 6px}
 .portrait{filter:grayscale(1) contrast(1.12) brightness(.92);border:1px solid var(--border);background:#111;object-fit:cover;display:block;flex:0 0 auto}
@@ -72,7 +81,8 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
 .inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
-.inspector .meta{color:var(--dim2);font-size:10px;letter-spacing:.06em}
+.inspector .meta{color:var(--dim2);font-size:10px;letter-spacing:.06em}.inspector .meta b{color:var(--text);font-weight:400}
+.chart svg .seat.pres circle,.landing .chamber-today .seat.pres circle{transition:opacity .15s}
 .inspector .row2{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:6px}
 .inspector .rec{color:var(--dim)}.inspector .rec b{color:var(--white);font-weight:400}
 .inspector .streak{display:inline-flex;gap:2px;align-items:center}.inspector .streak i{width:7px;height:10px;display:inline-block;background:var(--line2);border:1px solid var(--border)}

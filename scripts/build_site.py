@@ -407,6 +407,69 @@ def room_floor(geo: dict) -> str:
 
 PODIUM = '<path d="M -11 0 A 11 11 0 0 1 11 0 L 11 3 L -11 3 Z" class="rostrum"/><path d="M -6 -3 A 6 6 0 0 1 6 -3 L 6 0 L -6 0 Z" class="rostrum hi"/>'
 
+HOUSE_OFFICES = {"az Országgyűlés elnöke": "elnök", "az Országgyűlés alelnöke": "alelnök", "jegyző": "jegyző", "háznagy": "háznagy"}
+
+
+def presidium(mps: dict, on_day: str | None = None) -> dict[str, list[dict]]:
+    """Who presides, from the records' dated <tisztseg> rows: {'elnök': [mp], 'alelnök': [...], 'jegyző': [...]} —
+    the offices in force on `on_day` (today when None). The Speaker's platform is not a seat in the plan: the Speaker
+    and the deputy Speakers keep their seats on the floor and take the chair in turn; the clerks (jegyzők) sit by the
+    chair in rotation. So the drawing marks the platform with the office-holders rather than moving anyone's seat."""
+    out: dict[str, list[dict]] = {v: [] for v in HOUSE_OFFICES.values()}
+    for azon, mp in mps.items():
+        for o in mp.get("offices") or []:
+            role = HOUSE_OFFICES.get(o.get("office") or "")
+            if not role:
+                continue
+            frm, to = o.get("from"), o.get("to")
+            if on_day:
+                if (frm and frm > on_day) or (to and to < on_day):
+                    continue
+            elif to:
+                continue                                       # today: only the offices still in force
+            out[role].append({"azon": azon, "name": mp["name"], "faction": mp.get("faction"), "from": frm, "to": to})
+    for lst in out.values():
+        lst.sort(key=lambda m: name_key(m["name"]))
+    return out
+
+
+def podium_svg(pres: dict[str, list[dict]] | None, facs: list[dict], k: float = 1.0) -> str:
+    """The Speaker's platform with its office-holders: the Speaker's dot in the middle, the deputy Speakers' dots in
+    an arc behind, each in their faction colour, each a real seat group (hover/click as on the floor); without data,
+    the bare platform. Nothing is moved — these members are drawn on the floor too; this says who takes the chair."""
+    if not pres or not (pres.get("elnök") or pres.get("alelnök")):
+        return PODIUM
+    colour = {f["id"]: f["colour"] for f in facs}
+    speaker = pres.get("elnök") or []
+    deps = pres.get("alelnök") or []
+    # the platform as a desk the width of the presidium: the Speaker's place in the middle, the deputies at the sides
+    # in the order the records list them — they take the chair in turn, so this is who may preside, not who does now
+    pitch = 7.0 * k
+    n = len(speaker) + len(deps)
+    half = (n - 1) * pitch / 2
+    desk_w = max(22.0, n * pitch + 6.0 * k)
+    parts = [f'<path d="M {-desk_w / 2:.1f} 0 L {-desk_w / 2:.1f} -7 Q {-desk_w / 2:.1f} -10 {-desk_w / 2 + 3:.1f} -10 L {desk_w / 2 - 3:.1f} -10 Q {desk_w / 2:.1f} -10 {desk_w / 2:.1f} -7 L {desk_w / 2:.1f} 0 L {desk_w / 2:.1f} 3 L {-desk_w / 2:.1f} 3 Z" class="rostrum"/>']
+    r = 2.5 * k
+    def dot(m, cx, cy, role):
+        c = colour.get(m.get("faction") or "", "#8a8a8a")
+        return (f'<g class="seat pres" role="button" data-az="{esc(m["azon"])}" data-f="{esc(m.get("faction") or "")}" data-role="{esc(role)}" aria-label="{esc(m["name"])} — az Országgyűlés {esc(role)}e">'
+                f'<title>{esc(m["name"])} ({esc(m.get("faction") or "")}) — az Országgyűlés {esc(role)}e · az elnöki emelvény</title>'
+                f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r:.2f}" fill="{c}"/>'
+                f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r * 1.7:.2f}" class="hit"/></g>')
+    # the Speaker in the middle, the deputies alternating left and right of them
+    order = []
+    left, right = [], []
+    for i, m in enumerate(deps):
+        (left if i % 2 == 0 else right).append(m)
+    order = list(reversed(left)) + speaker + right if speaker else list(reversed(left)) + right
+    for i, m in enumerate(order):
+        role = "elnök" if m in speaker else "alelnök"
+        cx = -half + i * pitch
+        if m in speaker:
+            parts.append(f'<rect x="{cx - 3.6 * k:.2f}" y="{-8.6 * k:.2f}" width="{7.2 * k:.2f}" height="{7.2 * k:.2f}" rx="{1.2 * k:.2f}" class="rostrum hi"/>')
+        parts.append(dot(m, cx, -5.0 * k, role))
+    return "".join(parts)
+
 
 def _seat_group(pos: str, faction: str, azon: str | None, align: str | None, title: str, node: str, ring_r: float, k: float, hit_r: float | None = None) -> str:
     """One interactive seat: an invisible hit circle the size of the whole seat cell (so hovering near the dot
@@ -428,7 +491,7 @@ def node_cy(node: str) -> str:
 
 
 def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None = None, szoszolok: dict | None = None,
-                  kormany: dict | None = None) -> tuple[str, dict]:
+                  kormany: dict | None = None, pres: dict | None = None) -> tuple[str, dict]:
     """The reconstructed chamber: every voting MP at their (sector,row,seat). Returns (svg, info).
 
     `szoszolok`: (sector,row,seat) → the nationality spokesperson holding that seat. No roll call ever names them —
@@ -508,7 +571,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
                                 f'{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}',
                                 _node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k), ring_r, k, hit_r)
     svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
-           + "".join(floor) + arc + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
+           + "".join(floor) + arc + podium_svg(pres, facs, k) + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
            + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
     return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or []),
                  "seats_in_plan": len(outlines) if outlines else None}
@@ -521,7 +584,7 @@ def _seat_cell(cx: float, cy: float, angle: float, w: float, h: float) -> str:
             f'transform="translate({cx:.2f} {cy:.2f}) rotate({deg:.1f})"/>')
 
 
-def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None) -> str:
+def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None, pres: dict | None = None) -> str:
     order = {f["id"]: f["sort_order"] for f in facs}
     colour = {f["id"]: f["colour"] for f in facs}
     pos_rank = {p: i for i, p in enumerate(POSITION_ORDER)}
@@ -546,7 +609,7 @@ def seat_svg_fallback(view: dict, facs: list[dict], align: dict | None = None) -
         parts.append(_seat_group(m["position"], m["faction"], m.get("mp_azon"), align.get(m.get("mp_azon") or ""), title,
                                  _node(seat["cx"], seat["cy"], m["position"], c, k), 5.2 * k * 1.55, k, dmin * 0.55))
     return ('<svg viewBox="-200 -200 400 222" role="img" aria-label="Ülésrend-diagram: minden képviselő egy helyen, frakciónként és szavazat szerint">'
-            + PODIUM + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
+            + podium_svg(pres, facs, k) + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
             + cells + "".join(parts) + '</svg>')
 
 
@@ -603,6 +666,15 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .kz-main{padding:20px 16px 16px;background-image:radial-gradient(var(--grid) 1px,transparent 1px);background-size:24px 24px;background-position:50%}
 .wrap{max-width:1400px;margin:0 auto}
 .crumbs{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:0 0 10px}.crumbs a:hover{color:var(--white)}
+/* the cycle page's head: the term as the title, the cycle's pages grouped at the side */
+.cyc-head{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.9fr);gap:14px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.cyc-title .kicker{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
+.cyc-title h1{font-size:34px;line-height:1.1;letter-spacing:-.02em}.cyc-title .lede{margin-top:10px;max-width:58ch}
+.cyc-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;padding-top:8px}
+.cyc-nav .grp{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:11px;letter-spacing:.04em}
+.cyc-nav .lbl{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim3);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.cyc-nav a{color:var(--dim);padding:2px 0;border-bottom:1px solid transparent}.cyc-nav a:hover,.cyc-nav a:focus-visible{color:var(--white)}
+@media(max-width:900px){.cyc-head{grid-template-columns:1fr}.cyc-nav{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
 a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
 .hero-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;margin:0 0 6px}
 .portrait{filter:grayscale(1) contrast(1.12) brightness(.92);border:1px solid var(--border);background:#111;object-fit:cover;display:block;flex:0 0 auto}
@@ -652,7 +724,8 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
 .inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
-.inspector .meta{color:var(--dim2);font-size:10px;letter-spacing:.06em}
+.inspector .meta{color:var(--dim2);font-size:10px;letter-spacing:.06em}.inspector .meta b{color:var(--text);font-weight:400}
+.chart svg .seat.pres circle,.landing .chamber-today .seat.pres circle{transition:opacity .15s}
 .inspector .row2{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:6px}
 .inspector .rec{color:var(--dim)}.inspector .rec b{color:var(--white);font-weight:400}
 .inspector .streak{display:inline-flex;gap:2px;align-items:center}.inspector .streak i{width:7px;height:10px;display:inline-block;background:var(--line2);border:1px solid var(--border)}
@@ -930,14 +1003,14 @@ JS_INSPECT = """
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function render(az){
     var d = data[az]; if (!d) return;
-    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], pos = d[4], cast = d[5], inroll = d[6], w = d[7], a = d[8], streak = d[9];
+    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], pos = d[4], cast = d[5], inroll = d[6], w = d[7], a = d[8], streak = d[9], office = d[10] || '';
     var c = colours[fac] || '#8a8a8a';
     var part = inroll ? Math.round(100 * cast / inroll) : 0, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var sq = '';
     for (var i = 0; i < streak.length; i++) { var ch = streak[i]; sq += '<i class="' + (ch === '.' ? 'x' : ch) + (i === streak.length - 1 ? ' now' : '') + '" style="--c:' + c + '"></i>'; }
     box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
       '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
-      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + (office ? ' · <b>' + esc(office) + '</b>' : '') + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
       '<span class="badge' + (pos === 'igen' ? ' ok' : pos === 'nem' ? ' no' : ' mid') + '">' + esc(POS[pos] || pos) + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyezés ' + agree + '%' : '') + '</span>' +
       '<span class="streak" title="az utolsó ' + streak.length + ' név szerinti szavazás eddig a szavazásig: frakciójával (szín) · ellene (fehér) · nem adott le (üres)"><span class="lbl">utolsó ' + streak.length + '</span>' + sq + '</span></div>' +
@@ -993,6 +1066,7 @@ JS_HALL = """
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
     var photo = d[10] || (PHOTO_BASE + esc(az)), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
+    var office = d[12] || '';                            // Speaker, deputy Speaker, clerk — drawn on the platform too
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
     var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
     var c = colours[fac] || '#8a8a8a';
@@ -1000,7 +1074,7 @@ JS_HALL = """
     var who = (sz || km) ? esc(name) : '<a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a>';
     box.innerHTML = '<img class="portrait insp" src="' + esc(photo) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="' + esc(credit) + '" onerror="this.remove()">' +
       '<div class="row1"><span class="name">' + who + '</span>' +
-      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + (office ? ' · <b>' + esc(office) + '</b>' : '') + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +
       (sz ? 'nem szavaz — a szószóló felszólalhat és bizottságban dolgozik' + (com ? ' · bizottság <b>' + com + '</b>' : '')
         : km ? 'nem szavaz — a kormány tagja mandátum nélkül; a miniszteri padban ül és felszólal'
@@ -1419,9 +1493,12 @@ def inspector_data(view: dict, inp: dict) -> tuple[dict, dict]:
                 streak += "n"
         mp = inp["mps"].get(azon) or {}
         align_here[azon] = (by_ts.get(ts) or {}).get("align")
+        office = next((HOUSE_OFFICES[o["office"]] for o in (mp.get("offices") or []) if o.get("office") in HOUSE_OFFICES
+                       and (not o.get("from") or o["from"] <= view["on_date"]) and (not o.get("to") or o["to"] >= view["on_date"])), "") if mp else ""
         data[azon] = [pnt["name"], pnt["faction"] or "", mandate_text(mp) if mp else "—",
                       seat_text(mp) if (mp and inp["plan"]) else None, pnt["position"],
-                      rec["cast"], rec["in_roll"], rec["with"], rec["against"], streak]
+                      rec["cast"], rec["in_roll"], rec["with"], rec["against"], streak,
+                      ("az Országgyűlés " + office + "e") if office else ""]
     return data, align_here
 
 
@@ -1434,7 +1511,8 @@ def chart_block(view: dict, inp: dict) -> str:
     n_against = sum(1 for a in align_here.values() if a == "against")
     if plan:
         sz_seats, km_seats = szoszolo_seats(inp), kormany_seats(inp)
-        svg, info = seat_svg_real(view, facs, plan, align_here, sz_seats, km_seats)
+        pres = presidium(inp["mps"], view["on_date"])
+        svg, info = seat_svg_real(view, facs, plan, align_here, sz_seats, km_seats, pres)
         geo = plan["geometry"]
         n_sz, n_km = len(sz_seats), len(km_seats)
         note = ((f'Az Országház alaprajza, mindenki a saját helyén. Az emelvény felől nézve balra az ellenzék, jobbra a kormányoldal. '
@@ -1443,7 +1521,7 @@ def chart_block(view: dict, inp: dict) -> str:
                 if info.get("seats_in_plan") else
                 (f'Ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. Halvány karika: üres hely ({info.get("empty", 0)}).'))
     else:
-        svg = seat_svg_fallback(view, facs, align_here)
+        svg = seat_svg_fallback(view, facs, align_here, presidium(inp["mps"], view["on_date"]))
         note = ("Ugyanaz a terem ugyanúgy olvasva, de a helyek kiosztása a miénk: frakciónként, azon belül szavazat szerint. "
                 "Az ülésrendet az Országgyűlés csak a jelenlegi ciklusra adja meg — ez tehát nem a valódi ülésrend.")
     if n_against:
@@ -1639,6 +1717,17 @@ def directory_row(v: dict) -> str:
             f'<td class="num mono">{v["igen"]} – {v["nem"]} – {v["tartozkodott"]}</td><td class="num mono">{margin}</td><td>{res}{flag}</td></tr>')
 
 
+def cycle_title(cycle: int) -> str:
+    """'2014. május 6. — 2018. május 7.' for a closed cycle; '2026. május 9. óta' for the open one."""
+    span = CYCLE_SPAN.get(cycle, "")
+    a, _, b = span.partition(" –")
+    a, b = a.strip(), b.strip()
+    try:
+        return f"{hu_date(a)} — {hu_date(b)}" if b else f"{hu_date(a)} óta"
+    except ValueError:
+        return span
+
+
 def build_index(inp: dict, hero_ts: str) -> str:
     idx, fl = inp["idx"], inp["fl"]
     hero, _, _ = vote_bundle(inp, hero_ts)
@@ -1690,9 +1779,15 @@ def build_index(inp: dict, hero_ts: str) -> str:
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"],
                      feeds=[("feed/kulonvelemeny.xml", f'karzat · különvélemények · {inp["cycle"]}. ciklus'), ("feed/szavazasok.xml", f'karzat · szavazások · {inp["cycle"]}. ciklus'), ("feed/heti.xml", f'karzat · a hét számokban · {inp["cycle"]}. ciklus')]) + topbar(inp, [], 0) + f"""
-<div class="hero-h"><h1>karzat</h1><small class="label" data-kz-text>{esc(cyc) + " — " if inp["closed"] else ""}az Országgyűlés szavazásai, {"ülőhelyenként" if not inp["closed"] else "név szerint"} — a szükséges többséggel együtt</small></div>
-<nav class="crumbs" aria-label="Szakaszok"><a href="#dir">szavazások</a> <span class="sl">/</span> <a href="kepviselo/index.html">képviselők</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}szemely/index.html">személyek</a> <span class="sl">/</span> <a href="iromany/index.html">irományok</a> <span class="sl">/</span> <a href="szamok/index.html">számok</a> <span class="sl">/</span> <a href="kohezio/index.html">kohézió</a> <span class="sl">/</span> <a href="szoros/index.html">szoros szavazások</a> <span class="sl">/</span> <a href="felszolalas/index.html">felszólalások</a> <span class="sl">/</span> <a href="bizottsag/index.html">bizottságok</a> <span class="sl">/</span> <a href="kepviselom/index.html">képviselőm</a> <span class="sl">/</span> <a href="feed/index.html">értesítések</a> <span class="sl">/</span> <a href="adatok/index.html">adatok</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a> <span class="sl">/</span> <a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a> <span class="sl">/</span> ciklusok: {" · ".join(f'<b>{c}</b>' if c == inp["cycle"] else f'<a href="{"../" * inp["base_depth"]}{cycle_dir(c)}index.html" title="{esc(CYCLE_SPAN.get(c, ""))}">{c}</a>' for c in inp["cycles"])} <span class="sl">·</span> {esc(CYCLE_SPAN.get(inp["cycle"], ""))}</nav>
-<p class="lede">{hu_num(fl["votes"])} szavazás a {inp["cycle"]}. ciklus{" első " + str(sd["count"]) + " ülésnapjáról" if not inp["closed"] else "ból"}, mindegyik a saját oldalán: {"ki hogyan szavazott, és mennyi kellett hozzá" if not inp["archive"] else ("az arányok frakciónként és a szükséges többség; a név szerinti listák az adatállományban" if n_rolls > len(inp["order"]) // 10 else "az arányok frakciónként és a szükséges többség — név szerinti listát és tárgyat az API 1998 előtt nem ad")}.</p>
+<div class="cyc-head">
+  <div class="cyc-title"><span class="kicker" data-kz-text>{inp["cycle"]}. ciklus{"" if inp["closed"] else " · folyamatban"}</span><h1>{esc(cycle_title(inp["cycle"]))}</h1>
+    <p class="lede">{hu_num(fl["votes"])} szavazás{" az első " + hu_num(sd["count"]) + " ülésnapról" if not inp["closed"] else ""}, mindegyik a saját oldalán: {"ki hogyan szavazott, és mennyi kellett hozzá" if not inp["archive"] else ("az arányok frakciónként és a szükséges többség; a név szerinti listák az adatállományban" if n_rolls > len(inp["order"]) // 10 else "az arányok frakciónként és a szükséges többség — név szerinti listát és tárgyat az API 1998 előtt nem ad")}.</p></div>
+  <nav class="cyc-nav" aria-label="A ciklus oldalai">
+    <div class="grp"><span class="lbl">szavazások</span><a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a><a href="iromany/index.html">irományok</a></div>
+    <div class="grp"><span class="lbl">emberek</span><a href="kepviselo/index.html">képviselők</a><a href="bizottsag/index.html">bizottságok</a><a href="felszolalas/index.html">felszólalások</a><a href="kepviselom/index.html">képviselőm</a></div>
+    <div class="grp"><span class="lbl">eszközök</span><a href="feed/index.html">értesítések</a><a href="adatok/index.html">adatok</a><a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a><a href="{"../" * inp["base_depth"]}szemely/index.html">pályaképek</a><a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a></div>
+  </nav>
+</div>
 {closed_line}
 <section class="grid">
   <section class="panel">{CORNERS}
@@ -3731,7 +3826,7 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
     if n_km:
         legend.append(("kormánytag", n_km, KORMANY_COLOUR))
     svg = (f'<svg viewBox="{-W:.0f} -{R + 8:.0f} {2 * W:.0f} {R + 26:.0f}" role="group" aria-label="Az ülésterem ma: {len(plan["coords"])} képviselő, {n_sz} nemzetiségi szószóló és {n_km} mandátum nélküli kormánytag a helyén; {len(plan["seat_outlines"])} hely az Országház alaprajzán. Egy hely: a neve és a mérlege; kattintásra rögzül, nyilakkal is járható">'
-           + f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>' + PODIUM
+           + f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>' + podium_svg(presidium(cur["mps"]), cur["facs"], k)
            + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>' + labels + "".join(parts) + "</svg>")
     return svg, legend
 
@@ -3790,9 +3885,11 @@ def hall_data(cur: dict) -> dict[str, list]:
         if not mp:
             continue
         rec = per_mp.get(azon) or {"cast": 0, "in_roll": 0, "with": 0, "against": 0}
+        office = next((HOUSE_OFFICES[o["office"]] for o in mp.get("offices") or [] if o.get("office") in HOUSE_OFFICES and not o.get("to")), "")
         out[azon] = [mp["name"], mp.get("faction") or "független", mandate_text(mp), seat_text(mp),
                      rec["cast"], rec["in_roll"], rec["with"], rec["against"],
-                     sum(1 for r in speeches.get(azon, []) if not r["technical"]), 0, "", ""]
+                     sum(1 for r in speeches.get(azon, []) if not r["technical"]), 0, "", "",
+                     ("az Országgyűlés " + office + "e") if office else ""]
     # the ministerial bench's non-MP members: a minister need not hold a mandate; the card names the office and says
     # plainly that no vote of theirs exists. d[9] carries the office instead of a committee count.
     for azon, r in ((cur.get("kormany") or {}).get("people") or {}).items():

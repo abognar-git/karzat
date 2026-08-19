@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-08-18T21:38:06.885113+02:00",
+ "derived_at": "2026-08-19T12:40:34.649620+02:00",
  "cycle": 42,
  "count": 214,
  "current": 41,
@@ -55,7 +55,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 12,
+     "onallo": 14,
      "nem_onallo": 2
     },
     {
@@ -106,6 +106,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q63224232",
    "wikidata_end": null,
@@ -225,6 +226,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q131287967",
    "wikidata_end": null,
@@ -286,6 +288,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q31091937",
    "wikidata_end": "2026-05-08",
@@ -370,6 +373,13 @@
      "role": "tag",
      "from": "2025-06-10",
      "to": "2026-05-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
     }
    ],
    "motions": [],
@@ -586,6 +596,28 @@
      "to": "2002-11-26"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "oktatási és kulturális minisztériumi államtitkár",
+     "from": "2009-04-21",
+     "to": "2010-05-29"
+    },
+    {
+     "office": "oktatási és kulturális minisztériumi államtitkár",
+     "from": "2006-07-01",
+     "to": "2009-04-15"
+    },
+    {
+     "office": "oktatási és kulturális minisztériumi államtitkár",
+     "from": "2004-10-04",
+     "to": "2006-06-08"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q776150",
    "wikidata_end": "2026-05-08",
@@ -692,7 +724,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 5,
+     "onallo": 6,
      "nem_onallo": 0
     },
     {
@@ -893,6 +925,18 @@
      "role": "tag",
      "from": "2006-05-30",
      "to": "2008-10-13"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2006-05-16",
+     "to": "2006-05-16"
     }
    ],
    "motions": [],
@@ -1121,6 +1165,28 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2014-05-05"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2020-06-29",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "a Közbeszerzések Tanácsának tagja",
+     "from": "2006-12-02",
+     "to": "2010-04-28"
     }
    ],
    "motions": [],
@@ -1381,6 +1447,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q774389",
    "wikidata_end": null,
@@ -1531,6 +1598,7 @@
      "to": "2016-09-12"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q17530757",
    "wikidata_end": "2026-05-08",
@@ -1901,6 +1969,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q5625635",
    "wikidata_end": null,
@@ -2212,6 +2281,23 @@
      "role": "tag",
      "from": "1998-06-25",
      "to": "1999-10-01"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2022-07-04",
+     "to": "2026-06-29"
+    },
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2018-06-11",
+     "to": "2022-07-03"
+    },
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2014-06-10",
+     "to": "2018-05-07"
     }
    ],
    "motions": [],
@@ -2533,6 +2619,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q616234",
    "wikidata_end": "2026-05-08",
@@ -2851,6 +2938,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q791792",
    "wikidata_end": "2026-05-08",
@@ -2976,7 +3064,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 5,
+     "onallo": 6,
      "nem_onallo": 1
     },
     {
@@ -3214,6 +3302,18 @@
      "to": "1998-07-15"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2010-12-04",
+     "to": "2011-12-31"
+    },
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2010-12-03"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q792654",
    "wikidata_end": null,
@@ -3437,6 +3537,7 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q5625722",
    "wikidata_end": "2026-05-08",
@@ -3661,6 +3762,18 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2010-06-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "miniszteri biztos",
+     "from": "2014-09-01",
+     "to": "2015-03-01"
+    },
+    {
+     "office": "vidékfejlesztési minisztériumi államtitkár",
+     "from": "2012-03-01",
+     "to": "2014-06-05"
     }
    ],
    "motions": [],
@@ -3913,6 +4026,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q6950267",
    "wikidata_end": "2026-05-08",
@@ -4078,6 +4192,23 @@
      "to": "2012-03-05"
     }
    ],
+   "offices": [
+    {
+     "office": "Innovációs és Technológiai Minisztérium államtitkára",
+     "from": "2020-01-15",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "2018-06-13",
+     "to": "2020-01-14"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2018-06-12"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q7665258",
    "wikidata_end": "2026-05-08",
@@ -4210,6 +4341,13 @@
      "role": "tag",
      "from": "2018-05-08",
      "to": "2020-03-30"
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2020-07-03",
+     "to": "2022-05-01"
     }
    ],
    "motions": [],
@@ -4359,6 +4497,13 @@
      "to": "2018-06-04"
     }
    ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q55752783",
    "wikidata_end": "2026-05-08",
@@ -4462,6 +4607,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q55753797",
    "wikidata_end": "2023-04-22",
@@ -4544,6 +4690,18 @@
      "to": "2025-02-15"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2025-02-15"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q111671131",
    "wikidata_end": "2026-05-08",
@@ -4606,6 +4764,7 @@
      "to": "2022-09-26"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111804219",
    "wikidata_end": "2026-05-08",
@@ -4686,6 +4845,13 @@
      "subcommittee": null,
      "role": "tag",
      "from": "2022-05-02",
+     "to": "2026-05-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-17",
      "to": "2026-05-08"
     }
    ],
@@ -4778,6 +4944,13 @@
      "to": "2022-07-19"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2025-03-17",
+     "to": "2026-05-08"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q109043860",
    "wikidata_end": "2026-05-08",
@@ -4853,6 +5026,7 @@
      "to": "2025-02-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q7264681",
    "wikidata_end": "2026-05-08",
@@ -4936,6 +5110,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111804263",
    "wikidata_end": "2026-05-08",
@@ -5134,6 +5309,7 @@
      "to": "2014-06-23"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q29861529",
    "wikidata_end": "2026-05-08",
@@ -5410,6 +5586,18 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "földművelésügyi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "vidékfejlesztési minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q383427",
    "wikidata_end": null,
@@ -5670,6 +5858,18 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "Innovációs és Technológiai Minisztérium államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2015-10-09",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q871892",
    "wikidata_end": null,
@@ -5870,6 +6070,23 @@
      "to": "2011-02-14"
     }
    ],
+   "offices": [
+    {
+     "office": "Közigazgatási és Területfejlesztési Minisztérium államtitkára",
+     "from": "2025-01-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2016-02-14"
+    },
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q20895279",
    "wikidata_end": null,
@@ -6063,6 +6280,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q6375052",
    "wikidata_end": null,
@@ -6188,6 +6406,7 @@
      "to": "2019-03-04"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q17487544",
    "wikidata_end": "2026-05-08",
@@ -6275,6 +6494,7 @@
      "to": "2025-11-17"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q56390799",
    "wikidata_end": "2026-05-08",
@@ -6475,6 +6695,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q8073651",
    "wikidata_end": "2022-05-08",
@@ -6668,6 +6889,38 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2014-05-05"
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2014-05-06",
+     "to": "2014-05-06"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2010-05-14",
+     "to": "2010-05-14"
     }
    ],
    "motions": [],
@@ -6919,6 +7172,7 @@
      "to": "2011-03-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q5005010",
    "wikidata_end": null,
@@ -7001,6 +7255,23 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2022-05-25",
+     "to": "2024-09-30"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2015-10-21",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q55752813",
    "wikidata_end": "2024-09-30",
@@ -7114,6 +7385,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q63224258",
    "wikidata_end": "2026-05-08",
@@ -7241,6 +7513,18 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q63224381",
    "wikidata_end": null,
@@ -7303,6 +7587,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q84133217",
    "wikidata_end": null,
@@ -7365,6 +7650,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111812869",
    "wikidata_end": null,
@@ -7570,6 +7856,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16519202",
    "wikidata_end": null,
@@ -7777,6 +8064,23 @@
      "to": "2003-03-03"
     }
    ],
+   "offices": [
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2020-11-01",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2010-05-14",
+     "to": "2011-02-21"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q7050311",
    "wikidata_end": "2026-05-08",
@@ -7845,6 +8149,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q747190",
    "wikidata_end": null,
@@ -8156,6 +8461,18 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2025-05-31"
+    },
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q7665264",
    "wikidata_end": null,
@@ -8445,6 +8762,23 @@
      "to": "2001-12-18"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
+     "from": "2025-06-11",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "földművelésügyi miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "vidékfejlesztési miniszter",
+     "from": "2010-05-29",
+     "to": "2014-06-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q549568",
    "wikidata_end": null,
@@ -8687,6 +9021,48 @@
      "role": "alelnök",
      "from": "2002-05-27",
      "to": "2006-05-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Gazdaságfejlesztési Minisztérium államtitkára",
+     "from": "2024-01-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Gazdaságfejlesztési Minisztérium államtitkára",
+     "from": "2023-01-01",
+     "to": "2023-12-31"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2022-05-25",
+     "to": "2022-12-31"
+    },
+    {
+     "office": "Miniszterelnöki Kormányiroda államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "közlekedési, hírközlési és energiaügyi miniszter",
+     "from": "2000-12-01",
+     "to": "2002-05-26"
+    },
+    {
+     "office": "nemzeti fejlesztési és gazdasági minisztériumi államtitkár",
+     "from": "1998-07-14",
+     "to": "2000-01-31"
     }
    ],
    "motions": [],
@@ -9103,6 +9479,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q746355",
    "wikidata_end": null,
@@ -9303,6 +9680,23 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16729034",
    "wikidata_end": "2026-05-08",
@@ -9430,6 +9824,13 @@
      "to": "2010-09-13"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q5625576",
    "wikidata_end": null,
@@ -9489,6 +9890,18 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q104628126",
    "wikidata_end": "2026-05-08",
@@ -9558,6 +9971,7 @@
      "to": "2024-11-25"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q28842902",
    "wikidata_end": "2024-11-25",
@@ -9627,6 +10041,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q108756034",
    "wikidata_end": "2026-05-08",
@@ -9681,6 +10096,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2024-03-14",
+     "to": "2026-05-12"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q105079853",
    "wikidata_end": "2026-05-08",
@@ -9843,6 +10265,7 @@
      "to": "2004-07-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q369766",
    "wikidata_end": null,
@@ -10000,6 +10423,7 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1029066",
    "wikidata_end": null,
@@ -10157,6 +10581,33 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "miniszterelnök",
+     "from": "2006-06-09",
+     "to": "2009-04-14"
+    },
+    {
+     "office": "miniszterelnök-jelölt",
+     "from": "2006-05-16",
+     "to": "2006-06-09"
+    },
+    {
+     "office": "miniszterelnök",
+     "from": "2004-09-30",
+     "to": "2006-06-08"
+    },
+    {
+     "office": "miniszterelnök-jelölt",
+     "from": "2004-09-27",
+     "to": "2004-09-29"
+    },
+    {
+     "office": "ifjúsági, családügyi, szociális és esélyegyenlőségi miniszter",
+     "from": "2003-05-19",
+     "to": "2004-09-27"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q191337",
    "wikidata_end": "2025-05-09",
@@ -10263,7 +10714,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 7,
+     "onallo": 8,
      "nem_onallo": 0
     },
     {
@@ -10368,6 +10819,7 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q589138",
    "wikidata_end": null,
@@ -10538,6 +10990,23 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2014-05-05"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-06-23",
+     "to": "2018-05-07"
     }
    ],
    "motions": [],
@@ -10771,6 +11240,23 @@
      "to": "2014-02-03"
     }
    ],
+   "offices": [
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
+     "from": "2014-05-06",
+     "to": "2017-10-01"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q5550584",
    "wikidata_end": null,
@@ -11000,6 +11486,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q4853187",
    "wikidata_end": "2024-07-09",
@@ -11120,6 +11607,7 @@
      "to": "2019-12-31"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q980486",
    "wikidata_end": null,
@@ -11196,6 +11684,7 @@
      "to": "2025-02-24"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111817271",
    "wikidata_end": null,
@@ -11541,6 +12030,18 @@
      "role": "alelnök",
      "from": "1998-06-25",
      "to": "2001-12-17"
+    }
+   ],
+   "offices": [
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "a Nemzeti Kulturális Örökség Minisztériumának politikai államtitkára",
+     "from": "2002-01-01",
+     "to": "2002-05-26"
     }
    ],
    "motions": [],
@@ -11926,6 +12427,13 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16729643",
    "wikidata_end": null,
@@ -12140,6 +12648,23 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2014-05-05"
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2006-06-08",
+     "to": "2010-05-13"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2002-05-27",
+     "to": "2006-05-15"
+    },
+    {
+     "office": "szociális és családügyi miniszter",
+     "from": "1998-07-08",
+     "to": "2002-05-26"
     }
    ],
    "motions": [],
@@ -12440,6 +12965,48 @@
      "to": "2004-10-25"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
+     "from": "2022-05-02",
+     "to": "2025-05-31"
+    },
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
+     "from": "2017-10-02",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "honvédelmi miniszter",
+     "from": "2014-06-06",
+     "to": "2015-09-09"
+    },
+    {
+     "office": "honvédelmi miniszter",
+     "from": "2010-05-29",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2006-05-16",
+     "to": "2010-05-13"
+    },
+    {
+     "office": "jegyző",
+     "from": "2005-02-21",
+     "to": "2006-05-15"
+    },
+    {
+     "office": "igazságügyi és rendészeti minisztériumi államtitkár",
+     "from": "1998-07-14",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q220909",
    "wikidata_end": "2025-05-31",
@@ -12672,6 +13239,43 @@
      "role": "tag",
      "from": "2010-06-02",
      "to": "2014-05-05"
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "oktatási és kulturális miniszter",
+     "from": "2009-04-16",
+     "to": "2010-05-29"
+    },
+    {
+     "office": "oktatási és kulturális miniszter",
+     "from": "2006-06-09",
+     "to": "2009-04-15"
+    },
+    {
+     "office": "nemzeti kulturális örökség minisztere",
+     "from": "2004-10-04",
+     "to": "2005-02-13"
+    },
+    {
+     "office": "nemzeti kulturális örökség minisztere",
+     "from": "2003-05-19",
+     "to": "2004-10-03"
+    },
+    {
+     "office": "oktatási és kulturális minisztériumi államtitkár",
+     "from": "2002-05-27",
+     "to": "2003-05-18"
     }
    ],
    "motions": [],
@@ -12918,6 +13522,13 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2017-10-11",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q6089241",
    "wikidata_end": null,
@@ -13132,6 +13743,18 @@
      "role": "tag",
      "from": "2009-03-30",
      "to": "2010-05-13"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2023-01-31"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
     }
    ],
    "motions": [],
@@ -13349,6 +13972,7 @@
      "to": "2011-11-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1033823",
    "wikidata_end": null,
@@ -13481,6 +14105,13 @@
      "role": "alelnök",
      "from": "2013-09-23",
      "to": "2014-05-05"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2024-10-01",
+     "to": "2026-05-12"
     }
    ],
    "motions": [],
@@ -13654,6 +14285,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q28722039",
    "wikidata_end": null,
@@ -13719,6 +14351,23 @@
      "role": "tag",
      "from": "2024-09-30",
      "to": "2026-05-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2024-07-31"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2018-09-11"
+    },
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2015-10-09",
+     "to": "2018-05-17"
     }
    ],
    "motions": [],
@@ -13834,6 +14483,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q26802740",
    "wikidata_end": "2026-05-08",
@@ -13967,6 +14617,7 @@
      "to": "2020-03-23"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q55753757",
    "wikidata_end": null,
@@ -14084,6 +14735,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q55752876",
    "wikidata_end": null,
@@ -14159,6 +14811,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q110716161",
    "wikidata_end": null,
@@ -14220,6 +14873,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q42881086",
    "wikidata_end": null,
@@ -14289,6 +14943,7 @@
      "to": "2022-07-04"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111818850",
    "wikidata_end": null,
@@ -14604,6 +15259,7 @@
      "to": "1993-09-20"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q252267",
    "wikidata_end": null,
@@ -15044,6 +15700,13 @@
      "to": "1992-02-18"
     }
    ],
+   "offices": [
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16194594",
    "wikidata_end": null,
@@ -15158,6 +15821,23 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q28745275",
    "wikidata_end": "2026-05-09",
@@ -15239,6 +15919,18 @@
      "role": "tag",
      "from": "2022-05-02",
      "to": "2024-04-12"
+    }
+   ],
+   "offices": [
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2024-04-13",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
     }
    ],
    "motions": [],
@@ -15493,6 +16185,28 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q607401",
    "wikidata_end": null,
@@ -15598,6 +16312,7 @@
      "to": "2019-02-18"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q17361708",
    "wikidata_end": "2026-05-08",
@@ -15666,6 +16381,7 @@
      "to": "2024-09-27"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q107508919",
    "wikidata_end": null,
@@ -16005,6 +16721,23 @@
      "to": "1999-10-01"
     }
    ],
+   "offices": [
+    {
+     "office": "MNB Felügyelőbizottságának tagja",
+     "from": "2025-06-01",
+     "to": null
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1034272",
    "wikidata_end": "2025-05-31",
@@ -16235,6 +16968,28 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "önkormányzati minisztériumi államtitkár",
+     "from": "1998-07-14",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1106808",
    "wikidata_end": null,
@@ -16307,6 +17062,13 @@
      "role": "alelnök",
      "from": "2022-05-02",
      "to": "2023-01-30"
+    }
+   ],
+   "offices": [
+    {
+     "office": "szociális és munkaügyi minisztériumi államtitkár",
+     "from": "2004-10-04",
+     "to": "2006-06-08"
     }
    ],
    "motions": [],
@@ -16457,6 +17219,7 @@
      "to": "2006-10-09"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1121571",
    "wikidata_end": null,
@@ -16650,6 +17413,7 @@
      "to": "2011-02-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q6321143",
    "wikidata_end": null,
@@ -16836,6 +17600,18 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "Innovációs és Technológiai Minisztérium államtitkára",
+     "from": "2018-05-22",
+     "to": "2019-08-31"
+    },
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2014-10-16",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q8076628",
    "wikidata_end": null,
@@ -17018,6 +17794,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q3331988",
    "wikidata_end": null,
@@ -17085,7 +17862,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 3,
+     "onallo": 4,
      "nem_onallo": 0
     },
     {
@@ -17193,6 +17970,13 @@
      "role": "tag",
      "from": "2018-05-08",
      "to": "2022-05-01"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
     }
    ],
    "motions": [],
@@ -17307,6 +18091,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q55753722",
    "wikidata_end": null,
@@ -17454,6 +18239,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q47507181",
    "wikidata_end": "2026-05-09",
@@ -17604,6 +18390,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q55753231",
    "wikidata_end": null,
@@ -17671,7 +18458,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 7,
+     "onallo": 9,
      "nem_onallo": 0
     },
     {
@@ -17744,6 +18531,28 @@
      "role": "tag",
      "from": "2020-11-02",
      "to": "2022-05-01"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2024-08-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2024-07-31"
+    },
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2022-11-30"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
     }
    ],
    "motions": [],
@@ -17821,6 +18630,7 @@
      "to": "2022-06-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111822460",
    "wikidata_end": null,
@@ -17905,6 +18715,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111829645",
    "wikidata_end": null,
@@ -17980,6 +18791,7 @@
      "to": "2025-02-15"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q47507185",
    "wikidata_end": null,
@@ -18049,6 +18861,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q63224431",
    "wikidata_end": null,
@@ -18125,6 +18938,7 @@
      "to": "2022-07-04"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1122986",
    "wikidata_end": null,
@@ -18201,6 +19015,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111828939",
    "wikidata_end": null,
@@ -18535,6 +19350,43 @@
      "role": "tag",
      "from": "1990-05-03",
      "to": "1991-10-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a köztársasági elnököt helyettesítő OGY elnök",
+     "from": "2024-02-26",
+     "to": "2024-03-04"
+    },
+    {
+     "office": "az Országgyűlés elnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "az Országgyűlés elnöke",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés elnöke",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "a köztársasági elnököt helyettesítő OGY elnök",
+     "from": "2012-04-02",
+     "to": "2012-05-09"
+    },
+    {
+     "office": "az Országgyűlés elnöke",
+     "from": "2010-08-06",
+     "to": "2014-05-05"
+    },
+    {
+     "office": "a polgári nemzetbiztonsági szolgálatokat irányító tárca nélküli miniszter",
+     "from": "1998-07-08",
+     "to": "2000-05-02"
     }
    ],
    "motions": [],
@@ -18900,6 +19752,13 @@
      "to": "1994-06-27"
     }
    ],
+   "offices": [
+    {
+     "office": "tárca nélküli miniszter (a megyei jogú városok fejlesztéséért felelős)",
+     "from": "2017-10-02",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1124989",
    "wikidata_end": null,
@@ -19040,6 +19899,13 @@
      "role": "alelnök",
      "from": "2014-05-06",
      "to": "2018-05-07"
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2014-05-06",
+     "to": "2014-05-06"
     }
    ],
    "motions": [],
@@ -19228,6 +20094,13 @@
      "role": "tag",
      "from": "2014-05-06",
      "to": "2018-05-07"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
     }
    ],
    "motions": [],
@@ -19567,6 +20440,33 @@
      "to": "1997-07-21"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    },
+    {
+     "office": "ipari, kereskedelmi és idegenforgalmi miniszter",
+     "from": "1993-02-25",
+     "to": "1994-07-14"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q269131",
    "wikidata_end": "2026-05-08",
@@ -19810,6 +20710,33 @@
      "to": "2004-11-29"
     }
    ],
+   "offices": [
+    {
+     "office": "építési és beruházási miniszter",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "építési és beruházási miniszter",
+     "from": "2022-05-24",
+     "to": "2022-11-30"
+    },
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszterelnökséget vezető államtitkár",
+     "from": "2012-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2002-05-15",
+     "to": "2004-10-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q750646",
    "wikidata_end": null,
@@ -19923,6 +20850,7 @@
      "to": "2011-02-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q8074825",
    "wikidata_end": null,
@@ -20087,6 +21015,13 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2019-02-18",
+     "to": "2020-06-04"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q31092251",
    "wikidata_end": null,
@@ -20177,6 +21112,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111831958",
    "wikidata_end": null,
@@ -20498,6 +21434,43 @@
      "role": "tag",
      "from": "1994-06-28",
      "to": "1997-04-07"
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés elnökének feladatait ellátó alelnök",
+     "from": "2024-02-26",
+     "to": "2024-03-04"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "az Országgyűlés elnökének feladatait ellátó alelnök",
+     "from": "2012-04-02",
+     "to": "2012-05-09"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2006-06-08",
+     "to": "2010-05-13"
     }
    ],
    "motions": [],
@@ -20826,6 +21799,28 @@
      "to": "2000-05-02"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés háznagya",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "az Országgyűlés háznagya",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "az Országgyűlés háznagya",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "az Országgyűlés háznagya",
+     "from": "2013-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16121838",
    "wikidata_end": null,
@@ -21114,6 +22109,33 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2022-06-14"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "jegyző",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2006-05-16",
+     "to": "2010-05-13"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q22007029",
    "wikidata_end": null,
@@ -21373,6 +22395,7 @@
      "to": "2006-06-19"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16206215",
    "wikidata_end": null,
@@ -21557,6 +22580,13 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2012-06-29"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q12815357",
    "wikidata_end": null,
@@ -21668,6 +22698,7 @@
      "to": "2018-05-19"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1175738",
    "wikidata_end": null,
@@ -21746,6 +22777,18 @@
      "role": "tag",
      "from": "2024-04-29",
      "to": "2024-04-29"
+    }
+   ],
+   "offices": [
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2024-04-12"
+    },
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
     }
    ],
    "motions": [],
@@ -21837,6 +22880,7 @@
      "to": "2023-05-03"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111835433",
    "wikidata_end": null,
@@ -21923,6 +22967,13 @@
      "subcommittee": null,
      "role": "tag",
      "from": "2022-05-02",
+     "to": "2026-05-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-06-14",
      "to": "2026-05-08"
     }
    ],
@@ -22064,7 +23115,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 10,
      "nem_onallo": 0
     },
     {
@@ -22277,6 +23328,38 @@
      "subcommittee": null,
      "role": "tag",
      "from": "1998-06-25",
+     "to": "2002-05-14"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2023-02-08",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "földművelésügyi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "vidékfejlesztési minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2006-05-16",
+     "to": "2010-05-13"
+    },
+    {
+     "office": "jegyző",
+     "from": "2002-05-15",
+     "to": "2004-11-07"
+    },
+    {
+     "office": "jegyző",
+     "from": "1998-06-18",
      "to": "2002-05-14"
     }
    ],
@@ -22562,6 +23645,38 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "miniszterelnöki megbízott",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "miniszterelnöki megbízott",
+     "from": "2016-11-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszteri biztos",
+     "from": "2015-06-01",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszterelnöki biztos",
+     "from": "2011-09-13",
+     "to": "2012-07-15"
+    },
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2011-09-12"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2002-05-15",
+     "to": "2002-05-15"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1219426",
    "wikidata_end": "2026-05-08",
@@ -22809,6 +23924,13 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q13813421",
    "wikidata_end": null,
@@ -22938,6 +24060,38 @@
      "role": "tag",
      "from": "2006-05-30",
      "to": "2010-05-13"
+    }
+   ],
+   "offices": [
+    {
+     "office": "közigazgatási és területfejlesztési miniszter",
+     "from": "2024-01-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "területfejlesztési miniszter",
+     "from": "2022-05-24",
+     "to": "2023-12-31"
+    },
+    {
+     "office": "Európai Bizottság tagja",
+     "from": "2014-11-01",
+     "to": "2019-11-30"
+    },
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2014-06-06",
+     "to": "2014-09-22"
+    },
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2010-06-01",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "közigazgatási és igazságügyi miniszter",
+     "from": "2010-05-29",
+     "to": "2014-06-05"
     }
    ],
    "motions": [],
@@ -23105,6 +24259,23 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "agrárminiszter",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "agrárminiszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "földművelésügyi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16197131",
    "wikidata_end": "2026-05-08",
@@ -23247,6 +24418,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16212450",
    "wikidata_end": null,
@@ -23448,6 +24620,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1218911",
    "wikidata_end": null,
@@ -23626,6 +24799,23 @@
      "to": "2018-06-04"
     }
    ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2024-11-15",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q55753721",
    "wikidata_end": null,
@@ -23680,7 +24870,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 3,
+     "onallo": 6,
      "nem_onallo": 0
     },
     {
@@ -23715,6 +24905,18 @@
      "role": "tag",
      "from": "2022-05-02",
      "to": "2022-05-24"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2022-11-30"
     }
    ],
    "motions": [],
@@ -24062,6 +25264,18 @@
      "to": "1993-12-08"
     }
    ],
+   "offices": [
+    {
+     "office": "külügyminisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "külügyminisztériumi államtitkár",
+     "from": "1998-07-14",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1220884",
    "wikidata_end": null,
@@ -24263,6 +25477,23 @@
      "to": "2008-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "közlekedési, hírközlési és energiaügyi minisztériumi államtitkár",
+     "from": "2009-04-21",
+     "to": "2010-05-29"
+    },
+    {
+     "office": "környezetvédelmi és vízügyi minisztériumi államtitkár",
+     "from": "2008-05-01",
+     "to": "2009-04-15"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q31092525",
    "wikidata_end": "2026-05-08",
@@ -24382,6 +25613,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q53341941",
    "wikidata_end": null,
@@ -24472,6 +25704,18 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "a miniszterelnök politikai igazgatója",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q59417334",
    "wikidata_end": null,
@@ -24554,6 +25798,7 @@
      "to": "2024-02-26"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q29406323",
    "wikidata_end": "2025-05-05",
@@ -24785,6 +26030,43 @@
      "role": "elnök",
      "from": "1994-06-28",
      "to": "1998-06-17"
+    }
+   ],
+   "offices": [
+    {
+     "office": "miniszterelnök",
+     "from": "2022-05-16",
+     "to": "2026-05-09"
+    },
+    {
+     "office": "miniszterelnök",
+     "from": "2018-05-10",
+     "to": "2022-05-16"
+    },
+    {
+     "office": "miniszterelnök",
+     "from": "2014-05-10",
+     "to": "2018-05-10"
+    },
+    {
+     "office": "miniszterelnök",
+     "from": "2010-05-29",
+     "to": "2014-05-10"
+    },
+    {
+     "office": "miniszterelnök-jelölt",
+     "from": "2010-05-14",
+     "to": "2010-05-29"
+    },
+    {
+     "office": "miniszterelnök",
+     "from": "1998-07-06",
+     "to": "2002-05-26"
+    },
+    {
+     "office": "miniszterelnök-jelölt",
+     "from": "1998-06-18",
+     "to": "1998-07-06"
     }
    ],
    "motions": [],
@@ -25070,6 +26352,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16194248",
    "wikidata_end": "2026-05-08",
@@ -25307,6 +26590,23 @@
      "role": "tag",
      "from": "1998-06-25",
      "to": "2002-05-14"
+    }
+   ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2014-06-18"
     }
    ],
    "motions": [],
@@ -25569,6 +26869,23 @@
      "role": "tag",
      "from": "1998-06-25",
      "to": "2002-05-14"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2022-05-25",
+     "to": "2024-10-17"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
     }
    ],
    "motions": [],
@@ -25882,6 +27199,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16196219",
    "wikidata_end": "2026-05-08",
@@ -26078,6 +27396,13 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1233411",
    "wikidata_end": null,
@@ -26198,7 +27523,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 15,
+     "speeches": 13,
      "technical": 5
     },
     {
@@ -26336,6 +27661,13 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2014-06-02"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16195271",
    "wikidata_end": null,
@@ -26418,6 +27750,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111837045",
    "wikidata_end": null,
@@ -26718,6 +28051,23 @@
      "to": "1998-09-29"
     }
    ],
+   "offices": [
+    {
+     "office": "Miniszterelnöki Kabinetirodát vezető miniszter",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetirodát vezető miniszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetirodát vezető miniszter",
+     "from": "2015-10-17",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1249804",
    "wikidata_end": "2026-05-08",
@@ -26906,6 +28256,28 @@
      "role": "tag",
      "from": "2008-02-25",
      "to": "2008-04-14"
+    }
+   ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "közigazgatási és igazságügyi minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
     }
    ],
    "motions": [],
@@ -27129,6 +28501,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16187286",
    "wikidata_end": "2026-05-08",
@@ -27268,6 +28641,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q51079133",
    "wikidata_end": "2026-05-08",
@@ -27337,6 +28711,7 @@
      "to": "2025-05-20"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q63225379",
    "wikidata_end": "2026-05-08",
@@ -27420,6 +28795,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q63225381",
    "wikidata_end": "2026-05-08",
@@ -27748,6 +29124,43 @@
      "to": "2000-05-02"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-06-04",
+     "to": "2020-06-29"
+    },
+    {
+     "office": "honvédelmi miniszter",
+     "from": "2015-09-10",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2015-09-09"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2012-10-08",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2012-10-07"
+    },
+    {
+     "office": "a polgári nemzetbiztonsági szolgálatokat irányító tárca nélküli miniszter államtitkára",
+     "from": "2000-05-03",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1288461",
    "wikidata_end": null,
@@ -28031,6 +29444,7 @@
      "to": "2001-04-16"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16194811",
    "wikidata_end": "2026-05-08",
@@ -28466,6 +29880,18 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2012-06-26",
+     "to": "2012-07-07"
+    },
+    {
+     "office": "közigazgatási és igazságügyi minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2012-06-25"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1301603",
    "wikidata_end": null,
@@ -28763,6 +30189,38 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "jegyző",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2006-05-16",
+     "to": "2010-05-13"
+    },
+    {
+     "office": "jegyző",
+     "from": "2004-10-11",
+     "to": "2006-05-15"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16195821",
    "wikidata_end": "2026-05-08",
@@ -28973,6 +30431,28 @@
      "role": "tag",
      "from": "2002-05-15",
      "to": "2006-05-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
     }
    ],
    "motions": [],
@@ -29268,6 +30748,43 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2014-09-23",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2014-09-22"
+    },
+    {
+     "office": "Miniszterelnökség államtitkára",
+     "from": "2012-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "miniszterelnöki biztos",
+     "from": "2010-06-04",
+     "to": "2012-06-01"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2002-05-15",
+     "to": "2002-05-15"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q685293",
    "wikidata_end": "2026-07-15",
@@ -29541,6 +31058,13 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2011-02-01",
+     "to": "2014-06-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q15844871",
    "wikidata_end": null,
@@ -29757,6 +31281,13 @@
      "to": "2010-10-04"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16201211",
    "wikidata_end": null,
@@ -29897,6 +31428,7 @@
      "to": "2013-02-11"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1293745",
    "wikidata_end": null,
@@ -30096,6 +31628,7 @@
      "to": "2013-02-11"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1293787",
    "wikidata_end": null,
@@ -30289,6 +31822,13 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16195353",
    "wikidata_end": "2026-05-08",
@@ -30378,6 +31918,18 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2015-09-19",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q511580",
    "wikidata_end": "2026-05-08",
@@ -30465,6 +32017,23 @@
      "role": "alelnök",
      "from": "2023-05-03",
      "to": "2026-05-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2022-09-05"
+    },
+    {
+     "office": "tárca nélküli miniszter (a Paksi Atomerőmű két új blokkja tervezéséért, megépítéséért és üzembe helyezéséért felelős)",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "tárca nélküli miniszter (a Paksi Atomerőmű két új blokkja tervezéséért, megépítéséért és üzembe helyezéséért felelős)",
+     "from": "2017-05-02",
+     "to": "2018-05-17"
     }
    ],
    "motions": [],
@@ -30567,6 +32136,13 @@
      "to": "2020-03-09"
     }
    ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q55753382",
    "wikidata_end": "2026-05-08",
@@ -30659,6 +32235,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1286684",
    "wikidata_end": null,
@@ -30734,6 +32311,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111846807",
    "wikidata_end": null,
@@ -30808,6 +32386,13 @@
      "role": "tag",
      "from": "2022-05-02",
      "to": "2024-08-31"
+    }
+   ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2024-09-01",
+     "to": "2026-05-12"
     }
    ],
    "motions": [],
@@ -30923,6 +32508,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q63224348",
    "wikidata_end": null,
@@ -31006,6 +32592,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q72092408",
    "wikidata_end": null,
@@ -31068,6 +32655,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111841107",
    "wikidata_end": "2026-05-08",
@@ -31131,6 +32719,7 @@
      "to": "2022-09-19"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111844810",
    "wikidata_end": "2022-09-19",
@@ -31491,6 +33080,7 @@
      "to": "1998-06-17"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1286949",
    "wikidata_end": null,
@@ -31735,6 +33325,53 @@
      "to": "1996-04-15"
     }
    ],
+   "offices": [
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2022-06-05",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "tárca nélküli miniszter (nemzetpolitikáért felelős)",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2018-05-22",
+     "to": "2022-06-04"
+    },
+    {
+     "office": "tárca nélküli miniszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "tárca nélküli miniszter (nemzetpolitikáért felelős)",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2010-06-01",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "tárca nélküli miniszter (nemzetpolitikáért felelős)",
+     "from": "2010-05-29",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "1994-06-28",
+     "to": "1997-07-21"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q55574",
    "wikidata_end": null,
@@ -31883,6 +33520,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q31094962",
    "wikidata_end": null,
@@ -32011,6 +33649,7 @@
      "to": "2017-10-02"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q31091594",
    "wikidata_end": null,
@@ -32130,6 +33769,18 @@
      "role": "tag",
      "from": "2014-05-06",
      "to": "2014-09-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
     }
    ],
    "motions": [],
@@ -32279,6 +33930,13 @@
      "role": "tag",
      "from": "2014-05-06",
      "to": "2017-10-09"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2017-10-11",
+     "to": "2018-05-17"
     }
    ],
    "motions": [],
@@ -32555,6 +34213,38 @@
      "role": "tag",
      "from": "1998-06-25",
      "to": "2001-01-01"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2025-01-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2024-12-31"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "2001-01-10",
+     "to": "2002-05-26"
     }
    ],
    "motions": [],
@@ -32871,6 +34561,28 @@
      "to": "2000-11-28"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés korelnöke",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    },
+    {
+     "office": "az Országgyűlés korelnöke",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
+    },
+    {
+     "office": "az Országgyűlés korelnöke",
+     "from": "2014-05-06",
+     "to": "2014-05-06"
+    },
+    {
+     "office": "környezetvédelmi és vízügyi miniszter",
+     "from": "2000-12-01",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1325390",
    "wikidata_end": "2023-11-03",
@@ -33108,6 +34820,28 @@
      "role": "tag",
      "from": "2002-05-15",
      "to": "2006-05-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "jegyző",
+     "from": "2014-06-02",
+     "to": "2018-05-07"
+    },
+    {
+     "office": "jegyző",
+     "from": "2011-02-22",
+     "to": "2014-05-05"
     }
    ],
    "motions": [],
@@ -33361,6 +35095,18 @@
      "role": "tag",
      "from": "2004-08-27",
      "to": "2005-07-04"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2017-02-08",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2014-07-01",
+     "to": "2017-02-07"
     }
    ],
    "motions": [],
@@ -33646,6 +35392,7 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q1321047",
    "wikidata_end": null,
@@ -33800,6 +35547,7 @@
      "to": "2007-02-02"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q23561873",
    "wikidata_end": "2026-05-08",
@@ -34028,6 +35776,7 @@
      "to": "2013-02-11"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16194839",
    "wikidata_end": null,
@@ -34193,6 +35942,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16197309",
    "wikidata_end": "2026-05-08",
@@ -34401,6 +36151,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16215589",
    "wikidata_end": null,
@@ -34513,6 +36264,13 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16523396",
    "wikidata_end": null,
@@ -34598,6 +36356,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q832910",
    "wikidata_end": null,
@@ -34667,6 +36426,7 @@
      "to": "2025-02-24"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q111852081",
    "wikidata_end": null,
@@ -34742,6 +36502,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q109010782",
    "wikidata_end": null,
@@ -34907,6 +36668,33 @@
      "to": "2014-06-02"
     }
    ],
+   "offices": [
+    {
+     "office": "igazságügyi és rendészeti miniszter",
+     "from": "2023-08-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2022-05-25",
+     "to": "2023-07-31"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2020-01-03",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2020-01-02"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2015-10-21",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q20438122",
    "wikidata_end": null,
@@ -35003,6 +36791,18 @@
      "role": "tag",
      "from": "2018-05-08",
      "to": "2018-10-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
     }
    ],
    "motions": [],
@@ -35395,6 +37195,13 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés korelnöke",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16152024",
    "wikidata_end": null,
@@ -35683,6 +37490,23 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-07-19",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2009-04-21",
+     "to": "2010-05-29"
+    },
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2007-07-01",
+     "to": "2009-04-15"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q15710456",
    "wikidata_end": "2026-05-08",
@@ -35963,6 +37787,18 @@
      "to": "2006-05-15"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési és gazdasági minisztériumi államtitkár",
+     "from": "2009-04-21",
+     "to": "2010-05-29"
+    },
+    {
+     "office": "nemzeti fejlesztési és gazdasági minisztériumi államtitkár",
+     "from": "2008-12-01",
+     "to": "2009-04-15"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q23561959",
    "wikidata_end": "2026-05-08",
@@ -36158,6 +37994,7 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q16194381",
    "wikidata_end": "2026-05-08",
@@ -36330,6 +38167,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q15991655",
    "wikidata_end": null,
@@ -36472,6 +38310,28 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2012-12-11"
+    }
+   ],
+   "offices": [
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2018-06-23",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2012-10-16",
+     "to": "2014-06-05"
     }
    ],
    "motions": [],
@@ -36718,6 +38578,13 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16201735",
    "wikidata_end": null,
@@ -36954,6 +38821,13 @@
      "to": "2013-05-13"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2013-06-17",
+     "to": "2013-09-19"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16195844",
    "wikidata_end": null,
@@ -37133,6 +39007,23 @@
      "to": "2010-06-08"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-07-02",
+     "to": "2022-05-01"
+    },
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q16193422",
    "wikidata_end": null,
@@ -37205,6 +39096,23 @@
      "role": "tag",
      "from": "2023-08-01",
      "to": "2023-08-01"
+    }
+   ],
+   "offices": [
+    {
+     "office": "igazságügyi és rendészeti miniszter",
+     "from": "2022-05-24",
+     "to": "2023-07-31"
+    },
+    {
+     "office": "igazságügyi és rendészeti miniszter",
+     "from": "2019-07-12",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2019-07-11"
     }
    ],
    "motions": [],
@@ -37334,6 +39242,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q87798644",
    "wikidata_end": null,
@@ -37395,6 +39304,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q109008317",
    "wikidata_end": null,
@@ -37526,6 +39436,13 @@
      "to": "2023-01-06"
     }
    ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q111866278",
    "wikidata_end": "2026-05-08",
@@ -37586,6 +39503,13 @@
      "role": "tag",
      "from": "2022-05-17",
      "to": "2022-09-19"
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
     }
    ],
    "motions": [],
@@ -37896,6 +39820,68 @@
      "to": "1994-06-27"
     }
    ],
+   "offices": [
+    {
+     "office": "a Magyar Nemzeti Bank elnöke",
+     "from": "2025-03-04",
+     "to": null
+    },
+    {
+     "office": "az MNB Monetáris Tanácsának elnöke",
+     "from": "2025-03-04",
+     "to": null
+    },
+    {
+     "office": "a Költségvetési Tanács tagja",
+     "from": "2025-03-04",
+     "to": null
+    },
+    {
+     "office": "pénzügyminiszter",
+     "from": "2022-05-24",
+     "to": "2024-12-31"
+    },
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2018-05-22",
+     "to": "2022-06-04"
+    },
+    {
+     "office": "pénzügyminiszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzetgazdasági miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "nemzetgazdasági miniszter",
+     "from": "2013-03-07",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "Egyes nemzetközi pénzügyi szervezetekkel való kapcsolattartásért felelős tárca nélküli miniszter",
+     "from": "2012-06-02",
+     "to": "2013-03-06"
+    },
+    {
+     "office": "miniszterelnökséget vezető államtitkár",
+     "from": "2010-06-02",
+     "to": "2012-06-01"
+    },
+    {
+     "office": "pénzügyminiszter",
+     "from": "2001-01-01",
+     "to": "2002-05-26"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "1998-07-14",
+     "to": "2000-12-31"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1401791",
    "wikidata_end": "2025-02-21",
@@ -38089,6 +40075,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": "Q30093130",
    "wikidata_end": null,
@@ -38221,7 +40208,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 13,
      "nem_onallo": 0
     },
     {
@@ -38435,6 +40422,28 @@
      "role": "tag",
      "from": "1998-06-25",
      "to": "2002-05-14"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2024-04-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2020-10-01",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2018-05-22",
+     "to": "2020-09-30"
+    },
+    {
+     "office": "földművelésügyi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
     }
    ],
    "motions": [],
@@ -38708,6 +40717,18 @@
      "to": "2012-12-17"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "jegyző",
+     "from": "2012-11-19",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q1468057",
    "wikidata_end": null,
@@ -38775,7 +40796,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 9,
+     "onallo": 10,
      "nem_onallo": 0
     },
     {
@@ -38812,6 +40833,33 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2026-05-13",
+     "to": null
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2024-04-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2024-03-31"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q111884634",
    "wikidata_end": null,
@@ -38937,6 +40985,13 @@
      "role": "tag",
      "from": "2018-05-08",
      "to": "2022-05-01"
+    }
+   ],
+   "offices": [
+    {
+     "office": "Európai Uniós Ügyek Minisztériumának államtitkára",
+     "from": "2023-08-09",
+     "to": "2026-05-12"
     }
    ],
    "motions": [],

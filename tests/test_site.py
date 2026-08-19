@@ -89,7 +89,11 @@ class Build(unittest.TestCase):
         self.assertEqual(self.page.count('<g class="seat" role="button"'), len(inp["plan"]["coords"]))
         self.assertEqual(self.page.count('<g class="seat sz" role="button"'), n_sz)
         self.assertEqual(self.page.count('<g class="seat km" role="button"'), n_km)
-        self.assertEqual(self.page.count('class="hit"'), len(data))             # the whole seat cell answers to the pointer
+        n_pres = self.page.count('<g class="seat pres"')                        # the presidium on the platform: the same members, a second handle
+        self.assertEqual(self.page.count('class="hit"'), len(data) + n_pres)    # the whole seat cell answers to the pointer
+        self.assertGreaterEqual(n_pres, 1)                                      # at least the Speaker
+        for az in re.findall(r'<g class="seat pres"[^>]*data-az="([^"]+)"', self.page):
+            self.assertIn(az, data)                                             # every platform dot is a member drawn on the floor too
         self.assertIn('id="hall-data" data-mp-base="ckl43/kepviselo/"', self.page)
         self.assertIn('<div class="inspector" id="hall"', self.page)
         for azon, row in data.items():
@@ -188,7 +192,8 @@ class Build(unittest.TestCase):
         self.assertIn("133 / 199", self.cyc)
         self.assertEqual(self.cyc.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
         self.assertNotIn('data-year="', self.cyc)                      # one year only → no year filter
-        self.assertIn('title="2022-05-02 – 2026-05-08">42</a>', self.cyc)      # the other cycles, one click away
+        self.assertIn('href="../ckl42/index.html" class="near">42</a>', self.cyc)   # the other cycles, one click away (the top bar)
+        self.assertIn('<span class="kicker" data-kz-text>43. ciklus · folyamatban</span><h1>2026. május 9. óta</h1>', self.cyc)
         self.assertIn('<span class="more" title="', self.cyc)          # long titles keep their tail for the search
         self.assertIn('lang="hu"', self.cyc)
         for word in ("live", "élő", "real-time"):
@@ -370,11 +375,13 @@ class Cycle42(unittest.TestCase):
         for h in re.findall(r'href="\.\./([^"#]+)', page):
             self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
         self.assertIn('href="../ckl43/index.html" class="near">43</a>', page)  # the cycle switch (43 is the neighbour of 42)
-        self.assertIn('ciklusok: <a href="../ckl43/index.html" title="2026-05-09 –">43</a> · <b>42</b>', page)   # …and in the section nav
+        self.assertIn('<span class="kicker" data-kz-text>42. ciklus</span><h1>2022. május 2. — 2026. május 8.</h1>', page)   # the term is the title
+        self.assertEqual(page.count('<div class="grp">'), 3)                    # the cycle's pages, grouped: szavazások · emberek · eszközök
+        self.assertNotIn("ciklusok: ", page)                                      # the cycle list lives in the top bar, once
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
         self.assertEqual(page.count('data-y="2023"'), 719)
         self.assertIn("Egy szavazás, frakciónként", page)                     # not "ülőhelyenként": no chamber for a closed cycle
-        self.assertIn("az Országgyűlés szavazásai, név szerint —", page)
+        self.assertIn("2 599 szavazás", page.replace("\u00a0", " "))               # the lede counts the whole closed term
         self.assertIn("név szerint, frakciónként rendezve kirajzolva", page)  # the meta description
         self.assertIn("14 ülésszak, 2022. tavaszi … 2026. tavaszi", page)      # endpoints by date, not by string order
         self.assertIn('<a class="brand" href="../index.html">', page)         # the brand goes to the landing
@@ -661,6 +668,34 @@ class Helpers(unittest.TestCase):
                 self.assertEqual(svg.count('<g class="seat"'), n)
                 self.assertNotIn("rowline", svg)                                # the old guide arcs are gone
                 self.assertIn("nem a valódi ülésrend", build_vote_page(inp, ts))
+
+    def test_the_speakers_platform_names_who_presides(self):
+        # the platform is not a seat in the plan: the Speaker and the deputies keep their floor seats and take the
+        # chair in turn. The drawing marks the platform with the office-holders of the day, from the records' dated
+        # <tisztseg> rows — never moving anyone, never inventing a seat
+        from scripts.build_site import HOUSE_OFFICES, build_vote_page, podium_svg, presidium, vote_view
+        inp = load_inputs()
+        pres = presidium(inp["mps"])                                            # today
+        self.assertEqual(len(pres["elnök"]), 1)                                 # one Speaker
+        self.assertGreaterEqual(len(pres["alelnök"]), 3)
+        for m in pres["elnök"] + pres["alelnök"]:
+            self.assertIn(m["azon"], inp["mps"])                                # members, all of them
+            self.assertIn(m["azon"], inp["plan"]["coords"])                     # …with a floor seat of their own
+        svg = podium_svg(pres, inp["facs"])
+        self.assertEqual(svg.count('<g class="seat pres"'), len(pres["elnök"]) + len(pres["alelnök"]))
+        self.assertIn('data-role="elnök"', svg)
+        self.assertEqual(podium_svg(None, inp["facs"]), podium_svg({"elnök": [], "alelnök": []}, inp["facs"]))   # no data → the bare platform
+        # on a vote page the presidium is the one in force on the vote's day, and the card names the office
+        page = build_vote_page(inp, HERO_TS)
+        self.assertIn('class="seat pres"', page)
+        self.assertIn("az Országgyűlés elnöke", page)
+        # a closed cycle: the records reach back — cycle 42's hero day had a different Speaker
+        inp42 = load_inputs(42)
+        day = vote_view(inp42, HERO_BY_CYCLE[42])["on_date"]
+        p42 = presidium(inp42["mps"], day)
+        self.assertEqual([m["name"] for m in p42["elnök"]], ["Kövér László"])
+        self.assertNotEqual({m["azon"] for m in p42["elnök"]}, {m["azon"] for m in pres["elnök"]})
+        self.assertTrue(set(HOUSE_OFFICES) >= {"az Országgyűlés elnöke", "az Országgyűlés alelnöke", "jegyző"})
 
     def test_layout_places_exactly_n_seats_left_to_right(self):
         seats = hemicycle_layout(199)

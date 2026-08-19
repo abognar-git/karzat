@@ -166,6 +166,7 @@ def main(argv: list[str] | None = None) -> int:
             "motion_stats": (rec or {}).get("motion_stats") or [],
             "speech_stats": (rec or {}).get("speech_stats") or [],       # the record's own per-cycle felszólalás / technikai counts
             "committees": (rec or {}).get("committees") or [],           # bizottsági tagságok with dates, every cycle
+            "offices": (rec or {}).get("offices") or [],                 # tisztségek with dates: Speaker, deputies, clerks, state secretaries…
             "motions": motions_by_azon.get(azon, []),           # this cycle's irományok (current cycle only; empty for earlier cycles)
             "wikidata_qid": wd.get("qid"),
             "wikidata_end": wd.get("end"),

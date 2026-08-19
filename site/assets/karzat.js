@@ -206,6 +206,7 @@
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
     var photo = d[10] || (PHOTO_BASE + esc(az)), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
+    var office = d[12] || '';                            // Speaker, deputy Speaker, clerk — drawn on the platform too
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
     var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
     var c = colours[fac] || '#8a8a8a';
@@ -213,7 +214,7 @@
     var who = (sz || km) ? esc(name) : '<a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a>';
     box.innerHTML = '<img class="portrait insp" src="' + esc(photo) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="' + esc(credit) + '" onerror="this.remove()">' +
       '<div class="row1"><span class="name">' + who + '</span>' +
-      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + (office ? ' · <b>' + esc(office) + '</b>' : '') + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +
       (sz ? 'nem szavaz — a szószóló felszólalhat és bizottságban dolgozik' + (com ? ' · bizottság <b>' + com + '</b>' : '')
         : km ? 'nem szavaz — a kormány tagja mandátum nélkül; a miniszteri padban ül és felszólal'
@@ -301,14 +302,14 @@
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function render(az){
     var d = data[az]; if (!d) return;
-    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], pos = d[4], cast = d[5], inroll = d[6], w = d[7], a = d[8], streak = d[9];
+    var name = d[0], fac = d[1], mandate = d[2], seat = d[3], pos = d[4], cast = d[5], inroll = d[6], w = d[7], a = d[8], streak = d[9], office = d[10] || '';
     var c = colours[fac] || '#8a8a8a';
     var part = inroll ? Math.round(100 * cast / inroll) : 0, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var sq = '';
     for (var i = 0; i < streak.length; i++) { var ch = streak[i]; sq += '<i class="' + (ch === '.' ? 'x' : ch) + (i === streak.length - 1 ? ' now' : '') + '" style="--c:' + c + '"></i>'; }
     box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
       '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
-      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
+      '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + (office ? ' · <b>' + esc(office) + '</b>' : '') + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
       '<span class="badge' + (pos === 'igen' ? ' ok' : pos === 'nem' ? ' no' : ' mid') + '">' + esc(POS[pos] || pos) + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyezés ' + agree + '%' : '') + '</span>' +
       '<span class="streak" title="az utolsó ' + streak.length + ' név szerinti szavazás eddig a szavazásig: frakciójával (szín) · ellene (fehér) · nem adott le (üres)"><span class="lbl">utolsó ' + streak.length + '</span>' + sq + '</span></div>' +

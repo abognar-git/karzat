@@ -161,6 +161,10 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
     committees = [{"committee": t.get("@bizottsag") or None, "subcommittee": t.get("@albizottsag") or None, "role": t.get("@tisztseg") or None,
                    "from": _hu_date(t.get("@tol")), "to": _hu_date(t.get("@ig"))}
                   for t in as_list((r.get("bizottsagi-tagsagok") or {}).get("tagsag")) if isinstance(t, dict)]
+    # <tisztsegek><tisztseg megnevezes tol_datum ig_datum/>: the offices the record dates — the House's own (elnök,
+    # alelnök, jegyző, háznagy) and government ones (államtitkár…) alike; the reader decides which it wants
+    offices = [{"office": (t.get("@megnevezes") or "").strip() or None, "from": _hu_date(t.get("@tol_datum")), "to": _hu_date(t.get("@ig_datum"))}
+               for t in as_list((r.get("tisztsegek") or {}).get("tisztseg")) if isinstance(t, dict) and (t.get("@megnevezes") or "").strip()]
     return {
         "name": r.get("nev"),
         "photo_url": r.get("fenykep") or None,
@@ -171,6 +175,7 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
         "motion_stats": motions,
         "speech_stats": speech_stats,        # per cycle: felszólalás / technikai counts, as parlament.hu counts them
         "committees": committees,            # bizottsági tagságok with dates (subcommittees named)
+        "offices": offices,                  # tisztségek with dates: Speaker, deputy Speakers, clerks, state secretaries…
     }
 
 

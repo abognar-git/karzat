@@ -313,6 +313,18 @@
      "to": "2008-10-13"
     }
    ],
+   "offices": [
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2006-05-16",
+     "to": "2006-05-16"
+    }
+   ],
    "motions": [
     {
      "szam": "K/536",
@@ -629,6 +641,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/483",
@@ -831,6 +844,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -931,6 +951,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -1051,6 +1072,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -1135,6 +1157,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -1518,6 +1541,7 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "A/399",
@@ -1854,6 +1878,23 @@
      "to": "1999-10-01"
     }
    ],
+   "offices": [
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2022-07-04",
+     "to": "2026-06-29"
+    },
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2018-06-11",
+     "to": "2022-07-03"
+    },
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2014-06-10",
+     "to": "2018-05-07"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -1934,6 +1975,13 @@
      "role": "tag",
      "from": "2026-05-09",
      "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
     }
    ],
    "motions": [
@@ -2020,6 +2068,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -2096,6 +2145,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "szociális és családügyi minisztériumi politikai államtitkár",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -2491,6 +2547,18 @@
      "to": "1998-07-15"
     }
    ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési minisztériumi államtitkár",
+     "from": "2010-12-04",
+     "to": "2011-12-31"
+    },
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2010-12-03"
+    }
+   ],
    "motions": [
     {
      "szam": "K/521",
@@ -2611,6 +2679,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -2738,6 +2807,18 @@
      "to": "2026-06-01"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -2814,6 +2895,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -2889,6 +2977,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -2989,6 +3078,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -3062,6 +3152,18 @@
      "role": "alelnök",
      "from": "2026-05-09",
      "to": "2026-05-25"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Közbeszerzések Tanácsának tagja",
+     "from": "2026-08-01",
+     "to": "2028-07-31"
+    },
+    {
+     "office": "pénzügyminisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
     }
    ],
    "motions": [
@@ -3193,6 +3295,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -3275,6 +3378,13 @@
      "role": "tag",
      "from": "2026-05-09",
      "to": "2026-05-25"
+    }
+   ],
+   "offices": [
+    {
+     "office": "igazságügyi és rendészeti minisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
     }
    ],
    "motions": [
@@ -3397,6 +3507,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -3480,6 +3597,28 @@
      "role": "alelnök",
      "from": "2026-05-13",
      "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "európai uniós ügyekért felelős miniszter",
+     "from": "2023-08-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "igazságügyi és rendészeti minisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2023-07-31"
+    },
+    {
+     "office": "Miniszterelnöki Kormányiroda államtitkára",
+     "from": "2021-01-15",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "igazságügyi és rendészeti minisztériumi államtitkár",
+     "from": "2018-09-01",
+     "to": "2021-01-14"
     }
    ],
    "motions": [
@@ -3598,6 +3737,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -3696,6 +3836,7 @@
      "to": "2026-06-01"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -3771,6 +3912,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -3853,6 +3995,13 @@
      "role": "alelnök",
      "from": "2026-05-09",
      "to": "2026-05-25"
+    }
+   ],
+   "offices": [
+    {
+     "office": "élő környezetért felelős minisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
     }
    ],
    "motions": [
@@ -3982,6 +4131,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4057,6 +4207,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4202,6 +4353,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4329,6 +4481,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -4427,6 +4586,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/526",
@@ -4563,6 +4723,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4692,6 +4853,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4819,6 +4981,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4894,6 +5057,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -4969,6 +5133,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -5102,6 +5267,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/424",
@@ -5204,6 +5370,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -5271,6 +5438,18 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    },
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -5414,6 +5593,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -5523,6 +5703,13 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "I/183",
@@ -5614,6 +5801,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -5714,6 +5902,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -5850,6 +6039,18 @@
      "committee": "Mezőgazdasági Bizottság",
      "subcommittee": null,
      "role": "tag",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "jegyző",
      "from": "2022-05-02",
      "to": "2026-05-08"
     }
@@ -6278,6 +6479,38 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2014-05-06",
+     "to": "2014-05-06"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2010-05-14",
+     "to": "2010-05-14"
+    }
+   ],
    "motions": [
     {
      "szam": "K/496",
@@ -6524,6 +6757,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -6624,6 +6858,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -6824,6 +7059,13 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "K/506",
@@ -6912,6 +7154,18 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "a köztársasági elnököt helyettesítő OGY elnök",
+     "from": "2026-07-20",
+     "to": "2026-08-18"
+    },
+    {
+     "office": "az Országgyűlés elnöke",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [],
    "wikidata_qid": "Q136408471",
    "wikidata_end": null,
@@ -6977,6 +7231,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -7053,6 +7308,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "élő környezetért felelős miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -7135,6 +7397,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -7210,6 +7473,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -7294,6 +7558,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -7547,6 +7812,23 @@
      "to": "2014-02-03"
     }
    ],
+   "offices": [
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
+     "from": "2014-05-06",
+     "to": "2017-10-01"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -7638,6 +7920,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -7863,6 +8146,7 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/532",
@@ -7995,6 +8279,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -8075,6 +8360,13 @@
      "role": "tag",
      "from": "2026-05-09",
      "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
     }
    ],
    "motions": [
@@ -8159,6 +8451,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -8279,6 +8572,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -8426,6 +8720,18 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés elnökének feladatait ellátó alelnök",
+     "from": "2026-07-20",
+     "to": "2026-08-18"
+    },
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -8544,6 +8850,13 @@
      "role": "alelnök",
      "from": "2026-05-09",
      "to": "2026-05-25"
+    }
+   ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
     }
    ],
    "motions": [
@@ -8671,6 +8984,18 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "kultúráért és innovációért felelős miniszter",
+     "from": "2024-07-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2024-06-30"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -8762,6 +9087,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -9258,6 +9584,13 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [
     {
      "szam": "T/500",
@@ -9432,6 +9765,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -9507,6 +9841,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -9626,6 +9961,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/535",
@@ -9810,6 +10146,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "egészségügyi miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -9985,6 +10328,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "H/179",
@@ -10060,6 +10404,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -10225,6 +10570,13 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2024-10-01",
+     "to": "2026-05-12"
+    }
+   ],
    "motions": [
     {
      "szam": "A/487",
@@ -10328,6 +10680,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": null,
    "wikidata_end": null,
@@ -10772,6 +11125,13 @@
      "to": "1992-02-18"
     }
    ],
+   "offices": [
+    {
+     "office": "kormányhivatalt vezető kormánymegbízott",
+     "from": "2011-01-01",
+     "to": "2014-05-05"
+    }
+   ],
    "motions": [
     {
      "szam": "K/287",
@@ -10854,6 +11214,13 @@
      "role": "tag",
      "from": "2026-05-09",
      "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
     }
    ],
    "motions": [
@@ -10945,6 +11312,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11065,6 +11433,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11185,6 +11554,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11260,6 +11630,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11335,6 +11706,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11471,6 +11843,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11634,6 +12007,7 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "T/500",
@@ -11833,6 +12207,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -11922,6 +12297,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -12052,6 +12428,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "technológiai és ipari miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -12121,6 +12504,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -12241,6 +12625,13 @@
      "to": "2026-05-25"
     }
    ],
+   "offices": [
+    {
+     "office": "oktatási és gyermekügyi minisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -12322,6 +12713,18 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "pénzügyminiszter",
+     "from": "2026-05-13",
+     "to": null
+    },
+    {
+     "office": "nemzetgazdasági minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2011-10-31"
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -12442,6 +12845,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -12509,6 +12913,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "szociális és családügyi miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -12582,6 +12993,13 @@
      "role": "tag",
      "from": "2026-05-09",
      "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
     }
    ],
    "motions": [
@@ -12684,6 +13102,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -12782,6 +13201,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -13022,6 +13442,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "H/179",
@@ -13111,6 +13532,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -13312,6 +13734,28 @@
      "to": "2022-05-01"
     }
    ],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2024-08-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2024-07-31"
+    },
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2022-11-30"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    }
+   ],
    "motions": [
     {
      "szam": "K/534",
@@ -13466,6 +13910,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -13586,6 +14031,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -13661,6 +14107,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -13872,6 +14319,13 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -13943,6 +14397,13 @@
      "committee": "Szociális Bizottság",
      "subcommittee": null,
      "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
      "from": "2026-05-09",
      "to": null
     }
@@ -14073,6 +14534,13 @@
      "subcommittee": null,
      "role": "tag",
      "from": "2026-06-01",
+     "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "Interparlamentális Unió Magyar Nemzeti Csoportjának elnöke",
+     "from": "2026-06-30",
      "to": null
     }
    ],
@@ -14237,6 +14705,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -14354,6 +14823,23 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2026-05-13",
+     "to": null
+    },
+    {
+     "office": "Közigazgatási és Területfejlesztési Minisztérium államtitkára",
+     "from": "2024-01-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2022-05-25",
+     "to": "2023-12-31"
+    }
+   ],
    "motions": [
     {
      "szam": "K/509",
@@ -14854,6 +15340,33 @@
      "to": "2004-11-29"
     }
    ],
+   "offices": [
+    {
+     "office": "építési és beruházási miniszter",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "építési és beruházási miniszter",
+     "from": "2022-05-24",
+     "to": "2022-11-30"
+    },
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszterelnökséget vezető államtitkár",
+     "from": "2012-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2002-05-15",
+     "to": "2004-10-05"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -14929,6 +15442,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -15020,6 +15534,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -15087,6 +15602,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "közigazgatási és területfejlesztési miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -15169,6 +15691,7 @@
      "to": "2026-06-15"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -15236,6 +15759,18 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "miniszterelnök",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "miniszterelnök-jelölt",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -15332,6 +15867,7 @@
      "to": "2026-05-12"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "T/500",
@@ -15529,6 +16065,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -15719,6 +16256,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -15786,6 +16324,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -15882,6 +16427,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "H/179",
@@ -15964,6 +16510,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -16093,6 +16640,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -16177,6 +16725,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -16384,6 +16933,23 @@
      "role": "tag",
      "from": "2018-05-08",
      "to": "2018-06-04"
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2024-11-15",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2022-05-02",
+     "to": "2022-05-02"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2018-05-08",
+     "to": "2018-05-08"
     }
    ],
    "motions": [
@@ -16635,6 +17201,18 @@
      "to": "2022-05-24"
     }
    ],
+   "offices": [
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2022-11-30"
+    }
+   ],
    "motions": [
     {
      "szam": "K/531",
@@ -16747,6 +17325,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "társadalmi kapcsolatokért és kultúráért felelős minisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -16822,6 +17407,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -16945,6 +17531,13 @@
      "committee": "Vidék- és Településfejlesztési Bizottság",
      "subcommittee": null,
      "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
      "from": "2026-05-09",
      "to": null
     }
@@ -17078,6 +17671,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "A/486",
@@ -17198,6 +17798,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -17556,6 +18157,18 @@
      "to": "1993-12-08"
     }
    ],
+   "offices": [
+    {
+     "office": "külügyminisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "külügyminisztériumi államtitkár",
+     "from": "1998-07-14",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [
     {
      "szam": "H/271",
@@ -17779,6 +18392,7 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/499",
@@ -18269,6 +18883,18 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "miniszterelnök-helyettes",
+     "from": "2026-05-16",
+     "to": null
+    },
+    {
+     "office": "külügyminiszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -18372,6 +18998,18 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "a miniszterelnök politikai igazgatója",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -18441,6 +19079,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [],
    "wikidata_qid": null,
    "wikidata_end": null,
@@ -18516,6 +19155,13 @@
      "role": "alelnök",
      "from": "2026-05-13",
      "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
     }
    ],
    "motions": [
@@ -18692,6 +19338,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/507",
@@ -18810,6 +19457,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -18948,6 +19596,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -19229,6 +19878,13 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2014-05-06",
+     "to": "2014-06-02"
+    }
+   ],
    "motions": [
     {
      "szam": "A/488",
@@ -19358,6 +20014,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -19425,6 +20082,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -19537,6 +20201,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "egészségügyi minisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -19649,6 +20320,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "belügyminiszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -19738,6 +20416,7 @@
      "to": "2026-05-26"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/528",
@@ -19834,6 +20513,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -19909,6 +20589,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -19989,6 +20670,13 @@
      "committee": "Törvényalkotási Bizottság",
      "subcommittee": null,
      "role": "elnök",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "az Országgyűlés törvényalkotásért felelős alelnöke",
      "from": "2026-05-09",
      "to": null
     }
@@ -20120,6 +20808,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -20333,6 +21022,28 @@
      "to": "2008-04-14"
     }
    ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "közigazgatási és igazságügyi minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    }
+   ],
    "motions": [
     {
      "szam": "T/500",
@@ -20514,6 +21225,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -20594,6 +21306,13 @@
      "committee": "Digitalizációs és Technológiai Bizottság",
      "subcommittee": null,
      "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
      "from": "2026-05-09",
      "to": null
     }
@@ -20719,6 +21438,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "honvédelmi miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -20794,6 +21520,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -20885,6 +21612,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -20976,6 +21704,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -21103,6 +21832,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -21340,6 +22070,13 @@
      "role": "tag",
      "from": "2010-05-14",
      "to": "2010-10-04"
+    }
+   ],
+   "offices": [
+    {
+     "office": "nemzeti fejlesztési miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
     }
    ],
    "motions": [
@@ -21710,6 +22447,43 @@
      "to": "2000-05-02"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "office": "jegyző",
+     "from": "2018-06-04",
+     "to": "2020-06-29"
+    },
+    {
+     "office": "honvédelmi miniszter",
+     "from": "2015-09-10",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2015-09-09"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2012-10-08",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "honvédelmi minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2012-10-07"
+    },
+    {
+     "office": "a polgári nemzetbiztonsági szolgálatokat irányító tárca nélküli miniszter államtitkára",
+     "from": "2000-05-03",
+     "to": "2002-05-26"
+    }
+   ],
    "motions": [
     {
      "szam": "T/500",
@@ -21909,6 +22683,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -21998,6 +22773,13 @@
      "committee": "Egészségügyi Bizottság",
      "subcommittee": null,
      "role": "tag",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
+   "offices": [
+    {
+     "office": "jegyző",
      "from": "2026-05-09",
      "to": null
     }
@@ -22136,6 +22918,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -22256,6 +23039,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -22340,6 +23130,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -22476,6 +23267,13 @@
      "to": "2026-05-25"
     }
    ],
+   "offices": [
+    {
+     "office": "Közigazgatási és Területfejlesztési Minisztérium államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -22602,6 +23400,7 @@
      "to": "2026-05-08"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "K/495",
@@ -23116,6 +23915,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -23216,6 +24016,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -23345,6 +24146,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -23429,6 +24231,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -23520,6 +24323,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "A/221",
@@ -23631,6 +24435,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "H/179",
@@ -23706,6 +24511,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -23781,6 +24587,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -23865,6 +24672,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -24008,6 +24816,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "I/415",
@@ -24173,6 +24982,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "A/435",
@@ -24305,6 +25115,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "belügyminisztériumi államtitkár",
+     "from": "2022-05-25",
+     "to": "2026-05-12"
+    }
+   ],
    "motions": [
     {
      "szam": "K/537",
@@ -24408,6 +25225,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "kultúráért és innovációért felelős miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -24475,6 +25299,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "Építési és Beruházási Minisztérium államtitkára",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -24560,6 +25391,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "társadalmi kapcsolatokért és kultúráért felelős miniszter",
+     "from": "2026-05-13",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -24857,6 +25695,7 @@
      "to": "2010-05-13"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "H/179",
@@ -24924,6 +25763,13 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "társadalmi kapcsolatokért és kultúráért felelős minisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -25076,6 +25922,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/483",
@@ -25277,6 +26124,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -25368,6 +26216,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -25482,6 +26331,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -25564,6 +26414,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -25693,6 +26544,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -25872,6 +26724,33 @@
      "to": "2014-06-02"
     }
    ],
+   "offices": [
+    {
+     "office": "igazságügyi és rendészeti miniszter",
+     "from": "2023-08-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2022-05-25",
+     "to": "2023-07-31"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2020-01-03",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2018-05-22",
+     "to": "2020-01-02"
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2015-10-21",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [
     {
      "szam": "A/268",
@@ -25974,6 +26853,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -26058,6 +26944,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -26370,6 +27257,13 @@
      "to": "2014-05-05"
     }
    ],
+   "offices": [
+    {
+     "office": "jegyző",
+     "from": "2026-05-09",
+     "to": null
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -26452,6 +27346,13 @@
      "to": null
     }
    ],
+   "offices": [
+    {
+     "office": "korjegyző",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [
     {
      "szam": "S/482",
@@ -26525,6 +27426,13 @@
      "role": "tag",
      "from": "2026-05-09",
      "to": "2026-05-25"
+    }
+   ],
+   "offices": [
+    {
+     "office": "külügyminisztériumi államtitkár",
+     "from": "2026-05-26",
+     "to": null
     }
    ],
    "motions": [
@@ -26609,6 +27517,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -26756,6 +27665,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -26928,6 +27838,33 @@
     }
    ],
    "committees": [],
+   "offices": [
+    {
+     "office": "az Országgyűlés alelnöke",
+     "from": "2026-05-13",
+     "to": null
+    },
+    {
+     "office": "Miniszterelnöki Kabinetiroda államtitkára",
+     "from": "2024-04-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2022-05-25",
+     "to": "2024-03-31"
+    },
+    {
+     "office": "nemzeti erőforrás minisztériumi államtitkár",
+     "from": "2018-05-22",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [
     {
      "szam": "K/508",
@@ -27413,6 +28350,13 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "az Országgyűlés korelnöke",
+     "from": "2026-05-09",
+     "to": "2026-05-09"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -27781,6 +28725,38 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "Technológiai és Ipari Minisztérium államtitkára",
+     "from": "2023-02-08",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "földművelésügyi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "vidékfejlesztési minisztériumi államtitkár",
+     "from": "2010-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2006-05-16",
+     "to": "2010-05-13"
+    },
+    {
+     "office": "jegyző",
+     "from": "2002-05-15",
+     "to": "2004-11-07"
+    },
+    {
+     "office": "jegyző",
+     "from": "1998-06-18",
+     "to": "2002-05-14"
+    }
+   ],
    "motions": [
     {
      "szam": "K/513",
@@ -27944,6 +28920,7 @@
      "to": null
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "S/482",
@@ -28205,6 +29182,7 @@
      "to": "2018-05-07"
     }
    ],
+   "offices": [],
    "motions": [
     {
      "szam": "I/447",
@@ -28603,6 +29581,28 @@
      "to": "2002-05-14"
     }
    ],
+   "offices": [
+    {
+     "office": "Kulturális és Innovációs Minisztérium államtitkára",
+     "from": "2024-04-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "a Miniszterelnöki Hivatal általános politikai államtitkára",
+     "from": "2020-10-01",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "Agrárminisztérium államtitkára",
+     "from": "2018-05-22",
+     "to": "2020-09-30"
+    },
+    {
+     "office": "földművelésügyi minisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2018-05-17"
+    }
+   ],
    "motions": [
     {
      "szam": "K/520",
@@ -28950,6 +29950,18 @@
      "to": "2010-06-08"
     }
    ],
+   "offices": [
+    {
+     "office": "miniszteri biztos",
+     "from": "2014-09-01",
+     "to": "2015-03-01"
+    },
+    {
+     "office": "vidékfejlesztési minisztériumi államtitkár",
+     "from": "2012-03-01",
+     "to": "2014-06-05"
+    }
+   ],
    "motions": [
     {
      "szam": "H/179",
@@ -29254,6 +30266,43 @@
      "role": "tag",
      "from": "2002-05-15",
      "to": "2006-05-15"
+    }
+   ],
+   "offices": [
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2022-05-24",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2018-05-18",
+     "to": "2022-05-24"
+    },
+    {
+     "office": "külgazdasági és külügyminiszter",
+     "from": "2014-09-23",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "külgazdasági és külügyminisztériumi államtitkár",
+     "from": "2014-06-15",
+     "to": "2014-09-22"
+    },
+    {
+     "office": "Miniszterelnökség államtitkára",
+     "from": "2012-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "miniszterelnöki biztos",
+     "from": "2010-06-04",
+     "to": "2012-06-01"
+    },
+    {
+     "office": "korjegyző",
+     "from": "2002-05-15",
+     "to": "2002-05-15"
     }
    ],
    "motions": [
