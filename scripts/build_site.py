@@ -853,6 +853,7 @@ td a{color:#d4d4d8;text-decoration:underline;text-decoration-color:var(--dim3);t
 .kz-terminal{margin:0 auto 40px;width:calc(100% - 32px);max-width:1400px;background:var(--terminal);border:1px solid var(--border);padding:14px 18px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--dim2);position:relative}
 .kz-terminal .scan{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .kz-terminal .log{color:var(--dim2);line-height:1.7;position:relative}.kz-terminal .log span{display:block}
+.kz-terminal .factline{color:var(--dim)}.kz-terminal .factline a{color:var(--text);border-bottom:1px solid var(--border-hi)}.kz-terminal .factline a:hover{color:var(--white);border-color:var(--white)}.kz-terminal .factline .sub{color:var(--dim3);font-style:normal;margin-left:8px;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.kz-terminal .factline .more{margin-left:10px;border:1px solid var(--border);background:transparent;color:var(--dim2);cursor:pointer;font:inherit;line-height:1;padding:1px 6px}.kz-terminal .factline .more:hover,.kz-terminal .factline .more:focus-visible{color:var(--white);border-color:var(--border-hi)}
 .kz-terminal .cursor{display:inline-block;width:6px;height:11px;background:var(--dim2);vertical-align:-2px;margin-left:2px;animation:kz-blink 1s step-end infinite}
 .kz-terminal .method{margin-top:14px;padding-top:12px;border-top:1px solid var(--line2);font-family:var(--sans);font-size:11.5px;color:var(--dim);letter-spacing:0;line-height:1.6;max-width:110ch;position:relative}
 .kz-terminal .method h3{font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin:8px 0 4px;font-weight:400}
@@ -1116,6 +1117,38 @@ JS_HALL = """
       document.querySelectorAll('.chamber-today .legend button[data-hf]').forEach(function(x){ var on = fac !== 'all' && x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
       svg.querySelectorAll('.seat[data-f]').forEach(function(g){ g.classList.toggle('dim', fac !== 'all' && g.getAttribute('data-f') !== fac); });
     });
+  });
+})();
+"""
+
+JS_FACT = """
+(function(){
+  // The footer's fact rotates on a click. The pool is fetched once from the site root and cached in the tab, so a
+  // reader who keeps clicking never pays for it twice; with JavaScript off the page's own fact stands as built.
+  var line = document.querySelector('.factline'); if (!line) return;
+  var btn = line.querySelector('[data-fact-next]'), holder = line.querySelector('[data-fact]');
+  if (!btn || !holder) return;
+  var sc = document.querySelector('script[src$="assets/karzat.js"]');
+  var root = sc ? sc.getAttribute('src').replace(/assets\/karzat\.js$/, '') : '';
+  var pool = null, i = -1;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function show(){
+    if (!pool || !pool.length) return;
+    i = (i + 1) % pool.length;
+    var f = pool[i];
+    holder.innerHTML = (f.href ? '<a href="' + esc(root + f.href) + '">' + esc(f.hu) + '</a>' : esc(f.hu))
+      + ' <i class="sub">' + esc(f.scope || '') + '</i>';
+  }
+  btn.addEventListener('click', function(){
+    if (pool) return show();
+    var x = new XMLHttpRequest(); x.open('GET', root + 'tenyek.json');
+    x.onload = function(){ try { pool = (JSON.parse(x.responseText) || {}).facts || []; } catch (e) { pool = []; }
+      if (!pool.length) { btn.remove(); return; }
+      var here = holder.textContent.trim();
+      for (var k = 0; k < pool.length; k++) if (here.indexOf(pool[k].hu.slice(0, 24)) === 0) i = k;   // continue from the one on the page
+      show(); };
+    x.onerror = function(){ btn.remove(); };
+    x.send();
   });
 })();
 """
@@ -1405,6 +1438,9 @@ def page_head(title: str, description: str, depth: int = 0, feeds: list[tuple[st
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
 <meta name="description" content="{esc(description)}">
+<link rel="icon" href="{rel}assets/favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="{rel}assets/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="{rel}assets/apple-touch-icon.png">
 <link rel="stylesheet" href="{rel}assets/karzat.css">{alt}
 </head>
 <body>"""
@@ -1435,10 +1471,19 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
             f'<span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_txt)}</b></span></div></header>\n<main class="kz-main"><div class="wrap">')
 
 
+ROBOTS = """# karzat — az Országgyűlés szavazásai. A tartalom közadat, a másolás szabad; a gépi olvasáshoz viszont
+# ott vannak a letölthető táblák (adatok/) és a csatornák (feed/) — azokból egy kéréssel megvan, amiért itt
+# tízezer oldalt kellene végigjárni.
+User-agent: *
+Allow: /
+Crawl-delay: 2
+"""
+
 SITE_URL = os.environ.get("KARZAT_SITE_URL", "").rstrip("/")     # the deployed origin, when there is one; else paths are cited
 
 
 def cite_html(inp: dict, path: str, title: str, key: str, json_href: str | None = None, csv_href: str | None = None) -> str:
+    inp["_page_path"] = path                      # the page's own address: also the seed for its footer fact
     """A 'Hivatkozás' box: plain-text and BibTeX citations for this page, with a copy button, and the data twins."""
     url = f"{SITE_URL}/{path}" if SITE_URL else path
     stamp = sync_stamp(inp)
@@ -1458,9 +1503,10 @@ def sync_stamp(inp: dict) -> str:
     return datetime.fromisoformat(ls).astimezone(BUDAPEST).strftime("%Y-%m-%d %H:%M") if ls else "—"
 
 
-def page_tail(inp: dict, depth: int = 0, extra_script: str = "") -> str:
+def page_tail(inp: dict, depth: int = 0, extra_script: str = "", page: str = "") -> str:
     rel = "../" * (depth + inp["base_depth"])
     inp["_depth"] = depth
+    inp["_page_path"] = page or inp.get("_page_path") or ""      # the seed for this page's fact; set by the callers that know it
     return f'</div></main>\n{terminal_html(inp)}{extra_script}<script src="{rel}assets/karzat.js"></script>\n</body>\n</html>\n'
 
 
@@ -1669,6 +1715,31 @@ def rel_root_for_footer(inp: dict) -> str:
     return "../" * (inp.get("_depth", 0) + inp["base_depth"])
 
 
+FACTS_FILE = DERIVED / "tenyek.json"
+
+
+def facts() -> list[dict]:
+    """The footer's facts, computed by scripts/derive_facts.py from the corpus (empty when the file is absent)."""
+    if "_facts" not in _TOTALS:
+        _TOTALS["_facts"] = (json.loads(FACTS_FILE.read_text(encoding="utf-8")).get("facts") or []) if FACTS_FILE.exists() else []
+    return _TOTALS["_facts"]
+
+
+def fact_for(page_path: str, depth: int) -> str:
+    """One fact per page, chosen by the page's own address so the build stays reproducible and a reader who walks
+    the site meets a different one each time. The link points at the page that proves it; the script rotates the
+    line on a click, drawing from the same pool."""
+    pool = facts()
+    if not pool:
+        return ""
+    f = pool[int(hashlib.sha1(page_path.encode("utf-8")).hexdigest(), 16) % len(pool)]
+    rel = "../" * depth
+    text = esc(f["hu"])
+    if f.get("href"):
+        text = f'<a href="{esc(rel + f["href"])}">{text}</a>'
+    return f'<span class="fact" data-fact>{text} <i class="sub">{esc(f.get("scope") or "")}</i></span>'
+
+
 def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     """The footer as a terminal: a boot log of true values, then the method notes."""
     idx, fl, plan = inp["idx"], inp["fl"], inp["plan"]
@@ -1683,11 +1754,13 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     default_lines = [
         f"{n_cyc} ciklus · {hu_date(tot['from'])} – {hu_date(tot['to'])} · {hu_num(tot['votes'])} szavazás · {hu_num(tot['roll_calls'])} név szerinti lista · {hu_num(tot['people'])} képviselő",
         f"ezen az oldalon: {inp['cycle']}. ciklus · {hu_num(fl['votes'])} szavazás · {hu_num(days) if days else '—'} ülésnap · {hu_num(roster_n)} képviselő",
-        check,
-        seats_line,
+        f"{check} · {seats_line}",
         (f"frissítve {hu_date(sync_stamp(inp)[:10])} {sync_stamp(inp)[11:]}" if sync_stamp(inp) != "—" else "frissítve —"),
     ]
     log = "".join(f"<span>&gt; {esc(l)}</span>" for l in (lines or default_lines))
+    fact = fact_for(inp.get("_page_path") or f'c{inp["cycle"]}d{inp.get("_depth", 0)}', inp.get("_depth", 0) + inp["base_depth"])
+    if fact:
+        log += f'<span class="factline">&gt; {fact}<button type="button" class="more" data-fact-next title="másik tény">↻</button></span>'
     return f"""<footer class="kz-terminal"><div class="scan"></div>{CORNERS}
   <div class="log">{log}</div>
   <div class="method">
@@ -1803,8 +1876,19 @@ def build_index(inp: dict, hero_ts: str) -> str:
                         '<div class="timeline"><div><b>máj. 25.</b>benyújtva (kormány)</div><div><b>máj. 26.</b>kivételes eljárás elrendelve</div><div><b>máj. 27.</b>zárószavazás</div><div><b>máj. 28.</b>kihirdetve, Magyar Közlöny 60</div></div>'
                         '<div class="hero-meta prose" style="margin-top:8px">3 nap a benyújtástól a kihirdetésig.</div></section>')
     cyc = f'{inp["cycle"]}. ciklus ({CYCLE_SPAN.get(inp["cycle"], "")})'
-    closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: mind a {hu_num(fl["votes"])} szavazás itt van.</span>'
-                   f'<span class="en" lang="en">A closed term, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: all {hu_num(fl["votes"])} votes are here.</span></div>') if inp["closed"] else freshness_html(inp)
+    short = truncated_days(inp["cycle"])
+    if not inp["closed"]:
+        closed_line = freshness_html(inp)
+    elif short:
+        # the API's listing cap cuts these days short and no parameter reaches the rest: say it, do not imply completeness
+        closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: {hu_num(fl["votes"])} szavazás. '
+                       f'{hu_num(len(short))} ülésnap hiányos — ezeken a napokon 400-nál több szavazás volt, és a lista szolgáltatás egy kérésre legfeljebb 400-at ad, a nap utolsó 400-át '
+                       f'(<a href="{"../" * inp["base_depth"]}modszer/index.html#listakorlat">módszer</a>): {esc(", ".join(hu_date(d) for d in short[:6]))}{"…" if len(short) > 6 else ""}</span>'
+                       f'<span class="en" lang="en">A closed term, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: {hu_num(fl["votes"])} votes. {hu_num(len(short))} sitting days are incomplete — '
+                       f'the listing service returns at most 400 votes per request and keeps the last 400 of the day.</span></div>')
+    else:
+        closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: mind a {hu_num(fl["votes"])} szavazás itt van.</span>'
+                       f'<span class="en" lang="en">A closed term, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: all {hu_num(fl["votes"])} votes are here.</span></div>')
     return page_head(("karzat — az Országgyűlés szavazásai, ülőhelyenként" if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'ülőhelyenként' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"],
                      feeds=[("feed/kulonvelemeny.xml", f'karzat · különvélemények · {inp["cycle"]}. ciklus'), ("feed/szavazasok.xml", f'karzat · szavazások · {inp["cycle"]}. ciklus'), ("feed/heti.xml", f'karzat · a hét számokban · {inp["cycle"]}. ciklus')]) + topbar(inp, [], 0) + f"""
@@ -1912,7 +1996,7 @@ def build_vote_page(inp: dict, ts: str) -> str:
 {roll_call_table(view, inp) if not inp["archive"] else ""}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}szavazas/{view["slug"]}.html', f'{when} — {label}', f'{inp["cycle"]}-{view["slug"]}', None if inp["archive"] else f'{view["slug"]}.json', f'{view["slug"]}.csv' if (view["roll_call_available"] and not inp["archive"]) else None)}
 <nav class="pager" aria-label="Előző és következő szavazás">{pager_link(prev_ts, True)}{pager_link(next_ts, False)}</nav>
-""" + page_tail(inp, 1)
+""" + page_tail(inp, 1, page=f'{cycle_dir(inp["cycle"])}szavazas/{view["slug"]}')
 
 
 # -- MP pages ---------------------------------------------------------------------------------
@@ -2222,9 +2306,24 @@ def build() -> str:
     return build_landing()
 
 
+# The mark: the chamber as the gallery sees it — a dome of seats with the Speaker's platform notched out of its
+# base. One shape, no letters, no gradient; it survives 16 pixels, which is the only test a favicon has to pass.
+# Dark ground by default, inverted under a light UI (SVG favicons honour prefers-color-scheme).
+FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="karzat">
+<style>
+  .bg{fill:#050505}.fg{fill:#fafafa}
+  @media (prefers-color-scheme: light){.bg{fill:#fafafa}.fg{fill:#050505}}
+</style>
+<rect class="bg" width="64" height="64" rx="13"/>
+<path class="fg" d="M12 40a20 20 0 0 1 40 0h-9a11 11 0 0 0-22 0z"/>
+<rect class="fg" x="27" y="44" width="10" height="6" rx="2"/>
+</svg>
+"""
+
+
 def build_assets() -> dict[str, str]:
-    """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
+    """The shared stylesheet, script and favicon (committed, checked, never hand-edited)."""
+    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -3192,6 +3291,34 @@ def build_speeches_page(inp: dict) -> str:
 OEVK_FILE = ROOT / "reference" / "valasztas" / "oevk_telepules.json"
 
 
+LISTCAP_FILE = ROOT / "reference" / "parlament" / "listakorlat.json"
+
+
+def list_cap() -> dict:
+    """What the vote-listing service's 400-row cap costs us (reference/parlament/listakorlat.json).
+
+    szavazasok.cgi answers at most 400 votes per request and keeps the latest ones; its parameters take dates only.
+    Month-sized requests were therefore truncated — the day-level re-listing fixed every month, except the days that
+    on their own held more than 400 votes. Those days keep their last 400 and the earlier ones are unreachable, so
+    every page that would otherwise claim completeness says how many days are short instead."""
+    if not LISTCAP_FILE.exists():
+        return {}
+    return json.loads(LISTCAP_FILE.read_text(encoding="utf-8"))
+
+
+def truncated_days(cycle: int) -> list[str]:
+    """The cycle's sitting days that the 400-row cap still cuts short, newest first."""
+    cap = list_cap()
+    from karzat.normalise import CYCLE_STARTS as starts               # cycle → the day its constituent sitting fell on
+    out = []
+    for day in cap.get("days_still_truncated") or []:
+        iso = day.replace(".", "-")
+        c = max((k for k, v in starts.items() if iso >= v), default=None)
+        if c == cycle:
+            out.append(iso)
+    return sorted(out, reverse=True)
+
+
 POSTCODE_FILE = ROOT / "reference" / "valasztas" / "iranyitoszam.json"
 
 
@@ -3531,6 +3658,9 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
+
+<section class="panel" id="listakorlat">{CORNERS}<h2><span data-kz-text>A lista 400-as korlátja</span></h2>
+<div class="hero-meta prose">A szavazások listája (<span class="mono">szavazasok.cgi</span>) egy kérésre legfeljebb {hu_num(400)} szavazást ad vissza, mégpedig a legkésőbbieket, és a paraméterei csak dátumot fogadnak el, időpontot nem. Emiatt a hónapos lekérdezések a régebbi ciklusokban csonkák voltak: {hu_num(len((list_cap().get("months_originally_truncated") or [])))} hónap pontosan 400 sorral tért vissza. Az oldal ezeket a hónapokat naponként listázta újra — így {hu_num(list_cap().get("votes_recovered_by_day_scan") or 0)} korábban hiányzó szavazás került elő. Ami így sem érhető el: az a {hu_num(len((list_cap().get("days_still_truncated") or [])))} ülésnap, amelyen önmagában több mint 400 szavazás volt — ezeken a nap utolsó 400 szavazása van meg, a korábbiak nem, és a szolgáltatáson nincs olyan paraméter, amivel elkérhetők lennének. A ciklusok oldala kiírja, hány ilyen napja van; a korpusz számai tehát alsó becslések ezekre a napokra.</div></section>
 
 <section class="panel" id="kormanytag">{CORNERS}<h2><span data-kz-text>Miniszteri pad: kormánytagok mandátum nélkül</span></h2>
 <div class="hero-meta prose">A kormány tagjának nem kell képviselőnek lennie: aki nem az, a miniszteri padban ül és felszólal, de nem szavaz. Ilyen névsort az API nem ad, ezért az oldal onnan ismeri fel őket, ahogy megszólalnak: a felszólalás jegyzőkönyvi payloadja azonosítóval nevezi meg a felszólalót (<span class="mono">felszolalas.cgi</span>), és ha ez az azonosító sem a képviselői, sem a szószólói listában nincs, de a saját adatlapján a miniszteri padban van ülőhelye, akkor ő a padban ülő kormánytag. A tisztség az, ahogy a jegyzőkönyv megnevezi (<span class="mono">beosztás</span>). Amit ez nem talál meg: aki a ciklusban még nem szólalt fel — ezért maradhat üres hely a padban. Egy adatlap régi ülőhelyet is őrizhet (egy volt képviselőé); az ilyen igényt az oldal eldobja, ha a helyet ma más foglalja el vagy nem a padban van. Jelenleg {hu_num(len(((inp.get("kormany") or {{}}).get("people") or {{}})))} kormánytag ül a padban mandátum nélkül.</div></section>
@@ -3953,6 +4083,32 @@ def hall_data(cur: dict) -> dict[str, list]:
     return out
 
 
+def build_404() -> str:
+    """404.html — the page a wrong address lands on. Static hosts serve it for anything missing, so it must stand on
+    its own: no cycle context, no numbers that could go stale, just the way back."""
+    cur = load_inputs(CURRENT_CYCLE)
+    cur["base_depth"] = 0
+    tot = site_totals()
+    return page_head("Nincs ilyen oldal · karzat", "A keresett oldal nincs meg — vissza a karzat nyitólapjára.", 0) + f"""
+<header class="kz-topbar"><div class="l"><a class="brand" href="/index.html"><i></i>karzat</a></div>
+<div class="r"><span class="kv"><span class="hide-xs">404</span></span></div></header>
+<main class="kz-main"><div class="wrap">
+<div class="hero-h"><h1>Nincs ilyen oldal</h1><small class="label" data-kz-text>404</small></div>
+<p class="lede">Ez a cím nem vezet sehová. Lehet, hogy elgépelés, lehet, hogy egy régi hivatkozás — a karzat oldalai
+a ciklusok könyvtáraiban élnek (<span class="mono">/ckl43/…</span>), és minden szavazásnak, képviselőnek és
+felszólalásnak saját, állandó címe van.</p>
+<section class="doors">
+  <a class="panel door" href="/index.html">{CORNERS}<h2><span data-kz-text>Nyitólap</span></h2><p>Az ülésterem ma, a {len(tot["cycles"])} ciklus {hu_date(tot["from"])[:4]} óta, a legutóbbi ülésnap.</p><span class="go mono">/ →</span></a>
+  <a class="panel door" href="/kereses/index.html">{CORNERS}<h2><span data-kz-text>Keresés</span></h2><p>Képviselők, pályaképek és irományok minden ciklusból.</p><span class="go mono">kereses/ →</span></a>
+  <a class="panel door" href="/modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer</span></h2><p>Mit honnan vesz az oldal, és mit nem állít.</p><span class="go mono">modszer/ →</span></a>
+</section>
+</div></main>
+{terminal_html(cur, [f"{len(tot['cycles'])} ciklus · {hu_date(tot['from'])} – {hu_date(tot['to'])} · {hu_num(tot['votes'])} szavazás", "404 — a cím nem található"])}<script src="/assets/karzat.js"></script>
+</body>
+</html>
+"""
+
+
 def build_landing() -> str:
     li = landing_inputs()
     cur, tot = li["cur"], li["totals"]
@@ -4061,6 +4217,10 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
     full = not cycles or sorted(cycles) == sorted(available_cycles())
     if full:
         (out_dir / "index.html").write_text(build_landing(), encoding="utf-8")      # the site root: every cycle's door
+        (out_dir / "404.html").write_text(build_404(), encoding="utf-8")            # what a static host serves for a wrong address
+        (out_dir / "robots.txt").write_text(ROBOTS, encoding="utf-8")
+        if FACTS_FILE.exists():                                                     # the footer's pool, for the rotate button
+            (out_dir / "tenyek.json").write_text(json.dumps({"facts": facts()}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     # the cross-cycle pages (careers, search index, method) are assembled from every cycle's build: a partial
     # `--cycle N` run leaves them alone rather than shrinking them to one cycle
     if not index_only and full:

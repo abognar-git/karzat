@@ -56,6 +56,37 @@
 
 
 (function(){
+  // The footer's fact rotates on a click. The pool is fetched once from the site root and cached in the tab, so a
+  // reader who keeps clicking never pays for it twice; with JavaScript off the page's own fact stands as built.
+  var line = document.querySelector('.factline'); if (!line) return;
+  var btn = line.querySelector('[data-fact-next]'), holder = line.querySelector('[data-fact]');
+  if (!btn || !holder) return;
+  var sc = document.querySelector('script[src$="assets/karzat.js"]');
+  var root = sc ? sc.getAttribute('src').replace(/assets\/karzat\.js$/, '') : '';
+  var pool = null, i = -1;
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function show(){
+    if (!pool || !pool.length) return;
+    i = (i + 1) % pool.length;
+    var f = pool[i];
+    holder.innerHTML = (f.href ? '<a href="' + esc(root + f.href) + '">' + esc(f.hu) + '</a>' : esc(f.hu))
+      + ' <i class="sub">' + esc(f.scope || '') + '</i>';
+  }
+  btn.addEventListener('click', function(){
+    if (pool) return show();
+    var x = new XMLHttpRequest(); x.open('GET', root + 'tenyek.json');
+    x.onload = function(){ try { pool = (JSON.parse(x.responseText) || {}).facts || []; } catch (e) { pool = []; }
+      if (!pool.length) { btn.remove(); return; }
+      var here = holder.textContent.trim();
+      for (var k = 0; k < pool.length; k++) if (here.indexOf(pool[k].hu.slice(0, 24)) === 0) i = k;   // continue from the one on the page
+      show(); };
+    x.onerror = function(){ btn.remove(); };
+    x.send();
+  });
+})();
+
+
+(function(){
   // <input data-filter-table="id"> narrows a table by text (accent-insensitive); the button filters of the same
   // table consult table.__textMatch, so both narrow together.
   function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''); }

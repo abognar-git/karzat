@@ -1,0 +1,6 @@
+# karzat — az Országgyűlés szavazásai. A tartalom közadat, a másolás szabad; a gépi olvasáshoz viszont
+# ott vannak a letölthető táblák (adatok/) és a csatornák (feed/) — azokból egy kéréssel megvan, amiért itt
+# tízezer oldalt kellene végigjárni.
+User-agent: *
+Allow: /
+Crawl-delay: 2

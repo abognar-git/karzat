@@ -122,6 +122,10 @@ CREATE TABLE IF NOT EXISTS vote_position (
 );
 
 CREATE INDEX IF NOT EXISTS vote_position_mp ON vote_position(mp_azon);
+-- the facts in scripts/derive_facts.py rank over 14 M positions: without these two the ranking queries take
+-- tens of minutes, with them seconds
+CREATE INDEX IF NOT EXISTS vote_position_vote_faction ON vote_position(vote_ts, faction_id, position);
+CREATE INDEX IF NOT EXISTS vote_position_position ON vote_position(position);
 
 -- <kepvcsop_szerint>: faction tallies as the API prints them (cross-check against positions)
 CREATE TABLE IF NOT EXISTS vote_faction_tally (

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="karzat">
+<style>
+  .bg{fill:#050505}.fg{fill:#fafafa}
+  @media (prefers-color-scheme: light){.bg{fill:#fafafa}.fg{fill:#050505}}
+</style>
+<rect class="bg" width="64" height="64" rx="13"/>
+<path class="fg" d="M12 40a20 20 0 0 1 40 0h-9a11 11 0 0 0-22 0z"/>
+<rect class="fg" x="27" y="44" width="10" height="6" rx="2"/>
+</svg>

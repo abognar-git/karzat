@@ -38,7 +38,11 @@ class Build(unittest.TestCase):
             out = subprocess.run(["git", "ls-files", "site"], cwd=ROOT, capture_output=True, text=True, check=True).stdout.split()
         except (OSError, subprocess.CalledProcessError):
             self.skipTest("not a git checkout")
-        self.assertEqual(sorted(out), ["site/assets/karzat.css", "site/assets/karzat.js", "site/index.html"])
+        # the site root's own files are committed (they are generated, checked, and small); everything else is ignored
+        expected = {"site/404.html", "site/assets/apple-touch-icon.png", "site/assets/favicon.ico",
+                    "site/assets/favicon.svg", "site/assets/karzat.css", "site/assets/karzat.js",
+                    "site/index.html", "site/robots.txt"}
+        self.assertEqual(set(out) - {"site/tenyek.json"}, expected)
 
     def test_links_stay_inside_the_tree(self):
         # the landing is the root: nothing on it climbs out; every cycle is one level down, the current one included,
@@ -135,6 +139,38 @@ class Build(unittest.TestCase):
         self.assertEqual(re.findall(r'<script src="([^"]+)"', self.page), ["assets/karzat.js"])
         self.assertEqual(re.findall(r'<link rel="alternate" type="application/atom\+xml" href="([^"]+)"', self.cyc), ["feed/kulonvelemeny.xml", "feed/szavazasok.xml", "feed/heti.xml"])
         self.assertNotIn("url(http", build_assets()["karzat.css"])
+
+    def test_the_favicon_is_generated_and_announced(self):
+        from scripts.build_site import ROOT as _R, build_assets
+        a = build_assets()
+        svg = a["favicon.svg"]
+        self.assertIn('viewBox="0 0 64 64"', svg)
+        self.assertIn("prefers-color-scheme: light", svg)                        # the mark inverts under a light UI
+        self.assertLess(len(svg), 1200)                                          # one shape, no gradients, no cruft
+        for page in (self.page, self.cyc):
+            self.assertIn('rel="icon"', page)
+            self.assertIn('favicon.svg" type="image/svg+xml"', page)
+            self.assertIn('rel="apple-touch-icon"', page)
+        for name in ("favicon.ico", "apple-touch-icon.png"):                     # rendered by scripts/make_icons.py
+            f = ROOT / "site" / "assets" / name
+            self.assertTrue(f.exists(), f"{name} missing — run python3 -m scripts.make_icons")
+            self.assertGreater(f.stat().st_size, 500)
+
+    def test_the_footer_carries_a_fact_that_differs_by_page(self):
+        from scripts.build_site import DERIVED, fact_for, facts
+        pool = facts()
+        if not pool:
+            self.skipTest("no fact pool derived yet")
+        for f in pool:
+            self.assertTrue(f["hu"].strip() and f["scope"].strip())              # every fact says what it covers
+            self.assertLessEqual(len(f["hu"]), 200)
+        seen = {fact_for(f"ckl43/szavazas/x{i}", 1) for i in range(len(pool) * 3)}
+        self.assertGreater(len(seen), 1)                                          # the page's address picks the fact
+        self.assertEqual(fact_for("ckl43/szavazas/x1", 1), fact_for("ckl43/szavazas/x1", 1))   # …deterministically
+        self.assertIn('class="factline"', self.page)
+        self.assertIn("data-fact-next", self.page)
+        js = build_assets()["karzat.js"]
+        self.assertIn("tenyek.json", js)                                          # the rotate button reads the pool
 
     def test_the_inspector_card_contains_its_portrait(self):
         # the portrait floats beside the text; without containment the card's box ends above the photo and the
