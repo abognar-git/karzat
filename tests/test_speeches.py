@@ -14,6 +14,7 @@ from scripts.build_site import (CAST, build_day_page, build_kepviselom_page, bui
                                 speech_id, speech_search_index, speeches_by_mp, speeches_feed, substantive_rows, week_digests)
 
 FIXTURES = Path(__file__).parent / "fixtures"
+ROOT = Path(__file__).resolve().parent.parent
 NS = {"a": fd.ATOM_NS}
 
 
@@ -37,9 +38,24 @@ class Parser(unittest.TestCase):
         self.assertEqual(sp[2]["kind"], "jegyzői ismertetés")
         self.assertTrue(all(x["speaker_label"] for x in sp))
 
+    def test_the_rows_own_date_wins_over_a_header_one_day_early(self):
+        # the old cycles' list headers print the day one day early (cycle 36's first list: 1998.06.17 for the constituent
+        # sitting of 18 June) while every row's <felszkezdete> carries the right day — the rows win, the header is kept
+        def day(header, start):
+            return {"felszolalasok": {"@ulesnap": "1", "@datum": header, "esemeny": [{"#text": "Ülésnap megnyitása", "felszolalas": [
+                {"sorszam": "1", "felszolalo": "Dr. Varga László (Fidesz)", "felsztip": "ülésvezetés", "kormbiz": "", "felszkezdete": start, "videoido": ""},
+                {"sorszam": "2", "felszolalo": "Gyürk András (Fidesz)", "felsztip": "felszólalás", "kormbiz": "", "felszkezdete": start, "videoido": "3:10"}]}]}}
+        d = parse_felszolalasok(day("1998.06.17.", "1998.06.18."))
+        self.assertEqual((d["date"], d["date_listed"], d["date_corrected"]), ("1998-06-18", "1998-06-17", True))
+        d = parse_felszolalasok(day("2026.05.12.", "2026.05.12."))
+        self.assertEqual((d["date"], d["date_corrected"]), ("2026-05-12", False))
+        d = parse_felszolalasok(day("2026.05.12.", "2026.05.20."))                          # not a one-day shift: the header stands
+        self.assertEqual((d["date"], d["date_corrected"]), ("2026-05-12", False))
+
     def test_the_substantive_rule_is_named_and_the_record_agrees(self):
         # the rule is a list of kinds; a few that must be on each side
-        for k in ("felszólalás", "kétperces felszólalás", "vezérszónoki felszólalás", "kérdés megválaszolva", "ügyrendi javaslat"):
+        for k in ("felszólalás", "kétperces felszólalás", "vezérszónoki felszólalás", "kérdés megválaszolva", "ügyrendi javaslat",
+                  "expozé", "önálló indítvány indokolása"):                                    # the 1998–2010 lists' words for a speech
             self.assertIn(k, SUBSTANTIVE_KINDS)
         for k in ("ülésvezetés", "jegyzői ismertetés", "az ülésnap megnyitása", "önálló indítvány elfogadva", "személyes érintettség miatti felszólalás"):
             self.assertNotIn(k, SUBSTANTIVE_KINDS)
@@ -286,3 +302,32 @@ class LooseEnds(unittest.TestCase):
         self.assertIn("HHSZ 62. § (1)", " ".join(RULES[Rule.ABSZOLUT].basis))
         self.assertIn("HHSZ 60. § (7)", " ".join(RULES[Rule.KETHARMAD_JELENLEVO].basis))
         self.assertIn("HHSZ 65. § (1)", " ".join(RULES[Rule.NEGYOTOD_JELENLEVO].basis))
+
+
+class ArchiveSpeeches(unittest.TestCase):
+    """Cycles 36–41 have their speech lists but (for now) no texts: no page per speech there — the rows live on the
+    day pages and every link points at the row; the live cycles keep a page per substantive speech."""
+
+    def test_archive_rows_link_to_the_day_page_anchor_unless_the_text_is_loaded(self):
+        from scripts.build_site import speech_has_page, speech_href
+        r = {"ulnap": 12, "seq": 7, "date": "1999-03-02"}
+        live = {"archive": False, "texts": None}
+        arch = {"archive": True, "texts": None}
+        self.assertTrue(speech_has_page(live, r))
+        self.assertEqual(speech_href(live, r, "../felszolalas/"), "../felszolalas/12-7.html")
+        self.assertFalse(speech_has_page(arch, r))
+        self.assertEqual(speech_href(arch, r, "../felszolalas/"), "../felszolalas/nap12.html#s12-7")
+        arch_t = {"archive": True, "texts": {"texts": {"12-7": {"paragraphs": ["x"]}}}}
+        self.assertTrue(speech_has_page(arch_t, r))                                       # with the text, a page of its own
+
+    def test_an_archive_day_page_carries_row_anchors_and_no_dead_links(self):
+        from scripts.build_site import available_cycles, build_day_page
+        cycles = [c for c in available_cycles() if c <= 41 and (ROOT / "data" / "derived" / f"speeches_ckl{c}.json.gz").exists()]
+        if not cycles:
+            self.skipTest("no archive cycle has its speech lists yet")
+        inp = load_inputs(cycles[0])
+        rows = [r for r in inp["speeches"]["speeches"] if r["ulnap"] == inp["speeches"]["speeches"][0]["ulnap"]]
+        page = build_day_page(inp, rows[0]["ulnap"], rows, {})
+        self.assertIn(f'id="s{rows[0]["ulnap"]}-', page)
+        self.assertNotRegex(page, r'href="\d+-\d+\.html"')                              # no link to a page that is not built
+

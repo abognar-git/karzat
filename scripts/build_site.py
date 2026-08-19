@@ -660,7 +660,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .filters input{border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:5px 9px;font-family:var(--mono);font-size:11px;min-width:220px}
 .filters input::placeholder{color:var(--dim2)}
 .filters .n{color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;margin-left:auto}
-.tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}
+.tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
 .cite .copy{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;cursor:pointer;white-space:nowrap}
@@ -1808,7 +1808,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
         sp_note = "A ciklus felszólalás-listái nincsenek betöltve."
     elif rec_stat and rec_stat.get("speeches") is not None and rec_stat["speeches"] != len(sp_sub):
         sp_note = f'Az adatlap erre a ciklusra {hu_num(rec_stat["speeches"])} felszólalást és {hu_num(rec_stat["technical"] or 0)} eljárási sort számol; a napi listák szerint itt {hu_num(len(sp_sub))} érdemi és {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor van.'
-    sp_trs = "".join(f'<tr><td class="ts mono"><a href="../felszolalas/{speech_id(r)}.html">{esc(r["date"] or "")}</a></td><td>{esc(cut(r["event"] or "—", 120))}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["iromany"]) + "</span>") if r.get("iromany") else ""}</td>'
+    sp_trs = "".join(f'<tr><td class="ts mono"><a href="{speech_href(inp, r, "../felszolalas/")}">{esc(r["date"] or "")}</a></td><td>{esc(cut(r["event"] or "—", 120))}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["iromany"]) + "</span>") if r.get("iromany") else ""}</td>'
                      f'<td>{esc(r["kind"] or "")}</td><td class="mono">{esc(r["role"] or "")}</td><td class="num mono">{hu_mmss(r["duration_s"]) if r.get("duration_s") else "—"}</td></tr>' for r in sp_sub)
     coms = committees_in_cycle(mp, inp["cycle"])
     com_rows = "".join(f'<tr><td><a href="../bizottsag/{cslug(c["committee"])}.html">{esc(c["committee"] or "")}</a>{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(c["subcommittee"]) + "</span>") if c.get("subcommittee") else ""}</td><td>{esc(c.get("role") or "")}</td>'
@@ -2709,6 +2709,21 @@ def fold_tokens(text: str) -> list[str]:
     return re.findall(r"[a-z0-9]{3,}", folded)
 
 
+def speech_has_page(inp: dict, r: dict, texts: dict | None = None) -> bool:
+    """A page of its own for every substantive speech in the live cycles; in an archive cycle only where the record's
+    text is loaded — the lists alone would be tens of thousands of near-empty pages per cycle."""
+    if not inp["archive"]:
+        return True
+    texts = texts if texts is not None else ((inp["texts"] or {}).get("texts") or {})
+    return speech_id(r) in texts
+
+
+def speech_href(inp: dict, r: dict, up: str = "", texts: dict | None = None) -> str:
+    """Link target of a speech row from a page `up` levels away from felszolalas/ (own page or the day-page anchor)."""
+    sid = speech_id(r)
+    return f"{up}{sid}.html" if speech_has_page(inp, r, texts) else f"{up}nap{r['ulnap']}.html#s{sid}"
+
+
 def substantive_rows(inp: dict) -> list[dict]:
     """The cycle's substantive, non-reprint speech rows in the days' order (the ones that get a page and a search entry)."""
     if "_sub_rows" in inp:
@@ -2814,8 +2829,8 @@ def build_day_page(inp: dict, ulnap: int, day_rows: list[dict], texts: dict) -> 
             who = r.get("name") or r.get("speaker_label") or "—"
             az = ((texts.get(sid) or {}).get("azon") if sub else None) or r.get("azon")
             who_html = f'<a href="../kepviselo/{esc(az)}.html">{esc(who)}</a>' if az and az in inp["mps"] else esc(who)
-            link = f'<a href="{esc(sid)}.html">{"szöveg" if sid in texts else "lap"}</a>' if sub else ""
-            trs.append(f'<tr data-sub="{1 if sub else 0}"{" class=dim" if not sub else ""}><td class="num mono">{r["seq"] if r.get("seq") is not None else ""}</td><td>{who_html}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["faction"]) + "</span>") if r.get("faction") else ""}</td>'
+            link = (f'<a href="{esc(sid)}.html">{"szöveg" if sid in texts else "lap"}</a>' if speech_has_page(inp, r, texts) else "") if sub else ""
+            trs.append(f'<tr id="s{esc(sid)}" data-sub="{1 if sub else 0}"{" class=dim" if not sub else ""}><td class="num mono">{r["seq"] if r.get("seq") is not None else ""}</td><td>{who_html}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["faction"]) + "</span>") if r.get("faction") else ""}</td>'
                        f'<td>{esc(r.get("kind") or "")}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["role"]) + "</span>") if r.get("role") else ""}</td><td class="num mono">{hu_mmss(r["duration_s"]) if r.get("duration_s") else ""}</td><td class="mono">{link}</td></tr>')
     n_sub = sum(1 for r in day_rows if not r["technical"])
     return page_head(f'{r["ulnap"]}. ülésnap · {date} · felszólalások{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f'Az Országgyűlés {date} ({ulnap}. ülésnap) felszólalásai napirendi pontonként, sorban.', 1 + inp["base_depth"]) + \
@@ -2880,7 +2895,7 @@ def build_speeches_page(inp: dict) -> str:
     return page_head(f'Felszólalások · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus felszólalásai ülésnaponként és fajtánként, a képviselői adatlapokkal egyeztetve.', 1 + inp["base_depth"]) + \
         topbar(inp, [("felszólalások", None)], 1) + f"""
 <div class="hero-h"><h1>Felszólalások</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(sp.get("count", 0))} sor · {hu_num(sp.get("substantive", 0))} érdemi felszólalás · {hu_num(len(days))} ülésnap · {hu_num(n_tx)} szöveg</small></div>
-<p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig — naponként egy lap, érdemi felszólalásonként egy lap a jegyzőkönyvi szöveggel. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent. <a href="kereses.html">Keresés a szövegekben</a>.</p>
+<p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig — naponként egy lap, {"érdemi felszólalásonként egy lap a jegyzőkönyvi szöveggel" if not inp["archive"] else "érdemi felszólalásonként egy lap ott, ahol a jegyzőkönyvi szöveg be van töltve (archív ciklus: a sorok a napi lapokon)"}. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent. <a href="kereses.html">Keresés a szövegekben</a>.</p>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Ülésnaponként</span><span class="tag">a legfrissebb elöl · <a href="../adatok/felszolalasok.csv">CSV, mind</a></span></h2>
   <div class="tablewrap"><table data-page-size="25" data-counter="dn"><thead><tr><th scope="col">Nap</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Sor</th><th scope="col" class="num">Érdemi</th></tr></thead><tbody>{trs or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
@@ -3037,10 +3052,11 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         by_day: dict[int, list[dict]] = {}
         for r in (inp["speeches"] or {}).get("speeches") or []:
             by_day.setdefault(r["ulnap"], []).append(r)
-        for i, r in enumerate(subs):
+        paged = [r for r in subs if speech_has_page(inp, r, texts_map)]
+        for i, r in enumerate(paged):
             sid = speech_id(r)
             t = texts_map.get(sid)
-            sw(spd / f"{sid}.html", build_speech_page(inp, r, t, subs[i - 1] if i > 0 else None, subs[i + 1] if i + 1 < len(subs) else None, bs))
+            sw(spd / f"{sid}.html", build_speech_page(inp, r, t, paged[i - 1] if i > 0 else None, paged[i + 1] if i + 1 < len(paged) else None, bs))
             sw(spd / f"{sid}.json", json.dumps({"cycle": cycle, "id": sid, "date": r["date"], "ulnap": r["ulnap"], "seq": r["seq"], "speaker": r.get("speaker_label"), "p_azon": (t or {}).get("azon") or r.get("azon"),
                                                  "faction": r.get("faction"), "kind": r.get("kind"), "role": r.get("role"), "event": r.get("event"), "iromany": r.get("iromany"), "duration_s": r.get("duration_s"),
                                                  "position": (t or {}).get("position"), "chars": (t or {}).get("chars"), "paragraphs": (t or {}).get("paragraphs")}, ensure_ascii=False) + "\n")

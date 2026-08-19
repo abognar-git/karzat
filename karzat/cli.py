@@ -230,7 +230,7 @@ def cmd_sync_speeches(args: argparse.Namespace) -> int:
     ulesnap.cgi). Days already cached are not fetched again, except the newest --refresh-last ones of the current
     cycle, whose list may still be growing on the day itself."""
     from .normalise import CYCLE_STARTS, parse_ulesnap
-    api = WebApi(cache_dir=args.cache)
+    api = WebApi(cache_dir=args.cache, min_interval=args.pace)
     current = args.ckl == max(CYCLE_STARTS)
     try:
         days = parse_ulesnap(to_dict_payload(api.fetch("ulesnap", p_ckl=args.ckl, refresh=current)))   # the open cycle's day list grows
@@ -451,6 +451,7 @@ def main(argv: list[str] | None = None) -> int:
     ssp.add_argument("--ckl", type=int, required=True, help="cycle number (36 or later — the API has speeches from 1998)")
     ssp.add_argument("--from-day", type=int, default=0, help="first ülésnap number to fetch (default: all)")
     ssp.add_argument("--refresh-last", type=int, default=None, help="re-fetch the newest N days even if cached (an open day's list grows); default 1 for the current cycle, 0 for a closed one")
+    ssp.add_argument("--pace", type=float, default=0.6, help="seconds between live calls (default 0.6; slower when another sync runs)")
     ssp.add_argument("--verbose", action="store_true")
     ssp.set_defaults(fn=cmd_sync_speeches)
     sst = sub.add_parser("sync-speech-texts", help="cache the text of every substantive speech of a cycle (felszolalas.cgi, one call per speech)")

@@ -64,7 +64,8 @@ def main(argv: list[str] | None = None) -> int:
             rows.append(row)
             kinds[sp["kind"] or ""] += 1
             n_sub += 0 if sp["technical"] else 1
-        days.append({"ulnap": day["ulnap"], "date": day["date"], "speeches": len(day["speeches"]), "substantive": n_sub})
+        days.append({"ulnap": day["ulnap"], "date": day["date"], "speeches": len(day["speeches"]), "substantive": n_sub,
+                     **({"date_listed": day["date_listed"]} if day.get("date_corrected") else {})})   # the header's day, where the rows corrected it
     # the record check: our substantive count per MP vs the record's felszólalás count for this cycle
     label = CYCLE_LABELS.get(cycle)
     ours: collections.Counter = collections.Counter(r["azon"] for r in rows if r["azon"] and not r["technical"])
@@ -77,7 +78,7 @@ def main(argv: list[str] | None = None) -> int:
                 check[azon] = {"ours": ours.get(azon, 0), "record": st["speeches"], "record_technical": st["technical"]}
     agree = sum(1 for v in check.values() if v["ours"] == v["record"])
     out = {"cycle": cycle, "as_of": max((d["date"] for d in days if d["date"]), default=None),
-           "days": days, "count": len(rows), "substantive": sum(1 for r in rows if not r["technical"]),
+           "days": days, "days_date_corrected": sum(1 for d in days if d.get("date_listed")), "count": len(rows), "substantive": sum(1 for r in rows if not r["technical"]),
            "resolved": sum(1 for r in rows if r["azon"]), "kinds": dict(kinds.most_common()),
            "record_check": {"mps": len(check), "agree": agree, "detail": {a: v for a, v in check.items() if v["ours"] != v["record"]}},
            "speeches": rows}

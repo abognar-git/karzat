@@ -18,6 +18,7 @@ Observed shapes (see tests/fixtures/real_*.xml):
 
 from __future__ import annotations
 
+import collections
 import re
 from dataclasses import dataclass, field
 from datetime import date
@@ -374,8 +375,14 @@ SUBSTANTIVE_KINDS = {
     "képviselő elfogadta a választ", "képviselő elutasította a választ", "előadói válasz", "előterjesztő nyitóbeszéde",
     "ismerteti a bizottság véleményét", "bizottság kisebbségi véleményének ismertetése",
     "ügyrendi javaslat", "ügyrendi kérdés", "bejelentés helyettes válaszadó elutasításáról",
+    # the 1998–2010 lists' vocabulary (none of these occurs in cycles 42–43): the proposer's or the minister's opening speech, the
+    # proposer's justification, the case for urgency or for the exceptional procedure — each is someone speaking on the matter,
+    # and the record counts them: with them the check over cycles 36–38 goes from 746 to 1,216 of 1,232 MP-cycles agreeing
+    "expozé", "önálló indítvány indokolása", "sürgősség indoklása", "kivételes eljárás indoklása",
 }
-# ("egyéb felszólalás" is on the record's technical side too — six rows in two cycles, all matching the record only that way.)
+# ("egyéb felszólalás" is on the record's technical side too — six rows in two cycles, all matching the record only that way.
+#  So are the chair's lines "ülés napirendjének elutasítása" and "interpelláció elmondásának halasztása": counting them would
+#  gain two MP-cycles each in 1998–2010, too little to override what the names say.)
 
 
 def _duration_s(v: str | None) -> int | None:
@@ -425,6 +432,21 @@ def parse_felszolalasok(payload: dict[str, Any]) -> dict[str, Any]:
                 "reprint": reprint,                    # the same speech (same sorszam, same speaker) printed under an earlier item today
                 "technical": reprint or (kind or "").casefold() not in SUBSTANTIVE_KINDS,
             })
+    # The old cycles' list headers print the day one day early (the same shift as ulesnap.cgi's: cycle 36's first list
+    # says 1998.06.17 for the constituent sitting of 18 June) while each row's <felszkezdete> carries the right day —
+    # so when the rows' own date disagrees with the header by one day, the rows win, and the header is kept as listed.
+    starts = collections.Counter(sp["start"] for sp in out["speeches"] if sp["start"])
+    out["date_listed"] = out["date"]
+    out["date_corrected"] = False
+    if starts and out["date"]:
+        mode, _ = starts.most_common(1)[0]
+        try:
+            gap = (date.fromisoformat(mode) - date.fromisoformat(out["date"])).days
+        except ValueError:
+            gap = 0
+        if gap and abs(gap) == 1:
+            out["date"] = mode
+            out["date_corrected"] = True
     return out
 
 

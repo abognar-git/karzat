@@ -128,6 +128,14 @@ def build() -> list[tuple[str, list]]:
     ev43 = dissent_events(inp43)
     sp43 = inp43["speeches"] or {}
     sp42 = load_inputs(42)["speeches"] or {}
+    sp_old = {c: (load_inputs(c)["speeches"] or {}) for c in (36, 37, 38, 39, 40, 41)}       # the archive cycles' lists, when derived
+    old_rows = sum(s.get("count", 0) for s in sp_old.values())
+    old_sub = sum(s.get("substantive", 0) for s in sp_old.values())
+    old_days = sum(len(s.get("days") or []) for s in sp_old.values())
+    old_res = sum(s.get("resolved", 0) for s in sp_old.values())
+    old_fix = sum(s.get("days_date_corrected", 0) for s in sp_old.values())
+    old_agree = sum(s.get("record_check", {}).get("agree", 0) for s in sp_old.values())
+    old_mps = sum(s.get("record_check", {}).get("mps", 0) for s in sp_old.values())
     full = Tally(yes=0, no=0, present=seats, seats=seats)
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
@@ -202,6 +210,12 @@ def build() -> list[tuple[str, list]]:
          [sp43.get("record_check", {}).get("agree", 0), sp43.get("record_check", {}).get("mps", 0), sp42.get("record_check", {}).get("agree", 0), sp42.get("record_check", {}).get("mps", 0)]),
         ("Cycle 43: {:,.0f} rows over {:,.0f} sitting days, {:,.0f} substantive; cycle 42: {:,.0f} rows over {:,.0f} days",
          [sp43.get("count", 0), len(sp43.get("days") or []), sp43.get("substantive", 0), sp42.get("count", 0), len(sp42.get("days") or [])]),
+        # the archive cycles' speech lists — data/derived/speeches_ckl36..41.json.gz
+        ("cycles 36–41 synced: {:,.0f} day lists, {:,.0f} rows, {:,.0f} substantive, {:,.0f} rows resolved to MPs",
+         [old_days, old_rows, old_sub, old_res]),
+        ("the record agrees with the substantive count for {:,.0f} of {:,.0f} MP-cycles", [old_agree, old_mps]),
+        ("{:,.0f} of the {:,.0f} day lists print the day one day early", [old_fix, old_days]),
+        ("The texts of these cycles are not fetched: {:,.0f} calls at the polite pace, about {:,.0f} hours", [old_sub, round(old_sub * 0.6 / 3600)]),
         # the whole corpus — scripts.build_site.site_totals()
         ("{:,.0f} votes over ten cycles", [__import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["votes"]]),
         ("{:,.0f} of them roll calls that name the members", [__import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["roll_calls"]]),
