@@ -158,23 +158,46 @@
 
 
 (function(){
-  // kepviselom/index.html: a settlement (Budapest: a district) → its OEVK(s) → the MP; the list is telepules.json,
-  // loaded on the first keystroke; a city the annex splits by streets lists every candidate and says the address decides.
+  // kepviselom/index.html: a settlement or a postcode (Budapest: a district) → its OEVK(s) → the MP; the lists are
+  // telepules.json and iranyitoszam.json, loaded on the first keystroke; a city the annex splits by streets lists
+  // every candidate and says the address decides. A postcode names a settlement, never a district of the annex's own.
   var q = document.getElementById('town'), out = document.getElementById('townres'), mapEl = document.getElementById('oevk-map'); if (!q || !out || !mapEl) return;
   var map; try { map = JSON.parse(mapEl.textContent); } catch (e) { return; }
   function fold(s){ return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  var data = null, loading = false, keys = null;
-  function load(cb){ if (data) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'telepules.json'); x.onload = function(){ try { data = JSON.parse(x.responseText); } catch (e) { data = {}; } keys = Object.keys(data).map(function(k){ return [fold(k), k]; }); cb(); }; x.onerror = function(){ data = {}; keys = []; cb(); }; x.send(); }
+  var data = null, loading = false, keys = null, zips = null;
+  function get(url, cb){ var x = new XMLHttpRequest(); x.open('GET', url); x.onload = function(){ var v = null; try { v = JSON.parse(x.responseText); } catch (e) { v = null; } cb(v); }; x.onerror = function(){ cb(null); }; x.send(); }
+  function load(cb){
+    if (data) return cb();
+    if (loading) return;
+    loading = true;
+    get('telepules.json', function(v){
+      data = v || {}; keys = Object.keys(data).map(function(k){ return [fold(k), k]; });
+      get('iranyitoszam.json', function(z){ zips = z || {}; cb(); });
+    });
+  }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?t=' + encodeURIComponent(v) : location.pathname); }, 300); }
   function render(){
-    var t = fold(q.value);
+    var raw = String(q.value || '').trim(), t = fold(raw);
     if (t.length < 2) { out.innerHTML = ''; return; }
-    var exact = keys.filter(function(k){ return k[0] === t; }), pre = keys.filter(function(k){ return k[0].indexOf(t) === 0 && k[0] !== t; }).slice(0, 12);
-    var hits = exact.concat(pre);
+    var zip = /^\d{4}$/.test(raw) ? raw : null, names = null, note = '';
+    if (zip) {
+      names = (zips && zips[zip]) || null;
+      if (!names) { out.innerHTML = '<div class="hero-meta">Ehhez az irányítószámhoz nincs település a listánkban. Próbáld a település nevével.</div>'; return; }
+      note = '<div class="hero-meta" style="margin-bottom:6px">' + esc(zip) + ' · ' + (names.length > 1 ? esc(names.length + ' település ezzel az irányítószámmal (közös posta)') : esc(names[0])) + '</div>';
+    } else if (/^\d+$/.test(raw)) {
+      out.innerHTML = '<div class="hero-meta">Az irányítószám négy számjegy — például 1114 vagy 9021.</div>'; return;
+    }
+    var hits;
+    if (names) {
+      hits = names.map(function(n){ return [fold(n), n]; });
+    } else {
+      var exact = keys.filter(function(k){ return k[0] === t; }), pre = keys.filter(function(k){ return k[0].indexOf(t) === 0 && k[0] !== t; }).slice(0, 12);
+      hits = exact.concat(pre);
+    }
     if (!hits.length) { out.innerHTML = '<div class="hero-meta">Nincs ilyen település a választókerületi mellékletben.</div>'; return; }
-    out.innerHTML = hits.map(function(k){
+    out.innerHTML = note + hits.map(function(k){
       var name = k[1], list = data[name] || [];
       var parts = list.map(function(o){ var key = o[0] + '-' + o[1], mp = map[key], who = mp ? (mp[0] ? '<a href="../kepviselo/' + esc(mp[0]) + '.html">' + esc(mp[1]) + '</a>' : esc(mp[1])) + (mp[2] ? ' (' + esc(mp[2]) + ')' : '') : '—';
         return esc(o[0]) + ' ' + o[1] + '. OEVK → ' + who + (o[2] ? ' <span class="sub">csak a település egy része — a cím dönt</span>' : ''); });

@@ -332,6 +332,51 @@ class ArchiveSpeeches(unittest.TestCase):
         self.assertNotRegex(page, r'href="\d+-\d+\.html"')                              # no link to a page that is not built
 
 
+class Postcodes(unittest.TestCase):
+    """A postcode is the sharpest thing most people know about where they live — but it names a settlement, not an
+    electoral district, and the finder has to keep saying so where the annex splits a city street by street."""
+
+    def test_every_postcode_points_at_a_settlement_the_annex_lists(self):
+        import json as _json
+        from scripts.build_site import ROOT as _R, oevk_settlements, postcodes
+        pc = postcodes()
+        if not pc:
+            self.skipTest("no postcode table")
+        annex = oevk_settlements()["settlements"]
+        for code, names in pc["map"].items():
+            self.assertRegex(code, r"^\d{4}$")
+            self.assertTrue(names)
+            for n in names:
+                self.assertIn(n, annex)                                       # never a name the annex does not know
+        self.assertEqual(pc["codes"], len(pc["map"]))
+        # Budapest by the rule the codes are built on, all 23 districts
+        for d, code in ((1, "1011"), (5, "1054"), (11, "1114"), (23, "1239")):
+            self.assertTrue(any("kerület" in n for n in pc["map"][code]), code)
+        self.assertEqual(pc["map"]["1114"], ["Budapest XI. kerület"])
+        self.assertEqual(pc["map"]["9021"], ["Győr"])
+        self.assertGreater(len(pc["map"]), 2500)
+
+    def test_the_finder_ships_the_table_and_handles_both_kinds_of_query(self):
+        import json as _json
+        from scripts.build_site import SITE_DIR, build_assets, build_kepviselom_page, postcodes
+        inp = load_inputs()
+        page = build_kepviselom_page(inp)
+        self.assertIn("Irányítószám vagy település", page)
+        self.assertIn('placeholder="pl. 1114 · 9021 · Szombathely · Budapest XI. kerület"', page)
+        self.assertIn("nem a választókerületet", page)                        # the caveat is on the page, not only in the code
+        f = SITE_DIR / "ckl43" / "kepviselom" / "iranyitoszam.json"
+        if not f.exists():
+            self.skipTest("site not built")
+        shipped = _json.loads(f.read_text(encoding="utf-8"))
+        self.assertEqual(set(shipped) <= set(postcodes()["map"]), True)
+        for code, names in shipped.items():
+            self.assertTrue(names)
+        js = build_assets()["karzat.js"]
+        self.assertIn("iranyitoszam.json", js)
+        self.assertIn("Az irányítószám négy számjegy", js)                    # a three-digit number is answered, not ignored
+        self.assertIn("közös posta", js)                                      # one code, several villages: all of them shown
+
+
 class Spokespersons(unittest.TestCase):
     """The nationality spokespersons (nemzetiségi szószólók) sit in the chamber and speak, but cast no vote — so they
     are drawn on the landing chamber as rings and kept out of every roster count and alignment."""

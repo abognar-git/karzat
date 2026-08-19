@@ -234,6 +234,10 @@ def build() -> list[tuple[str, list]]:
         ("takes the Commons picture where one exists ({:,.0f} of the {:,.0f})",
          [_json.loads((ROOT / "reference" / "wikidata" / "kormany_photos.json").read_text(encoding="utf-8"))["count"],
           _json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["count"]]),
+        ("**joined to the annex by exact name only** ({:,.0f} codes → {:,.0f} of the annex's {:,.0f} settlements",
+         [_json.loads((ROOT / "reference" / "valasztas" / "iranyitoszam.json").read_text(encoding="utf-8"))["codes"],
+          _json.loads((ROOT / "reference" / "valasztas" / "iranyitoszam.json").read_text(encoding="utf-8"))["settlements"],
+          _json.loads((ROOT / "reference" / "valasztas" / "iranyitoszam.json").read_text(encoding="utf-8"))["annex_settlements"]]),
         # the archive cycles' speech lists — data/derived/speeches_ckl36..41.json.gz
         ("cycles 36–41 synced: {:,.0f} day lists, {:,.0f} rows, {:,.0f} substantive, {:,.0f} rows resolved to MPs",
          [old_days, old_rows, old_sub, old_res]),

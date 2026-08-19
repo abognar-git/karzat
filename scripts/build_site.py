@@ -433,41 +433,42 @@ def presidium(mps: dict, on_day: str | None = None) -> dict[str, list[dict]]:
     return out
 
 
-def podium_svg(pres: dict[str, list[dict]] | None, facs: list[dict], k: float = 1.0) -> str:
-    """The Speaker's platform with its office-holders: the Speaker's dot in the middle, the deputy Speakers' dots in
-    an arc behind, each in their faction colour, each a real seat group (hover/click as on the floor); without data,
-    the bare platform. Nothing is moved — these members are drawn on the floor too; this says who takes the chair."""
+def podium_svg(pres: dict[str, list[dict]] | None, facs: list[dict], k: float = 1.0, width: float = 44.0) -> str:
+    """The Speaker's platform with its office-holders — a dais the width of the aisle between the bench's arms, the
+    Speaker's chair centred and forward on a marked place, the deputy Speakers in an open arc behind, each in their
+    faction colour and each a real seat group (hover/click as on the floor; the member's floor seat lights with it).
+    Without data, the bare platform. The dais is furniture: it takes the room's scale (`width`), not the glyph's;
+    the dots take the floor seats' own size (`k`), so the same people carry the same mark. Nothing is moved — these
+    members are drawn on the floor too; this says who may take the chair."""
     if not pres or not (pres.get("elnök") or pres.get("alelnök")):
         return PODIUM
     colour = {f["id"]: f["colour"] for f in facs}
     speaker = pres.get("elnök") or []
     deps = pres.get("alelnök") or []
-    # the platform as a desk the width of the presidium: the Speaker's place in the middle, the deputies at the sides
-    # in the order the records list them — they take the chair in turn, so this is who may preside, not who does now
-    pitch = 7.0 * k
-    n = len(speaker) + len(deps)
-    half = (n - 1) * pitch / 2
-    desk_w = max(22.0, n * pitch + 6.0 * k)
-    parts = [f'<path d="M {-desk_w / 2:.1f} 0 L {-desk_w / 2:.1f} -7 Q {-desk_w / 2:.1f} -10 {-desk_w / 2 + 3:.1f} -10 L {desk_w / 2 - 3:.1f} -10 Q {desk_w / 2:.1f} -10 {desk_w / 2:.1f} -7 L {desk_w / 2:.1f} 0 L {desk_w / 2:.1f} 3 L {-desk_w / 2:.1f} 3 Z" class="rostrum"/>']
-    r = 2.5 * k
+    r = 2.8 * k
+    W = width / 2
+    H = width * 0.42
+    parts = [f'<path d="M {-W:.1f} 3 L {-W:.1f} {-H * 0.6:.1f} Q 0 {-H:.1f} {W:.1f} {-H * 0.6:.1f} L {W:.1f} 3 Z" class="rostrum"/>',
+             f'<path d="M {-W + 1.4:.1f} 3 L {-W + 1.4:.1f} {-H * 0.6 + 0.8:.1f} Q 0 {-H + 1.4:.1f} {W - 1.4:.1f} {-H * 0.6 + 0.8:.1f} L {W - 1.4:.1f} 3 Z" class="rostrum edge"/>']
     def dot(m, cx, cy, role):
         c = colour.get(m.get("faction") or "", "#8a8a8a")
         return (f'<g class="seat pres" role="button" data-az="{esc(m["azon"])}" data-f="{esc(m.get("faction") or "")}" data-role="{esc(role)}" aria-label="{esc(m["name"])} — az Országgyűlés {esc(role)}e">'
                 f'<title>{esc(m["name"])} ({esc(m.get("faction") or "")}) — az Országgyűlés {esc(role)}e · az elnöki emelvény</title>'
                 f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r:.2f}" fill="{c}"/>'
-                f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r * 1.7:.2f}" class="hit"/></g>')
-    # the Speaker in the middle, the deputies alternating left and right of them
-    order = []
-    left, right = [], []
+                f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r * 1.8:.2f}" class="hit"/></g>')
+    # the deputies: an open arc along the dais' back edge, left to right in the order the records list them
+    n = len(deps)
+    span = W * 1.42
     for i, m in enumerate(deps):
-        (left if i % 2 == 0 else right).append(m)
-    order = list(reversed(left)) + speaker + right if speaker else list(reversed(left)) + right
-    for i, m in enumerate(order):
-        role = "elnök" if m in speaker else "alelnök"
-        cx = -half + i * pitch
-        if m in speaker:
-            parts.append(f'<rect x="{cx - 3.6 * k:.2f}" y="{-8.6 * k:.2f}" width="{7.2 * k:.2f}" height="{7.2 * k:.2f}" rx="{1.2 * k:.2f}" class="rostrum hi"/>')
-        parts.append(dot(m, cx, -5.0 * k, role))
+        t = (i / (n - 1) - 0.5) if n > 1 else 0.0                 # -0.5 … 0.5
+        x = t * span
+        y = -H * 0.50 - (H * 0.24) * (1 - (2 * t) ** 2)           # inside the dais, bowing up with its back edge
+        parts.append(dot(m, x, y, "alelnök"))
+    # the Speaker's chair: centred, forward of the arc, on a marked place
+    for m in speaker:
+        box = max(7.0, r * 3.4)
+        parts.append(f'<rect x="{-box / 2:.2f}" y="{-H * 0.2 - box / 2:.2f}" width="{box:.2f}" height="{box:.2f}" rx="{box * 0.2:.2f}" class="rostrum hi"/>')
+        parts.append(dot(m, 0, -H * 0.2, "elnök"))
     return "".join(parts)
 
 
@@ -516,7 +517,12 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
         else:
             unplaced.append(m)
     outlines = plan.get("seat_outlines")
+    aisle = 44.0
     if outlines:
+        # the platform sits in the mouth of the horseshoe: its width is the gap between the bench's two arms
+        fb = [o for o in outlines if o["sector"] == geo.get("front_bench_sector")]
+        if fb:
+            aisle = max(26.0, (max(o["x"] for o in fb) - min(o["x"] for o in fb)) * 0.62)
         # parlament.hu's own floor plan: every seat's outline is the floor; empty seats stay outlines
         occupied = {(c["sector"], c["row"], c["seat"]) for c in coords.values()}
         sz = szoszolok or {}
@@ -571,7 +577,7 @@ def seat_svg_real(view: dict, facs: list[dict], plan: dict, align: dict | None =
                                 f'{html.escape(m["name"])} ({html.escape(m["faction"] or "")}) — {POSITION_LABEL.get(m["position"], m["position"])} · {why}',
                                 _node(x0 + 3 + i * 6, y0 + 3, m["position"], c, k), ring_r, k, hit_r)
     svg = (f'<svg viewBox="{-W:.0f} -{R+8:.0f} {2*W:.0f} {R+30:.0f}" role="img" aria-label="Az ülésterem rekonstruált ülésrendje: {len(view["positions"])} képviselő, frakció és szavazat szerint">'
-           + "".join(floor) + arc + podium_svg(pres, facs, k) + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
+           + "".join(floor) + arc + podium_svg(pres, facs, k, aisle) + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>'
            + "".join(labels) + empties + "".join(parts) + tray + '</svg>')
     return svg, {"placed": len(view["positions"]) - len(unplaced), "unplaced": len(unplaced), "seated_total": plan["seated"], "empty": len(plan.get("empty_seats") or []),
                  "seats_in_plan": len(outlines) if outlines else None}
@@ -736,7 +742,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .inspector .pin button{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;cursor:pointer;margin-left:6px}
 .inspector .pin button:hover{color:var(--white);border-color:var(--border-hi)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
-.rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
+.rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.rostrum.edge{fill:var(--panel-deep);fill-opacity:.55}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
 .seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35;vector-effect:non-scaling-stroke}.seatshape.occ{fill:rgba(255,255,255,.06)}
 .ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflow-x:auto}.tswrap svg{min-width:480px;display:block}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
@@ -1254,23 +1260,46 @@ JS_SPEECHSEARCH = """
 
 JS_TOWN = """
 (function(){
-  // kepviselom/index.html: a settlement (Budapest: a district) → its OEVK(s) → the MP; the list is telepules.json,
-  // loaded on the first keystroke; a city the annex splits by streets lists every candidate and says the address decides.
+  // kepviselom/index.html: a settlement or a postcode (Budapest: a district) → its OEVK(s) → the MP; the lists are
+  // telepules.json and iranyitoszam.json, loaded on the first keystroke; a city the annex splits by streets lists
+  // every candidate and says the address decides. A postcode names a settlement, never a district of the annex's own.
   var q = document.getElementById('town'), out = document.getElementById('townres'), mapEl = document.getElementById('oevk-map'); if (!q || !out || !mapEl) return;
   var map; try { map = JSON.parse(mapEl.textContent); } catch (e) { return; }
   function fold(s){ return String(s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().trim(); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-  var data = null, loading = false, keys = null;
-  function load(cb){ if (data) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'telepules.json'); x.onload = function(){ try { data = JSON.parse(x.responseText); } catch (e) { data = {}; } keys = Object.keys(data).map(function(k){ return [fold(k), k]; }); cb(); }; x.onerror = function(){ data = {}; keys = []; cb(); }; x.send(); }
+  var data = null, loading = false, keys = null, zips = null;
+  function get(url, cb){ var x = new XMLHttpRequest(); x.open('GET', url); x.onload = function(){ var v = null; try { v = JSON.parse(x.responseText); } catch (e) { v = null; } cb(v); }; x.onerror = function(){ cb(null); }; x.send(); }
+  function load(cb){
+    if (data) return cb();
+    if (loading) return;
+    loading = true;
+    get('telepules.json', function(v){
+      data = v || {}; keys = Object.keys(data).map(function(k){ return [fold(k), k]; });
+      get('iranyitoszam.json', function(z){ zips = z || {}; cb(); });
+    });
+  }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?t=' + encodeURIComponent(v) : location.pathname); }, 300); }
   function render(){
-    var t = fold(q.value);
+    var raw = String(q.value || '').trim(), t = fold(raw);
     if (t.length < 2) { out.innerHTML = ''; return; }
-    var exact = keys.filter(function(k){ return k[0] === t; }), pre = keys.filter(function(k){ return k[0].indexOf(t) === 0 && k[0] !== t; }).slice(0, 12);
-    var hits = exact.concat(pre);
+    var zip = /^\d{4}$/.test(raw) ? raw : null, names = null, note = '';
+    if (zip) {
+      names = (zips && zips[zip]) || null;
+      if (!names) { out.innerHTML = '<div class="hero-meta">Ehhez az irányítószámhoz nincs település a listánkban. Próbáld a település nevével.</div>'; return; }
+      note = '<div class="hero-meta" style="margin-bottom:6px">' + esc(zip) + ' · ' + (names.length > 1 ? esc(names.length + ' település ezzel az irányítószámmal (közös posta)') : esc(names[0])) + '</div>';
+    } else if (/^\d+$/.test(raw)) {
+      out.innerHTML = '<div class="hero-meta">Az irányítószám négy számjegy — például 1114 vagy 9021.</div>'; return;
+    }
+    var hits;
+    if (names) {
+      hits = names.map(function(n){ return [fold(n), n]; });
+    } else {
+      var exact = keys.filter(function(k){ return k[0] === t; }), pre = keys.filter(function(k){ return k[0].indexOf(t) === 0 && k[0] !== t; }).slice(0, 12);
+      hits = exact.concat(pre);
+    }
     if (!hits.length) { out.innerHTML = '<div class="hero-meta">Nincs ilyen település a választókerületi mellékletben.</div>'; return; }
-    out.innerHTML = hits.map(function(k){
+    out.innerHTML = note + hits.map(function(k){
       var name = k[1], list = data[name] || [];
       var parts = list.map(function(o){ var key = o[0] + '-' + o[1], mp = map[key], who = mp ? (mp[0] ? '<a href="../kepviselo/' + esc(mp[0]) + '.html">' + esc(mp[1]) + '</a>' : esc(mp[1])) + (mp[2] ? ' (' + esc(mp[2]) + ')' : '') : '—';
         return esc(o[0]) + ' ' + o[1] + '. OEVK → ' + who + (o[2] ? ' <span class="sub">csak a település egy része — a cím dönt</span>' : ''); });
@@ -3163,6 +3192,16 @@ def build_speeches_page(inp: dict) -> str:
 OEVK_FILE = ROOT / "reference" / "valasztas" / "oevk_telepules.json"
 
 
+POSTCODE_FILE = ROOT / "reference" / "valasztas" / "iranyitoszam.json"
+
+
+def postcodes() -> dict:
+    """Postcode → the annex's settlement names (reference/valasztas/iranyitoszam.json; empty when absent)."""
+    if not POSTCODE_FILE.exists():
+        return {}
+    return json.loads(POSTCODE_FILE.read_text(encoding="utf-8"))
+
+
 def oevk_settlements() -> dict:
     """The electoral-district annex as parsed into reference/valasztas/oevk_telepules.json (empty when absent)."""
     if not OEVK_FILE.exists():
@@ -3194,17 +3233,18 @@ def build_kepviselom_page(inp: dict) -> str:
     oevk_map = {f'{county_name(m.get("county"))}-{m.get("constituency_no")}': [m["p_azon"], m["name"], m.get("faction")] for m in egy if m.get("county") and m.get("constituency_no")}
     oevk_map_json = json.dumps(oevk_map, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     oevk_n_settlements = len(oevk_settlements().get("settlements") or {})
+    n_zip = len(postcodes().get("map") or {})
     lrows = "".join(row(m, "országos lista") for m in lis) + "".join(row(m, "mandátum: —") for m in other)
     return page_head(f'Ki a képviselőm? · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus képviselői választókerület szerint (megye, OEVK) és az országos listáról; névre szűrhető; minden képviselőnél a heti összefoglaló és a különvélemény-csatorna.', 1 + inp["base_depth"]) + \
         topbar(inp, [("képviselőm", None)], 1) + f"""
 <div class="hero-h"><h1>Ki a képviselőm?</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(len(egy))} egyéni választókerület · {hu_num(len(lis) + len(other))} listás képviselő{" · a ciklus teljes névsora" if inp["closed"] else ""}</small></div>
 <p class="lede">Egyéni választókerületben a megye és a kerület száma azonosítja a képviselőt; a listás képviselőknek nincs kerületük.{" Lezárt ciklus: mindenki, aki a ciklus névsoraiban szerepelt." if inp["closed"] else ""} Minden képviselő oldalán ott a heti összefoglalója és a különvélemény-csatornája.</p>
 <section class="panel">{CORNERS}
-  <h2><span data-kz-text>Település szerint</span><span class="tag">a választókerületi törvény melléklete · {hu_num(oevk_n_settlements)} település és kerület</span></h2>
-  <div class="filters"><input id="town" type="search" placeholder="pl. Szombathely · Budapest XI. kerület" aria-label="Település" autocomplete="off" style="min-width:min(100%,360px)"></div>
+  <h2><span data-kz-text>Irányítószám vagy település</span><span class="tag">a választókerületi törvény melléklete · {hu_num(oevk_n_settlements)} település és kerület · {hu_num(n_zip)} irányítószám</span></h2>
+  <div class="filters"><input id="town" type="search" placeholder="pl. 1114 · 9021 · Szombathely · Budapest XI. kerület" aria-label="Irányítószám vagy település" autocomplete="off" inputmode="text" style="min-width:min(100%,360px)"></div>
   <div id="townres" aria-live="polite"></div>
   <script type="application/json" id="oevk-map">{oevk_map_json}</script>
-  <div class="hero-meta prose" style="margin-top:8px">A választókerületek településlistája a választókerületi törvény mellékletéből (2011. évi CCIII. tv., 2. melléklet, a hatályos szöveg); ahol egy város vagy budapesti kerület több választókerülethez tartozik, a melléklet utcánként húzza a határt — ott minden szóba jövő kerület látszik, és a lakcím dönt (a pontos kerület a valasztas.hu keresőjében). Település nélküli képviselő a listás.</div>
+  <div class="hero-meta prose" style="margin-top:8px">Négy számjegy irányítószámként, minden más településnévként keres. Az irányítószám a települést (Budapesten a kerületet) azonosítja, nem a választókerületet: a kódok a Wikidata adataiból (P281) illeszkednek a melléklet neveihez, Budapesten pedig a kódképzés szabályából (1XYZ → XY. kerület). Egy irányítószám több települést is takarhat (közös posta) — ilyenkor mind látszik. A választókerületek településlistája a választókerületi törvény mellékletéből (2011. évi CCIII. tv., 2. melléklet, a hatályos szöveg); ahol egy város vagy budapesti kerület több választókerülethez tartozik, a melléklet utcánként húzza a határt — ott minden szóba jövő kerület látszik, és a lakcím dönt (a pontos kerület a valasztas.hu keresőjében). Település nélküli képviselő a listás.</div>
 </section>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Egyéni választókerületek</span><span class="tag">megye · kerület · képviselő</span></h2>
@@ -3325,6 +3365,8 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         (kmd / "index.html").write_text(build_kepviselom_page(inp), encoding="utf-8")
         compact = {name: [[x["county"], x["no"], 1 if x["partial"] else 0] for x in lst] for name, lst in (oevk_settlements().get("settlements") or {}).items()}
         (kmd / "telepules.json").write_text(json.dumps(compact, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        zips = {c: names for c, names in (postcodes().get("map") or {}).items() if any(n in compact for n in names)}
+        (kmd / "iranyitoszam.json").write_text(json.dumps(zips, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         bzd = out_dir / "bizottsag"; bzd.mkdir(parents=True, exist_ok=True)
         bw = _Writer()
         bw(bzd / "index.html", build_committee_index(inp))
@@ -3786,6 +3828,8 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
     by_seat = {(o["sector"], o["row"], o["seat"]): o for o in plan["seat_outlines"]}
     seated: Counter = Counter()
     hit_r = geo.get("seat_pitch", 5.2 * k * 2) * 0.55            # the whole seat cell answers to the pointer, as on a vote page
+    fb = [o for o in plan["seat_outlines"] if o["sector"] == geo.get("front_bench_sector")]
+    aisle = max(26.0, (max(o["x"] for o in fb) - min(o["x"] for o in fb)) * 0.62) if fb else 44.0
     for azon, xy in sorted(plan["coords"].items(), key=lambda kv: (kv[1]["sector"], kv[1]["row"], kv[1]["seat"])):
         mp = cur["mps"].get(azon) or {}
         fac = mp.get("faction") or "független"
@@ -3826,7 +3870,7 @@ def chamber_today_svg(cur: dict) -> tuple[str, list[tuple[str, int, str]]]:
     if n_km:
         legend.append(("kormánytag", n_km, KORMANY_COLOUR))
     svg = (f'<svg viewBox="{-W:.0f} -{R + 8:.0f} {2 * W:.0f} {R + 26:.0f}" role="group" aria-label="Az ülésterem ma: {len(plan["coords"])} képviselő, {n_sz} nemzetiségi szószóló és {n_km} mandátum nélküli kormánytag a helyén; {len(plan["seat_outlines"])} hely az Országház alaprajzán. Egy hely: a neve és a mérlege; kattintásra rögzül, nyilakkal is járható">'
-           + f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>' + podium_svg(presidium(cur["mps"]), cur["facs"], k)
+           + f'<text x="{fx}" y="{fy}" class="seclabel s" text-anchor="middle">miniszteri pad</text>' + podium_svg(presidium(cur["mps"]), cur["facs"], k, aisle)
            + '<text x="0" y="9" class="seclabel s" text-anchor="middle">elnöki emelvény</text>' + labels + "".join(parts) + "</svg>")
     return svg, legend
 
