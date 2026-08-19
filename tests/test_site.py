@@ -58,7 +58,8 @@ class Build(unittest.TestCase):
 
     def test_landing_is_the_view_from_the_gallery(self):
         tot = site_totals()
-        self.assertIn("<title>karzat — az Országgyűlés 1990 óta, ülőhelyenként</title>", self.page)
+        self.assertIn("<title>karzat — az Országgyűlés szavazásai 1990 óta</title>", self.page)
+        self.assertIn("Tiszta adat, kommentár nélkül.", self.page)                # the lede's closing beat
         inp0 = load_inputs()
         n_sz = len((inp0["szoszolok"] or {}).get("people") or {})
         n_km = len((inp0["kormany"] or {}).get("people") or {})
@@ -416,7 +417,7 @@ class Cycle42(unittest.TestCase):
         self.assertNotIn("ciklusok: ", page)                                      # the cycle list lives in the top bar, once
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
         self.assertEqual(page.count('data-y="2023"'), 719)
-        self.assertIn("Egy szavazás, frakciónként", page)                     # not "ülőhelyenként": no chamber for a closed cycle
+        self.assertIn("Egy szavazás, frakciónként", page)                     # not "az ülésteremben": no chamber for a closed cycle
         self.assertIn("2 599 szavazás", page.replace("\u00a0", " "))               # the lede counts the whole closed term
         self.assertIn("név szerint, frakciónként rendezve kirajzolva", page)  # the meta description
         self.assertIn("14 ülésszak, 2022. tavaszi … 2026. tavaszi", page)      # endpoints by date, not by string order
