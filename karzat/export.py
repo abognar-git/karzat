@@ -213,6 +213,10 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("kind, role, duration_s", "a felszólalás fajtája („felszólalás”, „ülésvezetés”, „kérdés megválaszolva” …), a lista által írt szerep, hossz másodpercben"),
             ("substantive", "érdemi (igaz) vagy eljárási (hamis) — a fajta neve szerint, lásd a módszer oldalt"),
         ]),
+        ("felszolalas/<ülésnap>-<sorszám>.json — egy felszólalás (a lapja mellett)", [
+            ("id, date, ulnap, seq, speaker, p_azon, faction, kind, role, event, iromany, duration_s", "a napi lista sora: azonosító, nap, ülésnap, sorszám, felszólaló, feloldott azonosító, frakció, fajta, szerep, napirendi pont, iromány-szám(ok), hossz"),
+            ("position, chars, paragraphs", "a szöveg-adat beosztása, a szöveg hossza karakterben, a bekezdések listája (üres, ha a szöveg nincs betöltve)"),
+        ]),
         ("heti.csv — képviselőnként és ülésnapos hetenként a heti összefoglaló számai", [
             ("cycle, week, from, to, sitting_days", "ciklus, ISO-hét, a hét első és utolsó ülésnapja, ülésnapok száma"),
             ("p_azon, name, faction", "a képviselő; a ciklusbeli utolsó frakciója"),

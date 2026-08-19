@@ -395,6 +395,48 @@ def parse_felszolalasok(payload: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
+def parse_felszolalas(raw: bytes) -> dict[str, Any]:
+    """felszolalas.cgi (one speech, with its text). The text comes as HTML *elements* inside <felsz_szovege> (div/p/span),
+    not as escaped text — so this reads the element tree directly: paragraphs → plain text, the speaker's href → p_azon.
+
+      <felszolalas ulnap datum sorsz><felszolalo href="/web/guest/kepviselok_mobil?kepviselo={"id":"m076"}">Név</felszolalo>
+      <beosztas/><bizottsagi_eloado/><felsz_oka/><felsz_ideje/><felsz_szovege><div><p><span>…</span></p>…</div></felsz_szovege>
+    """
+    from .xmlutil import parse_xml
+    import html as _html
+    from urllib.parse import unquote
+    root = parse_xml(raw)
+    if root.tag != "felszolalas":
+        root = root.find(".//felszolalas") or root
+    sp = root.find("felszolalo")
+    href = (sp.get("href") if sp is not None else None) or None
+    azon = None
+    if href:
+        m = re.search(r'"id"\s*:\s*"([^"]+)"', unquote(href))
+        azon = m.group(1) if m else None
+    body = root.find("felsz_szovege")
+    paras: list[str] = []
+    if body is not None:
+        for p_ in body.iter():
+            if p_.tag.lower() == "p":
+                txt = re.sub(r"\s+", " ", "".join(p_.itertext())).strip()
+                if txt:
+                    paras.append(_html.unescape(txt))
+        if not paras:                                             # no <p>: whatever text there is
+            txt = re.sub(r"\s+", " ", "".join(body.itertext())).strip()
+            if txt:
+                paras.append(_html.unescape(txt))
+    def _t(tag):
+        el = root.find(tag)
+        return (el.text or "").strip() if el is not None and el.text else None
+    return {
+        "ulnap": _int(root.get("ulnap")), "date": _hu_date(root.get("datum")), "seq": _int(root.get("sorsz")),
+        "speaker": (sp.text or "").strip() if sp is not None and sp.text else None, "azon": azon, "href": href,
+        "position": _t("beosztas"), "committee_rapporteur": _t("bizottsagi_eloado"), "kind": _t("felsz_oka"),
+        "duration_s": _duration_s(_t("felsz_ideje")), "paragraphs": paras, "chars": sum(len(x) for x in paras),
+    }
+
+
 # -- votes ----------------------------------------------------------------------------------
 
 def parse_iromany_szam(szam: str | None) -> dict[str, Any]:

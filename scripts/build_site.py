@@ -207,7 +207,9 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     facs = factions(cycle)
     sp_path = DERIVED / f"speeches{sfx}.json"
     speeches = load_json(sp_path) if (sp_path.exists() or sp_path.with_suffix(".json.gz").exists()) else None   # the cycle's speech lists, when synced
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches,
+    tx_path = DERIVED / f"speech_texts{sfx}.json"
+    texts = load_json(tx_path) if (tx_path.exists() or tx_path.with_suffix(".json.gz").exists()) else None      # the fetched texts, when any
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -562,6 +564,9 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .hero-title a{color:var(--white);border-bottom:1px solid var(--dim3)}.hero-title a:hover{border-bottom-color:var(--white)}
 .hero-meta{color:var(--dim2);font-size:12px;font-family:var(--mono);letter-spacing:.02em}
 .hero-meta.prose{font-family:var(--sans);font-size:12.5px;color:var(--dim);letter-spacing:0}
+.speech{font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--text);max-width:72ch}.speech p{margin:0 0 .9em}.speech mark,.snip mark{background:rgba(255,255,255,.18);color:var(--white);padding:0 2px}
+.snip{font-family:var(--sans);font-size:12.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:0;text-transform:none}
+tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sans);font-size:12.5px;padding-top:10px}tr.dim td{color:var(--dim3)}tr.dim a{color:var(--dim2)}
 /* chart */
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s,filter .2s;cursor:crosshair}
@@ -725,7 +730,7 @@ JS_PAGER = """
     render(false);
   }
   document.querySelectorAll('table[data-page-size]').forEach(paginate);
-  window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ r.hidden = r.hasAttribute('data-x'); }); } };
+  window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ if (!r.classList.contains('grp')) r.hidden = r.hasAttribute('data-x'); }); } };
 })();
 """
 
@@ -861,15 +866,28 @@ JS_TEXTFILTER = """
   function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, ''); }
   document.querySelectorAll('input[data-filter-table]').forEach(function(inp){
     var table = document.getElementById(inp.getAttribute('data-filter-table')); if (!table || !table.tBodies[0]) return;
-    var rows = Array.prototype.slice.call(table.tBodies[0].rows);
-    rows.forEach(function(r){ r.__hay = fold(r.textContent); });
+    var all = Array.prototype.slice.call(table.tBodies[0].rows), rows = [], groups = [], cur = null, curTxt = '';
+    all.forEach(function(r){ if (r.classList.contains('grp')) { cur = r; curTxt = fold(r.textContent); groups.push(r); r.__rows = []; return; } r.__hay = fold(r.textContent) + ' ' + curTxt; rows.push(r); if (cur) cur.__rows.push(r); });
     table.__textq = '';
     table.__textMatch = function(r){ return !table.__textq || (r.__hay || fold(r.textContent)).indexOf(table.__textq) >= 0; };
-    inp.addEventListener('input', function(){
-      table.__textq = fold(inp.value).trim();
+    table.__rowf = null;                                       // an attribute filter set by button[data-rowf] (below), if any
+    function apply(){
       if (table.__reapply) { table.__reapply(); return; }
-      rows.forEach(function(r){ if (table.__textMatch(r)) r.removeAttribute('data-x'); else r.setAttribute('data-x', ''); });
+      rows.forEach(function(r){ var ok = table.__textMatch(r) && (!table.__rowf || r.getAttribute(table.__rowf[0]) === table.__rowf[1]); if (ok) r.removeAttribute('data-x'); else r.setAttribute('data-x', ''); });
+      groups.forEach(function(g){ var any = g.__rows.some(function(r){ return !r.hasAttribute('data-x'); }); g.hidden = !any; });
       if (window.__karzatRerender) window.__karzatRerender(table, true);
+    }
+    table.__applyFilters = apply;
+    inp.addEventListener('input', function(){ table.__textq = fold(inp.value).trim(); apply(); });
+  });
+  // <button data-rowf="attr:value" data-table="id"> (or data-rowf="all") beside a text box: keeps rows whose attribute equals the value
+  document.querySelectorAll('button[data-rowf]').forEach(function(b){
+    var table = document.getElementById(b.getAttribute('data-table')); if (!table) return;
+    b.addEventListener('click', function(){
+      var v = b.getAttribute('data-rowf');
+      table.__rowf = (v === 'all') ? null : v.split(':');
+      document.querySelectorAll('button[data-rowf][data-table="' + table.id + '"]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      if (table.__applyFilters) table.__applyFilters();
     });
   });
 })();
@@ -906,6 +924,76 @@ JS_CITE = """
       else { var r = document.createRange(); r.selectNodeContents(pre); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); try { document.execCommand('copy'); done(); } catch (e) {} }
     });
   });
+})();
+"""
+
+JS_SPEECHSEARCH = """
+(function(){
+  // felszolalas/kereses.html: terms are AND-ed; each term matches tokens by prefix (3+ letters, accents folded); the index
+  // is sharded by the token's first two letters (idx/xx.json), the results table lists the speeches newest first and
+  // fetches the visible pages' texts for a snippet.
+  var q = document.getElementById('spq'), body = document.getElementById('spres'), n = document.getElementById('spn'), table = body && body.closest('table');
+  if (!q || !body) return;
+  function fold(s){ return String(s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase(); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var meta = null, metaFailed = false, metaWaiters = [], shards = {}, texts = {}, seq = 0;
+  function get(url, cb){ var x = new XMLHttpRequest(); x.open('GET', url); x.onload = function(){ if (x.status >= 400) return cb(null); try { cb(JSON.parse(x.responseText)); } catch (e) { cb(null); } }; x.onerror = function(){ cb(null); }; x.send(); }
+  function shard2(key, cb){ if (shards[key] !== undefined) return cb(shards[key]); get('idx/' + key + '.json', function(d){ shards[key] = d || {}; cb(shards[key]); }); }
+  function shard(term, cb){ shard2(term.slice(0, 2), function(sh){ if (sh && sh.__split) shard2(term.slice(0, 3), cb); else cb(sh); }); }   // a big two-letter shard is split by the third letter
+  function withMeta(cb){ if (meta) return cb(); if (metaFailed) return cb(); metaWaiters.push(cb); if (metaWaiters.length > 1) return; get('meta.json', function(d){ if (d) meta = d; else metaFailed = true; var w = metaWaiters; metaWaiters = []; w.forEach(function(f){ f(); }); }); }
+  var urlTimer = null;
+  function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
+  function search(){
+    var my = ++seq;
+    var terms = (fold(q.value).match(/[a-z0-9]{3,}/g) || []).filter(function(t, i, a){ return a.indexOf(t) === i; });
+    if (!terms.length) { body.innerHTML = '<tr><td colspan="4" class="hero-meta">Kezdj el gépelni (legalább három betű).</td></tr>'; n.textContent = ''; if (window.__karzatRerender && table) window.__karzatRerender(table, true); return; }
+    var need = terms.length + 1, sets = [];
+    function step(){ if (--need > 0 || my !== seq) return; render(); }
+    withMeta(step);
+    terms.forEach(function(t, i){
+      shard(t, function(sh){
+        var ids = {};
+        for (var k in sh) if (k !== '__split' && k.indexOf(t) === 0) { var arr = sh[k]; for (var j = 0; j < arr.length; j++) ids[arr[j]] = 1; }
+        sets[i] = ids; step();
+      });
+    });
+    function render(){
+      if (!meta) { body.innerHTML = '<tr><td colspan="3" class="hero-meta">A kereső listája (meta.json) nem tölthető be.</td></tr>'; n.textContent = ''; return; }
+      var hits = [];
+      for (var i = 0; i < meta.length; i++) { var ok = true; for (var s = 0; s < sets.length; s++) { if (!sets[s][i]) { ok = false; break; } } if (ok) hits.push(i); }
+      hits.reverse();                                                       // ids are chronological: newest first
+      body.innerHTML = hits.map(function(i){ var m = meta[i]; var who = m[3] ? '<a href="../kepviselo/' + esc(m[3]) + '.html">' + esc(m[2]) + '</a>' : esc(m[2]);
+        return '<tr data-i="' + i + '"><td class="ts mono"><a href="' + esc(m[0]) + '.html">' + esc(m[1]) + '</a></td><td>' + who + '<span class="sub">' + esc(m[4] || '') + (m[6] ? ' · ' + esc(m[6]) : '') + '</span></td><td>' + esc(m[5] || '') + '<span class="snip"></span></td></tr>'; }).join('')
+        || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
+      n.textContent = hits.length + ' találat';
+      if (window.__karzatRerender && table) window.__karzatRerender(table, true);
+      snippets(terms);
+    }
+  }
+  function snippets(terms){
+    var rows = Array.prototype.slice.call(body.rows).filter(function(r){ return !r.hidden && r.hasAttribute('data-i'); });
+    rows.forEach(function(r){
+      var i = parseInt(r.getAttribute('data-i'), 10), m = meta[i], cell = r.querySelector('.snip'); if (!cell || cell.getAttribute('data-done')) return;
+      cell.setAttribute('data-done', '1');
+      var fill = function(d){ if (!d || !d.paragraphs) { cell.textContent = ''; return; }
+        // matches are found on the folded text at word starts (the index rule) and painted on the original by the same
+        // offsets — folding a precomposed letter keeps the length, so the offsets line up
+        var txt = d.paragraphs.join(' '), f = fold(txt);
+        if (f.length !== txt.length) f = txt.toLowerCase();
+        var spans = [], first = -1;
+        terms.forEach(function(t){ var re = new RegExp('(^|[^a-z0-9])' + t.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&'), 'g'), m; while ((m = re.exec(f))) { var st = m.index + m[1].length, en = st + t.length; while (en < f.length && /[a-z0-9]/.test(f[en])) en++; spans.push([st, en]); if (first < 0 || st < first) first = st; if (spans.length > 40) break; } });
+        if (first < 0) { cell.textContent = txt.slice(0, 160) + (txt.length > 160 ? '…' : ''); return; }
+        var a = Math.max(0, first - 90), b = Math.min(txt.length, first + 130), out = '', pos = a;
+        spans.sort(function(x, y){ return x[0] - y[0]; }).forEach(function(sp){ if (sp[1] <= a || sp[0] >= b || sp[0] < pos) return; out += esc(txt.slice(pos, sp[0])) + '<mark>' + esc(txt.slice(sp[0], Math.min(sp[1], b))) + '</mark>'; pos = Math.min(sp[1], b); });
+        out += esc(txt.slice(pos, b));
+        cell.innerHTML = (a > 0 ? '…' : '') + out + (b < txt.length ? '…' : ''); };
+      if (texts[m[0]]) fill(texts[m[0]]); else get(m[0] + '.json', function(d){ texts[m[0]] = d; fill(d); });
+    });
+  }
+  q.addEventListener('input', function(){ syncUrl(); search(); });
+  if (table) table.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('button')) setTimeout(function(){ snippets((fold(q.value).match(/[a-z0-9]{3,}/g) || [])); }, 50); });
+  document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('nav.pgr button'); if (b && table && b.closest('nav.pgr') && b.closest('nav.pgr').previousElementSibling && b.closest('nav.pgr').previousElementSibling.contains(table)) setTimeout(function(){ snippets((fold(q.value).match(/[a-z0-9]{3,}/g) || [])); }, 50); });
+  if (location.search) { var m = /[?&]q=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\\+/g, ' ')); search(); } }
 })();
 """
 
@@ -1650,7 +1738,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
         sp_note = "A ciklus felszólalás-listái nincsenek betöltve."
     elif rec_stat and rec_stat.get("speeches") is not None and rec_stat["speeches"] != len(sp_sub):
         sp_note = f'Az adatlap erre a ciklusra {hu_num(rec_stat["speeches"])} felszólalást és {hu_num(rec_stat["technical"] or 0)} eljárási sort számol; a napi listák szerint itt {hu_num(len(sp_sub))} érdemi és {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor van.'
-    sp_trs = "".join(f'<tr><td class="ts mono">{esc(r["date"] or "")}</td><td>{esc(cut(r["event"] or "—", 120))}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["iromany"]) + "</span>") if r.get("iromany") else ""}</td>'
+    sp_trs = "".join(f'<tr><td class="ts mono"><a href="../felszolalas/{speech_id(r)}.html">{esc(r["date"] or "")}</a></td><td>{esc(cut(r["event"] or "—", 120))}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["iromany"]) + "</span>") if r.get("iromany") else ""}</td>'
                      f'<td>{esc(r["kind"] or "")}</td><td class="mono">{esc(r["role"] or "")}</td><td class="num mono">{hu_mmss(r["duration_s"]) if r.get("duration_s") else "—"}</td></tr>' for r in sp_sub)
     coms = committees_in_cycle(mp, inp["cycle"])
     com_rows = "".join(f'<tr><td>{esc(c["committee"] or "")}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(c["subcommittee"]) + "</span>") if c.get("subcommittee") else ""}</td><td>{esc(c.get("role") or "")}</td>'
@@ -1783,7 +1871,7 @@ def build() -> str:
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet and script, generated like the pages (committed, checked, never hand-edited)."""
-    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_TEXTFILTER + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
+    return {"karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -2132,7 +2220,7 @@ def build_feed_page(inp: dict, events: list[dict], fac_counts: dict[str, int], n
     indep = (f'<div class="hero-meta prose" style="margin-top:8px">A független képviselők nincsenek a csatornákban: nem frakció, így frakciótöbbség sincs, amitől eltérnének — a képviselőoldalak a többi függetlenhez mért számukat mutatják, feliratozva; a CSV-ben ott vannak ({hu_num(n_independent)} sor, „független” frakcióval).</div>'
              if n_independent else "")
     return page_head(f'Értesítések · {cyc}. ciklus · karzat', f'Atom-csatornák a {cyc}. ciklusról: különvélemények ciklusra, frakcióra és képviselőre, minden szavazás, és a heti összefoglalók képviselőnként és a ciklusra' + (" — a szinkronnal frissülnek." if not closed else " — lezárt ciklus, teljes lista."), 1 + inp["base_depth"],
-                     feeds=[("kulonvelemeny.xml", f"karzat · különvélemények · {cyc}. ciklus"), ("szavazasok.xml", f"karzat · szavazások · {cyc}. ciklus"), ("heti.xml", f"karzat · a hét számokban · {cyc}. ciklus")]) + \
+                     feeds=[("kulonvelemeny.xml", f"karzat · különvélemények · {cyc}. ciklus"), ("szavazasok.xml", f"karzat · szavazások · {cyc}. ciklus"), ("heti.xml", f"karzat · a hét számokban · {cyc}. ciklus"), ("felszolalasok.xml", f"karzat · felszólalások szövege · {cyc}. ciklus")]) + \
         topbar(inp, [("értesítések", None)], 1) + f"""
 <div class="hero-h"><h1>Értesítések</h1><small class="label" data-kz-text>{esc(label)}</small></div>
 <p class="lede">{lede}</p>
@@ -2148,6 +2236,11 @@ def build_feed_page(inp: dict, events: list[dict], fac_counts: dict[str, int], n
     <tr><td>egy képviselő</td><td>hetente: névsorban / leadott / frakciója ellen / érdemi felszólalásai (napirendi pont, fajta, hossz) — a címe a képviselő oldalán</td><td class="mono"><a href="../kepviselom/index.html">kepviselo/&lt;azonosító&gt;-heti.xml</a></td></tr>
     <tr><td>a ciklus</td><td>a hét számokban: szavazások, döntések, név szerinti szavazások, különvélemények, érdemi felszólalások, felszólalók</td><td class="mono"><a href="heti.xml">heti.xml</a></td></tr>
   </tbody></table></div>
+  <h2 style="margin-top:14px"><span data-kz-text>Felszólalások szövege</span><span class="tag">kulcsszóra figyelni · <a href="../felszolalas/kereses.html">keresés a szövegekben</a></span></h2>
+  <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Kör</th><th scope="col">Mi van benne</th><th scope="col">Fájl</th></tr></thead><tbody>
+    <tr><td>a ciklus</td><td>az érdemi felszólalások teljes jegyzőkönyvi szövege, a legfrissebb elöl (az utolsó napok tételei)</td><td class="mono"><a href="felszolalasok.xml">felszolalasok.xml</a></td></tr>
+  </tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Ebben a csatornában az utolsó 200 érdemi felszólalás van, teljes szöveggel; a tétel ideje a nap és a napi sorrend (az API nem ad órát); szöveges CSV nincs, a lapok és a JSON-ok igen. Kulcsszóra így lehet figyelni: a hírolvasó szűrője vagy szabálya a tétel <em>tartalmára</em> — a címben csak nap, felszólaló és fajta áll (Miniflux: keep rule a tartalomra, Inoreader Pro: szabály, Thunderbird: üzenetszűrő a törzsre) — a szöveg teljes, ezért a szűrő mindent lát. Az oldal nem sorol témába és nem foglal össze: a találat a jegyzőkönyv szava. Bizottsági ülések anyaga nincs az API-ban.</div>
   <div class="hero-meta prose" style="margin-top:8px">{esc(fd.CAVEATS)}</div>{indep}{how}
 </section>
 <section class="panel">{CORNERS}
@@ -2383,19 +2476,191 @@ def cycle_weekly_feed(inp: dict, updated: str, root: str) -> str:
                    f'{root}{cdir}feed/heti.xml', f'{root}{cdir}index.html', updated, ents)
 
 
+# -- speech texts: pages, day lists, the prefix index, the channel ---------------------------------
+
+def speech_id(r: dict) -> str:
+    return f'{r["ulnap"]}-{r["seq"]}'
+
+
+def fold_tokens(text: str) -> list[str]:
+    """Search tokens: accents folded, lower-case, [a-z0-9]{3,} — the same rule the page's script applies to the query."""
+    import unicodedata
+    folded = "".join(ch for ch in unicodedata.normalize("NFKD", text) if not unicodedata.combining(ch)).lower()
+    return re.findall(r"[a-z0-9]{3,}", folded)
+
+
+def substantive_rows(inp: dict) -> list[dict]:
+    """The cycle's substantive, non-reprint speech rows in the days' order (the ones that get a page and a search entry)."""
+    if "_sub_rows" in inp:
+        return inp["_sub_rows"]
+    rows = [r for r in ((inp["speeches"] or {}).get("speeches") or []) if not r["technical"] and r.get("seq") is not None]
+    rows.sort(key=lambda r: (r["date"] or "", r["ulnap"] or 0, r["order"]))
+    inp["_sub_rows"] = rows
+    return rows
+
+
+def speech_search_index(inp: dict) -> tuple[list[list], dict[str, dict[str, list[int]]]]:
+    """meta (one compact row per substantive speech, chronological — its position is the id the shards use) and the
+    shards: first two letters of the token → {token: [ids]}. Only speeches with a fetched text carry tokens; the others
+    are in the meta (they list, they do not match)."""
+    texts = (inp["texts"] or {}).get("texts") or {}
+    meta: list[list] = []
+    shards: dict[str, dict[str, list[int]]] = {}
+    for i, r in enumerate(substantive_rows(inp)):
+        sid = speech_id(r)
+        t = texts.get(sid)
+        azon = (t or {}).get("azon") or r.get("azon")               # the payload's own id first, the list's resolution otherwise
+        meta.append([sid, r["date"], r.get("name") or r.get("speaker_label") or "—", azon if azon in inp["mps"] else None, r.get("kind"), cut(r.get("event") or "", 90),
+                     hu_mmss(r["duration_s"]) if r.get("duration_s") else None])
+        if not t:
+            continue
+        seen: set[str] = set()
+        for tok in fold_tokens(" ".join(t["paragraphs"])):
+            if tok in seen:
+                continue
+            seen.add(tok)
+            shards.setdefault(tok[:2], {}).setdefault(tok, []).append(i)
+    # a two-letter shard past the size limit is split into three-letter shards; a stub tells the script where to look
+    out: dict[str, dict] = {}
+    for key, toks in shards.items():
+        size = sum(len(k) + 4 + 6 * len(v) for k, v in toks.items())        # a rough JSON byte estimate
+        if size > SHARD_LIMIT:
+            out[key] = {"__split": 1}
+            for k, v in toks.items():
+                out.setdefault(k[:3], {})[k] = v
+        else:
+            out[key] = toks
+    return meta, out
+
+
+SHARD_LIMIT = 250_000      # bytes of JSON, roughly; above it a first-two-letters shard is split by the third letter
+
+
+def build_speech_page(inp: dict, r: dict, text: dict | None, prev_r: dict | None, next_r: dict | None, bs: dict | None) -> str:
+    """felszolalas/<ülésnap>-<sorszám>.html — one speech: who, when, on what, the record's text."""
+    sid = speech_id(r)
+    who = r.get("name") or r.get("speaker_label") or "—"
+    azon = (text or {}).get("azon") or r.get("azon")               # the payload's own id first
+    who_html = f'<a href="../kepviselo/{esc(azon)}.html">{esc(who)}</a>' if azon and azon in inp["mps"] else esc(who)
+    fac = f' ({esc(r["faction"])})' if r.get("faction") else ""
+    role = (text or {}).get("position") or r.get("role")
+    label = " · ".join(x for x in [esc(r["date"] or ""), f'{r["ulnap"]}. ülésnap', esc(r.get("kind") or ""), hu_mmss(r["duration_s"]) if r.get("duration_s") else "", esc(role or "")] if x)
+    # the agenda item, with links to the bills it names when the cycle has their pages
+    ev = r.get("event") or "—"
+    ev_html = esc(ev)
+    if bs:
+        for num in (r.get("iromany") or "").split(" · "):
+            n_, _ = an.bill_key(num) if num else (None, None)
+            if n_ is not None and n_ in bs:
+                ev_html = ev_html.replace(esc(num), f'<a href="../iromany/{n_}.html">{esc(num)}</a>', 1)
+    if text and text.get("paragraphs"):
+        body = '<div class="speech">' + "".join(f"<p>{esc(x)}</p>" for x in text["paragraphs"]) + "</div>"
+        tag = f'{hu_num(text["chars"])} karakter · {len(text["paragraphs"])} bekezdés · <a href="{esc(sid)}.json">JSON</a>'
+    else:
+        body = '<div class="hero-meta">A szöveg nincs betöltve.</div>'
+        tag = f'<a href="{esc(sid)}.json">JSON</a>'
+    nav = ('<div class="pager">' + (f'<a href="{esc(speech_id(prev_r))}.html">← {esc(prev_r.get("name") or prev_r.get("speaker_label") or "")} · {esc(cut(prev_r.get("event") or "", 50))}</a>' if prev_r else "<span></span>")
+           + (f'<a href="{esc(speech_id(next_r))}.html">{esc(next_r.get("name") or next_r.get("speaker_label") or "")} · {esc(cut(next_r.get("event") or "", 50))} →</a>' if next_r else "<span></span>") + "</div>")
+    return page_head(f'{who} · {r["date"]} · {cut(r.get("kind") or "felszólalás", 40)}{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat',
+                     f'{who}{fac} felszólalása {r["date"]}: {r.get("kind") or ""} — {cut(ev, 120)}. Az Országgyűlés jegyzőkönyvi szövege.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("felszólalások", "index.html"), (f'{r["ulnap"]}. ülésnap', f'nap{r["ulnap"]}.html'), (f'{r["seq"]}.', None)], 1) + f"""
+<div class="hero-h"><h1>{who_html}{fac}</h1><small class="label">{label}</small></div>
+<p class="hero-meta">napirendi pont: {ev_html}</p>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Szöveg</span><span class="tag">{tag}</span></h2>
+  {body}
+  <div class="hero-meta prose" style="margin-top:10px">A jegyzőkönyv szövege, ahogy az Országgyűlés Web API-ja adja (felszolalas), a formázás nélkül. Nem összefoglaló.</div>
+</section>
+{nav}
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}felszolalas/{sid}.html', f'{who} — {r["date"]}, {r.get("kind") or "felszólalás"}', f'{inp["cycle"]}-felszolalas-{sid}', json_href=f"{sid}.json")}
+""" + page_tail(inp, 1)
+
+
+def build_day_page(inp: dict, ulnap: int, day_rows: list[dict], texts: dict) -> str:
+    """felszolalas/nap<N>.html — one sitting day's list, in order, grouped by agenda item; procedural rows dimmed."""
+    date = next((r["date"] for r in day_rows if r.get("date")), None)
+    groups: list[tuple[str, list[dict]]] = []
+    for r in sorted(day_rows, key=lambda r: r["order"]):
+        ev = r.get("event") or "—"
+        if not groups or groups[-1][0] != ev:
+            groups.append((ev, []))
+        groups[-1][1].append(r)
+    trs = []
+    for ev, rows in groups:
+        trs.append(f'<tr class="grp"><td colspan="5"><b>{esc(ev)}</b></td></tr>')
+        for r in rows:
+            sid = speech_id(r)
+            sub = not r["technical"] and r.get("seq") is not None
+            who = r.get("name") or r.get("speaker_label") or "—"
+            az = ((texts.get(sid) or {}).get("azon") if sub else None) or r.get("azon")
+            who_html = f'<a href="../kepviselo/{esc(az)}.html">{esc(who)}</a>' if az and az in inp["mps"] else esc(who)
+            link = f'<a href="{esc(sid)}.html">{"szöveg" if sid in texts else "lap"}</a>' if sub else ""
+            trs.append(f'<tr data-sub="{1 if sub else 0}"{" class=dim" if not sub else ""}><td class="num mono">{r["seq"] if r.get("seq") is not None else ""}</td><td>{who_html}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["faction"]) + "</span>") if r.get("faction") else ""}</td>'
+                       f'<td>{esc(r.get("kind") or "")}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["role"]) + "</span>") if r.get("role") else ""}</td><td class="num mono">{hu_mmss(r["duration_s"]) if r.get("duration_s") else ""}</td><td class="mono">{link}</td></tr>')
+    n_sub = sum(1 for r in day_rows if not r["technical"])
+    return page_head(f'{r["ulnap"]}. ülésnap · {date} · felszólalások{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f'Az Országgyűlés {date} ({ulnap}. ülésnap) felszólalásai napirendi pontonként, sorban.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("felszólalások", "index.html"), (f'{ulnap}. ülésnap', None)], 1) + f"""
+<div class="hero-h"><h1>{ulnap}. ülésnap</h1><small class="label" data-kz-text>{esc(hu_date(date)) if date else "—"} · {hu_num(len(day_rows))} sor · {hu_num(n_sub)} érdemi felszólalás</small></div>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>A nap sorban</span><span class="tag">napirendi pontonként · az eljárási sorok halványan</span></h2>
+  <div class="filters" role="group" aria-label="Szűrés"><button type="button" data-rowf="all" data-table="day" class="on" aria-pressed="true">minden sor</button><button type="button" data-rowf="data-sub:1" data-table="day" aria-pressed="false">csak érdemi</button><input type="search" data-filter-table="day" placeholder="név, tárgy, fajta" aria-label="Szűrés" style="min-width:160px"></div>
+  <div class="tablewrap"><table id="day"><thead><tr><th scope="col" class="num">Sorszám</th><th scope="col">Felszólaló</th><th scope="col">Fajta</th><th scope="col" class="num">Hossz</th><th scope="col">Lap</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+</section>
+""" + page_tail(inp, 1)
+
+
+def build_speech_search_page(inp: dict, n_meta: int, n_texts: int) -> str:
+    """felszolalas/kereses.html — a box over the fetched speech texts of the cycle."""
+    return page_head(f'Keresés a felszólalásokban · {inp["cycle"]}. ciklus · karzat', f'Szókeresés a {inp["cycle"]}. ciklus felszólalásainak jegyzőkönyvi szövegében: előtag szerint, ékezet nélkül is; a találatok szövegrészlettel.', 1 + inp["base_depth"]) + \
+        topbar(inp, [("felszólalások", "index.html"), ("keresés", None)], 1) + f"""
+<div class="hero-h"><h1>Keresés a felszólalásokban</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(n_meta)} érdemi felszólalás · {hu_num(n_texts)} szöveg betöltve</small></div>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Keresés</span><span class="tag">szó eleje szerint · ékezet nélkül is · több szó: mind szerepel</span></h2>
+  <div class="filters"><input id="spq" type="search" placeholder="pl. oktatás · MÁV · vasút · adó" aria-label="Keresés a szövegekben" autofocus style="min-width:min(100%,420px)"><span class="n" id="spn" aria-live="polite"></span></div>
+  <div class="tablewrap"><table data-page-size="20"><thead><tr><th scope="col">Nap</th><th scope="col">Felszólaló</th><th scope="col">Napirendi pont · részlet</th></tr></thead><tbody id="spres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni (legalább három betű).</td></tr></tbody></table></div>
+  <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle: a napok listája az <a href="index.html">előző oldalon</a>, a szövegek a napok lapjairól.</div></noscript>
+  <div class="hero-meta prose" style="margin-top:8px">A keresés a szó elejére illeszt („oktat” megtalálja az oktatást, oktatásit, oktatásügyet), legalább három betűtől, ékezetek nélkül is; több szó esetén mindegyiknek szerepelnie kell a szövegben. Szótövezés nincs. Csak a betöltött szövegekben keres; a szövegrészlet a jegyzőkönyvből való, a találat oldalán a teljes szöveg. A napok listái és a szövegek: <span class="mono">felszolalas/</span>; kulcsszóra figyelni csatornán: <a href="../feed/index.html">értesítések</a>.</div>
+</section>
+""" + page_tail(inp, 1)
+
+
+def speeches_feed(inp: dict, updated: str, root: str) -> str:
+    """feed/felszolalasok.xml — the recent substantive speeches with their full text: the keyword channel (a reader's
+    filter does the watching)."""
+    cdir = cycle_dir(inp["cycle"])
+    texts = (inp["texts"] or {}).get("texts") or {}
+    rows = [r for r in reversed(substantive_rows(inp)) if speech_id(r) in texts]
+    ents = []
+    for r in fd.recent(rows, lambda r: r["date"])[:200]:
+        sid = speech_id(r); t = texts[sid]
+        who = r.get("name") or r.get("speaker_label") or "—"
+        title = f'{r["date"]} · {who}{" (" + r["faction"] + ")" if r.get("faction") else ""} — {r.get("kind") or "felszólalás"} · {cut(r.get("event") or "", 90)}'
+        html = (f'<p><a href="{fd.a(root + cdir)}felszolalas/{fd.a(sid)}.html">{fd._x(r["date"])} · {fd._x(r.get("kind") or "")}{" · " + hu_mmss(r["duration_s"]) if r.get("duration_s") else ""}</a> · {fd._x(r.get("event") or "")}</p>'
+                + "".join(f"<p>{fd._x(x)}</p>" for x in t["paragraphs"]))
+        seq = int(r["seq"] or 0)
+        stamp = fd.rfc3339(f'{r["date"].replace("-", ".")}.{min(23, seq // 3600):02d}:{(seq // 60) % 60:02d}:{seq % 60:02d}')   # the day, then the speech's order (the API gives no clock time)
+        ents.append(fd.entry(f'urn:karzat:{inp["cycle"]}:felszolalas:{sid}', title, f'{root}{cdir}felszolalas/{sid}.html', stamp,
+                             html, categories=[c for c in [r.get("faction"), r.get("kind")] if c]))
+    return fd.atom(f'urn:karzat:{inp["cycle"]}:felszolalasok', f'karzat · felszólalások szövege · {inp["cycle"]}. ciklus',
+                   "Az érdemi felszólalások teljes jegyzőkönyvi szövege, a legfrissebb elöl — kulcsszóra a hírolvasó szűrője figyel. Az utolsó napok tételei; a többi a felszólalások lapjain.",
+                   f'{root}{cdir}feed/felszolalasok.xml', f'{root}{cdir}felszolalas/index.html', updated, ents)
+
+
 def build_speeches_page(inp: dict) -> str:
     """felszolalas/index.html — the cycle's speech lists day by day, the kinds, the classification and its check."""
     sp = inp["speeches"] or {}
     days = sp.get("days") or []
-    trs = "".join(f'<tr><td class="ts mono">{esc(d["date"] or "")}</td><td class="num mono">{d["ulnap"]}</td><td class="num mono">{hu_num(d["speeches"])}</td><td class="num mono">{hu_num(d["substantive"])}</td></tr>' for d in reversed(days))
+    trs = "".join(f'<tr><td class="ts mono"><a href="nap{d["ulnap"]}.html">{esc(d["date"] or "")}</a></td><td class="num mono">{d["ulnap"]}</td><td class="num mono">{hu_num(d["speeches"])}</td><td class="num mono">{hu_num(d["substantive"])}</td></tr>' for d in reversed(days))
+    tx = inp["texts"] or {}
+    n_tx = len(tx.get("texts") or {})
     from karzat.normalise import SUBSTANTIVE_KINDS
     kinds = sp.get("kinds") or {}
     krows = "".join(f'<tr><td>{esc(k or "—")}</td><td class="num mono">{hu_num(n)}</td><td>{"érdemi" if (k or "").casefold() in SUBSTANTIVE_KINDS else "eljárási"}</td></tr>' for k, n in kinds.items())
     chk = sp.get("record_check") or {}
     return page_head(f'Felszólalások · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus felszólalásai ülésnaponként és fajtánként, a képviselői adatlapokkal egyeztetve.', 1 + inp["base_depth"]) + \
         topbar(inp, [("felszólalások", None)], 1) + f"""
-<div class="hero-h"><h1>Felszólalások</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(sp.get("count", 0))} sor · {hu_num(sp.get("substantive", 0))} érdemi felszólalás · {hu_num(len(days))} ülésnap</small></div>
-<p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent.</p>
+<div class="hero-h"><h1>Felszólalások</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(sp.get("count", 0))} sor · {hu_num(sp.get("substantive", 0))} érdemi felszólalás · {hu_num(len(days))} ülésnap · {hu_num(n_tx)} szöveg</small></div>
+<p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig — naponként egy lap, érdemi felszólalásonként egy lap a jegyzőkönyvi szöveggel. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent. <a href="kereses.html">Keresés a szövegekben</a>.</p>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Ülésnaponként</span><span class="tag">a legfrissebb elöl · <a href="../adatok/felszolalasok.csv">CSV, mind</a></span></h2>
   <div class="tablewrap"><table data-page-size="25" data-counter="dn"><thead><tr><th scope="col">Nap</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Sor</th><th scope="col" class="num">Érdemi</th></tr></thead><tbody>{trs or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
@@ -2510,9 +2775,36 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         fw(fdir / "szavazasok.xml", fd.votes_feed(cycle, all_votes, updated, root, cdir, "feed/szavazasok.xml"))
         fw(fdir / "index.html", build_feed_page(inp, events, fac_counts, n_independent=sum(1 for e in all_events for d in e["dissents"] if d["faction"] == fd.INDEPENDENT)))
         fw(fdir / "heti.xml", cycle_weekly_feed(inp, updated, root))
+        fw(fdir / "felszolalasok.xml", speeches_feed(inp, updated, root))
         prune(fdir, fw.written)
         spd = out_dir / "felszolalas"; spd.mkdir(parents=True, exist_ok=True)
-        (spd / "index.html").write_text(build_speeches_page(inp), encoding="utf-8")
+        sw = _Writer()
+        sw(spd / "index.html", build_speeches_page(inp))
+        # one page + JSON per substantive speech, one page per sitting day, the search page with its shards and meta, the channel
+        texts_map = (inp["texts"] or {}).get("texts") or {}
+        subs = substantive_rows(inp)
+        bs = an.bills(inp)                                         # the cycle's bills: speech pages link the agenda item's bills
+        by_day: dict[int, list[dict]] = {}
+        for r in (inp["speeches"] or {}).get("speeches") or []:
+            by_day.setdefault(r["ulnap"], []).append(r)
+        for i, r in enumerate(subs):
+            sid = speech_id(r)
+            t = texts_map.get(sid)
+            sw(spd / f"{sid}.html", build_speech_page(inp, r, t, subs[i - 1] if i > 0 else None, subs[i + 1] if i + 1 < len(subs) else None, bs))
+            sw(spd / f"{sid}.json", json.dumps({"cycle": cycle, "id": sid, "date": r["date"], "ulnap": r["ulnap"], "seq": r["seq"], "speaker": r.get("speaker_label"), "p_azon": (t or {}).get("azon") or r.get("azon"),
+                                                 "faction": r.get("faction"), "kind": r.get("kind"), "role": r.get("role"), "event": r.get("event"), "iromany": r.get("iromany"), "duration_s": r.get("duration_s"),
+                                                 "position": (t or {}).get("position"), "chars": (t or {}).get("chars"), "paragraphs": (t or {}).get("paragraphs")}, ensure_ascii=False) + "\n")
+        for uln, day_rows in by_day.items():
+            sw(spd / f"nap{uln}.html", build_day_page(inp, uln, day_rows, texts_map))
+        meta, shards = speech_search_index(inp)
+        idx_dir = spd / "idx"; idx_dir.mkdir(parents=True, exist_ok=True)
+        iw = _Writer()
+        for key, toks in shards.items():
+            iw(idx_dir / f"{key}.json", json.dumps(toks, ensure_ascii=False, separators=(",", ":")))
+        prune(idx_dir, iw.written, (".json",))
+        sw(spd / "meta.json", json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
+        sw(spd / "kereses.html", build_speech_search_page(inp, len(meta), sum(1 for r in subs if speech_id(r) in texts_map)))
+        prune(spd, sw.written)
         kmd = out_dir / "kepviselom"; kmd.mkdir(parents=True, exist_ok=True)
         (kmd / "index.html").write_text(build_kepviselom_page(inp), encoding="utf-8")
         by_mp_events: dict[str, list[dict]] = {}
@@ -2565,7 +2857,6 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         nd = out_dir / "szamok"; nd.mkdir(parents=True, exist_ok=True)
         (nd / "index.html").write_text(build_numbers_page(inp, ms), encoding="utf-8")
         (nd / "havonta.csv").write_text(ex.monthly_csv(ms, cycle), encoding="utf-8")
-        bs = an.bills(inp)
         bd = out_dir / "iromany"; bd.mkdir(parents=True, exist_ok=True)
         w(bd / "index.html", build_bill_index(inp, bs))
         for bnum, b in bs.items():
@@ -2599,7 +2890,7 @@ def build_search_page(inp: dict, n_items: int) -> str:
   <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
   <div class="tablewrap"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr></tbody></table></div>
   <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../iromany/index.html">irományok</a> · <a href="../kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
-  <div class="hero-meta prose" style="margin-top:8px">A találatok listája a gépeléskor töltődik be (<span class="mono">kereses/index.json</span>); szavazások közvetlenül a ciklus címlapján kereshetők, tárgy szerint.</div>
+  <div class="hero-meta prose" style="margin-top:8px">A találatok listája a gépeléskor töltődik be (<span class="mono">kereses/index.json</span>); szavazások közvetlenül a ciklus címlapján kereshetők, tárgy szerint; a felszólalások szövegében a ciklus <a href="../felszolalas/kereses.html">felszólalás-keresője</a>.</div>
 </section>
 """ + page_tail(inp, 1)
 
@@ -2657,6 +2948,9 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="felszolalas">{CORNERS}<h2><span data-kz-text>Felszólalások és a heti összefoglaló</span></h2>
 <div class="hero-meta prose">Az ülésnapok felszólalás-listái (<span class="mono">felszolalasok</span>, 1998-tól) soronként: napirendi pont, felszólaló („Név (Frakció)”, ugyanazzal a feloldással, mint a névsorok; aki nem képviselő, névvel és tisztséggel marad), fajta, szerep, hossz. Érdemi felszólalás: a tárgyhoz szólás (felszólalás, kétperces, vezérszónoki, napirend előtti és utáni és hozzászólásaik), kérdés, interpelláció, azonnali kérdés és a válaszok, viszonválaszok, elfogadás/elutasítás, előadói válasz, előterjesztői nyitóbeszéd, bizottsági vélemény és kisebbségi vélemény, ügyrendi javaslat és kérdés; minden más eljárási (ülésvezetés, jegyzői ismertetés, megnyitás, bezárás, napirend elfogadása, eskü, személyes érintettség, az elnök eredmény- és állapotsorai). Ellenőrzés: a képviselői adatlap saját ciklusonkénti „felszólalás” száma ugyanezzel a határral a 43. ciklus képviselőinek túlnyomó többségénél megegyezik az itteni érdemi számmal (a felszólalások oldala írja, hány képviselőnél; ahol nem, a képviselő oldala mindkét számot). A heti összefoglaló: naptári hét ülésnapokkal; névsorban / a hét név szerinti szavazásai, leadott szavazatok, a frakció többségével szemben leadottak (döntetlennél nincs többség, jelenlét-megállapítás nem számít), érdemi felszólalások. Csatornái: képviselőnként <span class="mono">kepviselo/&lt;azonosító&gt;-heti.xml</span>, a ciklusé <span class="mono">feed/heti.xml</span>; a számok <span class="mono">adatok/heti.csv</span>-ben.</div></section>
+
+<section class="panel" id="szoveg">{CORNERS}<h2><span data-kz-text>A felszólalások szövege és a keresés</span></h2>
+<div class="hero-meta prose">Az érdemi felszólalások szövege az API <span class="mono">felszolalas</span> szolgáltatásából, felszólalásonként egy hívással; a szöveg a jegyzőkönyvé, bekezdésekre bontva, formázás nélkül, összefoglalás nélkül — egy lap és egy JSON felszólalásonként (<span class="mono">felszolalas/&lt;ülésnap&gt;-&lt;sorszám&gt;</span>), egy lap naponként. A felszólaló azonosítója a szöveg-adat saját hivatkozásából jön, ahol van (a képviselő oldalára mutat); a napi lista névfeloldása ugyanazt adja (a két forrás egyetlen esetben sem tér el). A kereső előtag szerint illeszt (legalább három betű, ékezet nélkül is): az index a szavak első két betűje szerint darabolt (<span class="mono">felszolalas/idx/</span>), a találat a szöveg részlete a jegyzőkönyvből; szótövezés, szinonima, témabesorolás nincs. A kulcsszó-figyelés csatornája <span class="mono">feed/felszolalasok.xml</span>: a friss felszólalások teljes szövege, a szűrést a hírolvasó végzi.</div></section>
 
 <section class="panel" id="csatornak">{CORNERS}<h2><span data-kz-text>Csatornák</span></h2>
 <div class="hero-meta prose">Atom-csatornák minden ciklusban (<span class="mono">feed/</span>): a különvélemények ciklusra (<span class="mono">kulonvelemeny.xml</span>), frakciónként (<span class="mono">frakcio-&lt;név&gt;.xml</span>) és képviselőnként (<span class="mono">kepviselo/&lt;azonosító&gt;.xml</span>), és minden szavazás (<span class="mono">szavazasok.xml</span>). Egy tétel egy szavazás; a benne álló különvélemények ugyanabból a számításból jönnek, mint a képviselőoldalak „frakció ellen” oszlopa (döntetlen = nincs többség; jelenlét-megállapítás nem számít). A tétel ideje a szavazásé, a csatorna frissítése a szinkroné — soha nem az építés pillanata, így ugyanabból a tárból ugyanaz a fájl épül. Egy csatornában az utolsó {fd.MAX_ENTRIES} tétel; a teljes lista <span class="mono">adatok/kulonvelemenyek.csv</span>. Értesítés az, hogy az oldal újraépül és a hírolvasó újraolvassa: nincs szerver, nincs fiók.</div></section>

@@ -7,10 +7,11 @@ from pathlib import Path
 
 from karzat import feeds as fd
 from karzat.export import adatszotar, speeches_csv, weekly_csv
-from karzat.normalise import SUBSTANTIVE_KINDS, parse_felszolalasok, parse_kepviselo, parse_ulesnap
+from karzat.normalise import SUBSTANTIVE_KINDS, parse_felszolalas, parse_felszolalasok, parse_kepviselo, parse_ulesnap
 from karzat.xmlutil import parse_xml, to_dict
-from scripts.build_site import (CAST, build_kepviselom_page, build_mp_page, build_speeches_page, committees_in_cycle, cycle_weekly_feed,
-                                digest_line, hu_span, load_inputs, mp_weekly_feed, sitting_weeks, speeches_by_mp, week_digests)
+from scripts.build_site import (CAST, build_day_page, build_kepviselom_page, build_mp_page, build_speech_page, build_speech_search_page, build_speeches_page,
+                                committees_in_cycle, cycle_weekly_feed, digest_line, fold_tokens, hu_span, load_inputs, mp_weekly_feed, sitting_weeks,
+                                speech_id, speech_search_index, speeches_by_mp, speeches_feed, substantive_rows, week_digests)
 
 FIXTURES = Path(__file__).parent / "fixtures"
 NS = {"a": fd.ATOM_NS}
@@ -67,6 +68,58 @@ class Parser(unittest.TestCase):
         ds = parse_ulesnap(payload_bytes(many))
         self.assertEqual([d["date"] for d in ds], ["1999-06-08", "1999-06-09", "1999-06-10", "1999-06-11", "1999-06-14", "1999-06-15", "1999-06-16", "1999-06-17", "1999-06-18", "1999-06-21"])
         self.assertEqual(sum(1 for d in ds if d["weekday_conflict"]), 1)                       # the slip is flagged, not silently trusted
+
+
+class Texts(unittest.TestCase):
+    def test_a_real_speech_text_parses_with_its_mp_id(self):
+        d = parse_felszolalas((FIXTURES / "real_felszolalas_ckl43_nap0006_f0002.xml").read_bytes())
+        self.assertEqual((d["ulnap"], d["date"], d["seq"]), (6, "2026-06-08", 2))
+        self.assertEqual((d["speaker"], d["azon"], d["position"], d["kind"]), ("Magyar Péter", "m076", "miniszterelnök", "napirend előtti felszólalás"))
+        self.assertEqual(d["duration_s"], 25 * 60 + 40)
+        self.assertEqual(len(d["paragraphs"]), 32)
+        self.assertTrue(d["paragraphs"][0].startswith("MAGYAR PÉTER miniszterelnök: Házelnök Asszony!"))
+        self.assertNotIn("<", " ".join(d["paragraphs"]))                                        # markup gone, words kept
+        self.assertEqual(d["chars"], sum(len(x) for x in d["paragraphs"]))
+
+    def test_tokens_fold_like_the_page_script(self):
+        self.assertEqual(fold_tokens("Az OKTATÁSÜGY, a MÁV és a gyermekvédelem — 2026-ban!"), ["oktatasugy", "mav", "gyermekvedelem", "2026", "ban"])
+        self.assertEqual(fold_tokens("ő ű ö ü á é í ó ú"), [])                                  # single letters are not tokens
+
+    def test_pages_index_and_channel(self):
+        inp = load_inputs()
+        subs = substantive_rows(inp)
+        self.assertEqual(len(subs), inp["speeches"]["substantive"])
+        self.assertTrue(all(not r["technical"] and not r.get("reprint") for r in subs))
+        meta, shards = speech_search_index(inp)
+        self.assertEqual(len(meta), len(subs))
+        self.assertTrue(all(len(k) == 2 for k in shards))                                        # sharded by the first two letters
+        texts = (inp["texts"] or {}).get("texts") or {}
+        if texts:
+            # every token of a fetched text points at its speech's position in the meta
+            sid, t = next(iter(texts.items()))
+            i = next(k for k, m in enumerate(meta) if m[0] == sid)
+            for tok in fold_tokens(" ".join(t["paragraphs"]))[:20]:
+                self.assertIn(i, shards[tok[:2]][tok])
+            page = build_speech_page(inp, next(r for r in subs if speech_id(r) == sid), t, None, None, None)
+            self.assertIn('<div class="speech">', page)
+            self.assertIn("A jegyzőkönyv szövege", page)
+        r0 = subs[0]
+        page = build_speech_page(inp, r0, None, None, subs[1], None)
+        self.assertIn("A szöveg nincs betöltve." if speech_id(r0) not in texts else "Szöveg", page)
+        self.assertIn(f'href="{speech_id(subs[1])}.html"', page)                                # next
+        day = build_day_page(inp, r0["ulnap"], [r for r in inp["speeches"]["speeches"] if r["ulnap"] == r0["ulnap"]], texts)
+        self.assertIn('data-rowf="data-sub:1"', day)
+        self.assertIn('<tr class="grp">', day)
+        srch = build_speech_search_page(inp, len(meta), len(texts))
+        self.assertIn('id="spq"', srch); self.assertIn("<noscript>", srch)
+        xml = speeches_feed(inp, "2026-08-18T18:56:12+02:00", "../")
+        root = ET.fromstring(xml.encode("utf-8"))
+        ents = root.findall("a:entry", NS)
+        self.assertLessEqual(len(ents), 200)
+        if ents:
+            self.assertIn("<p>", ents[0].find("a:content", NS).text)                              # the full text travels in the channel
+            self.assertRegex(ents[0].find("a:updated", NS).text, r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+0[12]:00$")
+        self.assertEqual(xml, speeches_feed(inp, "2026-08-18T18:56:12+02:00", "../"))         # deterministic
 
 
 def payload_bytes(raw: bytes) -> dict:

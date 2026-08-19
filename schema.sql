@@ -1,4 +1,4 @@
--- karzat — SQLite schema (v3: speeches and committee memberships, 2026-08-18; v2: seven roll-call states after the cycle-42 backfill; v1 after the first real payloads).
+-- karzat — SQLite schema (v4: speech texts, 2026-08-19; v3: speeches and committee memberships, 2026-08-18; v2: seven roll-call states after the cycle-42 backfill; v1 after the first real payloads).
 --
 -- Target shape for the normalised store the front end reads from. Columns are named after
 -- what the W-API actually returns (see karzat/normalise.py for the payload → record mapping);
@@ -205,6 +205,21 @@ CREATE TABLE IF NOT EXISTS speech (
     PRIMARY KEY (ckl, nap, ord)
 );
 CREATE INDEX IF NOT EXISTS speech_mp ON speech(mp_azon, on_date);
+
+-- The text of a speech (felszolalas.cgi): the record's own words as plain paragraphs, one row per fetched speech.
+CREATE TABLE IF NOT EXISTS speech_text (
+    ckl            INTEGER NOT NULL REFERENCES ciklus(ckl),
+    nap            INTEGER NOT NULL,
+    seq            INTEGER NOT NULL,              -- <sorszam> of the speech that day (a reprint shares it)
+    mp_azon        TEXT,                          -- from the speaker's href in the payload; NULL for non-MPs
+    speaker        TEXT,
+    position       TEXT,                          -- <beosztas>
+    kind           TEXT,                          -- <felsz_oka>
+    duration_s     INTEGER,
+    chars          INTEGER,
+    body           TEXT NOT NULL,                 -- paragraphs joined by two newlines
+    PRIMARY KEY (ckl, nap, seq)
+);
 
 -- Committee memberships from the MP record (<bizottsagi-tagsagok>), every cycle, dated.
 CREATE TABLE IF NOT EXISTS mp_committee (

@@ -44,3 +44,6 @@ site/kepviselom/
 
 # editor/session config
 .claude/
+
+# speech texts of the earlier cycles: tens of MB per cycle; fetch + derive them locally (sync-speech-texts, derive_speech_texts)
+data/derived/speech_texts_ckl*.json.gz

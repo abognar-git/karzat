@@ -27,6 +27,7 @@ FIXTURES = Path(__file__).parent / "fixtures"
 # the cycle-42 roll call that carries the seventh position state ("Ig.távol");
 # synthetic_kepviselok_latin2.xml stays only to exercise the ISO-8859-2 path the API does not use.
 GOLDEN = {
+    "real_felszolalas_ckl43_nap0006_f0002.xml": "9ea737751ed097ac",
     "real_felszolalasok_ckl43_nap0002.xml":   "b74b3f4916770b95",
     "real_iromany_71.xml":                     "fb700e8dff587bac",
     "real_iromanyok_head3.xml":                "ebe00be955b15b82",

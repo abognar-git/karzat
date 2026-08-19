@@ -258,6 +258,60 @@ def cmd_sync_speeches(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sync_speech_texts(args: argparse.Namespace) -> int:
+    """Cache the text of every substantive speech of a cycle (felszolalas.cgi, one call per speech; reprints of the same
+    sorszám are one text). Reads the cached day lists; days not cached are skipped (run sync-speeches first)."""
+    from .normalise import parse_felszolalasok
+    api = WebApi(cache_dir=args.cache, min_interval=args.pace)
+    days = sorted((Path(args.cache) / "felszolalasok").glob(f"ckl{args.ckl}_nap*.xml"))
+    if not days:
+        print(f"no cached day lists for cycle {args.ckl}: run python3 -m karzat sync-speeches --ckl {args.ckl} first", file=sys.stderr)
+        return 2
+    todo: list[tuple[int, int]] = []
+    for p in days:
+        day = parse_felszolalasok(to_dict_payload(p.read_bytes()))
+        if day["ulnap"] is None:
+            continue
+        for sp in day["speeches"]:
+            if sp["seq"] is None or sp.get("reprint"):
+                continue
+            if args.all or not sp["technical"]:
+                todo.append((day["ulnap"], sp["seq"]))
+    todo = sorted(set(todo))
+    if args.from_day:
+        todo = [x for x in todo if x[0] >= args.from_day]
+    n_ok = n_err = 0
+    from .normalise import parse_felszolalas
+    for i, (uln, seq) in enumerate(todo, 1):
+        try:
+            raw = api.fetch("felszolalas", p_ckl=args.ckl, p_uln=uln, p_felsz=seq)
+            try:
+                empty = not parse_felszolalas(raw)["paragraphs"]
+            except Exception:
+                empty = True
+            if empty:                                     # a not-yet-transcribed speech: ask once more, do not keep an empty answer forever
+                raw = api.fetch("felszolalas", p_ckl=args.ckl, p_uln=uln, p_felsz=seq, refresh=True)
+                try:
+                    empty = not parse_felszolalas(raw)["paragraphs"]
+                except Exception:
+                    empty = True
+                if empty:
+                    api.cache_path("felszolalas", {"p_ckl": args.ckl, "p_uln": uln, "p_felsz": seq}).unlink(missing_ok=True)
+                    n_err += 1
+                    print(f"  {uln}/{seq}: no text yet", file=sys.stderr)
+                    continue
+            n_ok += 1
+        except ApiError as e:
+            n_err += 1
+            print(f"  {uln}/{seq}: {e}", file=sys.stderr)
+            if "in a row" in str(e):
+                break
+        if args.verbose and i % 200 == 0:
+            print(f"  {i}/{len(todo)} · live {api.live_calls} · cached {api.cache_hits}", flush=True)
+    print(f"done: cycle {args.ckl}, {len(todo)} speech texts wanted, {n_ok} cached, {n_err} failed; live calls={api.live_calls} cache hits={api.cache_hits}")
+    return 0 if not n_err else 1
+
+
 def to_dict_payload(raw: bytes) -> dict:
     root = parse_xml(raw)
     from .xmlutil import to_dict
@@ -377,6 +431,13 @@ def main(argv: list[str] | None = None) -> int:
     ssp.add_argument("--refresh-last", type=int, default=None, help="re-fetch the newest N days even if cached (an open day's list grows); default 1 for the current cycle, 0 for a closed one")
     ssp.add_argument("--verbose", action="store_true")
     ssp.set_defaults(fn=cmd_sync_speeches)
+    sst = sub.add_parser("sync-speech-texts", help="cache the text of every substantive speech of a cycle (felszolalas.cgi, one call per speech)")
+    sst.add_argument("--ckl", type=int, required=True)
+    sst.add_argument("--from-day", type=int, default=0)
+    sst.add_argument("--all", action="store_true", help="procedural rows too (chairing, announcements) — several times more calls")
+    sst.add_argument("--pace", type=float, default=0.6, help="seconds between live calls (default 0.6; slower when another sync runs)")
+    sst.add_argument("--verbose", action="store_true")
+    sst.set_defaults(fn=cmd_sync_speech_texts)
     sf = sub.add_parser("freshness", help="compute the freshness sentence from cache + sync state")
     sf.add_argument("--ckl", type=int, default=43, help="parliamentary cycle for ulesnap (default 43)")
     sf.add_argument("--fetch", action="store_true", help="refresh ulesnap.cgi from the API (needs token)")
@@ -401,7 +462,7 @@ def main(argv: list[str] | None = None) -> int:
     ss.set_defaults(fn=cmd_stats)
 
     args = p.parse_args(argv)
-    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches") or (args.cmd == "freshness" and args.fetch)
+    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches", "sync-speech-texts") or (args.cmd == "freshness" and args.fetch)
     if needs_token and not os.environ.get(TOKEN_ENV):
         print(f"{TOKEN_ENV} is not set — copy .env.example to .env once the token arrives "
               f"(dry-run and inspect work without it)", file=sys.stderr)

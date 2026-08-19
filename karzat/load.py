@@ -35,6 +35,7 @@ from .normalise import (
     parse_kepviselo,
     parse_kepviselok,
     parse_szavazas,
+    parse_felszolalas,
     parse_felszolalasok,
     parse_szavazasok,
     parse_ulesnap,
@@ -190,6 +191,18 @@ class Loader:
             n += 1
         self.stats["speeches"] += n
         return n
+
+    def load_felszolalas(self, raw: bytes, ckl: int) -> int:
+        """One speech's text."""
+        d = parse_felszolalas(raw)
+        if d["ulnap"] is None or d["seq"] is None:
+            return 0
+        self._ciklus(ckl)
+        self.conn.execute(
+            "INSERT OR REPLACE INTO speech_text(ckl, nap, seq, mp_azon, speaker, position, kind, duration_s, chars, body) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            (ckl, d["ulnap"], d["seq"], d["azon"], d["speaker"], d["position"], d["kind"], d["duration_s"], d["chars"], "\n\n".join(d["paragraphs"])))
+        self.stats["speech_texts"] += 1
+        return 1
 
     # -- sitting days -----------------------------------------------------------------------
     def load_ulesnap(self, payload: dict[str, Any], ckl: int | None = None) -> int:
@@ -432,6 +445,13 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
             m = re.match(r"ckl(\d+)_nap(\d+)$", p.stem)
             if m:
                 L.load_felszolalasok(_load_xml(p), int(m.group(1)), resolver)
+        for p in sorted((cache / "felszolalas").glob("ckl*_nap*_f*.xml")):
+            m = re.match(r"ckl(\d+)_nap(\d+)_f(\d+)$", p.stem)
+            if m:
+                try:
+                    L.load_felszolalas(p.read_bytes(), int(m.group(1)))
+                except Exception:                     # one broken payload must not take the whole build down
+                    continue
         il = cache / "iromanyok" / "all.xml"
         if il.exists():
             L.load_iromanyok(_load_xml(il))
@@ -469,6 +489,7 @@ def summary(db_path: Path) -> dict[str, Any]:
             "bills_detailed": q("SELECT COUNT(*) FROM bill WHERE raw_json IS NOT NULL"), "bill_events": q("SELECT COUNT(*) FROM bill_event"),
             "faction_majorities": q("SELECT COUNT(*) FROM vote_faction_majority"),
             "speeches": q("SELECT COUNT(*) FROM speech"), "speeches_substantive": q("SELECT COUNT(*) FROM speech WHERE technical = 0"),
+            "speech_texts": q("SELECT COUNT(*) FROM speech_text"), "speech_text_chars": q("SELECT COALESCE(SUM(chars), 0) FROM speech_text"),
             "speeches_resolved": q("SELECT COUNT(*) FROM speech WHERE mp_azon IS NOT NULL"), "mp_committee_rows": q("SELECT COUNT(*) FROM mp_committee"),
             "rule_source_disagreements": q("SELECT COUNT(*) FROM vote WHERE passed IS NOT NULL AND needed IS NOT NULL AND ((igen >= needed) <> (passed = 1))"),
         }

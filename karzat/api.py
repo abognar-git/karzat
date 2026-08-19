@@ -94,6 +94,8 @@ def cache_key(service: str, params: dict[str, Any]) -> str:
         return f"iromany_{params['p_izon']}"
     if service == "felszolalasok" and "p_ckl" in params and "p_nap" in params:
         return f"ckl{int(params['p_ckl'])}_nap{int(params['p_nap']):04d}"
+    if service == "felszolalas" and "p_ckl" in params and "p_uln" in params and "p_felsz" in params:
+        return f"ckl{int(params['p_ckl'])}_nap{int(params['p_uln']):04d}_f{int(params['p_felsz']):04d}"
     if service == "ulesnap" and "p_ckl" in params:
         return f"ckl{int(params['p_ckl'])}"
     if not params:
