@@ -29,6 +29,7 @@ from karzat.majority import RULES, Rule, Tally, classify, evaluate  # noqa: E402
 from karzat.normalise import (  # noqa: E402
     NameResolver,
     record_histories,
+    seats_in_force,
     parse_kepviselok,
     parse_szavazas,
     parse_szavazasok,
@@ -160,6 +161,7 @@ def main(argv: list[str] | None = None) -> int:
                 aliases.setdefault(m["name_hu"], m["ogy_ids"][0])
     histories = record_histories(RAW)                      # the API's own spelling + faction history per cycle
     resolver = NameResolver(mps, aliases=aliases, histories=histories) if mps else None
+    seats_fn = seats_in_force(histories)                   # the all-MP majorities' base: mandates in force on the day
     if args.summary_only:
         return 0
     bill_links = {}
@@ -180,7 +182,7 @@ def main(argv: list[str] | None = None) -> int:
                           for m in v["motions"]]
         detail_path = RAW / "szavazas" / f"{ts_to_slug(v['ts'])}.xml"
         if detail_path.exists():
-            d = parse_szavazas(load(detail_path), resolver=resolver)
+            d = parse_szavazas(load(detail_path), resolver=resolver, seats_fn=seats_fn)
             details_cached += 1
             row["detail"] = True
             row["position_counts"] = d["position_counts"]
@@ -217,7 +219,7 @@ def main(argv: list[str] | None = None) -> int:
         detail_path = RAW / "szavazas" / f"{ts_to_slug(v['ts'])}.xml"
         if not detail_path.exists():
             continue
-        d = parse_szavazas(load(detail_path), resolver=resolver)
+        d = parse_szavazas(load(detail_path), resolver=resolver, seats_fn=seats_fn)
         rows = []
         for pnt in d["positions"]:
             f = pnt["faction"] or ""
@@ -245,7 +247,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"hero (auto): {pick}")
     hero_path = RAW / "szavazas" / f"{ts_to_slug(args.hero)}.xml"
     if hero_path.exists():
-        hero = parse_szavazas(load(hero_path), resolver=resolver)
+        hero = parse_szavazas(load(hero_path), resolver=resolver, seats_fn=seats_fn)
         hero["derived_at"] = out["derived_at"]
         for m in hero["motions"]:
             m["href"] = bill_links.get(m["iromany"] or "")

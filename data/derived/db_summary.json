@@ -6,70 +6,71 @@
  "mp_mandates": 3278,
  "factions": 18,
  "sitting_days": 1858,
- "votes": 2858,
- "votes_with_roll_call": 2835,
- "positions": 563216,
+ "votes": 62544,
+ "votes_with_roll_call": 40896,
+ "positions": 14025106,
  "positions_unresolved": 0,
- "vote_motions": 2746,
+ "vote_motions": 41390,
  "bills": 507,
  "bills_detailed": 1,
  "bill_events": 26,
- "faction_majorities": 27343,
+ "faction_majorities": 251217,
  "speeches": 41373,
  "speeches_substantive": 18013,
- "speech_texts": 1957,
- "speech_text_chars": 7328808,
+ "speech_texts": 5572,
+ "speech_text_chars": 22752894,
  "speeches_resolved": 40526,
  "mp_committee_rows": 8555,
- "rule_source_disagreements": 0,
+ "rule_source_disagreements": 13,
  "by_rule": {
-  "egyszeru": 2218,
-  "ketharmad_jelenlevo": 540,
-  "abszolut": 37,
-  "ketharmad_osszes": 34,
-  "—": 17,
-  "negyotod_jelenlevo": 12
+  "egyszeru": 55676,
+  "ketharmad_jelenlevo": 4848,
+  "negyotod_jelenlevo": 587,
+  "—": 562,
+  "ketharmad_osszes": 499,
+  "abszolut": 367,
+  "negyotod_osszes": 5
  },
  "alignment_top_deviators": [
   [
-   "Dr. Hadházy Ákos",
+   "Pősze Lajos",
    "független",
-   1304,
-   309,
-   583,
-   1271
+   5571,
+   2950,
+   13,
+   1549
   ],
   [
-   "Balassa Péter",
+   "Dr. Szűrös Mátyás",
+   "MSZP",
+   4937,
+   1797,
+   1520,
+   2101
+  ],
+  [
+   "Szabó Lukács",
    "független",
-   665,
-   172,
-   270,
-   22
+   4021,
+   1742,
+   2944,
+   2539
   ],
   [
-   "Jámbor András Imre",
-   "Párbeszéd",
-   2116,
-   127,
-   373,
-   429
-  ],
-  [
-   "Szabó Timea",
-   "Párbeszéd",
-   1338,
-   81,
-   229,
-   1196
-  ],
-  [
-   "Varga Ferenc",
+   "Császár Antal",
    "független",
-   1533,
-   80,
-   117,
-   353
+   3006,
+   1691,
+   535,
+   91
+  ],
+  [
+   "Dr. Gyenesei István",
+   "független",
+   6459,
+   1546,
+   851,
+   818
   ]
  ],
  "db": "data/karzat.sqlite"

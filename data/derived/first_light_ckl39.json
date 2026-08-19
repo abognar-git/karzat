@@ -1,0 +1,142 @@
+{
+ "derived_at": "2026-08-19T07:33:44.335267+02:00",
+ "window": {
+  "from": "2010-05-14",
+  "to": "2014-02-13",
+  "list_files": 447
+ },
+ "votes": 8550,
+ "decisions": 8539,
+ "quorum_checks": 11,
+ "secret_ballots": 51,
+ "qualified_majority_votes": 1357,
+ "by_mode": {
+  "Listás": 7132,
+  "Listás a jelenlevők 2/3-ával": 1093,
+  "Listás az összes képviselő 2/3-ával": 131,
+  "Listás a jelenlevők 4/5-ével": 88,
+  "Titkos az összes képviselő 2/3-ával": 26,
+  "Titkos": 25,
+  "Név szerinti": 25,
+  "Jelenlét megállapítás": 11,
+  "Név szerinti az összes képviselő 2/3-ával": 11,
+  "Név szerinti a jelenlevők 2/3-ával": 7,
+  "Listás az összes képviselő felével": 1
+ },
+ "by_result": {
+  "Elfogadva": 5013,
+  "Elutasítva": 3512,
+  "Határozatképtelen": 15,
+  "Határozatképes": 10
+ },
+ "by_month": {
+  "2010-05": 91,
+  "2010-06": 300,
+  "2010-07": 263,
+  "2010-09": 26,
+  "2010-10": 218,
+  "2010-11": 350,
+  "2010-12": 400,
+  "2011-02": 101,
+  "2011-03": 179,
+  "2011-04": 79,
+  "2011-05": 152,
+  "2011-06": 400,
+  "2011-07": 290,
+  "2011-09": 123,
+  "2011-10": 159,
+  "2011-11": 400,
+  "2011-12": 400,
+  "2012-02": 90,
+  "2012-03": 151,
+  "2012-04": 281,
+  "2012-05": 250,
+  "2012-06": 271,
+  "2012-07": 317,
+  "2012-09": 120,
+  "2012-10": 177,
+  "2012-11": 358,
+  "2012-12": 358,
+  "2013-02": 82,
+  "2013-03": 194,
+  "2013-04": 169,
+  "2013-05": 252,
+  "2013-06": 400,
+  "2013-07": 29,
+  "2013-08": 19,
+  "2013-09": 141,
+  "2013-10": 167,
+  "2013-11": 278,
+  "2013-12": 380,
+  "2014-02": 135
+ },
+ "motion_outcomes_top": {
+  "Határozathozatal módosítókról": 19616,
+  "önálló indítvány elfogadva": 1475,
+  "Országgyűlés az interpellációs választ elfogadta": 679,
+  "Részletes vitára bocsátás": 609,
+  "Sürgős kihirdetés kérése": 215,
+  "ülés napirendjének módosítása/kiegészítése": 172,
+  "Sürgősség elfogadva": 123,
+  "Az OGY nem veszi tárgysorozatba": 116,
+  "mentelmi jog fenntartva": 105,
+  "Házszabálytól eltéréshez  hozzájárulás": 69,
+  "Országgyűlés időkeretben történő tárgyaláshoz hozzájárult": 64,
+  "határozati házszabályi rendelkezésektől való eltéréshez hozzájárulás elfogadva": 47
+ },
+ "motion_prefixes": {
+  "T": 21245,
+  "H": 1375,
+  "I": 684,
+  "J": 52,
+  "P": 24,
+  "Ü": 13,
+  "V": 13,
+  "amendment": 1
+ },
+ "kiveteles_votes": 0,
+ "surgos_votes": 0,
+ "interpellation_answers": 679,
+ "hazszabalytol_elteres_votes": 47,
+ "mps": {
+  "total": 199,
+  "by_faction": {
+   "TISZA": 141,
+   "Fidesz": 44,
+   "KDNP": 8,
+   "Mi Hazánk": 6
+  },
+  "by_mandate": {
+   "egyeni": 106,
+   "lista": 93
+  }
+ },
+ "sitting_days": {
+  "count": 342,
+  "first": "2010-05-14",
+  "last": "2014-02-13",
+  "by_session": {
+   "2011. évi őszi": 46,
+   "2012. évi tavaszi": 41,
+   "2013. évi tavaszi": 39,
+   "2013. évi őszi": 38,
+   "2011. évi tavaszi": 36,
+   "2012. évi őszi": 34,
+   "2010. évi őszi": 32,
+   "2010. évi tavaszi": 15,
+   "2010. évi nyári rendkívüli": 13,
+   "2012. évi nyári rendkívüli": 13,
+   "2011. évi nyári rendkívüli": 9,
+   "2013. évi nyári rendkívüli": 9,
+   "2011. évi téli rendkívüli": 7,
+   "2014. évi tavaszi": 4,
+   "2010. téli rendkívüli": 3,
+   "2013. évi téli rendkívüli": 2,
+   "2012. évi téli rendkívüli": 1
+  },
+  "by_kind": {
+   "Rendes": 285,
+   "Rendkívüli": 57
+  }
+ }
+}

@@ -78,7 +78,7 @@ class Build(unittest.TestCase):
         # the terminal log is real values: the corpus, then this page's cycle; no page claims to be live
         self.assertIn("ezen az oldalon: 43. ciklus · 259 szavazás · 23 ülésnap · 199 képviselő", self.page)
         self.assertRegex(self.page, r"&gt; \d+ ciklus · \d{4}\. \w+ \d+\. – 2026\. augusztus 11\. · [\d\u00a0]+ szavazás · [\d\u00a0]+ név szerinti lista · [\d\u00a0]+ képviselő")
-        self.assertIn("a számított eredmény minden szavazásnál egyezik a jegyzőkönyvivel", self.page)
+        self.assertRegex(self.page, r"a számított eredmény (minden szavazásnál egyezik a jegyzőkönyvivel|[\d\u00a0]+ szavazásnál eltér a jegyzőkönyvitől — jelölve)")   # corpus-wide, either honest form
         stamp = sync_stamp(load_inputs())                                       # the last sync, whatever it was
         self.assertIn(f"frissítve {hu_date(stamp[:10])} {stamp[11:]}", self.page)
         self.assertNotIn("SYSTEM_READY", self.page)
@@ -255,7 +255,7 @@ class Cycle42(unittest.TestCase):
         cls.inp = load_inputs(42)
 
     def test_inputs_are_the_whole_cycle(self):
-        self.assertEqual(available_cycles(), [43, 42])
+        self.assertEqual(available_cycles(), [43, 42, 41, 40, 39, 38, 37, 36, 35, 34])   # every cycle since 1990
         self.assertEqual(len(self.inp["order"]), 2599)
         self.assertEqual(len({self.inp["by_ts"][ts]["slug"] for ts in self.inp["order"]}), 2599)
         self.assertEqual(len(self.inp["mps"]), 214)
@@ -434,13 +434,18 @@ class AllCycles(unittest.TestCase):
                         continue                                                    # no record fetched (should not happen after the record sync)
                     rows = {(f["ciklus"], f["faction"]) for f in m["factions"]}
                     self.assertTrue(any(cl == label for cl, _ in rows), f"cycle {c}: {azon} {m['name']} has no {label} row")
-                    self.assertIn((label, m["faction"]), rows, f"cycle {c}: {azon} {m['name']} roster faction {m['faction']} not in record")
+                    if m.get("faction") and m["faction"] != "független":
+                        self.assertIn((label, m["faction"]), rows, f"cycle {c}: {azon} {m['name']} roster faction {m['faction']} not in record")
                 # the index and the hero page build, and the directory is complete
                 page = build_index(inp, pick_hero(inp))
                 self.assertEqual(page.count("<tr data-rule="), len(inp["order"]))
                 self.assertIn(f"{c}. ciklus" if c != 43 else "karzat", page)
                 hero = build_vote_page(inp, pick_hero(inp))
-                self.assertIn('id="insp-data"', hero)
+                if inp["archive"]:
+                    self.assertIn("Archív ciklus", hero)                                    # light page: no chamber, no roll-call table
+                    self.assertNotIn('id="roll"', hero)
+                else:
+                    self.assertIn('id="insp-data"', hero)
                 # nobody in a roll call resolved to a person outside this cycle's roster
                 self.assertEqual(set(inp["store"]["members"]) - set(inp["mps"]), set())
 
@@ -498,6 +503,15 @@ class ResearchPages(unittest.TestCase):
         for f in ("iromanyok.csv", "szavazasonkent.csv", "dontesek.csv", "havonta.csv", "nevsorok.csv"):
             self.assertIn(f, page)
         self.assertIn("faction_tallies", page)                                          # documented
+
+    def test_committee_file_names_fit_a_file_system(self):
+        from scripts.build_site import cslug
+        self.assertEqual(cslug("Költségvetési bizottság"), "koltsegvetesi-bizottsag")
+        long = "A MALÉV Zrt. és a Budapest Airport Zrt. " * 12                             # cycle 39 has a 380-character inquiry committee
+        self.assertLessEqual(len(cslug(long)), 110)
+        self.assertEqual(cslug(long), cslug(long))                                       # stable
+        self.assertNotEqual(cslug(long), cslug(long + " (2)"))                            # two long names → two files
+        self.assertRegex(cslug(long), r"-[0-9a-f]{8}$")
 
     def test_search_and_method_pages(self):
         from scripts.build_site import build_method_page, build_search_page

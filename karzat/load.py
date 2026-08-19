@@ -30,6 +30,7 @@ from .normalise import (
     NameResolver,
     cycle_of_date as _cycle_of_date,
     record_histories,
+    seats_in_force,
     parse_iromany,
     parse_iromanyok,
     parse_kepviselo,
@@ -287,8 +288,8 @@ class Loader:
         self.stats["votes_listed"] += n
         return n
 
-    def load_vote_detail(self, payload: dict[str, Any], resolver: NameResolver | None) -> str | None:
-        v = parse_szavazas(payload, resolver=resolver)
+    def load_vote_detail(self, payload: dict[str, Any], resolver: NameResolver | None, seats_fn=None) -> str | None:
+        v = parse_szavazas(payload, resolver=resolver, seats_fn=seats_fn)
         if not v["ts"]:
             return None
         self._vote_row(v, detail=True)
@@ -437,10 +438,11 @@ def build_from_cache(cache: Path, db_path: Path, wikidata_snapshot: Path | None 
                 continue
             L.load_vote_list(_load_xml(p))
         resolver = NameResolver(mps, aliases=aliases, histories=histories) if mps else None
+        seats_fn = seats_in_force(histories)
         for p in sorted((cache / "szavazas").glob("*.xml")):
             if since and p.stem[:10] < since:
                 continue
-            L.load_vote_detail(_load_xml(p), resolver)
+            L.load_vote_detail(_load_xml(p), resolver, seats_fn)
         for p in sorted((cache / "felszolalasok").glob("ckl*_nap*.xml")):
             m = re.match(r"ckl(\d+)_nap(\d+)$", p.stem)
             if m:

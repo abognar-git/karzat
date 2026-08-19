@@ -196,12 +196,19 @@ def build() -> list[tuple[str, list]]:
         ("{:,.0f}\nfaction-history rows and {:,.0f} mandates back to 1990, {:,.0f} sitting days, {:,.0f} votes of which\n{:,.0f} carry a roll call — {:,.0f} positions, {:,.0f} unresolved names — {:,.0f} motions, {:,.0f} bills, and\n{:,.0f} rows of `vote_faction_majority`",
          [dbs["mp_faction_rows"], dbs["mp_mandates"], dbs["sitting_days"], dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"],
           dbs["positions_unresolved"], dbs["vote_motions"], dbs["bills"], dbs["faction_majorities"]]),
-        ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across two cycles and {:,.0f} roll calls, not {:,.0f}", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"]]),
+        ("`stats`: {:,.0f} votes where the computed threshold and the\nrecorded result disagree — now across ten cycles and {:,.0f} roll calls, not {:,.0f} (each of the\n{:,.0f} is marked", [dbs["rule_source_disagreements"], dbs["votes_with_roll_call"], vi["details_cached"], dbs["rule_source_disagreements"]]),
         # speeches — data/derived/speeches*.json.gz
         ("agrees with it for {:,.0f} of {:,.0f} cycle-43 MPs and {:,.0f} of {:,.0f} in cycle 42",
          [sp43.get("record_check", {}).get("agree", 0), sp43.get("record_check", {}).get("mps", 0), sp42.get("record_check", {}).get("agree", 0), sp42.get("record_check", {}).get("mps", 0)]),
         ("Cycle 43: {:,.0f} rows over {:,.0f} sitting days, {:,.0f} substantive; cycle 42: {:,.0f} rows over {:,.0f} days",
          [sp43.get("count", 0), len(sp43.get("days") or []), sp43.get("substantive", 0), sp42.get("count", 0), len(sp42.get("days") or [])]),
+        # the whole corpus — scripts.build_site.site_totals()
+        ("{:,.0f} votes over ten cycles", [__import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["votes"]]),
+        ("{:,.0f} of them roll calls that name the members", [__import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["roll_calls"]]),
+        ("their rosters come from the records ({:,.0f} and {:,.0f} people); {:,.0f} people in all",
+         [len(_json.loads((ROOT / "data" / "derived" / "mps_ckl34.json").read_text(encoding="utf-8"))["mps"]), len(_json.loads((ROOT / "data" / "derived" / "mps_ckl35.json").read_text(encoding="utf-8"))["mps"]),
+          __import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["people"]]),
+        ("Rule vs source across the corpus: {:,.0f} disagreements in {:,.0f}", [__import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["disagreements"], __import__("scripts.build_site", fromlist=["site_totals"]).site_totals()["votes"]]),
         # committees and the district annex
         ("caches the {:,.0f} committees' records", [len(_json.loads((ROOT / "data" / "derived" / "committees.json").read_text(encoding="utf-8"))["list"])]),
         ("parsed into {:,.0f} OEVK and {:,.0f} settlement/district names; the {:,.0f} cities and districts the annex splits by streets",

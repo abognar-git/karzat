@@ -185,7 +185,7 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("kind", "dontes | jelenlet (jelenlét megállapítása)"),
             ("secret", "titkos szavazás (nincs név szerinti lista)"),
             ("igen, nem, tartozkodott, osszes_szavazat", "az API összesítése"),
-            ("present", "jelenlévők: igen + nem + tartózkodott + jelen, nem szavazott (névsorból), különben az „Összes szavazat”"),
+            ("present", "jelenlévők = a leadott szavazatok: igen + nem + tartózkodott (a névsorból; ez az API „Összes szavazat” mezője is) — a „jelen, nem szavazott” nincs benne"),
             ("rule, needed, base, margin", "a szabály kódja (egyszeru, abszolut, ketharmad_jelenlevo, ketharmad_osszes, negyotod_jelenlevo, negyotod_osszes), a küszöb, az alap, igen − küszöb"),
             ("result, passed", "„Elfogadás” az API szerint; igaz/hamis ahol döntés"),
             ("computed_agrees", "a számított eredmény egyezik-e a forráséval"),

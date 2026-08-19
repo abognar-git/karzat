@@ -1,12 +1,12 @@
 {
- "derived_at": "2026-08-18T18:56:12.989859+02:00",
- "last_sync_at": "2026-08-18T18:56:12.989859+02:00",
+ "derived_at": "2026-08-19T07:33:44.335267+02:00",
+ "last_sync_at": "2026-08-19T07:33:44.335267+02:00",
  "seats": 199,
  "since": "2026-05-01",
  "window": {
   "from": "2026-05-09",
   "to": "2026-08-11",
-  "list_files": 147
+  "list_files": 447
  },
  "votes": [
   {
@@ -33,8 +33,8 @@
     "nem_szavazott": 2,
     "tartozkodott": 4
    },
-   "present": 197,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -97,8 +97,8 @@
     "jelen_nem_szavazott": 4,
     "nem_szavazott": 2
    },
-   "present": 197,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 193,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -141,12 +141,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 197,
-    "needed": 99,
-    "margin": 94,
+    "base": 193,
+    "needed": 97,
+    "margin": 96,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -183,8 +183,8 @@
     "jelen_nem_szavazott": 7,
     "nem_szavazott": 4
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 188,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -227,12 +227,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 90,
+    "base": 188,
+    "needed": 95,
+    "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -269,8 +269,8 @@
     "jelen_nem_szavazott": 4,
     "nem_szavazott": 3
    },
-   "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -313,12 +313,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 196,
-    "needed": 99,
-    "margin": 93,
+    "base": 192,
+    "needed": 97,
+    "margin": 95,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -437,7 +437,7 @@
     "nem_szavazott": 6
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -485,7 +485,7 @@
     "margin": 96,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -522,7 +522,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -570,7 +570,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -607,7 +607,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -655,7 +655,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -692,7 +692,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -740,7 +740,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -777,8 +777,8 @@
     "jelen_nem_szavazott": 3,
     "nem_szavazott": 4
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -821,12 +821,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 94,
+    "base": 192,
+    "needed": 97,
+    "margin": 95,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -863,7 +863,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -911,7 +911,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -948,7 +948,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -996,7 +996,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1033,7 +1033,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1081,7 +1081,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1118,8 +1118,8 @@
     "jelen_nem_szavazott": 1,
     "nem_szavazott": 4
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 194,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1162,12 +1162,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
+    "base": 194,
     "needed": 98,
     "margin": 96,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1204,7 +1204,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1252,7 +1252,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1289,7 +1289,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1337,7 +1337,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1374,8 +1374,8 @@
     "nem_szavazott": 4,
     "jelen_nem_szavazott": 2
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 193,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1418,12 +1418,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 95,
+    "base": 193,
+    "needed": 97,
+    "margin": 96,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1460,7 +1460,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1508,7 +1508,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1545,7 +1545,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1593,7 +1593,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1630,7 +1630,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1678,7 +1678,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1715,7 +1715,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1763,7 +1763,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1800,8 +1800,8 @@
     "jelen_nem_szavazott": 5,
     "nem_szavazott": 4
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 190,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1844,12 +1844,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 92,
+    "base": 190,
+    "needed": 96,
+    "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1886,7 +1886,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -1934,7 +1934,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -1971,7 +1971,7 @@
     "nem_szavazott": 4
    },
    "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2019,7 +2019,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2056,8 +2056,8 @@
     "jelen_nem_szavazott": 3,
     "nem_szavazott": 4
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2100,12 +2100,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 94,
+    "base": 192,
+    "needed": 97,
+    "margin": 95,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2143,8 +2143,8 @@
     "jelen_nem_szavazott": 2,
     "nem": 6
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 193,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2187,12 +2187,12 @@
     "rule": "negyotod_jelenlevo",
     "label_hu": "Jelenlévők négyötöde",
     "source": "payload",
-    "base": 195,
-    "needed": 156,
-    "margin": 31,
+    "base": 193,
+    "needed": 155,
+    "margin": 32,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2230,8 +2230,8 @@
     "jelen_nem_szavazott": 2,
     "nem": 6
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 193,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2274,12 +2274,12 @@
     "rule": "negyotod_jelenlevo",
     "label_hu": "Jelenlévők négyötöde",
     "source": "payload",
-    "base": 195,
-    "needed": 156,
-    "margin": 31,
+    "base": 193,
+    "needed": 155,
+    "margin": 32,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2316,7 +2316,7 @@
     "nem_szavazott": 3
    },
    "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2364,7 +2364,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2403,7 +2403,7 @@
     "nem_szavazott": 3
    },
    "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2451,7 +2451,7 @@
     "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2489,7 +2489,7 @@
     "nem": 6
    },
    "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2537,7 +2537,7 @@
     "margin": 91,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2574,7 +2574,7 @@
     "nem_szavazott": 3
    },
    "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2622,7 +2622,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2659,7 +2659,7 @@
     "nem_szavazott": 3
    },
    "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2707,7 +2707,7 @@
     "margin": 97,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2746,8 +2746,8 @@
     "nem_szavazott": 3,
     "tartozkodott": 1
    },
-   "present": 196,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 195,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2795,7 +2795,7 @@
     "margin": 40,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2834,8 +2834,8 @@
     "nem_szavazott": 4,
     "nem": 48
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2883,7 +2883,7 @@
     "margin": 39,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -2923,7 +2923,7 @@
     "nem": 50
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -2971,7 +2971,7 @@
     "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3010,8 +3010,8 @@
     "nem_szavazott": 4,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3054,12 +3054,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 44,
+    "base": 189,
+    "needed": 95,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3099,8 +3099,8 @@
     "nem_szavazott": 4,
     "jelen_nem_szavazott": 3
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3143,12 +3143,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 44,
+    "base": 187,
+    "needed": 94,
+    "margin": 46,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3188,8 +3188,8 @@
     "nem": 47,
     "jelen_nem_szavazott": 4
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3232,12 +3232,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 43,
+    "base": 186,
+    "needed": 94,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3277,8 +3277,8 @@
     "nem": 42,
     "nem_szavazott": 4
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3321,12 +3321,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 42,
+    "base": 186,
+    "needed": 94,
+    "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3365,8 +3365,8 @@
     "nem": 48,
     "nem_szavazott": 2
    },
-   "present": 192,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3409,12 +3409,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 192,
-    "needed": 97,
-    "margin": 42,
+    "base": 187,
+    "needed": 94,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3453,8 +3453,8 @@
     "nem": 51,
     "jelen_nem_szavazott": 2
    },
-   "present": 192,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 190,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3497,12 +3497,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 192,
-    "needed": 97,
-    "margin": 42,
+    "base": 190,
+    "needed": 96,
+    "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3542,8 +3542,8 @@
     "tartozkodott": 7,
     "nem_szavazott": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3586,12 +3586,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
-    "needed": 97,
-    "margin": 42,
+    "base": 189,
+    "needed": 95,
+    "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3631,8 +3631,8 @@
     "nem_szavazott": 1,
     "igen": 7
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 190,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3675,12 +3675,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
-    "needed": 97,
-    "margin": -90,
+    "base": 190,
+    "needed": 96,
+    "margin": -89,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3770,8 +3770,8 @@
     "nem_szavazott": 1,
     "tartozkodott": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3814,12 +3814,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
+    "base": 192,
     "needed": 97,
     "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3859,7 +3859,7 @@
     "nem_szavazott": 1
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -3907,7 +3907,7 @@
     "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -3997,8 +3997,8 @@
     "jelen_nem_szavazott": 2,
     "nem_szavazott": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 191,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4041,12 +4041,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
-    "needed": 97,
-    "margin": 49,
+    "base": 191,
+    "needed": 96,
+    "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4086,7 +4086,7 @@
     "nem_szavazott": 1
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4134,7 +4134,7 @@
     "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4174,7 +4174,7 @@
     "nem_szavazott": 1
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4222,7 +4222,7 @@
     "margin": -44,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4312,7 +4312,7 @@
     "nem_szavazott": 1
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4360,7 +4360,7 @@
     "margin": 49,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4400,7 +4400,7 @@
     "nem_szavazott": 1
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4448,7 +4448,7 @@
     "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4537,8 +4537,8 @@
     "jelen_nem_szavazott": 2,
     "nem_szavazott": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 191,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4581,12 +4581,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
-    "needed": 97,
-    "margin": 50,
+    "base": 191,
+    "needed": 96,
+    "margin": 51,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4626,8 +4626,8 @@
     "tartozkodott": 7,
     "nem_szavazott": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4670,12 +4670,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
+    "base": 192,
     "needed": 97,
     "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4764,8 +4764,8 @@
     "nem": 24,
     "nem_szavazott": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4808,12 +4808,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
+    "base": 192,
     "needed": 97,
     "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4853,7 +4853,7 @@
     "nem_szavazott": 2
    },
    "present": 192,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4901,7 +4901,7 @@
     "margin": -119,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -4940,8 +4940,8 @@
     "nem_szavazott": 4,
     "nem": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 188,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -4984,12 +4984,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 91,
+    "base": 188,
+    "needed": 95,
+    "margin": 92,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5029,8 +5029,8 @@
     "tartozkodott": 39,
     "nem": 2
    },
-   "present": 181,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 172,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5073,12 +5073,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 181,
-    "needed": 91,
-    "margin": 40,
+    "base": 172,
+    "needed": 87,
+    "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5118,8 +5118,8 @@
     "nem": 37,
     "tartozkodott": 5
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 175,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5162,12 +5162,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 41,
+    "base": 175,
+    "needed": 88,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5207,7 +5207,7 @@
     "tartozkodott": 1
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5255,7 +5255,7 @@
     "margin": 36,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5293,7 +5293,7 @@
     "nem_szavazott": 5
    },
    "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5341,7 +5341,7 @@
     "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5381,8 +5381,8 @@
     "bejelentett_hianyzo": 7,
     "nem": 43
    },
-   "present": 181,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 159,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5425,12 +5425,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 181,
-    "needed": 91,
-    "margin": 25,
+    "base": 159,
+    "needed": 80,
+    "margin": 36,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5469,8 +5469,8 @@
     "bejelentett_hianyzo": 7,
     "nem": 44
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 163,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5513,12 +5513,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 27,
+    "base": 163,
+    "needed": 82,
+    "margin": 37,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5558,8 +5558,8 @@
     "tartozkodott": 29,
     "nem": 11
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 169,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5602,12 +5602,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 37,
+    "base": 169,
+    "needed": 85,
+    "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5646,8 +5646,8 @@
     "nem_szavazott": 9,
     "nem": 36
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 165,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5690,12 +5690,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 37,
+    "base": 165,
+    "needed": 83,
+    "margin": 46,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5735,8 +5735,8 @@
     "jelen_nem_szavazott": 14,
     "nem": 39
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 168,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5779,12 +5779,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 36,
+    "base": 168,
+    "needed": 85,
+    "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5824,8 +5824,8 @@
     "nem": 37,
     "tartozkodott": 5
    },
-   "present": 180,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 171,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5868,12 +5868,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 180,
-    "needed": 91,
-    "margin": 38,
+    "base": 171,
+    "needed": 86,
+    "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -5913,8 +5913,8 @@
     "nem": 1,
     "jelen_nem_szavazott": 4
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -5957,12 +5957,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 46,
+    "base": 186,
+    "needed": 94,
+    "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6001,8 +6001,8 @@
     "tartozkodott": 45,
     "jelen_nem_szavazott": 4
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6045,12 +6045,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 46,
+    "base": 187,
+    "needed": 94,
+    "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6089,8 +6089,8 @@
     "tartozkodott": 45,
     "jelen_nem_szavazott": 4
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6133,12 +6133,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 46,
+    "base": 187,
+    "needed": 94,
+    "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6177,8 +6177,8 @@
     "tartozkodott": 44,
     "jelen_nem_szavazott": 4
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6221,12 +6221,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 47,
+    "base": 187,
+    "needed": 94,
+    "margin": 49,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6265,8 +6265,8 @@
     "nem_szavazott": 1,
     "jelen_nem_szavazott": 2
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6309,12 +6309,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 191,
-    "needed": 128,
-    "margin": 61,
+    "base": 189,
+    "needed": 126,
+    "margin": 63,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6353,8 +6353,8 @@
     "nem_szavazott": 1,
     "jelen_nem_szavazott": 2
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6397,12 +6397,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 93,
+    "base": 189,
+    "needed": 95,
+    "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6441,8 +6441,8 @@
     "nem_szavazott": 1,
     "jelen_nem_szavazott": 2
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6485,12 +6485,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 191,
-    "needed": 128,
-    "margin": 61,
+    "base": 189,
+    "needed": 126,
+    "margin": 63,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6529,8 +6529,8 @@
     "nem_szavazott": 1,
     "jelen_nem_szavazott": 2
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6573,12 +6573,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 93,
+    "base": 189,
+    "needed": 95,
+    "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6618,8 +6618,8 @@
     "nem_szavazott": 4,
     "nem": 47
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 169,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6662,12 +6662,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 28,
+    "base": 169,
+    "needed": 85,
+    "margin": 37,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6709,8 +6709,8 @@
     "tartozkodott": 5,
     "nem": 44
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 175,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6753,12 +6753,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 186,
-    "needed": 94,
-    "margin": 32,
+    "base": 175,
+    "needed": 88,
+    "margin": 38,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6798,8 +6798,8 @@
     "nem_szavazott": 4,
     "nem": 47
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 174,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6842,12 +6842,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 32,
+    "base": 174,
+    "needed": 88,
+    "margin": 38,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6886,8 +6886,8 @@
     "nem_szavazott": 7,
     "nem": 44
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 171,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -6930,12 +6930,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 184,
-    "needed": 93,
-    "margin": 34,
+    "base": 171,
+    "needed": 86,
+    "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -6975,8 +6975,8 @@
     "nem_szavazott": 6,
     "nem": 47
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 179,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7019,12 +7019,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
-    "needed": 93,
-    "margin": 39,
+    "base": 179,
+    "needed": 90,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7063,8 +7063,8 @@
     "nem_szavazott": 6,
     "nem": 45
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 176,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7107,12 +7107,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
-    "needed": 93,
-    "margin": 38,
+    "base": 176,
+    "needed": 89,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7151,8 +7151,8 @@
     "jelen_nem_szavazott": 4,
     "nem_szavazott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 181,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7195,12 +7195,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
-    "needed": 93,
-    "margin": 88,
+    "base": 181,
+    "needed": 91,
+    "margin": 90,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7239,8 +7239,8 @@
     "jelen_nem_szavazott": 3,
     "nem_szavazott": 5
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7283,12 +7283,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 186,
-    "needed": 94,
-    "margin": 89,
+    "base": 183,
+    "needed": 92,
+    "margin": 91,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7314,8 +7314,8 @@
     "nem_szavazott": 5,
     "bejelentett_hianyzo": 1
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7358,12 +7358,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 193,
-    "needed": 97,
-    "margin": 90,
+    "base": 187,
+    "needed": 94,
+    "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7402,8 +7402,8 @@
     "jelen_nem_szavazott": 1,
     "nem": 50
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7446,12 +7446,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 193,
-    "needed": 129,
-    "margin": 13,
+    "base": 192,
+    "needed": 128,
+    "margin": 14,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7490,7 +7490,7 @@
     "nem": 50
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7538,7 +7538,7 @@
     "margin": 14,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7577,7 +7577,7 @@
     "tartozkodott": 1
    },
    "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7625,7 +7625,7 @@
     "margin": 95,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7665,8 +7665,8 @@
     "nem": 46,
     "tartozkodott": 6
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 162,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7709,12 +7709,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 14,
+    "base": 162,
+    "needed": 82,
+    "margin": 28,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7754,8 +7754,8 @@
     "bejelentett_hianyzo": 1,
     "nem": 50
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 160,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7798,12 +7798,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 12,
+    "base": 160,
+    "needed": 81,
+    "margin": 27,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7843,8 +7843,8 @@
     "bejelentett_hianyzo": 1,
     "nem": 48
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 167,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7887,12 +7887,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 191,
-    "needed": 96,
-    "margin": 21,
+    "base": 167,
+    "needed": 84,
+    "margin": 33,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -7932,8 +7932,8 @@
     "nem": 48,
     "tartozkodott": 1
    },
-   "present": 192,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 172,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -7976,12 +7976,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 192,
-    "needed": 97,
-    "margin": 26,
+    "base": 172,
+    "needed": 87,
+    "margin": 36,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8021,8 +8021,8 @@
     "nem": 50,
     "tartozkodott": 6
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 190,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8070,7 +8070,7 @@
     "margin": 1,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8111,8 +8111,8 @@
     "nem": 50,
     "tartozkodott": 6
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 191,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8160,7 +8160,7 @@
     "margin": 2,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8199,8 +8199,8 @@
     "jelen_nem_szavazott": 3,
     "tartozkodott": 50
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 192,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8243,12 +8243,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 44,
+    "base": 192,
+    "needed": 97,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8287,8 +8287,8 @@
     "bejelentett_hianyzo": 1,
     "jelen_nem_szavazott": 2
    },
-   "present": 195,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 193,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8331,12 +8331,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 195,
-    "needed": 98,
-    "margin": 43,
+    "base": 193,
+    "needed": 97,
+    "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8376,8 +8376,8 @@
     "bejelentett_hianyzo": 1,
     "igen": 6
    },
-   "present": 193,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 190,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8420,12 +8420,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 193,
-    "needed": 129,
-    "margin": -123,
+    "base": 190,
+    "needed": 127,
+    "margin": -121,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8465,8 +8465,8 @@
     "tartozkodott": 2,
     "jelen_nem_szavazott": 3
    },
-   "present": 180,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 177,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8509,12 +8509,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 180,
-    "needed": 120,
-    "margin": 21,
+    "base": 177,
+    "needed": 118,
+    "margin": 23,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8553,7 +8553,7 @@
     "nem_szavazott": 3
    },
    "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8601,7 +8601,7 @@
     "margin": 39,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8643,8 +8643,8 @@
     "nem": 46,
     "nem_szavazott": 3
    },
-   "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 190,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8692,7 +8692,7 @@
     "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8732,7 +8732,7 @@
     "nem_szavazott": 3
    },
    "present": 191,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8780,7 +8780,7 @@
     "margin": 11,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8819,8 +8819,8 @@
     "nem_szavazott": 10,
     "nem": 44
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 174,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8863,12 +8863,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 184,
-    "needed": 93,
-    "margin": 37,
+    "base": 174,
+    "needed": 88,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8908,8 +8908,8 @@
     "bejelentett_hianyzo": 5,
     "nem": 45
    },
-   "present": 181,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 162,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -8952,12 +8952,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 181,
-    "needed": 91,
-    "margin": 24,
+    "base": 162,
+    "needed": 82,
+    "margin": 33,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -8996,8 +8996,8 @@
     "nem_szavazott": 12,
     "nem": 45
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 165,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9040,12 +9040,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 28,
+    "base": 165,
+    "needed": 83,
+    "margin": 37,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9084,8 +9084,8 @@
     "bejelentett_hianyzo": 5,
     "nem": 46
    },
-   "present": 180,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9128,12 +9128,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 180,
-    "needed": 91,
-    "margin": 29,
+    "base": 166,
+    "needed": 84,
+    "margin": 36,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9172,8 +9172,8 @@
     "bejelentett_hianyzo": 5,
     "nem": 47
    },
-   "present": 180,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 165,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9216,12 +9216,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 180,
-    "needed": 91,
-    "margin": 27,
+    "base": 165,
+    "needed": 83,
+    "margin": 35,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9261,8 +9261,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9305,12 +9305,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 184,
-    "needed": 123,
-    "margin": -84,
+    "base": 183,
+    "needed": 122,
+    "margin": -83,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9349,8 +9349,8 @@
     "nem_szavazott": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9393,12 +9393,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 184,
-    "needed": 123,
-    "margin": 16,
+    "base": 183,
+    "needed": 122,
+    "margin": 17,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9437,8 +9437,8 @@
     "nem_szavazott": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9481,12 +9481,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 184,
-    "needed": 93,
-    "margin": 46,
+    "base": 183,
+    "needed": 92,
+    "margin": 47,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9526,8 +9526,8 @@
     "nem_szavazott": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9570,12 +9570,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 184,
-    "needed": 123,
-    "margin": 22,
+    "base": 183,
+    "needed": 122,
+    "margin": 23,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9615,8 +9615,8 @@
     "nem_szavazott": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 184,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9659,12 +9659,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 184,
-    "needed": 93,
-    "margin": 52,
+    "base": 183,
+    "needed": 92,
+    "margin": 53,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9703,8 +9703,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9747,12 +9747,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 46,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9791,8 +9791,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9835,12 +9835,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 15,
+    "base": 184,
+    "needed": 123,
+    "margin": 16,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9880,8 +9880,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -9924,12 +9924,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 46,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -9970,8 +9970,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10014,12 +10014,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": -47,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10059,8 +10059,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10103,12 +10103,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 15,
+    "base": 184,
+    "needed": 123,
+    "margin": 16,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10148,8 +10148,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10192,12 +10192,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 46,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10236,8 +10236,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10280,12 +10280,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 21,
+    "base": 184,
+    "needed": 123,
+    "margin": 22,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10324,8 +10324,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10368,12 +10368,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 52,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10412,8 +10412,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 2
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10456,12 +10456,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 21,
+    "base": 183,
+    "needed": 122,
+    "margin": 23,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10500,8 +10500,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10544,12 +10544,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 52,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10588,8 +10588,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10632,12 +10632,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 21,
+    "base": 184,
+    "needed": 123,
+    "margin": 22,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10676,8 +10676,8 @@
     "nem_szavazott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10720,12 +10720,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 52,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10764,8 +10764,8 @@
     "igen": 44,
     "nem_szavazott": 5
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10808,12 +10808,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
-    "needed": 93,
-    "margin": -49,
+    "base": 183,
+    "needed": 92,
+    "margin": -48,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10853,8 +10853,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10897,12 +10897,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": -54,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -10942,8 +10942,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -10986,12 +10986,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 16,
+    "base": 184,
+    "needed": 123,
+    "margin": 17,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11031,8 +11031,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11075,12 +11075,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
+    "base": 184,
     "needed": 93,
     "margin": 46,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11120,8 +11120,8 @@
     "jelen_nem_szavazott": 1,
     "tartozkodott": 3
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11164,12 +11164,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 185,
-    "needed": 124,
-    "margin": 18,
+    "base": 184,
+    "needed": 123,
+    "margin": 19,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11209,8 +11209,8 @@
     "jelen_nem_szavazott": 2,
     "tartozkodott": 3
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11253,12 +11253,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 186,
-    "needed": 94,
-    "margin": 48,
+    "base": 184,
+    "needed": 93,
+    "margin": 49,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11297,8 +11297,8 @@
     "nem_szavazott": 4,
     "jelen_nem_szavazott": 1
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 185,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11341,12 +11341,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 186,
+    "base": 185,
     "needed": 124,
     "margin": -78,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11385,8 +11385,8 @@
     "nem_szavazott": 4,
     "jelen_nem_szavazott": 1
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 185,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11429,12 +11429,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 186,
+    "base": 185,
     "needed": 124,
     "margin": 21,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11474,8 +11474,8 @@
     "nem": 35,
     "tartozkodott": 5
    },
-   "present": 175,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 172,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11518,12 +11518,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 175,
-    "needed": 88,
-    "margin": 44,
+    "base": 172,
+    "needed": 87,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11563,8 +11563,8 @@
     "nem": 36,
     "tartozkodott": 5
    },
-   "present": 175,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 171,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11607,12 +11607,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 175,
-    "needed": 88,
-    "margin": 42,
+    "base": 171,
+    "needed": 86,
+    "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11655,8 +11655,8 @@
     "nem": 30,
     "tartozkodott": 6
    },
-   "present": 163,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 159,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11699,12 +11699,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 163,
-    "needed": 82,
-    "margin": 41,
+    "base": 159,
+    "needed": 80,
+    "margin": 43,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11749,7 +11749,7 @@
     "nem_szavazott": 1
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11797,7 +11797,7 @@
     "margin": 38,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11837,7 +11837,7 @@
     "nem": 7
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11885,7 +11885,7 @@
     "margin": 10,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -11925,7 +11925,7 @@
     "nem_szavazott": 1
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -11973,7 +11973,7 @@
     "margin": 58,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12012,8 +12012,8 @@
     "jelen_nem_szavazott": 9,
     "nem": 52
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 176,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12056,12 +12056,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
-    "needed": 93,
-    "margin": 31,
+    "base": 176,
+    "needed": 89,
+    "margin": 35,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12101,8 +12101,8 @@
     "nem": 26,
     "tartozkodott": 23
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 177,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12145,12 +12145,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 34,
+    "base": 177,
+    "needed": 89,
+    "margin": 39,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12190,8 +12190,8 @@
     "nem_szavazott": 8,
     "nem": 49
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 173,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12234,12 +12234,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 31,
+    "base": 173,
+    "needed": 87,
+    "margin": 36,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12279,8 +12279,8 @@
     "nem": 49,
     "tartozkodott": 1
    },
-   "present": 179,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 168,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12323,12 +12323,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 179,
-    "needed": 90,
-    "margin": 28,
+    "base": 168,
+    "needed": 85,
+    "margin": 33,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12367,8 +12367,8 @@
     "nem_szavazott": 13,
     "nem": 47
    },
-   "present": 177,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12411,12 +12411,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 177,
-    "needed": 89,
-    "margin": 30,
+    "base": 166,
+    "needed": 84,
+    "margin": 35,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12456,8 +12456,8 @@
     "nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12500,12 +12500,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
+    "base": 186,
     "needed": 94,
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12545,8 +12545,8 @@
     "nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 185,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12589,12 +12589,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 187,
-    "needed": 125,
-    "margin": 10,
+    "base": 185,
+    "needed": 124,
+    "margin": 11,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12634,8 +12634,8 @@
     "nem_szavazott": 1,
     "tartozkodott": 6
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 185,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12678,12 +12678,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 41,
+    "base": 185,
+    "needed": 93,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12724,8 +12724,8 @@
     "jelen_nem_szavazott": 1,
     "nem_szavazott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12768,12 +12768,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
+    "base": 186,
     "needed": 94,
     "margin": -43,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12812,8 +12812,8 @@
     "jelen_nem_szavazott": 1,
     "nem_szavazott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12856,12 +12856,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
+    "base": 186,
     "needed": 94,
     "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12900,8 +12900,8 @@
     "jelen_nem_szavazott": 1,
     "nem_szavazott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -12944,12 +12944,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 187,
-    "needed": 125,
-    "margin": 10,
+    "base": 186,
+    "needed": 124,
+    "margin": 11,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -12988,8 +12988,8 @@
     "jelen_nem_szavazott": 1,
     "nem_szavazott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13032,12 +13032,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
+    "base": 186,
     "needed": 94,
     "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13083,8 +13083,8 @@
     "nem": 1,
     "nem_szavazott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13127,12 +13127,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
+    "base": 186,
     "needed": 94,
     "margin": 91,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13171,8 +13171,8 @@
     "bejelentett_hianyzo": 6,
     "nem": 52
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13215,12 +13215,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": 10,
+    "base": 189,
+    "needed": 126,
+    "margin": 11,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13260,8 +13260,8 @@
     "nem": 47,
     "tartozkodott": 5
    },
-   "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 185,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13304,12 +13304,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 189,
-    "needed": 95,
-    "margin": 38,
+    "base": 185,
+    "needed": 93,
+    "margin": 40,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13348,8 +13348,8 @@
     "bejelentett_hianyzo": 6,
     "nem": 49
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 181,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13392,12 +13392,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 38,
+    "base": 181,
+    "needed": 91,
+    "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13437,8 +13437,8 @@
     "nem": 49,
     "tartozkodott": 1
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 180,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13481,12 +13481,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 186,
-    "needed": 94,
-    "margin": 36,
+    "base": 180,
+    "needed": 91,
+    "margin": 39,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13525,8 +13525,8 @@
     "bejelentett_hianyzo": 6,
     "nem": 49
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 183,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13569,12 +13569,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 40,
+    "base": 183,
+    "needed": 92,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13613,8 +13613,8 @@
     "jelen_nem_szavazott": 3,
     "nem": 49
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13657,12 +13657,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 41,
+    "base": 184,
+    "needed": 93,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13702,8 +13702,8 @@
     "nem": 49,
     "tartozkodott": 1
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13746,12 +13746,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 186,
-    "needed": 94,
-    "margin": 40,
+    "base": 184,
+    "needed": 93,
+    "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13789,8 +13789,8 @@
     "nem_szavazott": 3,
     "jelen_nem_szavazott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13833,12 +13833,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
+    "base": 186,
     "needed": 94,
     "margin": 92,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13876,8 +13876,8 @@
     "nem_szavazott": 2,
     "jelen_nem_szavazott": 1
    },
-   "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -13920,12 +13920,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 188,
-    "needed": 126,
-    "margin": 61,
+    "base": 187,
+    "needed": 125,
+    "margin": 62,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -13963,7 +13963,7 @@
     "nem_szavazott": 2
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14011,7 +14011,7 @@
     "margin": 62,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14049,7 +14049,7 @@
     "nem_szavazott": 2
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14097,7 +14097,7 @@
     "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14136,7 +14136,7 @@
     "igen": 47
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14184,7 +14184,7 @@
     "margin": -48,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14222,7 +14222,7 @@
     "nem_szavazott": 2
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14270,7 +14270,7 @@
     "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14309,7 +14309,7 @@
     "tartozkodott": 8
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14357,7 +14357,7 @@
     "margin": 54,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14395,7 +14395,7 @@
     "nem_szavazott": 2
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14443,7 +14443,7 @@
     "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14483,7 +14483,7 @@
     "tartozkodott": 53
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14531,7 +14531,7 @@
     "margin": 40,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14570,7 +14570,7 @@
     "tartozkodott": 6
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14618,7 +14618,7 @@
     "margin": 87,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14657,7 +14657,7 @@
     "tartozkodott": 6
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14705,7 +14705,7 @@
     "margin": 87,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14745,7 +14745,7 @@
     "nem": 1
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14793,7 +14793,7 @@
     "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14833,7 +14833,7 @@
     "nem": 1
    },
    "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14881,7 +14881,7 @@
     "margin": 10,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -14921,8 +14921,8 @@
     "jelen_nem_szavazott": 1,
     "nem": 1
    },
-   "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -14965,12 +14965,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 188,
-    "needed": 95,
-    "margin": 40,
+    "base": 187,
+    "needed": 94,
+    "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15009,8 +15009,8 @@
     "bejelentett_hianyzo": 10,
     "tartozkodott": 1
    },
-   "present": 139,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 138,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15053,12 +15053,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 139,
-    "needed": 93,
-    "margin": 44,
+    "base": 138,
+    "needed": 92,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15097,7 +15097,7 @@
     "tartozkodott": 6
    },
    "present": 144,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15145,7 +15145,7 @@
     "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15183,7 +15183,7 @@
     "nem_szavazott": 44
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15231,7 +15231,7 @@
     "margin": 72,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15270,7 +15270,7 @@
     "nem": 6
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15318,7 +15318,7 @@
     "margin": 66,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15357,7 +15357,7 @@
     "nem": 6
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15405,7 +15405,7 @@
     "margin": 66,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15444,7 +15444,7 @@
     "nem": 6
    },
    "present": 143,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15492,7 +15492,7 @@
     "margin": 65,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15531,7 +15531,7 @@
     "igen": 6
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15579,7 +15579,7 @@
     "margin": -127,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15618,7 +15618,7 @@
     "igen": 6
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15666,7 +15666,7 @@
     "margin": -127,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15705,7 +15705,7 @@
     "igen": 6
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15753,7 +15753,7 @@
     "margin": -127,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15791,7 +15791,7 @@
     "nem_szavazott": 44
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15839,7 +15839,7 @@
     "margin": 12,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15878,7 +15878,7 @@
     "nem": 6
    },
    "present": 145,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -15926,7 +15926,7 @@
     "margin": 6,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -15965,7 +15965,7 @@
     "igen": 53
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16013,7 +16013,7 @@
     "margin": -42,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16052,7 +16052,7 @@
     "tartozkodott": 53
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16100,7 +16100,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16139,7 +16139,7 @@
     "tartozkodott": 53
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16187,7 +16187,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16226,7 +16226,7 @@
     "nem": 1
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16274,7 +16274,7 @@
     "margin": 93,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16312,7 +16312,7 @@
     "bejelentett_hianyzo": 7
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16360,7 +16360,7 @@
     "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16401,7 +16401,7 @@
     "igen": 53
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16449,7 +16449,7 @@
     "margin": -42,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16488,7 +16488,7 @@
     "tartozkodott": 2
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16536,7 +16536,7 @@
     "margin": 92,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16575,7 +16575,7 @@
     "tartozkodott": 46
    },
    "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16623,7 +16623,7 @@
     "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16661,8 +16661,8 @@
     "jelen_nem_szavazott": 5,
     "nem_szavazott": 6
    },
-   "present": 186,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 181,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16705,12 +16705,12 @@
     "rule": "abszolut",
     "label_hu": "Abszolút többség",
     "source": "payload",
-    "base": 199,
+    "base": 198,
     "needed": 100,
     "margin": 81,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16750,8 +16750,8 @@
     "nem": 43,
     "tartozkodott": 6
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16794,12 +16794,12 @@
     "rule": "abszolut",
     "label_hu": "Abszolút többség",
     "source": "payload",
-    "base": 199,
+    "base": 198,
     "needed": 100,
     "margin": 35,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16838,8 +16838,8 @@
     "jelen_nem_szavazott": 7,
     "nem": 39
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 180,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16882,12 +16882,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 187,
-    "needed": 125,
-    "margin": 16,
+    "base": 180,
+    "needed": 120,
+    "margin": 21,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -16926,8 +16926,8 @@
     "tartozkodott": 2,
     "jelen_nem_szavazott": 43
    },
-   "present": 185,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 142,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -16970,12 +16970,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 185,
-    "needed": 93,
-    "margin": 47,
+    "base": 142,
+    "needed": 72,
+    "margin": 68,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17014,8 +17014,8 @@
     "jelen_nem_szavazott": 3,
     "tartozkodott": 1
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17058,12 +17058,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 89,
+    "base": 184,
+    "needed": 93,
+    "margin": 90,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17102,8 +17102,8 @@
     "nem_szavazott": 9,
     "nem": 8
    },
-   "present": 183,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 172,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17146,12 +17146,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 183,
-    "needed": 92,
-    "margin": 72,
+    "base": 172,
+    "needed": 87,
+    "margin": 77,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17190,8 +17190,8 @@
     "jelen_nem_szavazott": 22,
     "nem": 44
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 160,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17234,12 +17234,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 24,
+    "base": 160,
+    "needed": 81,
+    "margin": 35,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17278,8 +17278,8 @@
     "jelen_nem_szavazott": 8,
     "nem": 48
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 174,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17322,12 +17322,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 34,
+    "base": 174,
+    "needed": 88,
+    "margin": 38,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17367,8 +17367,8 @@
     "nem": 46,
     "tartozkodott": 1
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 172,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17411,12 +17411,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 33,
+    "base": 172,
+    "needed": 87,
+    "margin": 38,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17454,8 +17454,8 @@
     "jelen_nem_szavazott": 2,
     "nem_szavazott": 5
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 180,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17498,12 +17498,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 88,
+    "base": 180,
+    "needed": 91,
+    "margin": 89,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17541,8 +17541,8 @@
     "jelen_nem_szavazott": 2,
     "nem_szavazott": 5
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 180,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17585,12 +17585,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 88,
+    "base": 180,
+    "needed": 91,
+    "margin": 89,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17629,8 +17629,8 @@
     "nem_szavazott": 18,
     "nem": 26
    },
-   "present": 169,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17673,12 +17673,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 169,
-    "needed": 113,
-    "margin": 27,
+    "base": 166,
+    "needed": 111,
+    "margin": 29,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17718,8 +17718,8 @@
     "nem": 26,
     "tartozkodott": 1
    },
-   "present": 169,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17762,12 +17762,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 169,
-    "needed": 113,
-    "margin": 26,
+    "base": 166,
+    "needed": 111,
+    "margin": 28,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17807,8 +17807,8 @@
     "nem": 25,
     "tartozkodott": 7
    },
-   "present": 169,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17851,12 +17851,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 169,
-    "needed": 85,
-    "margin": 49,
+    "base": 166,
+    "needed": 84,
+    "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -17896,8 +17896,8 @@
     "tartozkodott": 31,
     "nem": 1
    },
-   "present": 169,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -17940,12 +17940,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 169,
-    "needed": 85,
-    "margin": 49,
+    "base": 166,
+    "needed": 84,
+    "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18022,9 +18022,9 @@
     "rule": "ketharmad_osszes",
     "label_hu": "Összes képviselő kétharmada",
     "source": "payload",
-    "base": 199,
-    "needed": 133,
-    "margin": 5,
+    "base": 198,
+    "needed": 132,
+    "margin": 6,
     "passed_by_rule": true,
     "agrees_with_source": true,
     "present_basis": "tulajdonsagok: Összes szavazat (no roll call)"
@@ -18066,8 +18066,8 @@
     "nem_szavazott": 52,
     "nem": 6
    },
-   "present": 142,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 140,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18110,12 +18110,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 142,
-    "needed": 72,
-    "margin": 62,
+    "base": 140,
+    "needed": 71,
+    "margin": 63,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18154,7 +18154,7 @@
     "nem": 7
    },
    "present": 140,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18202,7 +18202,7 @@
     "margin": 62,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18242,7 +18242,7 @@
     "tartozkodott": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18290,7 +18290,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18330,7 +18330,7 @@
     "tartozkodott": 7
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18378,7 +18378,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18416,7 +18416,7 @@
     "nem_szavazott": 3
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18464,7 +18464,7 @@
     "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18502,7 +18502,7 @@
     "nem_szavazott": 3
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18550,7 +18550,7 @@
     "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18589,7 +18589,7 @@
     "igen": 53
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18637,7 +18637,7 @@
     "margin": -43,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18676,7 +18676,7 @@
     "igen": 53
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18724,7 +18724,7 @@
     "margin": -43,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18763,7 +18763,7 @@
     "nem": 46
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18811,7 +18811,7 @@
     "margin": 17,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18850,7 +18850,7 @@
     "nem": 47
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18898,7 +18898,7 @@
     "margin": 47,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -18937,7 +18937,7 @@
     "nem": 47
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -18985,7 +18985,7 @@
     "margin": 16,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19024,8 +19024,8 @@
     "nem": 46,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19068,12 +19068,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 47,
+    "base": 189,
+    "needed": 95,
+    "margin": 48,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19113,7 +19113,7 @@
     "nem": 38
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19161,7 +19161,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19201,8 +19201,8 @@
     "tartozkodott": 14,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19245,12 +19245,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 41,
+    "base": 189,
+    "needed": 95,
+    "margin": 42,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19290,7 +19290,7 @@
     "nem": 23
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19338,7 +19338,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19378,8 +19378,8 @@
     "tartozkodott": 11,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19422,12 +19422,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": 10,
+    "base": 189,
+    "needed": 126,
+    "margin": 11,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19467,7 +19467,7 @@
     "nem": 39
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19515,7 +19515,7 @@
     "margin": 41,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19555,7 +19555,7 @@
     "tartozkodott": 1
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19603,7 +19603,7 @@
     "margin": 16,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19643,7 +19643,7 @@
     "tartozkodott": 1
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19691,7 +19691,7 @@
     "margin": 47,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19717,8 +19717,8 @@
     "jelen_nem_szavazott": 3,
     "bejelentett_hianyzo": 7
    },
-   "present": 187,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19761,12 +19761,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 187,
-    "needed": 94,
-    "margin": 90,
+    "base": 184,
+    "needed": 93,
+    "margin": 91,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19793,8 +19793,8 @@
     "tartozkodott": 4,
     "bejelentett_hianyzo": 7
    },
-   "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 181,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19837,12 +19837,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 188,
-    "needed": 95,
-    "margin": 82,
+    "base": 181,
+    "needed": 91,
+    "margin": 86,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19880,8 +19880,8 @@
     "nem_szavazott": 4,
     "bejelentett_hianyzo": 7
    },
-   "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 181,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -19924,12 +19924,12 @@
     "rule": "negyotod_jelenlevo",
     "label_hu": "Jelenlévők négyötöde",
     "source": "payload",
-    "base": 188,
-    "needed": 151,
-    "margin": 30,
+    "base": 181,
+    "needed": 145,
+    "margin": 36,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -19967,8 +19967,8 @@
     "jelen_nem_szavazott": 2,
     "bejelentett_hianyzo": 7
    },
-   "present": 188,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20011,12 +20011,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 188,
-    "needed": 95,
-    "margin": 91,
+    "base": 186,
+    "needed": 94,
+    "margin": 92,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20056,8 +20056,8 @@
     "nem": 49,
     "bejelentett_hianyzo": 7
    },
-   "present": 182,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 176,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20100,12 +20100,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 182,
-    "needed": 92,
-    "margin": 34,
+    "base": 176,
+    "needed": 89,
+    "margin": 37,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20144,8 +20144,8 @@
     "nem": 50,
     "bejelentett_hianyzo": 7
    },
-   "present": 181,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 176,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20188,12 +20188,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 181,
-    "needed": 91,
-    "margin": 35,
+    "base": 176,
+    "needed": 89,
+    "margin": 37,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20233,8 +20233,8 @@
     "bejelentett_hianyzo": 7,
     "tartozkodott": 1
    },
-   "present": 183,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 177,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20277,12 +20277,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 183,
-    "needed": 92,
-    "margin": 37,
+    "base": 177,
+    "needed": 89,
+    "margin": 40,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20321,8 +20321,8 @@
     "nem": 47,
     "bejelentett_hianyzo": 7
    },
-   "present": 179,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 175,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20365,12 +20365,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 179,
-    "needed": 90,
-    "margin": 38,
+    "base": 175,
+    "needed": 88,
+    "margin": 40,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20410,8 +20410,8 @@
     "bejelentett_hianyzo": 7,
     "tartozkodott": 1
    },
-   "present": 177,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 170,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20454,12 +20454,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 177,
-    "needed": 89,
-    "margin": 37,
+    "base": 170,
+    "needed": 86,
+    "margin": 40,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20498,8 +20498,8 @@
     "jelen_nem_szavazott": 3,
     "tartozkodott": 5
    },
-   "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 186,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20542,12 +20542,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 189,
-    "needed": 95,
-    "margin": 86,
+    "base": 186,
+    "needed": 94,
+    "margin": 87,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20586,8 +20586,8 @@
     "jelen_nem_szavazott": 2,
     "tartozkodott": 5
    },
-   "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20630,12 +20630,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 189,
-    "needed": 95,
-    "margin": 87,
+    "base": 187,
+    "needed": 94,
+    "margin": 88,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20674,8 +20674,8 @@
     "bejelentett_hianyzo": 6,
     "jelen_nem_szavazott": 2
    },
-   "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20718,12 +20718,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 189,
-    "needed": 95,
-    "margin": -48,
+    "base": 187,
+    "needed": 94,
+    "margin": -47,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20763,8 +20763,8 @@
     "jelen_nem_szavazott": 2,
     "nem": 1
    },
-   "present": 189,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20807,12 +20807,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 189,
-    "needed": 95,
-    "margin": 50,
+    "base": 187,
+    "needed": 94,
+    "margin": 51,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20852,8 +20852,8 @@
     "jelen_nem_szavazott": 3,
     "nem": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 187,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20896,12 +20896,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 49,
+    "base": 187,
+    "needed": 94,
+    "margin": 51,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -20940,8 +20940,8 @@
     "bejelentett_hianyzo": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -20984,12 +20984,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 49,
+    "base": 189,
+    "needed": 95,
+    "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21029,8 +21029,8 @@
     "tartozkodott": 1,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21073,12 +21073,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": 13,
+    "base": 189,
+    "needed": 126,
+    "margin": 14,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21117,8 +21117,8 @@
     "bejelentett_hianyzo": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21161,12 +21161,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 44,
+    "base": 189,
+    "needed": 95,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21206,8 +21206,8 @@
     "tartozkodott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21250,12 +21250,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": 13,
+    "base": 189,
+    "needed": 126,
+    "margin": 14,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21295,8 +21295,8 @@
     "tartozkodott": 5,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21339,12 +21339,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 44,
+    "base": 189,
+    "needed": 95,
+    "margin": 45,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21382,8 +21382,8 @@
     "bejelentett_hianyzo": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21426,12 +21426,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 93,
+    "base": 189,
+    "needed": 95,
+    "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21469,7 +21469,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21517,7 +21517,7 @@
     "margin": 94,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21556,7 +21556,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21604,7 +21604,7 @@
     "margin": 19,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21643,7 +21643,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21691,7 +21691,7 @@
     "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21731,7 +21731,7 @@
     "tartozkodott": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21779,7 +21779,7 @@
     "margin": 13,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21819,7 +21819,7 @@
     "tartozkodott": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21867,7 +21867,7 @@
     "margin": 44,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21906,7 +21906,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -21954,7 +21954,7 @@
     "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -21993,7 +21993,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22041,7 +22041,7 @@
     "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22080,8 +22080,8 @@
     "bejelentett_hianyzo": 6,
     "jelen_nem_szavazott": 1
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 189,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22124,12 +22124,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 190,
-    "needed": 96,
-    "margin": 49,
+    "base": 189,
+    "needed": 95,
+    "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22168,7 +22168,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22216,7 +22216,7 @@
     "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22255,7 +22255,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22303,7 +22303,7 @@
     "margin": 50,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22341,7 +22341,7 @@
     "bejelentett_hianyzo": 6
    },
    "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22389,7 +22389,7 @@
     "margin": 63,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22429,8 +22429,8 @@
     "bejelentett_hianyzo": 6,
     "igen": 6
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 168,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22473,12 +22473,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": -121,
+    "base": 168,
+    "needed": 112,
+    "margin": -106,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22518,8 +22518,8 @@
     "nem_szavazott": 3,
     "bejelentett_hianyzo": 6
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 179,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22562,12 +22562,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": -119,
+    "base": 179,
+    "needed": 120,
+    "margin": -112,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22607,8 +22607,8 @@
     "igen": 7,
     "bejelentett_hianyzo": 6
    },
-   "present": 190,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 182,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22651,12 +22651,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 190,
-    "needed": 127,
-    "margin": -120,
+    "base": 182,
+    "needed": 122,
+    "margin": -115,
     "passed_by_rule": false,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22694,8 +22694,8 @@
     "jelen_nem_szavazott": 3,
     "bejelentett_hianyzo": 6
    },
-   "present": 181,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 178,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22738,12 +22738,12 @@
     "rule": "ketharmad_jelenlevo",
     "label_hu": "Jelenlévők kétharmada",
     "source": "payload",
-    "base": 181,
-    "needed": 121,
-    "margin": 57,
+    "base": 178,
+    "needed": 119,
+    "margin": 59,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -22787,8 +22787,8 @@
     "bejelentett_hianyzo": 8,
     "tartozkodott": 5
    },
-   "present": 146,
-   "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+   "present": 145,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
    "faction_tallies": [
     {
      "faction": "TISZA",
@@ -22831,12 +22831,12 @@
     "rule": "egyszeru",
     "label_hu": "Egyszerű többség",
     "source": "payload",
-    "base": 146,
-    "needed": 74,
-    "margin": 66,
+    "base": 145,
+    "needed": 73,
+    "margin": 67,
     "passed_by_rule": true,
     "agrees_with_source": true,
-    "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav"
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
   },
   {
@@ -23069,7 +23069,9 @@
    "weekday": "szombat",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-05-12",
@@ -23077,7 +23079,9 @@
    "weekday": "kedd",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-05-26",
@@ -23085,7 +23089,9 @@
    "weekday": "kedd",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-05-27",
@@ -23093,7 +23099,9 @@
    "weekday": "szerda",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-01",
@@ -23101,7 +23109,9 @@
    "weekday": "hétfő",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-08",
@@ -23109,7 +23119,9 @@
    "weekday": "hétfő",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-09",
@@ -23117,7 +23129,9 @@
    "weekday": "kedd",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-15",
@@ -23125,7 +23139,9 @@
    "weekday": "hétfő",
    "session": "2026. tavaszi",
    "kind": "Rendes",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-16",
@@ -23133,7 +23149,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-22",
@@ -23141,7 +23159,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-23",
@@ -23149,7 +23169,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-29",
@@ -23157,7 +23179,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-06-30",
@@ -23165,7 +23189,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-06",
@@ -23173,7 +23199,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-07",
@@ -23181,7 +23209,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-13",
@@ -23189,7 +23219,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-14",
@@ -23197,7 +23229,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-20",
@@ -23205,7 +23239,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-21",
@@ -23213,7 +23249,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-27",
@@ -23221,7 +23259,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-07-28",
@@ -23229,7 +23269,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-08-10",
@@ -23237,7 +23279,9 @@
    "weekday": "hétfő",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   },
   {
    "date": "2026-08-11",
@@ -23245,7 +23289,9 @@
    "weekday": "kedd",
    "session": "2026. nyári",
    "kind": "Rendkívüli",
-   "remark": null
+   "remark": null,
+   "date_corrected": false,
+   "weekday_conflict": false
   }
  ],
  "disagreements": []

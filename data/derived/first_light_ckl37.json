@@ -1,0 +1,142 @@
+{
+ "derived_at": "2026-08-19T07:33:44.335267+02:00",
+ "window": {
+  "from": "2002-05-15",
+  "to": "2006-03-08",
+  "list_files": 447
+ },
+ "votes": 8362,
+ "decisions": 8358,
+ "quorum_checks": 4,
+ "secret_ballots": 26,
+ "qualified_majority_votes": 461,
+ "by_mode": {
+  "Listás": 7868,
+  "Listás a jelenlevők 2/3-ával": 291,
+  "Listás a jelenlevők 4/5-ével": 75,
+  "Listás az összes képviselő felével": 75,
+  "Titkos": 23,
+  "Listás az összes képviselő 2/3-ával": 17,
+  "Név szerinti": 6,
+  "Jelenlét megállapítás": 4,
+  "Titkos az összes képviselő 2/3-ával": 3
+ },
+ "by_result": {
+  "Elutasítva": 5465,
+  "Elfogadva": 2812,
+  "Határozatképtelen": 81,
+  "Határozatképes": 3,
+  "Érvénytelen": 1
+ },
+ "by_month": {
+  "2002-05": 56,
+  "2002-06": 82,
+  "2002-07": 188,
+  "2002-09": 44,
+  "2002-10": 70,
+  "2002-11": 247,
+  "2002-12": 400,
+  "2003-02": 88,
+  "2003-03": 200,
+  "2003-04": 288,
+  "2003-05": 55,
+  "2003-06": 400,
+  "2003-09": 93,
+  "2003-10": 207,
+  "2003-11": 400,
+  "2003-12": 400,
+  "2004-01": 2,
+  "2004-02": 22,
+  "2004-03": 352,
+  "2004-04": 304,
+  "2004-05": 250,
+  "2004-06": 337,
+  "2004-08": 15,
+  "2004-09": 127,
+  "2004-10": 109,
+  "2004-11": 400,
+  "2004-12": 400,
+  "2005-02": 70,
+  "2005-03": 124,
+  "2005-04": 270,
+  "2005-05": 400,
+  "2005-06": 400,
+  "2005-07": 44,
+  "2005-09": 64,
+  "2005-10": 236,
+  "2005-11": 400,
+  "2005-12": 400,
+  "2006-01": 16,
+  "2006-02": 400,
+  "2006-03": 2
+ },
+ "motion_outcomes_top": {
+  "Határozathozatal módosítókról": 13026,
+  "önálló indítvány elfogadva": 1036,
+  "Országgyűlés az interpellációs választ elfogadta": 483,
+  "Részletes vitára bocsátás": 284,
+  "Sürgős kihirdetés kérése": 123,
+  "Sürgősség elfogadva": 101,
+  "határozatképtelen szavazás": 83,
+  "önálló indítvány elutasítva": 64,
+  "Házszabálytól eltéréshez  hozzájárulás": 50,
+  "ülés napirendjének módosítása/kiegészítése": 48,
+  "mentelmi jog fenntartva": 44,
+  "Az OGY nem veszi tárgysorozatba": 29
+ },
+ "motion_prefixes": {
+  "T": 13644,
+  "H": 1196,
+  "I": 507,
+  "J": 101,
+  "Ü": 19,
+  "P": 7,
+  "amendment": 5,
+  "V": 1
+ },
+ "kiveteles_votes": 0,
+ "surgos_votes": 0,
+ "interpellation_answers": 483,
+ "hazszabalytol_elteres_votes": 0,
+ "mps": {
+  "total": 199,
+  "by_faction": {
+   "TISZA": 141,
+   "Fidesz": 44,
+   "KDNP": 8,
+   "Mi Hazánk": 6
+  },
+  "by_mandate": {
+   "egyeni": 106,
+   "lista": 93
+  }
+ },
+ "sitting_days": {
+  "count": 288,
+  "first": "2002-05-15",
+  "last": "2006-03-08",
+  "by_session": {
+   "2005. évi tavaszi": 41,
+   "2005. évi őszi": 38,
+   "2003. évi őszi": 37,
+   "2004. évi tavaszi": 37,
+   "2004. évi őszi": 36,
+   "2003. évi tavaszi": 33,
+   "2002. évi őszi": 26,
+   "2002. évi tavaszi": 8,
+   "2002. évi nyári rendkívüli": 8,
+   "2005. évi nyári rendkívüli": 5,
+   "2003. évi nyári rendkívüli": 4,
+   "2006. évi tavaszi": 4,
+   "2002. évi téli rendkívüli": 3,
+   "2005. évi téli rendkívüli": 3,
+   "2003. évi téli rendkívüli": 2,
+   "2004. évi nyári rendkívüli": 2,
+   "2004. évi téli rendkívüli": 1
+  },
+  "by_kind": {
+   "Rendes": 258,
+   "Rendkívüli": 30
+  }
+ }
+}

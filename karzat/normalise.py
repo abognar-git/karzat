@@ -45,7 +45,12 @@ POSITIONS: dict[str, str] = {
     "Ig.távol": "igazoltan_tavol",
 }
 ABSENT_POSITIONS = ("nem_szavazott", "bejelentett_hianyzo", "igazoltan_tavol")
-PRESENT_POSITIONS = ("igen", "nem", "tartozkodott", "jelen_nem_szavazott")   # the "jelen lévő" base — interpretation, VERIFY legally
+# The "jelen lévő" base of the present-based majorities is the votes cast (igen + nem + tartózkodott) — the API's own
+# "Összes szavazat". Evidence, not interpretation: with the present-not-voting ("Jelen, nem szav.") counted in, the
+# computed outcome contradicts the House's own Elfogadva/Elutasítva 272 times in cycle 38 (2006–2010), 15 in 39, 4 in
+# 40, 2 in 41; with the votes cast as the base, never (cycles 38–43, 25 000 present-based decisions; one plain
+# secret ballot in 2017 aside). So "jelen, nem szavazott" is participation, not part of the base.
+PRESENT_POSITIONS = ("igen", "nem", "tartozkodott")
 
 RESULTS: dict[str, bool | None] = {"Elfogadva": True, "Elutasítva": False, "Határozatképes": None,
                                    "Határozatképtelen": None,   # quorum check failed (10 times in cycle 42)
@@ -55,10 +60,32 @@ SEATS_199_FROM = "2014-05-06"   # the 2014–2018 term is the first with 199 sea
 
 
 def seats_for(on_date: str | None) -> int:
-    """Number of seats of the Országgyűlés on a given ISO date: 386 (1990–2014), 199 since the 2014 term."""
+    """Number of seats of the Országgyűlés on a given ISO date: 386 (1990–2014), 199 since the 2014 term. This is the
+    fallback; the all-MP majorities are computed against the mandates in force on the day when the records are at hand
+    (seats_in_force) — the House counts them so: a two-thirds-of-all secret ballot on 2014-12-01 passed with 132 yes,
+    two-thirds of the 197 mandates then in force, not of 199."""
     if on_date and on_date < SEATS_199_FROM:
         return 386
     return 199
+
+
+class SeatsInForce:
+    """Mandates in force per day, from the MP records' election rows; falls back to seats_for when it knows nothing about
+    a date's era (no record covers it) or the count is implausibly low (a gap in the records must not shrink the base)."""
+    def __init__(self, mandates: list[tuple[str, str | None]]):
+        self.mandates = [(a, b or "9999-12-31") for a, b in mandates if a]
+        self._cache: dict[str, int] = {}
+
+    def __call__(self, on_date: str | None) -> int:
+        base = seats_for(on_date)
+        if not on_date or not self.mandates:
+            return base
+        if on_date in self._cache:
+            return self._cache[on_date]
+        n = sum(1 for a, b in self.mandates if a <= on_date <= b)
+        val = n if base * 0.9 <= n <= base else base      # a few vacancies at most; anything else is the records' gap, not the House's
+        self._cache[on_date] = val
+        return val
 
 HONORIFICS = re.compile(r"^(?:dr\.|prof\.|ifj\.|id\.|özv\.|dr\s)\s*", re.IGNORECASE)
 
@@ -149,7 +176,7 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
 # Cycle starts (constitutive sittings; the month is a good-enough boundary) — shared with load.py.
 CYCLE_STARTS = {34: "1990-05-02", 35: "1994-06-28", 36: "1998-06-18", 37: "2002-05-15", 38: "2006-05-16",
                 39: "2010-05-14", 40: "2014-05-06", 41: "2018-05-08", 42: "2022-05-02", 43: "2026-05-09"}
-CYCLE_LABELS = {34: "1990-1994", 35: "1994-1998", 36: "1998-2002", 37: "2002-2006", 38: "2006-2010",
+CYCLE_LABELS = {34: "1990-94", 35: "1994-98", 36: "1998-2002", 37: "2002-2006", 38: "2006-2010",      # as kepviselo.cgi prints ciklus: two-digit end years before 1998
                 39: "2010-2014", 40: "2014-2018", 41: "2018-2022", 42: "2022-2026", 43: "2026-"}   # as kepviselo.cgi prints ciklus
 
 
@@ -269,8 +296,14 @@ def record_histories(cache: "Path") -> dict[str, dict[str, Any]]:
         if rec.get("name"):
             out[p.stem[3:]] = {"name": rec["name"], "factions": [(f.get("ciklus"), f.get("faction")) for f in rec.get("factions") or []],
                                # cycles in which parlament.hu credits speeches to this record — a former MP speaking as a state secretary is still that person
-                               "speech_cycles": [st.get("ciklus") for st in rec.get("speech_stats") or [] if (st.get("speeches") or st.get("technical"))]}
+                               "speech_cycles": [st.get("ciklus") for st in rec.get("speech_stats") or [] if (st.get("speeches") or st.get("technical"))],
+                               "mandates": [(e.get("mandate_from"), e.get("mandate_to")) for e in rec.get("elections") or [] if e.get("mandate_from")]}
     return out
+
+
+def seats_in_force(histories: dict[str, dict[str, Any]]) -> "SeatsInForce":
+    """The mandate spans of every cached record → a callable date → seats (see SeatsInForce)."""
+    return SeatsInForce([m for h in histories.values() for m in h.get("mandates") or []])
 
 
 # -- sitting days ---------------------------------------------------------------------------
@@ -558,6 +591,15 @@ def _vote_core(el: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _faction_label(f: str | None) -> str | None:
+    """The faction as the roll call prints it; an empty or missing label (an MP between two groups — 119 rows in 2002–2010)
+    is read as 'független' by the roll-call parser, because that is what no group means on the day."""
+    if f is None:
+        return None
+    f = f.strip()
+    return f if f else "független"
+
+
 def parse_szavazasok(payload: dict[str, Any]) -> list[dict[str, Any]]:
     """szavazasok.cgi list -> summary records (no per-MP positions)."""
     root = payload.get("szavazasok", payload)
@@ -573,7 +615,7 @@ def _faction_tallies(kcs: Any) -> tuple[list[dict[str, Any]], dict[str, int] | N
     for s in as_list(kcs.get("szavazat")):
         if not isinstance(s, dict):
             continue
-        rec = {"faction": s.get("@frakcio"), "igen": _int(s.get("igen_db")), "nem": _int(s.get("nem_db")),
+        rec = {"faction": _faction_label(s.get("@frakcio")), "igen": _int(s.get("igen_db")), "nem": _int(s.get("nem_db")),
                "tartozkodott": _int(s.get("tart_db")),
                "igazoltan_tavol": _int(s.get("igtav_db")),        # = Ig.távol + Előre bejelentett hiányzó (see POSITIONS)
                "nem_szavazott": _int(s.get("nemszav_db")),        # = Nem szav. + Jelen, nem szav.
@@ -586,13 +628,14 @@ def _faction_tallies(kcs: Any) -> tuple[list[dict[str, Any]], dict[str, int] | N
 
 
 def parse_szavazas(payload: dict[str, Any], resolver: NameResolver | None = None,
-                   seats: int | None = None) -> dict[str, Any]:
-    """szavazas.cgi -> full vote record with faction tallies, per-MP positions and the majority verdict."""
+                   seats: int | None = None, seats_fn=None) -> dict[str, Any]:
+    """szavazas.cgi -> full vote record with faction tallies, per-MP positions and the majority verdict.
+    `seats_fn(on_date)` gives the mandates in force (SeatsInForce); without it the era's seat count."""
     outer = payload.get("szavazas", payload)
     el = outer.get("szavazas", outer) if isinstance(outer, dict) and "szavazas" in outer else outer
     rec = _vote_core(el)
     if seats is None:
-        seats = seats_for(rec["on_date"])
+        seats = seats_fn(rec["on_date"]) if seats_fn else seats_for(rec["on_date"])
     rec["seats"] = seats
     tallies, totals = _faction_tallies(el.get("kepvcsop_szerint"))
     positions = []
@@ -604,6 +647,7 @@ def parse_szavazas(payload: dict[str, Any], resolver: NameResolver | None = None
                 continue
             label = s.get("@kepviselo", "")
             name, faction = NameResolver.split(label)
+            faction = _faction_label(faction) or "független"     # a roll-call line without a group is an independent's
             pos = POSITIONS.get(s.get("@szavazat", ""), "unknown:" + str(s.get("@szavazat")))
             counts[pos] = counts.get(pos, 0) + 1
             positions.append({"name_raw": label, "name": name, "faction": faction, "position": pos,
@@ -618,7 +662,7 @@ def parse_szavazas(payload: dict[str, Any], resolver: NameResolver | None = None
     if positions:
         present = sum(counts.get(k, 0) for k in PRESENT_POSITIONS)
         rec["present"] = present
-        rec["present_basis"] = "nev_szerint: igen+nem+tart+jelen_nem_szav"
+        rec["present_basis"] = "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
     elif rec["osszes_szavazat"] is not None:
         rec["present"] = rec["osszes_szavazat"]
         rec["present_basis"] = "tulajdonsagok: Összes szavazat (no roll call)"
@@ -631,9 +675,16 @@ def parse_szavazas(payload: dict[str, Any], resolver: NameResolver | None = None
         rec["majority"] = None
     else:
         cls = classify(payload_rule=rec["mode"], subject=" ".join(m.get("title") or "" for m in rec["motions"]))
+        cast_n = rec["igen"] + (rec["nem"] or 0) + (rec["tartozkodott"] or 0)
+        present_used = rec["present"]
+        if present_used is not None and present_used < cast_n:
+            # an old payload's header and roll call disagree (a 2002 vote: 347 cast, 346 in the roll call): the votes cast
+            # were present by definition — take them as the base and say so
+            present_used = cast_n
+            rec["present_basis"] = (rec["present_basis"] or "") + " · a névsor kevesebb, mint a leadott szavazat: a leadott az alap"
         tally = Tally(yes=rec["igen"], no=rec["nem"] or 0, abstain=rec["tartozkodott"] or 0,
                       not_voting=(counts.get("nem_szavazott", 0) + counts.get("jelen_nem_szavazott", 0)),
-                      present=rec["present"], seats=seats)
+                      present=present_used, seats=seats)
         v = evaluate(cls.rule, tally)
         rec["majority"] = {"rule": v.rule, "source": cls.source, "evidence": cls.evidence, "base": v.base,
                            "needed": v.needed, "margin": v.margin, "passed_by_rule": v.passed,

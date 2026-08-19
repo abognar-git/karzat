@@ -39,16 +39,16 @@ Arithmetic
 "kétharmada"        -> ceil(2N/3)      (2/3 of 199 = 132.67 -> 133)
 "négyötöde"         -> ceil(4N/5)
 
-What counts as "present" (jelen lévő) is the single most consequential modelling choice.
-Abstaining MPs (tartózkodott) ARE present, so an abstention counts against a motion under
-every present-based rule. Whether MPs recorded as "nem szavazott" count as present depends
-on how the payload defines its numbers — this module takes `present` explicitly when the
-source states it, and otherwise falls back to yes+no+abstain (voting-present) and says so
-in the verdict. VERIFY against real <tulajdonsagok> before relying on the fallback.
+What counts as "present" (jelen lévő) is the single most consequential modelling choice, and
+the record settles it: the base is the votes cast — igen + nem + tartózkodott, the API's own
+"Összes szavazat". Abstaining MPs ARE in it, so an abstention counts against a motion under
+every present-based rule; MPs registered "Jelen, nem szav." are NOT (see normalise.PRESENT_POSITIONS
+for the evidence: 272 contradicted outcomes in cycle 38 with them counted, none without).
 
-The base for "all MPs" (összes képviselő) is the number of MPs holding a mandate at the time
-of the vote, 199 when no seat is vacant. `Tally.seats` carries it; VERIFY how the Országgyűlés
-counts vacancies for the two-thirds-of-all rules.
+The base for "all MPs" (összes képviselő) is the number of mandates in force on the day —
+199 when no seat is vacant, fewer around a resignation (a two-thirds-of-all ballot on 2014-12-01
+passed with 132 = ⌈2·197/3⌉); normalise.SeatsInForce counts them from the records, and falls back
+to the era's 386 / 199 when it has nothing better.
 """
 
 from __future__ import annotations
@@ -245,7 +245,7 @@ def evaluate(rule: Rule | str, tally: Tally) -> Verdict:
     n = needed(rule, tally)
     note = ""
     if info.base == "present" and tally.present_is_assumed:
-        note = "present not stated by source; using yes+no+abstain (VERIFY definition)"
+        note = "present not stated by source; using yes+no+abstain (the votes cast — the House's own base)"
     if rule == Rule.RELATIV:
         return Verdict(rule.value, info.label_hu, info.base, None, None, tally.yes, None, None,
                        tally.present_is_assumed, info.basis,

@@ -1,0 +1,125 @@
+{
+ "ts": "1994.04.07.21:37:02",
+ "slug": "1994-04-07T21-37-02",
+ "on_date": "1994-04-07",
+ "mode": "Listás",
+ "secret": false,
+ "kind": "dontes",
+ "igen": 192,
+ "nem": 0,
+ "tartozkodott": 2,
+ "osszes_szavazat": 194,
+ "result_raw": "Elfogadva",
+ "passed": true,
+ "remark": null,
+ "motions": [],
+ "seats": 386,
+ "faction_tallies": [
+  {
+   "faction": "MDF",
+   "igen": 114,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 3,
+   "nem_szavazott": 19,
+   "osszesen": 136
+  },
+  {
+   "faction": "SZDSZ",
+   "igen": 0,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 82,
+   "osszesen": 83
+  },
+  {
+   "faction": "EKgP",
+   "igen": 25,
+   "nem": 0,
+   "tartozkodott": 1,
+   "igazoltan_tavol": 0,
+   "nem_szavazott": 10,
+   "osszesen": 36
+  },
+  {
+   "faction": "MSZP",
+   "igen": 0,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 32,
+   "osszesen": 33
+  },
+  {
+   "faction": "Fidesz",
+   "igen": 15,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 0,
+   "nem_szavazott": 11,
+   "osszesen": 26
+  },
+  {
+   "faction": "KDNP",
+   "igen": 21,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 1,
+   "osszesen": 23
+  },
+  {
+   "faction": "MIÉP",
+   "igen": 8,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 0,
+   "nem_szavazott": 4,
+   "osszesen": 12
+  },
+  {
+   "faction": "FKGP",
+   "igen": null,
+   "nem": null,
+   "tartozkodott": null,
+   "igazoltan_tavol": null,
+   "nem_szavazott": null,
+   "osszesen": null
+  },
+  {
+   "faction": "független",
+   "igen": 9,
+   "nem": 0,
+   "tartozkodott": 1,
+   "igazoltan_tavol": 0,
+   "nem_szavazott": 27,
+   "osszesen": 37
+  }
+ ],
+ "totals_row": {
+  "igen": 192,
+  "nem": 0,
+  "tartozkodott": 2,
+  "igazoltan_tavol": 6,
+  "nem_szavazott": 186,
+  "osszesen": 386
+ },
+ "positions": [],
+ "position_counts": {},
+ "roll_call_available": false,
+ "present": 194,
+ "present_basis": "tulajdonsagok: Összes szavazat (no roll call)",
+ "majority": {
+  "rule": "egyszeru",
+  "source": "payload",
+  "evidence": "Listás",
+  "base": 194,
+  "needed": 98,
+  "margin": 94,
+  "passed_by_rule": true,
+  "agrees_with_source": true,
+  "present_assumed": false
+ },
+ "derived_at": "2026-08-19T07:33:44.335267+02:00"
+}

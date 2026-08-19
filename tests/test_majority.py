@@ -1,6 +1,6 @@
 """Tests for karzat.majority — pure arithmetic and classification, no network, no XML.
 
-The legal citations in the module are marked VERIFY; these tests pin the *arithmetic* those
+The legal citations in the module were read against njt.hu on 2026-08-19; these tests pin the *arithmetic* those
 citations imply ("több mint a fele" = floor(N/2)+1, "kétharmada" = ceil(2N/3), "négyötöde" =
 ceil(4N/5)) and the modelling choice that abstainers are present.
 """
@@ -74,7 +74,7 @@ class Evaluate(unittest.TestCase):
         v = evaluate(Rule.EGYSZERU, Tally(yes=90, no=80, abstain=0, not_voting=20))
         self.assertEqual(v.base, 170)
         self.assertTrue(v.present_assumed)
-        self.assertIn("VERIFY", v.note)
+        self.assertIn("the votes cast", v.note)                      # the base is named, not flagged
 
     def test_stated_present_is_used_verbatim(self):
         v = evaluate(Rule.EGYSZERU, Tally(yes=90, no=80, not_voting=20, present=190))

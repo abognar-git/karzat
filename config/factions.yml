@@ -375,3 +375,7 @@ factions_ckl34:
     name: Magyar Demokrata Fórum
     colour: "#4a9a4a"
     sort_order: 80
+  - id: MIÉP
+    name: Magyar Igazság és Élet Pártja
+    colour: "#7d5ba6"
+    sort_order: 90

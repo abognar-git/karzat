@@ -99,6 +99,12 @@ def main(argv: list[str] | None = None) -> int:
         azons = list(by_azon) + [a for a in store["members"] if a not in by_azon]
     else:
         azons = list(store["members"])                       # the people of that cycle's roll calls, nobody else
+        if len(azons) < 50:
+            # before 1998 the API prints no names in the roll calls: the roster then comes from the records themselves —
+            # everyone whose faction history has a row for the cycle's label ("1990-94", "1994-98")
+            label = CYCLE_LABEL.get(cycle)
+            azons = sorted(azon for azon, h in record_histories(RAW).items() if any(c == label for c, _ in h["factions"]))
+            print(f"roster from the records: {len(azons)} people with a faction row for {label!r} (no roll calls print names in this cycle)")
     # the current cycle's irományok by submitter (iromanyok.cgi lists the current cycle only): the items behind
     # the record's <inditvanyok> "önálló" count — the two reconcile MP by MP (tests/test_site.py)
     motions_by_azon: dict[str, list] = {}
@@ -136,6 +142,13 @@ def main(argv: list[str] | None = None) -> int:
         else:
             mandate = mandate_from_record(rec, cycle)
             faction = last_faction.get(azon) or member.get("faction")   # as the person's last roll call of the cycle prints it
+            if not faction and rec:
+                # no roll call names this person in the cycle (before 1998 none do): the record's own faction rows for the
+                # cycle's label — the record lists them latest first
+                rows = [f for f in rec["factions"] if f.get("ciklus") == CYCLE_LABEL.get(cycle) and f.get("faction")]
+                faction = rows[0]["faction"] if rows else None
+                if rows:
+                    member = dict(member, faction=rows[-1]["faction"])   # the first faction of the cycle, for faction_first
         out_mps[azon] = {
             "p_azon": azon,
             "name": (listed_m or {}).get("name") or (rec or {}).get("name") or member.get("name"),

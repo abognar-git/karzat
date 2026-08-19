@@ -148,8 +148,7 @@ def close_votes(inp: dict[str, Any], plurality: dict[str, dict[str, str]] | None
             extra_yes = extra_present = 0
             for _, f, pos in exp:
                 if pos not in CAST and f in plur:
-                    if pos != "jelen_nem_szavazott":            # the present-not-voting are already in the presence base
-                        extra_present += 1
+                    extra_present += 1                            # the base is the votes cast: everyone who would now cast one joins it
                     if plur[f] == "igen":
                         extra_yes += 1
             hypo_igen = v["igen"] + extra_yes

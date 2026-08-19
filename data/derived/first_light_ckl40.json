@@ -1,0 +1,140 @@
+{
+ "derived_at": "2026-08-19T07:33:44.335267+02:00",
+ "window": {
+  "from": "2014-05-06",
+  "to": "2018-03-21",
+  "list_files": 447
+ },
+ "votes": 3584,
+ "decisions": 3578,
+ "quorum_checks": 6,
+ "secret_ballots": 15,
+ "qualified_majority_votes": 332,
+ "by_mode": {
+  "Listás": 3243,
+  "Listás a jelenlevők 2/3-ával": 197,
+  "Listás a jelenlevők 4/5-ével": 80,
+  "Listás az összes képviselő felével": 35,
+  "Titkos az összes képviselő 2/3-ával": 12,
+  "Jelenlét megállapítás": 6,
+  "Listás az összes képviselő 2/3-ával": 6,
+  "Titkos": 3,
+  "Listás az összes képviselő 4/5-ével": 2
+ },
+ "by_result": {
+  "Elfogadva": 2464,
+  "Elutasítva": 1107,
+  "Határozatképtelen": 8,
+  "Határozatképes": 5
+ },
+ "by_month": {
+  "2014-05": 47,
+  "2014-06": 80,
+  "2014-07": 26,
+  "2014-09": 37,
+  "2014-10": 41,
+  "2014-11": 128,
+  "2014-12": 238,
+  "2015-02": 25,
+  "2015-03": 163,
+  "2015-04": 115,
+  "2015-05": 78,
+  "2015-06": 247,
+  "2015-07": 72,
+  "2015-09": 63,
+  "2015-10": 67,
+  "2015-11": 143,
+  "2015-12": 177,
+  "2016-02": 33,
+  "2016-03": 87,
+  "2016-04": 75,
+  "2016-05": 97,
+  "2016-06": 196,
+  "2016-07": 1,
+  "2016-08": 1,
+  "2016-09": 46,
+  "2016-10": 81,
+  "2016-11": 147,
+  "2016-12": 193,
+  "2017-02": 27,
+  "2017-03": 68,
+  "2017-04": 62,
+  "2017-05": 168,
+  "2017-06": 169,
+  "2017-08": 1,
+  "2017-09": 29,
+  "2017-10": 139,
+  "2017-11": 113,
+  "2017-12": 70,
+  "2018-01": 1,
+  "2018-02": 32,
+  "2018-03": 1
+ },
+ "motion_outcomes_top": {
+  "önálló indítvány elfogadva": 977,
+  "módosító javaslat fenntartása elutasítva": 871,
+  "Országgyűlés az interpellációs választ elfogadta": 626,
+  "összegző módosító javaslat elfogadva": 527,
+  "Országgyűlés a tárgysorozatba vételt elutasította": 144,
+  "határozati házszabályi rendelkezésektől való eltéréshez hozzájárulás elfogadva": 139,
+  "beszámolóról történő határozathozatalra felkérés elfogadva": 100,
+  "összegző módosító javaslat külön szavazásra kért pontja elutasítva": 43,
+  "Országgyűlés időkeretben történő tárgyaláshoz hozzájárult": 34,
+  "kivételességi javaslat elfogadva": 33,
+  "összegző módosító javaslat külön szavazásra kért pontja elfogadva": 31,
+  "egyéb szavazás": 26
+ },
+ "motion_prefixes": {
+  "amendment": 2153,
+  "I": 627,
+  "T": 506,
+  "H": 201,
+  "B": 102,
+  "S": 79,
+  "V": 23,
+  "Ü": 5
+ },
+ "kiveteles_votes": 33,
+ "surgos_votes": 8,
+ "interpellation_answers": 626,
+ "hazszabalytol_elteres_votes": 139,
+ "mps": {
+  "total": 199,
+  "by_faction": {
+   "TISZA": 141,
+   "Fidesz": 44,
+   "KDNP": 8,
+   "Mi Hazánk": 6
+  },
+  "by_mandate": {
+   "egyeni": 106,
+   "lista": 93
+  }
+ },
+ "sitting_days": {
+  "count": 270,
+  "first": "2014-05-06",
+  "last": "2018-03-21",
+  "by_session": {
+   "2015. tavaszi": 42,
+   "2017. tavaszi": 37,
+   "2016. tavaszi": 36,
+   "2016. őszi": 34,
+   "2015. őszi": 32,
+   "2017. őszi": 29,
+   "2014. őszi": 27,
+   "2014. tavaszi": 9,
+   "2015. nyári rendkívüli": 8,
+   "2014. nyári rendkívüli": 4,
+   "2018. tavaszi": 4,
+   "2014. téli rendkívüli": 3,
+   "2016. nyári rendkívüli": 2,
+   "2017. nyári rendkívüli": 2,
+   "2018. téli rendkívüli": 1
+  },
+  "by_kind": {
+   "Rendes": 246,
+   "Rendkívüli": 24
+  }
+ }
+}

@@ -177,7 +177,7 @@ class VoteDetails(unittest.TestCase):
         self.assertIsNone(v["majority"])
         self.assertIn("jelen_nem_szavazott", v["position_counts"])
         self.assertEqual(v["position_counts"]["jelen_nem_szavazott"], 8)
-        self.assertEqual(v["present"], 171 + 14 + 4 + 8)
+        self.assertEqual(v["present"], 171 + 14 + 4)             # votes cast (igen + nem + tartózkodott); the 8 present-not-voting are participation, not base
         self.assertEqual(v["motions"], [])
 
     def test_no_unknown_position_labels_in_any_fixture(self):
@@ -284,7 +284,7 @@ class SeventhState(unittest.TestCase):
         self.assertEqual(tot["igazoltan_tavol"], 4 + 6)          # igtav_db  = Előre bejelentett hiányzó + Ig.távol
         self.assertEqual(tot["nem_szavazott"], 3 + 1)            # nemszav_db = Nem szav. + Jelen, nem szav.
         self.assertEqual(tot["osszesen"], 198)                   # one seat vacant that day
-        self.assertEqual(v["present"], 52 + 130 + 2 + 1)         # the excused are not present
+        self.assertEqual(v["present"], 52 + 130 + 2)             # the base is the votes cast; the present-not-voting and the excused are not in it
         self.assertEqual([t["faction"] for t in v["faction_tallies"]][:4], ["Fidesz", "KDNP", "DK", "MSZP"])
         self.assertIn("Nemzetiségi képviselő", [t["faction"] for t in v["faction_tallies"]])
         self.assertEqual(v["majority"]["rule"], "egyszeru")

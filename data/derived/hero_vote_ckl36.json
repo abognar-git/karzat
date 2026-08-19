@@ -1,0 +1,2833 @@
+{
+ "ts": "2001.06.12.21:40:36",
+ "slug": "2001-06-12T21-40-36",
+ "on_date": "2001-06-12",
+ "mode": "Listás az összes képviselő 2/3-ával",
+ "secret": false,
+ "kind": "dontes",
+ "igen": 284,
+ "nem": 3,
+ "tartozkodott": 6,
+ "osszes_szavazat": 293,
+ "result_raw": "Elfogadva",
+ "passed": true,
+ "remark": null,
+ "motions": [
+  {
+   "iromany": "T/3622",
+   "point": null,
+   "title": "A Magyar Köztársaság Alkotmányáról szóló 1949. évi XX. törvény módosításáról",
+   "outcome": "önálló indítvány elfogadva",
+   "submitters": [
+    "kormány (igazságügy-miniszter)"
+   ],
+   "submitter_ids": [],
+   "submitter_kind": "kormany",
+   "iromany_parsed": {
+    "kind": "T",
+    "number": 3622
+   },
+   "href": null
+  }
+ ],
+ "seats": 386,
+ "faction_tallies": [
+  {
+   "faction": "Fidesz",
+   "igen": 136,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 5,
+   "osszesen": 142
+  },
+  {
+   "faction": "MSZP",
+   "igen": 76,
+   "nem": 2,
+   "tartozkodott": 3,
+   "igazoltan_tavol": 13,
+   "nem_szavazott": 42,
+   "osszesen": 136
+  },
+  {
+   "faction": "FKGP",
+   "igen": 30,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 9,
+   "osszesen": 40
+  },
+  {
+   "faction": "SZDSZ",
+   "igen": 14,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 3,
+   "nem_szavazott": 7,
+   "osszesen": 24
+  },
+  {
+   "faction": "MDF",
+   "igen": 12,
+   "nem": 1,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 2,
+   "osszesen": 16
+  },
+  {
+   "faction": "MIÉP",
+   "igen": 10,
+   "nem": 0,
+   "tartozkodott": 0,
+   "igazoltan_tavol": 1,
+   "nem_szavazott": 1,
+   "osszesen": 12
+  },
+  {
+   "faction": "független",
+   "igen": 6,
+   "nem": 0,
+   "tartozkodott": 3,
+   "igazoltan_tavol": 0,
+   "nem_szavazott": 7,
+   "osszesen": 16
+  }
+ ],
+ "totals_row": {
+  "igen": 284,
+  "nem": 3,
+  "tartozkodott": 6,
+  "igazoltan_tavol": 20,
+  "nem_szavazott": 73,
+  "osszesen": 386
+ },
+ "positions": [
+  {
+   "name_raw": "Dr. Áder János (Fidesz)",
+   "name": "Dr. Áder János",
+   "faction": "Fidesz",
+   "position": "nem_szavazott",
+   "mp_azon": "a302"
+  },
+  {
+   "name_raw": "Ágota Gábor (Fidesz)",
+   "name": "Ágota Gábor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "a004"
+  },
+  {
+   "name_raw": "Arnóth Sándor (Fidesz)",
+   "name": "Arnóth Sándor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "a005"
+  },
+  {
+   "name_raw": "Babák Mihály (Fidesz)",
+   "name": "Babák Mihály",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b006"
+  },
+  {
+   "name_raw": "Balla György (Fidesz)",
+   "name": "Balla György",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b007"
+  },
+  {
+   "name_raw": "Balla Mihály (Fidesz)",
+   "name": "Balla Mihály",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b008"
+  },
+  {
+   "name_raw": "Balsay István (Fidesz)",
+   "name": "Balsay István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b144"
+  },
+  {
+   "name_raw": "Bánki Erik (Fidesz)",
+   "name": "Bánki Erik",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b009"
+  },
+  {
+   "name_raw": "Dr. Bartha László (Fidesz)",
+   "name": "Dr. Bartha László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b010"
+  },
+  {
+   "name_raw": "Básthy Tamás (Fidesz)",
+   "name": "Básthy Tamás",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b011"
+  },
+  {
+   "name_raw": "Bebes István (Fidesz)",
+   "name": "Bebes István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b012"
+  },
+  {
+   "name_raw": "Becsó Zsolt (Fidesz)",
+   "name": "Becsó Zsolt",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b013"
+  },
+  {
+   "name_raw": "Bernáth Ildikó (Fidesz)",
+   "name": "Bernáth Ildikó",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b014"
+  },
+  {
+   "name_raw": "Birkás Tivadar (Fidesz)",
+   "name": "Birkás Tivadar",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b015"
+  },
+  {
+   "name_raw": "Dr. Bóka István (Fidesz)",
+   "name": "Dr. Bóka István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b016"
+  },
+  {
+   "name_raw": "Borkó Károly (Fidesz)",
+   "name": "Borkó Károly",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b017"
+  },
+  {
+   "name_raw": "Dr. Braun Márton (Fidesz)",
+   "name": "Dr. Braun Márton",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b018"
+  },
+  {
+   "name_raw": "Búsi Lajos (Fidesz)",
+   "name": "Búsi Lajos",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "b019"
+  },
+  {
+   "name_raw": "Czerván György (Fidesz)",
+   "name": "Czerván György",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "c003"
+  },
+  {
+   "name_raw": "Dr. Dancsó József (Fidesz)",
+   "name": "Dr. Dancsó József",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "d002"
+  },
+  {
+   "name_raw": "Dr. Deutsch Tamás (Fidesz)",
+   "name": "Dr. Deutsch Tamás",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "d333"
+  },
+  {
+   "name_raw": "Domokos László (Fidesz)",
+   "name": "Domokos László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "d003"
+  },
+  {
+   "name_raw": "Dr. Dorkota Lajos (Fidesz)",
+   "name": "Dr. Dorkota Lajos",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "d004"
+  },
+  {
+   "name_raw": "Endre Sándor (Fidesz)",
+   "name": "Endre Sándor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "e001"
+  },
+  {
+   "name_raw": "Farkas Sándor (Fidesz)",
+   "name": "Farkas Sándor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "f001"
+  },
+  {
+   "name_raw": "Dr. Fazekas Sándor (Fidesz)",
+   "name": "Dr. Fazekas Sándor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "f002"
+  },
+  {
+   "name_raw": "Fehérvári Tamás (Fidesz)",
+   "name": "Fehérvári Tamás",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "f003"
+  },
+  {
+   "name_raw": "Dr. Fónagy János (Fidesz)",
+   "name": "Dr. Fónagy János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "f006"
+  },
+  {
+   "name_raw": "Dr. Frajna Imre (Fidesz)",
+   "name": "Dr. Frajna Imre",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "f330"
+  },
+  {
+   "name_raw": "Glattfelder Béla (Fidesz)",
+   "name": "Glattfelder Béla",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g363"
+  },
+  {
+   "name_raw": "Dr. Gógl Árpád (Fidesz)",
+   "name": "Dr. Gógl Árpád",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g006"
+  },
+  {
+   "name_raw": "Gubicza Tibor (Fidesz)",
+   "name": "Gubicza Tibor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g007"
+  },
+  {
+   "name_raw": "Gyapay Zoltán (Fidesz)",
+   "name": "Gyapay Zoltán",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g008"
+  },
+  {
+   "name_raw": "Gyimesi István (Fidesz)",
+   "name": "Gyimesi István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g009"
+  },
+  {
+   "name_raw": "Dr. Gyimesi József (Fidesz)",
+   "name": "Dr. Gyimesi József",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g010"
+  },
+  {
+   "name_raw": "Dr. Györkös Péter (Fidesz)",
+   "name": "Dr. Györkös Péter",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g012"
+  },
+  {
+   "name_raw": "Gyürk András (Fidesz)",
+   "name": "Gyürk András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "g014"
+  },
+  {
+   "name_raw": "Hadházy Sándor (Fidesz)",
+   "name": "Hadházy Sándor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h003"
+  },
+  {
+   "name_raw": "Halász János (Fidesz)",
+   "name": "Halász János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h004"
+  },
+  {
+   "name_raw": "Dr. Hargitai János (Fidesz)",
+   "name": "Dr. Hargitai János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h006"
+  },
+  {
+   "name_raw": "Harrach Péter (Fidesz)",
+   "name": "Harrach Péter",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h007"
+  },
+  {
+   "name_raw": "Herbst János (Fidesz)",
+   "name": "Herbst János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h014"
+  },
+  {
+   "name_raw": "Homa János (Fidesz)",
+   "name": "Homa János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h016"
+  },
+  {
+   "name_raw": "Dr. Horváth János (Fidesz)",
+   "name": "Dr. Horváth János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h019"
+  },
+  {
+   "name_raw": "Horváth László (Fidesz)",
+   "name": "Horváth László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h366"
+  },
+  {
+   "name_raw": "Dr. Horváth Zsolt (Fidesz)",
+   "name": "Dr. Horváth Zsolt",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h018"
+  },
+  {
+   "name_raw": "Dr. Hörcsik Richárd (Fidesz)",
+   "name": "Dr. Hörcsik Richárd",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "h275"
+  },
+  {
+   "name_raw": "Dr. Illés Zoltán (Fidesz)",
+   "name": "Dr. Illés Zoltán",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "i001"
+  },
+  {
+   "name_raw": "Imre Zsolt (Fidesz)",
+   "name": "Imre Zsolt",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "i002"
+  },
+  {
+   "name_raw": "Dr. Isépy Tamás (Fidesz)",
+   "name": "Dr. Isépy Tamás",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "i042"
+  },
+  {
+   "name_raw": "Ivanics Ferenc (Fidesz)",
+   "name": "Ivanics Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "i003"
+  },
+  {
+   "name_raw": "Ivanics István (Fidesz)",
+   "name": "Ivanics István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "i226"
+  },
+  {
+   "name_raw": "Járvás István (Fidesz)",
+   "name": "Járvás István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "j001"
+  },
+  {
+   "name_raw": "Dr. Juharos Róbert (Fidesz)",
+   "name": "Dr. Juharos Róbert",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "j003"
+  },
+  {
+   "name_raw": "Kádas Mihály (Fidesz)",
+   "name": "Kádas Mihály",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k007"
+  },
+  {
+   "name_raw": "Dr. Kerényi János (Fidesz)",
+   "name": "Dr. Kerényi János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k012"
+  },
+  {
+   "name_raw": "Dr. Koczka Csaba (Fidesz)",
+   "name": "Dr. Koczka Csaba",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k014"
+  },
+  {
+   "name_raw": "Koltai Ildikó (Fidesz)",
+   "name": "Koltai Ildikó",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k026"
+  },
+  {
+   "name_raw": "Koncz Ferenc (Fidesz)",
+   "name": "Koncz Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k015"
+  },
+  {
+   "name_raw": "Kósa Lajos (Fidesz)",
+   "name": "Kósa Lajos",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k325"
+  },
+  {
+   "name_raw": "Kosztolányi Dénes (Fidesz)",
+   "name": "Kosztolányi Dénes",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k016"
+  },
+  {
+   "name_raw": "Kovács Ferenc (Fidesz)",
+   "name": "Kovács Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k017"
+  },
+  {
+   "name_raw": "Dr. Kovács Zoltán (Fidesz)",
+   "name": "Dr. Kovács Zoltán",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k018"
+  },
+  {
+   "name_raw": "Kozma Péter (Fidesz)",
+   "name": "Kozma Péter",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k019"
+  },
+  {
+   "name_raw": "Körömi Attila (Fidesz)",
+   "name": "Körömi Attila",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k022"
+  },
+  {
+   "name_raw": "Kövér László (Fidesz)",
+   "name": "Kövér László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "k308"
+  },
+  {
+   "name_raw": "Lasztovicza Jenő (Fidesz)",
+   "name": "Lasztovicza Jenő",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "l008"
+  },
+  {
+   "name_raw": "Dr. Latorcai János (Fidesz)",
+   "name": "Dr. Latorcai János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "l001"
+  },
+  {
+   "name_raw": "Láyer József (Fidesz)",
+   "name": "Láyer József",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "l003"
+  },
+  {
+   "name_raw": "Lázár Mózes (Fidesz)",
+   "name": "Lázár Mózes",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "l004"
+  },
+  {
+   "name_raw": "Lenártek András (Fidesz)",
+   "name": "Lenártek András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "l009"
+  },
+  {
+   "name_raw": "Lévai Tibor (Fidesz)",
+   "name": "Lévai Tibor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "l005"
+  },
+  {
+   "name_raw": "Mádi László (Fidesz)",
+   "name": "Mádi László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m323"
+  },
+  {
+   "name_raw": "Dr. Mánya Kristóf (Fidesz)",
+   "name": "Dr. Mánya Kristóf",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m004"
+  },
+  {
+   "name_raw": "Márton Attila (Fidesz)",
+   "name": "Márton Attila",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m005"
+  },
+  {
+   "name_raw": "Dr. Martonosi György (Fidesz)",
+   "name": "Dr. Martonosi György",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m007"
+  },
+  {
+   "name_raw": "Mátrai Márta (Fidesz)",
+   "name": "Mátrai Márta",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m006"
+  },
+  {
+   "name_raw": "Dr. Mikes Éva (Fidesz)",
+   "name": "Dr. Mikes Éva",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m009"
+  },
+  {
+   "name_raw": "Molnár Oszkár (Fidesz)",
+   "name": "Molnár Oszkár",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "m010"
+  },
+  {
+   "name_raw": "Dr. Nagy Gábor Tamás (Fidesz)",
+   "name": "Dr. Nagy Gábor Tamás",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "n006"
+  },
+  {
+   "name_raw": "Németh Zsolt (Fidesz)",
+   "name": "Németh Zsolt",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "n322"
+  },
+  {
+   "name_raw": "Nógrádi László (Fidesz)",
+   "name": "Nógrádi László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "n008"
+  },
+  {
+   "name_raw": "Nyitray András (Fidesz)",
+   "name": "Nyitray András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "n007"
+  },
+  {
+   "name_raw": "Dr. Ódor Ferenc (Fidesz)",
+   "name": "Dr. Ódor Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "o003"
+  },
+  {
+   "name_raw": "Orbán Viktor (Fidesz)",
+   "name": "Orbán Viktor",
+   "faction": "Fidesz",
+   "position": "nem_szavazott",
+   "mp_azon": "o320"
+  },
+  {
+   "name_raw": "Oszlár Albert (Fidesz)",
+   "name": "Oszlár Albert",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "o002"
+  },
+  {
+   "name_raw": "Dr. Őry Csaba (Fidesz)",
+   "name": "Dr. Őry Csaba",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "o004"
+  },
+  {
+   "name_raw": "Pánczél Károly (Fidesz)",
+   "name": "Pánczél Károly",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p003"
+  },
+  {
+   "name_raw": "Dr. Pap János (Fidesz)",
+   "name": "Dr. Pap János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p286"
+  },
+  {
+   "name_raw": "Perlaki Jenő (Fidesz)",
+   "name": "Perlaki Jenő",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p004"
+  },
+  {
+   "name_raw": "Pogácsás Tibor (Fidesz)",
+   "name": "Pogácsás Tibor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p006"
+  },
+  {
+   "name_raw": "Pokorni Zoltán (Fidesz)",
+   "name": "Pokorni Zoltán",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p306"
+  },
+  {
+   "name_raw": "Polonyi Kornél (Fidesz)",
+   "name": "Polonyi Kornél",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p008"
+  },
+  {
+   "name_raw": "Dr. Pósán László (Fidesz)",
+   "name": "Dr. Pósán László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p012"
+  },
+  {
+   "name_raw": "Potápi Árpád János (Fidesz)",
+   "name": "Potápi Árpád János",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "p009"
+  },
+  {
+   "name_raw": "Dr. Rákos Tibor (Fidesz)",
+   "name": "Dr. Rákos Tibor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r004"
+  },
+  {
+   "name_raw": "Dr. Rapcsák András (Fidesz)",
+   "name": "Dr. Rapcsák András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r312"
+  },
+  {
+   "name_raw": "Dr. Répássy Róbert (Fidesz)",
+   "name": "Dr. Répássy Róbert",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "u002"
+  },
+  {
+   "name_raw": "Révész Máriusz (Fidesz)",
+   "name": "Révész Máriusz",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r005"
+  },
+  {
+   "name_raw": "Rigler Zoltán (Fidesz)",
+   "name": "Rigler Zoltán",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r007"
+  },
+  {
+   "name_raw": "Rockenbauer Zoltán (Fidesz)",
+   "name": "Rockenbauer Zoltán",
+   "faction": "Fidesz",
+   "position": "igazoltan_tavol",
+   "mp_azon": "r309"
+  },
+  {
+   "name_raw": "Rogán Antal (Fidesz)",
+   "name": "Rogán Antal",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r008"
+  },
+  {
+   "name_raw": "Dr. Rubovszky György (Fidesz)",
+   "name": "Dr. Rubovszky György",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r315"
+  },
+  {
+   "name_raw": "Ruchti Róbert (Fidesz)",
+   "name": "Ruchti Róbert",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "r010"
+  },
+  {
+   "name_raw": "Sági József (Fidesz)",
+   "name": "Sági József",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s005"
+  },
+  {
+   "name_raw": "Dr. Salamon László (Fidesz)",
+   "name": "Dr. Salamon László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s201"
+  },
+  {
+   "name_raw": "Dr. Sáringer Gyula Ede (Fidesz)",
+   "name": "Dr. Sáringer Gyula Ede",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s008"
+  },
+  {
+   "name_raw": "Sasvári Szilárd (Fidesz)",
+   "name": "Sasvári Szilárd",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s329"
+  },
+  {
+   "name_raw": "Schmidt Ferenc (Fidesz)",
+   "name": "Schmidt Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s009"
+  },
+  {
+   "name_raw": "Dr. Selmeczi Gabriella (Fidesz)",
+   "name": "Dr. Selmeczi Gabriella",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s322"
+  },
+  {
+   "name_raw": "Dr. Simicskó István (Fidesz)",
+   "name": "Dr. Simicskó István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s011"
+  },
+  {
+   "name_raw": "Steinerné Vasvári Éva (Fidesz)",
+   "name": "Steinerné Vasvári Éva",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s032"
+  },
+  {
+   "name_raw": "Dr. Surján László (Fidesz)",
+   "name": "Dr. Surján László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s361"
+  },
+  {
+   "name_raw": "Dr. Sümeghy Csaba (Fidesz)",
+   "name": "Dr. Sümeghy Csaba",
+   "faction": "Fidesz",
+   "position": "nem_szavazott",
+   "mp_azon": "s311"
+  },
+  {
+   "name_raw": "Dr. Szabó Erika (Fidesz)",
+   "name": "Dr. Szabó Erika",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s352"
+  },
+  {
+   "name_raw": "Szabó Ferenc (Fidesz)",
+   "name": "Szabó Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s020"
+  },
+  {
+   "name_raw": "Szabó István (Fidesz)",
+   "name": "Szabó István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s022"
+  },
+  {
+   "name_raw": "Dr. Szabó József Andor (Fidesz)",
+   "name": "Dr. Szabó József Andor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s018"
+  },
+  {
+   "name_raw": "Dr. Szájer József (Fidesz)",
+   "name": "Dr. Szájer József",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s317"
+  },
+  {
+   "name_raw": "Dr. Szakács Imre (Fidesz)",
+   "name": "Dr. Szakács Imre",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s024"
+  },
+  {
+   "name_raw": "Szalai Annamária (Fidesz)",
+   "name": "Szalai Annamária",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s025"
+  },
+  {
+   "name_raw": "Szinyei András (Fidesz)",
+   "name": "Szinyei András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s029"
+  },
+  {
+   "name_raw": "Szita Károly (Fidesz)",
+   "name": "Szita Károly",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s030"
+  },
+  {
+   "name_raw": "Dr. Szűcs Lajos (Fidesz)",
+   "name": "Dr. Szűcs Lajos",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "s038"
+  },
+  {
+   "name_raw": "Tállai András (Fidesz)",
+   "name": "Tállai András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t002"
+  },
+  {
+   "name_raw": "Tirts Tamás (Fidesz)",
+   "name": "Tirts Tamás",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t314"
+  },
+  {
+   "name_raw": "Tóth András (Fidesz)",
+   "name": "Tóth András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t009"
+  },
+  {
+   "name_raw": "Tóth Ferenc (Fidesz)",
+   "name": "Tóth Ferenc",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t010"
+  },
+  {
+   "name_raw": "Tóth Gábor (Fidesz)",
+   "name": "Tóth Gábor",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t008"
+  },
+  {
+   "name_raw": "Tóth István (Fidesz)",
+   "name": "Tóth István",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t006"
+  },
+  {
+   "name_raw": "Dr. Tölgyessy Péter (Fidesz)",
+   "name": "Dr. Tölgyessy Péter",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "t284"
+  },
+  {
+   "name_raw": "Ughy Attila (Fidesz)",
+   "name": "Ughy Attila",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "u001"
+  },
+  {
+   "name_raw": "Dr. Varga László (Fidesz)",
+   "name": "Dr. Varga László",
+   "faction": "Fidesz",
+   "position": "nem_szavazott",
+   "mp_azon": "v395"
+  },
+  {
+   "name_raw": "Varga Mihály (Fidesz)",
+   "name": "Varga Mihály",
+   "faction": "Fidesz",
+   "position": "nem_szavazott",
+   "mp_azon": "v331"
+  },
+  {
+   "name_raw": "Várhegyi Attila (Fidesz)",
+   "name": "Várhegyi Attila",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "v003"
+  },
+  {
+   "name_raw": "Várkonyi András (Fidesz)",
+   "name": "Várkonyi András",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "v005"
+  },
+  {
+   "name_raw": "Végh László (Fidesz)",
+   "name": "Végh László",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "v006"
+  },
+  {
+   "name_raw": "Dr. Vidoven Árpád (Fidesz)",
+   "name": "Dr. Vidoven Árpád",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "v010"
+  },
+  {
+   "name_raw": "Vígh Ilona (Fidesz)",
+   "name": "Vígh Ilona",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "v001"
+  },
+  {
+   "name_raw": "Dr. Vitányi István József (Fidesz)",
+   "name": "Dr. Vitányi István József",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "v008"
+  },
+  {
+   "name_raw": "Dr. Weszelovszky Zoltán (Fidesz)",
+   "name": "Dr. Weszelovszky Zoltán",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "w377"
+  },
+  {
+   "name_raw": "Zsigó Róbert (Fidesz)",
+   "name": "Zsigó Róbert",
+   "faction": "Fidesz",
+   "position": "igen",
+   "mp_azon": "z004"
+  },
+  {
+   "name_raw": "Dr. Ábrahám János (MSZP)",
+   "name": "Dr. Ábrahám János",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "a003"
+  },
+  {
+   "name_raw": "Antalóczy Attila (MSZP)",
+   "name": "Antalóczy Attila",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "a124"
+  },
+  {
+   "name_raw": "Dr. Avarkeszi Dezső (MSZP)",
+   "name": "Dr. Avarkeszi Dezső",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "a126"
+  },
+  {
+   "name_raw": "Dr. Baja Ferenc (MSZP)",
+   "name": "Dr. Baja Ferenc",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "b127"
+  },
+  {
+   "name_raw": "Bajor Tibor (MSZP)",
+   "name": "Bajor Tibor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b128"
+  },
+  {
+   "name_raw": "Dr. Bakonyi Tibor (MSZP)",
+   "name": "Dr. Bakonyi Tibor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b141"
+  },
+  {
+   "name_raw": "Dr. Balogh László (MSZP)",
+   "name": "Dr. Balogh László",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "b025"
+  },
+  {
+   "name_raw": "Dr. Baráth Etele (MSZP)",
+   "name": "Dr. Baráth Etele",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "b147"
+  },
+  {
+   "name_raw": "Bársony András (MSZP)",
+   "name": "Bársony András",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "b151"
+  },
+  {
+   "name_raw": "Dr. Bazsa György (MSZP)",
+   "name": "Dr. Bazsa György",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b027"
+  },
+  {
+   "name_raw": "Benedek Mihály (MSZP)",
+   "name": "Benedek Mihály",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "b155"
+  },
+  {
+   "name_raw": "Bodzás Ferenc Árpád (MSZP)",
+   "name": "Bodzás Ferenc Árpád",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b029"
+  },
+  {
+   "name_raw": "Boldvai László (MSZP)",
+   "name": "Boldvai László",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "b162"
+  },
+  {
+   "name_raw": "Burány Sándor (MSZP)",
+   "name": "Burány Sándor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b166"
+  },
+  {
+   "name_raw": "Csabai Lászlóné (MSZP)",
+   "name": "Csabai Lászlóné",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b168"
+  },
+  {
+   "name_raw": "Dr. Csákabonyi Balázs (MSZP)",
+   "name": "Dr. Csákabonyi Balázs",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "b169"
+  },
+  {
+   "name_raw": "Csige József (MSZP)",
+   "name": "Csige József",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "c171"
+  },
+  {
+   "name_raw": "Dr. Csiha Judit (MSZP)",
+   "name": "Dr. Csiha Judit",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "c173"
+  },
+  {
+   "name_raw": "Csintalan Sándor (MSZP)",
+   "name": "Csintalan Sándor",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "c175"
+  },
+  {
+   "name_raw": "Csizmár Gábor (MSZP)",
+   "name": "Csizmár Gábor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "c177"
+  },
+  {
+   "name_raw": "Donáth László (MSZP)",
+   "name": "Donáth László",
+   "faction": "MSZP",
+   "position": "tartozkodott",
+   "mp_azon": "d184"
+  },
+  {
+   "name_raw": "Ecsődi László (MSZP)",
+   "name": "Ecsődi László",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "e185"
+  },
+  {
+   "name_raw": "Érsek Zsolt (MSZP)",
+   "name": "Érsek Zsolt",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "e188"
+  },
+  {
+   "name_raw": "Dr. Faragó Péter (MSZP)",
+   "name": "Dr. Faragó Péter",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "f189"
+  },
+  {
+   "name_raw": "Farkas Imre (MSZP)",
+   "name": "Farkas Imre",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "f190"
+  },
+  {
+   "name_raw": "Filló Pál (MSZP)",
+   "name": "Filló Pál",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "f372"
+  },
+  {
+   "name_raw": "Fodor Sándor (MSZP)",
+   "name": "Fodor Sándor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "f474"
+  },
+  {
+   "name_raw": "Francz Rezső (MSZP)",
+   "name": "Francz Rezső",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "f195"
+  },
+  {
+   "name_raw": "Fritz Péter (MSZP)",
+   "name": "Fritz Péter",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "f196"
+  },
+  {
+   "name_raw": "Dr. Füle István (MSZP)",
+   "name": "Dr. Füle István",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "f198"
+  },
+  {
+   "name_raw": "Dr. Gál Zoltán (MSZP)",
+   "name": "Dr. Gál Zoltán",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "g124"
+  },
+  {
+   "name_raw": "Dr. Géczi József Alajos (MSZP)",
+   "name": "Dr. Géczi József Alajos",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "g370"
+  },
+  {
+   "name_raw": "Godó Lajos (MSZP)",
+   "name": "Godó Lajos",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "g203"
+  },
+  {
+   "name_raw": "Göndör István (MSZP)",
+   "name": "Göndör István",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "g205"
+  },
+  {
+   "name_raw": "Gráf József (MSZP)",
+   "name": "Gráf József",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "g207"
+  },
+  {
+   "name_raw": "Gyárfás Ildikó (MSZP)",
+   "name": "Gyárfás Ildikó",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "r311"
+  },
+  {
+   "name_raw": "Hajdu László (MSZP)",
+   "name": "Hajdu László",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "h211"
+  },
+  {
+   "name_raw": "Dr. Házas József (MSZP)",
+   "name": "Dr. Házas József",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "h214"
+  },
+  {
+   "name_raw": "Hegyi Gyula (MSZP)",
+   "name": "Hegyi Gyula",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "h215"
+  },
+  {
+   "name_raw": "Herbály Imre (MSZP)",
+   "name": "Herbály Imre",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "h216"
+  },
+  {
+   "name_raw": "Herczog Edit (MSZP)",
+   "name": "Herczog Edit",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "h015"
+  },
+  {
+   "name_raw": "Hiesz György (MSZP)",
+   "name": "Hiesz György",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "h219"
+  },
+  {
+   "name_raw": "Horn Gyula (MSZP)",
+   "name": "Horn Gyula",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "h073"
+  },
+  {
+   "name_raw": "Iváncsik Imre (MSZP)",
+   "name": "Iváncsik Imre",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "i225"
+  },
+  {
+   "name_raw": "Jakab Róbertné (MSZP)",
+   "name": "Jakab Róbertné",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "j018"
+  },
+  {
+   "name_raw": "Dr. Jakus Zoltán (MSZP)",
+   "name": "Dr. Jakus Zoltán",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "j002"
+  },
+  {
+   "name_raw": "Dr. Jánosi György (MSZP)",
+   "name": "Dr. Jánosi György",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "j368"
+  },
+  {
+   "name_raw": "Jauernik István (MSZP)",
+   "name": "Jauernik István",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "j228"
+  },
+  {
+   "name_raw": "Juhász Ferenc (MSZP)",
+   "name": "Juhász Ferenc",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "j230"
+  },
+  {
+   "name_raw": "Juhász Gábor (MSZP)",
+   "name": "Juhász Gábor",
+   "faction": "MSZP",
+   "position": "tartozkodott",
+   "mp_azon": "j231"
+  },
+  {
+   "name_raw": "Dr. Juhászné Lévai Katalin (MSZP)",
+   "name": "Dr. Juhászné Lévai Katalin",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "j232"
+  },
+  {
+   "name_raw": "Dr. Kálmán András (MSZP)",
+   "name": "Dr. Kálmán András",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k008"
+  },
+  {
+   "name_raw": "Karakas János (MSZP)",
+   "name": "Karakas János",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k236"
+  },
+  {
+   "name_raw": "Dr. Karl Imre (MSZP)",
+   "name": "Dr. Karl Imre",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k237"
+  },
+  {
+   "name_raw": "Dr. Katona Béla (MSZP)",
+   "name": "Dr. Katona Béla",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k157"
+  },
+  {
+   "name_raw": "Keleti György (MSZP)",
+   "name": "Keleti György",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k380"
+  },
+  {
+   "name_raw": "Keller László (MSZP)",
+   "name": "Keller László",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k240"
+  },
+  {
+   "name_raw": "Kertész István (MSZP)",
+   "name": "Kertész István",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k241"
+  },
+  {
+   "name_raw": "Dr. Kiss Gábor (MSZP)",
+   "name": "Dr. Kiss Gábor",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k243"
+  },
+  {
+   "name_raw": "Kiss Péter (MSZP)",
+   "name": "Kiss Péter",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k382"
+  },
+  {
+   "name_raw": "Kocsi László (MSZP)",
+   "name": "Kocsi László",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k245"
+  },
+  {
+   "name_raw": "Dr. Koleszár Lajos (MSZP)",
+   "name": "Dr. Koleszár Lajos",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "k248"
+  },
+  {
+   "name_raw": "Korózs Lajos (MSZP)",
+   "name": "Korózs Lajos",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k254"
+  },
+  {
+   "name_raw": "Kósa Ferenc (MSZP)",
+   "name": "Kósa Ferenc",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k099"
+  },
+  {
+   "name_raw": "Kósáné Dr. Kovács Magda (MSZP)",
+   "name": "Kósáné Dr. Kovács Magda",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k338"
+  },
+  {
+   "name_raw": "Kovács László (MSZP)",
+   "name": "Kovács László",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "k108"
+  },
+  {
+   "name_raw": "Kovács Tibor (MSZP)",
+   "name": "Kovács Tibor",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "k257"
+  },
+  {
+   "name_raw": "Dr. Kökény Mihály (MSZP)",
+   "name": "Dr. Kökény Mihály",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k247"
+  },
+  {
+   "name_raw": "Kristyánné Aknai Erzsébet (MSZP)",
+   "name": "Kristyánné Aknai Erzsébet",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "k259"
+  },
+  {
+   "name_raw": "Lakatos András (MSZP)",
+   "name": "Lakatos András",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "l262"
+  },
+  {
+   "name_raw": "Dr. Lamperth Mónika (MSZP)",
+   "name": "Dr. Lamperth Mónika",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "l263"
+  },
+  {
+   "name_raw": "Lendvai Ildikó (MSZP)",
+   "name": "Lendvai Ildikó",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "l267"
+  },
+  {
+   "name_raw": "Lévai Ferenc (MSZP)",
+   "name": "Lévai Ferenc",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "l006"
+  },
+  {
+   "name_raw": "Mayer Bertalan (MSZP)",
+   "name": "Mayer Bertalan",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "m555"
+  },
+  {
+   "name_raw": "Molnár Albert (MSZP)",
+   "name": "Molnár Albert",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "m018"
+  },
+  {
+   "name_raw": "Molnár Gyula (MSZP)",
+   "name": "Molnár Gyula",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "m282"
+  },
+  {
+   "name_raw": "Dr. Molnár János (MSZP)",
+   "name": "Dr. Molnár János",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "m281"
+  },
+  {
+   "name_raw": "Nagyiványi Zoltán (MSZP)",
+   "name": "Nagyiványi Zoltán",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "n291"
+  },
+  {
+   "name_raw": "Dr. Nagy Sándor (MSZP)",
+   "name": "Dr. Nagy Sándor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "n575"
+  },
+  {
+   "name_raw": "Dr. Nemcsók János (MSZP)",
+   "name": "Dr. Nemcsók János",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "n293"
+  },
+  {
+   "name_raw": "Dr. Németh Imre (MSZP)",
+   "name": "Dr. Németh Imre",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "n005"
+  },
+  {
+   "name_raw": "Nikolits István (MSZP)",
+   "name": "Nikolits István",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "n295"
+  },
+  {
+   "name_raw": "Dr. Orosz Sándor (MSZP)",
+   "name": "Dr. Orosz Sándor",
+   "faction": "MSZP",
+   "position": "nem",
+   "mp_azon": "o298"
+  },
+  {
+   "name_raw": "Pál Béla (MSZP)",
+   "name": "Pál Béla",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p299"
+  },
+  {
+   "name_raw": "Paszternák László (MSZP)",
+   "name": "Paszternák László",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "p137"
+  },
+  {
+   "name_raw": "Pásztohy András (MSZP)",
+   "name": "Pásztohy András",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p596"
+  },
+  {
+   "name_raw": "Páva Zoltán (MSZP)",
+   "name": "Páva Zoltán",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "p304"
+  },
+  {
+   "name_raw": "Podolák György (MSZP)",
+   "name": "Podolák György",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p005"
+  },
+  {
+   "name_raw": "Pozsgai Balázs (MSZP)",
+   "name": "Pozsgai Balázs",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p307"
+  },
+  {
+   "name_raw": "Puch László (MSZP)",
+   "name": "Puch László",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p308"
+  },
+  {
+   "name_raw": "Pusztai Csaba (MSZP)",
+   "name": "Pusztai Csaba",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p310"
+  },
+  {
+   "name_raw": "Dr. Pusztai Gyula (MSZP)",
+   "name": "Dr. Pusztai Gyula",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "p011"
+  },
+  {
+   "name_raw": "Dr. Sáling József (MSZP)",
+   "name": "Dr. Sáling József",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s006"
+  },
+  {
+   "name_raw": "Dr. Sándor László (MSZP)",
+   "name": "Dr. Sándor László",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "s007"
+  },
+  {
+   "name_raw": "Schalkhammer Antal (MSZP)",
+   "name": "Schalkhammer Antal",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s320"
+  },
+  {
+   "name_raw": "Dr. Schvarcz Tibor (MSZP)",
+   "name": "Dr. Schvarcz Tibor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s321"
+  },
+  {
+   "name_raw": "Dr. Serfőző András (MSZP)",
+   "name": "Dr. Serfőző András",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s325"
+  },
+  {
+   "name_raw": "Sibak András (MSZP)",
+   "name": "Sibak András",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s035"
+  },
+  {
+   "name_raw": "Simon József (MSZP)",
+   "name": "Simon József",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s327"
+  },
+  {
+   "name_raw": "Dr. Solymosi József (MSZP)",
+   "name": "Dr. Solymosi József",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s630"
+  },
+  {
+   "name_raw": "Dr. Soós Győző (MSZP)",
+   "name": "Dr. Soós Győző",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s310"
+  },
+  {
+   "name_raw": "Dr. Suchman Tamás (MSZP)",
+   "name": "Dr. Suchman Tamás",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s365"
+  },
+  {
+   "name_raw": "Szabados Tamás (MSZP)",
+   "name": "Szabados Tamás",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s312"
+  },
+  {
+   "name_raw": "Szabó György (MSZP)",
+   "name": "Szabó György",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s748"
+  },
+  {
+   "name_raw": "Szabó Imre (MSZP)",
+   "name": "Szabó Imre",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s021"
+  },
+  {
+   "name_raw": "Szabó Sándorné (MSZP)",
+   "name": "Szabó Sándorné",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s331"
+  },
+  {
+   "name_raw": "Szabó Vilmos (MSZP)",
+   "name": "Szabó Vilmos",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s023"
+  },
+  {
+   "name_raw": "Dr. Szabó Zoltán (MSZP)",
+   "name": "Dr. Szabó Zoltán",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s314"
+  },
+  {
+   "name_raw": "Dr. Szalay István (MSZP)",
+   "name": "Dr. Szalay István",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s026"
+  },
+  {
+   "name_raw": "Dr. Szanyi Tibor (MSZP)",
+   "name": "Dr. Szanyi Tibor",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s027"
+  },
+  {
+   "name_raw": "Dr. Szekeres Imre (MSZP)",
+   "name": "Dr. Szekeres Imre",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s358"
+  },
+  {
+   "name_raw": "Szilágyi Péter (MSZP)",
+   "name": "Szilágyi Péter",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s370"
+  },
+  {
+   "name_raw": "Dr. Szili Katalin (MSZP)",
+   "name": "Dr. Szili Katalin",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s372"
+  },
+  {
+   "name_raw": "Szili Sándor (MSZP)",
+   "name": "Szili Sándor",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "s104"
+  },
+  {
+   "name_raw": "Dr. Szűrös Mátyás (MSZP)",
+   "name": "Dr. Szűrös Mátyás",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "s015"
+  },
+  {
+   "name_raw": "Dr. Tabajdi Csaba (MSZP)",
+   "name": "Dr. Tabajdi Csaba",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "t364"
+  },
+  {
+   "name_raw": "Dr. Takács Imre (MSZP)",
+   "name": "Dr. Takács Imre",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "t375"
+  },
+  {
+   "name_raw": "Tatai-Tóth András (MSZP)",
+   "name": "Tatai-Tóth András",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "t385"
+  },
+  {
+   "name_raw": "Tóbiás József (MSZP)",
+   "name": "Tóbiás József",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "t005"
+  },
+  {
+   "name_raw": "Tokár István (MSZP)",
+   "name": "Tokár István",
+   "faction": "MSZP",
+   "position": "nem",
+   "mp_azon": "t380"
+  },
+  {
+   "name_raw": "Dr. Toller László (MSZP)",
+   "name": "Dr. Toller László",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "t381"
+  },
+  {
+   "name_raw": "Dr. Tompa Sándor (MSZP)",
+   "name": "Dr. Tompa Sándor",
+   "faction": "MSZP",
+   "position": "tartozkodott",
+   "mp_azon": "t367"
+  },
+  {
+   "name_raw": "Tóth András (MSZP)",
+   "name": "Tóth András",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "t384"
+  },
+  {
+   "name_raw": "Tóth Károly (MSZP)",
+   "name": "Tóth Károly",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "t387"
+  },
+  {
+   "name_raw": "Tóth Sándor (MSZP)",
+   "name": "Tóth Sándor",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "t386"
+  },
+  {
+   "name_raw": "Üszögi-Bleyer Jenő (MSZP)",
+   "name": "Üszögi-Bleyer Jenő",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "b161"
+  },
+  {
+   "name_raw": "Dr. Vágvölgyi János (MSZP)",
+   "name": "Dr. Vágvölgyi János",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "v002"
+  },
+  {
+   "name_raw": "Vancsik Zoltán (MSZP)",
+   "name": "Vancsik Zoltán",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "v393"
+  },
+  {
+   "name_raw": "Vargáné Kerékgyártó Ildikó (MSZP)",
+   "name": "Vargáné Kerékgyártó Ildikó",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "v400"
+  },
+  {
+   "name_raw": "Dr. Vastagh Pál (MSZP)",
+   "name": "Dr. Vastagh Pál",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "v190"
+  },
+  {
+   "name_raw": "Dr. Veres János (MSZP)",
+   "name": "Dr. Veres János",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "v403"
+  },
+  {
+   "name_raw": "Vitányi Iván (MSZP)",
+   "name": "Vitányi Iván",
+   "faction": "MSZP",
+   "position": "nem_szavazott",
+   "mp_azon": "v047"
+  },
+  {
+   "name_raw": "Dr. Vojnik Mária (MSZP)",
+   "name": "Dr. Vojnik Mária",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "v009"
+  },
+  {
+   "name_raw": "Dr. Wiener György (MSZP)",
+   "name": "Dr. Wiener György",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "w001"
+  },
+  {
+   "name_raw": "Zatykó János (MSZP)",
+   "name": "Zatykó János",
+   "faction": "MSZP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "y404"
+  },
+  {
+   "name_raw": "Zuschlag János László (MSZP)",
+   "name": "Zuschlag János László",
+   "faction": "MSZP",
+   "position": "igen",
+   "mp_azon": "z006"
+  },
+  {
+   "name_raw": "Atyánszky György (FKGP)",
+   "name": "Atyánszky György",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "a006"
+  },
+  {
+   "name_raw": "Balogh Gyula (FKGP)",
+   "name": "Balogh Gyula",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "b026"
+  },
+  {
+   "name_raw": "Balogh József (FKGP)",
+   "name": "Balogh József",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "b023"
+  },
+  {
+   "name_raw": "Dr. Bánk Attila (FKGP)",
+   "name": "Dr. Bánk Attila",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "b003"
+  },
+  {
+   "name_raw": "Barkóczy Gellért (FKGP)",
+   "name": "Barkóczy Gellért",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "b149"
+  },
+  {
+   "name_raw": "Dr. Bernáth Varga Balázs (FKGP)",
+   "name": "Dr. Bernáth Varga Balázs",
+   "faction": "FKGP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "b157"
+  },
+  {
+   "name_raw": "Dr. Boda Ilona (FKGP)",
+   "name": "Dr. Boda Ilona",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "b028"
+  },
+  {
+   "name_raw": "Dr. Boros Imre (FKGP)",
+   "name": "Dr. Boros Imre",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "b031"
+  },
+  {
+   "name_raw": "Dr. Czira Szabolcs (FKGP)",
+   "name": "Dr. Czira Szabolcs",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "c008"
+  },
+  {
+   "name_raw": "Czoma Kálmán (FKGP)",
+   "name": "Czoma Kálmán",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "c179"
+  },
+  {
+   "name_raw": "Csatári József (FKGP)",
+   "name": "Csatári József",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "c005"
+  },
+  {
+   "name_raw": "Dr. Dán János (FKGP)",
+   "name": "Dr. Dán János",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "d005"
+  },
+  {
+   "name_raw": "Danka Lajos (FKGP)",
+   "name": "Danka Lajos",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "d006"
+  },
+  {
+   "name_raw": "Dögei Imre (FKGP)",
+   "name": "Dögei Imre",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "d183"
+  },
+  {
+   "name_raw": "Dr. Fenyvesi Máté (FKGP)",
+   "name": "Dr. Fenyvesi Máté",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "f007"
+  },
+  {
+   "name_raw": "Gyimóthy Géza (FKGP)",
+   "name": "Gyimóthy Géza",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "g208"
+  },
+  {
+   "name_raw": "Hanó Miklós (FKGP)",
+   "name": "Hanó Miklós",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "h010"
+  },
+  {
+   "name_raw": "Dr. Hegedűs Mihály (FKGP)",
+   "name": "Dr. Hegedűs Mihály",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "h011"
+  },
+  {
+   "name_raw": "Dr. Homoki János (FKGP)",
+   "name": "Dr. Homoki János",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "h221"
+  },
+  {
+   "name_raw": "Horváth Béla (FKGP)",
+   "name": "Horváth Béla",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "h260"
+  },
+  {
+   "name_raw": "Dr. Kávássy Sándor (FKGP)",
+   "name": "Dr. Kávássy Sándor",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "k085"
+  },
+  {
+   "name_raw": "Kékkői Zoltán József (FKGP)",
+   "name": "Kékkői Zoltán József",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "k011"
+  },
+  {
+   "name_raw": "Koppánné Dr. Kertész Margit (FKGP)",
+   "name": "Koppánné Dr. Kertész Margit",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "k027"
+  },
+  {
+   "name_raw": "Dr. Kurucsai Csaba (FKGP)",
+   "name": "Dr. Kurucsai Csaba",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "k020"
+  },
+  {
+   "name_raw": "Lengyel János (FKGP)",
+   "name": "Lengyel János",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "l011"
+  },
+  {
+   "name_raw": "Dr. Orosházi György (FKGP)",
+   "name": "Dr. Orosházi György",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "o001"
+  },
+  {
+   "name_raw": "Pallag László (FKGP)",
+   "name": "Pallag László",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "p300"
+  },
+  {
+   "name_raw": "Pancza István (FKGP)",
+   "name": "Pancza István",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "p301"
+  },
+  {
+   "name_raw": "Dr. Pokol Béla (FKGP)",
+   "name": "Dr. Pokol Béla",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "p007"
+  },
+  {
+   "name_raw": "Dr. Simon Miklós (FKGP)",
+   "name": "Dr. Simon Miklós",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "s012"
+  },
+  {
+   "name_raw": "Dr. Szabó János (FKGP)",
+   "name": "Dr. Szabó János",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "s010"
+  },
+  {
+   "name_raw": "Dr. Szentgyörgyvölgyi Péter (FKGP)",
+   "name": "Dr. Szentgyörgyvölgyi Péter",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "s028"
+  },
+  {
+   "name_raw": "Dr. Tímár György (FKGP)",
+   "name": "Dr. Tímár György",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "t377"
+  },
+  {
+   "name_raw": "Dr. Torgyán Józsefné Cseh  Mária (FKGP)",
+   "name": "Dr. Torgyán Józsefné Cseh  Mária",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "t382"
+  },
+  {
+   "name_raw": "Tóth Imre (FKGP)",
+   "name": "Tóth Imre",
+   "faction": "FKGP",
+   "position": "nem_szavazott",
+   "mp_azon": "t007"
+  },
+  {
+   "name_raw": "Dr. Turi-Kovács Béla (FKGP)",
+   "name": "Dr. Turi-Kovács Béla",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "t004"
+  },
+  {
+   "name_raw": "Dr. Várhelyi András (FKGP)",
+   "name": "Dr. Várhelyi András",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "v004"
+  },
+  {
+   "name_raw": "Vincze László (FKGP)",
+   "name": "Vincze László",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "v007"
+  },
+  {
+   "name_raw": "Zakó László (FKGP)",
+   "name": "Zakó László",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "z001"
+  },
+  {
+   "name_raw": "Zsikla Győző (FKGP)",
+   "name": "Zsikla Győző",
+   "faction": "FKGP",
+   "position": "igen",
+   "mp_azon": "z005"
+  },
+  {
+   "name_raw": "Bauer Tamás (SZDSZ)",
+   "name": "Bauer Tamás",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "b152"
+  },
+  {
+   "name_raw": "Béki Gabriella (SZDSZ)",
+   "name": "Béki Gabriella",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "b344"
+  },
+  {
+   "name_raw": "Dr. Dornbach Alajos (SZDSZ)",
+   "name": "Dr. Dornbach Alajos",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "d090"
+  },
+  {
+   "name_raw": "Dr. Eörsi Mátyás (SZDSZ)",
+   "name": "Dr. Eörsi Mátyás",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "e262"
+  },
+  {
+   "name_raw": "Fodor Gábor (SZDSZ)",
+   "name": "Fodor Gábor",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "f319"
+  },
+  {
+   "name_raw": "Dr. Hack Péter (SZDSZ)",
+   "name": "Dr. Hack Péter",
+   "faction": "SZDSZ",
+   "position": "igazoltan_tavol",
+   "mp_azon": "h304"
+  },
+  {
+   "name_raw": "Dr. Hankó Faragó Miklós (SZDSZ)",
+   "name": "Dr. Hankó Faragó Miklós",
+   "faction": "SZDSZ",
+   "position": "igazoltan_tavol",
+   "mp_azon": "h305"
+  },
+  {
+   "name_raw": "Horn Gábor (SZDSZ)",
+   "name": "Horn Gábor",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "h223"
+  },
+  {
+   "name_raw": "Iványi Gábor (SZDSZ)",
+   "name": "Iványi Gábor",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "i239"
+  },
+  {
+   "name_raw": "Dr. Kis Zoltán (SZDSZ)",
+   "name": "Dr. Kis Zoltán",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "k261"
+  },
+  {
+   "name_raw": "Dr. Kóródi Mária (SZDSZ)",
+   "name": "Dr. Kóródi Mária",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "k345"
+  },
+  {
+   "name_raw": "Kovács Kálmán (SZDSZ)",
+   "name": "Kovács Kálmán",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "k009"
+  },
+  {
+   "name_raw": "Kuncze Gábor (SZDSZ)",
+   "name": "Kuncze Gábor",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "k225"
+  },
+  {
+   "name_raw": "Dr. Lotz Károly (SZDSZ)",
+   "name": "Dr. Lotz Károly",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "l095"
+  },
+  {
+   "name_raw": "Mádai Péter (SZDSZ)",
+   "name": "Mádai Péter",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "m109"
+  },
+  {
+   "name_raw": "Dr. Magyar Bálint (SZDSZ)",
+   "name": "Dr. Magyar Bálint",
+   "faction": "SZDSZ",
+   "position": "igazoltan_tavol",
+   "mp_azon": "m247"
+  },
+  {
+   "name_raw": "Mécs Imre (SZDSZ)",
+   "name": "Mécs Imre",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "m079"
+  },
+  {
+   "name_raw": "Dr. Pető Iván (SZDSZ)",
+   "name": "Dr. Pető Iván",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "p189"
+  },
+  {
+   "name_raw": "Szalay Gábor (SZDSZ)",
+   "name": "Szalay Gábor",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "s149"
+  },
+  {
+   "name_raw": "Dr. Szent-Iványi István (SZDSZ)",
+   "name": "Dr. Szent-Iványi István",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "s297"
+  },
+  {
+   "name_raw": "Tardos Márton (SZDSZ)",
+   "name": "Tardos Márton",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "t059"
+  },
+  {
+   "name_raw": "T. Asztalos Ildikó (SZDSZ)",
+   "name": "T. Asztalos Ildikó",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "t001"
+  },
+  {
+   "name_raw": "Dr. Világosi Gábor (SZDSZ)",
+   "name": "Dr. Világosi Gábor",
+   "faction": "SZDSZ",
+   "position": "igen",
+   "mp_azon": "v276"
+  },
+  {
+   "name_raw": "Dr. Wekler Ferenc (SZDSZ)",
+   "name": "Dr. Wekler Ferenc",
+   "faction": "SZDSZ",
+   "position": "nem_szavazott",
+   "mp_azon": "w274"
+  },
+  {
+   "name_raw": "Balogh László (MDF)",
+   "name": "Balogh László",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "b024"
+  },
+  {
+   "name_raw": "Dr. Balsai István (MDF)",
+   "name": "Dr. Balsai István",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "b195"
+  },
+  {
+   "name_raw": "Dr. Csáky András (MDF)",
+   "name": "Dr. Csáky András",
+   "faction": "MDF",
+   "position": "nem_szavazott",
+   "mp_azon": "c004"
+  },
+  {
+   "name_raw": "Dr. Csapody Miklós (MDF)",
+   "name": "Dr. Csapody Miklós",
+   "faction": "MDF",
+   "position": "nem",
+   "mp_azon": "c272"
+  },
+  {
+   "name_raw": "Dr. Dávid Ibolya (MDF)",
+   "name": "Dr. Dávid Ibolya",
+   "faction": "MDF",
+   "position": "nem_szavazott",
+   "mp_azon": "d349"
+  },
+  {
+   "name_raw": "Ékes József (MDF)",
+   "name": "Ékes József",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "e002"
+  },
+  {
+   "name_raw": "Font Sándor (MDF)",
+   "name": "Font Sándor",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "f010"
+  },
+  {
+   "name_raw": "Dr. Gémesi György (MDF)",
+   "name": "Dr. Gémesi György",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "g015"
+  },
+  {
+   "name_raw": "Herényi Károly (MDF)",
+   "name": "Herényi Károly",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "h013"
+  },
+  {
+   "name_raw": "Dr. Horváth Balázs (MDF)",
+   "name": "Dr. Horváth Balázs",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "h141"
+  },
+  {
+   "name_raw": "Dr. Kelemen András (MDF)",
+   "name": "Dr. Kelemen András",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "k119"
+  },
+  {
+   "name_raw": "Lezsák Sándor (MDF)",
+   "name": "Lezsák Sándor",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "l269"
+  },
+  {
+   "name_raw": "Dr. Medgyasszay László (MDF)",
+   "name": "Dr. Medgyasszay László",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "m132"
+  },
+  {
+   "name_raw": "Szászfalvi László (MDF)",
+   "name": "Szászfalvi László",
+   "faction": "MDF",
+   "position": "igazoltan_tavol",
+   "mp_azon": "s013"
+  },
+  {
+   "name_raw": "Dr. Varga István (MDF)",
+   "name": "Dr. Varga István",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "v399"
+  },
+  {
+   "name_raw": "V. Németh Zsolt (MDF)",
+   "name": "V. Németh Zsolt",
+   "faction": "MDF",
+   "position": "igen",
+   "mp_azon": "n004"
+  },
+  {
+   "name_raw": "Balczó Zoltán (MIÉP)",
+   "name": "Balczó Zoltán",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "b022"
+  },
+  {
+   "name_raw": "Dr. Bogdán Emil (MIÉP)",
+   "name": "Dr. Bogdán Emil",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "b033"
+  },
+  {
+   "name_raw": "Dr. Bognár László (MIÉP)",
+   "name": "Dr. Bognár László",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "b384"
+  },
+  {
+   "name_raw": "Csurka István (MIÉP)",
+   "name": "Csurka István",
+   "faction": "MIÉP",
+   "position": "nem_szavazott",
+   "mp_azon": "c081"
+  },
+  {
+   "name_raw": "Erkel Tibor (MIÉP)",
+   "name": "Erkel Tibor",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "e004"
+  },
+  {
+   "name_raw": "Dr. Fenyvessy Zoltán (MIÉP)",
+   "name": "Dr. Fenyvessy Zoltán",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "f008"
+  },
+  {
+   "name_raw": "Dr. Gidai Erzsébet (MIÉP)",
+   "name": "Dr. Gidai Erzsébet",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "g016"
+  },
+  {
+   "name_raw": "ifj Hegedűs Loránt (MIÉP)",
+   "name": "ifj Hegedűs Loránt",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "h012"
+  },
+  {
+   "name_raw": "Kapronczi Mihály (MIÉP)",
+   "name": "Kapronczi Mihály",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "k235"
+  },
+  {
+   "name_raw": "Kiss Andor (MIÉP)",
+   "name": "Kiss Andor",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "k013"
+  },
+  {
+   "name_raw": "Dr. Lentner Csaba (MIÉP)",
+   "name": "Dr. Lentner Csaba",
+   "faction": "MIÉP",
+   "position": "igen",
+   "mp_azon": "l010"
+  },
+  {
+   "name_raw": "Rozgonyi Ernő (MIÉP)",
+   "name": "Rozgonyi Ernő",
+   "faction": "MIÉP",
+   "position": "igazoltan_tavol",
+   "mp_azon": "r009"
+  },
+  {
+   "name_raw": "Cseh Sándor (független)",
+   "name": "Cseh Sándor",
+   "faction": "független",
+   "position": "tartozkodott",
+   "mp_azon": "c006"
+  },
+  {
+   "name_raw": "Dr. Csúcs László (független)",
+   "name": "Dr. Csúcs László",
+   "faction": "független",
+   "position": "igen",
+   "mp_azon": "c007"
+  },
+  {
+   "name_raw": "Dr. Gyuga Pál (független)",
+   "name": "Dr. Gyuga Pál",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "g013"
+  },
+  {
+   "name_raw": "Dr. Helmeczy László (független)",
+   "name": "Dr. Helmeczy László",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "h009"
+  },
+  {
+   "name_raw": "Hortobágyi Krisztina (független)",
+   "name": "Hortobágyi Krisztina",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "h017"
+  },
+  {
+   "name_raw": "Dr. Kiszely Katalin (független)",
+   "name": "Dr. Kiszely Katalin",
+   "faction": "független",
+   "position": "igen",
+   "mp_azon": "k030"
+  },
+  {
+   "name_raw": "Dr. Kupa Mihály (független)",
+   "name": "Dr. Kupa Mihály",
+   "faction": "független",
+   "position": "igen",
+   "mp_azon": "k375"
+  },
+  {
+   "name_raw": "Lányi Zsolt (független)",
+   "name": "Lányi Zsolt",
+   "faction": "független",
+   "position": "tartozkodott",
+   "mp_azon": "l264"
+  },
+  {
+   "name_raw": "Molnár László (független)",
+   "name": "Molnár László",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "m011"
+  },
+  {
+   "name_raw": "Molnár Róbert (független)",
+   "name": "Molnár Róbert",
+   "faction": "független",
+   "position": "igen",
+   "mp_azon": "m012"
+  },
+  {
+   "name_raw": "Pápai Mihály (független)",
+   "name": "Pápai Mihály",
+   "faction": "független",
+   "position": "igen",
+   "mp_azon": "p302"
+  },
+  {
+   "name_raw": "Dr. Szabadi Béla (független)",
+   "name": "Dr. Szabadi Béla",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "s017"
+  },
+  {
+   "name_raw": "Dr. Szabó Attila (független)",
+   "name": "Dr. Szabó Attila",
+   "faction": "független",
+   "position": "igen",
+   "mp_azon": "s019"
+  },
+  {
+   "name_raw": "Szabó Lukács (független)",
+   "name": "Szabó Lukács",
+   "faction": "független",
+   "position": "tartozkodott",
+   "mp_azon": "s217"
+  },
+  {
+   "name_raw": "Székely Zoltán (független)",
+   "name": "Székely Zoltán",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "s016"
+  },
+  {
+   "name_raw": "Dr. Torgyán József (független)",
+   "name": "Dr. Torgyán József",
+   "faction": "független",
+   "position": "nem_szavazott",
+   "mp_azon": "t076"
+  }
+ ],
+ "position_counts": {
+  "nem_szavazott": 73,
+  "igen": 284,
+  "igazoltan_tavol": 20,
+  "tartozkodott": 6,
+  "nem": 3
+ },
+ "roll_call_available": true,
+ "present": 293,
+ "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+ "majority": {
+  "rule": "ketharmad_osszes",
+  "source": "payload",
+  "evidence": "Listás az összes képviselő 2/3-ával",
+  "base": 386,
+  "needed": 258,
+  "margin": 26,
+  "passed_by_rule": true,
+  "agrees_with_source": true,
+  "present_assumed": false
+ },
+ "derived_at": "2026-08-19T07:33:44.335267+02:00"
+}

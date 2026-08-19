@@ -82,7 +82,7 @@ class LoadFixtures(unittest.TestCase):
         n_votes = self.q("SELECT COUNT(*) FROM vote")[0][0]
         self.assertGreaterEqual(n_votes, 4)
         row = self.q("SELECT igen, nem, tartozkodott, present, majority_rule, needed, margin, passed, kind, secret, sitting_nap FROM vote WHERE ts='2026.06.15.17:20:04'")[0]
-        self.assertEqual(row, (135, 50, 6, 195, "ketharmad_osszes", 133, 2, 1, "dontes", 0, self.q("SELECT nap FROM sitting_day WHERE on_date='2026-06-15'")[0][0]))
+        self.assertEqual(row, (135, 50, 6, 191, "ketharmad_osszes", 133, 2, 1, "dontes", 0, self.q("SELECT nap FROM sitting_day WHERE on_date='2026-06-15'")[0][0]))   # present = votes cast
         self.assertEqual(self.q("SELECT COUNT(*) FROM vote_position WHERE vote_ts='2026.06.15.17:20:04'")[0][0], 199)
         self.assertEqual(self.q("SELECT COUNT(*) FROM vote_faction_tally WHERE vote_ts='2026.06.15.17:20:04'")[0][0], 4)
         # positions resolved for the 5 listed MPs (+ Budai via alias) — the rest are NULL and kept by name

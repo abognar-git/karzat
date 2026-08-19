@@ -1535,8 +1535,8 @@
   "jelen_nem_szavazott": 1
  },
  "roll_call_available": true,
- "present": 162,
- "present_basis": "nev_szerint: igen+nem+tart+jelen_nem_szav",
+ "present": 161,
+ "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
  "majority": {
   "rule": "ketharmad_osszes",
   "source": "payload",
@@ -1548,5 +1548,5 @@
   "agrees_with_source": true,
   "present_assumed": false
  },
- "derived_at": "2026-08-18T18:56:12.989859+02:00"
+ "derived_at": "2026-08-19T07:33:44.335267+02:00"
 }
