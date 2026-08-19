@@ -172,6 +172,16 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .door .go{display:block;margin-top:auto;color:var(--dim2);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
 a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go{color:var(--white)}
 @media(max-width:900px){.landing .masthead{grid-template-columns:1fr;padding:18px 16px 14px}.landing .mast-h h1{font-size:40px}.counts.land{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.land{grid-template-columns:1fr}.doors{grid-template-columns:1fr}.cyc{grid-template-columns:40px minmax(0,1fr)}.cyc .stat{text-align:left}}
+/* the sitting day as a strip: one bar per vote, the margin above or below the axis */
+.strip .stripwrap{overflow-x:auto;margin-top:6px;padding:2px 0}
+.strip svg{width:100%;height:56px;display:block;min-width:320px}
+.strip .axis{stroke:var(--border-hi);stroke-width:.4}
+.strip .b rect{fill:var(--dim3);transition:fill .12s}
+.strip .b .hit{fill:transparent}
+.strip .b.pass rect:first-child{fill:#3f7a55}.strip .b.fail rect:first-child{fill:#8a4a4a}.strip .b.q rect{fill:var(--border-hi)}
+.strip .b:hover rect:first-child,.strip .b:focus-visible rect:first-child{fill:var(--white)}
+.strip .b.now rect:first-child{fill:var(--white)}
+.strip .b.now .hit{fill:rgba(255,255,255,.07)}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}

@@ -821,6 +821,16 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .door .go{display:block;margin-top:auto;color:var(--dim2);font-size:10px;letter-spacing:.15em;text-transform:uppercase}
 a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go{color:var(--white)}
 @media(max-width:900px){.landing .masthead{grid-template-columns:1fr;padding:18px 16px 14px}.landing .mast-h h1{font-size:40px}.counts.land{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.land{grid-template-columns:1fr}.doors{grid-template-columns:1fr}.cyc{grid-template-columns:40px minmax(0,1fr)}.cyc .stat{text-align:left}}
+/* the sitting day as a strip: one bar per vote, the margin above or below the axis */
+.strip .stripwrap{overflow-x:auto;margin-top:6px;padding:2px 0}
+.strip svg{width:100%;height:56px;display:block;min-width:320px}
+.strip .axis{stroke:var(--border-hi);stroke-width:.4}
+.strip .b rect{fill:var(--dim3);transition:fill .12s}
+.strip .b .hit{fill:transparent}
+.strip .b.pass rect:first-child{fill:#3f7a55}.strip .b.fail rect:first-child{fill:#8a4a4a}.strip .b.q rect{fill:var(--border-hi)}
+.strip .b:hover rect:first-child,.strip .b:focus-visible rect:first-child{fill:var(--white)}
+.strip .b.now rect:first-child{fill:var(--white)}
+.strip .b.now .hit{fill:rgba(255,255,255,.07)}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
@@ -1956,6 +1966,57 @@ def archive_note(inp: dict, view: dict) -> str:
     return '<div class="hero-meta prose" style="margin-top:14px">Archív ciklus, név szerinti lista nélkül: az API 1998 előtt csak a frakciónkénti számokat adja.</div>'
 
 
+STRIP_MAX = 160          # bars drawn around the current vote; a long sitting day is windowed, and the page says so
+
+
+def day_strip(inp: dict, ts: str) -> str:
+    """The sitting day as one strip: a bar per vote in the order they were taken, the margin above the axis when the
+    decision passed and below when it did not, the vote you are reading marked. It answers the question a single vote
+    page cannot — was this one decision, or the fortieth of an afternoon that all went the same way.
+
+    The height is the margin (igen − szükséges) scaled to the day's largest; a quorum check has no margin and gets a
+    tick on the axis. Every bar links to its own page. Nothing here is new data: it is the cycle's own index, read
+    day by day."""
+    day = inp["by_ts"][ts]["on_date"]
+    votes = [v for v in inp["idx"]["votes"] if v["on_date"] == day]
+    if len(votes) < 2:
+        return ""
+    votes.sort(key=lambda v: v["ts"])
+    here = next(i for i, v in enumerate(votes) if v["ts"] == ts)
+    total = len(votes)
+    if total > STRIP_MAX:                                   # window it around the vote being read, keeping the order
+        lo = max(0, min(here - STRIP_MAX // 2, total - STRIP_MAX))
+        votes, here = votes[lo:lo + STRIP_MAX], here - lo
+    n = len(votes)
+    peak = max((abs((v.get("majority") or {}).get("margin") or 0) for v in votes), default=0) or 1
+    w, h, gap = 6.0, 34.0, 1.6                              # one bar's cell; the axis sits in the middle
+    width = n * w
+    bars = []
+    for i, v in enumerate(votes):
+        m = (v.get("majority") or {}).get("margin")
+        x = i * w
+        cls = "b now" if i == here else "b"
+        title = (f'{v["time"]} · {cut((v["motions"][0].get("iromany") + " " + (v["motions"][0].get("title") or "")).strip() if v.get("motions") else (v.get("remark") or ""), 70) or "szavazás"}'
+                 f' · {v["result_raw"] or ""}{f" · különbség {m:+d}" if m is not None else ""}')
+        if m is None:                                        # a quorum check: no threshold, no margin
+            bars.append(f'<a href="{esc(v["slug"])}.html" class="{cls} q"><rect x="{x:.1f}" y="{h / 2 - 1:.1f}" width="{w - gap:.1f}" height="2"/><title>{esc(title)}</title></a>')
+            continue
+        frac = min(1.0, abs(m) / peak)
+        bh = max(1.6, frac * (h / 2 - 2))
+        y = (h / 2 - bh) if m >= 0 else h / 2
+        state = "pass" if m >= 0 else "fail"
+        bars.append(f'<a href="{esc(v["slug"])}.html" class="{cls} {state}"><rect x="{x:.1f}" y="{y:.1f}" width="{w - gap:.1f}" height="{bh:.1f}"/>'
+                    f'<rect x="{x:.1f}" y="0" width="{w - gap:.1f}" height="{h:.1f}" class="hit"/><title>{esc(title)}</title></a>')
+    shown = f'{hu_num(n)} szavazás' if n == total else f'a nap {hu_num(total)} szavazásából {hu_num(n)}'
+    return (f'<section class="panel strip">{CORNERS}'
+            f'<h2><span data-kz-text>A nap menete</span><span class="tag">{esc(hu_date(day))} · {shown} · a sáv fölött elfogadva, alatta elutasítva</span></h2>'
+            f'<div class="stripwrap"><svg viewBox="0 0 {width:.0f} {h:.0f}" preserveAspectRatio="none" role="img" '
+            f'aria-label="A nap {hu_num(total)} szavazása időrendben; az oszlop magassága a különbség a szükséges többséghez képest, ez a szavazás kiemelve">'
+            f'<line x1="0" y1="{h / 2:.1f}" x2="{width:.0f}" y2="{h / 2:.1f}" class="axis"/>{"".join(bars)}</svg></div>'
+            f'<div class="hero-meta">Az oszlop magassága a különbség: mennyivel lett több (vagy kevesebb) az igen, mint amennyi kellett. A legnagyobb oszlop a napon {hu_num(peak)} szavazat.</div>'
+            f'</section>')
+
+
 def build_vote_page(inp: dict, ts: str) -> str:
     order = inp["order"]
     i = order.index(ts)
@@ -1993,6 +2054,7 @@ def build_vote_page(inp: dict, ts: str) -> str:
     {verdict_block(view, inp)}
   </section>
 </section>
+{day_strip(inp, ts)}
 {roll_call_table(view, inp) if not inp["archive"] else ""}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}szavazas/{view["slug"]}.html', f'{when} — {label}', f'{inp["cycle"]}-{view["slug"]}', None if inp["archive"] else f'{view["slug"]}.json', f'{view["slug"]}.csv' if (view["roll_call_available"] and not inp["archive"]) else None)}
 <nav class="pager" aria-label="Előző és következő szavazás">{pager_link(prev_ts, True)}{pager_link(next_ts, False)}</nav>

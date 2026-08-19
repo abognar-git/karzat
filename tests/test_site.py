@@ -316,6 +316,68 @@ class VotePages(unittest.TestCase):
         self.assertTrue(all(p["mp_azon"] for p in v["positions"]))    # every name resolved (aliases included)
 
 
+class DayStrip(unittest.TestCase):
+    """The sitting day as one strip on every vote page: a bar per vote, the margin above the axis when it passed and
+    below when it did not, this vote marked. It is the cycle's own index read day by day — no new data."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_the_strip_is_the_day_and_marks_the_vote(self):
+        from scripts.build_site import build_vote_page, day_strip
+        ts = HERO_TS
+        day = self.inp["by_ts"][ts]["on_date"]
+        same_day = [v for v in self.inp["idx"]["votes"] if v["on_date"] == day]
+        html = day_strip(self.inp, ts)
+        self.assertEqual(html.count('<a href='), len(same_day))                  # one bar per vote of the day
+        self.assertEqual(html.count('class="b now'), 1)                           # exactly one is the page's own
+        self.assertIn(hu_date(day), html)
+        slugs = {v["slug"] for v in same_day}
+        for href in re.findall(r'<a href="([^"]+)\.html"', html):
+            self.assertIn(href, slugs)                                            # every bar goes to a vote of that day
+        self.assertIn(day_strip(self.inp, ts), build_vote_page(self.inp, ts))     # …and the page carries it
+
+    def test_a_single_vote_day_draws_nothing(self):
+        from scripts.build_site import day_strip
+        import collections
+        per_day = collections.Counter(v["on_date"] for v in self.inp["idx"]["votes"])
+        lonely = [d for d, n in per_day.items() if n == 1]
+        if not lonely:
+            self.skipTest("no single-vote day in this cycle")
+        ts = next(v["ts"] for v in self.inp["idx"]["votes"] if v["on_date"] == lonely[0])
+        self.assertEqual(day_strip(self.inp, ts), "")                             # a strip of one bar says nothing
+
+    def test_a_long_day_is_windowed_and_says_so(self):
+        from scripts.build_site import STRIP_MAX, day_strip
+        import collections
+        for c in available_cycles():
+            inp = load_inputs(c)
+            per_day = collections.Counter(v["on_date"] for v in inp["idx"]["votes"])
+            long_days = [d for d, n in per_day.items() if n > STRIP_MAX]
+            if not long_days:
+                continue
+            day = long_days[0]
+            votes = sorted((v for v in inp["idx"]["votes"] if v["on_date"] == day), key=lambda v: v["ts"])
+            html = day_strip(inp, votes[len(votes) // 2]["ts"])
+            self.assertEqual(html.count('<a href='), STRIP_MAX)                   # windowed around the vote
+            self.assertEqual(html.count('class="b now'), 1)
+            self.assertIn("szavazásából", html)                                    # and the page says it is a window
+            return
+        self.skipTest("no day longer than the window in any cycle")
+
+    def test_quorum_checks_get_a_tick_not_a_bar(self):
+        from scripts.build_site import day_strip
+        for v in self.inp["idx"]["votes"]:
+            if v["kind"] != "jelenlet":
+                continue
+            html = day_strip(self.inp, v["ts"])
+            if html:
+                self.assertIn("b now q", html.replace('class="', ""))              # no margin, no threshold: a tick
+                return
+        self.skipTest("no quorum check in this cycle")
+
+
 class MPPages(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
