@@ -1,0 +1,2126 @@
+{
+ "as_of": "2026-08-05",
+ "count": 26,
+ "list": [
+  {
+   "id": "002J",
+   "title": "Agrár- és Élelmiszergazdasági Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "0031",
+   "title": "A Gyermekvédelem Rendszerszintű Válságát Feltáró Vizsgálóbizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "0032",
+   "title": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "0033",
+   "title": "A Spontán Privatizációt és a Közvagyon Elvesztését Feltáró Vizsgálóbizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "0034",
+   "title": "A Végrehajtási Visszaéléseket Feltáró Vizsgálóbizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "0035",
+   "title": "Az MNB Működésével Kapcsolatos Visszaéléseit Feltáró Vizsgálóbizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002M",
+   "title": "Digitalizációs és Technológiai Bizottság",
+   "subcommittees": [
+    {
+     "id": "0036",
+     "title": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002O",
+   "title": "Egészségügyi Bizottság",
+   "subcommittees": [
+    {
+     "id": "0039",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002Q",
+   "title": "Élő Környezetért Felelős Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002S",
+   "title": "Európai Ügyek Bizottsága",
+   "subcommittees": []
+  },
+  {
+   "id": "002U",
+   "title": "Gazdasági és Energetikai Bizottság",
+   "subcommittees": [
+    {
+     "id": "003A",
+     "title": "Turisztikai Albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002W",
+   "title": "Honvédelmi és Rendvédelmi Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002X",
+   "title": "Igazságügyi és Alkotmányügyi Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002Y",
+   "title": "Közlekedési és Beruházási Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002F",
+   "title": "Külügyi Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002V",
+   "title": "Magyarországi Nemzetiségek Bizottsága",
+   "subcommittees": [
+    {
+     "id": "002Z",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002G",
+   "title": "Magyarságpolitikai Bizottság",
+   "subcommittees": [
+    {
+     "id": "0037",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002H",
+   "title": "Mentelmi Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002I",
+   "title": "Művelődési Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002K",
+   "title": "Nemzetbiztonsági Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002L",
+   "title": "Oktatási Bizottság",
+   "subcommittees": [
+    {
+     "id": "0030",
+     "title": "Ellenőrző  Albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002N",
+   "title": "Pénzügyi és Költségvetési Bizottság",
+   "subcommittees": [
+    {
+     "id": "0038",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
+  },
+  {
+   "id": "002P",
+   "title": "Szociális Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002R",
+   "title": "Társadalmi Részvétel Bizottsága",
+   "subcommittees": []
+  },
+  {
+   "id": "002E",
+   "title": "Törvényalkotási Bizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "002T",
+   "title": "Vidék- és Településfejlesztési Bizottság",
+   "subcommittees": [
+    {
+     "id": "003B",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
+  }
+ ],
+ "records": {
+  "002E": {
+   "name": "Törvényalkotási Bizottság",
+   "type": "törvényalkotási",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "tab@parlament.hu",
+   "phone": "36(1)441-4228,36(1)441-4294",
+   "chair": {
+    "azon": "001J",
+    "name": "Dr. Rák Richárd",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "002Z",
+     "name": "Dr. Bilisics Zita",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0037",
+     "name": "Dr. Bóka Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "h083",
+     "name": "Héjj Dávid",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0017",
+     "name": "Melléthei-Barna Márton",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001S",
+     "name": "Dr. Simon Krisztián Márk",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "t023",
+     "name": "Dr. Tilki Attila",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "b007",
+     "name": "Balla György",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001R",
+     "name": "Berki Ákos",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0049",
+     "name": "Dr. Czipa András",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "g053",
+     "name": "Gulyás Gergely",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001M",
+     "name": "Dr. Hantosi István",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0011",
+     "name": "Dr. Jakab Zsuzsanna",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001V",
+     "name": "Dr. Kiss Máté Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002B",
+     "name": "Dr. Miskolczi Orsolya",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004S",
+     "name": "Németh Balázs Lajos",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "006F",
+     "name": "Palóc André",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001O",
+     "name": "Dr. Sasi-Nagy Edit",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004Z",
+     "name": "Szűcs Gábor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003B",
+     "name": "Tóth Norbert",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001H",
+     "name": "Varga Lőrinc Mihály",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002F": {
+   "name": "Külügyi Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "kub@parlament.hu",
+   "phone": "36(1)441-4039,36(1)441-4626,36(1)441-4817",
+   "chair": {
+    "azon": "001K",
+    "name": "Hajdu Márton",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "n322",
+     "name": "Németh Zsolt",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001L",
+     "name": "Pásztor Anett",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "b008",
+     "name": "Balla Mihály",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "k155",
+     "name": "Dr. Juhász Hajnalka",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "0016",
+     "name": "Kulcsár Krisztián",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001I",
+     "name": "Sóti Anikó Zsuzsanna",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002N",
+     "name": "Strompová Viktória",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002D",
+     "name": "Dr. Szabó Alexandra",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002G": {
+   "name": "Magyarságpolitikai Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "mab@parlament.hu",
+   "phone": "36(1)441-4623,36(1)441-4625",
+   "chair": {
+    "azon": "n048",
+    "name": "Nacsa Lőrinc",
+    "faction": "KDNP"
+   },
+   "vice_chairs": [
+    {
+     "azon": "004G",
+     "name": "Gajda Attila",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003Q",
+     "name": "Dr. Kovács Áron",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "001P",
+     "name": "Balogh Mihály",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0005",
+     "name": "Dr. Csibi Krisztina",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0041",
+     "name": "Dr. Gáspár Levente",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001E",
+     "name": "Kalázdi-Kerekes Kinga",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004R",
+     "name": "Molnárné Dr. Lezsák Anna",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "000N",
+     "name": "Rost Andrea",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "0037",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002H": {
+   "name": "Mentelmi Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "mob@parlament.hu",
+   "phone": "36(1)441-4082,36(1)441-5114",
+   "chair": {
+    "azon": "001O",
+    "name": "Dr. Sasi-Nagy Edit",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "h006",
+     "name": "Dr. Hargitai János",
+     "faction": "KDNP"
+    }
+   ],
+   "members": [
+    {
+     "azon": "003H",
+     "name": "Czakó Czirbus Pál",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "h074",
+     "name": "Hidvéghi Balázs",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "002Q",
+     "name": "Veres Ádám",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "v008",
+     "name": "Dr. Vitányi István József",
+     "faction": "Fidesz"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002I": {
+   "name": "Művelődési Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "mvb@parlament.hu",
+   "phone": "36(1)441-4849,36(1)441-5073",
+   "chair": {
+    "azon": "004Y",
+    "name": "Szentkirályi Alexandra",
+    "faction": "Fidesz"
+   },
+   "vice_chairs": [
+    {
+     "azon": "000S",
+     "name": "Radnai Márk",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "000N",
+     "name": "Rost Andrea",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "s184",
+     "name": "Szabadi István",
+     "faction": "Mi Hazánk"
+    }
+   ],
+   "members": [
+    {
+     "azon": "000U",
+     "name": "Csézy Erzsébet",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0005",
+     "name": "Dr. Csibi Krisztina",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003P",
+     "name": "Havasi Balázs",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002S",
+     "name": "Hende Máté",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "h366",
+     "name": "Horváth László",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "004B",
+     "name": "Karsai-Juhász Katalin",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003T",
+     "name": "Rápli Róbert",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002J": {
+   "name": "Agrár- és Élelmiszergazdasági Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "agb@parlament.hu",
+   "phone": "36(1)441-5020,36(1)441-5022,36(1)441-5023,36(1)441-5025",
+   "chair": {
+    "azon": "0038",
+    "name": "Kovács Petra Judit",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "004W",
+     "name": "Papp Zsolt",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0036",
+     "name": "Ráki Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001H",
+     "name": "Varga Lőrinc Mihály",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "d040",
+     "name": "Dócs Dávid",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "003V",
+     "name": "Dr. Farkas Csongor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004C",
+     "name": "Judák Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "p041",
+     "name": "Pócs János",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003U",
+     "name": "Ujvári Szilvia",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002K": {
+   "name": "Nemzetbiztonsági Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "nbb@parlament.hu",
+   "phone": "36(1)441-5127,36(1)441-5128",
+   "chair": {
+    "azon": "a018",
+    "name": "Dr. Apáti István",
+    "faction": "Mi Hazánk"
+   },
+   "vice_chairs": [
+    {
+     "azon": "0023",
+     "name": "Tóthmajor Balázs",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "002M",
+     "name": "Bakos Csaba Attila",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003H",
+     "name": "Czakó Czirbus Pál",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0002",
+     "name": "Dr. Hegedűs Barbara",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "h366",
+     "name": "Horváth László",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001L",
+     "name": "Pásztor Anett",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0025",
+     "name": "Dr. Sopov Ildikó Éva",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001T",
+     "name": "Tóth Tamás",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002L": {
+   "name": "Oktatási Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "otb@parlament.hu",
+   "phone": "36(1)441-5061,36(1)441-5062,36(1)441-5072,36(1)441-5860",
+   "chair": {
+    "azon": "0013",
+    "name": "Szűcs Dóra",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "h092",
+     "name": "Dr. Hankó Balázs",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0029",
+     "name": "Müller Anna",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "0039",
+     "name": "Dr. Bugya László",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004U",
+     "name": "Czirbus Gábor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003W",
+     "name": "Csák László",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001B",
+     "name": "Dr. Kincse Csongor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004R",
+     "name": "Molnárné Dr. Lezsák Anna",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003T",
+     "name": "Rápli Róbert",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "0030",
+     "title": "Ellenőrző  Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002M": {
+   "name": "Digitalizációs és Technológiai Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "dtb@parlament.hu",
+   "phone": "36(1)441-4477",
+   "chair": {
+    "azon": "0033",
+    "name": "Varga Balázs",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "003D",
+     "name": "Járosi Péter",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004Q",
+     "name": "Dr. Máthé Zsuzsa",
+     "faction": "KDNP"
+    }
+   ],
+   "members": [
+    {
+     "azon": "001Q",
+     "name": "Császár Martin",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003O",
+     "name": "Gyömbér Dávid",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "006E",
+     "name": "Hortay Olivér",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "004X",
+     "name": "Radics Béla",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0048",
+     "name": "Rózsahegyi Áron",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "0036",
+     "title": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002N": {
+   "name": "Pénzügyi és Költségvetési Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "pkb@parlament.hu",
+   "phone": "36(1)441-4582,36(1)441-4846,36(1)441-4848",
+   "chair": {
+    "azon": "b034",
+    "name": "Bencsik János",
+    "faction": "Fidesz"
+   },
+   "vice_chairs": [
+    {
+     "azon": "003G",
+     "name": "Dr. Dicső Viktória",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "p067",
+     "name": "Dr. Panyi Miklós",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "004D",
+     "name": "Polgár György",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002K",
+     "name": "Dr. Sárosi József",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "a011",
+     "name": "Ágh Péter",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001C",
+     "name": "Borsós Gabriella",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "000T",
+     "name": "Bujdosó Andrea Anna",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001F",
+     "name": "Gyuk Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0020",
+     "name": "Dr. Koncz Áron",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004X",
+     "name": "Radics Béla",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "002R",
+     "name": "Szabó Tibor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002X",
+     "name": "Trentin Balázs",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "0038",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002O": {
+   "name": "Egészségügyi Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "egb@parlament.hu",
+   "phone": "36(1)441-5037",
+   "chair": {
+    "azon": "0024",
+    "name": "Dr. Ruzsa Diána",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "002D",
+     "name": "Dr. Szabó Alexandra",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "t062",
+     "name": "Takács Péter",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "002H",
+     "name": "Dr. Gurzó Mária",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "h366",
+     "name": "Horváth László",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0018",
+     "name": "Jójárt Erika",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003M",
+     "name": "Dr. Juhász Áron",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0035",
+     "name": "Dr. Simon Zsuzsánna",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "v008",
+     "name": "Dr. Vitányi István József",
+     "faction": "Fidesz"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "0039",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002P": {
+   "name": "Szociális Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "szob@parlament.hu",
+   "phone": "36(1)441-5075,36(1)441-5077,36(1)441-5085",
+   "chair": {
+    "azon": "z004",
+    "name": "Zsigó Róbert",
+    "faction": "Fidesz"
+   },
+   "vice_chairs": [
+    {
+     "azon": "002U",
+     "name": "Muhari Gergely",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003I",
+     "name": "Dr. Németh Csilla",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "001P",
+     "name": "Balogh Mihály",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003Y",
+     "name": "Bárkányi Bence",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001U",
+     "name": "Kőszegi Krisztián",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004Q",
+     "name": "Dr. Máthé Zsuzsa",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "o015",
+     "name": "Dr. Orbán Balázs",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003S",
+     "name": "Dr. Szijjártó Gábor",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002Q": {
+   "name": "Élő Környezetért Felelős Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "efb@parlament.hu",
+   "phone": "36(1)441-5051,36(1)441-5052,36(1)441-5053,36(1)441-5055",
+   "chair": {
+    "azon": "n004",
+    "name": "V. Németh Zsolt",
+    "faction": "Fidesz"
+   },
+   "vice_chairs": [
+    {
+     "azon": "0043",
+     "name": "Dr. Bihari Zoltán",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001X",
+     "name": "Kaprinyák Tibor",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "k163",
+     "name": "Dr. Koncz Zsófia",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003J",
+     "name": "Dr. Kovács Gyula",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0044",
+     "name": "Lontay László",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0040",
+     "name": "Dr. Nagy Márta",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002Y",
+     "name": "Szimon Renáta",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "v048",
+     "name": "Varga Gábor",
+     "faction": "Fidesz"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002R": {
+   "name": "Társadalmi Részvétel Bizottsága",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "trb@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "0011",
+    "name": "Dr. Jakab Zsuzsanna",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "h074",
+     "name": "Hidvéghi Balázs",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001W",
+     "name": "Lukács Gábor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002A",
+     "name": "Trompler Ildikó",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "000W",
+     "name": "Bódis Kriszta",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "r023",
+     "name": "Rétvári Bence",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "001G",
+     "name": "Schummer Orsolya",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "s184",
+     "name": "Szabadi István",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "002W",
+     "name": "Dr. Virágh Gabriella Mária",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002S": {
+   "name": "Európai Ügyek Bizottsága",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "eub@parlament.hu",
+   "phone": "36(1)441-4302,36(1)441-4307,36(1)441-4498,36(1)441-4555,36(1)441-4682",
+   "chair": {
+    "azon": "0025",
+    "name": "Dr. Sopov Ildikó Éva",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "b130",
+     "name": "Dr. Bóka János",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "002C",
+     "name": "Jelencsik József",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "0049",
+     "name": "Dr. Czipa András",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001N",
+     "name": "Gyöngyösi István",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0002",
+     "name": "Dr. Hegedűs Barbara",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003K",
+     "name": "Horváth Nándor Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "k155",
+     "name": "Dr. Juhász Hajnalka",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "002X",
+     "name": "Trentin Balázs",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22d67ea036-e130-4222-b22b-fb3c88aaf1dc%22%7D"
+  },
+  "002T": {
+   "name": "Vidék- és Településfejlesztési Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "vtb@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "002R",
+    "name": "Szabó Tibor",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "000Z",
+     "name": "Göröghné Bocskai Éva",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "g048",
+     "name": "Gyopáros Alpár",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "003C",
+     "name": "Dr. Balatincz Péter",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0046",
+     "name": "Benke József",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "k163",
+     "name": "Dr. Koncz Zsófia",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0021",
+     "name": "László Endre Márton",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003X",
+     "name": "Néher András",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "t023",
+     "name": "Dr. Tilki Attila",
+     "faction": "Fidesz"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "003B",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002U": {
+   "name": "Gazdasági és Energetikai Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "geb@parlament.hu",
+   "phone": "36(1)441-4566,36(1)441-4567,36(1)441-4571,36(1)441-4574,36(1)441-4847",
+   "chair": {
+    "azon": "002P",
+    "name": "Csőszi Attila",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "002L",
+     "name": "Csatári Ernő",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003N",
+     "name": "Kiss János",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003A",
+     "name": "Lovkó Csaba",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004T",
+     "name": "Szalai Piroska",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "w704",
+     "name": "Witzmann Mihály",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "002Z",
+     "name": "Dr. Bilisics Zita",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0028",
+     "name": "Bodóczi István",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003Z",
+     "name": "Ferenczi Gábor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "k151",
+     "name": "F. Kovács Sándor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003E",
+     "name": "Gombár Dávid",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0047",
+     "name": "Hatala-Orosz Csaba",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "006E",
+     "name": "Hortay Olivér",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "004A",
+     "name": "Juhász Roland Csongor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0020",
+     "name": "Dr. Koncz Áron",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "s093",
+     "name": "Dr. Seszták Miklós",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "002Q",
+     "name": "Veres Ádám",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "003A",
+     "title": "Turisztikai Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002V": {
+   "name": "Magyarországi Nemzetiségek Bizottsága",
+   "type": "nemzetiségi",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "neb@parlament.hu",
+   "phone": "36(1)441-5262,36(1)441-5263,36(1)441-5265",
+   "chair": {
+    "azon": "004L",
+    "name": "Gallai Gergely (német nemzetiségi szószóló)",
+    "faction": null
+   },
+   "vice_chairs": [
+    {
+     "azon": "004J",
+     "name": "Gugán János (horvát nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "p059",
+     "name": "Paulik Antal (szlovák nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "v713",
+     "name": "Varga Szimeon (bolgár nemzetiségi szószóló)",
+     "faction": null
+    }
+   ],
+   "members": [
+    {
+     "azon": "004O",
+     "name": "Aba-Horváth István (roma nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "a024",
+     "name": "Akopjan Nikogosz (örmény nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "g078",
+     "name": "Grexa Liliána (ukrán nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "004P",
+     "name": "Holecz Károly (szlovén nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "004N",
+     "name": "Kramarenko Viktor (ruszin nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "004I",
+     "name": "Purosz Alexandrosz (görög nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "0065",
+     "name": "Dr. Szucsigán László (román nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "004K",
+     "name": "Tóthné Szegedi Iwona Jolán (lengyel nemzetiségi szószóló)",
+     "faction": null
+    }
+   ],
+   "subcommittees": [
+    {
+     "id": "002Z",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002W": {
+   "name": "Honvédelmi és Rendvédelmi Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "hob@parlament.hu",
+   "phone": "36(1)441-4085,36(1)441-4375,36(1)441-4669",
+   "chair": {
+    "azon": "002M",
+    "name": "Bakos Csaba Attila",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "002O",
+     "name": "Borics Mihály",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0027",
+     "name": "Diószegi Judit",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "s011",
+     "name": "Dr. Simicskó István",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "004V",
+     "name": "Dr. Takács Árpád",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "0045",
+     "name": "Cseh Tamás",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0021",
+     "name": "László Endre Márton",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "n036",
+     "name": "Novák Előd",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "002V",
+     "name": "Weigand István",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002X": {
+   "name": "Igazságügyi és Alkotmányügyi Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "iab@parlament.hu",
+   "phone": "36(1)441-4484,36(1)441-4586,36(1)441-4876,36(1)441-4878",
+   "chair": {
+    "azon": "001M",
+    "name": "Dr. Hantosi István",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "001V",
+     "name": "Dr. Kiss Máté Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0017",
+     "name": "Melléthei-Barna Márton",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002B",
+     "name": "Dr. Miskolczi Orsolya",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "t687",
+     "name": "Tuzson Bence",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "a018",
+     "name": "Dr. Apáti István",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "0037",
+     "name": "Dr. Bóka Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "000E",
+     "name": "Dr. Csuzda Gábor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0042",
+     "name": "Dr. Hallerné Dr. Nagy Anikó",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001S",
+     "name": "Dr. Simon Krisztián Márk",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004Z",
+     "name": "Szűcs Gábor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003B",
+     "name": "Tóth Norbert",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002Y": {
+   "name": "Közlekedési és Beruházási Bizottság",
+   "type": "állandó",
+   "created": "2026-05-09",
+   "parent": null,
+   "email": "kbb@parlament.hu",
+   "phone": "36(1)441-5054",
+   "chair": {
+    "azon": "0022",
+    "name": "Perticsné Kácsor Andrea",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "003R",
+     "name": "Csiszár Béla",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001A",
+     "name": "Molnár Zoltán",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "n053",
+     "name": "Nagy Bálint",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "a011",
+     "name": "Ágh Péter",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "002T",
+     "name": "Balajti István",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004U",
+     "name": "Czirbus Gábor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001D",
+     "name": "Szafkó Zoltán Péter",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003F",
+     "name": "Szakács Péter Lajos",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "002Z": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-05-26",
+   "parent": {
+    "id": "002V",
+    "name": "Magyarországi Nemzetiségek Bizottsága"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "v713",
+    "name": "Varga Szimeon (bolgár nemzetiségi szószóló)",
+    "faction": null
+   },
+   "vice_chairs": [
+    {
+     "azon": "a024",
+     "name": "Akopjan Nikogosz (örmény nemzetiségi szószóló)",
+     "faction": null
+    }
+   ],
+   "members": [
+    {
+     "azon": "g078",
+     "name": "Grexa Liliána (ukrán nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "004N",
+     "name": "Kramarenko Viktor (ruszin nemzetiségi szószóló)",
+     "faction": null
+    },
+    {
+     "azon": "p059",
+     "name": "Paulik Antal (szlovák nemzetiségi szószóló)",
+     "faction": null
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0030": {
+   "name": "Ellenőrző  Albizottság",
+   "type": "Albizottság",
+   "created": "2026-05-26",
+   "parent": {
+    "id": "002L",
+    "name": "Oktatási Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "0039",
+    "name": "Dr. Bugya László",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [],
+   "members": [
+    {
+     "azon": "004U",
+     "name": "Czirbus Gábor",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "003W",
+     "name": "Csák László",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0031": {
+   "name": "A Gyermekvédelem Rendszerszintű Válságát Feltáró Vizsgálóbizottság",
+   "type": "vizsgáló",
+   "created": "2026-05-28",
+   "parent": null,
+   "email": "gyvb@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "0027",
+    "name": "Diószegi Judit",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "d028",
+     "name": "Dúró Dóra",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "p067",
+     "name": "Dr. Panyi Miklós",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "0011",
+     "name": "Dr. Jakab Zsuzsanna",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "k155",
+     "name": "Dr. Juhász Hajnalka",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "0017",
+     "name": "Melléthei-Barna Márton",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0032": {
+   "name": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
+   "type": "vizsgáló",
+   "created": "2026-05-28",
+   "parent": null,
+   "email": "kbvb@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "001G",
+    "name": "Schummer Orsolya",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "n036",
+     "name": "Novák Előd",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "004Z",
+     "name": "Szűcs Gábor",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "002O",
+     "name": "Borics Mihály",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001E",
+     "name": "Kalázdi-Kerekes Kinga",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004Q",
+     "name": "Dr. Máthé Zsuzsa",
+     "faction": "KDNP"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0033": {
+   "name": "A Spontán Privatizációt és a Közvagyon Elvesztését Feltáró Vizsgálóbizottság",
+   "type": "vizsgáló",
+   "created": "2026-05-28",
+   "parent": null,
+   "email": "spvb@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "002K",
+    "name": "Dr. Sárosi József",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "d040",
+     "name": "Dócs Dávid",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "004T",
+     "name": "Szalai Piroska",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "0037",
+     "name": "Dr. Bóka Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003A",
+     "name": "Lovkó Csaba",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "s011",
+     "name": "Dr. Simicskó István",
+     "faction": "KDNP"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0034": {
+   "name": "A Végrehajtási Visszaéléseket Feltáró Vizsgálóbizottság",
+   "type": "vizsgáló",
+   "created": "2026-05-28",
+   "parent": null,
+   "email": "vfvb@parlament.hu",
+   "phone": "36(1)441-4443",
+   "chair": {
+    "azon": "t058",
+    "name": "Toroczkai László",
+    "faction": "Mi Hazánk"
+   },
+   "vice_chairs": [
+    {
+     "azon": "b007",
+     "name": "Balla György",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001N",
+     "name": "Gyöngyösi István",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "001V",
+     "name": "Dr. Kiss Máté Zsolt",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001A",
+     "name": "Molnár Zoltán",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "n048",
+     "name": "Nacsa Lőrinc",
+     "faction": "KDNP"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0035": {
+   "name": "Az MNB Működésével Kapcsolatos Visszaéléseit Feltáró Vizsgálóbizottság",
+   "type": "vizsgáló",
+   "created": "2026-05-28",
+   "parent": null,
+   "email": "mnbvb@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "002P",
+    "name": "Csőszi Attila",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "a018",
+     "name": "Dr. Apáti István",
+     "faction": "Mi Hazánk"
+    },
+    {
+     "azon": "t687",
+     "name": "Tuzson Bence",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "h006",
+     "name": "Dr. Hargitai János",
+     "faction": "KDNP"
+    },
+    {
+     "azon": "0025",
+     "name": "Dr. Sopov Ildikó Éva",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002V",
+     "name": "Weigand István",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22e75bd0f3-4694-4586-bccd-4d8ea5db1c76%22%7D"
+  },
+  "0036": {
+   "name": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság",
+   "type": "Albizottság",
+   "created": "2026-06-02",
+   "parent": {
+    "id": "002M",
+    "name": "Digitalizációs és Technológiai Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": null,
+    "name": null,
+    "faction": null
+   },
+   "vice_chairs": [],
+   "members": [],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0037": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-06-16",
+   "parent": {
+    "id": "002G",
+    "name": "Magyarságpolitikai Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "003Q",
+    "name": "Dr. Kovács Áron",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "0005",
+     "name": "Dr. Csibi Krisztina",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "0041",
+     "name": "Dr. Gáspár Levente",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001E",
+     "name": "Kalázdi-Kerekes Kinga",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004R",
+     "name": "Molnárné Dr. Lezsák Anna",
+     "faction": "Fidesz"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0038": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-06-24",
+   "parent": {
+    "id": "002N",
+    "name": "Pénzügyi és Költségvetési Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "003G",
+    "name": "Dr. Dicső Viktória",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [],
+   "members": [
+    {
+     "azon": "a011",
+     "name": "Ágh Péter",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001F",
+     "name": "Gyuk Zsolt",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "0039": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-07-22",
+   "parent": {
+    "id": "002O",
+    "name": "Egészségügyi Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "003M",
+    "name": "Dr. Juhász Áron",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [],
+   "members": [
+    {
+     "azon": "002H",
+     "name": "Dr. Gurzó Mária",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "t062",
+     "name": "Takács Péter",
+     "faction": "Fidesz"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "003A": {
+   "name": "Turisztikai Albizottság",
+   "type": "Albizottság",
+   "created": "2026-07-22",
+   "parent": {
+    "id": "002U",
+    "name": "Gazdasági és Energetikai Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "002L",
+    "name": "Csatári Ernő",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [],
+   "members": [
+    {
+     "azon": "002P",
+     "name": "Csőszi Attila",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003Z",
+     "name": "Ferenczi Gábor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "004A",
+     "name": "Juhász Roland Csongor",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "003N",
+     "name": "Kiss János",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "0020",
+     "name": "Dr. Koncz Áron",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "003B": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-08-05",
+   "parent": {
+    "id": "002T",
+    "name": "Vidék- és Településfejlesztési Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "k163",
+    "name": "Dr. Koncz Zsófia",
+    "faction": "Fidesz"
+   },
+   "vice_chairs": [
+    {
+     "azon": "0021",
+     "name": "László Endre Márton",
+     "faction": "TISZA"
+    }
+   ],
+   "members": [
+    {
+     "azon": "003X",
+     "name": "Néher András",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  }
+ }
+}

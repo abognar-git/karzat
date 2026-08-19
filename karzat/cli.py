@@ -312,6 +312,28 @@ def cmd_sync_speech_texts(args: argparse.Namespace) -> int:
     return 0 if not n_err else 1
 
 
+def cmd_sync_committees(args: argparse.Namespace) -> int:
+    """Cache the committee list and every committee's record (bizottsagok.cgi + bizottsag.cgi, ~35 calls) — always fresh,
+    the records carry the next sitting's invitation."""
+    from .normalise import parse_bizottsagok
+    api = WebApi(cache_dir=args.cache)
+    try:
+        lst = parse_bizottsagok(to_dict_payload(api.fetch("bizottsagok", refresh=not args.cached)))
+    except ApiError as e:
+        print(f"bizottsagok: {e}", file=sys.stderr)
+        return 2
+    n = 0
+    ids = [b["id"] for b in lst if b.get("id")] + [s["id"] for b in lst for s in b.get("subcommittees") or [] if s.get("id")]
+    for bid in ids:
+        try:
+            api.fetch("bizottsag", p_biz=bid, refresh=not args.cached)
+            n += 1
+        except ApiError as e:
+            print(f"  {bid}: {e}", file=sys.stderr)
+    print(f"done: {len(lst)} committees listed, {n} records cached; live calls={api.live_calls} cache hits={api.cache_hits}")
+    return 0
+
+
 def to_dict_payload(raw: bytes) -> dict:
     root = parse_xml(raw)
     from .xmlutil import to_dict
@@ -438,6 +460,9 @@ def main(argv: list[str] | None = None) -> int:
     sst.add_argument("--pace", type=float, default=0.6, help="seconds between live calls (default 0.6; slower when another sync runs)")
     sst.add_argument("--verbose", action="store_true")
     sst.set_defaults(fn=cmd_sync_speech_texts)
+    sc = sub.add_parser("sync-committees", help="cache the committee list and records (~35 calls; always fresh: they carry the next sitting's invitation)")
+    sc.add_argument("--cached", action="store_true", help="do not re-fetch what is cached")
+    sc.set_defaults(fn=cmd_sync_committees)
     sf = sub.add_parser("freshness", help="compute the freshness sentence from cache + sync state")
     sf.add_argument("--ckl", type=int, default=43, help="parliamentary cycle for ulesnap (default 43)")
     sf.add_argument("--fetch", action="store_true", help="refresh ulesnap.cgi from the API (needs token)")
@@ -462,7 +487,7 @@ def main(argv: list[str] | None = None) -> int:
     ss.set_defaults(fn=cmd_stats)
 
     args = p.parse_args(argv)
-    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches", "sync-speech-texts") or (args.cmd == "freshness" and args.fetch)
+    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches", "sync-speech-texts", "sync-committees") or (args.cmd == "freshness" and args.fetch)
     if needs_token and not os.environ.get(TOKEN_ENV):
         print(f"{TOKEN_ENV} is not set — copy .env.example to .env once the token arrives "
               f"(dry-run and inspect work without it)", file=sys.stderr)

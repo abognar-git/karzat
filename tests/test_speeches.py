@@ -196,7 +196,7 @@ class Digest(unittest.TestCase):
         k = build_kepviselom_page(self.inp)
         self.assertEqual(k.count("OEVK</td>"), 106)
         self.assertEqual(k.count("országos lista</td>"), 93)
-        self.assertIn("Település szerint keresni még nem lehet", k)
+        self.assertIn('id="town"', k)                                                        # the town box (the annex is loaded)
         s = build_speeches_page(self.inp)
         self.assertIn("4 651 sor", s)
         self.assertIn("érdemi", s)
@@ -216,3 +216,73 @@ class Digest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LooseEnds(unittest.TestCase):
+    """Portraits, committees, the district annex, the citations."""
+
+    def test_portraits_are_hotlinked_black_and_white_and_attributed(self):
+        from scripts.build_site import PHOTO_BASE, build_assets, build_mp_index, portrait_html
+        inp = load_inputs()
+        h = portrait_html(inp["mps"]["a011"], "hero")
+        self.assertIn(f'src="{PHOTO_BASE}a011"', h)
+        self.assertIn('referrerpolicy="no-referrer"', h)
+        self.assertIn('loading="lazy"', h)
+        self.assertIn('title="fénykép: parlament.hu"', h)
+        self.assertEqual(portrait_html({"name": "x"}), "")                              # no photo, no tag
+        css = build_assets()["karzat.css"]
+        self.assertIn(".portrait{filter:grayscale(1)", css)
+        page = build_mp_page(inp, "a011")
+        self.assertIn('class="portrait hero"', page)
+        self.assertEqual(build_mp_index(inp).count('class="portrait thumb"'), len(inp["mps"]))
+        self.assertIn("PHOTO_BASE + esc(az)", build_assets()["karzat.js"])              # the inspector too
+
+    def test_committees_from_records_and_the_api(self):
+        from scripts.build_site import build_committee_index, build_committee_page, committee_roster, committees_feed
+        inp = load_inputs()
+        cm = committee_roster(inp)
+        self.assertEqual(len(cm), inp["committees"]["count"])                              # every API committee, subcommittees under their parent
+        self.assertTrue(all(e["api"] for e in cm.values()))
+        agr = next(e for e in cm.values() if e["name"].startswith("Agrár"))
+        self.assertEqual(agr["api"]["chair"]["azon"], "0038")
+        self.assertTrue(any(m["azon"] == "0038" and m["role"] == "elnök" for m in agr["members"]))   # the record's history agrees
+        idx = build_committee_index(inp)
+        self.assertIn("29" if False else "26 bizottság", idx)
+        page = build_committee_page(inp, "agrar-es-elelmiszergazdasagi-bizottsag", agr)
+        self.assertIn("Mai összetétel", page)
+        self.assertIn("Kitűzött ülés az API szerint most nincs.", page)
+        xml = committees_feed(inp, "2026-08-18T18:56:12+02:00", "../")
+        root = ET.fromstring(xml.encode("utf-8"))
+        self.assertEqual(len(root.findall("a:entry", NS)), sum(1 for e in cm.values() if (e["api"] or {}).get("next_meeting")))
+        # a closed cycle: from the records alone
+        inp42 = load_inputs(42)
+        cm42 = committee_roster(inp42)
+        self.assertGreater(len(cm42), 10)
+        self.assertTrue(all(e["api"] is None for e in cm42.values()))
+
+    def test_district_annex_and_the_town_box(self):
+        from scripts.build_site import build_kepviselom_page, oevk_settlements
+        d = oevk_settlements()
+        self.assertEqual(len(d["oevk"]), 106)
+        self.assertEqual({o["county"] for o in d["oevk"]}, set(d["counties"]))
+        self.assertEqual(len(d["counties"]), 20)
+        self.assertEqual(d["settlements"]["Szombathely"], [{"county": "Vas", "no": 1, "partial": False}])
+        self.assertEqual(sorted(x["no"] for x in d["settlements"]["Budapest XI. kerület"]), [1, 3, 9, 10])
+        self.assertTrue(all(x["partial"] for x in d["settlements"]["Budapest XI. kerület"]))
+        # every OEVK of the annex has an MP in the current cycle
+        inp = load_inputs()
+        from scripts.build_site import county_name
+        have = {(county_name(m["county"]), m["constituency_no"]) for m in inp["mps"].values() if m.get("mandate_kind") == "egyeni"}   # the API says "Csongrád", the annex "Csongrád-Csanád"
+        self.assertTrue(all((o["county"], o["no"]) in have for o in d["oevk"]))
+        page = build_kepviselom_page(inp)
+        self.assertIn('id="town"', page)
+        self.assertIn('id="oevk-map"', page)
+        self.assertNotIn("Település szerint keresni még nem lehet", page)
+
+    def test_citations_are_read_not_remembered(self):
+        from karzat.majority import RULES, Rule
+        flagged = [r for r, info in RULES.items() if any("VERIFY" in b for b in info.basis)]
+        self.assertEqual(flagged, [Rule.NEGYOTOD_OSSZES])                                  # the one with no basis found
+        self.assertIn("HHSZ 62. § (1)", " ".join(RULES[Rule.ABSZOLUT].basis))
+        self.assertIn("HHSZ 60. § (7)", " ".join(RULES[Rule.KETHARMAD_JELENLEVO].basis))
+        self.assertIn("HHSZ 65. § (1)", " ".join(RULES[Rule.NEGYOTOD_JELENLEVO].basis))

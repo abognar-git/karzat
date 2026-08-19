@@ -113,7 +113,7 @@ class Evaluate(unittest.TestCase):
         self.assertEqual(d["rule"], "ketharmad_jelenlevo")
         self.assertEqual(d["needed"], 114)
         self.assertTrue(any("T) cikk" in b for b in d["basis"]))
-        self.assertTrue(all("VERIFY" in b for b in d["basis"]))  # nothing is un-flagged yet
+        self.assertFalse(any("VERIFY" in b for b in d["basis"]))  # read against njt.hu on 2026-08-19: the flags are gone here
 
 
 class TallyValidation(unittest.TestCase):

@@ -202,6 +202,12 @@ def build() -> list[tuple[str, list]]:
          [sp43.get("record_check", {}).get("agree", 0), sp43.get("record_check", {}).get("mps", 0), sp42.get("record_check", {}).get("agree", 0), sp42.get("record_check", {}).get("mps", 0)]),
         ("Cycle 43: {:,.0f} rows over {:,.0f} sitting days, {:,.0f} substantive; cycle 42: {:,.0f} rows over {:,.0f} days",
          [sp43.get("count", 0), len(sp43.get("days") or []), sp43.get("substantive", 0), sp42.get("count", 0), len(sp42.get("days") or [])]),
+        # committees and the district annex
+        ("caches the {:,.0f} committees' records", [len(_json.loads((ROOT / "data" / "derived" / "committees.json").read_text(encoding="utf-8"))["list"])]),
+        ("parsed into {:,.0f} OEVK and {:,.0f} settlement/district names; the {:,.0f} cities and districts the annex splits by streets",
+         [len(_json.loads((ROOT / "reference" / "valasztas" / "oevk_telepules.json").read_text(encoding="utf-8"))["oevk"]),
+          len(_json.loads((ROOT / "reference" / "valasztas" / "oevk_telepules.json").read_text(encoding="utf-8"))["settlements"]),
+          sum(1 for v in _json.loads((ROOT / "reference" / "valasztas" / "oevk_telepules.json").read_text(encoding="utf-8"))["settlements"].values() if any(x["partial"] for x in v))]),
         # speech texts — data/derived/speech_texts.json.gz
         ("Cycle 43: {:,.0f} texts, {:,.0f} characters. SQLite v4", [(inp43["texts"] or {}).get("count", 0), (inp43["texts"] or {}).get("chars", 0)]),
         # feeds — the same alignment record the MP pages print

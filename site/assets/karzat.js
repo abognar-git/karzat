@@ -158,6 +158,34 @@
 
 
 (function(){
+  // kepviselom/index.html: a settlement (Budapest: a district) → its OEVK(s) → the MP; the list is telepules.json,
+  // loaded on the first keystroke; a city the annex splits by streets lists every candidate and says the address decides.
+  var q = document.getElementById('town'), out = document.getElementById('townres'), mapEl = document.getElementById('oevk-map'); if (!q || !out || !mapEl) return;
+  var map; try { map = JSON.parse(mapEl.textContent); } catch (e) { return; }
+  function fold(s){ return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  var data = null, loading = false, keys = null;
+  function load(cb){ if (data) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'telepules.json'); x.onload = function(){ try { data = JSON.parse(x.responseText); } catch (e) { data = {}; } keys = Object.keys(data).map(function(k){ return [fold(k), k]; }); cb(); }; x.onerror = function(){ data = {}; keys = []; cb(); }; x.send(); }
+  var urlTimer = null;
+  function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?t=' + encodeURIComponent(v) : location.pathname); }, 300); }
+  function render(){
+    var t = fold(q.value);
+    if (t.length < 2) { out.innerHTML = ''; return; }
+    var exact = keys.filter(function(k){ return k[0] === t; }), pre = keys.filter(function(k){ return k[0].indexOf(t) === 0 && k[0] !== t; }).slice(0, 12);
+    var hits = exact.concat(pre);
+    if (!hits.length) { out.innerHTML = '<div class="hero-meta">Nincs ilyen település a választókerületi mellékletben.</div>'; return; }
+    out.innerHTML = hits.map(function(k){
+      var name = k[1], list = data[name] || [];
+      var parts = list.map(function(o){ var key = o[0] + '-' + o[1], mp = map[key], who = mp ? (mp[0] ? '<a href="../kepviselo/' + esc(mp[0]) + '.html">' + esc(mp[1]) + '</a>' : esc(mp[1])) + (mp[2] ? ' (' + esc(mp[2]) + ')' : '') : '—';
+        return esc(o[0]) + ' ' + o[1] + '. OEVK → ' + who + (o[2] ? ' <span class="sub">csak a település egy része — a cím dönt</span>' : ''); });
+      return '<div class="townhit"><b>' + esc(name) + '</b>' + (list.length > 1 ? ' <span class="sub">több választókerület, utcák szerint — a cím dönt</span>' : '') + '<ul>' + parts.map(function(p){ return '<li>' + p + '</li>'; }).join('') + '</ul></div>'; }).join('');
+  }
+  q.addEventListener('input', function(){ syncUrl(); load(render); });
+  if (location.search) { var m = /[?&]t=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); load(render); } }
+})();
+
+
+(function(){
   var tbody = document.getElementById('rows'), n = document.getElementById('n'); if (!tbody) return;
   var rows = Array.prototype.slice.call(tbody.rows), rule = 'all', result = 'all', year = 'all', q = '';
   var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
@@ -199,6 +227,7 @@
     else if (e.key === 'End') { e.preventDefault(); focusSeat(seats.length - 1); }
   });
   var POS = {igen:'igen', nem:'nem', tartozkodott:'tartózkodott', jelen_nem_szavazott:'jelen, nem szavazott', nem_szavazott:'nem szavazott', bejelentett_hianyzo:'előre bejelentett hiányzó', igazoltan_tavol:'igazoltan távol'};
+  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
   var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\.html$/, '') : '';
   var mpBase = (svg.closest('body').querySelector('.pager') ? '../kepviselo/' : 'kepviselo/');
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -209,7 +238,8 @@
     var part = inroll ? Math.round(100 * cast / inroll) : 0, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var sq = '';
     for (var i = 0; i < streak.length; i++) { var ch = streak[i]; sq += '<i class="' + (ch === '.' ? 'x' : ch) + (i === streak.length - 1 ? ' now' : '') + '" style="--c:' + c + '"></i>'; }
-    box.innerHTML = '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
+    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+      '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
       '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
       '<span class="badge' + (pos === 'igen' ? ' ok' : pos === 'nem' ? ' no' : ' mid') + '">' + esc(POS[pos] || pos) + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>leadott <b>' + cast + '</b> / ' + inroll + ' (' + part + '%) · frakciójával <b>' + w + '</b> · ellene <b>' + a + '</b>' + (agree !== null ? ' · egyezés ' + agree + '%' : '') + '</span>' +

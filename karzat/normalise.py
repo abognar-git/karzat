@@ -437,6 +437,42 @@ def parse_felszolalas(raw: bytes) -> dict[str, Any]:
     }
 
 
+# -- committees -----------------------------------------------------------------------------
+#
+#   bizottsagok.cgi  <bizottsagok><bizottsag id title><albizottsagok><albizottsag id title/>…</albizottsagok></bizottsag>…
+#   bizottsag.cgi    <bizottsag nev tipus letrehozas><fobizottsag id nev/><elerhetoseg email telefon/><elnok p_azon nev frakcio/>
+#                    <alelnokok><alelnok …/></alelnokok><tagok><tag …/></tagok><albizottsagok/><meghivo_datum/><meghivo_URL/></bizottsag>
+
+def parse_bizottsagok(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    root = payload.get("bizottsagok", payload)
+    out = []
+    for b in as_list(root.get("bizottsag")):
+        if not isinstance(b, dict):
+            continue
+        subs = [{"id": a.get("@id"), "title": a.get("@title")} for a in as_list((b.get("albizottsagok") or {}).get("albizottsag") if isinstance(b.get("albizottsagok"), dict) else []) if isinstance(a, dict)]
+        out.append({"id": b.get("@id"), "title": b.get("@title"), "subcommittees": subs})
+    return out
+
+
+def parse_bizottsag(payload: dict[str, Any]) -> dict[str, Any]:
+    r = payload.get("bizottsag", payload)
+    def person(x):
+        return {"azon": x.get("@p_azon") or None, "name": x.get("@nev") or None, "faction": x.get("@frakcio") or None} if isinstance(x, dict) else None
+    fob = r.get("fobizottsag") if isinstance(r.get("fobizottsag"), dict) else {}
+    el = r.get("elerhetoseg") if isinstance(r.get("elerhetoseg"), dict) else {}
+    return {
+        "name": r.get("@nev"), "type": r.get("@tipus") or None, "created": _hu_date(r.get("@letrehozas")),
+        "parent": {"id": fob.get("@id") or None, "name": fob.get("@nev") or None} if fob.get("@id") else None,
+        "email": el.get("@email") or None, "phone": el.get("@telefon") or None,
+        "chair": person(r.get("elnok")),
+        "vice_chairs": [p for p in (person(x) for x in as_list((r.get("alelnokok") or {}).get("alelnok") if isinstance(r.get("alelnokok"), dict) else [])) if p],
+        "members": [p for p in (person(x) for x in as_list((r.get("tagok") or {}).get("tag") if isinstance(r.get("tagok"), dict) else [])) if p],
+        "subcommittees": [{"id": a.get("@id"), "title": a.get("@title") or a.get("@nev")} for a in as_list((r.get("albizottsagok") or {}).get("albizottsag") if isinstance(r.get("albizottsagok"), dict) else []) if isinstance(a, dict)],
+        "next_meeting": _hu_date(r.get("meghivo_datum")) if r.get("meghivo_datum") else None,
+        "next_meeting_url": (r.get("meghivo_URL") or "").strip() or None,
+    }
+
+
 # -- votes ----------------------------------------------------------------------------------
 
 def parse_iromany_szam(szam: str | None) -> dict[str, Any]:

@@ -5,28 +5,33 @@ This is the analytical core Konzol lacks (it shows every vote against a simple-m
 marker). Here every vote gets an explicit rule, an explicit base (present MPs or all MPs), an
 explicit "needed" number and a margin against it.
 
-Legal basis — transcribed from memory of the Alaptörvény (Fundamental Law) and the
-Házszabály (10/2014. (II. 24.) OGY határozat, "HHSZ"). Every citation is a claim to be checked
-against the current consolidated text on njt.hu before it is trusted; the VERIFY flags below
-are not decoration. Nothing here should be presented to readers as authoritative until the
-citations have been read.
+Legal basis — read against the consolidated texts on njt.hu on 2026-08-19: Magyarország
+Alaptörvénye (njt.hu/jogszabaly/2011-4301-02-00) and the House Rules, 10/2014. (II. 24.) OGY
+határozat, "HHSZ" (njt.hu/jogszabaly/2014-10-30-41). Every citation below names the paragraph
+that was read; the one rule with no basis found says so.
 
 Rules
 -----
-egyszeru              more than half of the MPs *present*                Alaptörvény 5. cikk (6)
-abszolut              more than half of *all* MPs                        16. cikk (4) PM election; 21. cikk
-                                                                          no-confidence/confidence; HHSZ kivételes
-                                                                          eljárás elrendelése (VERIFY §)
-ketharmad_jelenlevo   at least two-thirds of the MPs *present*           T) cikk (4) sarkalatos törvény;
-                                                                          5. cikk (7) Házszabály; HHSZ sürgős tárgyalás (VERIFY §)
+egyszeru              more than half of the MPs *present*                Alaptörvény 5. cikk (6) (default when nothing
+                                                                          else applies); quorum: 5. cikk (5)
+abszolut              more than half of *all* MPs                        16. cikk (4) PM election; 21. cikk (2)–(3)
+                                                                          no-confidence/confidence; HHSZ 62. § (1)
+                                                                          kivételes eljárás elrendelése
+ketharmad_jelenlevo   at least two-thirds of the MPs *present*           T) cikk (4) sarkalatos törvény; 5. cikk (7)
+                                                                          házszabályi rendelkezések; HHSZ 60. § (7)
+                                                                          sürgős tárgyalás elrendelése
 ketharmad_osszes      at least two-thirds of *all* MPs (133 of 199)      S) cikk (2) Alaptörvény; 24. cikk (8) AB tagok;
-                                                                          26. cikk (3), 29. cikk (4), 30. cikk (3), 43. cikk (2)
-                                                                          public officers; 11. cikk (3) KE 1st round (VERIFY each)
-negyotod_jelenlevo    at least four-fifths of the MPs *present*          HHSZ Házszabálytól eltérés (VERIFY §)
+                                                                          26. cikk (3) Kúria elnöke, 29. cikk (4) legfőbb
+                                                                          ügyész, 30. cikk (3) alapvető jogok biztosa,
+                                                                          43. cikk (2) ÁSZ elnöke; 11. cikk (3) KE 1st round;
+                                                                          5. cikk (1) zárt ülés
+negyotod_jelenlevo    at least four-fifths of the MPs *present*          HHSZ 65. § (1) Házszabálytól eltérés (and the old
+                                                                          46/1994 Házszabály 140. § (1) said the same)
 negyotod_osszes       at least four-fifths of *all* MPs (160 of 199)     seen in the API's own vocabulary
                                                                           ("Listás az összes képviselő 4/5-ével", 2014);
-                                                                          legal basis not identified (VERIFY)
-relativ               plurality among candidates, no yes/no threshold    11. cikk (4) KE 2nd round
+                                                                          no basis found in the consolidated texts (VERIFY)
+relativ               plurality among candidates, no yes/no threshold    11. cikk (4) KE 2nd round (the most valid votes,
+                                                                          "tekintet nélkül a szavazásban részt vevők számára")
 
 Arithmetic
 ----------
@@ -82,45 +87,46 @@ RULES: dict[Rule, RuleInfo] = {
     Rule.EGYSZERU: RuleInfo(
         Rule.EGYSZERU, "Egyszerű többség", "Simple majority (of those present)",
         "present", "floor(present/2)+1",
-        ("Alaptörvény 5. cikk (6) (VERIFY)",),
+        ("Alaptörvény 5. cikk (6) — a jelen lévő képviselők több mint felének szavazata, ha az Alaptörvény eltérően nem rendelkezik; 5. cikk (5) határozatképesség",),
     ),
     Rule.ABSZOLUT: RuleInfo(
         Rule.ABSZOLUT, "Abszolút többség", "Absolute majority (of all MPs)",
         "seats", "floor(seats/2)+1",
-        ("Alaptörvény 16. cikk (4) — miniszterelnök megválasztása (VERIFY)",
-         "Alaptörvény 21. cikk — bizalmatlansági indítvány, bizalmi szavazás (VERIFY)",
-         "HHSZ — kivételes eljárás elrendelése (VERIFY §)"),
+        ("Alaptörvény 16. cikk (4) — miniszterelnök megválasztása",
+         "Alaptörvény 21. cikk (2)–(3) — bizalmatlansági indítvány, bizalmi szavazás",
+         "HHSZ 62. § (1) — kivételes eljárás elrendelése"),
     ),
     Rule.KETHARMAD_JELENLEVO: RuleInfo(
         Rule.KETHARMAD_JELENLEVO, "Jelenlévők kétharmada", "Two-thirds of those present",
         "present", "ceil(2*present/3)",
-        ("Alaptörvény T) cikk (4) — sarkalatos törvény (VERIFY)",
-         "Alaptörvény 5. cikk (7) — Házszabály elfogadása (VERIFY)",
-         "HHSZ — sürgős tárgyalás elrendelése (VERIFY §)"),
+        ("Alaptörvény T) cikk (4) — sarkalatos törvény",
+         "Alaptörvény 5. cikk (7) — házszabályi rendelkezések elfogadása",
+         "HHSZ 60. § (7) — sürgős tárgyalás elrendelése"),
     ),
     Rule.KETHARMAD_OSSZES: RuleInfo(
         Rule.KETHARMAD_OSSZES, "Összes képviselő kétharmada", "Two-thirds of all MPs",
         "seats", "ceil(2*seats/3)",
-        ("Alaptörvény S) cikk (2) — Alaptörvény elfogadása/módosítása (VERIFY)",
-         "Alaptörvény 24. cikk (8) — alkotmánybírák (VERIFY)",
+        ("Alaptörvény S) cikk (2) — Alaptörvény elfogadása/módosítása",
+         "Alaptörvény 24. cikk (8) — alkotmánybírák",
          "Alaptörvény 26. cikk (3), 29. cikk (4), 30. cikk (3), 43. cikk (2) — Kúria elnöke, legfőbb ügyész, "
-         "alapvető jogok biztosa, ÁSZ elnöke (VERIFY each)",
-         "Alaptörvény 11. cikk (3) — köztársasági elnök, első forduló (VERIFY)"),
+         "alapvető jogok biztosa, ÁSZ elnöke",
+         "Alaptörvény 11. cikk (3) — köztársasági elnök, első forduló",
+         "Alaptörvény 5. cikk (1) — zárt ülés elrendelése"),
     ),
     Rule.NEGYOTOD_JELENLEVO: RuleInfo(
         Rule.NEGYOTOD_JELENLEVO, "Jelenlévők négyötöde", "Four-fifths of those present",
         "present", "ceil(4*present/5)",
-        ("HHSZ — Házszabálytól eltérés (VERIFY §)",),
+        ("HHSZ 65. § (1) — a határozati házszabályi rendelkezésektől való eltérés (a jelen lévő képviselők legalább négyötöde)",),
     ),
     Rule.NEGYOTOD_OSSZES: RuleInfo(
         Rule.NEGYOTOD_OSSZES, "Összes képviselő négyötöde", "Four-fifths of all MPs",
         "seats", "ceil(4*seats/5)",
-        ("W-API 'Szavazási mód' = 'Listás az összes képviselő 4/5-ével' (observed 2014); legal basis not identified (VERIFY)",),
+        ("W-API 'Szavazási mód' = 'Listás az összes képviselő 4/5-ével' (observed 2014); no basis found in the consolidated Alaptörvény or House Rules texts (VERIFY)",),
     ),
     Rule.RELATIV: RuleInfo(
         Rule.RELATIV, "Relatív többség", "Plurality among candidates",
         "candidates", "—",
-        ("Alaptörvény 11. cikk (4) — köztársasági elnök, második forduló (VERIFY)",),
+        ("Alaptörvény 11. cikk (4) — köztársasági elnök, második forduló: a legtöbb érvényes szavazat, a részt vevők számától függetlenül",),
     ),
 }
 

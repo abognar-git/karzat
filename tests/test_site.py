@@ -210,7 +210,8 @@ class MPPages(unittest.TestCase):
         self.assertIn("Szavazatok a frakció többségével szemben", page)
         self.assertIn('id="mine"', page)
         self.assertEqual(page.count('href="../szavazas/'), 256 + self.inp["alignment"]["per_mp"]["a011"]["against"])
-        self.assertNotIn('<img', page)                                # portraits are linked, not embedded (licence unverified)
+        self.assertIn('class="portrait hero"', page)                  # the parlament.hu portrait, shown from there (the owner's decision, attributed)
+        self.assertNotIn('src="data:', page)                            # never copied into the page
 
     def test_this_cycles_motions_reconcile_with_the_record_for_every_mp(self):
         # iromanyok.cgi by submitter == the record's <inditvanyok> "önálló" for 2026-, for all 201 people

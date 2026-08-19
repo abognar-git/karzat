@@ -129,6 +129,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 - [x] **Felszólalások** — the sitting days' speech lists (`felszolalasok.cgi`, one call per day; `python3 -m karzat sync-speeches --ckl N`; `scripts/derive_speeches.py`): who spoke on which agenda item, what kind, in what role, for how long; speakers resolved with the roll calls' resolver (ministers and the President who are not MPs stay named, unresolved). Substantive vs procedural is a named list of kinds (`normalise.SUBSTANTIVE_KINDS` — chairing, announcements and the chair's result lines are procedural, personal-involvement remarks too), and the MP record's own per-cycle count agrees with it for 187 of 189 cycle-43 MPs and 218 of 220 in cycle 42 (the pages print both where they differ). Cycle 43: 4,651 rows over 23 sitting days, 1,957 substantive; cycle 42: 36,722 rows over 192 days. SQLite v3: `speech` and `mp_committee` tables. Also found: the API's `ulesnap` dates for the older cycles are one day early against their own weekday names — corrected from the weekday, flagged per row
 - [x] **Mit csinált a képviselőm** — every MP page opens with the last sitting week in numbers (névsorban / leadott / frakciója ellen / érdemi felszólalás, then the speeches by agenda item, kind, length) and a table of every sitting week; committee memberships from the record; the speeches themselves, filterable; per-MP weekly Atom channel (`kepviselo/<azon>-heti.xml`), the cycle's week in numbers (`feed/heti.xml`), `adatok/heti.csv` and `adatok/felszolalasok.csv`; a `felszolalas/` page (days, kinds, the record check) and `kepviselom/` — Ki a képviselőm? by county and OEVK, the list MPs, a name box (settlement lookup is not there: the constituency settlement lists are not loaded, and the page says so). Numbers, no prose: label form, no suffix on a numeral
 - [x] **Felszólalások szövege és keresés** — `karzat sync-speech-texts --ckl N` fetches the record's text of every substantive speech (`felszolalas.cgi`, one call per speech; the payload names the MP by id where the speaker is one — it agrees with the lists' name resolution in every case), `scripts/derive_speech_texts.py` keeps them as plain paragraphs (the current cycle's file is committed; an earlier cycle's is tens of megabytes and stays local — fetch and derive it, the builder picks it up). Every substantive speech gets a page and a JSON twin (`felszolalas/<ülésnap>-<sorszám>`), every sitting day a page in the day's order grouped by agenda item; `felszolalas/kereses.html` searches the texts by word prefix (3+ letters, accents folded, terms AND-ed) over an index sharded by the token's first two letters, showing the record's own snippet; `feed/felszolalasok.xml` carries the recent speeches with their full text so a reader's filter can watch a keyword — that is the whole "topic radar": no topic classification, no summary, no server; committee sittings are not in the API and the page says so. Cycle 43: 1,957 texts, 7,328,808 characters. SQLite v4: `speech_text`
+- [x] **Loose ends** — portraits: every MP page, the seat inspector, the MP index, the finder and the career pages show the parlament.hu photo (the record's `fenykep`, 195×260), loaded from there and not copied, in the black-and-white treatment Konzol uses (`filter: grayscale(1) contrast(1.12) brightness(.92)`), attributed on the image; the terms of use are not stated on parlament.hu, so this is the owner's decision, recorded. `bizottsagok.cgi` exists as the manual's broken cell suggested: `karzat sync-committees` (35 calls, always fresh) caches the 26 committees' records — type, chair, vice-chairs, members by id, and the next sitting's invitation date and URL when one is out; `bizottsag/` per cycle (the API's present-tense records for the current cycle, the MP records' membership histories for every cycle, subcommittees under their parent), a `feed/bizottsagok.xml` channel of announced sittings. "Ki a képviselőm?" takes a town: `reference/valasztas/oevk_telepules.json` is the electoral-district law's annex (2011. évi CCIII. tv., 2. melléklet, the text in force from 2024-12-31, njt.hu) parsed into 106 OEVK and 3,175 settlement/district names; the 23 cities and districts the annex splits by streets list every candidate and say the address decides. And the legal citations in `karzat/majority.py` were read against the consolidated Alaptörvény and House Rules on njt.hu — every VERIFY flag is gone except the API's 4/5-of-all label from 2014, for which neither text gives a basis
 - [x] **Értesítések** — Atom feeds written by the builder, so a scheduled rebuild is the alert channel (`karzat/feeds.py`; `feed/` per cycle): every roll call with a dissent (`kulonvelemeny.xml`, one entry per vote listing who voted against their faction's plurality), the same per faction (`frakcio-<slug>.xml`) and per MP (`kepviselo/<azon>.xml`), and every vote (`szavazasok.xml`); a page explains them and lists them, `adatok/kulonvelemenyek.csv` is the complete record, the index and MP pages announce their feeds for autodiscovery. Independents are not a faction and are not in the channels (the CSV keeps their rows). Each channel carries the newest 100 entries but never less than the last five sitting days (a marathon day has 160+ votes). Deterministic: ids are URNs from cycle, vote time and channel, `updated` is the sync stamp, never the clock; links are absolute when `KARZAT_SITE_URL` is set for the published build and relative to the feed file otherwise. Cycle 43: 92 roll calls with a dissent, 240 dissents in all; the same numbers the MP pages and the cohesion page print, tested to agree
 - [x] **Cohesion and close votes** — `karzat/analytics.py`: Rice and Hix–Noury–Roland agreement indices per faction per vote and per cycle, the faction × faction plurality-agreement matrix, MP × MP agreement within a faction (≥ 20 shared votes), all with the formulas printed on `kohezio/`; and `szoros/`, the decisions ranked by margin to their threshold, the yes-majorities a qualified threshold sank, and — a labelled counterfactual — the outcomes that would flip if every non-caster had voted with their faction's plurality; every vote page shows each faction's AI beside its bar; CSVs for all of it
 - [x] **Cycle 42 pages** — the same builder, one level down (`site/ckl42/`): its own index, 2,599 vote pages and 214 MP pages, a cycle switch in the top bar and cross-links between an MP's two pages; inputs `votes_index_ckl42.json.gz` + `votes_positions_ckl42.json.gz` (deterministic gzip, 424 KB together) + `mps_ckl42.json`; the missing `kepviselo.cgi` records fetched (171 of the 214 people are not in the cycle-43 roster); factions attributed by each person's last roll call (10 switchers)
@@ -143,7 +144,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 182 tests
+python3 -m unittest discover -s tests -t .      # offline; 186 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -152,6 +153,7 @@ python3 -m karzat sync-votes --from 2026-05-01   # month-windowed lists + one ca
 python3 -m karzat sync-mps [--refresh]           # MP list + one call per MP, cached (--refresh: re-fetch, the records' per-cycle counts grow)
 python3 -m karzat sync-speeches --ckl 43         # one call per sitting day: the day's speech list, cached (the newest day re-fetched)
 python3 -m karzat sync-speech-texts --ckl 43     # one call per substantive speech: the record's text, cached (--pace 1.5 beside another sync)
+python3 -m karzat sync-committees                # the committee list and every record (~35 calls, always fresh: they carry the next sitting)
 python3 -m karzat freshness --fetch              # one ulesnap call; writes data/freshness.json + the sentence
 python3 -m karzat inspect data/raw/szavazas/2026-09-15T09-37-07.xml   # cached XML → JSON
 python3 -m karzat fingerprint tests/fixtures/*.xml   # digest table for tests/test_golden.py
@@ -199,24 +201,27 @@ been able to check. The mapping from Konzol's model to this one:
 | `billRole` sponsor/cosponsor | `bill.submitters` + `submitter_kind` kormány/képviselő | Government vs. individual-MP bills is the transparency angle |
 | `sponsoredBillHistory[20]` | derived from `<inditvanyok>` | Keep the idea, recompute from source |
 | `recentPartyAlignment[20]` | derived: position vs. faction majority | Discipline is near-total on the government side; deviation and absence are the signal |
-| photo from congress.gov | `mp.photo_url` from parlament.hu (licence VERIFY) | |
+| photo from congress.gov | `mp.photo_url` from parlament.hu, shown from there (hotlinked, not copied), black-and-white like Konzol's; the terms of use were not found stated on parlament.hu — the owner's decision, attributed on every image | |
 | 200-record directory cap | none; paginate | Hundreds of votes per sitting day |
 
 ## Majority rules — the analytical core
 
 `karzat/majority.py` gives every vote an explicit rule, base, threshold and margin. The
 arithmetic is fixed ("több mint a fele" → ⌊N/2⌋+1; "kétharmada" → ⌈2N/3⌉; "négyötöde" →
-⌈4N/5⌉); the legal citations are transcribed from memory and **every one is flagged VERIFY**
-in the module until it has been read against the consolidated text on njt.hu.
+⌈4N/5⌉); the legal citations were read against the consolidated texts on njt.hu on 19 August
+2026 — Magyarország Alaptörvénye and the House Rules (10/2014. (II. 24.) OGY határozat, HHSZ) — and
+name the paragraph read; one rule the API's vocabulary carries ("az összes képviselő 4/5-ével",
+seen in 2014) has no basis I could find in either text and stays flagged.
 
-| Rule | Base | Needed (N=199 / present 176) | Applies to (citation, VERIFY) |
+| Rule | Base | Needed (N=199 / present 176) | Applies to (citation) |
 |---|---|---|---|
-| `egyszeru` | present | 100 / 89 | default — Alaptörvény 5. cikk (6) |
-| `abszolut` | all MPs | 100 | miniszterelnök választás 16. cikk (4); bizalmatlansági / bizalmi szavazás 21. cikk; kivételes eljárás elrendelése (HHSZ) |
-| `ketharmad_jelenlevo` | present | 133 / 118 | sarkalatos törvény T) cikk (4); Házszabály 5. cikk (7); sürgős tárgyalás (HHSZ) |
-| `ketharmad_osszes` | all MPs | 133 | Alaptörvény módosítás S) cikk (2); alkotmánybírák 24. cikk (8); Kúria elnöke, legfőbb ügyész, ombudsman, ÁSZ elnöke; KE 1. forduló 11. cikk (3) |
-| `negyotod_jelenlevo` | present | 160 / 141 | Házszabálytól eltérés (HHSZ) |
-| `relativ` | candidates | — | KE 2. forduló 11. cikk (4); not decidable from a yes/no tally |
+| `egyszeru` | present | 100 / 89 | default — Alaptörvény 5. cikk (6); quorum 5. cikk (5) |
+| `abszolut` | all MPs | 100 | miniszterelnök választás 16. cikk (4); bizalmatlansági / bizalmi szavazás 21. cikk (2)–(3); kivételes eljárás elrendelése HHSZ 62. § (1) |
+| `ketharmad_jelenlevo` | present | 133 / 118 | sarkalatos törvény T) cikk (4); házszabályi rendelkezések 5. cikk (7); sürgős tárgyalás HHSZ 60. § (7) |
+| `ketharmad_osszes` | all MPs | 133 | Alaptörvény módosítás S) cikk (2); alkotmánybírák 24. cikk (8); Kúria elnöke 26. cikk (3), legfőbb ügyész 29. cikk (4), alapvető jogok biztosa 30. cikk (3), ÁSZ elnöke 43. cikk (2); KE 1. forduló 11. cikk (3); zárt ülés 5. cikk (1) |
+| `negyotod_jelenlevo` | present | 160 / 141 | Házszabálytól eltérés HHSZ 65. § (1) |
+| `negyotod_osszes` | all MPs | 160 | the API's own label, 2014; no basis found (VERIFY) |
+| `relativ` | candidates | — | KE 2. forduló 11. cikk (4): the most valid votes; not decidable from a yes/no tally |
 
 Two modelling choices, both deliberate and both flagged in every verdict: **abstainers are
 present** (tartózkodás counts against a motion under every present-based rule), and when the
