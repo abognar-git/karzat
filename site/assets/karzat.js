@@ -415,7 +415,7 @@
   function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; failed = true; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; failed = true; cb(); }; x.send(); }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
-  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép'};
+  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló'};
   function render(){
     var terms = fold(q.value).split(/\s+/).filter(Boolean);
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }

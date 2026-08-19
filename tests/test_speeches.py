@@ -366,3 +366,44 @@ class Spokespersons(unittest.TestCase):
             self.assertIn(r["nationality"], row[2])
         self.assertIn("nem szavaz — a szószóló felszólalhat", build_assets()["karzat.js"])
 
+    def test_they_have_a_career_page_and_are_findable(self):
+        from scripts.build_site import (CURRENT_CYCLE, available_cycles, build_person_index, build_spokesperson_page,
+                                        factions, load_inputs)
+        inp = load_inputs()
+        sz = (inp["szoszolok"] or {}).get("people") or {}
+        if not sz:
+            self.skipTest("no spokesperson list derived")
+        inp["facs_all"] = {}
+        for c in available_cycles():
+            for f in factions(c):
+                inp["facs_all"].setdefault(f["id"], f["colour"])
+        azon, r = next(iter(sz.items()))
+        page = build_spokesperson_page(inp, azon, r)
+        self.assertIn(f'<title>{r["name"]} — nemzetiségi szószóló · karzat</title>', page)
+        self.assertIn("de nem szavaz", page)
+        self.assertNotIn("Frakciójával", page)                                   # no discipline figure can exist
+        self.assertNotIn("Leadott", page)
+        self.assertIn(f'szemely/{azon}.html', page)                              # cites its own address
+        for st in r["cycles"]:
+            self.assertIn(f'{st["cycle"]}. ciklus', page)
+        idx = build_person_index(inp, {}, sz)
+        for a, x in sz.items():
+            self.assertIn(f'<a href="{a}.html">{x["name"]}</a>', idx)
+        self.assertEqual(idx.count('data-f="szószóló"'), len(sz))
+        self.assertIn(f'{len(sz)} nemzetiségi szószóló', idx)
+
+    def test_the_search_index_carries_them_with_their_own_kind(self):
+        import json as _json
+        from scripts.build_site import SITE_DIR, load_inputs
+        path = SITE_DIR / "kereses" / "index.json"
+        if not path.exists():
+            self.skipTest("search index not built")
+        items = _json.loads(path.read_text(encoding="utf-8"))
+        sz = (load_inputs()["szoszolok"] or {}).get("people") or {}
+        rows = [it for it in items if it["k"] == "szoszolo"]
+        self.assertEqual(len(rows), len(sz))
+        for it in rows:
+            self.assertTrue(it["u"].startswith("szemely/") and it["u"].endswith(".html"))
+            self.assertIn("nemzetiségi szószóló", it["s"])
+            self.assertTrue((SITE_DIR / it["u"]).exists(), it["u"])
+

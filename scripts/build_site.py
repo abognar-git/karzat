@@ -1199,7 +1199,7 @@ JS_SEARCH = """
   function load(cb){ if (items) return cb(); if (loading) return; loading = true; var x = new XMLHttpRequest(); x.open('GET', 'index.json'); x.onload = function(){ try { items = JSON.parse(x.responseText); } catch (e) { items = []; failed = true; } items.forEach(function(it){ it.f = fold(it.t) + ' ' + fold(it.s); it.ft = fold(it.t); }); cb(); }; x.onerror = function(){ items = []; failed = true; cb(); }; x.send(); }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
-  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép'};
+  var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló'};
   function render(){
     var terms = fold(q.value).split(/\s+/).filter(Boolean);
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
@@ -3301,7 +3301,7 @@ def build_search_page(inp: dict, n_items: int) -> str:
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Keresés</span><span class="tag">ékezet nélkül is · szám, cím, név</span></h2>
   <div class="filters"><input id="sq" type="search" placeholder="pl. T/51 · alaptörvény · Ágh" aria-label="Keresés" autofocus style="min-width:min(100%,420px)"><span class="n" id="sn" aria-live="polite"></span></div>
-  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button></div>
+  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button><button type="button" data-sk="szoszolo" aria-pressed="false">szószólók</button></div>
   <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
   <div class="tablewrap"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr></tbody></table></div>
   <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../iromany/index.html">irományok</a> · <a href="../kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
@@ -3432,7 +3432,59 @@ def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
 """ + page_tail(inp, 1)
 
 
-def build_person_index(inp: dict, people: dict[str, list[dict]]) -> str:
+def build_spokesperson_page(inp: dict, azon: str, r: dict) -> str:
+    """szemely/<azon>.html for a nationality spokesperson: the same address as a career page, a different content —
+    there is no vote to count. Cycle by cycle: the committees the record dates to that cycle and the record's own
+    speech count; then the whole committee history and the seat. What is missing is named: szoszolok.cgi is
+    present-tense, so an earlier term is only here if the record's dated rows show it."""
+    cycles = r.get("cycles") or []
+    rows = []
+    for st in cycles:
+        coms = st["committees"]
+        names = " · ".join(dict.fromkeys(f'{c["committee"]}{" / " + c["subcommittee"] if c.get("subcommittee") else ""}{" (" + c["role"] + ")" if c.get("role") else ""}' for c in coms))
+        sp = st.get("speeches")
+        rows.append(f'<tr><td class="mono">{st["cycle"]}. ciklus<span class="sub">{esc(CYCLE_SPAN.get(st["cycle"], ""))}</span></td>'
+                    f'<td>{esc(cut(names, 140)) or "—"}<span class="sub">{hu_num(len(coms))} tagsági sor</span></td>'
+                    f'<td class="num mono">{hu_num(sp) if sp is not None else "—"}</td></tr>')
+    com_rows = "".join(f'<tr><td>{esc(c["committee"] or "")}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(c["subcommittee"]) + "</span>") if c.get("subcommittee") else ""}</td>'
+                       f'<td>{esc(c.get("role") or "")}</td><td class="ts mono">{esc(c.get("from") or "")}{" – " + esc(c["to"]) if c.get("to") else " –"}</td></tr>'
+                       for st in cycles for c in st["committees"])
+    seat = r.get("seat") or {}
+    seat_txt = f'{seat["sector"]}. szektor, {seat["row"]}. sor, {seat["seat"]}. szék' if seat.get("sector") is not None else "—"
+    n_sp = sum(st["speeches"] or 0 for st in cycles)
+    links = " · ".join(x for x in [
+        f'<a href="{esc(ext_url(r.get("parlament_url")))}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>' if ext_url(r.get("parlament_url")) else "",
+        f'<a href="{esc(ext_url(r.get("website")))}" target="_blank" rel="noopener">honlap ↗</a>' if ext_url(r.get("website")) else "",
+        ] if x)
+    name = r["name"]
+    return page_head(f'{name} — nemzetiségi szószóló · karzat',
+                     f'{name}, a {r["nationality"]} nemzetiség szószólója az Országgyűlésben: ülőhely, bizottságok, felszólalások ciklusonként. A szószóló nem szavaz.', 1) + \
+        topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
+<div class="hero-h withpic">{portrait_html({"photo_url": r.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>nemzetiségi szószóló · {esc(r["nationality"] or "")} · {hu_num(len(cycles))} ciklus</small>
+<p class="hero-meta">{links}</p></div></div>
+<div class="fresh">{CORNERS}<span class="hu">A nemzetiségi szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz: a név szerinti listák sosem tartalmazzák, így itt nincs részvételi vagy frakciófegyelem-szám.</span>
+<span class="en" lang="en">A nationality spokesperson sits, speaks and works in committees but casts no vote: no roll call names them, so there is no participation or discipline figure here.</span></div>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Ciklusonként</span><span class="tag">a saját adatlapja dátumozott sorai szerint · összesen {hu_num(n_sp)} felszólalás</span></h2>
+  <div class="tablewrap"><table><thead><tr><th scope="col">Ciklus</th><th scope="col">Bizottságok</th><th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{"".join(rows) or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">A szószólók listája (<span class="mono">szoszolok.cgi</span>) jelen idejű: a mai szószólókat adja. A korábbi ciklusok innen csak akkor látszanak, ha a képviselői adatlap dátumozott sorai (bizottsági tagság, felszólalás-statisztika) mutatják őket — ezért lehet, hogy egy régebbi megbízatás hiányzik.</div>
+</section>
+<section class="grid">
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Bizottsági tagságok</span><span class="tag">{hu_num(sum(len(st["committees"]) for st in cycles))} sor</span></h2>
+    <div class="tablewrap" style="border:0"><table><thead><tr><th>Bizottság</th><th>Tisztség</th><th>Időszak</th></tr></thead><tbody>{com_rows or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+  </section>
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Ülőhely</span></h2>
+    <div class="hero-meta">A jelenlegi ciklusban: {esc(seat_txt)} — a <a href="../index.html">nyitólap patkóján</a> gyűrűvel jelölve.</div>
+    <div class="hero-meta prose" style="margin-top:8px">Nemzetiség: {esc(r["nationality"] or "—")}. A szószólót a nemzetiségi lista küldi, ha a lista nem szerez mandátumot.</div>
+  </section>
+</section>
+{cite_html(inp, f'szemely/{azon}.html', f'{name} — nemzetiségi szószóló', f'szemely-{azon}')}
+""" + page_tail(inp, 1)
+
+
+def build_person_index(inp: dict, people: dict[str, list[dict]], szoszolok: dict | None = None) -> str:
     facs = inp["facs_all"]
     trs = []
     for azon, stints in sorted(people.items(), key=lambda kv: name_key(kv[1][0]["name"])):
@@ -3443,9 +3495,18 @@ def build_person_index(inp: dict, people: dict[str, list[dict]]) -> str:
         trs.append(f'<tr data-f="{esc(latest["faction"] or "")}" data-name="{esc(name_key(latest["name"]))}" data-n="{len(stints)}" data-against="{ag}"><td><a href="{esc(azon)}.html">{esc(latest["name"])}</a></td>'
                    f'<td><span class="pos"><i class="d" style="--c:{facs.get(latest["faction"] or "", "#8a8a8a")}"></i>{esc(latest["faction"] or "—")}</span></td>'
                    f'<td class="mono">{cycles_txt}</td><td class="num mono">{len(stints)}</td><td class="num mono">{cast} / {roll}</td><td class="num mono">{ag}</td></tr>')
-    return page_head("Személyek · karzat", "Mindenki, aki a betöltött ciklusok névsoraiban szerepel — egy pályakép-oldal személyenként, ciklusokon át.", 1) + \
+    # the nationality spokespersons sit in the same rows, with a dash where a vote count would be: they cast none
+    sz_rows = []
+    for azon, r in sorted((szoszolok or {}).items(), key=lambda kv: name_key(kv[1]["name"])):
+        cyc = [st["cycle"] for st in r.get("cycles") or []]
+        sz_rows.append(f'<tr data-f="szószóló" data-name="{esc(name_key(r["name"]))}" data-n="{len(cyc)}" data-against="0"><td><a href="{esc(azon)}.html">{esc(r["name"])}</a></td>'
+                       f'<td><span class="pos"><i class="d" style="--c:{SZOSZOLO_COLOUR};background:transparent;box-shadow:inset 0 0 0 2px {SZOSZOLO_COLOUR}"></i>{esc(r["nationality"] or "")} szószóló</span></td>'
+                       f'<td class="mono">{" · ".join(str(c) for c in sorted(cyc))}</td><td class="num mono">{len(cyc)}</td><td class="num mono">—</td><td class="num mono">—</td></tr>')
+    trs = sorted(trs + sz_rows, key=lambda t: name_key(re.search(r'data-name="([^"]*)"', t).group(1)))
+    n_sz = len(szoszolok or {})
+    return page_head("Személyek · karzat", "Mindenki, aki a betöltött ciklusok névsoraiban szerepel, és a nemzetiségi szószólók — egy pályakép-oldal személyenként, ciklusokon át.", 1) + \
         topbar(inp, [("személyek", None)], 1) + f"""
-<div class="hero-h"><h1>Személyek</h1><small class="label" data-kz-text>{len(people)} képviselő a betöltött ciklusok névsoraiból · egy oldal személyenként, ciklusokon át</small></div>
+<div class="hero-h"><h1>Személyek</h1><small class="label" data-kz-text>{len(people)} képviselő a betöltött ciklusok névsoraiból{f" · {n_sz} nemzetiségi szószóló" if n_sz else ""} · egy oldal személyenként, ciklusokon át</small></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Pályaképek</span><span class="tag">a fejlécre kattintva rendezhető</span></h2>
   <div class="filters"><input type="search" data-filter-table="roll" placeholder="név" aria-label="Szűrés névre" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
@@ -3755,15 +3816,22 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         (md_ / "index.html").write_text(build_method_page(inp), encoding="utf-8")
         items = [it for r in res for it in r["search"]]
         items += [{"k": "szemely", "c": 0, "t": stints[0]["name"], "s": f'pályakép · {", ".join(str(st["cycle"]) for st in sorted(stints, key=lambda r: r["cycle"]))}. ciklus', "u": f"szemely/{azon}.html"} for azon, stints in people.items()]
+        items += [{"k": "szoszolo", "c": CURRENT_CYCLE, "t": r["name"],
+                   "s": f'{r["nationality"] or ""} nemzetiségi szószóló · {", ".join(str(st["cycle"]) for st in sorted(r.get("cycles") or [], key=lambda x: x["cycle"]))}. ciklus'.strip(),
+                   "u": f"szemely/{azon}.html"} for azon, r in ((inp["szoszolok"] or {}).get("people") or {}).items()]
         sd_ = out_dir / "kereses"; sd_.mkdir(parents=True, exist_ok=True)
         (sd_ / "index.json").write_text(json.dumps(items, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
         (sd_ / "index.html").write_text(build_search_page(inp, len(items)), encoding="utf-8")
         pd = out_dir / "szemely"
         pd.mkdir(parents=True, exist_ok=True)
         pw = _Writer()
-        pw(pd / "index.html", build_person_index(inp, people))
+        sz_people = (inp["szoszolok"] or {}).get("people") or {}
+        pw(pd / "index.html", build_person_index(inp, people, sz_people))
         for azon, stints in people.items():
             pw(pd / f"{azon}.html", build_person_page(inp, azon, stints))
+            people_n += 1
+        for azon, r in sz_people.items():
+            pw(pd / f"{azon}.html", build_spokesperson_page(inp, azon, r))     # the same address, no vote to count
             people_n += 1
         prune(pd, pw.written)
     return {"index": res[0]["index"], "vote_pages": sum(r["vote_pages"] for r in res), "mp_pages": sum(r["mp_pages"] for r in res),

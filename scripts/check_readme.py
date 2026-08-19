@@ -219,6 +219,8 @@ def build() -> list[tuple[str, list]]:
         # the landing page — scripts.build_site.build_landing()
         ("the arrow keys walk the seats; then the ten cycles since 1990 as stacked composition bars (mandates in force on each constituent sitting, read from the records' dated rows — {:,.0f} in the strip)",
          [_landing().count('<a class="cyc')]),
+        ("and their own kind in the search index ({:,.0f} entries)",
+         [sum(1 for it in _json.loads((ROOT / "site" / "kereses" / "index.json").read_text(encoding="utf-8")) if it["k"] == "szoszolo")]),
         ("with them the **{:,.0f} nationality spokespersons**", [_json.loads((ROOT / "data" / "derived" / "szoszolok.json").read_text(encoding="utf-8"))["count"]]),
         ("all {:,.0f} mandate-holders placed where their own record puts them,", [_landing().count('<g class="seat" role="button"')]),
         ("The {:,.0f} seats still left as outlines",
