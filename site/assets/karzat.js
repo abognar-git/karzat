@@ -205,12 +205,13 @@
   function render(az){
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
+    var photo = d[10] || (PHOTO_BASE + esc(az)), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
     var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
     var c = colours[fac] || '#8a8a8a';
     var part = inroll ? Math.round(100 * cast / inroll) : null, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var who = (sz || km) ? esc(name) : '<a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a>';
-    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+    box.innerHTML = '<img class="portrait insp" src="' + esc(photo) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="' + esc(credit) + '" onerror="this.remove()">' +
       '<div class="row1"><span class="name">' + who + '</span>' +
       '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +

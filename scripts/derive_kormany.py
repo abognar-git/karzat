@@ -77,6 +77,10 @@ def main(argv: list[str] | None = None) -> int:
         if t.get("date") and (e["last_spoke"] is None or t["date"] > e["last_spoke"]):
             e["last_spoke"] = t["date"]
 
+    photos = {}
+    ph_path = ROOT / "reference" / "wikidata" / "kormany_photos.json"
+    if ph_path.exists():
+        photos = json.loads(ph_path.read_text(encoding="utf-8"))["people"]
     people, no_seat, stale = {}, [], []
     for azon, e in seen.items():
         rec_path = RAW / "kepviselo" / f"mp_{azon}.xml"
@@ -91,12 +95,18 @@ def main(argv: list[str] | None = None) -> int:
             stale.append((azon, e["name"]))
             continue
         offices = [o for o, _ in e["offices"].most_common()]
+        # parlament.hu answers 404 for their portrait (it photographs the members it lists), so the picture — where
+        # one exists at all — is a Commons file found by scripts/pull_kormany_photos.py, shown with its attribution
+        ph = photos.get(azon) or {}
         people[azon] = {"p_azon": azon, "name": rec.get("name") or e["name"], "offices": offices,
                         "office": offices[0] if offices else None, "seat": seat,
-                        "photo_url": rec.get("photo_url"), "parlament_url": rec.get("parlament_url"),
+                        "photo_url": ph.get("url"), "photo_credit": ph.get("credit"), "photo_qid": ph.get("qid"),
+                        "photo_licence": ph.get("licence"), "photo_licence_url": ph.get("licence_url"),
+                        "parlament_url": rec.get("parlament_url"),
                         "speeches": e["speeches"], "last_spoke": e["last_spoke"],
                         "front_bench": seat.get("sector") == 0}
     out = {"cycle": cycle, "count": len(people), "front_bench": sum(1 for p in people.values() if p["front_bench"]),
+           "with_photo": sum(1 for p in people.values() if p.get("photo_url")),
            "seen_without_seat": sorted(n for _, n in no_seat), "seat_not_on_the_bench": sorted(n for _, n in stale),
            "people": dict(sorted(people.items(), key=lambda kv: (kv[1]["seat"]["sector"], kv[1]["seat"]["row"], kv[1]["seat"]["seat"])))}
     path = DERIVED / "kormany.json"

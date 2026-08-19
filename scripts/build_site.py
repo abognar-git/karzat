@@ -162,15 +162,17 @@ PHOTO_BASE = "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexp
 
 
 def portrait_html(mp: dict, cls: str = "") -> str:
-    """The MP's portrait as parlament.hu serves it (195×260, the record's <fenykep> URL), loaded from there — not
-    copied — lazily, without a referrer, in the site's black-and-white treatment; attributed in the title. Empty when
-    the record has no photo."""
+    """A portrait, loaded from wherever it lives — not copied — lazily, without a referrer, in the site's
+    black-and-white treatment, attributed in the title. parlament.hu for the members it photographs (the record's
+    <fenykep> URL, 195×260); a Wikimedia Commons file with its author and licence for the House's non-MP members,
+    whom parlament.hu does not photograph. Empty when there is no picture at all."""
     url = mp.get("photo_url")
     if not url:
         return ""
     klass = ("portrait " + cls).strip()
+    credit = mp.get("photo_credit") or "fénykép: parlament.hu"
     return (f'<img class="{klass}" src="{esc(url)}" alt="{esc(mp.get("name") or "")}" width="195" height="260" loading="lazy" decoding="async" '
-            f'referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">')
+            f'referrerpolicy="no-referrer" title="{esc(credit)}" onerror="this.remove()">')
 
 
 def ext_url(u: str | None) -> str:
@@ -984,12 +986,13 @@ JS_HALL = """
   function render(az){
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
+    var photo = d[10] || (PHOTO_BASE + esc(az)), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
     var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
     var c = colours[fac] || '#8a8a8a';
     var part = inroll ? Math.round(100 * cast / inroll) : null, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var who = (sz || km) ? esc(name) : '<a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a>';
-    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+    box.innerHTML = '<img class="portrait insp" src="' + esc(photo) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="' + esc(credit) + '" onerror="this.remove()">' +
       '<div class="row1"><span class="name">' + who + '</span>' +
       '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + (sz ? 'nemzetiségi szószóló' : km ? 'kormánytag, nem képviselő' : esc(fac)) + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span></div>' +
       '<div class="row2"><span class="rec"><span class="lbl">a ciklusban</span>' +
@@ -3380,7 +3383,7 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 <div class="hero-meta prose">Atom-csatornák minden ciklusban (<span class="mono">feed/</span>): a különvélemények ciklusra (<span class="mono">kulonvelemeny.xml</span>), frakciónként (<span class="mono">frakcio-&lt;név&gt;.xml</span>) és képviselőnként (<span class="mono">kepviselo/&lt;azonosító&gt;.xml</span>), és minden szavazás (<span class="mono">szavazasok.xml</span>). Egy tétel egy szavazás; a benne álló különvélemények ugyanabból a számításból jönnek, mint a képviselőoldalak „frakció ellen” oszlopa (döntetlen = nincs többség; jelenlét-megállapítás nem számít). A tétel ideje a szavazásé, a csatorna frissítése a szinkroné — soha nem az építés pillanata, így ugyanabból a tárból ugyanaz a fájl épül. Egy csatornában az utolsó {fd.MAX_ENTRIES} tétel; a teljes lista <span class="mono">adatok/kulonvelemenyek.csv</span>. Értesítés az, hogy az oldal újraépül és a hírolvasó újraolvassa: nincs szerver, nincs fiók.</div></section>
 
 <section class="panel" id="kep">{CORNERS}<h2><span data-kz-text>Fényképek, bizottságok, választókerületek</span></h2>
-<div class="hero-meta prose">A képviselők fényképe a parlament.hu-ról töltődik be (a képviselői adatlap <span class="mono">fenykep</span> hivatkozása; az oldal nem másolja, onnan mutatja, fekete-fehérben, forrásmegjelöléssel); a felhasználás feltételeit a parlament.hu nem írja ki — a beágyazás az oldal tulajdonosának döntése. A bizottságok a jelenlegi ciklusra az API bizottsági listájából és adatlapjaiból (típus, mai összetétel, a következő ülés meghívója — jelen idejű adat), minden ciklusra a képviselői adatlapok tagságtörténetéből; ülésmeghívó-csatorna: <span class="mono">feed/bizottsagok.xml</span>. „Ki a képviselőm?” település szerint: a választókerületi törvény mellékletéből (2011. évi CCIII. tv., 2. melléklet, hatályos szöveg, njt.hu); ahol egy várost vagy kerületet a melléklet utcánként oszt meg, minden szóba jövő választókerület látszik és a lakcím dönt.</div></section>
+<div class="hero-meta prose">A képviselők fényképe a parlament.hu-ról töltődik be (a képviselői adatlap <span class="mono">fenykep</span> hivatkozása; az oldal nem másolja, onnan mutatja, fekete-fehérben, forrásmegjelöléssel); a felhasználás feltételeit a parlament.hu nem írja ki — a beágyazás az oldal tulajdonosának döntése. Akit a parlament.hu nem fényképez (a mandátum nélküli kormánytagokat: a portré-végpont 404-et ad rájuk), annak a képe — ha van — Wikimedia Commons-fájl, a Wikidata P18 alapján, szerzővel és licenccel megnevezve a kép címkéjében és az adatlapján; a párosítás akkor fogadható el, ha a tétel ember, a neve a jegyzőkönyvi névvel egyezik, és vagy a saját p_azon-ját viseli (P4966), vagy a tisztsége (P39) az, amit a jegyzőkönyv ír. Minden fénykép fekete-fehéren, ugyanazzal a szűrővel jelenik meg. A bizottságok a jelenlegi ciklusra az API bizottsági listájából és adatlapjaiból (típus, mai összetétel, a következő ülés meghívója — jelen idejű adat), minden ciklusra a képviselői adatlapok tagságtörténetéből; ülésmeghívó-csatorna: <span class="mono">feed/bizottsagok.xml</span>. „Ki a képviselőm?” település szerint: a választókerületi törvény mellékletéből (2011. évi CCIII. tv., 2. melléklet, hatályos szöveg, njt.hu); ahol egy várost vagy kerületet a melléklet utcánként oszt meg, minden szóba jövő választókerület látszik és a lakcím dönt.</div></section>
 
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
@@ -3513,10 +3516,22 @@ def build_kormany_page(inp: dict, azon: str, r: dict) -> str:
         f'<a href="{esc(ext_url(r.get("parlament_url")))}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>' if ext_url(r.get("parlament_url")) else "",
         f'<a href="../{cdir}felszolalas/index.html">a ciklus felszólalásai ↗</a>'] if x)
     name = r["name"]
+    # parlament.hu photographs the members it lists and answers 404 for everyone else, so the picture — when there is
+    # one — is a Commons file, and it is credited here as its licence asks
+    if r.get("photo_url"):
+        lic = (f'<a href="{esc(ext_url(r["photo_licence_url"]))}" target="_blank" rel="noopener">{esc(r.get("photo_licence") or "licenc")}</a>'
+               if r.get("photo_licence_url") else esc(r.get("photo_licence") or ""))
+        wd = f' · <a href="https://www.wikidata.org/wiki/{esc(r["photo_qid"])}" target="_blank" rel="noopener">Wikidata {esc(r["photo_qid"])} ↗</a>' if r.get("photo_qid") else ""
+        credit = (r.get("photo_credit") or "")
+        if r.get("photo_licence") and lic and credit.endswith(r["photo_licence"]):
+            credit = credit[:-len(r["photo_licence"])].rstrip(" ·")             # the licence follows as a link
+        photo_note = f'{esc(credit)}{" · " + lic if lic else ""}{wd}'
+    else:
+        photo_note = "Nincs: a parlament.hu csak a képviselőket fényképezi, és szabad licencű képet sem találtunk hozzá."
     return page_head(f'{name} — kormánytag, nem képviselő · karzat',
                      f'{name} ({offices}) az Országgyűlésben: a miniszteri padban ül és felszólal, de nem képviselő — nem szavaz.', 1) + \
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
-<div class="hero-h withpic">{portrait_html({"photo_url": r.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>kormánytag, nem képviselő · {esc(cut(offices, 90))}</small>
+<div class="hero-h withpic">{portrait_html({"photo_url": r.get("photo_url"), "photo_credit": r.get("photo_credit"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>kormánytag, nem képviselő · {esc(cut(offices, 90))}</small>
 <p class="hero-meta">{links}</p></div></div>
 <div class="fresh">{CORNERS}<span class="hu">A kormány tagjának nem kell képviselőnek lennie. Aki nem az, az ülésteremben a miniszteri padban ül és felszólal, de nem szavaz: a név szerinti listák sosem tartalmazzák, mandátuma, frakciója, választókerülete nincs.</span>
 <span class="en" lang="en">A minister need not hold a mandate. One who does not sits on the ministerial bench and speaks, but casts no vote: no roll call names them, and they have no mandate, faction or constituency.</span></div>
@@ -3527,6 +3542,7 @@ def build_kormany_page(inp: dict, azon: str, r: dict) -> str:
       <tr><td>Tisztség</td><td>{esc(offices)}</td></tr>
       <tr><td>Ülőhely</td><td>{esc(seat_txt)} — a <a href="../index.html">nyitólap patkóján</a> halvány koronggal</td></tr>
       <tr><td>Felszólalás a {CURRENT_CYCLE}. ciklusban</td><td class="mono">{hu_num(r.get("speeches") or 0)}{" · legutóbb " + esc(hu_date(r["last_spoke"])) if r.get("last_spoke") else ""}</td></tr>
+      <tr><td>Fénykép</td><td>{photo_note}</td></tr>
     </tbody></table></div>
     <div class="hero-meta prose" style="margin-top:8px">A tisztség onnan van, ahogy a jegyzőkönyv a felszólalásainál megnevezi (<span class="mono">beosztás</span>); az oldal nem tart nyilván kormánynévsort. Aki a ciklusban nem szólalt fel, az így nem is látszik — ezért lehet, hogy a miniszteri padban marad üres hely.</div>
   </section>
@@ -3769,14 +3785,15 @@ def hall_data(cur: dict) -> dict[str, list]:
         rec = per_mp.get(azon) or {"cast": 0, "in_roll": 0, "with": 0, "against": 0}
         out[azon] = [mp["name"], mp.get("faction") or "független", mandate_text(mp), seat_text(mp),
                      rec["cast"], rec["in_roll"], rec["with"], rec["against"],
-                     sum(1 for r in speeches.get(azon, []) if not r["technical"])]
+                     sum(1 for r in speeches.get(azon, []) if not r["technical"]), 0, "", ""]
     # the ministerial bench's non-MP members: a minister need not hold a mandate; the card names the office and says
     # plainly that no vote of theirs exists. d[9] carries the office instead of a committee count.
     for azon, r in ((cur.get("kormany") or {}).get("people") or {}).items():
         s = r.get("seat") or {}
         out[azon] = [r["name"], "kormánytag", r.get("office") or "kormánytag",
                      (f'miniszteri pad, {s["seat"]}. szék' if s.get("sector") == 0 else ""),
-                     0, 0, 0, 0, r.get("speeches") or 0, r.get("office") or ""]
+                     0, 0, 0, 0, r.get("speeches") or 0, 0,
+                     r.get("photo_url") or "", r.get("photo_credit") or ""]      # parlament.hu has no photo of them
     # the spokespersons: no roll call ever names them, so the card says what they do instead — nationality,
     # committees, the record's speech count. The 0s in the vote slots are what the card reads as "no vote".
     for azon, r in ((cur.get("szoszolok") or {}).get("people") or {}).items():
@@ -3784,7 +3801,7 @@ def hall_data(cur: dict) -> dict[str, list]:
         out[azon] = [r["name"], "szószóló", f'{r["nationality"]} nemzetiségi lista' if r.get("nationality") else "nemzetiségi lista",
                      (f'{s["sector"]}. szektor, {s["row"]}. sor, {s["seat"]}. szék' if s.get("sector") is not None else ""),
                      0, 0, 0, 0, r.get("speeches") or sum(1 for x in speeches.get(azon, []) if not x["technical"]),
-                     len(r.get("committees") or [])]
+                     len(r.get("committees") or []), r.get("photo_url") or "", r.get("photo_credit") or ""]
     return out
 
 

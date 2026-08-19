@@ -1,0 +1,57 @@
+{
+ "source": "Wikidata (P18) + Wikimedia Commons imageinfo; matched by name and either P4966 or the office the record prints",
+ "note": "parlament.hu has no photograph of a minister who is not an MP (its portrait endpoint answers 404); these are Commons files, each with its licence and author, shown with attribution.",
+ "count": 3,
+ "without_photo": [
+  {
+   "p_azon": "0050",
+   "name": "Bóna Szabolcs János",
+   "qid": null,
+   "why": "nincs egyértelmű Wikidata-tétel"
+  },
+  {
+   "p_azon": "0051",
+   "name": "Lannert Judit Orsolya",
+   "qid": null,
+   "why": "nincs egyértelmű Wikidata-tétel"
+  }
+ ],
+ "people": {
+  "0052": {
+   "p_azon": "0052",
+   "name": "Dr. Törőcsikné Dr. Görög Márta",
+   "qid": "Q108701206",
+   "image": "Márta Görög in 2026.jpg",
+   "evidence": "P39 = igazságügyi miniszter",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/M%C3%A1rta%20G%C3%B6r%C3%B6g%20in%202026.jpg?width=400",
+   "licence": "CC BY 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by/4.0",
+   "author": "EC - Audiovisual Service Photographer: Ferenc Isza",
+   "credit": "fénykép: EC - Audiovisual Service Photographer: Ferenc Isza · Wikimedia Commons · CC BY 4.0"
+  },
+  "0053": {
+   "p_azon": "0053",
+   "name": "Dr. Ruff Bálint György",
+   "qid": "Q139501809",
+   "image": "Ruff Bálint.jpg",
+   "evidence": "P39 = Miniszterelnökséget vezető miniszter",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ruff%20B%C3%A1lint.jpg?width=400",
+   "licence": "CC BY 3.0",
+   "licence_url": "https://creativecommons.org/licenses/by/3.0",
+   "author": "Magyar Kétfarkú Kutya Párt YouTube-csatorna",
+   "credit": "fénykép: Magyar Kétfarkú Kutya Párt YouTube-csatorna · Wikimedia Commons · CC BY 3.0"
+  },
+  "v076": {
+   "p_azon": "v076",
+   "name": "Vitézy Dávid László",
+   "qid": "Q1460530",
+   "image": "VitézyDávid2021.jpg",
+   "evidence": "P4966 = a saját p_azon",
+   "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Vit%C3%A9zyD%C3%A1vid2021.jpg?width=400",
+   "licence": "CC BY-SA 4.0",
+   "licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "author": "NyitraiD",
+   "credit": "fénykép: NyitraiD · Wikimedia Commons · CC BY-SA 4.0"
+  }
+ }
+}

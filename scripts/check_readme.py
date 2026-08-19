@@ -231,6 +231,9 @@ def build() -> list[tuple[str, list]]:
         ("stays invisible, so {:,.0f} bench seats are still outlines",
          [22 - len(_json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["people"])
           - sum(1 for c in _json.loads((ROOT / "data" / "derived" / "seating.json").read_text(encoding="utf-8"))["coords"].values() if c["sector"] == 0)]),
+        ("takes the Commons picture where one exists ({:,.0f} of the {:,.0f})",
+         [_json.loads((ROOT / "reference" / "wikidata" / "kormany_photos.json").read_text(encoding="utf-8"))["count"],
+          _json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["count"]]),
         # the archive cycles' speech lists — data/derived/speeches_ckl36..41.json.gz
         ("cycles 36–41 synced: {:,.0f} day lists, {:,.0f} rows, {:,.0f} substantive, {:,.0f} rows resolved to MPs",
          [old_days, old_rows, old_sub, old_res]),

@@ -451,6 +451,37 @@ class MinisterialBench(unittest.TestCase):
         self.assertIn("seen_without_seat", d)
         self.assertTrue(all(p["seat"]["sector"] == 0 for p in d["people"].values()))
 
+    def test_their_photographs_are_licensed_credited_and_black_and_white(self):
+        import json as _json
+        from scripts.build_site import DERIVED, ROOT as _R, build_assets, build_kormany_page, hall_data, load_inputs, portrait_html
+        inp = load_inputs()
+        km = (inp["kormany"] or {}).get("people") or {}
+        if not km:
+            self.skipTest("no government bench derived")
+        snap = _json.loads((ROOT / "reference" / "wikidata" / "kormany_photos.json").read_text(encoding="utf-8"))
+        with_photo = {a: r for a, r in km.items() if r.get("photo_url")}
+        self.assertEqual(set(with_photo), set(snap["people"]))                      # only what the snapshot found
+        for azon, r in with_photo.items():
+            self.assertIn("commons.wikimedia.org", r["photo_url"])                  # never parlament.hu: it 404s for them
+            self.assertTrue(r["photo_credit"] and r["photo_licence"])               # attribution is the licence's price
+            self.assertIn("Wikimedia Commons", r["photo_credit"])
+            html = portrait_html(r, "hero")
+            self.assertIn('class="portrait hero"', html)                            # the grayscale class, like every portrait
+            self.assertIn(f'title="{r["photo_credit"]}"', html)
+            page = build_kormany_page(inp, azon, r)
+            self.assertIn(r["photo_licence"], page)                                 # the licence is named on the page too
+        for azon, r in km.items():
+            if not r.get("photo_url"):
+                self.assertIn("Nincs:", build_kormany_page(inp, azon, r))           # says there is none, rather than a broken frame
+        data = hall_data(inp)
+        for azon, r in with_photo.items():
+            self.assertEqual(data[azon][10], r["photo_url"])                        # the card shows the same picture
+            self.assertEqual(data[azon][11], r["photo_credit"])
+        js = build_assets()["karzat.js"]
+        self.assertIn("d[10] || (PHOTO_BASE", js)                                   # …and falls back to the id only when there is none
+        self.assertIn('class="portrait insp"', js)
+        self.assertRegex(build_assets()["karzat.css"], r"\.portrait\{filter:grayscale\(1\)")
+
     def test_they_have_a_page_and_are_findable(self):
         import json as _json
         from scripts.build_site import CURRENT_CYCLE, SITE_DIR, available_cycles, build_kormany_page, factions, load_inputs
