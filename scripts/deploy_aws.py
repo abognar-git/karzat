@@ -38,7 +38,11 @@ CONTENT_TYPE = {
 }
 # HTML is short-lived (the site is rebuilt when parliament sits) and the feeds shorter still; a portrait is the same
 # picture for as long as the person has the same face, so it is cached for a month rather than a day.
-CACHE = {".html": "public, max-age=300", ".xml": "public, max-age=900",
+# The stylesheet and the script are versionless names, so a long cache means a reader can hold yesterday's CSS over
+# today's HTML — which is how a chart drawn with new class names came to render as black rectangles for a day. They
+# are small and CloudFront answers the revalidation, so they follow the HTML's own short life instead.
+CACHE = {".html": "public, max-age=300", ".css": "public, max-age=300", ".js": "public, max-age=300",
+         ".xml": "public, max-age=900",
          ".webp": "public, max-age=2592000", ".png": "public, max-age=2592000",
          ".jpg": "public, max-age=2592000", ".ico": "public, max-age=2592000"}
 CACHE_DEFAULT = "public, max-age=86400"

@@ -205,16 +205,19 @@ class Build(unittest.TestCase):
         self.assertEqual(mp.count('data-page-size="25"'), 5)             # weeks, speeches, votes, dissents, motions
 
     def test_boot_sequence_is_honest_and_optional(self):
+        """The terminal used to print four lines of true numbers on every page — the corpus, this page's cycle, the
+        rule-versus-record check, the sync stamp — which every page repeated and nobody read twice. Each of them
+        lives on the page that owns it now, and the terminal keeps the one line that differs page to page: a fact
+        from the corpus. What must not come back is a claim of being live."""
         js = build_assets()["karzat.js"]
         self.assertIn("prefers-reduced-motion", js)                  # the whole boot choreography is skipped for reduced motion
         self.assertTrue(js.lstrip().startswith("(function(){"))
-        # the terminal log is real values: the corpus, then this page's cycle; no page claims to be live
-        self.assertIn("ezen az oldalon: 43. ciklus · 259 szavazás · 23 ülésnap · 199 képviselő", self.cyc)
         stamp = sync_stamp(load_inputs())                                       # the last sync, whatever it was
         for page in (self.page, self.cyc):
-            self.assertRegex(page, r"&gt; \d+ ciklus · \d{4}\. \w+ \d+\. – 2026\. augusztus 11\. · [\d\u00a0]+ szavazás · [\d\u00a0]+ név szerinti lista · [\d\u00a0]+ képviselő")
-            self.assertRegex(page, r"a számított eredmény (minden szavazásnál egyezik a jegyzőkönyvivel|[\d\u00a0]+ szavazásnál eltér a jegyzőkönyvitől — jelölve)")   # corpus-wide, either honest form
-            self.assertIn(f"frissítve {hu_date(stamp[:10])} {stamp[11:]}", page)
+            log = re.search(r'<div class="log">(.*?)</div>', page, re.S).group(1)
+            self.assertEqual(log.count('class="factline"'), 1)                  # the fact…
+            self.assertNotIn("<span>&gt;", log)                                 # …and none of the old boot lines
+            self.assertNotIn("ezen az oldalon", page)
             self.assertNotIn("SYSTEM_READY", page)
             self.assertNotIn(".cgi", page.split("<footer")[1])          # the footer talks about the data, not the plumbing
             self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", page)   # absolute, not a frozen "15 perce"
@@ -468,7 +471,8 @@ class Cycle42(unittest.TestCase):
         self.assertIn('href="../assets/karzat.css"', page)                   # site/ckl42/index.html → ../assets
         self.assertIn("Lezárt ciklus, 2022-05-02 – 2026-05-08: mind a 2\u00a0599 szavazás itt van.", page)
         self.assertNotIn("Frissítve 1", page)                                 # no relative age anywhere
-        self.assertIn("214 képviselő", page)                                  # the cycle's own roster, not today's list
+        # the cycle's own roster, not today's list — in the headline count, where the terminal no longer repeats it
+        self.assertIn('data-kz-number="214">214</b><span data-kz-text>képviselő', page)
         self.assertNotIn("TISZA: 141", page)
         # links leave the cycle root only for the shared trees (assets, people, method, search, other cycles)
         for h in re.findall(r'href="\.\./([^"#]+)', page):
@@ -806,6 +810,25 @@ class Helpers(unittest.TestCase):
         self.assertTrue(all(s["cy"] <= 0.01 for s in seats))    # a semicircle above the axis
 
 
+class CachesAreSeparate(unittest.TestCase):
+    """Two caches shared one dictionary, and the first caller decided whether the second worked.
+
+    `site_totals()` treats an empty `_TOTALS` as "not computed yet"; `facts()` used to store its list under a key
+    in that same dict, so asking for a fact first left the totals permanently empty — every number on the landing
+    page. It only ever worked because the terminal asked for the totals first, and it broke the day the terminal
+    stopped. Whichever order they are called in now, both answer."""
+
+    def test_asking_for_a_fact_first_does_not_empty_the_totals(self):
+        import importlib
+        import scripts.build_site as bs
+        m = importlib.reload(bs)
+        m.facts()
+        tot = m.site_totals()
+        for key in ("cycles", "votes", "roll_calls", "people", "from", "to"):
+            self.assertIn(key, tot)
+        self.assertGreater(len(m.build_landing()), 10_000)
+
+
 class Portraits(unittest.TestCase):
     """The pictures are ours now: a grey WebP of the size they are drawn at, not a colour JPEG ten times larger
     filtered in the browser. What the markup says must follow the manifest and nothing else, or a build would
@@ -885,42 +908,47 @@ class LifePath(unittest.TestCase):
         return st
 
     def test_a_lane_per_kind_the_record_dates(self):
-        from scripts.build_site import life_path_svg
+        from scripts.build_site import life_path_html
         azon = max(self.mps, key=lambda a: len(self.mps[a].get("local_offices") or []))
         st = self.stint(azon)
-        html = life_path_svg(self.inp, st, [st])
+        html = life_path_html(self.inp, st, [st])
         self.assertIn("Országgyűlés", html)                                  # the mandates are always a lane
         self.assertIn("Önkormányzat", html)                                  # this person has local seats
         n_local = len(st["local_offices"])
         n_mand = len([e for e in st["elections"] if e.get("mandate_from")])
-        self.assertEqual(html.count("<rect"), n_local + n_mand + len(st["offices"]))
+        drawn = html.count('class="sp')
+        self.assertLessEqual(drawn, n_local + n_mand + len(st["offices"]))    # consecutive terms of one post merge
+        self.assertGreaterEqual(drawn, n_mand)                                 # …but a mandate is never merged away
         years = {s["year"] for s in st["schools"] if s.get("year")}
-        self.assertEqual(html.count("<circle"), len(years))       # one dot per year, however many degrees it carries
+        self.assertEqual(html.count('class="sch"'), len(years))   # one dot per year, however many degrees it carries
+        for o in st["offices"]:                                   # every span names itself, not only on hover
+            if o.get("office"):
+                self.assertIn(f'<b>{o["office"]}</b>', html)
 
     def test_nothing_dated_draws_nothing(self):
-        from scripts.build_site import life_path_svg
+        from scripts.build_site import life_path_html
         bare = {"name": "X", "elections": [], "offices": [], "local_offices": [], "schools": [], "factions": []}
-        self.assertEqual(life_path_svg(self.inp, bare, []), "")
+        self.assertEqual(life_path_html(self.inp, bare, []), "")
 
     def test_an_open_span_ends_at_the_newest_vote_not_today(self):
-        from scripts.build_site import life_path_svg, site_today
+        from scripts.build_site import life_path_html, site_today
         day = site_today(self.inp)
         self.assertEqual(day, max(v["ts"] for v in self.inp["idx"]["votes"])[:10].replace(".", "-"))
         azon = next(a for a, m in self.mps.items()
                     if any(e.get("mandate_from") and not e.get("mandate_to") for e in m.get("elections") or []))
         st = self.stint(azon)
-        self.assertIn(hu_date(day), life_path_svg(self.inp, st, [st]))        # the page names the day it runs to
+        self.assertIn(hu_date(day), life_path_html(self.inp, st, [st]))        # the page names the day it runs to
 
     def test_a_cycle_the_site_never_loaded_still_gets_its_colour(self):
         """The colour comes from the stint when the site has one, and from the record's own faction rows when it
         does not — otherwise every pre-1998 bar would be grey."""
-        from scripts.build_site import life_path_svg
+        from scripts.build_site import life_path_html
         azon = max(self.mps, key=lambda a: len(self.mps[a].get("elections") or []))
         st = self.stint(azon)
         if len(st["elections"]) < 2:
             self.skipTest("nobody in this cycle has served in another")
-        html = life_path_svg(self.inp, st, [st])                              # one stint only: earlier cycles are unloaded
-        colours = set(re.findall(r'fill="(#[0-9a-fA-F]{6})"', html))
+        html = life_path_html(self.inp, st, [st])                              # one stint only: earlier cycles are unloaded
+        colours = set(re.findall(r'--c:(#[0-9a-fA-F]{6})', html))
         self.assertTrue(colours - {"#8a8a8a", "#d4d4d8", "#8a8a93"})           # at least one real faction colour
 
 

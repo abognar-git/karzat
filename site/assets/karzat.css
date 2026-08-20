@@ -53,7 +53,6 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.02em;position:relative}
-.fresh .en{color:var(--dim2);display:block;margin-top:2px}
 .fresh:before{content:">";color:var(--dim3);margin-right:8px}
 /* text */
 .hero-title{font-size:22px;font-weight:300;letter-spacing:-.01em;line-height:1.3;margin:2px 0 8px;color:var(--white)}
@@ -182,14 +181,23 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .strip .b:hover rect:first-child,.strip .b:focus-visible rect:first-child{fill:var(--white)}
 .strip .b.now rect:first-child{fill:var(--white)}
 .strip .b.now .hit{fill:rgba(255,255,255,.07)}
-/* one person on one time axis: mandates, offices, local-government seats, the years of the degrees */
-.life svg{width:100%;height:auto;display:block;margin-top:4px;overflow:visible}
-.life .g{stroke:var(--grid);stroke-width:1}
-.life .ax{stroke:var(--border-hi);stroke-width:.5}
-.life .yr,.life .ln{font-family:var(--mono);font-size:10px;fill:var(--dim3)}
-.life .yr{text-anchor:middle}.life .ln{text-anchor:end;letter-spacing:.12em;text-transform:uppercase;font-size:9px}
-.life .sp rect,.life .sp circle{transition:opacity .12s}.life .sp:hover rect,.life .sp:hover circle{opacity:.72}
-.life .sch{fill:var(--dim2)}
+/* one person on one time axis: mandates, offices, local-government seats, the years of the degrees. HTML, not
+   SVG, so the type is the page's own size and every span can carry its name instead of hiding it in a tooltip. */
+.lifewrap{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.life .lane{display:flex;align-items:center;gap:12px;min-height:26px}
+.life .ln{flex:0 0 92px;font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2);text-align:right}
+.life .track{position:relative;flex:1 1 auto;height:calc(var(--rows,1) * 20px + 2px);background:linear-gradient(var(--line2),var(--line2)) 0 50%/100% 1px no-repeat}
+.life .sp{position:absolute;left:var(--x);width:var(--w);top:calc(var(--r,0) * 20px + 3px);height:16px;background:var(--c);display:flex;align-items:center;padding:0 6px;overflow:hidden;transition:filter .12s}
+.life .sp.hollow{background:transparent;box-shadow:inset 0 0 0 1px var(--c)}
+.life .sp:hover{filter:brightness(1.25)}
+.life .sp b{font:400 10.5px/1 var(--sans);color:#0b0b0b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.life .sp.hollow b{color:var(--dim)}
+.life .sch{position:absolute;left:var(--x);top:7px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--dim2)}
+.life .sch b{position:absolute;left:50%;transform:translateX(-50%);top:10px;font-family:var(--mono);font-size:9px;color:var(--dim3);font-weight:400}
+.life .lane.axis{min-height:16px}
+.life .lane.axis .track{height:12px;background:none}
+.life .lane.axis i{position:absolute;left:var(--x);transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--dim3);font-style:normal}
+@media (max-width:640px){.life .ln{flex-basis:56px;font-size:8px}.life .sp b{font-size:9.5px}}
 /* the asset declarations: one square per document, grouped by the year the record states */
 .vny{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
 .vny .yr{display:flex;flex-direction:column;align-items:center;gap:4px}

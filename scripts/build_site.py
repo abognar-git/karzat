@@ -725,7 +725,6 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.02em;position:relative}
-.fresh .en{color:var(--dim2);display:block;margin-top:2px}
 .fresh:before{content:">";color:var(--dim3);margin-right:8px}
 /* text */
 .hero-title{font-size:22px;font-weight:300;letter-spacing:-.01em;line-height:1.3;margin:2px 0 8px;color:var(--white)}
@@ -854,14 +853,23 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .strip .b:hover rect:first-child,.strip .b:focus-visible rect:first-child{fill:var(--white)}
 .strip .b.now rect:first-child{fill:var(--white)}
 .strip .b.now .hit{fill:rgba(255,255,255,.07)}
-/* one person on one time axis: mandates, offices, local-government seats, the years of the degrees */
-.life svg{width:100%;height:auto;display:block;margin-top:4px;overflow:visible}
-.life .g{stroke:var(--grid);stroke-width:1}
-.life .ax{stroke:var(--border-hi);stroke-width:.5}
-.life .yr,.life .ln{font-family:var(--mono);font-size:10px;fill:var(--dim3)}
-.life .yr{text-anchor:middle}.life .ln{text-anchor:end;letter-spacing:.12em;text-transform:uppercase;font-size:9px}
-.life .sp rect,.life .sp circle{transition:opacity .12s}.life .sp:hover rect,.life .sp:hover circle{opacity:.72}
-.life .sch{fill:var(--dim2)}
+/* one person on one time axis: mandates, offices, local-government seats, the years of the degrees. HTML, not
+   SVG, so the type is the page's own size and every span can carry its name instead of hiding it in a tooltip. */
+.lifewrap{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.life .lane{display:flex;align-items:center;gap:12px;min-height:26px}
+.life .ln{flex:0 0 92px;font-family:var(--mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2);text-align:right}
+.life .track{position:relative;flex:1 1 auto;height:calc(var(--rows,1) * 20px + 2px);background:linear-gradient(var(--line2),var(--line2)) 0 50%/100% 1px no-repeat}
+.life .sp{position:absolute;left:var(--x);width:var(--w);top:calc(var(--r,0) * 20px + 3px);height:16px;background:var(--c);display:flex;align-items:center;padding:0 6px;overflow:hidden;transition:filter .12s}
+.life .sp.hollow{background:transparent;box-shadow:inset 0 0 0 1px var(--c)}
+.life .sp:hover{filter:brightness(1.25)}
+.life .sp b{font:400 10.5px/1 var(--sans);color:#0b0b0b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.life .sp.hollow b{color:var(--dim)}
+.life .sch{position:absolute;left:var(--x);top:7px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--dim2)}
+.life .sch b{position:absolute;left:50%;transform:translateX(-50%);top:10px;font-family:var(--mono);font-size:9px;color:var(--dim3);font-weight:400}
+.life .lane.axis{min-height:16px}
+.life .lane.axis .track{height:12px;background:none}
+.life .lane.axis i{position:absolute;left:var(--x);transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--dim3);font-style:normal}
+@media (max-width:640px){.life .ln{flex-basis:56px;font-size:8px}.life .sp b{font-size:9.5px}}
 /* the asset declarations: one square per document, grouped by the year the record states */
 .vny{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
 .vny .yr{display:flex;flex-direction:column;align-items:center;gap:4px}
@@ -1813,11 +1821,20 @@ def rel_root_for_footer(inp: dict) -> str:
 FACTS_FILE = DERIVED / "tenyek.json"
 
 
+_FACTS: list[dict] | None = None
+
+
 def facts() -> list[dict]:
-    """The footer's facts, computed by scripts/derive_facts.py from the corpus (empty when the file is absent)."""
-    if "_facts" not in _TOTALS:
-        _TOTALS["_facts"] = (json.loads(FACTS_FILE.read_text(encoding="utf-8")).get("facts") or []) if FACTS_FILE.exists() else []
-    return _TOTALS["_facts"]
+    """The footer's facts, computed by scripts/derive_facts.py from the corpus (empty when the file is absent).
+
+    Its own cache, deliberately. It used to keep them under a key in `_TOTALS`, whose emptiness is what tells
+    `site_totals()` whether it has work to do — so whichever of the two ran first decided whether the other
+    returned anything. That stayed hidden only because the terminal happened to ask for the totals before the
+    fact; the moment it stopped, the landing page lost every number it had."""
+    global _FACTS
+    if _FACTS is None:
+        _FACTS = (json.loads(FACTS_FILE.read_text(encoding="utf-8")).get("facts") or []) if FACTS_FILE.exists() else []
+    return _FACTS
 
 
 def fact_for(page_path: str, depth: int) -> str:
@@ -1836,26 +1853,17 @@ def fact_for(page_path: str, depth: int) -> str:
 
 
 def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
-    """The footer as a terminal: a boot log of true values, then the method notes."""
-    idx, fl, plan = inp["idx"], inp["fl"], inp["plan"]
-    tot = site_totals()
-    n_cyc = len(tot["cycles"])
-    roster_n = fl["mps"]["total"] if not inp["closed"] else len(inp["mps"])
-    days = (fl.get("sitting_days") or {}).get("count") or 0
-    check = ("a számított eredmény minden szavazásnál egyezik a jegyzőkönyvivel" if tot["disagreements"] == 0
-             else f"a számított eredmény {hu_num(tot['disagreements'])} szavazásnál eltér a jegyzőkönyvitől — jelölve")
-    seats_line = (f"ülésrend: az Országház alaprajza, {hu_num(len(plan['seat_outlines']))} hely — csak a jelenlegi ciklusból ismert"
-                  if plan and plan.get("seat_outlines") else "ülésrend: csak a jelenlegi ciklusból ismert")
-    default_lines = [
-        f"{n_cyc} ciklus · {hu_date(tot['from'])} – {hu_date(tot['to'])} · {hu_num(tot['votes'])} szavazás · {hu_num(tot['roll_calls'])} név szerinti lista · {hu_num(tot['people'])} képviselő",
-        f"ezen az oldalon: {inp['cycle']}. ciklus · {hu_num(fl['votes'])} szavazás · {hu_num(days) if days else '—'} ülésnap · {hu_num(roster_n)} képviselő",
-        f"{check} · {seats_line}",
-        (f"frissítve {hu_date(sync_stamp(inp)[:10])} {sync_stamp(inp)[11:]}" if sync_stamp(inp) != "—" else "frissítve —"),
-    ]
-    log = "".join(f"<span>&gt; {esc(l)}</span>" for l in (lines or default_lines))
+    """The footer as a terminal, and one line in it. It used to print a boot log — the corpus totals, this page's
+    cycle, the rule-versus-record check, the sync stamp — four lines of true numbers that every page repeated and
+    nobody read twice. All four are on the pages that own them: the totals on the landing page, the freshness
+    sentence above the fold, the disagreement count on the method page. What is left is the one line that is
+    different on every page and worth stopping for: a fact from the corpus, with the page that proves it.
+
+    `lines` is accepted and ignored: the 404 page used to pass its own, and the signature stays so that a caller
+    which has something to say can be given a home for it deliberately rather than by accident."""
     fact = fact_for(inp.get("_page_path") or f'c{inp["cycle"]}d{inp.get("_depth", 0)}', inp.get("_depth", 0) + inp["base_depth"])
-    if fact:
-        log += f'<span class="factline">&gt; {fact}<button type="button" class="more" data-fact-next title="másik tény">↻</button></span>'
+    log = (f'<span class="factline">&gt; {fact}<button type="button" class="more" data-fact-next title="másik tény">↻</button></span>'
+           if fact else "")
     return f"""<footer class="kz-terminal"><div class="scan"></div>{CORNERS}
   <div class="log">{log}</div>
   <div class="method">
@@ -1877,7 +1885,7 @@ def freshness_html(inp: dict) -> str:
     newest_dt = datetime.strptime(newest, "%Y.%m.%d.%H:%M:%S").replace(tzinfo=BUDAPEST) if newest else None
     fr = assess(sitting_days=[_date.fromisoformat(d["date"]) for d in idx["sitting_days"] if d.get("date")],
                 newest_vote_at=newest_dt, last_sync_at=last_sync, now=derived_at, absolute_sync=True)
-    return f'<div class="fresh">{CORNERS}<span class="hu">{esc(fr.sentence_hu)}</span><span class="en" lang="en">{esc(fr.sentence_en)}</span></div>'
+    return f'<div class="fresh">{CORNERS}<span class="hu">{esc(fr.sentence_hu)}</span></div>'
 
 
 def roster_summary(inp: dict) -> dict:
@@ -1978,12 +1986,9 @@ def build_index(inp: dict, hero_ts: str) -> str:
         # the API's listing cap cuts these days short and no parameter reaches the rest: say it, do not imply completeness
         closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: {hu_num(fl["votes"])} szavazás. '
                        f'{hu_num(len(short))} ülésnap hiányos — ezeken a napokon 400-nál több szavazás volt, és a lista szolgáltatás egy kérésre legfeljebb 400-at ad, a nap utolsó 400-át '
-                       f'(<a href="{"../" * inp["base_depth"]}modszer/index.html#listakorlat">módszer</a>): {esc(", ".join(hu_date(d) for d in short[:6]))}{"…" if len(short) > 6 else ""}</span>'
-                       f'<span class="en" lang="en">A closed term, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: {hu_num(fl["votes"])} votes. {hu_num(len(short))} sitting days are incomplete — '
-                       f'the listing service returns at most 400 votes per request and keeps the last 400 of the day.</span></div>')
+                       f'(<a href="{"../" * inp["base_depth"]}modszer/index.html#listakorlat">módszer</a>): {esc(", ".join(hu_date(d) for d in short[:6]))}{"…" if len(short) > 6 else ""}</span></div>')
     else:
-        closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: mind a {hu_num(fl["votes"])} szavazás itt van.</span>'
-                       f'<span class="en" lang="en">A closed term, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: all {hu_num(fl["votes"])} votes are here.</span></div>')
+        closed_line = (f'<div class="fresh">{CORNERS}<span class="hu">Lezárt ciklus, {esc(CYCLE_SPAN.get(inp["cycle"], ""))}: mind a {hu_num(fl["votes"])} szavazás itt van.</span></div>')
     return page_head((f'karzat — a {inp["cycle"]}. ciklus szavazásai, név szerint' if not inp["closed"] else f'karzat — {inp["cycle"]}. ciklus, az Országgyűlés szavazásai'),
                      f"Az Országgyűlés szavazásai a {inp['cycle']}. ciklusban: minden szavazás a saját szükséges többségével, egy szavazás {'név szerint, az ülésterem rendje szerint' if not inp['closed'] else 'név szerint, frakciónként rendezve'} kirajzolva. Forrás: parlament.hu Web API.", inp["base_depth"],
                      feeds=[("feed/kulonvelemeny.xml", f'karzat · különvélemények · {inp["cycle"]}. ciklus'), ("feed/szavazasok.xml", f'karzat · szavazások · {inp["cycle"]}. ciklus'), ("feed/heti.xml", f'karzat · a hét számokban · {inp["cycle"]}. ciklus')]) + topbar(inp, [], 0) + f"""
@@ -4167,10 +4172,40 @@ LIFE_W, LIFE_L, LIFE_R = 1000.0, 116.0, 12.0        # viewBox width, and the gut
 LIFE_LANE, LIFE_BAR = 26.0, 12.0                    # one lane's height, and the bar drawn inside it
 
 
-def life_path_svg(inp: dict, latest: dict, stints: list[dict]) -> str:
+def _pack_spans(rows: list[tuple]) -> list[list[tuple]]:
+    """Lay a lane's spans out so none is drawn on top of another.
+
+    Two things collide in a record like this. The same post held term after term arrives as several rows that touch
+    end to end — six mayoral terms at one town, each with the same label, which drawn as six bars is six copies of
+    the same word fighting for the same pixels; those merge into the one span they describe. And genuinely
+    overlapping spans (a committee office during a ministry) go on separate sub-rows rather than over each other."""
+    merged: list[tuple] = []
+    for sp in sorted(rows):
+        if merged:
+            p = merged[-1]
+            if sp[4] == p[4] and sp[2] == p[2] and sp[3] == p[3] and sp[0] <= p[1] + 0.09:
+                merged[-1] = (p[0], max(p[1], sp[1]), *p[2:])
+                continue
+        merged.append(sp)
+    out: list[list[tuple]] = []
+    for sp in merged:
+        for row in out:
+            if sp[0] >= row[-1][1] - 0.02:
+                row.append(sp)
+                break
+        else:
+            out.append([sp])
+    return out
+
+
+def life_path_html(inp: dict, latest: dict, stints: list[dict]) -> str:
     """One person on one time axis: the cycles they sat, the offices the record dates, the local-government seats
-    they held before or between, and the years their degrees carry. The tables above say the same things in
-    columns; this says when, and against each other — which is the one question a column cannot answer.
+    they held before or between, and the years their degrees carry.
+
+    Drawn in HTML rather than SVG, and the reason is legibility. An SVG scaled to the panel's width scales its type
+    with it, so the lane names arrived at whatever size the viewport decided and the only way to learn what a bar
+    meant was to hover it — no use at all on a phone. Here the type is the page's own, the lane names are text, and
+    every span carries its name beside it, so the chart says what it means without being touched.
 
     Every span is the record's own: <valasztasok> for mandates, <tisztsegek> for offices, <egyeb-tagsagok> for the
     local seats (years, so a year is drawn whole), <iskolak> for the degree years. A span the record leaves open
@@ -4178,7 +4213,6 @@ def life_path_svg(inp: dict, latest: dict, stints: list[dict]) -> str:
     facs = inp["facs_all"]
     end_open = _yr(site_today(inp)) or 2026.0
     fac_by_cycle = {st["cycle"]: st.get("faction") for st in stints if st.get("faction")}
-    # a cycle the site has not loaded still has a colour: the record's own faction rows carry the label, latest first
     for fr in latest.get("factions") or []:
         c = CYCLE_BY_LABEL.get(fr.get("ciklus"))
         if c and fr.get("faction"):
@@ -4191,10 +4225,10 @@ def life_path_svg(inp: dict, latest: dict, stints: list[dict]) -> str:
         if a is None:
             continue
         c = CYCLE_BY_LABEL.get(e.get("ciklus"))
-        col = facs.get(fac_by_cycle.get(c) or "", "#8a8a8a")
-        where = e.get("constituency") or ""
-        mandates.append((a, _yr(e.get("mandate_to")) or end_open, col, False,
-                         " · ".join(x for x in [f"{c}. ciklus" if c else (e.get("ciklus") or ""), where] if x)))
+        fac = fac_by_cycle.get(c)
+        col = facs.get(fac or "", "#8a8a8a")
+        label = " · ".join(x for x in [f"{c}. ciklus" if c else (e.get("ciklus") or ""), fac or ""] if x)
+        mandates.append((a, _yr(e.get("mandate_to")) or end_open, col, False, label, e.get("constituency") or ""))
     if mandates:
         lanes.append(("Országgyűlés", mandates))
 
@@ -4203,7 +4237,7 @@ def life_path_svg(inp: dict, latest: dict, stints: list[dict]) -> str:
         a = _yr(o.get("from"))
         if a is None:
             continue
-        offices.append((a, _yr(o.get("to")) or end_open, "#d4d4d8", False, o.get("office") or ""))
+        offices.append((a, _yr(o.get("to")) or end_open, "#d4d4d8", False, o.get("office") or "", ""))
     if offices:
         lanes.append(("Tisztség", offices))
 
@@ -4212,59 +4246,54 @@ def life_path_svg(inp: dict, latest: dict, stints: list[dict]) -> str:
         a = _yr(t.get("from"))
         if a is None:
             continue
-        b = _yr(t.get("to"))
-        local.append((a, (b + 1.0) if b is not None else end_open, "#8a8a93", True,   # a year is inclusive: 2006–2010 ends when 2010 does
-                      " · ".join(x for x in [t.get("body") or "", t.get("office") or ""] if x)))
+        b_ = _yr(t.get("to"))
+        local.append((a, (b_ + 1.0) if b_ is not None else end_open, "#8a8a93", True,
+                      " · ".join(x for x in [t.get("body") or "", t.get("office") or ""] if x), ""))
     if local:
         lanes.append(("Önkormányzat", local))
 
-    by_year: dict[int, list[str]] = {}                  # two degrees in one year are one dot, not two on top of each other
-    for s in latest.get("schools") or []:
-        if s.get("year"):
-            by_year.setdefault(s["year"], []).append(" · ".join(x for x in [s.get("institution") or "", s.get("degree") or ""] if x))
+    by_year: dict[int, list[str]] = {}
+    for sc in latest.get("schools") or []:
+        if sc.get("year"):
+            by_year.setdefault(sc["year"], []).append(" · ".join(x for x in [sc.get("institution") or "", sc.get("degree") or ""] if x))
     schools = sorted((y, " / ".join(v)) for y, v in by_year.items())
     if not lanes:
         return ""
-    lo = min([sp[0] for _, rows in lanes for sp in rows] + [float(y) for y, _ in schools] or [end_open])
-    hi = max([sp[1] for _, rows in lanes for sp in rows] + [float(y) for y, _ in schools] or [end_open])
+    lo = min([sp[0] for _, rows in lanes for sp in rows] + [float(y) for y, _ in schools])
+    hi = max([sp[1] for _, rows in lanes for sp in rows] + [float(y) for y, _ in schools])
     lo, hi = math.floor(lo) - 1, math.ceil(hi) + 1
     span = max(hi - lo, 1)
-    plot = LIFE_W - LIFE_L - LIFE_R
-    def x(v: float) -> float:
-        return LIFE_L + (v - lo) / span * plot
-    axis_y = len(lanes) * LIFE_LANE + (18.0 if schools else 4.0)
-    height = axis_y + 22.0
+    def pc(v: float) -> float:
+        return max(0.0, min(100.0, (v - lo) / span * 100))
 
-    parts = []
-    step = 10 if span > 28 else 5
-    for yr in range(lo - lo % step, hi + 1, step):
-        if yr < lo:
-            continue
-        parts.append(f'<line x1="{x(yr):.1f}" y1="0" x2="{x(yr):.1f}" y2="{axis_y:.1f}" class="g"/>'
-                     f'<text x="{x(yr):.1f}" y="{height - 6:.1f}" class="yr">{yr}</text>')
-    for i, (name, rows) in enumerate(lanes):
-        cy = i * LIFE_LANE + LIFE_LANE / 2
-        parts.append(f'<text x="{LIFE_L - 10:.1f}" y="{cy + 3.5:.1f}" class="ln">{esc(name)}</text>')
-        for a, b, col, hollow, label in sorted(rows):
-            x0, x1 = x(a), max(x(b), x(a) + 2.4)
-            style = (f'fill="none" stroke="{col}" stroke-width="1"' if hollow else f'fill="{col}"')
-            parts.append(f'<g class="sp"><rect x="{x0:.1f}" y="{cy - LIFE_BAR / 2:.1f}" width="{x1 - x0:.1f}" height="{LIFE_BAR:.1f}" {style}/>'
-                         f'<title>{esc(label)}</title></g>')
-    for yr, what in schools:
-        parts.append(f'<g class="sp"><circle cx="{x(float(yr)):.1f}" cy="{axis_y - 9:.1f}" r="3" class="sch"/>'
-                     f'<title>{esc(f"{yr} · {what}")}</title></g>')
+    rows_html = []
+    for name, rows in lanes:
+        bars = []
+        packed = _pack_spans(rows)
+        for r, sub in enumerate(packed):
+            for a, b_, col, hollow, label, extra in sub:
+                x0, w = pc(a), max(pc(b_) - pc(a), 0.6)
+                years = f"{int(a)}–" if b_ >= end_open else f"{int(a)}–{int(math.ceil(b_) - 1)}"
+                bars.append(f'<i class="sp{" hollow" if hollow else ""}" style="--x:{x0:.2f}%;--w:{w:.2f}%;--c:{col};--r:{r}" '
+                            f'title="{esc(" · ".join(x for x in [label, extra, years] if x))}"><b>{esc(label)}</b></i>')
+        rows_html.append(f'<div class="lane"><span class="ln">{esc(name)}</span>'
+                         f'<span class="track" style="--rows:{max(len(packed), 1)}">{"".join(bars)}</span></div>')
     if schools:
-        parts.append(f'<text x="{LIFE_L - 10:.1f}" y="{axis_y - 5.5:.1f}" class="ln">Tanulmány</text>')
-    parts.append(f'<line x1="{LIFE_L:.1f}" y1="{axis_y:.1f}" x2="{LIFE_W - LIFE_R:.1f}" y2="{axis_y:.1f}" class="ax"/>')
+        dots = "".join(f'<i class="sch" style="--x:{pc(float(y)):.2f}%" title="{esc(str(y))} · {esc(what)}"><b>{y}</b></i>'
+                       for y, what in schools)
+        rows_html.append(f'<div class="lane"><span class="ln">Tanulmány</span><span class="track">{dots}</span></div>')
+    step = 10 if span > 28 else 5
+    ticks = "".join(f'<i style="--x:{pc(float(y)):.2f}%">{y}</i>'
+                    for y in range(lo - lo % step, hi + 1, step) if lo <= y <= hi)
     legend = " · ".join(x for x in ["tömör sáv: mandátum, a frakció színével" if mandates else "",
                                     "világos sáv: tisztség" if offices else "",
                                     "üres sáv: önkormányzati tisztség" if local else "",
                                     "pont: a végzettség éve" if schools else ""] if x)
     return (f'<section class="panel life">{CORNERS}'
             f'<h2><span data-kz-text>Az életút</span><span class="tag">{esc(legend)}</span></h2>'
-            f'<svg viewBox="0 0 {LIFE_W:.0f} {height:.0f}" role="img" aria-label="{esc(latest["name"])} pályája időrendben: '
-            f'{esc(", ".join(n.lower() for n, _ in lanes))}{", a végzettségek éve" if schools else ""}, {lo + 1}-tól {hi - 1}-ig.">'
-            f'{"".join(parts)}</svg>'
+            f'<div class="lifewrap" role="img" aria-label="{esc(latest["name"])} pályája {lo + 1}-tól {hi - 1}-ig: '
+            f'{esc(", ".join(n.lower() for n, _ in lanes))}{", a végzettségek éve" if schools else ""}.">'
+            f'{"".join(rows_html)}<div class="lane axis"><span class="ln"></span><span class="track">{ticks}</span></div></div>'
             f'<div class="hero-meta">A képviselői adatlap dátumozott sorai egy tengelyen. A nyitva hagyott sáv a legutóbbi '
             f'szavazás napjáig fut ({esc(hu_date(site_today(inp)))}), nem a mai napig.</div></section>')
 
@@ -4395,7 +4424,7 @@ def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
     <div class="tablewrap" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
   </section>
 </section>
-{life_path_svg(inp, latest, stints)}
+{life_path_html(inp, latest, stints)}
 <section class="grid">{schooling_html(latest)}{remuneration_html(latest)}</section>
 {declarations_html(latest)}
 {cite_html(inp, f'szemely/{azon}.html', f'{name} — pályakép', f'szemely-{azon}')}
@@ -4432,8 +4461,7 @@ def build_spokesperson_page(inp: dict, azon: str, r: dict) -> str:
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
 <div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": r.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>nemzetiségi szószóló · {esc(r["nationality"] or "")} · {hu_num(len(cycles))} ciklus</small>
 <p class="hero-meta">{links}</p></div></div>
-<div class="fresh">{CORNERS}<span class="hu">A nemzetiségi szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz: a név szerinti listák sosem tartalmazzák, így itt nincs részvételi vagy frakciófegyelem-szám.</span>
-<span class="en" lang="en">A nationality spokesperson sits, speaks and works in committees but casts no vote: no roll call names them, so there is no participation or discipline figure here.</span></div>
+<div class="fresh">{CORNERS}<span class="hu">A nemzetiségi szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz: a név szerinti listák sosem tartalmazzák, így itt nincs részvételi vagy frakciófegyelem-szám.</span></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Ciklusonként</span><span class="tag">a saját adatlapja dátumozott sorai szerint · összesen {hu_num(n_sp)} felszólalás</span></h2>
   <div class="tablewrap"><table><thead><tr><th scope="col">Ciklus</th><th scope="col">Bizottságok</th><th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{"".join(rows) or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
@@ -4488,8 +4516,7 @@ def build_kormany_page(inp: dict, azon: str, r: dict) -> str:
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
 <div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": r.get("photo_url"), "photo_credit": r.get("photo_credit"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>kormánytag, nem képviselő · {esc(cut(offices, 90))}</small>
 <p class="hero-meta">{links}</p></div></div>
-<div class="fresh">{CORNERS}<span class="hu">A kormány tagjának nem kell képviselőnek lennie. Aki nem az, az ülésteremben a miniszteri padban ül és felszólal, de nem szavaz: a név szerinti listák sosem tartalmazzák, mandátuma, frakciója, választókerülete nincs.</span>
-<span class="en" lang="en">A minister need not hold a mandate. One who does not sits on the ministerial bench and speaks, but casts no vote: no roll call names them, and they have no mandate, faction or constituency.</span></div>
+<div class="fresh">{CORNERS}<span class="hu">A kormány tagjának nem kell képviselőnek lennie. Aki nem az, az ülésteremben a miniszteri padban ül és felszólal, de nem szavaz: a név szerinti listák sosem tartalmazzák, mandátuma, frakciója, választókerülete nincs.</span></div>
 <section class="grid">
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Tisztség és hely</span></h2>
