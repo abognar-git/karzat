@@ -138,6 +138,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--only", help="comma-separated top-level names to upload (default: everything)")
     ap.add_argument("--workers", type=int, default=24)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--force", action="store_true",
+                    help="upload even when the object is byte-identical — the way to apply changed cache headers, "
+                         "which the sameness check would otherwise skip for every unchanged file")
     ap.add_argument("--no-invalidate", action="store_true")
     args = ap.parse_args(argv)
     import boto3
@@ -158,7 +161,7 @@ def main(argv: list[str] | None = None) -> int:
         key = str(p.relative_to(SITE))
         size = p.stat().st_size
         cur = have.get(key)
-        if cur and cur[0] == size and "-" not in cur[1] and cur[1] == md5(p):
+        if cur and not args.force and cur[0] == size and "-" not in cur[1] and cur[1] == md5(p):
             continue
         todo.append((p, key))
     print(f"to upload: {len(todo):,} objects ({sum(p.stat().st_size for p, _ in todo) / 1e9:.2f} GB)")
