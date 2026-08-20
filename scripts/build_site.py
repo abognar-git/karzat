@@ -3794,6 +3794,8 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
                      "current": mp.get("current"), "wikidata_qid": mp.get("wikidata_qid"), "parlament_url": mp.get("parlament_url"), "photo_url": mp.get("photo_url"),
                      "factions": mp.get("factions") or [], "elections": mp.get("elections") or [], "motion_stats": mp.get("motion_stats") or [],
                      "offices": mp.get("offices") or [], "schools": mp.get("schools") or [], "languages": mp.get("languages") or [],
+                     "committees": mp.get("committees") or [],      # the career page opens with the same paragraph as the cycle page
+                    
                      "highest_degree": mp.get("highest_degree"), "declarations": mp.get("declarations") or [],
                      "remuneration": mp.get("remuneration") or [], "local_offices": mp.get("local_offices") or [],
                      "biography_url": mp.get("biography_url"),

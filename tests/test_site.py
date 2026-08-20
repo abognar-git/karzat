@@ -841,6 +841,27 @@ class ProfileLine(unittest.TestCase):
     def setUpClass(cls):
         cls.mps = json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
 
+    def test_the_two_pages_of_one_person_open_with_the_same_paragraph(self):
+        """A sitting member has a cycle page and a career page, and both open with this paragraph, so it has to say
+        the same thing on each. It did not: the career page's copy of the record was assembled without the
+        committees, so the cycle page named a committee and the career page silently did not."""
+        para = re.compile(r'<p class="profile">(.*?)</p>', re.S)
+        checked = 0
+        for azon, mp in self.mps.items():
+            if not mp.get("current") or not [c for c in (mp.get("committees") or []) if not c.get("to")]:
+                continue
+            a = ROOT / "site" / cycle_dir(CURRENT_CYCLE) / "kepviselo" / f"{azon}.html"
+            b = ROOT / "site" / "szemely" / f"{azon}.html"
+            if not (a.exists() and b.exists()):
+                self.skipTest("site not built")
+            ma, mb = para.search(a.read_text(encoding="utf-8")), para.search(b.read_text(encoding="utf-8"))
+            self.assertTrue(ma and mb, f"{azon}: a profile paragraph is missing from one of the two pages")
+            self.assertEqual(ma.group(1), mb.group(1), f"{azon}: the two pages disagree")
+            checked += 1
+            if checked >= 25:
+                break
+        self.assertGreater(checked, 0, "no sitting member with a current committee to compare")
+
     def test_every_person_gets_one(self):
         from scripts.build_site import profile_html
         missing = [a for a, m in self.mps.items() if not profile_html(m, [])]
