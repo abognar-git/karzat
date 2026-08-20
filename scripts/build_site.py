@@ -700,7 +700,11 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
    reach the other nine: nine links measured 0x0 on a phone. They stay, as a strip that scrolls inside the bar if
    it must. The separators go instead — they cost width and carry nothing — and each link becomes a target the
    full 48px height of the bar, with the current cycle underlined rather than merely brighter. */
-@media(max-width:600px){.kz-topbar .hide-xs{display:none}.kz-topbar .kv.sync{display:none}.kz-topbar .r{flex:0 1 auto;min-width:0}.kz-topbar nav .cur{min-width:6ch}
+@media(max-width:600px){.kz-topbar .hide-xs{display:none}.kz-topbar .kv.sync{display:none}.kz-topbar .r{flex:0 1 auto;min-width:0}
+/* The breadcrumb's links already go at 900px; below 600 the current crumb goes too. Its nav shrinks to zero
+   width but does not clip, so the crumb painted straight over the cycle strip — and it is the one label on
+   the page that is pure repetition: the <h1> two lines below says the same thing. */
+.kz-topbar nav[aria-label="Útvonal"]{display:none}
 .kz-topbar .cyc{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,#000 calc(100% - 14px),transparent)}
 .kz-topbar .cyc::-webkit-scrollbar{display:none}
 .kz-topbar .cyc .sl{display:none}
