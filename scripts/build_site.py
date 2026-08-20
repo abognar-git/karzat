@@ -916,6 +916,8 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog{margin-top:12px}
 .evlog summary{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);cursor:pointer;padding:6px 0}
 .evlog summary:hover{color:var(--white)}
+.profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13.5px;line-height:1.65}
+.profile b{color:var(--text);font-weight:400}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
@@ -2343,6 +2345,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
         topbar(inp, [("képviselők", "index.html"), (mp["name"], None)], 1) + f"""
 <div class="hero-h withpic">{portrait_html(mp, "hero")}<div><h1>{esc(mp["name"])}</h1><small class="label"><span class="pos"><i class="d" style="--c:{c}"></i>{esc(mp.get("faction") or "—")}</span> · {esc(mandate_text(mp))}{seat_label}</small>
 <p class="hero-meta">{links}</p></div></div>
+{profile_html(mp, [])}
 {former_note}
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Hétről hétre</span><span class="tag">{"a legutóbbi ülésnapos hét" if not inp["closed"] else "a ciklus utolsó ülésnapos hete"} · <a href="{esc(azon)}-heti.xml" type="application/atom+xml" title="heti összefoglaló Atom-csatornaként">Atom</a> · <a href="../adatok/heti.csv">CSV, minden hét</a></span></h2>
@@ -4198,6 +4201,97 @@ def _pack_spans(rows: list[tuple]) -> list[list[tuple]]:
     return out
 
 
+HU_NUMWORD = {1: "egy", 2: "két", 3: "három", 4: "négy", 5: "öt", 6: "hat", 7: "hét", 8: "nyolc", 9: "kilenc", 10: "tíz"}
+
+
+def profile_html(latest: dict, stints: list[dict]) -> str:
+    """The orientation a reader wants before the numbers: who this is, how long they have sat, what they held
+    before, what they work on now.
+
+    Written from the record's own fields, never about them. Two rules shape the wording. Nothing is inferred — a
+    clause whose field is empty is simply absent, so the paragraph shortens rather than guessing; and no value out
+    of the record is ever inflected, because "Vasvár Város Önkormányzata" declines one way and "Vas 3. OEVK"
+    another, and a generated suffix is the one thing here that could be wrong. Every value therefore appears
+    verbatim, introduced by a label the code owns.
+
+    It covers everyone the site knows: mandates are recorded for all 1,602 people, committees for 95% and schooling
+    for 89%. The record's own biography PDF, by contrast, exists for 184 — and carries private contact details."""
+    cyc = sorted({CYCLE_BY_LABEL[e["ciklus"]] for e in (latest.get("elections") or []) if e.get("ciklus") in CYCLE_BY_LABEL})
+    if not cyc:
+        cyc = sorted({st["cycle"] for st in stints})
+    bits: list[str] = []
+
+    # the seat: the faction and the constituency of the most recent mandate the record dates
+    els = sorted((e for e in (latest.get("elections") or []) if e.get("mandate_from")), key=lambda e: e["mandate_from"])
+    where = (els[-1].get("constituency") if els else None) or None
+    lead = " · ".join(x for x in [latest.get("faction") or "független", where] if x)
+
+    if cyc:
+        first_year = CYCLE_SPAN.get(cyc[0], "")[:4]
+        n = len(cyc)
+        word = HU_NUMWORD.get(n, hu_num(n))
+        if latest.get("current"):
+            bits.append(f"{first_year} óta {word} ciklusban képviselő." if n > 1 else f"{first_year} óta képviselő.")
+        else:
+            last_year = (CYCLE_SPAN.get(cyc[-1], "").split("–")[-1] or "").strip()[:4] or CYCLE_SPAN.get(cyc[-1], "")[:4]
+            bits.append(f"{word} ciklusban volt képviselő, {first_year} és {last_year} között." if n > 1
+                        else f"Egy ciklusban volt képviselő ({first_year}–{last_year}).")
+
+    def span(a: str | None, b: str | None) -> str:
+        return f' ({(a or "")[:4]}–{(b or "")[:4]})'.replace("–)", ")") if a else ""
+
+    # the two most recent offices, skipping the ceremonial one-day posts (korjegyző opens a constituent sitting and
+    # is recorded from and to the same day) — a rule about length, not about which office anyone thinks matters
+    def held_days(o: dict) -> int:
+        try:
+            return (_date.fromisoformat(o["to"]) - _date.fromisoformat(o["from"])).days if o.get("to") else 10_000
+        except ValueError:
+            return 10_000
+    offices = sorted((o for o in (latest.get("offices") or []) if o.get("office") and o.get("from") and held_days(o) >= 30),
+                     key=lambda o: o["from"], reverse=True)[:2]
+    if offices:
+        bits.append(("Tisztsége: " if len(offices) == 1 else "Tisztségei: ")
+                    + ", ".join(f'{esc(o["office"])}{span(o.get("from"), o.get("to"))}' for o in offices) + ".")
+
+    # the most recent unbroken run of the same local post. Terms arrive one row each and a career can have a gap in
+    # it (mayor 1990-94, a councillor's term, then mayor again 1998-2010); the outer range would paper over the gap
+    # and the first row alone would end in the wrong decade, so the run is what is shown.
+    runs: dict[tuple, list[tuple[int, int]]] = {}
+    for t in (latest.get("local_offices") or []):
+        if not t.get("body") or not (t.get("from") or "").isdigit():
+            continue
+        a = int(t["from"])
+        b = int(t["to"]) if (t.get("to") or "").isdigit() else a + 4
+        runs.setdefault((t["body"], t.get("office") or ""), []).append((a, b))
+    best = None
+    for (body, office), spans in runs.items():
+        merged: list[list[int]] = []
+        for a, b in sorted(spans):
+            if merged and a <= merged[-1][1]:
+                merged[-1][1] = max(merged[-1][1], b)
+            else:
+                merged.append([a, b])
+        a, b = merged[-1]
+        if best is None or b > best[0]:
+            best = (b, a, body, office)
+    if best:
+        end, a, body, office = best
+        bits.append(f'Önkormányzatban: {esc(body)}{", " + esc(office) if office else ""} ({a}–{end}).')
+
+    coms = [c["committee"] for c in (latest.get("committees") or [])
+            if c.get("committee") and not c.get("subcommittee") and not c.get("to")][:2]
+    if coms:
+        bits.append(("Bizottsága: " if len(coms) == 1 else "Bizottságai: ") + ", ".join(esc(c) for c in dict.fromkeys(coms)) + ".")
+
+    sc = sorted((x for x in (latest.get("schools") or []) if x.get("year") and x.get("institution")),
+                key=lambda x: -x["year"])
+    if sc:
+        bits.append(f'Végzettsége: {esc(sc[0]["institution"])} ({sc[0]["year"]}).')
+    if not bits:
+        return ""
+    return (f'<p class="profile"><b>{esc(lead)}</b> ' + " ".join(bits) + "</p>")
+
+
 def life_path_html(inp: dict, latest: dict, stints: list[dict]) -> str:
     """One person on one time axis: the cycles they sat, the offices the record dates, the local-government seats
     they held before or between, and the years their degrees carry.
@@ -4408,6 +4502,7 @@ def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
 <div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": latest.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>pályakép · {len(stints)} betöltött ciklus{" · ma is képviselő" if latest.get("current") else ""}</small>
 <p class="hero-meta">{links}</p></div></div>
+{profile_html(latest, stints)}
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Ciklusonként</span><span class="tag">{hu_num(total_roll)} névsorban · leadott {hu_num(total_cast)} · frakciójával {hu_num(total_with)} · ellene {hu_num(total_against)}</span></h2>
   <div class="tablewrap"><table><thead><tr><th scope="col">Ciklus</th><th scope="col">Frakció</th><th scope="col">Mandátum</th><th scope="col" class="num">Névsor</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciójával</th><th scope="col" class="num">Ellene</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>

@@ -829,6 +829,64 @@ class CachesAreSeparate(unittest.TestCase):
         self.assertGreater(len(m.build_landing()), 10_000)
 
 
+class ProfileLine(unittest.TestCase):
+    """The orientation paragraph: who this is, before the numbers.
+
+    It is written from the record's fields and it covers everyone — mandates are recorded for all of them — where
+    the record's own biography PDF exists for 184 and carries private contact details. Two properties matter and
+    are checked here: it never inflects a value out of the record (a generated Hungarian suffix on
+    "Vasvár Város Önkormányzata" is the one thing in it that could be wrong), and it says nothing it was not told."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mps = json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
+
+    def test_every_person_gets_one(self):
+        from scripts.build_site import profile_html
+        missing = [a for a, m in self.mps.items() if not profile_html(m, [])]
+        self.assertEqual(missing, [])
+
+    def test_values_appear_verbatim_never_inflected(self):
+        from scripts.build_site import profile_html
+        for azon, mp in self.mps.items():
+            html = profile_html(mp, [])
+            for c in (mp.get("committees") or []):
+                if c.get("committee") and c["committee"] in html:
+                    self.assertNotRegex(html, re.escape(c["committee"]) + r"[a-záéíóöőúüű]")
+            for t in (mp.get("local_offices") or []):
+                if t.get("body") and t["body"] in html:
+                    self.assertNotRegex(html, re.escape(t["body"]) + r"[a-záéíóöőúüű]")
+
+    def test_an_empty_field_shortens_the_line_rather_than_guessing(self):
+        from scripts.build_site import profile_html
+        bare = {"faction": "Fidesz", "elections": [{"ciklus": "2026-", "mandate_from": "2026-05-09"}], "current": True}
+        html = profile_html(bare, [])
+        self.assertIn("2026 óta képviselő.", html)
+        for word in ("Tisztsége", "Bizottsága", "Végzettsége", "Önkormányzatban"):
+            self.assertNotIn(word, html)
+
+    def test_a_one_day_ceremonial_post_does_not_take_a_slot(self):
+        """korjegyző opens a constituent sitting and is recorded from and to the same day; a line with room for two
+        offices should not spend one of them on it."""
+        from scripts.build_site import profile_html
+        mp = {"faction": "Fidesz", "current": True,
+              "elections": [{"ciklus": "2026-", "mandate_from": "2026-05-09"}],
+              "offices": [{"office": "korjegyző", "from": "2006-05-16", "to": "2006-05-16"},
+                          {"office": "Ipari Minisztérium államtitkára", "from": "2022-12-01", "to": "2026-05-12"}]}
+        html = profile_html(mp, [])
+        self.assertNotIn("korjegyző", html)
+        self.assertIn("Ipari Minisztérium államtitkára", html)
+
+    def test_a_local_post_held_with_a_gap_shows_the_latest_unbroken_run(self):
+        from scripts.build_site import profile_html
+        mp = {"faction": "Fidesz", "current": True,
+              "elections": [{"ciklus": "2026-", "mandate_from": "2026-05-09"}],
+              "local_offices": [{"body": "X Önkormányzata", "office": "polgármester", "from": "1990", "to": "1994"},
+                                {"body": "X Önkormányzata", "office": "polgármester", "from": "1998", "to": "2002"},
+                                {"body": "X Önkormányzata", "office": "polgármester", "from": "2002", "to": "2010"}]}
+        self.assertIn("(1998–2010)", profile_html(mp, []))     # not 1990–2010, which would paper over the gap
+
+
 class Portraits(unittest.TestCase):
     """The pictures are ours now: a grey WebP of the size they are drawn at, not a colour JPEG ten times larger
     filtered in the browser. What the markup says must follow the manifest and nothing else, or a build would
