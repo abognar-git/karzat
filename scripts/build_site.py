@@ -1103,7 +1103,7 @@ JS_INSPECT = """
   var POS = {igen:'igen', nem:'nem', tartozkodott:'tartózkodott', jelen_nem_szavazott:'jelen, nem szavazott', nem_szavazott:'nem szavazott', bejelentett_hianyzo:'előre bejelentett hiányzó', igazoltan_tavol:'igazoltan távol'};
   var PHOTO_BASE = '/assets/portre/', PHOTO_EXT = '.webp';   // our own grey copy, ~3 kB; the picture is
   // already the size and the tone it is drawn at, so nothing is downloaded or filtered that is not shown
-  var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\.html$/, '') : '';
+  var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\\.html$/, '') : '';
   var mpBase = (svg.closest('body').querySelector('.pager') ? '../kepviselo/' : 'kepviselo/');
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function render(az){
@@ -1228,7 +1228,7 @@ JS_FACT = """
   var btn = line.querySelector('[data-fact-next]'), holder = line.querySelector('[data-fact]');
   if (!btn || !holder) return;
   var sc = document.querySelector('script[src$="assets/karzat.js"]');
-  var root = sc ? sc.getAttribute('src').replace(/assets\/karzat\.js$/, '') : '';
+  var root = sc ? sc.getAttribute('src').replace(/assets\\/karzat\\.js$/, '') : '';
   var pool = null, i = -1;
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   function show(){
@@ -1303,7 +1303,7 @@ JS_CITE = """
 (function(){
   // The citation names the page by its site-root path when no deployed origin was configured at build time;
   // in a browser the origin is known, so print the address the reader is actually looking at.
-  var sc = document.querySelector('script[src$="assets/karzat.js"]'), root = sc ? sc.getAttribute('src').replace(/assets\/karzat\.js$/, '') : '';
+  var sc = document.querySelector('script[src$="assets/karzat.js"]'), root = sc ? sc.getAttribute('src').replace(/assets\\/karzat\\.js$/, '') : '';
   document.querySelectorAll('.cite[data-path]').forEach(function(sec){
     var p = sec.getAttribute('data-path'); if (!p || /^[a-z]+:/i.test(p)) return;
     var abs; try { abs = new URL(root + p, location.href).href; } catch (e) { return; }
@@ -1415,12 +1415,12 @@ JS_TOWN = """
   function render(){
     var raw = String(q.value || '').trim(), t = fold(raw);
     if (t.length < 2) { out.innerHTML = ''; return; }
-    var zip = /^\d{4}$/.test(raw) ? raw : null, names = null, note = '';
+    var zip = /^\\d{4}$/.test(raw) ? raw : null, names = null, note = '';
     if (zip) {
       names = (zips && zips[zip]) || null;
       if (!names) { out.innerHTML = '<div class="hero-meta">Ehhez az irányítószámhoz nincs település a listánkban. Próbáld a település nevével.</div>'; return; }
       note = '<div class="hero-meta" style="margin-bottom:6px">' + esc(zip) + ' · ' + (names.length > 1 ? esc(names.length + ' település ezzel az irányítószámmal (közös posta)') : esc(names[0])) + '</div>';
-    } else if (/^\d+$/.test(raw)) {
+    } else if (/^\\d+$/.test(raw)) {
       out.innerHTML = '<div class="hero-meta">Az irányítószám négy számjegy — például 1114 vagy 9021.</div>'; return;
     }
     var hits;
@@ -1454,7 +1454,7 @@ JS_SEARCH = """
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
   var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló', kormany: 'kormánytag'};
   function render(){
-    var terms = fold(q.value).split(/\s+/).filter(Boolean);
+    var terms = fold(q.value).split(/\\s+/).filter(Boolean);
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
     if (failed) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">A keresőindex (index.json) nem tölthető be — a listák külön oldalakon: irományok, képviselők, személyek.</td></tr>'; n.textContent = ''; return; }
     var hits = [];
@@ -1474,7 +1474,7 @@ JS_SEARCH = """
   q.addEventListener('input', function(){ syncUrl(); load(render); });
   document.querySelectorAll('button[data-sk]').forEach(function(b){ b.addEventListener('click', function(){ kind = b.getAttribute('data-sk'); document.querySelectorAll('button[data-sk]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
   document.querySelectorAll('button[data-sc]').forEach(function(b){ b.addEventListener('click', function(){ cyc = b.getAttribute('data-sc'); document.querySelectorAll('button[data-sc]').forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); }); load(render); }); });
-  if (location.search) { var m = /[?&]q=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\+/g, ' ')); load(render); } }
+  if (location.search) { var m = /[?&]q=([^&]+)/.exec(location.search); if (m) { q.value = decodeURIComponent(m[1].replace(/\\+/g, ' ')); load(render); } }
 })();
 """
 

@@ -829,6 +829,27 @@ class CachesAreSeparate(unittest.TestCase):
         self.assertGreater(len(m.build_landing()), 10_000)
 
 
+class SourceIsFutureProof(unittest.TestCase):
+    """The builder holds JavaScript and CSS in Python strings, and a JS regex is full of sequences Python does not
+    recognise as escapes: /index\\.html$/, /\\d{4}/, /\\s+/. Python has warned about these for years and will
+    make them an error; on the day it does, an unattended nightly build stops with a syntax error and nobody is
+    watching. Worse is the pair that already means something: \\b is a word boundary in JavaScript and a backspace
+    in Python, so it would corrupt a regex rather than fail loudly. There are none today and this keeps it so."""
+
+    def test_the_builder_compiles_with_syntax_warnings_as_errors(self):
+        import py_compile
+        import tempfile
+        import warnings
+        for mod in ("scripts/build_site.py", "scripts/nightly.py", "karzat/normalise.py"):
+            with warnings.catch_warnings():
+                warnings.simplefilter("error", SyntaxWarning)
+                with tempfile.NamedTemporaryFile(suffix=".pyc") as tmp:
+                    try:
+                        py_compile.compile(str(ROOT / mod), doraise=True, cfile=tmp.name)
+                    except (SyntaxWarning, py_compile.PyCompileError) as e:
+                        self.fail(f"{mod}: {e}")
+
+
 class SpeakingTime(unittest.TestCase):
     """Seconds at the microphone — the first aggregate the site draws from the speech lists, and the one with a
     trap in it.
