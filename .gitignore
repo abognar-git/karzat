@@ -42,6 +42,9 @@ site/feed/
 site/felszolalas/
 site/kepviselom/
 site/bizottsag/
+site/arcel/
+site/lefedettseg/
+site/assets/portre/
 
 # editor/session config
 .claude/

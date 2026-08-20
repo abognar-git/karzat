@@ -806,6 +806,40 @@ class Helpers(unittest.TestCase):
         self.assertTrue(all(s["cy"] <= 0.01 for s in seats))    # a semicircle above the axis
 
 
+class Portraits(unittest.TestCase):
+    """The pictures are ours now: a grey WebP of the size they are drawn at, not a colour JPEG ten times larger
+    filtered in the browser. What the markup says must follow the manifest and nothing else, or a build would
+    depend on what happens to be sitting in the output directory."""
+
+    def test_a_person_in_the_manifest_is_served_from_our_own_copy(self):
+        from scripts.build_site import PORTRAITS, portrait_html, portrait_src
+        if not PORTRAITS:
+            self.skipTest("no portraits made — run: python3 -m scripts.make_portraits")
+        azon = sorted(PORTRAITS)[0]
+        self.assertEqual(portrait_src({"p_azon": azon, "photo_url": "https://example.invalid/x"}),
+                         f"/assets/portre/{azon}.webp")
+        html = portrait_html({"p_azon": azon, "photo_url": "https://example.invalid/x", "name": "X"}, "hero")
+        self.assertIn(f'src="/assets/portre/{azon}.webp"', html)
+        self.assertIn('loading="lazy"', html)
+        self.assertIn('width="192" height="256"', html)          # the file's own size, so nothing is resampled
+
+    def test_a_person_without_one_keeps_the_original_url(self):
+        from scripts.build_site import portrait_src
+        self.assertEqual(portrait_src({"p_azon": "nobody-here", "photo_url": "https://example.invalid/x"}),
+                         "https://example.invalid/x")
+        self.assertEqual(portrait_src({"p_azon": "nobody-here"}), "")
+
+    def test_the_manifest_matches_the_files_it_claims(self):
+        from scripts.build_site import PORTRAITS
+        if not PORTRAITS:
+            self.skipTest("no portraits made")
+        out = ROOT / "site" / "assets" / "portre"
+        missing = [a for a in PORTRAITS if not (out / f"{a}.webp").exists()]
+        self.assertEqual(missing[:5], [], f"{len(missing)} portraits are in the manifest but not on disk")
+        big = [a for a, n in PORTRAITS.items() if n > 40_000]
+        self.assertEqual(big[:5], [], "a portrait over 40 kB means the render settings drifted")
+
+
 class NoDuplicateVotes(unittest.TestCase):
     """A vote appears once per cycle, whatever the cache holds.
 

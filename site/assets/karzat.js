@@ -250,7 +250,8 @@
   var svg = hall.querySelector('svg'); if (!svg) return;
   var hint = box.innerHTML, pinned = null, colours = {};
   document.querySelectorAll('.chamber-today .legend .f[data-f] i').forEach(function(i){ colours[i.parentNode.getAttribute('data-f')] = i.style.background; });
-  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
+  var PHOTO_BASE = '/assets/portre/', PHOTO_EXT = '.webp';   // our own grey copy, ~3 kB; the picture is
+  // already the size and the tone it is drawn at, so nothing is downloaded or filtered that is not shown
   var mpBase = src.getAttribute('data-mp-base') || '';
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   var seats = Array.prototype.slice.call(svg.querySelectorAll('.seat[data-az]'));
@@ -259,7 +260,7 @@
   function render(az){
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
-    var photo = d[10] || (PHOTO_BASE + esc(az)), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
+    var photo = d[10] || (PHOTO_BASE + esc(az) + PHOTO_EXT), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
     var office = d[12] || '';                            // Speaker, deputy Speaker, clerk — drawn on the platform too
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
     var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
@@ -350,7 +351,8 @@
     else if (e.key === 'End') { e.preventDefault(); focusSeat(seats.length - 1); }
   });
   var POS = {igen:'igen', nem:'nem', tartozkodott:'tartózkodott', jelen_nem_szavazott:'jelen, nem szavazott', nem_szavazott:'nem szavazott', bejelentett_hianyzo:'előre bejelentett hiányzó', igazoltan_tavol:'igazoltan távol'};
-  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
+  var PHOTO_BASE = '/assets/portre/', PHOTO_EXT = '.webp';   // our own grey copy, ~3 kB; the picture is
+  // already the size and the tone it is drawn at, so nothing is downloaded or filtered that is not shown
   var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\.html$/, '') : '';
   var mpBase = (svg.closest('body').querySelector('.pager') ? '../kepviselo/' : 'kepviselo/');
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -361,7 +363,7 @@
     var part = inroll ? Math.round(100 * cast / inroll) : 0, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var sq = '';
     for (var i = 0; i < streak.length; i++) { var ch = streak[i]; sq += '<i class="' + (ch === '.' ? 'x' : ch) + (i === streak.length - 1 ? ' now' : '') + '" style="--c:' + c + '"></i>'; }
-    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + PHOTO_EXT + '" alt="" width="192" height="256" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
       '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
       '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + (office ? ' · <b>' + esc(office) + '</b>' : '') + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
       '<span class="badge' + (pos === 'igen' ? ' ok' : pos === 'nem' ? ' no' : ' mid') + '">' + esc(POS[pos] || pos) + '</span></div>' +

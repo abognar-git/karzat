@@ -34,8 +34,13 @@ CONTENT_TYPE = {
     ".xml": "application/atom+xml; charset=utf-8", ".csv": "text/csv; charset=utf-8",
     ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8",
     ".txt": "text/plain; charset=utf-8", ".svg": "image/svg+xml",
+    ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".ico": "image/x-icon",
 }
-CACHE = {".html": "public, max-age=300", ".xml": "public, max-age=900"}          # the rest: a day
+# HTML is short-lived (the site is rebuilt when parliament sits) and the feeds shorter still; a portrait is the same
+# picture for as long as the person has the same face, so it is cached for a month rather than a day.
+CACHE = {".html": "public, max-age=300", ".xml": "public, max-age=900",
+         ".webp": "public, max-age=2592000", ".png": "public, max-age=2592000",
+         ".jpg": "public, max-age=2592000", ".ico": "public, max-age=2592000"}
 CACHE_DEFAULT = "public, max-age=86400"
 
 

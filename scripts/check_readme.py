@@ -129,6 +129,9 @@ def build() -> list[tuple[str, list]]:
     m42 = _json.loads((ROOT / "data" / "derived" / "mps_ckl42.json").read_text(encoding="utf-8"))
     m43 = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))
     h42 = _json.loads((ROOT / "data" / "derived" / "hero_vote_ckl42.json").read_text(encoding="utf-8"))
+    _pf = ROOT / "data" / "derived" / "portre.json"
+    def _portre():
+        return _json.loads(_pf.read_text(encoding="utf-8")) if _pf.exists() else {}
     cap = _json.loads((ROOT / "reference" / "parlament" / "listakorlat.json").read_text(encoding="utf-8"))
     f34 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl34.json").read_text(encoding="utf-8"))
     f35 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl35.json").read_text(encoding="utf-8"))
@@ -241,6 +244,10 @@ def build() -> list[tuple[str, list]]:
         ("takes the Commons picture where one exists ({:,.0f} of the {:,.0f})",
          [_json.loads((ROOT / "reference" / "wikidata" / "kormany_photos.json").read_text(encoding="utf-8"))["count"],
           _json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["count"]]),
+        # the portraits — data/derived/portre.json
+        ("renders each to a {:,.0f}×{:,.0f} grey WebP", [_portre().get("width", 0), _portre().get("height", 0)]),
+        ("caches the {:,.0f} that answer", [_portre().get("count", 0)]),
+        ("averaging about {:,.0f} kB", [round(_portre().get("bytes", 0) / max(_portre().get("count", 1), 1) / 1024)]),
         # the 400-row listing cap and what the day-level rescan recovered — reference/parlament/listakorlat.json
         ("turned up {:,.0f} months holding exactly 400 votes", [len(cap["months_originally_truncated"])]),
         ("recovered **{:,.0f} votes**", [cap["votes_recovered_by_day_scan"]]),

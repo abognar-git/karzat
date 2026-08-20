@@ -161,17 +161,34 @@ def cut(text: str, n: int) -> str:
 PHOTO_BASE = "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/"
 
 
+PORTRAITS = (load_json(DERIVED / "portre.json").get("people") or {}) if (DERIVED / "portre.json").exists() else {}
+
+
+def portrait_src(mp: dict) -> str:
+    """Where the page should ask for this person's picture. Our own copy when `scripts.make_portraits` has made one
+    — a 192×256 grey WebP of about three kilobytes, against the forty the API serves in colour — and the original
+    URL otherwise, so a person fetched after the last render still has a face. The path is root-absolute because the
+    same picture is drawn from four directory depths."""
+    azon = mp.get("p_azon")
+    if azon and azon in PORTRAITS:
+        return f"/assets/portre/{azon}.webp"
+    return mp.get("photo_url") or ""
+
+
 def portrait_html(mp: dict, cls: str = "") -> str:
-    """A portrait, loaded from wherever it lives — not copied — lazily, without a referrer, in the site's
-    black-and-white treatment, attributed in the title. parlament.hu for the members it photographs (the record's
-    <fenykep> URL, 195×260); a Wikimedia Commons file with its author and licence for the House's non-MP members,
-    whom parlament.hu does not photograph. Empty when there is no picture at all."""
-    url = mp.get("photo_url")
-    if not url:
+    """A portrait, lazily, without a referrer, in the site's black-and-white treatment, attributed in the title.
+    Ours is already grey and already the size it is drawn at; the stylesheet's contrast and brightness sit on top so
+    a local copy and a remote one look alike. parlament.hu for the members it photographs (the record's <fenykep>,
+    195×260); a Wikimedia Commons file with its author and licence for the House's non-MP members, whom
+    parlament.hu does not photograph. Empty when there is no picture at all."""
+    src = portrait_src(mp)
+    if not src:
         return ""
     klass = ("portrait " + cls).strip()
     credit = mp.get("photo_credit") or "fénykép: parlament.hu"
-    return (f'<img class="{klass}" src="{esc(url)}" alt="{esc(mp.get("name") or "")}" width="195" height="260" loading="lazy" decoding="async" '
+    local = src.startswith("/assets/")
+    w, h = (192, 256) if local else (195, 260)
+    return (f'<img class="{klass}" src="{esc(src)}" alt="{esc(mp.get("name") or "")}" width="{w}" height="{h}" loading="lazy" decoding="async" '
             f'referrerpolicy="no-referrer" title="{esc(credit)}" onerror="this.remove()">')
 
 
@@ -447,9 +464,14 @@ def podium_svg(pres: dict[str, list[dict]] | None, facs: list[dict], k: float = 
     colour = {f["id"]: f["colour"] for f in facs}
     speaker = pres.get("elnök") or []
     deps = pres.get("alelnök") or []
-    r = 2.8 * k
-    W = width / 2
-    H = width * 0.42
+    # the same person carries the same mark wherever they are drawn, so a chair on the dais is a floor seat's dot
+    # (5.2·k, the "igen" glyph) and not a smaller token. The dais is then sized to hold them: wide enough that the
+    # deputies' arc keeps a seat's worth of air between neighbours, tall enough that the arc sits inside its edge.
+    r = 5.2 * k
+    pitch = 2 * r + 3.4 * k                                        # neighbouring chairs keep a third of a seat apart
+    span = max(len(deps) - 1, 0) * pitch                           # the arc's width, centre of the first to the last
+    W = max(width / 2, span / 2 + r * 1.75)                        # …and the dais holds it with a margin
+    H = max(width * 0.42, r * 6.2)
     parts = [f'<path d="M {-W:.1f} 3 L {-W:.1f} {-H * 0.6:.1f} Q 0 {-H:.1f} {W:.1f} {-H * 0.6:.1f} L {W:.1f} 3 Z" class="rostrum"/>',
              f'<path d="M {-W + 1.4:.1f} 3 L {-W + 1.4:.1f} {-H * 0.6 + 0.8:.1f} Q 0 {-H + 1.4:.1f} {W - 1.4:.1f} {-H * 0.6 + 0.8:.1f} L {W - 1.4:.1f} 3 Z" class="rostrum edge"/>']
     def dot(m, cx, cy, role):
@@ -460,17 +482,16 @@ def podium_svg(pres: dict[str, list[dict]] | None, facs: list[dict], k: float = 
                 f'<circle cx="{cx:.2f}" cy="{cy:.2f}" r="{r * 1.8:.2f}" class="hit"/></g>')
     # the deputies: an open arc along the dais' back edge, left to right in the order the records list them
     n = len(deps)
-    span = W * 1.42
     for i, m in enumerate(deps):
         t = (i / (n - 1) - 0.5) if n > 1 else 0.0                 # -0.5 … 0.5
         x = t * span
-        y = -H * 0.50 - (H * 0.24) * (1 - (2 * t) ** 2)           # inside the dais, bowing up with its back edge
+        y = -H * 0.40 - (H * 0.16) * (1 - (2 * t) ** 2)           # inside the dais, bowing up with its back edge
         parts.append(dot(m, x, y, "alelnök"))
-    # the Speaker's chair: centred, forward of the arc, on a marked place
+    # the Speaker's chair: centred, forward of the arc, on a marked place just larger than the mark itself
     for m in speaker:
-        box = max(7.0, r * 3.4)
-        parts.append(f'<rect x="{-box / 2:.2f}" y="{-H * 0.2 - box / 2:.2f}" width="{box:.2f}" height="{box:.2f}" rx="{box * 0.2:.2f}" class="rostrum hi"/>')
-        parts.append(dot(m, 0, -H * 0.2, "elnök"))
+        box = r * 2.6
+        parts.append(f'<rect x="{-box / 2:.2f}" y="{-H * 0.17 - box / 2:.2f}" width="{box:.2f}" height="{box:.2f}" rx="{box * 0.22:.2f}" class="rostrum hi"/>')
+        parts.append(dot(m, 0, -H * 0.17, "elnök"))
     return "".join(parts)
 
 
@@ -1070,7 +1091,8 @@ JS_INSPECT = """
     else if (e.key === 'End') { e.preventDefault(); focusSeat(seats.length - 1); }
   });
   var POS = {igen:'igen', nem:'nem', tartozkodott:'tartózkodott', jelen_nem_szavazott:'jelen, nem szavazott', nem_szavazott:'nem szavazott', bejelentett_hianyzo:'előre bejelentett hiányzó', igazoltan_tavol:'igazoltan távol'};
-  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
+  var PHOTO_BASE = '/assets/portre/', PHOTO_EXT = '.webp';   // our own grey copy, ~3 kB; the picture is
+  // already the size and the tone it is drawn at, so nothing is downloaded or filtered that is not shown
   var root = (document.querySelector('a.brand') || {}).getAttribute ? document.querySelector('a.brand').getAttribute('href').replace(/index\.html$/, '') : '';
   var mpBase = (svg.closest('body').querySelector('.pager') ? '../kepviselo/' : 'kepviselo/');
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -1081,7 +1103,7 @@ JS_INSPECT = """
     var part = inroll ? Math.round(100 * cast / inroll) : 0, agree = (w + a) ? Math.round(100 * w / (w + a)) : null;
     var sq = '';
     for (var i = 0; i < streak.length; i++) { var ch = streak[i]; sq += '<i class="' + (ch === '.' ? 'x' : ch) + (i === streak.length - 1 ? ' now' : '') + '" style="--c:' + c + '"></i>'; }
-    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + '" alt="" width="195" height="260" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
+    box.innerHTML = '<img class="portrait insp" src="' + PHOTO_BASE + esc(az) + PHOTO_EXT + '" alt="" width="192" height="256" loading="lazy" decoding="async" referrerpolicy="no-referrer" title="fénykép: parlament.hu" onerror="this.remove()">' +
       '<div class="row1"><span class="name"><a href="' + mpBase + esc(az) + '.html">' + esc(name) + '</a></span>' +
       '<span class="meta"><i class="d" style="--c:' + c + '"></i> ' + esc(fac) + (office ? ' · <b>' + esc(office) + '</b>' : '') + ' · ' + esc(mandate) + (seat ? ' · ' + esc(seat) : '') + '</span>' +
       '<span class="badge' + (pos === 'igen' ? ' ok' : pos === 'nem' ? ' no' : ' mid') + '">' + esc(POS[pos] || pos) + '</span></div>' +
@@ -1129,7 +1151,8 @@ JS_HALL = """
   var svg = hall.querySelector('svg'); if (!svg) return;
   var hint = box.innerHTML, pinned = null, colours = {};
   document.querySelectorAll('.chamber-today .legend .f[data-f] i').forEach(function(i){ colours[i.parentNode.getAttribute('data-f')] = i.style.background; });
-  var PHOTO_BASE = 'https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/';
+  var PHOTO_BASE = '/assets/portre/', PHOTO_EXT = '.webp';   // our own grey copy, ~3 kB; the picture is
+  // already the size and the tone it is drawn at, so nothing is downloaded or filtered that is not shown
   var mpBase = src.getAttribute('data-mp-base') || '';
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   var seats = Array.prototype.slice.call(svg.querySelectorAll('.seat[data-az]'));
@@ -1138,7 +1161,7 @@ JS_HALL = """
   function render(az){
     var d = data[az]; if (!d) return;
     var name = d[0], fac = d[1], mandate = d[2], seat = d[3], cast = d[4], inroll = d[5], w = d[6], a = d[7], sp = d[8], com = d[9];
-    var photo = d[10] || (PHOTO_BASE + esc(az)), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
+    var photo = d[10] || (PHOTO_BASE + esc(az) + PHOTO_EXT), credit = d[11] || 'fénykép: parlament.hu';   // the House's non-MP members are not on parlament.hu's portrait endpoint
     var office = d[12] || '';                            // Speaker, deputy Speaker, clerk — drawn on the platform too
     var sz = (fac === 'szószóló');                       // a nationality spokesperson: sits and speaks, never votes
     var km = (fac === 'kormánytag');                     // a member of the government without a mandate: the same
@@ -1545,7 +1568,12 @@ Allow: /
 Crawl-delay: 2
 """
 
-SITE_URL = os.environ.get("KARZAT_SITE_URL", "").rstrip("/")     # the deployed origin, when there is one; else paths are cited
+# Where the site lives. This used to default to empty, and a build that forgot the environment variable shipped
+# feeds whose entries linked to themselves relatively — correct in a reader that resolves against the feed's own
+# address, useless in one that does not, and silent either way. The published origin is a fact about this project,
+# so it is the default; KARZAT_SITE_URL overrides it, and KARZAT_SITE_URL="" restores relative links for a build
+# that is going somewhere else.
+SITE_URL = os.environ.get("KARZAT_SITE_URL", "https://d1pd6pxzgalwl6.cloudfront.net").rstrip("/")
 
 
 def cite_html(inp: dict, path: str, title: str, key: str, json_href: str | None = None, csv_href: str | None = None) -> str:
@@ -4349,7 +4377,7 @@ def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
     loaded = ", ".join(f"{st['cycle']}." for st in stints)
     return page_head(f'{name} — pályakép · karzat', f'{name} az Országgyűlésben: ciklusonként a részvétele és a frakciójával való egyezése, a képviselői adatlap frakció- és mandátumtörténete.', 1) + \
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
-<div class="hero-h withpic">{portrait_html({"photo_url": latest.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>pályakép · {len(stints)} betöltött ciklus{" · ma is képviselő" if latest.get("current") else ""}</small>
+<div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": latest.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>pályakép · {len(stints)} betöltött ciklus{" · ma is képviselő" if latest.get("current") else ""}</small>
 <p class="hero-meta">{links}</p></div></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Ciklusonként</span><span class="tag">{hu_num(total_roll)} névsorban · leadott {hu_num(total_cast)} · frakciójával {hu_num(total_with)} · ellene {hu_num(total_against)}</span></h2>
@@ -4402,7 +4430,7 @@ def build_spokesperson_page(inp: dict, azon: str, r: dict) -> str:
     return page_head(f'{name} — nemzetiségi szószóló · karzat',
                      f'{name}, a {r["nationality"]} nemzetiség szószólója az Országgyűlésben: ülőhely, bizottságok, felszólalások ciklusonként. A szószóló nem szavaz.', 1) + \
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
-<div class="hero-h withpic">{portrait_html({"photo_url": r.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>nemzetiségi szószóló · {esc(r["nationality"] or "")} · {hu_num(len(cycles))} ciklus</small>
+<div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": r.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>nemzetiségi szószóló · {esc(r["nationality"] or "")} · {hu_num(len(cycles))} ciklus</small>
 <p class="hero-meta">{links}</p></div></div>
 <div class="fresh">{CORNERS}<span class="hu">A nemzetiségi szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz: a név szerinti listák sosem tartalmazzák, így itt nincs részvételi vagy frakciófegyelem-szám.</span>
 <span class="en" lang="en">A nationality spokesperson sits, speaks and works in committees but casts no vote: no roll call names them, so there is no participation or discipline figure here.</span></div>
@@ -4458,7 +4486,7 @@ def build_kormany_page(inp: dict, azon: str, r: dict) -> str:
     return page_head(f'{name} — kormánytag, nem képviselő · karzat',
                      f'{name} ({offices}) az Országgyűlésben: a miniszteri padban ül és felszólal, de nem képviselő — nem szavaz.', 1) + \
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
-<div class="hero-h withpic">{portrait_html({"photo_url": r.get("photo_url"), "photo_credit": r.get("photo_credit"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>kormánytag, nem képviselő · {esc(cut(offices, 90))}</small>
+<div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": r.get("photo_url"), "photo_credit": r.get("photo_credit"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>kormánytag, nem képviselő · {esc(cut(offices, 90))}</small>
 <p class="hero-meta">{links}</p></div></div>
 <div class="fresh">{CORNERS}<span class="hu">A kormány tagjának nem kell képviselőnek lennie. Aki nem az, az ülésteremben a miniszteri padban ül és felszólal, de nem szavaz: a név szerinti listák sosem tartalmazzák, mandátuma, frakciója, választókerülete nincs.</span>
 <span class="en" lang="en">A minister need not hold a mandate. One who does not sits on the ministerial bench and speaks, but casts no vote: no roll call names them, and they have no mandate, faction or constituency.</span></div>
@@ -4724,7 +4752,7 @@ def hall_data(cur: dict) -> dict[str, list]:
         out[azon] = [r["name"], "kormánytag", r.get("office") or "kormánytag",
                      (f'miniszteri pad, {s["seat"]}. szék' if s.get("sector") == 0 else ""),
                      0, 0, 0, 0, r.get("speeches") or 0, 0,
-                     r.get("photo_url") or "", r.get("photo_credit") or ""]      # parlament.hu has no photo of them
+                     portrait_src({**r, "p_azon": azon}), r.get("photo_credit") or ""]   # parlament.hu has no photo of them
     # the spokespersons: no roll call ever names them, so the card says what they do instead — nationality,
     # committees, the record's speech count. The 0s in the vote slots are what the card reads as "no vote".
     for azon, r in ((cur.get("szoszolok") or {}).get("people") or {}).items():
@@ -4732,7 +4760,7 @@ def hall_data(cur: dict) -> dict[str, list]:
         out[azon] = [r["name"], "szószóló", f'{r["nationality"]} nemzetiségi lista' if r.get("nationality") else "nemzetiségi lista",
                      (f'{s["sector"]}. szektor, {s["row"]}. sor, {s["seat"]}. szék' if s.get("sector") is not None else ""),
                      0, 0, 0, 0, r.get("speeches") or sum(1 for x in speeches.get(azon, []) if not x["technical"]),
-                     len(r.get("committees") or []), r.get("photo_url") or "", r.get("photo_credit") or ""]
+                     len(r.get("committees") or []), portrait_src({**r, "p_azon": azon}), r.get("photo_credit") or ""]
     return out
 
 

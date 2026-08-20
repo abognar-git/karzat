@@ -237,21 +237,28 @@ if __name__ == "__main__":
 class LooseEnds(unittest.TestCase):
     """Portraits, committees, the district annex, the citations."""
 
-    def test_portraits_are_hotlinked_black_and_white_and_attributed(self):
-        from scripts.build_site import PHOTO_BASE, build_assets, build_mp_index, portrait_html
+    def test_portraits_are_our_own_copy_black_and_white_and_attributed(self):
+        """The picture used to be linked where it lives; it is now a grey WebP of ours, the size it is drawn at.
+        What has not changed: lazy, no referrer, attributed in the title, and nothing at all when there is no
+        picture. A person the manifest does not carry still falls back to the original URL."""
+        from scripts.build_site import PHOTO_BASE, PORTRAITS, build_assets, build_mp_index, portrait_html
         inp = load_inputs()
         h = portrait_html(inp["mps"]["a011"], "hero")
-        self.assertIn(f'src="{PHOTO_BASE}a011"', h)
+        if "a011" in PORTRAITS:
+            self.assertIn('src="/assets/portre/a011.webp"', h)
+            self.assertIn('width="192" height="256"', h)
+        else:
+            self.assertIn(f'src="{PHOTO_BASE}a011"', h)
         self.assertIn('referrerpolicy="no-referrer"', h)
         self.assertIn('loading="lazy"', h)
         self.assertIn('title="fénykép: parlament.hu"', h)
         self.assertEqual(portrait_html({"name": "x"}), "")                              # no photo, no tag
         css = build_assets()["karzat.css"]
-        self.assertIn(".portrait{filter:grayscale(1)", css)
+        self.assertIn(".portrait{filter:grayscale(1)", css)                             # still grey for remote ones
         page = build_mp_page(inp, "a011")
         self.assertIn('class="portrait hero"', page)
         self.assertEqual(build_mp_index(inp).count('class="portrait thumb"'), len(inp["mps"]))
-        self.assertIn("PHOTO_BASE + esc(az)", build_assets()["karzat.js"])              # the inspector too
+        self.assertIn("PHOTO_BASE + esc(az) + PHOTO_EXT", build_assets()["karzat.js"])  # the inspector too
 
     def test_committees_from_records_and_the_api(self):
         from scripts.build_site import build_committee_index, build_committee_page, committee_roster, committees_feed
@@ -520,7 +527,8 @@ class MinisterialBench(unittest.TestCase):
                 self.assertIn("Nincs:", build_kormany_page(inp, azon, r))           # says there is none, rather than a broken frame
         data = hall_data(inp)
         for azon, r in with_photo.items():
-            self.assertEqual(data[azon][10], r["photo_url"])                        # the card shows the same picture
+            # the same picture, but our own grey copy where one was made — the card must not go to Commons for it
+            self.assertIn(data[azon][10], (r["photo_url"], f"/assets/portre/{azon}.webp"))
             self.assertEqual(data[azon][11], r["photo_credit"])
         js = build_assets()["karzat.js"]
         self.assertIn("d[10] || (PHOTO_BASE", js)                                   # …and falls back to the id only when there is none
