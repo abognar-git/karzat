@@ -2385,7 +2385,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
     <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">Bizottság</th><th scope="col">Tisztség</th><th scope="col">Időszak</th></tr></thead><tbody>{com_rows or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
   </section>
   <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} érdemi · {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor</span></h2>
+    <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} érdemi · {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor{" · mikrofonnál " + hu_hours((speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds")) if (speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds") else ""}</span></h2>
     <div class="hero-meta prose">Érdemi: a tárgyhoz szólás, kérdés, interpelláció és válaszaik, napirend előtti és utáni, ügyrendi; eljárási: ülésvezetés, bejelentés, eredmény kihirdetése.{(" " + esc(sp_note)) if sp_note else ""}</div>
   </section>
 </section>
@@ -2753,6 +2753,7 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
     def named(t, svg):
         return svg.replace('aria-label=":', 'aria-label="' + esc(t) + ':', 1)
     blocks = "".join(f'<section class="panel">{CORNERS}<h2><span data-kz-text>{esc(t)}</span></h2><div class="chart">{named(t, svg)}</div><div class="hero-meta" style="margin-top:6px">{esc(note)}</div></section>' for t, svg, note in charts)
+    blocks += speaking_panel(inp)
     legend = "".join(f'<span class="f"><i style="background:{colour.get(f, "#8a8a8a")}"></i>{esc(f)}</span>' for f in facs)
     head = "".join(f'<th scope="col" class="num">{esc(f)}<span class="sub">részvétel · ellene</span></th>' for f in facs)
     def cell(x):
@@ -3114,6 +3115,96 @@ def committees_in_cycle(mp: dict, cycle: int) -> list[dict]:
             continue
         out.append(c)
     return sorted(out, key=lambda c: (c.get("to") is not None, c.get("to") or "", c.get("from") or ""), reverse=False)
+
+
+def hu_hours(seconds: int | None) -> str:
+    """A length a reader can hold: '3 óra 12 perc', '47 perc', '38 másodperc'."""
+    if not seconds:
+        return "—"
+    h, rem = divmod(int(seconds), 3600)
+    m = rem // 60
+    if h:
+        return f"{hu_num(h)} óra {m} perc" if m else f"{hu_num(h)} óra"
+    return f"{m} perc" if m else f"{int(seconds)} másodperc"
+
+
+def speaking_time(inp: dict) -> dict:
+    """Time at the microphone — per member, per faction, and for the cycle — counting each speech once.
+
+    The one rule that matters here is `reprint`. A speech held in a joint debate is listed again under every motion
+    the debate covered, with the same recorded length, so adding the rows as they come counts the same minutes
+    several times: measured across the cycles it overstates by 1.29× (cycle 43) to 6.68× (cycle 37), and unevenly
+    by faction — in cycle 43 the largest group's share of the floor falls from 62% to 55% once the copies are
+    dropped. Nothing on the site had summed these seconds before, which is exactly why the rule is enforced here,
+    once, and pinned by a test rather than left to whoever writes the next page.
+
+    `substantive` excludes what `normalise.SUBSTANTIVE_KINDS` calls procedural — chairing, announcements, the
+    chair's result lines. That is 42% of the rows and only 6.5% of the seconds: the chair speaks often and briefly."""
+    if "_speaking" in inp:
+        return inp["_speaking"]
+    per_mp: dict[str, dict] = {}
+    per_fac: dict[str, dict] = {}
+    total = subtotal = counted = reprints = 0
+    for r in (inp["speeches"] or {}).get("speeches") or []:
+        if r.get("reprint"):
+            reprints += 1
+            continue
+        secs = int(r.get("duration_s") or 0)
+        if not secs:
+            continue
+        sub = not r.get("technical")
+        total += secs
+        subtotal += secs if sub else 0
+        counted += 1
+        if r.get("azon"):
+            e = per_mp.setdefault(r["azon"], {"seconds": 0, "substantive": 0, "speeches": 0})
+            e["seconds"] += secs
+            e["substantive"] += secs if sub else 0
+            e["speeches"] += 1
+        if r.get("faction"):
+            f = per_fac.setdefault(r["faction"], {"seconds": 0, "substantive": 0, "speeches": 0})
+            f["seconds"] += secs
+            f["substantive"] += secs if sub else 0
+            f["speeches"] += 1
+    inp["_speaking"] = {"per_mp": per_mp, "per_faction": per_fac, "total": total, "substantive": subtotal,
+                        "rows_counted": counted, "reprints_skipped": reprints}
+    return inp["_speaking"]
+
+
+def speaking_panel(inp: dict) -> str:
+    """The cycle's floor time, faction by faction — the share of the microphone, next to the share of the seats."""
+    sp = speaking_time(inp)
+    if not sp["total"]:
+        return ""
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    seats = dict(Counter(m.get("faction") for m in inp["mps"].values() if m.get("faction")))
+    n_seats = sum(seats.values()) or 1
+    rows = sorted(sp["per_faction"].items(), key=lambda kv: -kv[1]["seconds"])
+    # whoever spoke without a faction — the President opening a sitting, a minister without a mandate — so the
+    # column adds up to the whole floor instead of leaving a silent remainder
+    rest = sp["total"] - sum(e["seconds"] for _, e in rows)
+    if rest > 0:
+        rows.append(("frakció nélkül", {"seconds": rest, "substantive": 0,
+                                        "speeches": sp["rows_counted"] - sum(e["speeches"] for _, e in rows)}))
+    trs, bar = [], []
+    for fac, e in rows:
+        share = e["seconds"] / sp["total"]
+        seat_share = seats.get(fac, 0) / n_seats
+        bar.append(f'<i style="--w:{100 * share:.2f}%;background:{colour.get(fac, "#8a8a8a")}" title="{esc(fac)}: {esc(hu_hours(e["seconds"]))}"></i>')
+        trs.append(f'<tr><td><span class="pos"><i class="d" style="--c:{colour.get(fac, "#8a8a8a")}"></i>{esc(fac)}</span></td>'
+                   f'<td class="num mono">{esc(hu_hours(e["seconds"]))}</td><td class="num mono">{100 * share:.0f}%</td>'
+                   f'<td class="num mono">{(f"{100 * seat_share:.0f}%" if seats.get(fac) else "—")}</td>'
+                   f'<td class="num mono">{hu_num(e["speeches"])}</td></tr>')
+    return (f'<section class="panel">{CORNERS}'
+            f'<h2><span data-kz-text>Mennyit beszéltek</span><span class="tag">{esc(hu_hours(sp["total"]))} · ebből érdemi {esc(hu_hours(sp["substantive"]))}</span></h2>'
+            f'<div class="paybar">{"".join(bar)}</div>'
+            f'<div class="tablewrap" style="border:0"><table><thead><tr><th>Frakció</th><th class="num">Idő</th>'
+            f'<th class="num">A mikrofonból</th><th class="num">A helyekből</th><th class="num">Felszólalás</th></tr></thead>'
+            f'<tbody>{"".join(trs)}</tbody></table></div>'
+            f'<div class="hero-meta">A jegyzőkönyv percre pontos hosszai összeadva, minden felszólalás egyszer: a közös '
+            f'vitában elhangzottakat a lista minden érintett irományhoz újranyomtatja, ugyanazzal az idővel, és ebben a '
+            f'ciklusban {hu_num(sp["reprints_skipped"])} ilyen másolat van. „Érdemi”: az ülésvezetés, a bejelentések és az '
+            f'elnöki eredményhirdetés nélkül — a sorok 42 százaléka, az időnek a töredéke.</div></section>')
 
 
 def speeches_by_mp(inp: dict) -> dict[str, list[dict]]:

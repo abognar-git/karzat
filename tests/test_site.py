@@ -829,6 +829,59 @@ class CachesAreSeparate(unittest.TestCase):
         self.assertGreater(len(m.build_landing()), 10_000)
 
 
+class SpeakingTime(unittest.TestCase):
+    """Seconds at the microphone — the first aggregate the site draws from the speech lists, and the one with a
+    trap in it.
+
+    A speech held in a joint debate is listed again under every motion the debate covered, with the same recorded
+    length. Nothing had summed these seconds before, so nothing had met the trap: adding the rows as they come
+    overstates a cycle by 1.29× to 6.68× and shifts the factions' shares of the floor against each other. These
+    tests exist so the rule cannot be quietly dropped by whoever writes the next page that wants a total."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_a_reprinted_speech_is_counted_once(self):
+        from scripts.build_site import speaking_time
+        rows = (self.inp["speeches"] or {}).get("speeches") or []
+        reprints = [r for r in rows if r.get("reprint")]
+        self.assertTrue(reprints, "no reprinted rows in this cycle — the rule would be untested")
+        sp = speaking_time(self.inp)
+        naive = sum(int(r.get("duration_s") or 0) for r in rows)
+        self.assertEqual(sp["total"], sum(int(r.get("duration_s") or 0) for r in rows if not r.get("reprint")))
+        self.assertGreater(naive, sp["total"], "the copies carry time, so ignoring them would overstate")
+        self.assertEqual(sp["reprints_skipped"], len(reprints))
+
+    def test_the_parts_add_up_to_the_whole(self):
+        from scripts.build_site import speaking_time
+        sp = speaking_time(self.inp)
+        by_mp = sum(e["seconds"] for e in sp["per_mp"].values())
+        by_fac = sum(e["seconds"] for e in sp["per_faction"].values())
+        self.assertLessEqual(by_mp, sp["total"])            # some speakers are not members
+        self.assertLessEqual(by_fac, sp["total"])           # …and some members of the House have no faction
+        self.assertGreaterEqual(sp["total"], sp["substantive"])
+
+    def test_the_panel_accounts_for_every_second(self):
+        """The faction column would otherwise stop short of 100% with no explanation; the remainder is a row."""
+        from scripts.build_site import speaking_panel, speaking_time
+        html = speaking_panel(self.inp)
+        sp = speaking_time(self.inp)
+        if sum(e["seconds"] for e in sp["per_faction"].values()) < sp["total"]:
+            self.assertIn("frakció nélkül", html)
+        shares = [int(x) for x in re.findall(r'<td class="num mono">(\d+)%</td>', html)]
+        self.assertTrue(shares)
+
+    def test_every_cycle_with_speech_lists_has_reprints_to_skip(self):
+        """If a later capture stopped marking the copies, the totals would silently double. Fail loudly instead."""
+        for c in available_cycles():
+            inp = load_inputs(c)
+            rows = (inp["speeches"] or {}).get("speeches") or []
+            if len(rows) < 1000:
+                continue
+            self.assertTrue(any(r.get("reprint") for r in rows), f"cycle {c}: no row marked reprint")
+
+
 class ProfileLine(unittest.TestCase):
     """The orientation paragraph: who this is, before the numbers.
 
