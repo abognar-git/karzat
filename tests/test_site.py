@@ -220,7 +220,13 @@ class Build(unittest.TestCase):
             self.assertNotIn("ezen az oldalon", page)
             self.assertNotIn("SYSTEM_READY", page)
             self.assertNotIn(".cgi", page.split("<footer")[1])          # the footer talks about the data, not the plumbing
-            self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", page)   # absolute, not a frozen "15 perce"
+            # absolute, never a frozen "15 perce". A build from a cache that carries no sync record — which is what
+            # the scheduled run does on its first pass — has no stamp to print, and must say so rather than invent one.
+            if stamp == "—":
+                self.assertIn("A szinkronizálás még sosem futott le.", page)
+                self.assertNotIn("Frissítve:", page)          # no stamp is a sentence, not a made-up timestamp
+            else:
+                self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", page)
             for word in ("live", "élő", "real-time"):
                 self.assertNotIn(word, visible_text(page))
             # the footer is a landmark of its own, outside <main>
