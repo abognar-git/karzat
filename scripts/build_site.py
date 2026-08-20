@@ -265,7 +265,13 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
     ir_path = DERIVED / "iromany_records.json"
     bill_recs = ((load_json(ir_path).get("records") or {}) if (cycle == CURRENT_CYCLE and ir_path.exists()) else {})  # motion records: current cycle only, izon is per-cycle
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "bill_recs": bill_recs,
+    # Also keyed by the bare number, because that is what a page is named after and what the roll calls carry. The
+    # record's own key is the full motion number ("T/122"), and 15 motions are reached only through amendment-
+    # numbered votes ("122/3"), so their derived label was a bare integer that matched no record: those pages have
+    # been showing a number where the title belongs, and no road panel at all.
+    bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
+                        if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -690,7 +696,20 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .kz-topbar nav{display:flex;align-items:center;gap:8px;min-width:0;color:var(--dim2);white-space:nowrap}.kz-topbar nav a,.kz-topbar nav .cur{min-width:0;overflow:hidden;text-overflow:ellipsis}.kz-topbar nav a:hover{color:var(--white)}.kz-topbar nav .cur{color:var(--white)}.sl{color:var(--border-hi)}
 .kz-topbar .kv{color:var(--dim2);white-space:nowrap}.kz-topbar .kv b{color:#d4d4d8;font-weight:400;margin-left:6px}.kz-topbar .cyc a{margin-left:2px;padding:6px 4px;display:inline-block}.kz-topbar .cyc a:hover{color:var(--white)}
 .kz-topbar .dot{width:6px;height:6px;border-radius:50%;background:#52525b;display:inline-block;margin-right:6px}
-@media(max-width:900px){.kz-topbar nav[aria-label="Útvonal"] a,.kz-topbar nav[aria-label="Útvonal"] .sl{display:none}}@media(max-width:760px){.kz-topbar .hide-sm{display:none}}@media(max-width:600px){.kz-topbar .hide-xs{display:none}.kz-topbar .cyc a:not(.near),.kz-topbar .cyc a:not(.near)+.sl,.kz-topbar .cyc .sl:has(+a:not(.near)){display:none}.kz-topbar .kv.sync{display:none}.kz-topbar .r{flex:0 1 auto;min-width:0}.kz-topbar nav .cur{min-width:6ch}}
+@media(max-width:900px){.kz-topbar nav[aria-label="Útvonal"] a,.kz-topbar nav[aria-label="Útvonal"] .sl{display:none}}@media(max-width:760px){.kz-topbar .hide-sm{display:none}}/* Under 600px the bar used to hide every cycle but the current one, which saved room by removing the only way to
+   reach the other nine: nine links measured 0x0 on a phone. They stay, as a strip that scrolls inside the bar if
+   it must. The separators go instead — they cost width and carry nothing — and each link becomes a target the
+   full 48px height of the bar, with the current cycle underlined rather than merely brighter. */
+@media(max-width:600px){.kz-topbar .hide-xs{display:none}.kz-topbar .kv.sync{display:none}.kz-topbar .r{flex:0 1 auto;min-width:0}.kz-topbar nav .cur{min-width:6ch}
+.kz-topbar .cyc{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(to right,#000 calc(100% - 14px),transparent)}
+.kz-topbar .cyc::-webkit-scrollbar{display:none}
+.kz-topbar .cyc .sl{display:none}
+.kz-topbar .cyc a,.kz-topbar .cyc b{margin:0;padding:0 6px;min-width:26px;height:48px;display:inline-grid;place-items:center;vertical-align:top;font-weight:400}
+/* "where you are" is a <b aria-current> on a cycle page and an <a class=near> on the landing, where no <b> is
+   printed; .near means the two neighbouring cycles on a cycle page, so underlining it there would mark the
+   wrong two. Hence the :has() guard rather than one rule for both. */
+.kz-topbar .cyc b[aria-current]{color:var(--white);box-shadow:inset 0 -2px 0 currentColor}
+.kz-topbar .cyc:not(:has(b[aria-current])) a.near{color:var(--white);box-shadow:inset 0 -2px 0 currentColor}}
 /* main */
 .kz-main{padding:20px 16px 16px;background-image:radial-gradient(var(--grid) 1px,transparent 1px);background-size:24px 24px;background-position:50%}
 .wrap{max-width:1400px;margin:0 auto}
@@ -748,7 +767,7 @@ tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sa
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}
 /* seat inspector */
-.inspector{display:flkz-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
+.inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
 .inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
@@ -766,7 +785,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.rostrum.edge{fill:var(--panel-deep);fill-opacity:.55}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
 .seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35;vector-effect:non-scaling-stroke}.seatshape.occ{fill:rgba(255,255,255,.06)}
-.ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflkz-x:auto}.tswrap svg{min-width:480px;display:block}
+.ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflow-x:auto}.tswrap svg{min-width:480px;display:block}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
@@ -844,7 +863,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go{color:var(--white)}
 @media(max-width:900px){.landing .masthead{grid-template-columns:1fr;padding:18px 16px 14px}.landing .mast-h h1{font-size:40px}.counts.land{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.land{grid-template-columns:1fr}.doors{grid-template-columns:1fr}.cyc{grid-template-columns:40px minmax(0,1fr)}.cyc .stat{text-align:left}}
 /* the sitting day as a strip: one bar per vote, the margin above or below the axis */
-.strip .stripwrap{overflkz-x:auto;margin-top:6px;padding:2px 0}
+.strip .stripwrap{overflow-x:auto;margin-top:6px;padding:2px 0}
 .strip svg{width:100%;height:56px;display:block;min-width:320px}
 .strip .axis{stroke:var(--border-hi);stroke-width:.4}
 .strip .b rect{fill:var(--dim3);transition:fill .12s}
@@ -883,7 +902,7 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .paybar i{width:var(--w);background:var(--white);opacity:var(--o,1)}
 .paybar i:nth-child(2){opacity:.7}.paybar i:nth-child(3){opacity:.48}.paybar i:nth-child(4){opacity:.32}.paybar i:nth-child(5){opacity:.22}
 /* the record's own edge: a month per column, bright where the House recorded names */
-.cov .covwrap{overflkz-x:auto;margin-top:6px}
+.cov .covwrap{overflow-x:auto;margin-top:6px}
 .cov svg{width:100%;height:210px;display:block;min-width:520px}
 .cov .all{fill:var(--border-hi)}.cov .named{fill:#d4d4d8}
 .cov .hit{fill:transparent}.cov .mc:hover .all,.cov .mc:hover .named{fill:var(--white)}
@@ -895,7 +914,7 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .covkey i.k{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
 .covkey i.named{background:#d4d4d8}.covkey i.all{background:var(--border-hi)}.covkey i.short{background:#8a4a4a}.covkey i.secret{background:var(--sz)}
 /* first-term share, cycle by cycle */
-.turn .turnwrap{overflkz-x:auto;margin-top:6px}
+.turn .turnwrap{overflow-x:auto;margin-top:6px}
 .turn svg{width:100%;height:190px;display:block;min-width:560px}
 .turn .first{fill:#d4d4d8}.turn .back{fill:var(--line2)}
 .turn .tc:hover .first{fill:var(--white)}
@@ -918,7 +937,7 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog summary:hover{color:var(--white)}
 .profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13.5px;line-height:1.65}
 .profile b{color:var(--text);font-weight:400}
-.tablewrap{overflkz-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
+.tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
 .cite .copy{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;cursor:pointer;white-space:nowrap}
@@ -1478,6 +1497,20 @@ JS_SEARCH = """
 })();
 """
 
+JS_CYCLESTRIP = """
+(function(){
+  // On a narrow screen the ten cycles are a strip that scrolls inside the top bar, and on an older cycle's page
+  // the one you are reading sits off to the right where you cannot see it. This brings it into view. It is an
+  // instant jump, not a scroll animation, so it is right for reduced-motion readers too and needs no guard; and
+  // it is an enhancement only — without JavaScript every cycle is still a link, just possibly out of sight.
+  // "here" is a <b aria-current> on a cycle page; the landing has no <b> and marks the current cycle .near
+  var strip = document.querySelector('.kz-topbar .cyc');
+  var here = strip && (strip.querySelector('[aria-current]') || strip.querySelector('a.near'));
+  if (!strip || !here || strip.scrollWidth <= strip.clientWidth) return;
+  strip.scrollLeft = Math.max(0, here.offsetLeft - (strip.clientWidth - here.offsetWidth) / 2);
+})();
+"""
+
 JS_BOOT = """
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -1583,7 +1616,14 @@ Crawl-delay: 2
 # address, useless in one that does not, and silent either way. The published origin is a fact about this project,
 # so it is the default; KARZAT_SITE_URL overrides it, and KARZAT_SITE_URL="" restores relative links for a build
 # that is going somewhere else.
-SITE_URL = os.environ.get("KARZAT_SITE_URL", "https://d1pd6pxzgalwl6.cloudfront.net").rstrip("/")
+#
+# The site answers to six names — ogykarzat.hu and orszaggyuleskarzat.hu with their www forms, ogykarzat.com with
+# its own — plus the distribution's d1pd6pxzgalwl6.cloudfront.net, which is where it lived until 2026-08-20. Five
+# of those six 301 to the one below through a CloudFront Function, so a citation minted last week and one minted
+# tomorrow lead to the same page. One address is the point: the citation on each page is a promise, and a site
+# that answers to six names without choosing between them cannot keep it. The choice is .hu because the subject
+# is the Hungarian Parliament and the reader is Hungarian; the .com is a redirect, not a second home.
+SITE_URL = os.environ.get("KARZAT_SITE_URL", "https://ogykarzat.hu").rstrip("/")
 
 
 def cite_html(inp: dict, path: str, title: str, key: str, json_href: str | None = None, csv_href: str | None = None) -> str:
@@ -2478,7 +2518,7 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" rol
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet, script and favicon (committed, checked, never hand-edited)."""
-    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_BOOT).strip() + "\n"}
+    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_CYCLESTRIP + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -2584,7 +2624,15 @@ def build_close_page(inp: dict, cl: dict) -> str:
 """ + page_tail(inp, 1)
 
 
-def bill_path_html(inp: dict, rec: dict) -> str:
+def _vote_day(v: dict) -> str | None:
+    """The ISO day of a vote row from either source: the index carries `date`, the record carries `ts` as
+    '2026.06.08.15:12:50'."""
+    if v.get("date"):
+        return v["date"]
+    return v["ts"][:10].replace(".", "-") if v.get("ts") else None
+
+
+def bill_path_html(inp: dict, rec: dict, votes: list | None = None) -> str:
     """The motion's own road: submitted, every vote the record dates, promulgated — on one axis, then the full event
     log underneath.
 
@@ -2593,8 +2641,13 @@ def bill_path_html(inp: dict, rec: dict) -> str:
     unfiltered, so nothing the record says is hidden behind my choice of what counts as a milestone."""
     start = rec.get("submitted_on")
     prom = (rec.get("promulgation") or {}).get("date")
+    # The roll calls come from the cycle's own vote index when the caller has them, and only fall back to the
+    # record's <szavazasok> list otherwise. The record's list is a strict subset — 150 rows in all, every one of
+    # them present in the index, undercounting on 36 of the 129 motions that were voted, and empty on 15 that were
+    # voted between two and eight times and then promulgated. The fallback keeps the two-argument callers working.
+    vs = votes if votes is not None else (rec.get("votes") or [])
     dates = [d for d in [start, prom] if d] + [e["date"] for e in rec.get("events") or [] if e.get("date")] \
-        + [v["ts"][:10].replace(".", "-") for v in rec.get("votes") or [] if v.get("ts")]
+        + [_vote_day(v) for v in vs if _vote_day(v)]
     if not dates:
         return ""
     lo, hi = min(dates), max(dates)
@@ -2609,12 +2662,13 @@ def bill_path_html(inp: dict, rec: dict) -> str:
     if start:
         marks.append(f'<g class="bm"><circle cx="{x(start):.1f}" cy="{Y:.1f}" r="5" class="start"/>'
                      f'<title>Benyújtva · {esc(hu_date(start))}</title></g>')
-    for v in rec.get("votes") or []:
-        if not v.get("ts"):
+    for v in vs:
+        day = _vote_day(v)
+        if not day:
             continue
-        day = v["ts"][:10].replace(".", "-")
-        slug = f'{day}T{v["ts"][11:].replace(":", "-")}'          # '2026.06.08.15:12:50' -> '2026-06-08T15-12-50'
-        tip = f'{hu_date(day)} · {v.get("outcome") or ""} · {v.get("igen")}–{v.get("nem")}–{v.get("tartozkodott")} · {v.get("result_raw") or ""}'
+        # a row from the cycle's index already knows its own slug; a row from the record has to have one derived
+        slug = v.get("slug") or f'{day}T{v["ts"][11:].replace(":", "-")}'   # '2026.06.08.15:12:50' -> '2026-06-08T15-12-50'
+        tip = f'{hu_date(day)} · {v.get("outcome") or ""} · {v.get("igen")}–{v.get("nem")}–{v.get("tartozkodott")} · {v.get("result") or v.get("result_raw") or ""}'
         marks.append(f'<a href="../szavazas/{esc(slug)}.html" class="bm v"><rect x="{x(day) - 1.5:.1f}" y="{Y - 11:.1f}" width="3" height="22"/>'
                      f'<rect x="{x(day) - 7:.1f}" y="{Y - 16:.1f}" width="14" height="32" class="hit"/><title>{esc(tip)}</title></a>')
     if prom:
@@ -2624,11 +2678,20 @@ def bill_path_html(inp: dict, rec: dict) -> str:
     marks.append(f'<text x="{L:.1f}" y="{Y + 24:.1f}" class="dl">{esc(hu_date(lo))}</text>'
                  f'<text x="{W - R:.1f}" y="{Y + 24:.1f}" class="dl end">{esc(hu_date(hi))}</text>')
 
-    have_speech = {f'{s["ulnap"]}-{s["seq"]}' for s in ((inp.get("speeches") or {}).get("speeches") or [])}
+    # A reference gets the speech's own page where one is written, and the sitting day's anchor where it is not —
+    # which is the same fallback speech_href() uses. It used to link every reference to a per-speech page whether
+    # or not that page existed: the set was built from all 4,361 speech rows, pages are written for the 1,957
+    # substantive ones, and the other 990 links 404ed. Every reference now lands somewhere real.
+    paged = paged_speech_ids(inp)
     log = []
     for e in sorted(rec.get("events") or [], key=lambda e: (e.get("date") or "", e.get("text") or "")):
         sid = (e.get("speech") or "").replace("/", "-")
-        ref = f'<a href="../felszolalas/{esc(sid)}.html">{esc(e["speech"])}</a>' if sid in have_speech else esc(e.get("speech") or "")
+        if sid in paged:
+            ref = f'<a href="../felszolalas/{esc(sid)}.html">{esc(e["speech"])}</a>'
+        elif sid:
+            ref = f'<a href="../felszolalas/nap{esc(sid.split("-")[0])}.html#s{esc(sid)}">{esc(e["speech"])}</a>'
+        else:
+            ref = ""
         rel = f'<span class="sub">{esc(e["related"])}</span>' if e.get("related") else ""
         log.append(f'<tr><td class="ts mono">{esc(hu_date(e["date"]) if e.get("date") else "—")}</td>'
                    f'<td>{esc(e.get("text") or "")}{rel}</td><td class="mono">{ref}</td></tr>')
@@ -2644,7 +2707,7 @@ def bill_path_html(inp: dict, rec: dict) -> str:
     return (f'<section class="panel deep road">{CORNERS}'
             f'<h2><span data-kz-text>A törvény útja</span><span class="tag">{head}</span></h2>'
             f'<svg viewBox="0 0 {W:.0f} {Y + 30:.0f}" role="img" aria-label="Az iromány útja {esc(hu_date(lo))} és {esc(hu_date(hi))} között: '
-            f'benyújtás, {hu_num(len(rec.get("votes") or []))} szavazás{", kihirdetés" if prom else ""}.">{"".join(marks)}</svg>'
+            f'benyújtás, {hu_num(len(vs))} szavazás{", kihirdetés" if prom else ""}.">{"".join(marks)}</svg>'
             f'<div class="roadkey"><span><i class="k start"></i>benyújtva</span><span><i class="k v"></i>szavazás (a szavazás oldalára visz)</span>'
             + (f'<span><i class="k prom"></i>kihirdetve</span>' if prom else "") + '</div>'
             + (f'<div class="tablewrap" style="margin-top:12px"><table><thead><tr><th>Tárgyaló bizottság</th><th>Jogcím</th><th>Házszabály</th></tr></thead><tbody>{coms}</tbody></table></div>' if coms else "")
@@ -2662,8 +2725,12 @@ def build_bill_page(inp: dict, b: dict) -> str:
         rows.append(f'<tr{" class=own" if v.get("own") else ""}><td class="ts mono"><a href="../szavazas/{esc(v["slug"])}.html">{esc(v["date"])} {esc(v["time"] or "")}</a></td>'
                     f'<td class="mono">{esc(v["iromany"] or "")}</td><td>{esc(v["outcome"] or "")}</td>'
                     f'<td class="mono">{esc(rule_short(v["rule"]))}</td><td class="num mono">{v["igen"]} – {v["nem"]} – {v["tartozkodott"]}</td><td>{badge}</td></tr>')
-    label = b["label"]
-    title = b["title"] or "—"
+    # The record is joined on the bare number, and its own motion number wins over the label the roll calls imply.
+    # For 15 motions the roll calls only ever named an amendment ("122/3"), so the derived label was "122" and the
+    # record — keyed "T/122" — was never found: those pages showed a bare integer and no road panel.
+    rec = (inp.get("bill_recs_by_num") or {}).get(b["number"]) or {}
+    label = rec.get("szam") or b["label"]
+    title = b["title"] or rec.get("title") or "—"
     ext = f' · <a href="{esc(b["href"])}" target="_blank" rel="noopener">parlament.hu ↗</a>' if b.get("href") else ""
     span = f'{hu_date(b["first"])} – {hu_date(b["last"])}' if b["first"] != b["last"] else hu_date(b["first"])
     return page_head(f'{label} — {cut(title, 80)}{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f'{label} {title}: a {inp["cycle"]}. ciklusban tartott név szerinti szavazásai sorban, az indítvány szakaszaival és módosítóival.', 1 + inp["base_depth"]) + \
@@ -2676,7 +2743,7 @@ def build_bill_page(inp: dict, b: dict) -> str:
   <div class="tablewrap"><table data-page-size="50"><thead><tr><th scope="col">Időpont</th><th scope="col">Szám</th><th scope="col">Szakasz</th><th scope="col">Szabály</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col">Eredmény</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">A „szakasz” az API kimenetel-szövege minden szavazásnál; a szám az iromány saját száma vagy egy módosítóé (szám/pont).</div>
 </section>
-{bill_path_html(inp, (inp.get("bill_recs") or {}).get(label) or {}) if (inp.get("bill_recs") or {}).get(label) else ""}
+{bill_path_html(inp, rec, b["votes"]) if rec else ""}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}iromany/{b["number"]}.html', f'{label} — {cut(title, 80)}', f'{inp["cycle"]}-iromany-{b["number"]}')}
 """ + page_tail(inp, 1)
 
@@ -3386,7 +3453,7 @@ def cycle_weekly_feed(inp: dict, updated: str, root: str) -> str:
         html = f'<p><a href="{root}{cdir}index.html">{esc(w["label"])}</a> · {esc(line)}</p>'
         ents.append(fd.entry(f'urn:karzat:{inp["cycle"]}:heti:{w["key"]}', f'{w["label"]} — {line}', f'{root}{cdir}index.html', week_end_stamp(inp, w, updated), html))
     return fd.atom(f'urn:karzat:{inp["cycle"]}:heti', f'karzat · a hét számokban · {inp["cycle"]}. ciklus',
-                   "Ülésnapos hetenként: szavazások, döntések, név szerinti szavazások, különvélemények (frakciótagoké; a függetleneké nem számít), érdemi felszólalások és felszólalók (nem képviselőkkel együtt). Számok, az oldal nem ítélek.",
+                   "Ülésnapos hetenként: szavazások, döntések, név szerinti szavazások, különvélemények (frakciótagoké; a függetleneké nem számít), érdemi felszólalások és felszólalók (nem képviselőkkel együtt). Számok, az oldal nem ítél.",
                    f'{root}{cdir}feed/heti.xml', f'{root}{cdir}index.html', updated, ents)
 
 
@@ -3416,6 +3483,22 @@ def speech_href(inp: dict, r: dict, up: str = "", texts: dict | None = None) -> 
     """Link target of a speech row from a page `up` levels away from felszolalas/ (own page or the day-page anchor)."""
     sid = speech_id(r)
     return f"{up}{sid}.html" if speech_has_page(inp, r, texts) else f"{up}nap{r['ulnap']}.html#s{sid}"
+
+
+def paged_speech_ids(inp: dict) -> set[str]:
+    """The speech ids that this build actually writes a page for.
+
+    Not the same as "every speech in the cycle", and the difference was a live defect: a motion record's event log
+    linked every reference it carried, but the cycle holds 4,361 addressable speech rows and only the substantive
+    ones get a page — 1,957 here — so 990 links on the motion pages pointed at files that were never written.
+
+    `speech_has_page` cannot be the gate. It answers "should this row get a page", and for a live cycle it answers
+    yes unconditionally (:3441), which is the same wrong answer. The gate has to be the set the writer iterates,
+    which is what this returns. Memoised on the inputs because the caller is inside a per-motion loop."""
+    if "_paged_sids" not in inp:
+        tm = (inp["texts"] or {}).get("texts") or {}
+        inp["_paged_sids"] = {speech_id(r) for r in substantive_rows(inp) if speech_has_page(inp, r, tm)}
+    return inp["_paged_sids"]
 
 
 def substantive_rows(inp: dict) -> list[dict]:
@@ -5046,7 +5129,7 @@ def build_landing() -> str:
 <header class="kz-topbar"><div class="l"><a class="brand" href="index.html" aria-current="page"><i></i>karzat</a></div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{' <span class="sl">·</span> '.join(f'<a href="{cycle_dir(c)}index.html"{" class=near" if c == CURRENT_CYCLE else ""}>{c}</a>' for c in tot["cycles"])}</nav><span class="sep hide-sm"></span><span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_stamp(inp))}</b></span></div></header>
 <main class="kz-main"><div class="wrap landing">
 <section class="masthead">{CORNERS}
-  <div class="mast-h"><h1>karzat</h1><p class="mast-lede">Az Országgyűlés {hu_date(tot['from'])[:4]} óta. Ki hogyan szavazott, mennyi kellett a döntéshez, ki mit mondott. Tiszta adat, kommentár nélkül.</p></div>
+  <div class="mast-h"><h1>karzat</h1><p class="mast-lede">A magyar Országgyűlés munkája {hu_date(tot['from'])[:4]} óta, adatban — a karzatról nézve.</p></div>
   <figure class="chamber-today">{chamber}
     <figcaption><span class="label" data-kz-text>Az ülésterem ma</span> <span class="sub">{esc(hero_note)}</span><div class="legend">{legend_html}</div></figcaption>
     <div class="inspector" id="hall" aria-live="polite"><span class="insp-hint">Egy helyre mutatva: ki ül ott, és mit tett eddig a ciklusban. Kattintásra rögzül; a névre kattintva a képviselő oldala. Nyilakkal is járható.</span></div>

@@ -502,6 +502,19 @@
 
 
 (function(){
+  // On a narrow screen the ten cycles are a strip that scrolls inside the top bar, and on an older cycle's page
+  // the one you are reading sits off to the right where you cannot see it. This brings it into view. It is an
+  // instant jump, not a scroll animation, so it is right for reduced-motion readers too and needs no guard; and
+  // it is an enhancement only — without JavaScript every cycle is still a link, just possibly out of sight.
+  // "here" is a <b aria-current> on a cycle page; the landing has no <b> and marks the current cycle .near
+  var strip = document.querySelector('.kz-topbar .cyc');
+  var here = strip && (strip.querySelector('[aria-current]') || strip.querySelector('a.near'));
+  if (!strip || !here || strip.scrollWidth <= strip.clientWidth) return;
+  strip.scrollLeft = Math.max(0, here.offsetLeft - (strip.clientWidth - here.offsetWidth) / 2);
+})();
+
+
+(function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (document.hidden) return;                       // a background tab gets the finished page, not a stalled boot
   var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

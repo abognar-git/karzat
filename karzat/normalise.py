@@ -100,6 +100,20 @@ def prop_map(tulajdonsagok: Any) -> dict[str, str]:
     return out
 
 
+def prop_href(tulajdonsagok: Any) -> dict[str, str]:
+    """<tulajdonsagok><tulajdonsag nev href/>… -> {nev: href}.
+
+    A sibling of prop_map rather than a change to it, because the two carry different things and the difference
+    matters: `Irományszöveg`'s @ertek is the literal label "szöveges PDF" on every one of the 406 records that
+    have it, and only the @href is the document. Anything that rendered the value as a link would have emitted
+    href="szöveges PDF". prop_map's return type is relied on elsewhere, so it keeps it."""
+    out: dict[str, str] = {}
+    for t in as_list((tulajdonsagok or {}).get("tulajdonsag") if isinstance(tulajdonsagok, dict) else None):
+        if isinstance(t, dict) and "@nev" in t and t.get("@href"):
+            out[t["@nev"]] = t["@href"]
+    return out
+
+
 def _int(s: Any) -> int | None:
     try:
         return int(str(s).replace(" ", "").replace(" ", ""))
@@ -800,6 +814,7 @@ def parse_iromanyok(payload: dict[str, Any]) -> list[dict[str, Any]]:
 def parse_iromany(payload: dict[str, Any]) -> dict[str, Any]:
     r = payload.get("iromany", payload)
     p = prop_map(r.get("tulajdonsagok"))
+    h = prop_href(r.get("tulajdonsagok"))
     events = [{"date": _hu_date(e.get("datum")), "text": e.get("leiras") or None, "related": e.get("kapcsolodik") or None,
                "remark": e.get("megjegyzes") or None, "speech": e.get("felszolalas") or None}
               for e in as_list((r.get("esemenyek") or {}).get("esemeny")) if isinstance(e, dict)]
@@ -829,7 +844,16 @@ def parse_iromany(payload: dict[str, Any]) -> dict[str, Any]:
         "promulgation": {"number": number, "mk_issue": (p.get("MK száma") or "").strip() or None,
                          "date": promulgated_on, "law_ref": law_ref} if number or promulgated_on else None,
         "submitters": submitters, "submitter_kind": submitter_kind(submitters),
+        # Four fields the record always carried and nothing ever read, because prop_map keeps @ertek and drops @href.
+        # `addressee` is the costly one: filled on all 399 questions, immediate questions and interpellations and on
+        # none of the 138 legislative records, 19 distinct values, every one an office rather than a person — the
+        # field a question page most needs. `text_url` stays: it is a SQLite column, and it holds the label, not the
+        # document, which is why text_pdf_url exists beside it rather than replacing it.
+        "addressee": (p.get("Címzett") or "").strip() or None,
+        "note": (p.get("Megjegyzés") or "").strip() or None,
         "text_url": p.get("Irományszöveg") or None,
+        "text_pdf_url": h.get("Irományszöveg") or None,
+        "submitter_azon": (h.get("Benyújtó(k)") or "").rsplit("/", 1)[-1] or None,
         "events": events, "votes": votes, "committees": committees,
         "szam_parsed": parse_iromany_szam(r.get("@szam")),
     }

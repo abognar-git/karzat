@@ -59,7 +59,7 @@ class Build(unittest.TestCase):
     def test_landing_is_the_view_from_the_gallery(self):
         tot = site_totals()
         self.assertIn("<title>karzat — az Országgyűlés szavazásai 1990 óta</title>", self.page)
-        self.assertIn("Tiszta adat, kommentár nélkül.", self.page)                # the lede's closing beat
+        self.assertIn("a karzatról nézve.", self.page)                            # the lede's closing beat
         inp0 = load_inputs()
         n_sz = len((inp0["szoszolok"] or {}).get("people") or {})
         n_km = len((inp0["kormany"] or {}).get("people") or {})
@@ -177,7 +177,7 @@ class Build(unittest.TestCase):
         # the portrait floats beside the text; without containment the card's box ends above the photo and the
         # picture hangs outside the rectangle (it did — a reader saw it before the tests did)
         css = build_assets()["karzat.css"]
-        self.assertRegex(css, r"\.inspector\{[^}]*display:flkz-root")
+        self.assertRegex(css, r"\.inspector\{[^}]*display:flow-root")
         self.assertIn(".portrait.insp{width:48px;height:64px;float:left", css)
 
     def test_the_three_door_forms_line_up(self):
@@ -1281,3 +1281,159 @@ class BillRoad(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MotionNumbering(unittest.TestCase):
+    """Why every motion can have a page at iromany/<n>.html without colliding, and why the 129 pages that
+    existed before keep their addresses.
+
+    The number after the prefix is the record's own `izon`, and izon is one sequence per cycle shared by every
+    motion kind — so T/10 and K/10 cannot both exist. That is a property of the source, not of our data, which
+    is exactly the kind of thing that can change under us without any error: if a future cycle numbered each
+    prefix separately, two motions would quietly render to the same file and one would overwrite the other."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.recs = (load_inputs().get("bill_recs") or {})
+
+    def test_the_number_is_the_izon(self):
+        if not self.recs:
+            self.skipTest("no motion records cached — run: python3 -m karzat sync-bills")
+        for szam, r in self.recs.items():
+            m = re.match(r"^([A-ZÁÉÍÓÖŐÚÜŰ]+)/(\d+)", szam)
+            self.assertIsNotNone(m, f"{szam}: a motion number that is not <prefix>/<number>")
+            self.assertEqual(m.group(2), str(r.get("izon")),
+                             f"{szam}: the number and izon disagree, so iromany/<n>.html is no longer the record's address")
+
+    def test_no_two_motions_share_a_page(self):
+        if not self.recs:
+            self.skipTest("no motion records cached")
+        seen: dict[str, str] = {}
+        for szam, r in self.recs.items():
+            n = str(r.get("izon"))
+            self.assertNotIn(n, seen, f"{szam} and {seen.get(n)} would both write iromany/{n}.html")
+            seen[n] = szam
+        self.assertEqual(len(seen), len(self.recs))
+
+
+class MotionSpeeches(unittest.TestCase):
+    """The join that makes a page worth having for a motion nobody voted on: the record's events carry a
+    felszólalás reference, and the reference is <ülésnap>/<sorszám> — the same pair the speech list is keyed by.
+
+    Both assertions are invariants against drift rather than checks of today's numbers. A reference that stops
+    resolving means the two syncs have fallen out of step; a substantive speech whose text is missing means the
+    text fetch is behind the list. Either would show up on the page as an absence, and an absence on this site
+    is supposed to mean "the record does not hold it", not "we did not fetch it"."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.recs = cls.inp.get("bill_recs") or {}
+        cls.speeches = {f'{s["ulnap"]}-{s["seq"]}': s
+                        for s in ((cls.inp.get("speeches") or {}).get("speeches") or [])
+                        if s.get("ulnap") is not None and s.get("seq") is not None}
+        cls.texts = ((cls.inp.get("texts") or {}).get("texts") or {})
+        cls.refs = [(szam, e) for szam, r in cls.recs.items()
+                    for e in (r.get("events") or []) if e.get("speech")]
+
+    def test_every_reference_resolves_to_a_speech_of_this_cycle(self):
+        if not self.refs or not self.speeches:
+            self.skipTest("no motion records or no speech list cached")
+        missing = [(szam, e["speech"]) for szam, e in self.refs
+                   if e["speech"].replace("/", "-") not in self.speeches]
+        self.assertEqual(missing[:5], [], f"{len(missing)} of {len(self.refs)} references point at no speech we hold")
+
+    def test_every_substantive_referenced_speech_has_its_text(self):
+        if not self.refs or not self.speeches or not self.texts:
+            self.skipTest("no speech texts cached — run: python3 -m karzat sync-speech-texts")
+        gaps = []
+        for szam, e in self.refs:
+            key = e["speech"].replace("/", "-")
+            s = self.speeches.get(key)
+            if s and not s.get("technical") and key not in self.texts:
+                gaps.append((szam, e["speech"], s.get("kind")))
+        self.assertEqual(gaps[:5], [],
+                         f"{len(gaps)} substantive speeches a motion points at have no text — the text sync is behind the list")
+
+
+class PrefixRenameDidNotEatWords(unittest.TestCase):
+    """A guard against the way the `kz-` prefix arrived.
+
+    The prefix was applied to the whole file as a plain text substitution, and it bit into three English words
+    that happen to contain the same letters: `flow-root` became `flkz-root` and `overflow-x` became `overflkz-x`
+    in five rules. Both are invalid CSS, so the browser dropped the declarations silently — the inspector stopped
+    containing its floated portrait, and every wide table pushed the page sideways instead of scrolling in its
+    own box (318 px of it at 375 px wide). Nothing failed: the suite stayed green because the assertion that
+    named `flow-root` had been rewritten by the same substitution.
+
+    So this asserts the shape rather than any one value. In real markup `kz-` is only ever preceded by `.`, `-`,
+    a quote or whitespace — never by a letter or a digit, because that would mean it landed inside a word."""
+
+    def test_no_generated_asset_has_the_prefix_inside_a_word(self):
+        bad = []
+        for name, text in build_assets().items():
+            for m in re.finditer(r"[A-Za-z0-9]kz-[a-z-]+", text):
+                bad.append(f'{name}: …{text[max(0, m.start() - 20):m.end() + 6]}…')
+        self.assertEqual(bad[:5], [], f"{len(bad)} places where kz- landed inside a word")
+
+    def test_the_two_layout_rules_the_substitution_broke_are_intact(self):
+        css = build_assets()["karzat.css"]
+        # named explicitly, because these two are the ones that fail invisibly rather than loudly
+        self.assertIn("display:flow-root", css)          # the inspector contains its floated portrait
+        self.assertGreaterEqual(css.count("overflow-x:auto"), 5)   # wide content scrolls in its own box
+
+
+class MotionEventLinks(unittest.TestCase):
+    """Every felszólalás a motion record points at must land on a page this build writes.
+
+    It did not. The log linked each reference to `felszolalas/<ülésnap>-<sorszám>.html` whenever the cycle held a
+    row with that id — 4,361 of them — but pages are written only for the substantive speeches, 1,957 here. The
+    other 990 links were 404s on the live site, and at 537 motion pages it would have been 1,962 of 3,606.
+
+    The trap worth remembering is that the site's own `speech_href` helper would not have fixed it: its gate is
+    `speech_has_page`, which returns True unconditionally for a live cycle, so it emits the identical dead link.
+    The only gate that cannot drift is the set the writer actually iterates."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.recs = cls.inp.get("bill_recs") or {}
+
+    def _hrefs(self):
+        from scripts.build_site import bill_path_html
+        out = []
+        for szam, rec in self.recs.items():
+            for h in re.findall(r'href="\.\./felszolalas/([^"]+)"', bill_path_html(self.inp, rec)):
+                out.append((szam, h))
+        return out
+
+    def test_no_event_reference_links_to_a_page_that_is_not_written(self):
+        from scripts.build_site import paged_speech_ids
+        if not self.recs:
+            self.skipTest("no motion records cached")
+        paged = paged_speech_ids(self.inp)
+        days = {str(d["ulnap"]) for d in ((self.inp.get("speeches") or {}).get("days") or [])}
+        bad = []
+        for szam, h in self._hrefs():
+            if h.startswith("nap"):
+                if h.split(".html")[0][3:] not in days:
+                    bad.append(f"{szam}: {h} — no such sitting day")
+            elif h[:-5] not in paged:
+                bad.append(f"{szam}: {h} — no page is written for that speech")
+        self.assertEqual(bad[:5], [], f"{len(bad)} references point at a file the build never writes")
+
+    def test_a_reference_without_its_own_page_falls_back_to_the_day_anchor(self):
+        from scripts.build_site import paged_speech_ids, build_day_page
+        if not self.recs:
+            self.skipTest("no motion records cached")
+        paged = paged_speech_ids(self.inp)
+        anchors = [(s, h) for s, h in self._hrefs() if h.startswith("nap")]
+        self.assertTrue(anchors, "every reference has its own page — this fallback is untested")
+        for szam, h in anchors[:200]:
+            self.assertRegex(h, r"^nap\d+\.html#s\d+-\d+$", f"{szam}: malformed day-anchor href")
+            self.assertNotIn(h.split("#s")[1], paged, f"{szam}: {h} sends a paged speech to the day list")
+        # and the day page really does carry the anchor the href names
+        uln, sid = int(anchors[0][1][3:].split(".html")[0]), anchors[0][1].split("#s")[1]
+        rows = [r for r in ((self.inp.get("speeches") or {}).get("speeches") or []) if str(r["ulnap"]) == str(uln)]
+        html = build_day_page(self.inp, uln, rows, (self.inp["texts"] or {}).get("texts") or {})
+        self.assertIn(f'id="s{sid}"', html)
