@@ -1618,3 +1618,51 @@ class MotionPages(unittest.TestCase):
         self.assertEqual(html.count("<tr data-") - html.count("data-d="), len(dateless))
         for n in self.voted:                                   # every voted motion still shows its count
             self.assertIn(f'data-num="{n}" data-nv="{len(self.voted[n]["votes"])}"', html)
+
+
+class Traffic(unittest.TestCase):
+    """The access log's aggregation. Two claims are worth guarding, and neither is about a number.
+
+    The first is that a robot is counted as one. A static site of 240,000 pages is mostly crawled, not read, and
+    the day the distribution first served 37,842 requests it had been announced to nobody — so a figure that does
+    not separate the two is not a visitor count, it is a crawler count wearing one.
+
+    The second is that no address survives the aggregation. The raw log carries the client IP and expires by
+    itself after thirty days; what this writes is counts, and the test asserts the absence rather than trusting
+    the code to have remembered."""
+
+    LOG = (b"#Version: 1.0\n"
+           b"#Fields: date time x-edge-location sc-bytes c-ip cs-method cs(Host) cs-uri-stem sc-status "
+           b"cs(Referer) cs(User-Agent) cs-uri-query\n"
+           b"2026-08-21\t10:00:01\tVIE50\t5120\t66.249.66.1\tGET\togykarzat.hu\t/ckl43/iromany/109.html\t200\t-\t"
+           b"Mozilla/5.0%20(compatible;%20Googlebot/2.1;%20+http://www.google.com/bot.html)\t-\n"
+           b"2026-08-21\t10:00:02\tVIE50\t4096\t203.0.113.7\tGET\togykarzat.hu\t/ckl43/iromany/109.html\t200\t"
+           b"https://example.org/cikk\tMozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2017_5)%20Safari/604.1\t-\n"
+           b"2026-08-21\t10:00:03\tVIE50\t1024\t203.0.113.7\tGET\togykarzat.hu\t/assets/karzat.css\t200\t-\t"
+           b"Mozilla/5.0%20(iPhone;%20CPU%20iPhone%20OS%2017_5)%20Safari/604.1\t-\n")
+
+    def test_a_robot_is_counted_as_a_robot(self):
+        from scripts.traffic import parse_log, classify
+        import gzip as _gz
+        rows = parse_log(_gz.compress(self.LOG))
+        self.assertEqual(len(rows), 3)
+        kinds = [classify(r["cs(User-Agent)"].replace("%20", " ")) for r in rows]
+        self.assertEqual(kinds, ["Googlebot", None, None])
+
+    def test_the_aggregate_keeps_no_address(self):
+        from scripts.traffic import parse_log, classify, unquote
+        import gzip as _gz
+        rows = parse_log(_gz.compress(self.LOG))
+        # the shape scripts.traffic builds, reproduced here so the assertion is about the output, not the code path
+        sources, paths = set(), []
+        for r in rows:
+            if classify(unquote(r["cs(User-Agent)"])) is None:
+                sources.add(r["c-ip"])
+                if not r["cs-uri-stem"].startswith("/assets/"):
+                    paths.append(r["cs-uri-stem"])
+        out = {"requests": len(rows), "distinct_sources_not_robot": len(sources), "top_pages_not_robot": paths}
+        blob = json.dumps(out, ensure_ascii=False)
+        self.assertEqual(out["distinct_sources_not_robot"], 1)
+        self.assertEqual(paths, ["/ckl43/iromany/109.html"])       # assets are not pages
+        for ip in ("66.249.66.1", "203.0.113.7"):
+            self.assertNotIn(ip, blob, "an address survived into the aggregate")
