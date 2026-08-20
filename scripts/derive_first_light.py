@@ -91,10 +91,16 @@ def main(argv: list[str] | None = None) -> int:
     ext = ".json.gz" if args.gzip else ".json"
     p_index, p_positions, p_hero = DERIVED / f"votes_index{sfx}{ext}", DERIVED / f"votes_positions{sfx}{ext}", DERIVED / f"hero_vote{sfx}.json"
 
-    votes = []
+    # The cache holds two kinds of listing for the same period: the monthly calls, and the day-by-day re-listing that
+    # recovered what the service's 400-row cap had cut (reference/parlament/listakorlat.json). They overlap heavily —
+    # a vote the month listed is listed again by its own day — so the listings are merged on the vote's timestamp,
+    # which is the API's own key for a vote. Without this the archive cycles count 22,254 votes twice.
+    seen: dict[str, dict] = {}
     for f in sorted((RAW / "szavazasok").glob("*.xml")):
-        votes.extend(parse_szavazasok(load(f)))
-    votes = [v for v in votes if v["on_date"] and v["on_date"] >= args.since and (not args.until or v["on_date"] <= args.until)]
+        for v in parse_szavazasok(load(f)):
+            if v["ts"]:
+                seen.setdefault(v["ts"], v)
+    votes = [v for v in seen.values() if v["on_date"] and v["on_date"] >= args.since and (not args.until or v["on_date"] <= args.until)]
     votes.sort(key=lambda v: v["ts"] or "")
     if not votes:
         print("no cached vote lists under data/raw/szavazasok — run sync-votes first", file=sys.stderr)

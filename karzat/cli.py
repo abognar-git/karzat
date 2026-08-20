@@ -327,6 +327,35 @@ def cmd_sync_speech_texts(args: argparse.Namespace) -> int:
     return 0 if not n_err else 1
 
 
+def cmd_sync_bills(args: argparse.Namespace) -> int:
+    """Cache the motion list and every motion's record (iromanyok.cgi + iromany.cgi, ~540 calls).
+
+    Current cycle only, and that is the service's limit, not a choice: iromanyok.cgi has no cycle parameter (sending
+    p_ckl changes nothing — it was probed), and iromany.cgi's p_izon is a per-cycle sequence, so an earlier cycle's
+    T/1220 cannot be addressed at all. The vote payloads carry the irományszám but never the izon, so the motions of
+    1990–2022 stay out of reach however many calls one is willing to make."""
+    from .normalise import parse_iromanyok
+    api = WebApi(cache_dir=args.cache)
+    try:
+        lst = parse_iromanyok(to_dict_payload(api.fetch("iromanyok", refresh=not args.cached)))
+    except ApiError as e:
+        print(f"iromanyok: {e}", file=sys.stderr)
+        return 2
+    izons = [b["izon"] for b in lst if b.get("izon")]
+    n, failed = 0, 0
+    for i, izon in enumerate(izons, 1):
+        try:
+            api.fetch("iromany", p_izon=izon, refresh=not args.cached)
+            n += 1
+        except ApiError as e:
+            failed += 1
+            print(f"  {izon}: {e}", file=sys.stderr)
+        if i % 100 == 0:
+            print(f"  {i}/{len(izons)} · ok {n} · failed {failed}", flush=True)
+    print(f"done: {len(lst)} motions listed, {n} records cached, {failed} failed; live calls={api.live_calls} cache hits={api.cache_hits}")
+    return 0 if not failed else 1
+
+
 def cmd_sync_committees(args: argparse.Namespace) -> int:
     """Cache the committee list and every committee's record (bizottsagok.cgi + bizottsag.cgi, ~35 calls) — always fresh,
     the records carry the next sitting's invitation."""
@@ -476,6 +505,9 @@ def main(argv: list[str] | None = None) -> int:
     sst.add_argument("--pace", type=float, default=0.6, help="seconds between live calls (default 0.6; slower when another sync runs)")
     sst.add_argument("--verbose", action="store_true")
     sst.set_defaults(fn=cmd_sync_speech_texts)
+    sb = sub.add_parser("sync-bills", help="cache the motion list and every motion's record (~540 calls; current cycle only — the service has no cycle parameter)")
+    sb.add_argument("--cached", action="store_true", help="do not re-fetch what is cached")
+    sb.set_defaults(fn=cmd_sync_bills)
     sc = sub.add_parser("sync-committees", help="cache the committee list and records (~35 calls; always fresh: they carry the next sitting's invitation)")
     sc.add_argument("--cached", action="store_true", help="do not re-fetch what is cached")
     sc.set_defaults(fn=cmd_sync_committees)
@@ -503,7 +535,7 @@ def main(argv: list[str] | None = None) -> int:
     ss.set_defaults(fn=cmd_stats)
 
     args = p.parse_args(argv)
-    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches", "sync-speech-texts", "sync-committees") or (args.cmd == "freshness" and args.fetch)
+    needs_token = args.cmd in ("probe", "sync-votes", "sync-mps", "sync-speeches", "sync-speech-texts", "sync-bills", "sync-committees") or (args.cmd == "freshness" and args.fetch)
     if needs_token and not os.environ.get(TOKEN_ENV):
         print(f"{TOKEN_ENV} is not set — copy .env.example to .env once the token arrives "
               f"(dry-run and inspect work without it)", file=sys.stderr)

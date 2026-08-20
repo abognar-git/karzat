@@ -806,5 +806,257 @@ class Helpers(unittest.TestCase):
         self.assertTrue(all(s["cy"] <= 0.01 for s in seats))    # a semicircle above the axis
 
 
+class NoDuplicateVotes(unittest.TestCase):
+    """A vote appears once per cycle, whatever the cache holds.
+
+    The listing cache carries the same vote twice on purpose: once from the month it was called for, once from the
+    day-level re-listing that recovered what the 400-row cap had cut. The derivation merges them on the timestamp —
+    the API's own key for a vote. When it did not, the six archive cycles counted 22,254 votes twice and every
+    headline built on them was inflated, so this is checked for every cycle rather than the one being worked on."""
+
+    def test_each_cycle_lists_a_vote_once(self):
+        import collections
+        for c in available_cycles():
+            votes = load_inputs(c)["idx"]["votes"]
+            dupes = [ts for ts, n in collections.Counter(v["ts"] for v in votes).items() if n > 1]
+            self.assertEqual(dupes[:3], [], f"cycle {c}: {len(dupes)} timestamps listed more than once")
+
+    def test_the_index_and_the_roll_call_store_agree_on_what_exists(self):
+        """Every vote the store names must be a vote the index lists — a store key with no index row would mean the
+        two derivations disagree about which votes the cycle had."""
+        for c in available_cycles():
+            inp = load_inputs(c)
+            listed = {v["ts"] for v in inp["idx"]["votes"]}
+            named = {ts for ts, p in ((inp["store"] or {}).get("positions") or {}).items() if p}
+            self.assertEqual(named - listed, set(), f"cycle {c}: roll calls for votes the index does not list")
+
+
+class LifePath(unittest.TestCase):
+    """The person on one time axis: mandates, offices, local-government seats, the years the degrees carry. It is
+    drawn from the record's own dated rows, and a span the record leaves open must stop at the newest vote on the
+    site rather than at whatever day the build happens to run."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.inp["facs_all"] = {f["id"]: f["colour"] for c in available_cycles() for f in factions(c)}
+        cls.mps = json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
+
+    def stint(self, azon):
+        mp = self.mps[azon]
+        st = {"cycle": CURRENT_CYCLE, "name": mp["name"], "faction": mp.get("faction"), "in_roll": 0, "cast": 0,
+              "with": 0, "against": 0, "mandate": "", "href": ""}
+        st.update({k: mp.get(k) or [] for k in ("factions", "elections", "motion_stats", "offices", "schools",
+                                                "languages", "declarations", "remuneration", "local_offices")})
+        return st
+
+    def test_a_lane_per_kind_the_record_dates(self):
+        from scripts.build_site import life_path_svg
+        azon = max(self.mps, key=lambda a: len(self.mps[a].get("local_offices") or []))
+        st = self.stint(azon)
+        html = life_path_svg(self.inp, st, [st])
+        self.assertIn("Országgyűlés", html)                                  # the mandates are always a lane
+        self.assertIn("Önkormányzat", html)                                  # this person has local seats
+        n_local = len(st["local_offices"])
+        n_mand = len([e for e in st["elections"] if e.get("mandate_from")])
+        self.assertEqual(html.count("<rect"), n_local + n_mand + len(st["offices"]))
+        years = {s["year"] for s in st["schools"] if s.get("year")}
+        self.assertEqual(html.count("<circle"), len(years))       # one dot per year, however many degrees it carries
+
+    def test_nothing_dated_draws_nothing(self):
+        from scripts.build_site import life_path_svg
+        bare = {"name": "X", "elections": [], "offices": [], "local_offices": [], "schools": [], "factions": []}
+        self.assertEqual(life_path_svg(self.inp, bare, []), "")
+
+    def test_an_open_span_ends_at_the_newest_vote_not_today(self):
+        from scripts.build_site import life_path_svg, site_today
+        day = site_today(self.inp)
+        self.assertEqual(day, max(v["ts"] for v in self.inp["idx"]["votes"])[:10].replace(".", "-"))
+        azon = next(a for a, m in self.mps.items()
+                    if any(e.get("mandate_from") and not e.get("mandate_to") for e in m.get("elections") or []))
+        st = self.stint(azon)
+        self.assertIn(hu_date(day), life_path_svg(self.inp, st, [st]))        # the page names the day it runs to
+
+    def test_a_cycle_the_site_never_loaded_still_gets_its_colour(self):
+        """The colour comes from the stint when the site has one, and from the record's own faction rows when it
+        does not — otherwise every pre-1998 bar would be grey."""
+        from scripts.build_site import life_path_svg
+        azon = max(self.mps, key=lambda a: len(self.mps[a].get("elections") or []))
+        st = self.stint(azon)
+        if len(st["elections"]) < 2:
+            self.skipTest("nobody in this cycle has served in another")
+        html = life_path_svg(self.inp, st, [st])                              # one stint only: earlier cycles are unloaded
+        colours = set(re.findall(r'fill="(#[0-9a-fA-F]{6})"', html))
+        self.assertTrue(colours - {"#8a8a8a", "#d4d4d8", "#8a8a93"})           # at least one real faction colour
+
+
+class RecordPanels(unittest.TestCase):
+    """The three sections of the MP record the site had never read: declarations, remuneration, schooling."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.mps = json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
+
+    def test_every_declaration_gets_a_square_and_the_filed_ones_a_link(self):
+        from scripts.build_site import declarations_html
+        azon = max(self.mps, key=lambda a: len(self.mps[a].get("declarations") or []))
+        mp = self.mps[azon]
+        html = declarations_html(mp)
+        ds = mp["declarations"]
+        self.assertEqual(html.count("<a href=") + html.count('<span class="due"'), len(ds))
+        self.assertEqual(html.count("<a href="), sum(1 for d in ds if d.get("url")))
+        for d in ds:
+            if d.get("url"):
+                self.assertIn(d["url"], html)
+
+    def test_a_declaration_recorded_as_due_but_not_published_is_hollow(self):
+        from scripts.build_site import declarations_html
+        azon = next((a for a, m in self.mps.items()
+                     if any(not d.get("url") for d in m.get("declarations") or [])), None)
+        if not azon:
+            self.skipTest("every declaration in this cycle carries a link")
+        html = declarations_html(self.mps[azon])
+        self.assertIn('class="due"', html)
+        self.assertIn("nincs közzétett dokumentum", html)
+
+    def test_remuneration_names_its_one_month_and_never_implies_a_series(self):
+        from scripts.build_site import remuneration_html
+        azon = next(a for a, m in self.mps.items() if m.get("remuneration"))
+        mp = self.mps[azon]
+        html = remuneration_html(mp)
+        self.assertIn(mp["remuneration"][0]["period"], html)
+        self.assertIn("Egyetlen hónap", html)
+        parts = [mp["remuneration"][0].get(k) or 0 for k in ("gross", "constituency_allowance", "housing_allowance")]
+        self.assertEqual("összesen" in html, sum(1 for v in parts if v) > 1)   # no total when there is one line
+
+    def test_nothing_recorded_renders_nothing(self):
+        from scripts.build_site import declarations_html, remuneration_html, schooling_html
+        for fn in (declarations_html, remuneration_html, schooling_html):
+            self.assertEqual(fn({"declarations": [], "remuneration": [], "schools": [], "languages": []}), "")
+
+
+class Coverage(unittest.TestCase):
+    """The page that draws the data's own edge. Its numbers must be the same ones every cycle page is built from."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.inp["facs_all"] = {f["id"]: f["colour"] for c in available_cycles() for f in factions(c)}
+
+    def test_the_months_account_for_every_vote_of_the_cycle(self):
+        from scripts.build_site import coverage_rows
+        rows = coverage_rows(self.inp)
+        self.assertEqual(sum(r["votes"] for r in rows), len(self.inp["idx"]["votes"]))
+        named = sum(r["named"] for r in rows)
+        with_names = {ts for ts, p in ((self.inp["store"] or {}).get("positions") or {}).items() if p}
+        self.assertEqual(named, len(with_names & {v["ts"] for v in self.inp["idx"]["votes"]}))
+        self.assertTrue(all(r["named"] <= r["votes"] for r in rows))
+
+    def test_before_1998_the_page_says_there_is_no_roll_call(self):
+        from scripts.build_site import build_coverage_page, coverage_rows
+        by_cycle = {}
+        for c in available_cycles():
+            by_cycle[c] = coverage_rows(load_inputs(c))
+        html = build_coverage_page(self.inp, by_cycle)
+        # 1990–1998 is tallies only: cycle 34 names nobody at all and cycle 35 carries a single roll call in 7,677
+        # votes. If either count starts climbing, the payloads changed and the page's claim needs re-reading.
+        for c, allowed in ((34, 0), (35, 1)):
+            if c in by_cycle:
+                self.assertLessEqual(sum(r["named"] for r in by_cycle[c]), allowed,
+                                     f"cycle {c} should carry no more than {allowed} roll call")
+        for c in by_cycle:
+            if c >= 36:
+                votes = sum(r["votes"] for r in by_cycle[c])
+                self.assertGreater(sum(r["named"] for r in by_cycle[c]) / max(votes, 1), 0.9)
+        self.assertIn("1998", html)
+        self.assertIn("nem a lekérdezés hiányos", visible_text(html).replace(" ", " "))
+
+    def test_a_month_two_cycles_share_is_added_up_not_overwritten(self):
+        """Nothing forbids a cycle's last vote and the next cycle's first from falling in the same month — the
+        House has simply never done it since 1990 (the old cycle stops voting weeks before the constituent
+        sitting). So the merge is checked on rows built for the purpose rather than on a month that happens to
+        exist: two cycles handing in the same month must add up, not overwrite."""
+        from scripts.build_site import build_coverage_page, hu_num
+        by_cycle = {41: [{"month": "2099-05", "votes": 7, "named": 3, "secret": 1}],
+                    42: [{"month": "2099-05", "votes": 5, "named": 2, "secret": 0}]}
+        html = build_coverage_page(self.inp, by_cycle)
+        self.assertIn(hu_num(12), html)                     # 7 + 5, not 5
+        self.assertIn("2099-05 · 12 szavazás · név szerint 5", html)
+
+    def test_the_truncated_days_are_the_recorded_ones(self):
+        from scripts.build_site import CAP_FILE, build_coverage_page, coverage_rows
+        cap = json.loads(CAP_FILE.read_text(encoding="utf-8"))
+        html = build_coverage_page(self.inp, {c: coverage_rows(load_inputs(c)) for c in available_cycles()})
+        self.assertIn(str(len(cap["days_still_truncated"])), html)
+
+
+class Profile(unittest.TestCase):
+    """A Ház arcéle: one measure is a time series and the rest deliberately are not."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import landing_inputs
+        cls.inp = load_inputs()
+        cls.inp["facs_all"] = {f["id"]: f["colour"] for c in available_cycles() for f in factions(c)}
+        cls.rows = landing_inputs()["rows"]
+
+    def test_the_first_parliament_is_all_first_term(self):
+        from scripts.build_site import build_profile_page
+        html = build_profile_page(self.inp, self.rows)
+        if any(r["cycle"] == 34 for r in self.rows):
+            self.assertRegex(html, r'34\. ciklus · [\d  ]+ első ciklusos a [\d  ]+ mandátumot viselőből')
+            self.assertIn(">100%<", html)
+
+    def test_it_prints_how_completely_each_cycle_is_recorded(self):
+        from scripts.build_site import build_profile_page
+        html = build_profile_page(self.inp, self.rows)
+        self.assertIn("Mit rögzít a nyilvántartás", html)
+        text = visible_text(html)
+        self.assertIn("nem bontja az oldal ciklusra", text)      # and says why the other three are not a series
+
+
+class BillRoad(unittest.TestCase):
+    """A motion's road: submitted, the votes the record dates, promulgated — current cycle only, by the service's
+    own limit."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_every_dated_vote_points_at_its_own_page(self):
+        from scripts.build_site import bill_path_html
+        recs = self.inp.get("bill_recs") or {}
+        if not recs:
+            self.skipTest("no motion records cached — run: python3 -m karzat sync-bills")
+        rec = max(recs.values(), key=lambda r: len(r["votes"]))
+        html = bill_path_html(self.inp, rec)
+        hrefs = re.findall(r'href="\.\./szavazas/([^"]+)\.html"', html)
+        self.assertEqual(len(hrefs), len([v for v in rec["votes"] if v.get("ts")]))
+        for v in rec["votes"]:
+            if v.get("ts"):
+                self.assertIn(f'{v["ts"][:10].replace(".", "-")}T{v["ts"][11:].replace(":", "-")}', hrefs)
+
+    def test_a_promulgated_law_shows_its_reference(self):
+        from scripts.build_site import bill_path_html
+        recs = self.inp.get("bill_recs") or {}
+        rec = next((r for r in recs.values() if (r.get("promulgation") or {}).get("law_ref")), None)
+        if not rec:
+            self.skipTest("nothing promulgated in this cycle yet")
+        html = bill_path_html(self.inp, rec)
+        self.assertIn(rec["promulgation"]["law_ref"], html)
+        self.assertIn("kihirdetve", visible_text(html))
+
+    def test_the_whole_event_log_is_printed_not_a_selection(self):
+        from scripts.build_site import bill_path_html
+        recs = self.inp.get("bill_recs") or {}
+        if not recs:
+            self.skipTest("no motion records cached")
+        rec = max(recs.values(), key=lambda r: len(r["events"]))
+        html = bill_path_html(self.inp, rec)
+        self.assertEqual(html.count('<td class="ts mono">'), len(rec["events"]))   # every row of the log, none dropped
+        from scripts.build_site import hu_num
+        self.assertIn(f'({hu_num(len(rec["events"]))} sor)', html)
+
+
 if __name__ == "__main__":
     unittest.main()

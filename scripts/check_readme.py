@@ -129,6 +129,13 @@ def build() -> list[tuple[str, list]]:
     m42 = _json.loads((ROOT / "data" / "derived" / "mps_ckl42.json").read_text(encoding="utf-8"))
     m43 = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))
     h42 = _json.loads((ROOT / "data" / "derived" / "hero_vote_ckl42.json").read_text(encoding="utf-8"))
+    cap = _json.loads((ROOT / "reference" / "parlament" / "listakorlat.json").read_text(encoding="utf-8"))
+    f34 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl34.json").read_text(encoding="utf-8"))
+    f35 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl35.json").read_text(encoding="utf-8"))
+    irp = (ROOT / "data" / "derived" / "iromany_records.json")
+    ir = _json.loads(irp.read_text(encoding="utf-8")) if irp.exists() else {"count": 0, "records": {}}
+    ir_events = sum(len(r["events"]) for r in ir["records"].values())
+    ir_laws = sum(1 for r in ir["records"].values() if (r.get("promulgation") or {}).get("law_ref"))
     from scripts.build_site import dissent_events, load_inputs   # the feeds' numbers come from the builder's own alignment
     inp43 = load_inputs()
     ev43 = dissent_events(inp43)
@@ -234,6 +241,23 @@ def build() -> list[tuple[str, list]]:
         ("takes the Commons picture where one exists ({:,.0f} of the {:,.0f})",
          [_json.loads((ROOT / "reference" / "wikidata" / "kormany_photos.json").read_text(encoding="utf-8"))["count"],
           _json.loads((ROOT / "data" / "derived" / "kormany.json").read_text(encoding="utf-8"))["count"]]),
+        # the 400-row listing cap and what the day-level rescan recovered — reference/parlament/listakorlat.json
+        ("turned up {:,.0f} months holding exactly 400 votes", [len(cap["months_originally_truncated"])]),
+        ("recovered **{:,.0f} votes**", [cap["votes_recovered_by_day_scan"]]),
+        ("took {:,.0f} more calls", [cap["votes_recovered_by_day_scan"]]),
+        ("**{:,.0f} votes, {:,.0f} of them naming the members, {:,.0f} roll-call positions** and {:,.0f} unresolved names",
+         [dbs["votes"], dbs["votes_with_roll_call"], dbs["positions"], dbs["positions_unresolved"]]),
+        ("cycle 34 alone went from 13,746 to {:,.0f} votes", [f34["votes"]]),
+        ("**{:,.0f} sitting days** had more than 400 votes in a single day", [len(cap["days_still_truncated"])]),
+        # the coverage page — the same derived inputs the cycle pages use
+        ("cycles 34 and 35 hold {:,.0f} votes and one name-level list between them", [f34["votes"] + f35["votes"]]),
+        ("the {:,.0f} permanently short days and the months containing a secret ballot", [len(cap["days_still_truncated"])]),
+        ("and the {:,.0f} secret ballots have nothing to download by definition",
+         [sum(_json.loads(p.read_text(encoding="utf-8")).get("secret_ballots", 0)
+              for p in sorted((ROOT / "data" / "derived").glob("first_light*.json")))]),
+        # the motion records — data/derived/iromany_records.json
+        ("({:,.0f} motions, {:,.0f} records, ~5 minutes)", [ir.get("listed", 0), ir["count"]]),
+        ("{:,.0f} events across the cycle, {:,.0f} promulgated laws", [ir_events, ir_laws]),
         ("**joined to the annex by exact name only** ({:,.0f} codes → {:,.0f} of the annex's {:,.0f} settlements",
          [_json.loads((ROOT / "reference" / "valasztas" / "iranyitoszam.json").read_text(encoding="utf-8"))["codes"],
           _json.loads((ROOT / "reference" / "valasztas" / "iranyitoszam.json").read_text(encoding="utf-8"))["settlements"],

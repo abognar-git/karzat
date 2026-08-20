@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kepviselo p_azon="n004">
+<nev>V. Németh Zsolt</nev>
+<oneletrajz>https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/n004</oneletrajz>
+<honlap></honlap>
+<kepvcsop-tagsagok>
+                <tagsag ciklus="2026-" kepvcsop="Fidesz"
+                        tol_datum="2026.05.09."
+                        ig_datum=""/>
+<tagsag ciklus="2022-2026" kepvcsop="Fidesz"
+                        tol_datum="2022.05.02."
+                        ig_datum="2026.05.08."/>
+<tagsag ciklus="2018-2022" kepvcsop="Fidesz"
+                        tol_datum="2018.05.08."
+                        ig_datum="2022.05.01."/>
+</kepvcsop-tagsagok>
+<valasztasok>
+                <valasztas ciklus="2026-" megvalasztas_napja="2026.04.12."
+                           valasztokerulet="Vas 3. OEVK"
+                           mandatum_kezdete="2026.05.09."
+                           mandatum_vege=""/>
+<valasztas ciklus="2022-2026" megvalasztas_napja="2022.04.03."
+                           valasztokerulet="Vas 3. OEVK"
+                           mandatum_kezdete="2022.05.02."
+                           mandatum_vege="2026.05.08."/>
+<valasztas ciklus="2018-2022" megvalasztas_napja="2018.04.08."
+                           valasztokerulet="Vas 3. OEVK"
+                           mandatum_kezdete="2018.05.08."
+                           mandatum_vege="2022.05.01."/>
+</valasztasok>
+<tisztsegek>
+                <tisztseg megnevezes="Technológiai és Ipari Minisztérium államtitkára"
+                          tol_datum="2023.02.08."
+                          ig_datum="2026.05.12."/>
+<tisztseg megnevezes="földművelésügyi minisztériumi államtitkár"
+                          tol_datum="2014.06.15."
+                          ig_datum="2018.05.17."/>
+<tisztseg megnevezes="vidékfejlesztési minisztériumi államtitkár"
+                          tol_datum="2010.06.02."
+                          ig_datum="2014.06.05."/>
+</tisztsegek>
+<iskolak>
+            <legmagasabb-elismert>egyetem</legmagasabb-elismert>
+                <iskola vegzettseg_kepzettseg="humán szervező" intezmeny="Janus Pannonius Tudományegyetem"
+                        kar="Bölcsészettudományi Kar" ev="1994"/>
+                <iskola vegzettseg_kepzettseg="földmérő üzemmérnök" intezmeny="Erdészeti és Faipari Egyetem"
+                        kar="Földmérési és Földrendezői Főiskolai Kar" ev="1984"/>
+        </iskolak>
+<nyelvismeret>
+                <nyelv nyelv="angol" fok="társalgási"/>
+        </nyelvismeret>
+<vagyonnyilatkozatok>
+                        <vagyonnyilatkozat
+                                cim="Vagyonnyilatkozat 2004"
+                                href="https://www.parlament.hu/vagynyil/2004/n004.pdf"
+                                
+                                allapot_idopont="2004.12.31."
+                                beadasi_hatarido="2005.01.31."
+                                beadva="igen"
+/>
+<vagyonnyilatkozat
+                                cim="Vagyonnyilatkozat 2005"
+                                href="https://www.parlament.hu/vagynyil/2005/n004_j0051231k.pdf"
+                                
+                                allapot_idopont="2005.12.31."
+                                beadasi_hatarido="2006.01.31."
+                                beadva="igen"
+/>
+<vagyonnyilatkozat
+                                cim="Vagyonnyilatkozat 2006"
+                                href="https://www.parlament.hu/vagynyil/2006/n004_j0060516k.pdf"
+                                
+                                allapot_idopont="2006.05.16."
+                                beadasi_hatarido="2006.06.15."
+                                beadva="igen"
+/>
+</vagyonnyilatkozatok>
+<javadalmazas>
+                <javadalom idoszak="2026. július" brutto_tiszteletdij="3 142 783"
+                              valasztokeruleti_potlek="0"
+                              lakhatasi_tamogatas="0"/>
+        </javadalmazas>
+<egyeb-tagsagok>
+                <tagsag testulet="Vasvár Város Önkormányzata" testulet_tipus="helyi önkormányzat"
+                        tisztseg="polgármester" tol_datum="2006" ig_datum="2010"/>
+<tagsag testulet="Vasvár Város Önkormányzata" testulet_tipus="helyi önkormányzat"
+                        tisztseg="polgármester" tol_datum="2002" ig_datum="2006"/>
+<tagsag testulet="Vasvár Város Önkormányzata" testulet_tipus="helyi önkormányzat"
+                        tisztseg="polgármester" tol_datum="1998" ig_datum="2002"/>
+</egyeb-tagsagok>
+<inditvanyok>
+                <stat ciklus="2026-" onallo_db="10"
+                      nem_onallo_db="0"/>
+<stat ciklus="2022-2026" onallo_db="6"
+                      nem_onallo_db="0"/>
+<stat ciklus="2018-2022" onallo_db="1"
+                      nem_onallo_db="0"/>
+</inditvanyok>
+</kepviselo>

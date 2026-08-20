@@ -32,6 +32,8 @@ GOLDEN = {
     "real_iromany_71.xml":                     "fb700e8dff587bac",
     "real_iromanyok_head3.xml":                "ebe00be955b15b82",
     "real_kepviselo_a011_trimmed.xml":         "4322a43dbccb5b8a",
+    "real_kepviselo_n004_profile.xml":         "adac2acd8634f8d3",   # the sections a011's trim leaves out: schooling,
+                                                                     # languages, declarations, remuneration, local seats
     "real_kepviselok_head5.xml":               "fe5d4f1f3b6cb092",
     "real_szavazas_2026-05-09T10-45-47.xml":   "9bd69cb450e23a85",
     "real_szavazas_2026-05-09T11-50-00.xml":   "f54b3847abf049a7",

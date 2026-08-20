@@ -62,6 +62,36 @@ class Members(unittest.TestCase):
         self.assertEqual(r["elections"][0]["mandate_from"], "2026-05-09")
         self.assertEqual(r["motion_stats"][0], {"ciklus": "2026-", "onallo": 5, "nem_onallo": 0})
 
+    def test_kepviselo_record_the_five_sections_the_site_had_never_read(self):
+        """Schooling, languages, asset declarations, remuneration and the local-government seats are all in the MP
+        record the site already caches; the parser had simply been dropping them. Pinned against a real record so a
+        change in the payload's shape or vocabulary shows up here."""
+        r = parse_kepviselo(load("real_kepviselo_n004_profile.xml"))
+        self.assertEqual(r["highest_degree"], "egyetem")
+        self.assertEqual(r["schools"][0], {"degree": "humán szervező", "institution": "Janus Pannonius Tudományegyetem",
+                                           "faculty": "Bölcsészettudományi Kar", "year": 1994})
+        self.assertEqual(r["languages"], [{"language": "angol", "level": "társalgási"}])
+        self.assertEqual(r["local_offices"][0], {"body": "Vasvár Város Önkormányzata", "body_kind": "helyi önkormányzat",
+                                                 "office": "polgármester", "from": "2006", "to": "2010"})
+        d = r["declarations"][0]
+        self.assertEqual((d["as_of"], d["due"], d["filed"]), ("2004-12-31", "2005-01-31", True))
+        self.assertTrue(d["url"].endswith(".pdf"))
+        self.assertEqual(r["remuneration"], [{"period": "2026. július", "gross": 3142783,
+                                              "constituency_allowance": 0, "housing_allowance": 0}])
+        self.assertTrue(r["biography_url"].startswith("https://www.parlament.hu/"))
+
+    def test_the_record_sections_the_api_leaves_empty_stay_empty(self):
+        """ulohely and email carry the tag and no content in every one of the 1,636 cached records — the parser must
+        not invent a value for them, and the seat has to keep coming from the seating plan instead."""
+        r = parse_kepviselo(load("real_kepviselo_n004_profile.xml"))
+        self.assertIsNone(r["seat"])
+        self.assertEqual(r["declarations"][0]["filed"], True)
+        bare = parse_kepviselo({"kepviselo": {}})
+        for k in ("schools", "languages", "declarations", "remuneration", "local_offices"):
+            self.assertEqual(bare[k], [])
+        self.assertIsNone(bare["highest_degree"])
+        self.assertIsNone(bare["biography_url"])
+
     def test_name_resolver_exact_bare_and_alias(self):
         mps = parse_kepviselok(load("real_kepviselok_head5.xml"))
         res = NameResolver(mps, aliases={"Szijjártó Péter": "s999"})

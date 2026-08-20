@@ -73,14 +73,20 @@ def main(argv: list[str] | None = None) -> int:
             f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', votes=r["osszes_szavazat"])
 
     # 2 — the narrowest decision
+    # margin >= 0 matters: a handful of votes the record calls Elfogadva compute to a negative margin (the site's own
+    # "disagreements" count). Those are a discrepancy to show on their own page, never "the narrowest passage".
     for r in q(f"""SELECT v.slug, v.ckl, v.on_date, v.igen, v.nem, v.needed, v.margin,
                           (SELECT m.iromany FROM vote_motion m WHERE m.vote_ts=v.ts LIMIT 1) iromany
-                   FROM vote v WHERE v.kind='dontes' AND v.passed=1 AND v.margin IS NOT NULL AND {safe}
+                   FROM vote v WHERE v.kind='dontes' AND v.passed=1 AND v.margin >= 0 AND {safe}
                    ORDER BY v.margin ASC, v.on_date DESC LIMIT 1""", args):
-        gap = "egyetlen szavazaton" if r["margin"] == 1 else f'{hu(r["margin"])} szavazaton'
-        add(f'{hu_date(r["on_date"])}: {hu(r["igen"])} igen a szükséges {hu(r["needed"])} ellenében — '
-            f'{gap} múlt, hogy a javaslat átment.',
-            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', margin=r["margin"])
+        if r["margin"] == 0:
+            text = (f'{hu_date(r["on_date"])}: pontosan a szükséges {hu(r["needed"])} igen gyűlt össze — '
+                    f'egyetlen szavazattal sem több.')
+        else:
+            gap = "egyetlen szavazaton" if r["margin"] == 1 else f'{hu(r["margin"])} szavazaton'
+            text = (f'{hu_date(r["on_date"])}: {hu(r["igen"])} igen a szükséges {hu(r["needed"])} ellenében — '
+                    f'{gap} múlt, hogy a javaslat átment.')
+        add(text, f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', margin=r["margin"])
 
     # 3 — more yes than no, and still rejected: the qualified threshold at work
     rows = q(f"""SELECT COUNT(*) n FROM vote v WHERE v.kind='dontes' AND v.passed=0 AND v.igen > v.nem
@@ -110,10 +116,11 @@ def main(argv: list[str] | None = None) -> int:
             "a nem csonkolt hónapok, 1998 óta", f'szemely/{r["azon"]}.html', n=r["n"])
 
     # 7 — the longest speech the record keeps, in characters
-    for r in q("""SELECT t.ckl, t.nap ulnap, t.seq, t.speaker, t.chars, s.date FROM speech_text t
-                  LEFT JOIN speech s ON s.ckl=t.ckl AND s.ulnap=t.nap AND s.seq=t.seq
+    for r in q("""SELECT t.ckl, t.nap ulnap, t.seq, t.speaker, t.chars, s.on_date date FROM speech_text t
+                  LEFT JOIN speech s ON s.ckl=t.ckl AND s.nap=t.nap AND s.seq=t.seq
                   ORDER BY t.chars DESC LIMIT 1"""):
-        add(f'A leghosszabb betöltött felszólalás {hu(r["chars"])} karakter: {r["speaker"]}, {hu_date(r["date"]) if r["date"] else ""}.',
+        when = f', {hu_date(r["date"])}' if r["date"] else "."          # hu_date already ends in a full stop
+        add(f'A leghosszabb betöltött felszólalás {hu(r["chars"])} karakter: {r["speaker"]}{when}',
             f'{r["ckl"]}. ciklus (a szövegek 2022 óta)', f'ckl{r["ckl"]}/felszolalas/{r["ulnap"]}-{r["seq"]}.html', chars=r["chars"])
 
     # 8 — how much of the record is the chair speaking
@@ -123,7 +130,9 @@ def main(argv: list[str] | None = None) -> int:
                 f'{r["ulv"] * 100 // r["tot"]} százaléka az ülés vezetése.', "1998–2026", "ckl43/felszolalas/index.html", n=r["ulv"])
 
     # 9 — the committee that draws the most members
-    for r in q("""SELECT committee, COUNT(DISTINCT mp_azon) n FROM mp_committee WHERE to_date IS NULL AND subcommittee IS NULL
+    # subcommittee is '' rather than NULL for a seat on the committee itself — an IS NULL test silently matches nothing
+    for r in q("""SELECT committee, COUNT(DISTINCT mp_azon) n FROM mp_committee
+                  WHERE to_date IS NULL AND (subcommittee IS NULL OR subcommittee = '')
                   GROUP BY committee ORDER BY n DESC LIMIT 1"""):
         add(f'A legnépesebb bizottság most a {r["committee"]}: {hu(r["n"])} tag.', "43. ciklus", "ckl43/bizottsag/index.html", n=r["n"])
 

@@ -182,6 +182,60 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .strip .b:hover rect:first-child,.strip .b:focus-visible rect:first-child{fill:var(--white)}
 .strip .b.now rect:first-child{fill:var(--white)}
 .strip .b.now .hit{fill:rgba(255,255,255,.07)}
+/* one person on one time axis: mandates, offices, local-government seats, the years of the degrees */
+.life svg{width:100%;height:auto;display:block;margin-top:4px;overflow:visible}
+.life .g{stroke:var(--grid);stroke-width:1}
+.life .ax{stroke:var(--border-hi);stroke-width:.5}
+.life .yr,.life .ln{font-family:var(--mono);font-size:10px;fill:var(--dim3)}
+.life .yr{text-anchor:middle}.life .ln{text-anchor:end;letter-spacing:.12em;text-transform:uppercase;font-size:9px}
+.life .sp rect,.life .sp circle{transition:opacity .12s}.life .sp:hover rect,.life .sp:hover circle{opacity:.72}
+.life .sch{fill:var(--dim2)}
+/* the asset declarations: one square per document, grouped by the year the record states */
+.vny{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.vny .yr{display:flex;flex-direction:column;align-items:center;gap:4px}
+.vny .yr b{font-family:var(--mono);font-size:10px;font-weight:400;color:var(--dim3)}
+.vny .sq{display:flex;gap:3px}
+.vny a{width:13px;height:13px;background:var(--dim3);display:block;position:relative}
+.vny a:hover,.vny a:focus-visible{background:var(--white)}
+.vny .vs{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.vny .due{width:13px;height:13px;display:block;box-shadow:inset 0 0 0 1px var(--border-hi)}
+.paybar{display:flex;height:10px;margin:2px 0 10px;background:var(--line2);gap:1px}
+.paybar i{width:var(--w);background:var(--white);opacity:var(--o,1)}
+.paybar i:nth-child(2){opacity:.7}.paybar i:nth-child(3){opacity:.48}.paybar i:nth-child(4){opacity:.32}.paybar i:nth-child(5){opacity:.22}
+/* the record's own edge: a month per column, bright where the House recorded names */
+.cov .covwrap{overflow-x:auto;margin-top:6px}
+.cov svg{width:100%;height:210px;display:block;min-width:520px}
+.cov .all{fill:var(--border-hi)}.cov .named{fill:#d4d4d8}
+.cov .hit{fill:transparent}.cov .mc:hover .all,.cov .mc:hover .named{fill:var(--white)}
+.cov .ax{stroke:var(--border-hi);stroke-width:.5}
+.cov .cyc{stroke:var(--grid);stroke-width:1}
+.cov .short{fill:#8a4a4a}.cov .secret{fill:var(--sz)}
+.cov .cl,.cov .yl{font-family:var(--mono);font-size:9px;fill:var(--dim3)}
+.covkey{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim2)}
+.covkey i.k{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+.covkey i.named{background:#d4d4d8}.covkey i.all{background:var(--border-hi)}.covkey i.short{background:#8a4a4a}.covkey i.secret{background:var(--sz)}
+/* first-term share, cycle by cycle */
+.turn .turnwrap{overflow-x:auto;margin-top:6px}
+.turn svg{width:100%;height:190px;display:block;min-width:560px}
+.turn .first{fill:#d4d4d8}.turn .back{fill:var(--line2)}
+.turn .tc:hover .first{fill:var(--white)}
+.turn .pc,.turn .cl2,.turn .cl3{font-family:var(--mono);text-anchor:middle}
+.turn .pc{font-size:11px;fill:var(--text)}.turn .cl2{font-size:10px;fill:var(--dim2)}.turn .cl3{font-size:9px;fill:var(--dim3)}
+td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(--dim2)}
+/* one motion's road: submitted, the votes it took, promulgated */
+.road svg{width:100%;height:62px;display:block;margin-top:4px}
+.road .ax{stroke:var(--border-hi);stroke-width:.5}
+.road .start{fill:var(--dim)}.road .prom{fill:var(--white)}
+.road .ev{stroke:var(--border-hi);stroke-width:1}
+.road .bm.v rect:first-child{fill:var(--dim2)}.road .bm.v .hit{fill:transparent}
+.road .bm.v:hover rect:first-child,.road .bm.v:focus-visible rect:first-child{fill:var(--white)}
+.road .dl{font-family:var(--mono);font-size:10px;fill:var(--dim3)}.road .dl.end{text-anchor:end}
+.roadkey{display:flex;flex-wrap:wrap;gap:14px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim2)}
+.roadkey i.k{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+.roadkey i.start{background:var(--dim);border-radius:50%}.roadkey i.v{background:var(--dim2);width:3px;margin-right:8px}.roadkey i.prom{background:var(--white)}
+.evlog{margin-top:12px}
+.evlog summary{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);cursor:pointer;padding:6px 0}
+.evlog summary:hover{color:var(--white)}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}

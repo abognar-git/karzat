@@ -165,6 +165,31 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
     # alelnök, jegyző, háznagy) and government ones (államtitkár…) alike; the reader decides which it wants
     offices = [{"office": (t.get("@megnevezes") or "").strip() or None, "from": _hu_date(t.get("@tol_datum")), "to": _hu_date(t.get("@ig_datum"))}
                for t in as_list((r.get("tisztsegek") or {}).get("tisztseg")) if isinstance(t, dict) and (t.get("@megnevezes") or "").strip()]
+    # <iskolak><legmagasabb-elismert>egyetem</…><iskola vegzettseg_kepzettseg intezmeny kar ev/>
+    isk = r.get("iskolak") if isinstance(r.get("iskolak"), dict) else {}
+    schools = [{"degree": (s.get("@vegzettseg_kepzettseg") or "").strip() or None, "institution": (s.get("@intezmeny") or "").strip() or None,
+                "faculty": (s.get("@kar") or "").strip() or None, "year": _int(s.get("@ev"))}
+               for s in as_list(isk.get("iskola")) if isinstance(s, dict)]
+    languages = [{"language": (n.get("@nyelv") or "").strip() or None, "level": (n.get("@fok") or "").strip() or None}
+                 for n in as_list((r.get("nyelvismeret") or {}).get("nyelv")) if isinstance(n, dict)]
+    # <vagyonnyilatkozat cim href allapot_idopont beadasi_hatarido beadva/> — beadva is 'igen' or empty; an empty one
+    # carries no href either, so the record says a declaration was due and none is published, and nothing more
+    declarations = [{"title": (v.get("@cim") or "").strip() or None, "url": (v.get("@href") or "").strip() or None,
+                     "as_of": _hu_date(v.get("@allapot_idopont")), "due": _hu_date(v.get("@beadasi_hatarido")),
+                     "filed": (v.get("@beadva") or "").strip() == "igen"}
+                    for v in as_list((r.get("vagyonnyilatkozatok") or {}).get("vagyonnyilatkozat")) if isinstance(v, dict)]
+    # <javadalom idoszak brutto_tiszteletdij valasztokeruleti_potlek lakhatasi_tamogatas/> — one month, the month the
+    # record was fetched; the service keeps no history, so a series only exists if we keep the snapshots ourselves
+    pay = [{"period": (j.get("@idoszak") or "").strip() or None, "gross": _int(j.get("@brutto_tiszteletdij")),
+            "constituency_allowance": _int(j.get("@valasztokeruleti_potlek")), "housing_allowance": _int(j.get("@lakhatasi_tamogatas"))}
+           for j in as_list((r.get("javadalmazas") or {}).get("javadalom")) if isinstance(j, dict)]
+    # <egyeb-tagsagok><tagsag testulet testulet_tipus tisztseg tol_datum ig_datum/> — local government, county assembly;
+    # the dates here are years, not days, so they stay strings
+    local_offices = [{"body": (t.get("@testulet") or "").strip() or None, "body_kind": (t.get("@testulet_tipus") or "").strip() or None,
+                      "office": (t.get("@tisztseg") or "").strip() or None,
+                      "from": (t.get("@tol_datum") or "").strip() or None, "to": (t.get("@ig_datum") or "").strip() or None}
+                     for t in as_list((r.get("egyeb-tagsagok") or {}).get("tagsag")) if isinstance(t, dict)]
+    bio = r.get("oneletrajz")
     return {
         "name": r.get("nev"),
         "photo_url": r.get("fenykep") or None,
@@ -176,6 +201,13 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
         "speech_stats": speech_stats,        # per cycle: felszólalás / technikai counts, as parlament.hu counts them
         "committees": committees,            # bizottsági tagságok with dates (subcommittees named)
         "offices": offices,                  # tisztségek with dates: Speaker, deputy Speakers, clerks, state secretaries…
+        "highest_degree": ((isk.get("legmagasabb-elismert") or "") if isinstance(isk.get("legmagasabb-elismert"), str) else "").strip() or None,
+        "schools": schools,                  # iskolák: degree, institution, faculty, year
+        "languages": languages,              # nyelvismeret: language and the level the record states
+        "declarations": declarations,        # vagyonnyilatkozatok: the published PDFs, and the ones recorded as due
+        "remuneration": pay,                 # javadalmazás: one month per record — the month it was fetched
+        "local_offices": local_offices,      # egyéb tagságok: local government and county assembly seats, by year
+        "biography_url": (bio.strip() if isinstance(bio, str) else None) or None,
     }
 
 
