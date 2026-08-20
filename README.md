@@ -515,6 +515,53 @@ reference/         parlament-webapi/ (manual v2.5, PDF + text) · wikidata/ (mem
 data/raw/          git-ignored XML cache · data/derived/ committed summaries the README is gated on
 ```
 
+## Every motion, not only the ones that were voted on
+
+Until this point a motion had a page only if the House had held a recorded vote on it, and for the oversight
+instruments that produced a rule worth stating as a set rather than a tendency: **the site published an
+interpellation if and only if the member rejected the minister's answer**, because only a rejection is put to a
+vote. 53 records carry `képviselő elutasította a választ` in their log. The registry holds
+537 full motion records for cycle 43 — the listing names 539 and the difference is one
+number under which three different motions run, of which the service returns one — and 408 of
+them had no page at all.
+
+Each `<esemeny>` in a record carries an `ülésnap/sorszám` reference into the speech corpus. All 3,606 of
+them resolve to a row, and 1,644 resolve to a speech whose text the site already holds; the rest are the
+chair's procedural announcements, which the record does not print as speeches, so nothing is missing. That makes
+242 of the 399 oversight motions carry the exchange as it was spoken — 738
+turns, 1,331,648 characters, question and answer both, nothing summarised.
+
+I sorted the turns by the transcript's own sitting day and sequence rather than by the record's event date,
+because most multi-turn exchanges happen inside a single day: the date is not an order. The existing event log
+sorts by `(date, event text)`, which alphabetises a follow-up ahead of the question it follows. Three exchanges
+legitimately open before the question — on `A/155` the member announced on sitting day 6 that he would not accept
+a substitute answerer and the question was put on day 8 — and a rule that forced the question to the top would
+hide exactly that.
+
+A turn is any event whose reference resolves to a held text, labelled with the record's own words, rather than a
+whitelist of the Hungarian phrases that name an exchange. The whitelist finds ten fewer turns, and four of them
+are the member refusing a substitute answerer.
+
+The panel is on the oversight pages only, and the pages say why. The same rule applied to legislation would add
+48 records and 906 turns, but a question's two-to-five references *are* the question,
+while a bill's are a slice of a multi-day debate that already lives on the speeches' own pages.
+
+Four fields were being discarded in derivation, because `prop_map` keeps `@ertek` and drops `@href`. The costly
+one is `Címzett`: filled on 399 of the 399 oversight instruments and on none of the
+legislative ones, every value an office rather than a person, and nothing had ever read it. `Irományszöveg`'s
+value is the literal label "szöveges PDF", so anything rendering it as a link would have emitted
+`href="szöveges PDF"`; only its href is the document.
+
+A page never says a field is missing when that kind of motion cannot have it. The generated "the record does not
+carry" line is gated on what at least half of the motions of the same kind do carry, which silences it on every
+oversight page — otherwise each of them would have ended with a sentence regretting the absence of a committee
+and a promulgation, which questions do not have. This is the same trap as the 12%-filled panel I rejected
+earlier, and it took a reviewer to see that I had walked back into it.
+
+I do not badge the status. Every answered interpellation reads `elfogadva`, including all 53 where
+the record's own log says the member rejected the answer, so a coloured badge would be the one genuine lie on
+the page.
+
 ## Licence
 
 Four different things live in this repository, and only one of them is mine to license.

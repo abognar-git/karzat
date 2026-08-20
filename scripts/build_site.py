@@ -1809,7 +1809,7 @@ def motion_title_html(view: dict, up: str = "../") -> tuple[str, str]:
         title = "Jelenlét megállapítása" if view["kind"] == "jelenlet" else (view.get("remark") or "Szavazás")
         return f'<div class="hero-title">{esc(title)}</div>', ""
     n, _ = an.bill_key(mo.get("iromany"))
-    link = (f'<a href="{up}iromany/{n}.html" title="az iromány szavazásai">{esc(mo.get("iromany"))}</a> ' if n is not None else esc(mo.get("iromany", "")) + " ")
+    link = (f'<a href="{up}iromany/{n}.html" title="az iromány adatlapja és szavazásai">{esc(mo.get("iromany"))}</a> ' if n is not None else esc(mo.get("iromany", "")) + " ")
     meta = f'{esc(mo.get("outcome", ""))} · benyújtó: {esc(", ".join(mo.get("submitters") or []))}' if mo.get("submitters") else esc(mo.get("outcome", ""))
     if mo.get("href"):
         meta += f' · <a href="{esc(mo["href"])}" target="_blank" rel="noopener">parlament.hu ↗</a>'
@@ -3200,7 +3200,8 @@ def build_data_page(inp: dict, out_dir: Path | None = None) -> str:
              ("felszolalasok.csv", None, "az ülésnapok felszólalás-listái soronként: napirendi pont, felszólaló, fajta, szerep, hossz, érdemi/eljárási"),
              ("heti.csv", None, "képviselőnként és ülésnapos hetenként: névsorban, leadott, frakciója ellen, érdemi felszólalás — a heti összefoglalók számai"),
              ("kepviselok.csv", "kepviselok.json", "a ciklus névsoraiban szereplő személyek, összesítéssel"),
-             ] + ([("inditvanyok.csv", "inditvanyok.json", "a jelenlegi ciklus irományai benyújtó szerint")] if not inp["closed"] else []) + [
+             ] + ([("inditvanyok.csv", "inditvanyok.json", "a jelenlegi ciklus irományai benyújtó szerint"),
+                   ("../iromany/adatlapok.csv", None, "a ciklus irományai az adatlapokról: típus, benyújtó, címzett, állapot, kihirdetés, események, elhangzott felszólalások")] if not inp["closed"] else []) + [
              ("../iromany/iromanyok.csv", None, "minden iromány, amelyről név szerint szavaztak"),
              ("../kohezio/frakciok.csv", None, "frakciónként: Rice-index, egyetértési index, kisebbségi szavazatok"),
              ("../kohezio/szavazasonkent.csv", None, "szavazásonként és frakciónként a két index"),
@@ -4301,6 +4302,11 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         for bnum, b in bs.items():
             w(bd / f"{bnum}.html", build_bill_page(inp, b))
         w(bd / "iromanyok.csv", ex.bills_csv(bs, cycle))
+        if not inp["closed"] and inp.get("bill_recs_by_num"):
+            # a separate file rather than new columns on iromanyok.csv: that one exists for every cycle and
+            # its shape is part of the data dictionary, so eight archive exports would gain blank columns
+            w(bd / "adatlapok.csv", ex.motion_records_csv(inp["bill_recs_by_num"], cycle,
+                                                          (inp.get("texts") or {}).get("texts") or {}))
         prune(bd, w.written)
         (ad / "index.html").write_text(build_data_page(inp, out_dir), encoding="utf-8")   # last: it lists the others with sizes
     search_items = ([{"k": "iromany", "c": cycle, "t": b["label"], "s": (b["title"] or "")[:140], "u": f"{cycle_dir(cycle)}iromany/{b['number']}.html", "d": b["first"], "n": len(b["votes"])} for b in bs.values()]
@@ -4425,6 +4431,12 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
+
+<section class="panel" id="iromany">{CORNERS}<h2><span data-kz-text>Irományok: mit tart nyilván az adatlap, és mit nem</span></h2>
+<div class="hero-meta prose">Az iromány-adatlap (<span class="mono">iromany.cgi</span>) csak a futó ciklusban címezhető: az irományazonosító ciklusonként újraindul, az irománylista pedig a ciklusparamétert figyelmen kívül hagyja. A {hu_num(CURRENT_CYCLE)}. ciklusban a lista {hu_num(539)} tételt sorol, a szolgáltatás {hu_num(537)} számra ad választ — a különbség egyetlen szám, amely alatt három különböző indítvány fut, és a végpont egyet ad vissza belőlük. A korábbi ciklusoknál ezért csak az az iromány szerepel, amelyikről név szerint szavaztak.
+<br><br>Az adatlap mezői irománytípusonként mást tartanak nyilván, és ez nem hiány: kérdésnél, azonnali kérdésnél és interpellációnál nincs tárgyaló bizottság és nincs kihirdetés; törvényjavaslatnál és határozati javaslatnál nincs címzett; azonnali kérdéshez szöveges PDF sem tartozik. Az oldal ezért csak azt a mezőt említi hiányzóként egy lapon, amit az azonos fajtájú irományok legalább fele hordoz.
+<br><br>Az <b>állapot</b> az adatlap szava, és fajtánként mást jelent: interpellációnál az „elfogadva” a <i>válaszra</i> vonatkozik, nem az indítványra — a megválaszolt interpellációk mind ezt írják, azok is, amelyeknél az eseménynapló szerint a képviselő elutasította a választ. Az oldal ezért nem színezi és nem fordítja le. Az adatlap saját szavazáslistáját sem jeleníti meg: az a ciklus név szerinti szavazásainak szigorú részhalmaza, és épp azoknál üres, amelyeket többször megszavaztak és kihirdettek — a szavazások a ciklus saját listájából jönnek.
+<br><br>Ahol az adatlap eseménye felszólalásra hivatkozik (<span class="mono">ülésnap/sorszám</span>), az oldal a jegyzőkönyv szövegét mutatja, ha megvan. Kérdésnél és interpellációnál a hivatkozott két–öt felszólalás maga az iromány, ezért ott a lap kiírja őket, ülésnap és sorszám szerinti sorrendben — a megnevezés az adatlap saját eseményszövege. Törvényjavaslatnál nem: ott a hivatkozás egy többnapos vita szelete, és a szövegek a felszólalások saját lapján állnak.</div></section>
 
 <section class="panel" id="listakorlat">{CORNERS}<h2><span data-kz-text>A lista 400-as korlátja</span></h2>
 <div class="hero-meta prose">A szavazások listája (<span class="mono">szavazasok.cgi</span>) egy kérésre legfeljebb {hu_num(400)} szavazást ad vissza, mégpedig a legkésőbbieket, és a paraméterei csak dátumot fogadnak el, időpontot nem. Emiatt a hónapos lekérdezések a régebbi ciklusokban csonkák voltak: {hu_num(len((list_cap().get("months_originally_truncated") or [])))} hónap pontosan 400 sorral tért vissza. Az oldal ezeket a hónapokat naponként listázta újra — így {hu_num(list_cap().get("votes_recovered_by_day_scan") or 0)} korábban hiányzó szavazás került elő. Ami így sem érhető el: az a {hu_num(len((list_cap().get("days_still_truncated") or [])))} ülésnap, amelyen önmagában több mint 400 szavazás volt — ezeken a nap utolsó 400 szavazása van meg, a korábbiak nem, és a szolgáltatáson nincs olyan paraméter, amivel elkérhetők lennének. A ciklusok oldala kiírja, hány ilyen napja van; a korpusz számai tehát alsó becslések ezekre a napokra.</div></section>
@@ -4662,6 +4674,7 @@ def build_coverage_page(inp: dict, by_cycle: dict[int, list[dict]]) -> str:
       <p><b>Név szerinti lista 1998 előtt nincs.</b> A 34. és a 35. ciklus szavazásainál a válasz üres névsort ad — nem a lekérdezés hiányos, az Országgyűlés akkor még nem így rögzítette. Ezeknél a szavazásoknál csak az igen / nem / tartózkodás összesítés van meg, és az oldal sem mutat többet.</p>
       <p><b>{hu_num(len(short_days))} ülésnap véglegesen csonka.</b> A szavazáslista egy válaszban legfeljebb 400 sort ad, és a legkésőbbieket tartja meg; a paraméterei csak dátumot fogadnak, időpontot nem. Amelyik napon egymagában több mint 400 szavazás volt, annak a korábbi szavazásaihoz ezen a végponton nem vezet út. {cap_note}</p>
       <p><b>{hu_num(tot_s)} titkos szavazás.</b> Ezeknél nincs mit letölteni: a szavazás titkos volt, az eredmény nyilvános, a leadott szavazatok nem.</p>
+      <p><b>Irományok csak a futó ciklusból.</b> A 43. ciklus irományairól adatlap kérhető — benyújtó, állapot, eseménynapló, és ami elhangzott —, a korábbi ciklusokéról nem: az adatlap ciklusonként újrainduló irományazonosító szerint címezhető, az irománylista pedig a ciklusparamétert figyelmen kívül hagyja. A régebbi ciklusoknál ezért csak az az iromány szerepel, amelyikről név szerint szavaztak — hogy összesen hány volt, ezen a végponton nem állapítható meg.</p>
     </div>
   </section>
 </section>

@@ -303,6 +303,35 @@ def bills_csv(bs: dict[int, dict[str, Any]], cycle: int) -> str:
     return _csv(rows, ["cycle", "number", "prefix", "label", "title", "votes", "own_votes", "amendment_votes", "first", "last", "final_outcome", "final_result", "href"])
 
 
+def motion_records_csv(by_num: dict[int, dict[str, Any]], cycle: int, texts: dict[str, Any]) -> str:
+    """One row per motion record — the registry's own view, which `iromanyok.csv` does not carry.
+
+    A file of its own rather than columns added to `iromanyok.csv`: that one is written for every cycle and its
+    column list is part of the published data dictionary, so widening it would give the eight archive cycles eight
+    columns of blank. This one exists only where the registry answers, which is the current cycle.
+
+    `spoken` counts the referenced speeches whose full text the site holds, so a reader can tell a motion whose
+    debate is readable here from one where the record only points at it."""
+    rows = []
+    for n, r in sorted(by_num.items()):
+        events = r.get("events") or []
+        refs = [e["speech"].replace("/", "-") for e in events if e.get("speech")]
+        prom = r.get("promulgation") or {}
+        rows.append({"cycle": cycle, "number": n, "szam": r.get("szam"), "title": r.get("title"),
+                     "type": r.get("type"), "main_type": r.get("main_type"), "nature": r.get("nature"),
+                     "submitted_on": r.get("submitted_on"), "status": r.get("status"),
+                     "submitters": "; ".join(r.get("submitters") or []), "submitter_kind": r.get("submitter_kind"),
+                     "addressee": r.get("addressee"), "procedure_mode": r.get("procedure_mode"),
+                     "promulgation_date": prom.get("date"), "law_ref": prom.get("law_ref"),
+                     "committees": "; ".join(c.get("name") or "" for c in r.get("committees") or []),
+                     "events": len(events), "speech_refs": len(refs),
+                     "spoken": sum(1 for x in refs if x in texts),
+                     "text_pdf_url": r.get("text_pdf_url"), "note": r.get("note")})
+    return _csv(rows, ["cycle", "number", "szam", "title", "type", "main_type", "nature", "submitted_on", "status",
+                       "submitters", "submitter_kind", "addressee", "procedure_mode", "promulgation_date", "law_ref",
+                       "committees", "events", "speech_refs", "spoken", "text_pdf_url", "note"])
+
+
 def monthly_csv(months: list[dict[str, Any]], cycle: int) -> str:
     rows = []
     for d in months:

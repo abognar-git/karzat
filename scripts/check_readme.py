@@ -136,9 +136,27 @@ def build() -> list[tuple[str, list]]:
     f34 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl34.json").read_text(encoding="utf-8"))
     f35 = _json.loads((ROOT / "data" / "derived" / "first_light_ckl35.json").read_text(encoding="utf-8"))
     irp = (ROOT / "data" / "derived" / "iromany_records.json")
+    _OV = ("kérdés", "azonnali kérdés", "interpelláció")
     ir = _json.loads(irp.read_text(encoding="utf-8")) if irp.exists() else {"count": 0, "records": {}}
     ir_events = sum(len(r["events"]) for r in ir["records"].values())
     ir_laws = sum(1 for r in ir["records"].values() if (r.get("promulgation") or {}).get("law_ref"))
+    # the motion pages' own figures, recomputed here so the README's numbers cannot drift from the corpus
+    import gzip as _gz
+    _OV = ("kérdés", "azonnali kérdés", "interpelláció")
+    _tp = ROOT / "data" / "derived" / "speech_texts.json.gz"
+    _tx = _json.loads(_gz.decompress(_tp.read_bytes()))["texts"] if _tp.exists() else {}
+    _refs = [(k, e) for k, r in ir["records"].items() for e in (r.get("events") or []) if e.get("speech")]
+    _held = [(k, e) for k, e in _refs if e["speech"].replace("/", "-") in _tx]
+    _ovk = {k for k, r in ir["records"].items() if r.get("main_type") in _OV}
+    _ovt = [(k, e) for k, e in _held if k in _ovk]
+    ir_refs, ir_held = len(_refs), len(_held)
+    ir_ov_total, ir_ov_shown, ir_ov_turns = len(_ovk), len({k for k, _ in _ovt}), len(_ovt)
+    ir_ov_chars = sum(_tx[e["speech"].replace("/", "-")]["chars"] for _, e in _ovt)
+    ir_leg_turns = len(_held) - len(_ovt)
+    ir_leg_recs = len({k for k, _ in _held} - {k for k, _ in _ovt})
+    ir_rejected = sum(1 for r in ir["records"].values()
+                      if any("elutasította a választ" in (e.get("text") or "") for e in r.get("events") or []))
+    ir_addressee = sum(1 for r in ir["records"].values() if r.get("addressee"))
     from scripts.build_site import dissent_events, load_inputs   # the feeds' numbers come from the builder's own alignment
     inp43 = load_inputs()
     ev43 = dissent_events(inp43)
@@ -263,6 +281,15 @@ def build() -> list[tuple[str, list]]:
          [sum(_json.loads(p.read_text(encoding="utf-8")).get("secret_ballots", 0)
               for p in sorted((ROOT / "data" / "derived").glob("first_light*.json")))]),
         # the motion records — data/derived/iromany_records.json
+        ("{:,.0f} records carry `képviselő elutasította a választ` in their log", [ir_rejected]),
+        ("The registry holds\n{:,.0f} full motion records for cycle 43 — the listing names {:,.0f}", [ir["count"], ir.get("listed", 0)]),
+        ("and {:,.0f} of\nthem had no page at all", [ir["count"] - 129]),
+        ("All {:,.0f} of\nthem resolve to a row, and {:,.0f} resolve to a speech whose text the site already holds", [ir_refs, ir_held]),
+        ("{:,.0f} of the {:,.0f} oversight motions carry the exchange as it was spoken — {:,.0f}\nturns, {:,.0f} characters",
+         [ir_ov_shown, ir_ov_total, ir_ov_turns, ir_ov_chars]),
+        ("would add\n{:,.0f} records and {:,.0f} turns", [ir_leg_recs, ir_leg_turns]),
+        ("filled on {:,.0f} of the {:,.0f} oversight instruments", [ir_addressee, ir_ov_total]),
+        ("including all {:,.0f} where", [ir_rejected]),
         ("({:,.0f} motions, {:,.0f} records, ~5 minutes)", [ir.get("listed", 0), ir["count"]]),
         ("{:,.0f} events across the cycle, {:,.0f} promulgated laws", [ir_events, ir_laws]),
         ("**joined to the annex by exact name only** ({:,.0f} codes → {:,.0f} of the annex's {:,.0f} settlements",
