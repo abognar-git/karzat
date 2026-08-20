@@ -2648,6 +2648,10 @@ def bill_path_html(inp: dict, rec: dict, votes: list | None = None) -> str:
     vs = votes if votes is not None else (rec.get("votes") or [])
     dates = [d for d in [start, prom] if d] + [e["date"] for e in rec.get("events") or [] if e.get("date")] \
         + [_vote_day(v) for v in vs if _vote_day(v)]
+    # Fewer than two dated days means there is no axis to draw, not that there is nothing to say: the log, the
+    # committees and the heading stand on their own. The guard therefore wraps the chart only — it used to return
+    # the empty string for the whole panel and take 675 events on 100 records with it.
+    chart = len(set(dates)) >= 2
     if not dates:
         return ""
     lo, hi = min(dates), max(dates)
@@ -2704,16 +2708,245 @@ def bill_path_html(inp: dict, rec: dict, votes: list | None = None) -> str:
         f'{hu_num(days)} nap' if days is not None else "",
         esc((rec.get("promulgation") or {}).get("law_ref") or ""),
         esc(rec.get("procedure_mode") or "")] if x)
+    # "A törvény útja" is only true of a bill; on the other 473 records it is the motion's course, and the two
+    # headings must differ from the roll-call panel's own "Az iromány útja a szavazásokon".
+    title_h = "A törvény útja" if rec.get("main_type") == "törvényjavaslat" else "Az iromány menete"
+    svg = (f'<svg viewBox="0 0 {W:.0f} {Y + 30:.0f}" role="img" aria-label="{esc(title_h)} {esc(hu_date(lo))} és {esc(hu_date(hi))} között: '
+           f'benyújtás, {hu_num(len(vs))} szavazás{", kihirdetés" if prom else ""}.">{"".join(marks)}</svg>'
+           f'<div class="roadkey"><span><i class="k start"></i>benyújtva</span><span><i class="k v"></i>szavazás (a szavazás oldalára visz)</span>'
+           + (f'<span><i class="k prom"></i>kihirdetve</span>' if prom else "") + '</div>') if chart else ""
     return (f'<section class="panel deep road">{CORNERS}'
-            f'<h2><span data-kz-text>A törvény útja</span><span class="tag">{head}</span></h2>'
-            f'<svg viewBox="0 0 {W:.0f} {Y + 30:.0f}" role="img" aria-label="Az iromány útja {esc(hu_date(lo))} és {esc(hu_date(hi))} között: '
-            f'benyújtás, {hu_num(len(vs))} szavazás{", kihirdetés" if prom else ""}.">{"".join(marks)}</svg>'
-            f'<div class="roadkey"><span><i class="k start"></i>benyújtva</span><span><i class="k v"></i>szavazás (a szavazás oldalára visz)</span>'
-            + (f'<span><i class="k prom"></i>kihirdetve</span>' if prom else "") + '</div>'
+            f'<h2><span data-kz-text>{esc(title_h)}</span><span class="tag">{head}</span></h2>'
+            + svg
             + (f'<div class="tablewrap" style="margin-top:12px"><table><thead><tr><th>Tárgyaló bizottság</th><th>Jogcím</th><th>Házszabály</th></tr></thead><tbody>{coms}</tbody></table></div>' if coms else "")
             + f'<details class="evlog"><summary>Az adatlap teljes eseménynaplója ({hu_num(len(log))} sor)</summary>'
               f'<div class="tablewrap"><table data-page-size="60"><thead><tr><th>Dátum</th><th>Esemény</th><th>Felszólalás</th></tr></thead><tbody>{"".join(log)}</tbody></table></div></details>'
             + '</section>')
+
+
+# -- the motion record's own panels ----------------------------------------------------------------
+
+OVERSIGHT = ("kérdés", "azonnali kérdés", "interpelláció")
+
+# accusative forms, code-owned: the "does not carry" line names fields, and Hungarian needs the case
+_MISSING_NAME = {"procedure_mode": "tárgyalási módot", "committees": "tárgyaló bizottságot",
+                 "promulgation": "kihirdetést", "addressee": "címzettet", "submitters": "benyújtót",
+                 "status": "állapotot", "text_pdf_url": "irományszöveget", "submitted_on": "benyújtási dátumot"}
+
+
+def _kind_fill(inp: dict) -> dict:
+    """Per main_type, the share of records carrying each field — the gate for the "does not carry" line.
+
+    Without it the line fires on all 537: a question has no committee and no promulgation *by kind*, not by
+    omission, and saying so on each of the 399 would be the 12 %-filled panel this project already rejected once.
+    Gated on what at least half of the same kind do carry, it fires on 72 and on no oversight page at all."""
+    if "_kind_fill" not in inp:
+        by: dict[str, list] = {}
+        for r in (inp.get("bill_recs") or {}).values():
+            by.setdefault(r.get("main_type") or "", []).append(r)
+        inp["_kind_fill"] = {k: {f: sum(1 for r in rs if r.get(f)) / len(rs) for f in _MISSING_NAME} for k, rs in by.items()}
+    return inp["_kind_fill"]
+
+
+def _submitter_link(inp: dict, rec: dict, up: str) -> str:
+    """The first submitter, linked to their own page where the record's href names one we know."""
+    names = rec.get("submitters") or []
+    if not names:
+        return ""
+    azon, first = rec.get("submitter_azon"), esc(names[0])
+    if azon and azon in (inp.get("mps") or {}):
+        first = f'<a href="{up}kepviselo/{esc(azon)}.html">{first}</a>'
+    more = f' <span class="sub">+{len(names) - 1} további benyújtó</span>' if len(names) > 1 else ""
+    rest = f'<div class="sub">{esc(", ".join(names[1:]))}</div>' if len(names) > 1 else ""
+    return first + more + rest
+
+
+def motion_card_html(inp: dict, rec: dict) -> str:
+    """The record's own fields, one row per field the record carries — never a blank cell, never a dash.
+
+    The heading changes with the kind because the fields do: on a question the interesting pair is who asked and
+    who was asked, on a bill there is no addressee at all (0 of 138) and the card is just the record."""
+    if not rec:
+        return ""
+    prom = (rec.get("promulgation") or {})
+    rows = [
+        ("Típus", esc(rec["type"]) if rec.get("type") and rec.get("type") != rec.get("main_type") else ""),
+        ("Jelleg", esc(rec["nature"]) if rec.get("nature") == "módosító" else ""),
+        ("Benyújtó", _submitter_link(inp, rec, "../")),
+        ("Címzett", esc(rec.get("addressee") or "")),
+        ("Benyújtva", esc(hu_date(rec["submitted_on"])) if rec.get("submitted_on") else ""),
+        ("Állapot", esc(rec.get("status") or "")),
+        ("Tárgyalási mód", esc(rec.get("procedure_mode") or "")),
+        ("Kihirdetés", " · ".join(x for x in [esc(prom.get("law_ref") or prom.get("number") or ""),
+                                              esc(hu_date(prom["date"])) if prom.get("date") else ""] if x)),
+        ("Megjegyzés", esc(rec.get("note") or "")),
+        ("Irományszöveg", f'<a href="{esc(rec["text_pdf_url"])}" target="_blank" rel="noopener">szöveges PDF ↗</a>'
+                          if rec.get("text_pdf_url") else ""),
+    ]
+    body = "".join(f'<tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in rows if v)
+
+    fill = _kind_fill(inp).get(rec.get("main_type") or "", {})
+    missing = [_MISSING_NAME[f] for f in ("procedure_mode", "committees", "promulgation", "addressee",
+                                          "submitters", "status", "text_pdf_url", "submitted_on")
+               if not rec.get(f) and fill.get(f, 0) >= 0.5]
+    note = f'<div class="hero-meta prose" style="margin-top:8px">Az adatlap ezen az irományon nem közöl: {esc(", ".join(missing))}.</div>' if missing else ""
+    if not (rec.get("events") or []):
+        note += '<div class="hero-meta prose" style="margin-top:8px">Az adatlap ennyit közöl, eseményt nem.</div>'
+    if not rec.get("submitted_on") and not rec.get("status") and not (rec.get("submitters") or []):
+        note = ('<div class="hero-meta prose" style="margin-top:8px">Az adatlap csak a címet közli: benyújtás, '
+                'állapot és benyújtó nincs rögzítve.</div>')
+    head = "Ki kérdezett, kit kérdeztek" if rec.get("main_type") in OVERSIGHT else "Az adatlap"
+    return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>{head}</span></h2>'
+            f'<div class="tablewrap"><table class="kv2"><tbody>{body}</tbody></table></div>{note}</section>')
+
+
+def _speech_rows_by_id(inp: dict) -> dict:
+    if "_rows_by_sid" not in inp:
+        out: dict[str, list] = {}
+        for r in ((inp.get("speeches") or {}).get("speeches") or []):
+            if r.get("ulnap") is not None and r.get("seq") is not None:
+                out.setdefault(f'{r["ulnap"]}-{r["seq"]}', []).append(r)
+        inp["_rows_by_sid"] = out
+    return inp["_rows_by_sid"]
+
+
+def _resolve_ref(inp: dict, sid: str, szam: str) -> dict | None:
+    """One speech id can name several rows — the record's documented reprint mechanism prints a speech again under
+    each motion of a joint debate. 124 of the 4,361 ids do. The rows agree on speaker and on id, so who spoke never
+    depends on this choice; only the agenda label does. Prefer the row that names this motion, then a non-reprint."""
+    rows = _speech_rows_by_id(inp).get(sid) or []
+    if not rows:
+        return None
+    return (next((r for r in rows if r.get("iromany") == szam), None)
+            or next((r for r in rows if not r.get("reprint")), None) or rows[0])
+
+
+def exchange_html(inp: dict, rec: dict) -> str:
+    """„Ahogy elhangzott" — the question and the answer, verbatim, on the oversight instruments only.
+
+    A turn is any event whose felszólalás reference resolves to a text the site holds; the turn's label is the
+    record's own event text. No whitelist of Hungarian phrases: the whitelist finds 728 turns and this rule finds
+    738, and four of the seven it adds are the member refusing a substitute answerer — the thing in an exchange
+    one would least like to drop.
+
+    Order is the transcript's own (ülésnap, sorszám), never the event date: 235 of the 238 multi-turn exchanges
+    happen inside a single sitting day, so the date is not an order at all, and sorting by (date, text) puts the
+    follow-up before the question it follows on 89 records.
+
+    Blocks, never table rows — an existing test counts `<td class="ts mono">` against the event log's length."""
+    if rec.get("main_type") not in OVERSIGHT:
+        return ""
+    texts = (inp.get("texts") or {}).get("texts") or {}
+    szam = rec.get("szam")
+    turns = []
+    for e in (rec.get("events") or []):
+        ref = e.get("speech")
+        if not ref:
+            continue
+        sid = ref.replace("/", "-")
+        t = texts.get(sid)
+        if not t:
+            continue
+        row = _resolve_ref(inp, sid, szam) or {}
+        # the agenda guard: if no row for this id names this motion, the speech belongs to a neighbour
+        if szam and any(r.get("iromany") for r in _speech_rows_by_id(inp).get(sid) or []) \
+           and not any(r.get("iromany") == szam for r in _speech_rows_by_id(inp).get(sid) or []):
+            continue
+        turns.append((int(sid.split("-")[0]), int(sid.split("-")[1]), sid, e, t, row))
+    turns.sort(key=lambda x: (x[0], x[1]))
+
+    if not turns:
+        return _exchange_empty(inp, rec)
+    blocks = []
+    for _, _, sid, e, t, row in turns:
+        azon = t.get("azon") or row.get("azon")
+        who = esc(t.get("speaker") or row.get("name") or "")
+        if azon and azon in (inp.get("mps") or {}):
+            who = f'<a href="../kepviselo/{esc(azon)}.html">{who}</a>'
+        elif azon and azon in (((inp.get("kormany") or {}).get("people")) or {}):
+            who = f'<a href="../../szemely/{esc(azon)}.html">{who}</a>'
+        pos = f' <span class="sub">{esc(t.get("position") or "")}</span>' if t.get("position") else ""
+        lbl = esc(e.get("text") or "")
+        lbl = f'<span class="sub">{lbl}</span>' if (e.get("text") or "") == "ülésvezetés" else lbl
+        rp = ' <span class="sub">ez a felszólalás több napirendi ponthoz tartozik</span>' if row.get("reprint") else ""
+        paras = "".join(f"<p>{esc(x)}</p>" for x in (t.get("paragraphs") or []))
+        blocks.append(f'<div class="turn"><div class="turn-h"><span class="ts mono">{esc(hu_date(t.get("date")) if t.get("date") else "")}</span> '
+                      f'<a class="mono" href="../felszolalas/{esc(sid)}.html">{esc(sid.replace("-", "/"))}</a> · <b>{who}</b>{pos} · {lbl}{rp}</div>'
+                      f'<div class="turn-t prose">{paras}</div></div>')
+    n_ans = sum(1 for *_x, t, _r in turns if (t.get("position") or ""))
+    tail = ('<div class="hero-meta prose" style="margin-top:10px">A szöveg a jegyzőkönyvé, a formázás nélkül. '
+            'Nem összefoglaló. A sorrend a jegyzőkönyvé — ülésnap és sorszám szerint; a megnevezés az adatlap saját '
+            'eseményszövege; a hivatkozás az adatlap <span class="mono">ülésnap/sorszám</span> mutatója.</div>')
+    if rec.get("addressee") and n_ans:
+        tail += ('<div class="hero-meta prose" style="margin-top:6px">A „Címzett” azt mondja, kihez szólt a kérdés; '
+                 'a beosztás azt, ki válaszolt rá — az is a jegyzőkönyv szava.</div>')
+    return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Ahogy elhangzott</span>'
+            f'<span class="tag">{hu_num(len(turns))} felszólalás</span></h2>{"".join(blocks)}{tail}</section>')
+
+
+def _exchange_empty(inp: dict, rec: dict) -> str:
+    """Six branches, first match wins, exhaustive — and none of them in the present tense.
+
+    "Válasz még nincs" would be a claim about now, made by a build that ran at some point in the past; the footer's
+    "Frissítve" carries the tense for the whole site and this panel must not contradict it."""
+    if not ((inp.get("texts") or {}).get("texts")):
+        body = "A felszólalás-szövegek nincsenek betöltve."
+    elif rec.get("status") == "visszavonva" or any("visszavont" in (e.get("text") or "") for e in rec.get("events") or []):
+        body = "Nem hangzott el: az irományt visszavonták."
+        if rec.get("note"):
+            body += f' {esc(rec["note"])}'
+    elif rec.get("type") == "írásbeli kérdés":
+        body = "Írásbeli kérdés: a válasz írásban érkezik, nem az ülésteremben."
+    elif any(e.get("speech") for e in rec.get("events") or []):
+        n = sum(1 for e in rec.get("events") or [] if e.get("speech"))
+        body = f"Az adatlap {hu_num(n)} felszólalásra hivatkozik; a szövegük nincs betöltve."
+    elif rec.get("status"):
+        body = f'Az adatlap állapota: „{esc(rec["status"])}”. Elhangzott felszólalást nem jelez.'
+    else:
+        body = "Az adatlap nem jelez elhangzott felszólalást ehhez az irományhoz."
+    return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Ahogy elhangzott</span></h2>'
+            f'<div class="hero-meta prose">{body}</div></section>')
+
+
+def written_answer_html(inp: dict, rec: dict) -> str:
+    """„Az írásbeli válasz" — keyed on the event, not on the status block, because the status says `elfogadva`
+    on things that were never answered. The record marks that an answer arrived; it never links the answer."""
+    if rec.get("type") != "írásbeli kérdés":
+        return ""
+    ev = next((e for e in rec.get("events") or [] if "írásban megválaszolva" in (e.get("text") or "")), None)
+    if ev:
+        who = f' · {esc(ev["related"])}' if ev.get("related") else ""
+        body = (f'Írásban megválaszolva {esc(hu_date(ev["date"])) if ev.get("date") else ""}{who}. '
+                'A válasz szövegére ez a végpont nem ad hivatkozást: az adatlap csak azt jelzi, hogy válasz érkezett.')
+    else:
+        body = f'Az adatlap állapota: „{esc(rec.get("status") or "")}”. Válasz nincs iktatva.'
+    return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Az írásbeli válasz</span></h2>'
+            f'<div class="hero-meta prose">{body}</div></section>')
+
+
+def merge_motion_records(bs: dict, by_num: dict) -> dict:
+    """Every motion the registry answers for gets an entry, not only the ones the House voted on by name.
+
+    `an.bills()` builds its dict from the roll calls, so a motion has a page if and only if a recorded vote named
+    it — which for the oversight instruments produced one rule: the site published an interpellation exactly when
+    the member rejected the minister's answer. 129 of cycle 43's 537 records qualified; the other 408 sat on disk.
+
+    Entries that already exist are left alone: their vote list is the authority and the record only decorates them.
+    New entries carry an empty vote list, which is why every reader of a `b` has to tolerate one — the alternative,
+    faking a vote row, would put a number on the page that no roll call supports.
+
+    Identity when `by_num` is empty, which is every cycle but the current one: the registry cannot be addressed for
+    a closed cycle at all, so cycles 34-42 come out of here unchanged, byte for byte."""
+    out = dict(bs)
+    for n, rec in by_num.items():
+        if n in out:
+            continue
+        sub = rec.get("submitted_on")
+        out[n] = {"number": n, "prefix": (rec.get("szam_parsed") or {}).get("kind"), "title": rec.get("title"),
+                  "href": rec.get("href"), "votes": [], "amendment_votes": 0, "own_votes": 0,
+                  "first": sub, "last": sub, "final_outcome": None, "final_result": None,
+                  "label": rec.get("szam") or str(n)}
+    return dict(sorted(out.items()))
 
 
 def build_bill_page(inp: dict, b: dict) -> str:
@@ -2732,39 +2965,147 @@ def build_bill_page(inp: dict, b: dict) -> str:
     label = rec.get("szam") or b["label"]
     title = b["title"] or rec.get("title") or "—"
     ext = f' · <a href="{esc(b["href"])}" target="_blank" rel="noopener">parlament.hu ↗</a>' if b.get("href") else ""
-    span = f'{hu_date(b["first"])} – {hu_date(b["last"])}' if b["first"] != b["last"] else hu_date(b["first"])
-    return page_head(f'{label} — {cut(title, 80)}{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f'{label} {title}: a {inp["cycle"]}. ciklusban tartott név szerinti szavazásai sorban, az indítvány szakaszaival és módosítóival.', 1 + inp["base_depth"]) + \
-        topbar(inp, [("irományok", "index.html"), (label, None)], 1) + f"""
-<div class="hero-h"><h1>{esc(label)}</h1><small class="label" data-kz-text>{len(b["votes"])} szavazás · {esc(span)}</small></div>
-<div class="hero-title">{esc(title)}</div>
-<p class="hero-meta">{"a javaslatról magáról: " + str(b["own_votes"]) if b["own_votes"] else "csak módosítókról szavaztak név szerint"}{" · módosítókról: " + str(b["amendment_votes"]) if b["amendment_votes"] else ""}{ext}</p>
-<section class="panel deep">{CORNERS}
+    # a motion with no roll call has no span; it has a submission date, or on three records not even that
+    span = ("" if not b["first"] else
+            f'{hu_date(b["first"])} – {hu_date(b["last"])}' if b["last"] and b["first"] != b["last"] else hu_date(b["first"]))
+    # A voted motion is introduced by its votes; one the House never voted on is introduced by what it is and when
+    # it arrived. Neither clause is printed when its field is empty, so nothing reads "0 szavazás" or a bare dash.
+    kicker = " · ".join(x for x in [
+        f'{len(b["votes"])} szavazás' if b["votes"] else (rec.get("main_type") or ""),
+        f'benyújtva {span}' if span else ""] if x)
+    # The description must not promise roll calls on a page that has none: 408 of the 537 motions were never voted
+    # on by name, and most of them never could be — the House does not hold a recorded vote on a question.
+    desc = (f'{label} {title}: a {inp["cycle"]}. ciklusban tartott név szerinti szavazásai sorban, az indítvány '
+            f'szakaszaival és módosítóival.' if b["votes"] else
+            f'{label} {title}: az iromány adatlapja — benyújtó, állapot, események, és ami az ülésteremben elhangzott.')
+    # the roll-call table only where roll calls exist
+    votes_panel = f"""<section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Az iromány útja a szavazásokon</span><span class="tag">utolsó: {esc(b["final_outcome"] or "")}</span></h2>
   <div class="tablewrap"><table data-page-size="50"><thead><tr><th scope="col">Időpont</th><th scope="col">Szám</th><th scope="col">Szakasz</th><th scope="col">Szabály</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col">Eredmény</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">A „szakasz” az API kimenetel-szövege minden szavazásnál; a szám az iromány saját száma vagy egy módosítóé (szám/pont).</div>
-</section>
+</section>""" if b["votes"] else ""
+    meta = " · ".join(x for x in [
+        (f'a javaslatról magáról: {b["own_votes"]}' if b["own_votes"] else
+         ("csak módosítókról szavaztak név szerint" if b["votes"] else "")),
+        f'módosítókról: {b["amendment_votes"]}' if b["amendment_votes"] else ""] if x)
+    return page_head(f'{label} — {cut(title, 80)}{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', desc, 1 + inp["base_depth"]) + \
+        topbar(inp, [("irományok", "index.html"), (label, None)], 1) + f"""
+<div class="hero-h"><h1>{esc(label)}</h1><small class="label" data-kz-text>{esc(kicker)}</small></div>
+<div class="hero-title">{esc(title)}</div>
+<p class="hero-meta">{meta}{ext}</p>
+{motion_card_html(inp, rec)}
+{exchange_html(inp, rec)}
+{written_answer_html(inp, rec)}
+{votes_panel}
 {bill_path_html(inp, rec, b["votes"]) if rec else ""}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}iromany/{b["number"]}.html', f'{label} — {cut(title, 80)}', f'{inp["cycle"]}-iromany-{b["number"]}')}
 """ + page_tail(inp, 1)
 
 
 def build_bill_index(inp: dict, bs: dict) -> str:
+    byn = inp.get("bill_recs_by_num") or {}
+    texts = (inp.get("texts") or {}).get("texts") or {}
     trs = []
     for n, b in sorted(bs.items(), key=lambda kv: -kv[0]):
-        badge = result_badge({"result_raw": b["final_result"], "kind": b["votes"][-1]["kind"]})
-        trs.append(f'<tr data-p="{esc(b["prefix"] or "")}" data-num="{n}" data-nv="{len(b["votes"])}"><td class="mono"><a href="{n}.html">{esc(b["label"])}</a></td><td>{esc(cut(b["title"] or "—", 110))}</td>'
-                   f'<td class="num mono">{len(b["votes"])}</td><td class="ts mono">{esc(b["first"])}{(" – " + esc(b["last"])) if b["last"] != b["first"] else ""}</td>'
-                   f'<td>{esc(cut(b["final_outcome"] or "", 60))}</td><td>{badge}</td></tr>')
-    prefixes = sorted({b["prefix"] for b in bs.values() if b["prefix"]})
+        rec = byn.get(n) or {}
+        if rec:
+            # the registry's columns: who put it down, when, what the record calls its state, and how many times
+            # the House voted on it by name — 0 on 408 of them, and on 303 because no such vote can exist
+            spoken = (rec.get("main_type") in OVERSIGHT
+                      and any((e.get("speech") or "").replace("/", "-") in texts for e in rec.get("events") or []))
+            written = any("írásban megválaszolva" in (e.get("text") or "") for e in rec.get("events") or [])
+            marks = ("" + ('<span class="badge">szöveg</span>' if spoken else "")
+                     + ('<span class="badge">írásbeli válasz</span>' if written else ""))
+            dt = rec.get("submitted_on")
+            trs.append(f'<tr data-p="{esc(rec.get("szam_parsed", {}).get("kind") or "")}" data-num="{n}" data-nv="{len(b["votes"])}"'
+                       f'{f" data-d={chr(34)}" + dt.replace("-", "") + chr(34) if dt else ""}'
+                       f' data-f="{"szoveg" if spoken else ("iras" if written else ("szavazas" if b["votes"] else "adatlap"))}">'
+                       f'<td class="mono"><a href="{n}.html">{esc(rec.get("szam") or b["label"])}</a>{marks}</td>'
+                       f'<td>{esc(cut(rec.get("title") or b["title"] or "—", 96))}</td>'
+                       f'<td>{_submitter_link(inp, rec, "../") or "—"}</td>'
+                       f'<td class="ts mono">{esc(hu_date(dt)) if dt else "—"}</td>'
+                       f'<td>{esc(rec.get("status") or "") or "—"}</td>'
+                       f'<td class="num mono">{len(b["votes"])}</td></tr>')
+        else:
+            badge = result_badge({"result_raw": b["final_result"], "kind": b["votes"][-1]["kind"]}) if b["votes"] else ""
+            trs.append(f'<tr data-p="{esc(b["prefix"] or "")}" data-num="{n}" data-nv="{len(b["votes"])}"><td class="mono"><a href="{n}.html">{esc(b["label"])}</a></td><td>{esc(cut(b["title"] or "—", 110))}</td>'
+                       f'<td class="num mono">{len(b["votes"])}</td><td class="ts mono">{esc(b["first"] or "")}{(" – " + esc(b["last"])) if b["last"] and b["last"] != b["first"] else ""}</td>'
+                       f'<td>{esc(cut(b["final_outcome"] or "", 60))}</td><td>{badge}</td></tr>')
+    prefixes = sorted({(byn.get(n, {}).get("szam_parsed", {}) or {}).get("kind") or b["prefix"] for n, b in bs.items()
+                       if ((byn.get(n, {}).get("szam_parsed", {}) or {}).get("kind") or b["prefix"])})
     pbuttons = '<button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>' + "".join(f'<button type="button" data-posf="{p}" aria-pressed="false">{p}/</button>' for p in prefixes)
-    return page_head(f'Irományok · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus irományai, amelyekről név szerint szavaztak: szavazásaik száma, első és utolsó szavazás, utolsó kimenetel.', 1 + inp["base_depth"]) + \
+    # A partition, not a set of tags: every motion is in exactly one of the four, so the counts sum to the total.
+    # It reuses the vote page's generic data-f axis, so it needs no new JavaScript — new JavaScript would change
+    # site/assets/karzat.js and with it the byte comparison that guards the committed build.
+    part = {"szoveg": 0, "iras": 0, "szavazas": 0, "adatlap": 0}
+    for n, b in bs.items():
+        rec = byn.get(n) or {}
+        if not rec:
+            continue
+        sp = (rec.get("main_type") in OVERSIGHT
+              and any((e.get("speech") or "").replace("/", "-") in texts for e in rec.get("events") or []))
+        wr = any("írásban megválaszolva" in (e.get("text") or "") for e in rec.get("events") or [])
+        part["szoveg" if sp else ("iras" if wr else ("szavazas" if b["votes"] else "adatlap"))] += 1
+    fbuttons = ("" if not byn else
+                '<button type="button" data-fac="all" class="on" aria-pressed="true">mind</button>'
+                + "".join(f'<button type="button" data-fac="{k}" aria-pressed="false">{lbl} {hu_num(part[k])}</button>'
+                          for k, lbl in (("szoveg", "szó szerinti szöveg"), ("iras", "írásbeli válasz"),
+                                         ("szavazas", "csak szavazási sor"), ("adatlap", "csak adatlap"))))
+    n_voted = sum(1 for b in bs.values() if b["votes"])
+    n_no_vote = sum(1 for r in byn.values() if r.get("main_type") in ("kérdés", "azonnali kérdés", "tájékoztató"))
+    partition_row = f'<div class="filters" role="group" aria-label="Szűrés aszerint, mi van róla">{fbuttons}</div>' if fbuttons else ""
+    cols = ('<th scope="col" class="sortable" data-key="num">Szám</th><th scope="col">Cím</th>'
+            '<th scope="col">Benyújtó</th><th scope="col" class="sortable" data-key="d">Benyújtva</th>'
+            '<th scope="col">Állapot</th><th scope="col" class="sortable num" data-key="nv">Szavazás</th>') if byn else (
+           '<th scope="col" class="sortable" data-key="num">Szám</th><th scope="col">Cím</th>'
+           '<th scope="col" class="sortable num" data-key="nv">Szavazás</th><th scope="col">Időszak</th>'
+           '<th scope="col">Utolsó szakasz</th><th scope="col">Eredmény</th>')
+    if byn:
+        # Three facts a reader would otherwise infer wrongly: that a 0 means missing data, that a status word means
+        # the same thing on every kind of motion, and that a blank field is an omission rather than a category error.
+        notes = (
+            '<div class="hero-meta prose" style="margin-top:8px">A <b>Szavazás</b> oszlop a ciklus név szerinti '
+            'szavazásaiból számol. Kérdésről, azonnali kérdésről és tájékoztatóról az Országgyűlés nem szavaz név '
+            f'szerint: {hu_num(n_no_vote)} sorban azért 0, mert ilyen szavazás nem létezik \u2014 nem azért, mert '
+            'hiányzik az adat.</div>'
+            '<div class="hero-meta prose" style="margin-top:6px">Az <b>Állapot</b> az adatlap szava, és '
+            'irománytípusonként mást jelent: interpellációnál az \u201eelfogadva\u201d a <i>válaszra</i> vonatkozik, '
+            'törvényjavaslatnál a javaslatra. Az oldal nem fordítja le és nem színezi.</div>'
+            '<div class="hero-meta prose" style="margin-top:6px">Kérdésnél, azonnali kérdésnél és interpellációnál az '
+            'adatlap nem tart nyilván tárgyaló bizottságot és kihirdetést; törvényjavaslatnál és határozati '
+            'javaslatnál nincs címzett. Ezek a mezők nem hiányoznak \u2014 az iromány fajtájánál nincsenek.</div>'
+            '<div class="hero-meta prose" style="margin-top:6px">A korábbi ciklusok irománylistái a név szerinti '
+            'szavazásokból állnak össze, ez a lista az irománynyilvántartásból: a két szám nem összehasonlítható.</div>')
+    else:
+        notes = ('<div class="hero-meta prose" style="margin-top:8px">Az előtag (T/ törvényjavaslat, H/ határozati '
+                 'javaslat, I/ interpelláció, K/ kérdés\u2026) csak ott ismert, ahol a névsor az iromány saját számát '
+                 'írta; a csak módosítókról ismert irományok szám nélküli előtaggal szerepelnek.</div>')
+    if byn:
+        desc = (f'A {inp["cycle"]}. ciklus irományai az irománynyilvántartásból: benyújtó, benyújtás, állapot, '
+                f'név szerinti szavazások száma, és ahol van, a szó szerinti szöveg.')
+        kick = (f'{inp["cycle"]}. ciklus · az irománylista {hu_num(539)} tételt sorol · az adatlap-szolgáltatás '
+                f'{hu_num(len(byn))} számra ad választ · {hu_num(n_voted)}-ről volt név szerinti szavazás · '
+                f'{hu_num(part["szoveg"])}-nél van szó szerinti szöveg')
+        above = ('<div class="hero-meta prose">Az <span class="mono">A/254</span> szám alatt az irománylista három '
+                 'indítványt sorol, három azonosítóval és három címmel; az adatlap-szolgáltatás csak irományszámot '
+                 'fogad, és egyet ad vissza. Ezért 539 tétel, 537 adatlap.</div>')
+    else:
+        desc = f'A {inp["cycle"]}. ciklus irományai, amelyekről név szerint szavaztak: szavazásaik száma, első és utolsó szavazás, utolsó kimenetel.'
+        kick = f'{inp["cycle"]}. ciklus · {hu_num(len(bs))} iromány, amelyről név szerint szavaztak'
+        above = ('<div class="hero-meta prose"><b>Ez a lista nem a ciklus összes irománya.</b> Az iromány-adatlapokat '
+                 'adó végpont csak a futó ciklust címzi: az irományazonosító ciklusonként újraindul, és az irománylista '
+                 'a ciklusparamétert figyelmen kívül hagyja. Ezért itt csak az szerepel, amiről név szerint szavaztak — '
+                 f'hogy a {inp["cycle"]}. ciklusban összesen hány iromány volt, ezen a végponton nem állapítható meg.</div>')
+    return page_head(f'Irományok · {inp["cycle"]}. ciklus · karzat', desc, 1 + inp["base_depth"]) + \
         topbar(inp, [("irományok", None)], 1) + f"""
-<div class="hero-h"><h1>Irományok</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(len(bs))} iromány, amelyről név szerint szavaztak</small></div>
+<div class="hero-h"><h1>Irományok</h1><small class="label" data-kz-text>{esc(kick)}</small></div>
+{above}
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Irományok</span><span class="tag">a legfrissebb szám elöl · <a href="iromanyok.csv">CSV</a></span></h2>
   <div class="filters" role="group" aria-label="Szűrés előtag szerint">{pbuttons}<input type="search" data-filter-table="roll" placeholder="szám, cím" aria-label="Szűrés számra vagy címre" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
-  <div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="num">Szám</th><th scope="col">Cím</th><th scope="col" class="sortable num" data-key="nv">Szavazás</th><th scope="col">Időszak</th><th scope="col">Utolsó szakasz</th><th scope="col">Eredmény</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Az előtag (T/ törvényjavaslat, H/ határozati javaslat, I/ interpelláció, K/ kérdés…) csak ott ismert, ahol a névsor az iromány saját számát írta; a csak módosítókról ismert irományok szám nélküli előtaggal szerepelnek.</div>
+  {partition_row}
+  <div class="tablewrap"><table id="roll" data-page-size="25" data-counter="rn"><thead><tr>{cols}</tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+  {notes}
 </section>
 """ + page_tail(inp, 1)
 
@@ -3865,6 +4206,7 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         texts_map = (inp["texts"] or {}).get("texts") or {}
         subs = substantive_rows(inp)
         bs = an.bills(inp)                                         # the cycle's bills: speech pages link the agenda item's bills
+        bs = merge_motion_records(bs, inp.get("bill_recs_by_num") or {})   # …and every motion the registry answers for
         by_day: dict[int, list[dict]] = {}
         for r in (inp["speeches"] or {}).get("speeches") or []:
             by_day.setdefault(r["ulnap"], []).append(r)

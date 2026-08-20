@@ -1244,18 +1244,49 @@ class BillRoad(unittest.TestCase):
     def setUpClass(cls):
         cls.inp = load_inputs()
 
-    def test_every_dated_vote_points_at_its_own_page(self):
+    def test_every_dated_vote_points_at_its_own_page_where_there_is_an_axis(self):
+        """Where the chart is drawn, every vote on it is a link to that vote's page.
+
+        Restated rather than deleted. It used to take the record with the most votes, which is S/5 — submitted,
+        voted fourteen times and promulgated on one day, 2026-05-09. A road across a single day is a chart with
+        every marker at the same x, so the chart is now suppressed there and the fourteen votes reach the reader
+        through the roll-call table above instead. The claim worth guarding is the one about the chart."""
         from scripts.build_site import bill_path_html
         recs = self.inp.get("bill_recs") or {}
         if not recs:
             self.skipTest("no motion records cached — run: python3 -m karzat sync-bills")
-        rec = max(recs.values(), key=lambda r: len(r["votes"]))
+        def spread(r):
+            days = {e["date"] for e in r.get("events") or [] if e.get("date")}
+            days |= {v["ts"][:10].replace(".", "-") for v in r.get("votes") or [] if v.get("ts")}   # the record dates votes with dots
+            return len(days)
+        voted = [r for r in recs.values() if len([v for v in r["votes"] if v.get("ts")]) >= 2 and spread(r) >= 2]
+        self.assertTrue(voted, "no motion is both voted and spread over two days — the axis case is untested")
+        rec = max(voted, key=lambda r: len(r["votes"]))
         html = bill_path_html(self.inp, rec)
+        self.assertIn("<svg", html)
         hrefs = re.findall(r'href="\.\./szavazas/([^"]+)\.html"', html)
         self.assertEqual(len(hrefs), len([v for v in rec["votes"] if v.get("ts")]))
         for v in rec["votes"]:
             if v.get("ts"):
                 self.assertIn(f'{v["ts"][:10].replace(".", "-")}T{v["ts"][11:].replace(":", "-")}', hrefs)
+
+    def test_a_one_day_motion_keeps_its_event_log_when_the_chart_is_dropped(self):
+        """The guard wraps the chart, not the panel. It used to return the empty string for the whole thing, which
+        on 100 records took 675 events and five committee tables with it."""
+        from scripts.build_site import bill_path_html
+        recs = self.inp.get("bill_recs") or {}
+        if not recs:
+            self.skipTest("no motion records cached")
+        one_day = [r for r in recs.values()
+                   if r.get("events") and len({e["date"] for e in r["events"] if e.get("date")}
+                                              | ({r["submitted_on"]} if r.get("submitted_on") else set())) < 2]
+        if not one_day:
+            self.skipTest("every motion spans two dated days")
+        rec = max(one_day, key=lambda r: len(r["events"]))
+        html = bill_path_html(self.inp, rec)
+        self.assertNotIn("<svg", html)
+        self.assertIn("eseménynaplója", html)
+        self.assertEqual(html.count('<td class="ts mono">'), len(rec["events"]))
 
     def test_a_promulgated_law_shows_its_reference(self):
         from scripts.build_site import bill_path_html
@@ -1437,3 +1468,153 @@ class MotionEventLinks(unittest.TestCase):
         rows = [r for r in ((self.inp.get("speeches") or {}).get("speeches") or []) if str(r["ulnap"]) == str(uln)]
         html = build_day_page(self.inp, uln, rows, (self.inp["texts"] or {}).get("texts") or {})
         self.assertIn(f'id="s{sid}"', html)
+
+
+class MotionPages(unittest.TestCase):
+    """A page for every motion the registry answers for, not only the ones the House voted on by name.
+
+    The rule the old behaviour produced, stated as a set: the site published an oversight instrument if and only
+    if the member rejected the minister's answer, because only then was there a recorded vote. 129 of 537."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import merge_motion_records
+        import karzat.analytics as an
+        cls.inp = load_inputs()
+        cls.voted = an.bills(cls.inp)
+        cls.bs = merge_motion_records(cls.voted, cls.inp.get("bill_recs_by_num") or {})
+        cls.byn = cls.inp.get("bill_recs_by_num") or {}
+
+    def test_every_record_gets_a_page_and_the_old_ones_keep_their_address(self):
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        self.assertEqual(set(self.bs), set(self.byn) | set(self.voted))
+        for n in self.voted:                                  # no address moves, no citation key changes
+            self.assertIn(n, self.bs)
+            self.assertEqual(self.bs[n]["votes"], self.voted[n]["votes"])
+
+    def test_the_merge_is_the_identity_on_a_closed_cycle(self):
+        from scripts.build_site import merge_motion_records
+        import karzat.analytics as an
+        inp42 = load_inputs(42)
+        bs42 = an.bills(inp42)
+        self.assertEqual(merge_motion_records(bs42, inp42.get("bill_recs_by_num") or {}), dict(sorted(bs42.items())))
+
+    def test_a_field_the_record_does_not_carry_renders_no_row(self):
+        from scripts.build_site import motion_card_html
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        pairs = (("Kihirdetés", "promulgation"), ("Címzett", "addressee"), ("Megjegyzés", "note"),
+                 ("Tárgyalási mód", "procedure_mode"))
+        for rec in self.byn.values():
+            card = motion_card_html(self.inp, rec)
+            self.assertNotIn("<td></td>", card)
+            self.assertNotIn("<td>—</td>", card)
+            for label, field in pairs:
+                self.assertEqual(f'<th scope="row">{label}</th>' in card, bool(rec.get(field)),
+                                 f'{rec["szam"]}: the {label} row and the {field} field disagree')
+
+    def test_the_missing_field_line_never_names_something_this_kind_never_has(self):
+        """Ungated, the line fires on all 537 and tells every question in the cycle that it lacks a committee and
+        a promulgation — which questions do not have. Gated on the kind's own fill it fires on far fewer, and on
+        no oversight page at all."""
+        from scripts.build_site import motion_card_html, _kind_fill, _MISSING_NAME, OVERSIGHT
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        inverse = {v: k for k, v in _MISSING_NAME.items()}
+        fired = oversight_fired = 0
+        for rec in self.byn.values():
+            m = re.search(r"nem közöl: ([^<.]+)\.", motion_card_html(self.inp, rec))
+            if not m:
+                continue
+            fired += 1
+            if rec.get("main_type") in OVERSIGHT:
+                oversight_fired += 1
+            fill = _kind_fill(self.inp).get(rec.get("main_type") or "", {})
+            for word in (x.strip() for x in m.group(1).split(",")):
+                self.assertGreaterEqual(fill.get(inverse[word], 0), 0.5,
+                                        f'{rec["szam"]}: names {word!r}, which most motions of its kind also lack')
+        self.assertEqual(oversight_fired, 0, "an oversight page regrets a field its kind never has")
+        self.assertLess(fired, len(self.byn) / 2, "the line still fires on most pages")
+
+    def test_every_oversight_page_reaches_exactly_one_empty_state_or_an_exchange(self):
+        from scripts.build_site import exchange_html, OVERSIGHT
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        states = ("A felszólalás-szövegek nincsenek betöltve.", "Nem hangzott el: az irományt visszavonták.",
+                  "Írásbeli kérdés: a válasz írásban érkezik", "felszólalásra hivatkozik; a szövegük nincs betöltve.",
+                  "Elhangzott felszólalást nem jelez.", "nem jelez elhangzott felszólalást ehhez")
+        with_turns = 0
+        for rec in self.byn.values():
+            if rec.get("main_type") not in OVERSIGHT:
+                self.assertEqual(exchange_html(self.inp, rec), "", f'{rec["szam"]}: a bill has no exchange panel')
+                continue
+            html = exchange_html(self.inp, rec)
+            self.assertIn("Ahogy elhangzott", html)
+            hits = sum(1 for x in states if x in html)
+            if 'class="turn"' in html:
+                with_turns += 1
+                self.assertEqual(hits, 0, f'{rec["szam"]}: an exchange that also apologises for having none')
+            else:
+                self.assertEqual(hits, 1, f'{rec["szam"]}: {hits} empty states fired, want exactly one')
+        self.assertGreater(with_turns, 100)
+
+    def test_the_exchange_prints_the_question_before_the_answer(self):
+        """Sorted by the transcript's own (ülésnap, sorszám), never by the record's (date, event text): 235 of the
+        238 multi-turn exchanges happen on one sitting day, so the date is not an order, and alphabetising the
+        label puts the follow-up ahead of the question it follows."""
+        from scripts.build_site import exchange_html, OVERSIGHT
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        asked = "elhangzik az interpelláció/kérdés/azonnali kérdés"
+        checked = 0
+        for rec in self.byn.values():
+            if rec.get("main_type") not in OVERSIGHT:
+                continue
+            html = exchange_html(self.inp, rec)
+            labels = re.findall(r'· ([^<·]+)</div>\s*<div class="turn-t', html)
+            labels = [x.strip() for x in labels]
+            answer = next((x for x in labels if "megválaszolva" in x or "miniszteri viszonválasz" in x), None)
+            if asked not in labels or not answer:
+                continue
+            checked += 1
+            self.assertLess(labels.index(asked), labels.index(answer),
+                            f'{rec["szam"]}: the answer is printed before the question')
+        self.assertGreater(checked, 100, "too few exchanges carried both a question and a reply to prove this")
+
+    def test_a_turn_from_an_earlier_sitting_day_keeps_its_place_in_front(self):
+        """Not every exchange opens with the question, and the three that do not are the interesting ones.
+
+        On A/155 the member announced on sitting day 6 that he would not accept a substitute answerer; the question
+        itself was put on day 8. Ordering by (ülésnap, sorszám) puts the announcement first, which is what happened.
+        A rule that forced the question to the top would hide the refusal — and the refusal is the news."""
+        from scripts.build_site import exchange_html, OVERSIGHT
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        asked = "elhangzik az interpelláció/kérdés/azonnali kérdés"
+        early = []
+        for rec in self.byn.values():
+            if rec.get("main_type") not in OVERSIGHT:
+                continue
+            labels = [x.strip() for x in re.findall(r'· ([^<·]+)</div>\s*<div class="turn-t', exchange_html(self.inp, rec))]
+            if asked in labels and len(labels) > 1 and labels.index(asked) != 0:
+                early.append(rec["szam"])
+        self.assertLessEqual(len(early), 5, f"more exchanges than expected open before the question: {early}")
+        for szam in early:                     # and each one is genuinely a two-day exchange, not a sorting bug
+            rec = next(r for r in self.byn.values() if r["szam"] == szam)
+            days = {e["speech"].split("/")[0] for e in rec["events"] if e.get("speech")}
+            self.assertGreater(len(days), 1, f"{szam}: opens before the question but sits on one sitting day")
+
+    def test_the_index_marks_an_unvoted_motion_as_zero_and_never_blank(self):
+        from scripts.build_site import build_bill_index
+        if not self.byn:
+            self.skipTest("no motion records cached")
+        html = build_bill_index(self.inp, self.bs)
+        self.assertEqual(html.count("<td></td>"), 0)
+        self.assertNotIn('data-nv=""', html)
+        self.assertEqual(html.count("<tr data-"), len(self.bs))
+        # the three records that carry only a title get no date attribute rather than a zero
+        dateless = [r for r in self.byn.values() if not r.get("submitted_on")]
+        self.assertEqual(html.count("<tr data-") - html.count("data-d="), len(dateless))
+        for n in self.voted:                                   # every voted motion still shows its count
+            self.assertIn(f'data-num="{n}" data-nv="{len(self.voted[n]["votes"])}"', html)
