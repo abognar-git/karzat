@@ -73,8 +73,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--dry-run", action="store_true", help="print the steps, run none of them")
     ap.add_argument("--force", action="store_true", help="rebuild and publish even when nothing changed")
     ap.add_argument("--no-deploy", action="store_true", help="stop before the upload")
+    ap.add_argument("--no-sync", action="store_true",
+                    help="skip every API call and work from the cache — how the pipeline is exercised while a "
+                         "long fetch already holds the one polite request stream")
     ap.add_argument("--days", type=int, default=10, help="how far back to re-list votes (default 10)")
-    ap.add_argument("--profile", default=os.environ.get("KARZAT_AWS_PROFILE", "karzat"))
+    ap.add_argument("--profile", default=os.environ.get("KARZAT_AWS_PROFILE", "karzat"),
+                    help='named AWS profile; pass "" in a role-based environment such as the scheduled build')
     ap.add_argument("--bucket", default=os.environ.get("KARZAT_BUCKET", "karzat-hu"))
     args = ap.parse_args(argv)
     dry = args.dry_run
@@ -85,15 +89,18 @@ def main(argv: list[str] | None = None) -> int:
     log(f"before: {before[0]:,} votes listed, last sitting day {before[1] or '—'}")
 
     # ---- the cheap half: ask the API what is new -------------------------------------------------
+    if args.no_sync:
+        log("--no-sync: not calling the API at all; working from the cache as it stands")
     # a window rather than "since yesterday": the listing is re-read for the last few days because a sitting day's
     # rows can be completed after the fact, and re-listing a day that has not changed costs one call
     today = datetime.now(timezone.utc).date()
     since = today - timedelta(days=args.days)
-    run(py + ["-m", "karzat", "sync-votes", "--from", str(since), "--to", str(today)], dry=dry)
-    run(py + ["-m", "karzat", "sync-speeches", "--ckl", str(CURRENT_CYCLE)], dry=dry)
-    run(py + ["-m", "karzat", "sync-speech-texts", "--ckl", str(CURRENT_CYCLE)], dry=dry, allow_fail=True)
-    run(py + ["-m", "karzat", "sync-committees"], dry=dry, allow_fail=True)   # they carry the next sitting's invitation
-    run(py + ["-m", "karzat", "sync-bills", "--cached"], dry=dry, allow_fail=True)
+    if not args.no_sync:
+        run(py + ["-m", "karzat", "sync-votes", "--from", str(since), "--to", str(today)], dry=dry)
+        run(py + ["-m", "karzat", "sync-speeches", "--ckl", str(CURRENT_CYCLE)], dry=dry)
+        run(py + ["-m", "karzat", "sync-speech-texts", "--ckl", str(CURRENT_CYCLE)], dry=dry, allow_fail=True)
+        run(py + ["-m", "karzat", "sync-committees"], dry=dry, allow_fail=True)   # they carry the next sitting's invitation
+        run(py + ["-m", "karzat", "sync-bills", "--cached"], dry=dry, allow_fail=True)
 
     # ---- did anything move? ----------------------------------------------------------------------
     run(py + ["-m", "scripts.derive_first_light"], dry=dry)
@@ -121,7 +128,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.no_deploy:
         log("built and proven; --no-deploy, so stopping here")
         return 0
-    run(py + ["-m", "scripts.deploy_aws", "--profile", args.profile, "--bucket", args.bucket, "--workers", "24"], dry=dry)
+    deploy = ["-m", "scripts.deploy_aws", "--bucket", args.bucket, "--workers", "24"]
+    if args.profile:
+        deploy += ["--profile", args.profile]
+    run(py + deploy, dry=dry)
     log("published")
     return 0
 

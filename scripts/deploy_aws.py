@@ -132,7 +132,9 @@ def remote_index(s3, bucket: str) -> dict[str, tuple[int, str]]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--profile", required=True)
+    ap.add_argument("--profile", default=None,
+                    help="a named profile from ~/.aws/credentials; omit to use the ambient credentials, "
+                         "which is how the scheduled build authenticates (an IAM role, no key on disk)")
     ap.add_argument("--bucket", required=True)
     ap.add_argument("--region", default="eu-central-1")
     ap.add_argument("--only", help="comma-separated top-level names to upload (default: everything)")
@@ -145,7 +147,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     import boto3
 
-    sess = boto3.Session(profile_name=args.profile, region_name=args.region)
+    sess = boto3.Session(profile_name=args.profile, region_name=args.region) if args.profile \
+        else boto3.Session(region_name=args.region)
     s3, cfront = sess.client("s3"), sess.client("cloudfront")
     ensure_bucket(s3, args.bucket, args.region, args.dry_run)
     dist_id, domain = ensure_distribution(cfront, s3, args.bucket, args.region, args.dry_run)
