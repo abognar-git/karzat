@@ -1,7 +1,7 @@
 """Majority rules of the Országgyűlés: which threshold applied, how many votes it needed,
 and whether a tally clears it.
 
-This is the analytical core Konzol lacks (it shows every vote against a simple-majority
+This is the analytical core the site is built around. Showing every vote against a simple-majority
 marker). Here every vote gets an explicit rule, an explicit base (present MPs or all MPs), an
 explicit "needed" number and a margin against it.
 

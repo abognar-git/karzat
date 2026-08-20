@@ -1,6 +1,7 @@
 """The freshness contract: what the site is allowed to say about how current its data is.
 
-Konzol pulsed "LIVE_FEED_ACTIVE" while its ingest had been dead for 26 days. This module
+A site that pulses "live" while its ingest has been dead for weeks is worse than one that says
+plainly when it last looked, because the first kind of wrong is invisible. This module
 exists so that karzat can never do that. It takes three facts and produces a status and a
 sentence, and the sentence is what the page shows — not a badge.
 

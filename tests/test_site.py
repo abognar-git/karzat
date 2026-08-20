@@ -177,7 +177,7 @@ class Build(unittest.TestCase):
         # the portrait floats beside the text; without containment the card's box ends above the photo and the
         # picture hangs outside the rectangle (it did — a reader saw it before the tests did)
         css = build_assets()["karzat.css"]
-        self.assertRegex(css, r"\.inspector\{[^}]*display:flow-root")
+        self.assertRegex(css, r"\.inspector\{[^}]*display:flkz-root")
         self.assertIn(".portrait.insp{width:48px;height:64px;float:left", css)
 
     def test_the_three_door_forms_line_up(self):

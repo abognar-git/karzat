@@ -20,7 +20,7 @@ then one tree per cycle under site/ckl<N>/ (index, szavazas/<slug>.html × votes
 felszolalas/, bizottsag/, feed/, adatok/ …) and the cross-cycle szemely/, kereses/, modszer/ (generated, git-ignored).
 Every cycle lives one level down, the current one included: a vote's address never changes when the next cycle
 starts. The look is
-Konzol's console language (see reference/konzol/): dark ground, dot grid, corner-bracketed panels, mono labels,
+The console language: dark ground, dot grid, corner-bracketed panels, mono labels,
 a terminal footer whose log lines are real values, and a boot sequence that reduced-motion users never see.
 
 Deterministic: no clock is read (the freshness sentence is computed at the derive timestamp
@@ -497,7 +497,7 @@ def podium_svg(pres: dict[str, list[dict]] | None, facs: list[dict], k: float = 
 
 def _seat_group(pos: str, faction: str, azon: str | None, align: str | None, title: str, node: str, ring_r: float, k: float, hit_r: float | None = None) -> str:
     """One interactive seat: an invisible hit circle the size of the whole seat cell (so hovering near the dot
-    is hovering the dot — Konzol's .kz-hit), data hooks for the inspector and filters, and a white ring when
+    is hovering the dot), data hooks for the inspector and filters, and a white ring when
     the MP voted against their faction. The hover glow is the hit circle's own fill, not a CSS filter."""
     cx, cy = node_cx(node), node_cy(node)
     ring = f'<circle cx="{cx}" cy="{cy}" r="{ring_r:.2f}" class="against"/>' if align == "against" else ""
@@ -748,7 +748,7 @@ tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sa
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}
 /* seat inspector */
-.inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
+.inspector{display:flkz-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
 .inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
@@ -766,7 +766,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.rostrum.edge{fill:var(--panel-deep);fill-opacity:.55}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
 .seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35;vector-effect:non-scaling-stroke}.seatshape.occ{fill:rgba(255,255,255,.06)}
-.ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflow-x:auto}.tswrap svg{min-width:480px;display:block}
+.ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflkz-x:auto}.tswrap svg{min-width:480px;display:block}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
@@ -844,7 +844,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go{color:var(--white)}
 @media(max-width:900px){.landing .masthead{grid-template-columns:1fr;padding:18px 16px 14px}.landing .mast-h h1{font-size:40px}.counts.land{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.land{grid-template-columns:1fr}.doors{grid-template-columns:1fr}.cyc{grid-template-columns:40px minmax(0,1fr)}.cyc .stat{text-align:left}}
 /* the sitting day as a strip: one bar per vote, the margin above or below the axis */
-.strip .stripwrap{overflow-x:auto;margin-top:6px;padding:2px 0}
+.strip .stripwrap{overflkz-x:auto;margin-top:6px;padding:2px 0}
 .strip svg{width:100%;height:56px;display:block;min-width:320px}
 .strip .axis{stroke:var(--border-hi);stroke-width:.4}
 .strip .b rect{fill:var(--dim3);transition:fill .12s}
@@ -883,7 +883,7 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .paybar i{width:var(--w);background:var(--white);opacity:var(--o,1)}
 .paybar i:nth-child(2){opacity:.7}.paybar i:nth-child(3){opacity:.48}.paybar i:nth-child(4){opacity:.32}.paybar i:nth-child(5){opacity:.22}
 /* the record's own edge: a month per column, bright where the House recorded names */
-.cov .covwrap{overflow-x:auto;margin-top:6px}
+.cov .covwrap{overflkz-x:auto;margin-top:6px}
 .cov svg{width:100%;height:210px;display:block;min-width:520px}
 .cov .all{fill:var(--border-hi)}.cov .named{fill:#d4d4d8}
 .cov .hit{fill:transparent}.cov .mc:hover .all,.cov .mc:hover .named{fill:var(--white)}
@@ -895,7 +895,7 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .covkey i.k{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
 .covkey i.named{background:#d4d4d8}.covkey i.all{background:var(--border-hi)}.covkey i.short{background:#8a4a4a}.covkey i.secret{background:var(--sz)}
 /* first-term share, cycle by cycle */
-.turn .turnwrap{overflow-x:auto;margin-top:6px}
+.turn .turnwrap{overflkz-x:auto;margin-top:6px}
 .turn svg{width:100%;height:190px;display:block;min-width:560px}
 .turn .first{fill:#d4d4d8}.turn .back{fill:var(--line2)}
 .turn .tc:hover .first{fill:var(--white)}
@@ -918,7 +918,7 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog summary:hover{color:var(--white)}
 .profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13.5px;line-height:1.65}
 .profile b{color:var(--text);font-weight:400}
-.tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
+.tablewrap{overflkz-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
 .cite .copy{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;cursor:pointer;white-space:nowrap}
@@ -1546,7 +1546,7 @@ def page_head(title: str, description: str, depth: int = 0, feeds: list[tuple[st
 
 
 def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> str:
-    """Konzol-style top bar: brand square, breadcrumb, cycle and the sync time — no 'live' badge."""
+    """The top bar: brand square, breadcrumb, cycle and the sync time — no 'live' badge."""
     rel = "../" * depth
     depth = depth + inp["base_depth"]
     rel = "../" * depth

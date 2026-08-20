@@ -1,7 +1,7 @@
 """Tests for the freshness contract. Pure: fixed `now`, no network, no files (except the CLI test,
 which uses a temp cache).
 
-The scenario numbers are Konzol's own failure, transposed: newest vote 21 July, Parliament
+The scenario is the failure this module exists to prevent: newest vote 21 July, Parliament
 sat on 22 and 23 July, sync last ran on 22 July, and the page is rendered on 18 August.
 """
 
@@ -25,7 +25,7 @@ V = lambda *a: datetime(*a, tzinfo=BUDAPEST)  # noqa: E731
 
 
 class Sentences(unittest.TestCase):
-    def test_konzol_scenario_is_behind_and_names_the_days(self):
+    def test_a_stale_sync_is_behind_and_names_the_days(self):
         fr = assess(
             sitting_days=[date(2026, 7, 20), date(2026, 7, 21), date(2026, 7, 22), date(2026, 7, 23)],
             newest_vote_at=V(2026, 7, 21, 22, 13),

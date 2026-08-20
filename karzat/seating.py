@@ -18,7 +18,7 @@ of the chamber from the triples themselves and states every assumption in the ou
     as a wedge (observed 2026-08-18: 12 TISZA MPs, seat numbers up to 21).
 
 The output is a set of seat coordinates plus a `geometry` record with the numbers the
-inference used, so a reader can check them against a photograph of the chamber. Konzol's
+inference used, so a reader can check them against a photograph of the chamber. The generic
 algorithmic hemicycle stays available as the fallback for MPs without a seat.
 """
 

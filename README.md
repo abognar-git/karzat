@@ -1,7 +1,7 @@
 # karzat
 
-**Konzol, rebuilt for the Országgyűlés: every recorded vote of the Hungarian
-Parliament, drawn seat by seat, with the majority rule that actually applied.**
+**Every recorded vote of the Hungarian Parliament since 1990, on its own page,
+drawn seat by seat, with the majority the House itself required.**
 The parlament.hu Web API token arrived on 18 August 2026. By the end of that day the
 whole of cycle 43 to date — 259 votes with their roll calls — was cached and
 normalised, and the first page was built: one vote drawn seat by seat with the rule
@@ -17,16 +17,13 @@ Hungarian politics yet — it is a description of data and of code.</sub>
 
 ## What this is, in one page
 
-**It is a re-implementation, not a fork.** The reference is *Konzol*, Konzol
-Media LLC's dark, terminal-styled congressional vote visualizer at
-konzol.invalid/konzol. I took it apart in August 2026 — routes, RSC payloads,
-bundles, the public JSON route, the GSAP boot/exit choreography, the hemicycle
-layout algorithm — and the teardown lives in
-[`reference/konzol/`](reference/konzol/konzol-teardown.html) so I do not
-have to keep it in my head. What carries over is the *shape*: a landing page of
-aggregates, a directory of votes, and a per-vote screen with a seat chart and a
-member inspector. What does not carry over is any of the code, the two-party
-assumptions, or the defects I found (see below).
+**The shape it takes.** A landing page of aggregates, a directory of votes, and a
+per-vote screen with a seat chart and a member inspector — the arrangement a reader
+of a legislature's record needs, whichever country's record it is. Everything under
+it is written for this House: six recorded positions rather than three, a majority
+rule that changes from vote to vote, faction membership as a history rather than a
+label, and votes keyed by a timestamp because that is how the Országgyűlés keys
+them.
 
 **One source is enough for the core.** The Országgyűlés publishes a Web API
 (`https://www.parlament.hu/cgi-bin/web-api-pub/*.cgi`, XML, personal access token,
@@ -49,9 +46,10 @@ factions this cycle, and MPs move between them across cycles, so faction members
 is a history. Votes are identified by a timestamp, not a roll number. And the
 majority rule is the story: simple, absolute, two-thirds of those present
 (sarkalatos laws), two-thirds of all 199 (Alaptörvény), four-fifths of those present
-(Házszabálytól eltérés) — and the API names the rule on every vote. Konzol shows
-every vote against a simple-majority marker; that is the single defect this project
-was built not to inherit.
+(Házszabálytól eltérés) — and the API names the rule on every vote. Drawing every
+vote against a single simple-majority marker would be the easy thing to do and would
+be wrong about most of the interesting ones; the threshold is computed per vote and
+shown with it.
 
 **The seat chart is the chamber.** The MP record carries `<ulohely szektor sor szek>` —
 sector, row and seat — and parlament.hu draws a seat map on every MP page from a query
@@ -68,7 +66,7 @@ orientation parlament.hu describes (government to the Speaker's right) is what t
 shows. Before that table turned up I estimated the geometry twice — first with sector
 wedges proportional to their widest row (cramped, overlapping), then with a uniform seat
 pitch and a semicircular front bench (tidy, and still wrong in shape); both are kept in
-`layout()` as the fallback for a cycle without a plan, and the story is in the git log. Konzol's algorithm stays as the fallback. The chart is a console, not an
+`layout()` as the fallback for a cycle without a plan, and the story is in the git log. The generic algorithm stays as the fallback. The chart is a console, not an
 illustration: hover, tap or tab to a seat and an inspector under the chart fills — name,
 faction, mandate, seat, this vote's position, the cycle record (cast, with / against own
 faction) and the last twenty roll calls up to that vote as a streak strip; click pins it, Esc
@@ -107,7 +105,6 @@ and each index links the other cycle in words, not just in the top bar's switch.
 
 ## Status
 
-- [x] Konzol reverse-engineered; teardown and notes in `reference/konzol/`
 - [x] W-API manual v2.5 obtained and transcribed; endpoints and parameters encoded in `karzat/api.py`
 - [x] Client + CLI + offline tests (`python3 -m unittest discover -s tests -t .`)
 - [x] Draft schema (`schema.sql`) and faction/majority config (`config/factions.yml`) — both marked VERIFY throughout
@@ -119,7 +116,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 - [x] First live calls: MP list, four months of vote lists, five vote details, sitting days, one MP, the bill list, one bill — read, fixtured (`tests/fixtures/real_*`), normalised (`karzat/normalise.py`) and gated
 - [x] All 259 cycle-43 vote details synced (254 calls); every computed verdict agrees with the recorded result
 - [x] **First page** — `scripts/build_site.py` → `site/index.html`, deterministic from committed `data/derived/*` (`--check` and `tests/test_site.py` guard it): the T/51 seat chart + verdict, headline counts, mode table, T/71 timeline, the 259-vote directory with filters
-- [x] **The console look** — restyled in Konzol's visual language (dark ground, dot grid, corner-bracketed panels, mono labels, terminal footer, boot sequence); shared generated `site/assets/karzat.css` / `karzat.js`, checked like the index
+- [x] **The console look** — a console language (dark ground, dot grid, corner-bracketed panels, mono labels, terminal footer, boot sequence); shared generated `site/assets/karzat.css` / `karzat.js`, checked like the index
 - [x] **Motions on the MP pages** — the record's `<inditvanyok>` is counts only, so `iromanyok.cgi` (the current cycle's 539 irományok, submitters as "Név (Frakció)") is resolved to people with the same resolver and listed under each current-cycle MP: 974 submissions, and for every one of the 201 people the list count equals the record's "önálló" count; a parser bug that dropped every submitter of a multi-submitter bill was found and fixed on the way
 - [x] **For researchers: export, citation, careers** — every table on a page has a CSV/JSON twin beside it (a vote's roll call, an MP's votes) and each cycle has `adatok/` (szavazasok, nevsorok, kepviselok, inditvanyok as CSV+JSON, with a data dictionary page); every vote, MP and career page carries a "Hivatkozás" box (plain and BibTeX, copy button); `szemely/<azon>.html` is one person across every loaded cycle, linked from each cycle's MP page
 - [x] **Bill journeys** — every roll call grouped by its iromány number (amendment votes `n/k` belong to bill `n`; one number space per cycle): `iromany/<n>.html` per bill with its votes in order and the API's stage text for each, an index per cycle with prefix filters, `iromanyok.csv`; vote pages and the directory link the number to it, parlament.hu's record beside it where the list has one
@@ -130,7 +127,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 - [x] **Mit csinált a képviselőm** — every MP page opens with the last sitting week in numbers (névsorban / leadott / frakciója ellen / érdemi felszólalás, then the speeches by agenda item, kind, length) and a table of every sitting week; committee memberships from the record; the speeches themselves, filterable; per-MP weekly Atom channel (`kepviselo/<azon>-heti.xml`), the cycle's week in numbers (`feed/heti.xml`), `adatok/heti.csv` and `adatok/felszolalasok.csv`; a `felszolalas/` page (days, kinds, the record check) and `kepviselom/` — Ki a képviselőm? by county and OEVK, the list MPs, a name box (settlement lookup is not there: the constituency settlement lists are not loaded, and the page says so). Numbers, no prose: label form, no suffix on a numeral
 - [x] **Felszólalások szövege és keresés** — `karzat sync-speech-texts --ckl N` fetches the record's text of every substantive speech (`felszolalas.cgi`, one call per speech; the payload names the MP by id where the speaker is one — it agrees with the lists' name resolution in every case), `scripts/derive_speech_texts.py` keeps them as plain paragraphs (the current cycle's file is committed; an earlier cycle's is tens of megabytes and stays local — fetch and derive it, the builder picks it up). Every substantive speech gets a page and a JSON twin (`felszolalas/<ülésnap>-<sorszám>`), every sitting day a page in the day's order grouped by agenda item; `felszolalas/kereses.html` searches the texts by word prefix (3+ letters, accents folded, terms AND-ed) over an index sharded by the token's first two letters, showing the record's own snippet; `feed/felszolalasok.xml` carries the recent speeches with their full text so a reader's filter can watch a keyword — that is the whole "topic radar": no topic classification, no summary, no server; committee sittings are not in the API and the page says so. Cycle 43: 1,957 texts, 7,328,808 characters. SQLite v4: `speech_text`
 - [x] **A landing page, and one address per vote for good** — the site root is no longer the current cycle's directory but a page of its own: the chamber as it sits today drawn on the Országház floor plan with **every seat the member who holds it** — all 199 mandate-holders placed where their own record puts them, and with them the **12 nationality spokespersons** (`szoszolok.cgi` — a service I had registered and never called; they are elected by a nationality's list, sit in the back row of sectors 3–4, may speak and sit on committees, but cast no vote, so they are drawn as rings, kept out of every roster count and alignment, and their card says what they do instead). They also have a **career page** each under `szemely/` — the same address shape as an MP's, with committees and speech counts per cycle instead of votes, and a note that a cycle only appears there if the record's dated rows show it (the list itself is present-tense) — and their own kind in the search index (12 entries). The 58 seats still left as outlines are the room's spare places: it was built for 386 members, the House has had 199 since 2014 — hover or focus names them and shows the record their own page prints (leadott / frakciójával / ellene / érdemi felszólalás), a click pins the card, the name opens the page, the legend filters to one faction, and the arrow keys walk the seats; then the ten cycles since 1990 as stacked composition bars (mandates in force on each constituent sitting, read from the records' dated rows — 10 in the strip), the last sitting day with its votes and the freshness sentence, and the doors (Ki a képviselőm?, keresés, a szavak, a jelenlegi ciklus, pályaképek, módszer) as plain forms that work without JavaScript. Every cycle now lives under `ckl<N>/`, **the current one included** — before this, a vote's URL would have changed meaning at the next election, when the root switched to cycle 44; now `ckl43/szavazas/<slug>.html` is what it says it is, and the citations minted on those pages stay true
-- [x] **A nap menete** — a vote page used to be an island: a decision with a chamber and a roll call, and no way to tell whether it was one vote or the fortieth of an afternoon that all went the same way. Every vote page now carries the whole sitting day as a strip — one bar per vote in the order they were taken, the margin above the axis where the decision passed and below where it did not, a tick for a quorum check that has no threshold, and the vote you are reading marked. Each bar links to its own page, and its title names the time, the subject and the difference. A day longer than 160 votes is windowed around the vote you are on and the panel says so. The idea is Konzol (a session timeline on its vote pages); the data is the cycle's own index, read day by day, so it costs nothing new
+- [x] **A nap menete** — a vote page used to be an island: a decision with a chamber and a roll call, and no way to tell whether it was one vote or the fortieth of an afternoon that all went the same way. Every vote page now carries the whole sitting day as a strip — one bar per vote in the order they were taken, the margin above the axis where the decision passed and below where it did not, a tick for a quorum check that has no threshold, and the vote you are reading marked. Each bar links to its own page, and its title names the time, the subject and the difference. A day longer than 160 votes is windowed around the vote you are on and the panel says so. The data is the cycle's own index, read day by day, so it costs nothing new
 - [x] **Published** — the site is live on AWS: a private S3 bucket in Frankfurt behind CloudFront with an Origin Access Control, TLS on CloudFront's certificate, `index.html` as the default root object and the bucket's 403-on-missing rewritten to a real 404 page. `scripts/deploy_aws.py` does the whole thing from a named profile — creates the bucket and the distribution if they are absent, uploads only the objects whose size or MD5 differs, sets content types and cache headers per extension, and asks for an invalidation. First push: 132,387 objects, 3.57 GB, 7.2 minutes. Storage runs about ten cents a month and the traffic sits inside CloudFront's perpetual free tier
 - [x] **A mark of its own** — a favicon in the site's language: one half-ring of tiers over the Speaker's platform, white on near-black, inverted under a light UI. `FAVICON_SVG` is generated with the stylesheet and checked like it; `scripts/make_icons.py` renders the same geometry to `favicon.ico` (16/32/48/64) and a 180-pixel apple-touch-icon, so the build itself never needs Pillow
 - [x] **A fact in the footer** — the boot log's last line is a fact from the corpus instead of a constant: which day the House voted most, the narrowest passage, the member with the most roll calls behind them. `scripts/derive_facts.py` computes them (never typed) into `data/derived/tenyek.json`, each with the page that proves it and the cycles it covers; **rankings are computed only over the months the listing cap never truncated**, so a record is a record and not an artefact of what survived the cut. Each page shows one, picked by a hash of its own address so the build stays reproducible, and a button rotates through the rest from a pool shipped at the site root
@@ -152,14 +149,14 @@ and each index links the other cycle in words, not just in the top bar's switch.
 - [x] **A Ház arcéle** — the first page that reads across the ten cycles rather than inside one, and it is deliberately asymmetric. Mandates are recorded completely since 1990, so **how many members are serving a first term** is a real series and is drawn as one: 100% in 1990, down to 15% in the 199-seat House of 2014, and **79% in 2026** — the largest turnover since the first free election. Degrees, languages and local-government service are *not* drawn that way, because they come from each person's record as it stands today: 273 of cycle 34's 416 members carry a schooling row against 383 of 386 in cycle 35, so a column chart of it would show the archive being tidied, not the Parliament changing. Those three appear once, over all 1,602 people, with a table of exactly how completely each cycle is filled in printed beside them
 - [x] **Five sections of the MP record the site had never read** — the reply to `kepviselo.cgi` carries seventeen blocks and the parser was using eleven. No new call was needed: the 1,636 cached records already held **2,561 schooling rows, 2,033 languages, 9,303 asset declarations, 1,094 local-government seats** and a month of remuneration for the 205 people currently entitled to one. Each career page now draws **az életút** — the cycles sat, the offices the record dates, the local seats held before or between, and the years the degrees carry, all on one time axis, with a span the record leaves open running to the newest vote on the site rather than to the clock — and beneath it the declarations as one square per document linking the published PDF (hollow where the record says one was due and gives no link), the one month of remuneration labelled as the snapshot it is, and the degrees and languages as the record states them. `<ulohely>` and `<email>` are present in every record and empty in every record; the parser leaves them alone and the seat keeps coming from the seating plan
 - [x] **A törvény útja** — `iromany.cgi` had been called exactly once, as a probe. `karzat sync-bills` now caches the current cycle's whole list and every record (539 motions, 537 records, ~5 minutes), and a motion's page draws its road: submitted, every vote the record dates as a tick that links to that vote's page, promulgated as a square with the law reference, a hair on the axis for every day the log touches, the committees assigned to it, and the complete event log — 4,779 events across the cycle, 35 promulgated laws — printed whole rather than filtered through my guess at what counts as a milestone. Current cycle only, and that is the service's limit, not a choice: `iromanyok.cgi` takes no cycle parameter (`p_ckl` was probed and changes nothing) and `p_izon` is a sequence that restarts each cycle, while the vote payloads carry the irományszám and never the izon — so the 14,056 motions the older cycles' votes point at cannot be addressed at all, and the page says so instead of implying the archive is thin
-- [x] **Loose ends** — portraits: every MP page, the seat inspector, the MP index, the finder and the career pages show the parlament.hu photo (the record's `fenykep`, 195×260), loaded from there and not copied, in the black-and-white treatment Konzol uses (`filter: grayscale(1) contrast(1.12) brightness(.92)`), attributed on the image; the terms of use are not stated on parlament.hu, so this is the owner's decision, recorded. `bizottsagok.cgi` exists as the manual's broken cell suggested: `karzat sync-committees` (35 calls, always fresh) caches the 26 committees' records — type, chair, vice-chairs, members by id, and the next sitting's invitation date and URL when one is out; `bizottsag/` per cycle (the API's present-tense records for the current cycle, the MP records' membership histories for every cycle, subcommittees under their parent), a `feed/bizottsagok.xml` channel of announced sittings. "Ki a képviselőm?" takes a town: `reference/valasztas/oevk_telepules.json` is the electoral-district law's annex (2011. évi CCIII. tv., 2. melléklet, the text in force from 2024-12-31, njt.hu) parsed into 106 OEVK and 3,171 settlement/district names; the 23 cities and districts the annex splits by streets list every candidate and say the address decides. And the legal citations in `karzat/majority.py` were read against the consolidated Alaptörvény and House Rules on njt.hu — every VERIFY flag is gone except the API's 4/5-of-all label from 2014, for which neither text gives a basis
+- [x] **Loose ends** — portraits: every MP page, the seat inspector, the MP index, the finder and the career pages show the parlament.hu photo (the record's `fenykep`, 195×260), loaded from there and not copied, in a black-and-white treatment (`filter: grayscale(1) contrast(1.12) brightness(.92)`), attributed on the image; the terms of use are not stated on parlament.hu, so this is the owner's decision, recorded. `bizottsagok.cgi` exists as the manual's broken cell suggested: `karzat sync-committees` (35 calls, always fresh) caches the 26 committees' records — type, chair, vice-chairs, members by id, and the next sitting's invitation date and URL when one is out; `bizottsag/` per cycle (the API's present-tense records for the current cycle, the MP records' membership histories for every cycle, subcommittees under their parent), a `feed/bizottsagok.xml` channel of announced sittings. "Ki a képviselőm?" takes a town: `reference/valasztas/oevk_telepules.json` is the electoral-district law's annex (2011. évi CCIII. tv., 2. melléklet, the text in force from 2024-12-31, njt.hu) parsed into 106 OEVK and 3,171 settlement/district names; the 23 cities and districts the annex splits by streets list every candidate and say the address decides. And the legal citations in `karzat/majority.py` were read against the consolidated Alaptörvény and House Rules on njt.hu — every VERIFY flag is gone except the API's 4/5-of-all label from 2014, for which neither text gives a basis
 - [x] **Értesítések** — Atom feeds written by the builder, so a scheduled rebuild is the alert channel (`karzat/feeds.py`; `feed/` per cycle): every roll call with a dissent (`kulonvelemeny.xml`, one entry per vote listing who voted against their faction's plurality), the same per faction (`frakcio-<slug>.xml`) and per MP (`kepviselo/<azon>.xml`), and every vote (`szavazasok.xml`); a page explains them and lists them, `adatok/kulonvelemenyek.csv` is the complete record, the index and MP pages announce their feeds for autodiscovery. Independents are not a faction and are not in the channels (the CSV keeps their rows). Each channel carries the newest 100 entries but never less than the last five sitting days (a marathon day has 160+ votes). Deterministic: ids are URNs from cycle, vote time and channel, `updated` is the sync stamp, never the clock; links are absolute when `KARZAT_SITE_URL` is set for the published build and relative to the feed file otherwise. Cycle 43: 92 roll calls with a dissent, 240 dissents in all; the same numbers the MP pages and the cohesion page print, tested to agree
 - [x] **Cohesion and close votes** — `karzat/analytics.py`: Rice and Hix–Noury–Roland agreement indices per faction per vote and per cycle, the faction × faction plurality-agreement matrix, MP × MP agreement within a faction (≥ 20 shared votes), all with the formulas printed on `kohezio/`; and `szoros/`, the decisions ranked by margin to their threshold, the yes-majorities a qualified threshold sank, and — a labelled counterfactual — the outcomes that would flip if every non-caster had voted with their faction's plurality; every vote page shows each faction's AI beside its bar; CSVs for all of it
 - [x] **Cycle 42 pages** — the same builder, one level down (`site/ckl42/`): its own index, 2,599 vote pages and 214 MP pages, a cycle switch in the top bar and cross-links between an MP's two pages; inputs `votes_index_ckl42.json.gz` + `votes_positions_ckl42.json.gz` (deterministic gzip, 424 KB together) + `mps_ckl42.json`; the missing `kepviselo.cgi` records fetched (171 of the 214 people are not in the cycle-43 roster); factions attributed by each person's last roll call (10 switchers)
 - [x] `sync-mps`: all 199 MP records; the **real seating plan** reconstructed from `<ulohely>` (`karzat/seating.py`, `scripts/derive_seating.py` → `data/derived/seating.json`) and drawn on the page — 197 of the hero vote's 199 placed, the 2 MPs whose mandates have since ended kept visible without a seat
 - [x] **SQLite loader** (`karzat/load.py`, `python3 -m karzat load` / `stats`): schema v3 (v2 at the time) built from scratch from the cache — twelve seconds for two cycles then, twelve minutes for ten now — 79,829 votes, 17,444,402 roll-call positions with 0 unresolved names, 3,580 faction-history rows, 3,278 mandates across cycles, 539 bills — plus a per-vote faction-plurality table and views (`v_vote`, `v_mp_alignment`) so discipline and absence are plain SQL
 - [x] **Per-vote pages**: `site/szavazas/<slug>.html` for all 259 votes — the reconstructed chamber for that vote, the verdict card, faction bars, and a sortable, filterable roll call with every MP's seat; prev/next; the directory links to them. Generated from the committed `data/derived/votes_positions.json` (git-ignored output, 0.6 s for all 259)
-- [x] **MP pages**: `site/kepviselo/<p_azon>.html` for all 201 people in the roll calls plus an index — mandate, seat highlighted on the chamber, faction history and mandates back to 1990, motion counts, this cycle's participation and with/against-own-faction record with definitions on the page, the votes cast against the faction plurality, and every vote linked. Portraits linked, not embedded (licence unverified). Names on vote pages link here
+- [x] **MP pages**: `site/kepviselo/<p_azon>.html` for all 201 people in the roll calls plus an index — mandate, seat highlighted on the chamber, faction history and mandates back to 1990, motion counts, this cycle's participation and with/against-own-faction record with definitions on the page, the votes cast against the faction plurality, and every vote linked. Portraits shown (since **The pictures are ours** above, served from our own origin; before that, linked). Names on vote pages link here
 - [x] **Cycle 42 backfilled** (2022-05-02 → 2026-05-08): 2,599 votes over 192 sitting days listed and every roll call fetched (2,445 calls at the polite pace, about 26 a minute, in one afternoon); a second Wikidata snapshot for the names; the list-level summary in `data/derived/first_light_ckl42.json`, the comparison below; both cycles in the database. What the backfill taught the vocabulary: a **seventh** roll-call state, `Ig.távol` (excused absence — 1,223 entries in 288 of cycle 42's roll calls, none in cycle 43's first 259), and how the faction rows aggregate the seven into five columns (`igtav_db` = Ig.távol + Előre bejelentett hiányzó, `nemszav_db` = Nem szav. + Jelen, nem szav.) — schema v2, one real fixture, one test
 
 ## Run it
@@ -214,22 +211,21 @@ is git-ignored. Live requests are paced at ≥ 0.6 s.
 ## The model (draft)
 
 `schema.sql` is the target; every VERIFY comment is a claim about the XML I have not
-been able to check. The mapping from Konzol's model to this one:
+been able to check. The decisions in it that a reader might expect to have gone the
+other way, and why:
 
-| Konzol | karzat | Why it changes |
-|---|---|---|
-| `chamber` House/Senate | — (one chamber) | Országgyűlés is unicameral |
-| `congress`, `session` (119-2) | `ckl` (43), `session_label` (tavaszi/őszi), `sitting_day` | parlament.hu numbers terms from 34 (1990); 43 = 2026– |
-| `rollNumber` | `vote.ts` (idopont) + `slug` | The API identifies a vote by timestamp |
-| `vote: yea/nay/nv` | `position:` igen / nem / tartozkodott / jelen_nem_szavazott / nem_szavazott / bejelentett_hianyzo / igazoltan_tavol | Abstention is first-class; presence is recorded separately from voting; two kinds of excused absence |
-| `party: DEM/REP/IND` | `faction_id` + `mp_faction` history | N factions, MPs move |
-| `thresholdLabel` (always SIMPLE) | `majority_rule` from the API's "Szavazási mód" + `needed`, per vote | The rule differs and matters — and the source states it |
-| `district` | `mp_mandate.kind` egyéni/lista + constituency | Mixed electoral system |
-| `billRole` sponsor/cosponsor | `bill.submitters` + `submitter_kind` kormány/képviselő | Government vs. individual-MP bills is the transparency angle |
-| `sponsoredBillHistory[20]` | derived from `<inditvanyok>` | Keep the idea, recompute from source |
-| `recentPartyAlignment[20]` | derived: position vs. faction majority | Discipline is near-total on the government side; deviation and absence are the signal |
-| photo from congress.gov | `mp.photo_url` from parlament.hu, shown from there (hotlinked, not copied), black-and-white like Konzol's; the terms of use were not found stated on parlament.hu — the owner's decision, attributed on every image | |
-| 200-record directory cap | none; paginate | Hundreds of votes per sitting day |
+| Decision | Why |
+|---|---|
+| one chamber, no `chamber` column | the Országgyűlés is unicameral |
+| `ckl` (43) and `session_label` (tavaszi/őszi) rather than a congress number | parlament.hu numbers terms from 34 (1990); 43 = 2026– |
+| a vote is keyed by `vote.ts` (idopont) and a slug, not a roll number | the API identifies a vote by timestamp and nothing else |
+| seven positions, not three | abstention is a political act here and gets its own glyph; presence is recorded separately from voting; there are two kinds of excused absence |
+| `faction_id` plus an `mp_faction` history | there are several factions and members move between them across cycles |
+| `majority_rule` and `needed` on every vote | the rule differs from vote to vote and the source states it — this is the whole analytical point |
+| `mp_mandate.kind` egyéni/lista with a constituency | a mixed electoral system |
+| `bill.submitters` with `submitter_kind` kormány/képviselő | government against individual-member bills is the transparency angle |
+| the directory paginates rather than capping | a sitting day can hold hundreds of votes |
+| portraits shown from parlament.hu, in black and white, attributed on every image | the terms of use are not stated there — the owner's decision, recorded |
 
 ## Majority rules — the analytical core
 
@@ -274,8 +270,7 @@ Fidesz 44, KDNP 8, Mi Hazánk 6 — which, if the API confirms it, puts one grou
 
 `site/index.html` plus two generated files under `site/assets/` (`karzat.css`,
 `karzat.js`; no CDN, no fonts fetched, one external link type: parlament.hu bill pages),
-Hungarian-first with the freshness sentence in both languages. The look is Konzol's,
-deliberately — the console I studied before starting: a near-black ground with a faint
+Hungarian-first. The look is a console, deliberately: a near-black ground with a faint
 24 px dot grid, zinc-bordered panels with 16 px corner brackets, tiny upper-case
 monospace labels, big light-weight numbers, a 48 px top bar (brand square, breadcrumb,
 cycle, and the sync time — never a "live" pulse, because nothing here is live), and a
@@ -420,8 +415,8 @@ Two mechanisms carried over from the sibling repos, both live before any real da
 
 ## The freshness contract
 
-Konzol pulsed "LIVE_FEED_ACTIVE" while its ingest had been dead for 26 days. karzat
-cannot: `karzat/freshness.py` takes the sitting days known from `ulesnap.cgi`, the newest
+A site can pulse "live" while its ingest has been dead for weeks, and nothing on the
+page would say so. This one cannot: `karzat/freshness.py` takes the sitting days known from `ulesnap.cgi`, the newest
 vote held, and the last successful sync, and produces a status and **a sentence** — the
 sentence is what the page shows, in Hungarian and English. Its rules: never say "live" (a
 test forbids the word); always name the date of the newest vote; count what is missing in
@@ -435,11 +430,11 @@ unavailable, say that currency cannot be told rather than imply it. `sync-votes`
 ## Decisions
 
 - **Votes are keyed by timestamp**, URL slug `YYYY-MM-DDTHH-MM-SS`; no invented roll numbers.
-- **Six positions, explicit majority rule, faction history** — the things Konzol gets wrong or cannot express, fixed in the schema rather than in the UI.
+- **Six positions, explicit majority rule, faction history** — the things a three-state, single-threshold model cannot express, fixed in the schema rather than in the UI.
 - **Members are joined by `p_azon`, never by name.** The roll call prints names + faction; names are unique in the current list and resolve exactly, honorifics included; former MPs resolve through Wikidata aliases (P4966 = `p_azon`) or stay explicitly unresolved.
 - **Raw XML is the source of truth on disk; SQLite is derived** and can be rebuilt. This is the same
   "generated, not typed" discipline as the assay repos.
-- **Working assumption for the front end: static site + JSON, built by a scheduled job** (a GitHub Action holding the token as a secret), published on Pages like the pyrite explorer. No Vercel, no Cloudflare, no auth. Whether the visual language mirrors Konzol's GSAP terminal or takes a calmer line is still open.
+- **Working assumption for the front end: static site + JSON, built by a scheduled job** (the token held as a secret, never on disk), published as static files. No server, no auth. Whether the visual language goes for an animated terminal or takes a calmer line is still open.
 - **No gazette scraping.** Promulgation comes from the API; decrees are out of scope.
 
 ## What the first payloads answered (18 August 2026, 15 calls)
@@ -516,11 +511,41 @@ site/              index.html — the first page, generated, guarded by --check 
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v3 (speeches and committee memberships; v2 added the seven roll-call states) — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels
-reference/         parlament-webapi/ (manual v2.5, PDF + text) · konzol/ (teardown + notes) · wikidata/ (member snapshot + README)
+reference/         parlament-webapi/ (manual v2.5, PDF + text) · wikidata/ (member snapshot + README) · valasztas/ (constituency annex, postcodes) · parlament/ (the listing cap)
 data/raw/          git-ignored XML cache · data/derived/ committed summaries the README is gated on
 ```
 
 ## Licence
 
-MIT. Data belongs to the Országgyűlés and is republished under the terms of its Web
-API registration; attribute it.
+Four different things live in this repository, and only one of them is mine to license.
+
+**The code** — everything under `karzat/`, `scripts/`, `tests/`, and the templates inside
+`build_site.py` — is MIT, in `LICENSE`. Take it, fork it, point it at another parliament's
+API; that is what it is for.
+
+**The record** is not mine and never becomes mine. Votes, members, motions, committees and
+the shorthand record belong to the Országgyűlés and are reached through the W-API under a
+registered token. Nothing in this repository grants you a right to them: if you want the
+same data, register for your own token at parlament.hu. Attribute the House, not me.
+
+**The derivation** — the shape I gave that record: the schema in `schema.sql`, the summary
+files in `data/derived/`, and the per-cycle tables the site publishes under `adatok/` as
+JSON and CSV — is the part I actually made, and it is [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+Use the tables, cite karzat and parlament.hu. Where a derived file merely restates the
+record verbatim there is nothing for me to license, and I claim nothing over it.
+
+**The pictures** are the loose end, and the honest answer is that I do not know. The
+portraits come from the House's own `fenykep` endpoint; parlament.hu states no terms of use
+for them that I could find, and I did not receive an answer to asking. The site serves a
+resized, greyscale copy from its own origin — a copy, not a hotlink, which is the more
+exposed of the two positions — and every one of them is captioned with its source. The
+image files are not in this repository (`site/assets/portre/` is git-ignored); a clone
+rebuilds them from the cache or falls back to loading them from parlament.hu directly. If
+the House objects, one constant in `build_site.py` turns every copy back into a link.
+The handful of government members the House does not photograph are taken from Wikimedia
+Commons instead, under whatever each file's own licence is, with author and licence printed
+on the image and on the page.
+
+The W-API manual in `reference/parlament-webapi/` is the House's own PDF, kept here because
+the repository's claims about the API should be checkable against the document they came
+from. The Wikidata snapshots in `reference/wikidata/` are CC0 from source.
