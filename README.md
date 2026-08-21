@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 283 tests
+python3 -m unittest discover -s tests -t .      # offline; 291 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -639,6 +639,52 @@ same thousand.
 
 Twenty-five records asked so far, nothing rewritten. The interesting number is the one that is not zero, and it
 may be years before there is one; the point is that if it happens, the old bytes will still be here.
+
+## A receipt for every number
+
+The site's rule is that a number is generated rather than typed, and the README gate enforces it. But
+"generated" answers *how*, not *from what*. A reader looking at a count of votes has no way to tell which
+payloads produced it, or whether the code that counted them is the code in front of them.
+
+`scripts/derive_receipt.py` pins the three things that have to agree. The corpus: 148304 cached
+payloads, 2.75 GB, their content hashes folded in sorted order into one root, per service and
+then over the services. The code: the commit, and whether the working tree was clean — a dirty tree is recorded
+as dirty rather than quietly attributed to the commit it sits on, because that is exactly the case where
+somebody trying to reproduce a figure fails and cannot see why. And each derived file's own hash, so
+`--verify` can check the receipt against the disk without re-deriving anything.
+
+Content, never modification time. A refetch returning identical bytes must not look like a change and one
+returning different bytes must, which is the same property the source watcher needs and the reason both exist.
+The sensitivity is tested rather than assumed: adding an eight-byte comment to one payload out of
+148304 moves the root, and restoring the file restores it.
+
+What the receipt does not claim is that a given number came from a given payload. Tracking that would mean
+instrumenting every read in every derivation. The honest cheaper answer is the one here — this figure came from
+this corpus state under this code — and both halves are checkable, which is more than most published statistics
+offer. It costs 41 seconds a night.
+
+## The whole corpus in three files
+
+The site publishes a CSV per cycle per table, which is right for a spreadsheet and wrong for a question that
+spans 1990 to 2026: nine downloads and a join before you start. `scripts/derive_parquet.py` writes the same data
+in one piece — 79829 votes, 17444402 cast positions, and
+3263 member-cycles.
+
+The size is the surprising part. Seventeen million positions come to
+2.7 MB and all three files together to 4.3 MB, because the columns
+that dominate the row count — member, faction, position — are low cardinality and dictionary encoding is close
+to free on them. The entire named voting record of the Hungarian Parliament since 1990 is a smaller download
+than a photograph.
+
+It is also seekable, in row groups rather than one block, so a question can pull only what answers it over
+ordinary HTTP range requests. That matters less at four megabytes than I expected it to, and it is the
+groundwork for running the queries in the browser rather than on a server there is none of.
+
+Two things are asserted rather than assumed, because both are ways a published extract can quietly disagree with
+the site it came from. Every named vote's positions must sum to the tallies its own header carries — checked
+across three thousand votes, since a mismatch would mean the file and the pages disagree and one of them is
+wrong. And all seven positions must survive: collapsing them into yes, no and abstain is the commonest way this
+data is misread, and an export that did it silently would hand the mistake to everyone who downloaded it.
 
 ## Licence
 

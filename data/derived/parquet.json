@@ -1,0 +1,52 @@
+{
+ "built_at": "2026-08-21T09:21:12Z",
+ "tables": {
+  "szavazasok": {
+   "rows": 79829,
+   "bytes": 1575909,
+   "columns": [
+    "cycle",
+    "ts",
+    "date",
+    "time",
+    "slug",
+    "subject",
+    "motion",
+    "igen",
+    "nem",
+    "tartozkodott",
+    "result",
+    "kind",
+    "mode",
+    "rule",
+    "needed"
+   ]
+  },
+  "szavazatok": {
+   "rows": 17444402,
+   "bytes": 2694239,
+   "columns": [
+    "cycle",
+    "ts",
+    "date",
+    "mp",
+    "faction",
+    "position"
+   ]
+  },
+  "kepviselok": {
+   "rows": 3263,
+   "bytes": 32010,
+   "columns": [
+    "cycle",
+    "mp",
+    "name",
+    "faction",
+    "mandate_kind",
+    "county",
+    "constituency_no",
+    "current"
+   ]
+  }
+ }
+}

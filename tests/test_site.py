@@ -1748,12 +1748,24 @@ class NightlyRunsEveryDerivation(unittest.TestCase):
         self.assertEqual(missing, [], f"the nightly never runs: {', '.join(missing)}")
         self.assertTrue(named <= on_disk, f"the nightly names a script that does not exist: {named - on_disk}")
 
-    def test_the_facts_are_derived_after_what_they_count(self):
-        """tenyek.json is computed from the other derived files, so its step has to come last."""
+    def test_the_last_two_steps_are_the_ones_that_read_the_others(self):
+        """Two derivations consume what the rest produce, and their order is the claim.
+
+        tenyek.json counts the derived corpus, so it must come after everything that writes to it. receipt.json
+        hashes the derived files, so it must come after *that* — a receipt taken before the last write would
+        certify a state the build then left behind, which is worse than no receipt at all."""
         nightly = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
         order = re.findall(r"scripts\.(derive_\w+)", nightly)
         self.assertIn("derive_facts", order)
-        self.assertEqual(order[-1], "derive_facts", f"derive_facts runs before {order[order.index('derive_facts') + 1:]}")
+        self.assertEqual(order[-1], "derive_receipt", f"the receipt is not last: {order[-3:]}")
+        # facts counts the derived corpus, so everything that writes to it has to have run; the receipt then
+        # hashes the result, facts and parquet included. Only the two relative positions are the claim — what
+        # sits between them is free to grow, and it has.
+        self.assertLess(order.index("derive_facts"), order.index("derive_receipt"))
+        for earlier in ("derive_mps", "derive_speeches", "derive_bills", "derive_echo"):
+            if earlier in order:
+                self.assertLess(order.index(earlier), order.index("derive_facts"),
+                                f"{earlier} runs after the facts that count it")
 
     def test_deriving_one_cycle_does_not_drop_the_others(self):
         """The nightly passes --cycle, and a run that rewrote echo.json with only the running cycle would silently
@@ -1856,3 +1868,122 @@ class PagesLoadTheirAssets(unittest.TestCase):
                 self.fail(f"{name}: {bad} resolves inside the page's own directory, where no assets/ exists")
             self.assertRegex(html, r'href="(\.\./)+assets/karzat\.css"', f"{name}: no stylesheet climbing out")
             self.assertRegex(html, r'src="(\.\./)+assets/karzat\.js"', f"{name}: no script climbing out")
+
+
+class Receipt(unittest.TestCase):
+    """The receipt pins a published number to a corpus state and a code version.
+
+    Its one load-bearing property is sensitivity: if any of the 146,709 cached payloads changes by a byte, the
+    corpus root must move. A digest that misses a small edit would certify a corpus that is not the one that was
+    read, which is worse than publishing no receipt — it would make an unverifiable claim look verified."""
+
+    def test_a_single_changed_byte_moves_the_corpus_root(self):
+        import hashlib as _h
+        from scripts.derive_receipt import service_root
+        d = ROOT / "data" / "raw" / "ulesnap"
+        if not d.is_dir() or not any(d.glob("*.xml")):
+            self.skipTest("no cached payloads to fingerprint")
+        before, n, _ = service_root(d)
+        p = sorted(d.glob("*.xml"))[0]
+        keep = p.read_bytes()
+        try:
+            p.write_bytes(keep + b"<!-- -->")
+            after, n2, _ = service_root(d)
+        finally:
+            p.write_bytes(keep)
+        self.assertEqual(n, n2)
+        self.assertNotEqual(before, after, "an edited payload left the root unchanged")
+        self.assertEqual(service_root(d)[0], before, "restoring the payload did not restore the root")
+
+    def test_the_root_moves_for_an_added_or_removed_payload_too(self):
+        from scripts.derive_receipt import service_root
+        d = ROOT / "data" / "raw" / "ulesnap"
+        if not d.is_dir():
+            self.skipTest("no cached payloads")
+        before, _, _ = service_root(d)
+        extra = d / "zzz-receipt-test.xml"
+        try:
+            extra.write_bytes(b"<x/>")
+            self.assertNotEqual(service_root(d)[0], before, "an added payload left the root unchanged")
+        finally:
+            extra.unlink(missing_ok=True)
+        self.assertEqual(service_root(d)[0], before)
+
+    def test_the_receipt_says_when_the_tree_was_dirty(self):
+        """A build from uncommitted code must not be attributed to the commit it sits on: that is exactly the
+        case where somebody trying to reproduce the number fails and cannot see why."""
+        from scripts.derive_receipt import code_state
+        c = code_state()
+        self.assertIn("commit", c)
+        self.assertIsInstance(c["clean"], bool)
+        self.assertEqual(c["clean"], c["uncommitted_files"] == 0)
+
+    def test_the_method_page_prints_the_receipt(self):
+        from scripts.build_site import build_method_page
+        inp = load_inputs()
+        r = inp.get("receipt") or {}
+        if not r:
+            self.skipTest("no receipt derived — run: python3 -m scripts.derive_receipt")
+        html = build_method_page(inp)
+        self.assertIn(r["corpus_root"][:16], html)
+        self.assertIn(r["code"]["described"], html)
+
+
+class ParquetCorpus(unittest.TestCase):
+    """The whole roll-call corpus in one seekable file, and the two ways it could quietly lie.
+
+    The first is arithmetic: if the positions do not sum to the tallies the vote's own header carries, the file
+    disagrees with the site built from the same source and one of them is wrong. The second is subtler and is the
+    commonest way this data gets misread — collapsing the seven positions the House distinguishes into
+    yes/no/abstain. A file that did that silently would spread the mistake to everyone who downloaded it."""
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            import pyarrow.parquet as pq
+        except ImportError:
+            raise unittest.SkipTest("pyarrow not installed")
+        cls.pq = pq
+        cls.dir = ROOT / "site" / "adatok"
+        if not (cls.dir / "szavazatok.parquet").exists():
+            raise unittest.SkipTest("no parquet built — run: python3 -m scripts.derive_parquet")
+        cls.votes = pq.read_table(cls.dir / "szavazasok.parquet")
+        cls.pos = pq.read_table(cls.dir / "szavazatok.parquet")
+
+    def test_it_holds_the_same_number_of_votes_the_site_publishes(self):
+        from scripts.build_site import site_totals
+        self.assertEqual(self.votes.num_rows, site_totals()["votes"])
+
+    def test_a_vote_s_rows_add_up_to_its_own_header(self):
+        import collections
+        ts_col = self.pos.column("ts").to_pylist()
+        by_ts = collections.defaultdict(collections.Counter)
+        for ts, p in zip(ts_col, self.pos.column("position").to_pylist()):
+            by_ts[ts][p] += 1
+        checked = 0
+        for i in range(self.votes.num_rows):
+            ts = self.votes.column("ts")[i].as_py()
+            counts = by_ts.get(ts)
+            if not counts:
+                continue                                   # a vote with no name-level list: tallies only
+            for col in ("igen", "nem", "tartozkodott"):
+                want = self.votes.column(col)[i].as_py()
+                if want is None:
+                    continue
+                self.assertEqual(counts.get(col, 0), want, f"{ts}: {col} header {want}, rows {counts.get(col, 0)}")
+            checked += 1
+            if checked >= 3000:
+                break
+        self.assertGreater(checked, 1000, "too few named votes checked to prove anything")
+
+    def test_all_seven_positions_survive_the_export(self):
+        seen = set(self.pos.column("position").to_pylist()[:3_000_000])
+        for p in ("igen", "nem", "tartozkodott", "jelen_nem_szavazott", "nem_szavazott",
+                  "bejelentett_hianyzo", "igazoltan_tavol"):
+            self.assertIn(p, seen, f"{p} is missing — the export collapsed the House's own distinctions")
+
+    def test_it_is_seekable_rather_than_one_block(self):
+        """A single row group would mean any question downloads the whole file; the browser page depends on not."""
+        md = self.pq.ParquetFile(self.dir / "szavazatok.parquet").metadata
+        self.assertGreater(md.num_row_groups, 10, "the positions are one block, so no query can seek")
+        self.assertLess(self.pos.nbytes and (self.dir / "szavazatok.parquet").stat().st_size, 60_000_000)

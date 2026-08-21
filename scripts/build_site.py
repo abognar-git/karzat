@@ -263,6 +263,8 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
     km_path = DERIVED / "kormany.json"
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    rc_path = DERIVED / "receipt.json"
+    receipt = load_json(rc_path) if rc_path.exists() else {}
     fs_path = DERIVED / "faction_switches.json"
     switches = load_json(fs_path) if fs_path.exists() else {}
     ec_path = DERIVED / "echo.json"
@@ -275,7 +277,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -3379,6 +3381,9 @@ def build_data_page(inp: dict, out_dir: Path | None = None) -> str:
              ("felszolalasok.csv", None, "az ülésnapok felszólalás-listái soronként: napirendi pont, felszólaló, fajta, szerep, hossz, érdemi/eljárási"),
              ("heti.csv", None, "képviselőnként és ülésnapos hetenként: névsorban, leadott, frakciója ellen, érdemi felszólalás — a heti összefoglalók számai"),
              ("kepviselok.csv", "kepviselok.json", "a ciklus névsoraiban szereplő személyek, összesítéssel"),
+             ("../adatok/szavazatok.parquet", None, "MINDEN ciklus együtt, egy fájlban: 17,4 millió leadott szavazat — Parquet, DuckDB-vel vagy pandasszal egy lekérdezés"),
+             ("../adatok/szavazasok.parquet", None, "minden ciklus szavazásai egy fájlban: dátum, tárgy, iromány, számok, szabály, eredmény"),
+             ("../adatok/kepviselok.parquet", None, "minden ciklus névsora egy fájlban: mandátum, frakció, választókerület"),
              ] + ([("inditvanyok.csv", "inditvanyok.json", "a jelenlegi ciklus irományai benyújtó szerint"),
                    ("../iromany/adatlapok.csv", None, "a ciklus irományai az adatlapokról: típus, benyújtó, címzett, állapot, kihirdetés, események, elhangzott felszólalások")] if not inp["closed"] else []) + [
              ("../iromany/iromanyok.csv", None, "minden iromány, amelyről név szerint szavaztak"),
@@ -4613,6 +4618,14 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
+
+<section class="panel" id="nyugta">{CORNERS}<h2><span data-kz-text>Nyugta: melyik korpuszból, melyik kódból</span></h2>
+<div class="hero-meta prose">Az oldal minden száma generált, nem beírt — ezt a README-kapu kényszeríti ki. De a „generált" csak azt mondja meg, <i>hogyan</i>, azt nem, hogy <i>miből</i>. Ehhez három dolgot kell egymáshoz rögzíteni, és ez a nyugta rögzíti őket.
+<br><br><b>A korpusz.</b> {hu_num((inp.get("receipt") or {}).get("payloads") or 0)} letöltött payload tartalmi lenyomata egyetlen gyökérbe fésülve, névsorrendben. Bármelyik payload hozzáadása, törlése vagy módosítása elmozdítja a gyökeret — kipróbálva: egy nyolcbájtos megjegyzés egyetlen fájlban megváltoztatja. Tartalom szerint, nem módosítási idő szerint: egy újralekérés, ami ugyanazokat a bájtokat hozza, nem látszhat változásnak, egy másik bájtokat hozó viszont igen.
+<br><br><b>A kód.</b> A commit, és hogy tiszta volt-e a munkakönyvtár a build idején. A piszkos állapot piszkosként van rögzítve, nem csendben a committhoz rendelve — épp az az eset, amikor egy reprodukálni próbáló olvasó elakadna, és nem tudná, miért.
+<br><br><b>A származtatott fájlok.</b> Mindegyik saját lenyomata, hogy a nyugta újraszámolás nélkül is összevethető legyen a lemezzel (<span class="mono">python3 -m scripts.derive_receipt --verify</span>).
+<br><br><b>Amit nem állít:</b> hogy egy adott szám egy adott payloadból jött. Ehhez minden levezetés minden olvasását műszerezni kellene; az őszinte, olcsóbb válasz ez — <i>ebből a korpuszállapotból, ezzel a kóddal</i>. Mindkettő ellenőrizhető.
+<br><br>A jelenlegi nyugta: korpusz <span class="mono">{esc(((inp.get("receipt") or {}).get("corpus_root") or "—")[:16])}</span> · kód <span class="mono">{esc((((inp.get("receipt") or {}).get("code") or {}).get("described")) or "—")}</span> · készült {esc(((inp.get("receipt") or {}).get("built_at") or "—")[:10])}.</div></section>
 
 <section class="panel" id="frakciovaltas">{CORNERS}<h2><span data-kz-text>Frakcióváltás: két nyilvántartás ugyanarról</span></h2>
 <div class="hero-meta prose">Az Országgyűlés kétszer rögzíti ugyanazt a tényt, és a kettőt nem veti össze: a képviselő adatlapja dátumozott frakciósorokat tart, a név szerinti szavazások listái pedig minden szavazásnál külön megcímkézik a képviselőt. Az oldal összeveti őket.
