@@ -263,6 +263,8 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
     km_path = DERIVED / "kormany.json"
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    fs_path = DERIVED / "faction_switches.json"
+    switches = load_json(fs_path) if fs_path.exists() else {}
     ec_path = DERIVED / "echo.json"
     echo = ((load_json(ec_path).get("cycles") or {}).get(str(cycle)) or {}) if ec_path.exists() else {}
     ir_path = DERIVED / "iromany_records.json"
@@ -273,7 +275,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -2602,6 +2604,85 @@ def normalise_echo_words(paragraphs: list[str]) -> list[str]:
     return normalise(paragraphs)
 
 
+VERDICT_ORDER = ("egyezik", "a váltás napján még a régi", "tovább tartja a régit",
+                 "más frakciót nevez meg", "nincs név szerinti lista")
+
+
+def build_switch_page(inp: dict) -> str:
+    """frakciovaltas/index.html — every change of faction inside a mandate, and whether the two records agree.
+
+    The House keeps the same fact twice and never reconciles the two: the member's own record carries dated
+    faction rows, and every roll-call name list labels them independently at every vote. Where both exist the
+    claim is checkable, which is the whole reason to publish it — and where they differ the difference is printed
+    with the name on it rather than smoothed away, because a reconciliation nobody can audit is worth nothing."""
+    sw = inp.get("switches") or {}
+    items = sw.get("items") or []
+    if not items:
+        return ""
+    facs = {f["id"]: f["colour"] for c in available_cycles() for f in factions(c)}
+    v = sw.get("verdicts") or {}
+    rows = []
+    for it in items:
+        dot = lambda x: f'<i class="d" style="--c:{facs.get(x, "#8a8a8a")}"></i>{esc(x)}'
+        lag = f'<span class="sub">{hu_num(it["lag_days"])} nap</span>' if it.get("lag_days") else ""
+        listed = ", ".join(it.get("listed_after") or []) or "—"
+        rows.append(
+            f'<tr data-p="{esc(it["verdict"])}" data-f="{esc(it["ciklus"] or "")}" data-num="{esc((it["on"] or "").replace("-", ""))}">'
+            f'<td class="ts mono">{esc(hu_date(it["on"]) if it.get("on") else "—")}</td>'
+            f'<td><a href="szemely/{esc(it["azon"])}.html">{esc(it["name"] or "—")}</a><span class="sub">{esc(it["ciklus"] or "")}</span></td>'
+            f'<td>{dot(it["from"])} → {dot(it["to"])}</td>'
+            f'<td>{esc(it["verdict"])}{lag}</td>'
+            f'<td class="mono">{esc(listed)}</td></tr>')
+    tally = " · ".join(f'{hu_num(v[k])} {k}' for k in VERDICT_ORDER if v.get(k))
+    return page_head("Frakcióváltás · karzat",
+                     f'Minden mandátum közbeni frakcióváltás {hu_num(1990)} óta — {hu_num(sw["switches"])} eset —, '
+                     f'és hogy a képviselő adatlapja meg a név szerinti listák ugyanazt mondják-e róla.', 0) + \
+        topbar(inp, [("frakcióváltás", None)], 0) + f"""
+<div class="hero-h"><h1>Frakcióváltás</h1><small class="label" data-kz-text>{hu_num(sw["switches"])} váltás · {hu_num(sw["people"])} ember · 1990 óta</small></div>
+<p class="lede">Amikor egy képviselő a mandátuma alatt frakciót vált, ezt két nyilvántartás is rögzíti — az
+adatlapja dátumozott frakciósorai, és a név szerinti szavazások listái, amelyek minden szavazásnál külön
+megcímkézik. A kettőt senki nem veti össze. Ez az oldal összeveti.</p>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Mit jelentenek a számok</span></h2>
+  <div class="prose hero-meta">
+    <p><b>{hu_num(sw["switches"])} váltás</b> {hu_num(sw["people"])} embernél, {hu_num(sw["person_cycles"])} mandátumban. A három szám három
+    különböző kérdésre válaszol, és könnyű összekeverni őket: aki egy cikluson belül kétszer vált, az egy ember,
+    egy mandátum, két váltás.</p>
+    <p><b>Váltásnak az számít, ha egy mandátumon belül változik a frakció.</b> Aki nyolc választás után nyolcadszor
+    ül be ugyanabba a frakcióba, annak hét ciklushatára van és nulla váltása — a határokat is beszámítva
+    {hu_num(985)} jönne ki {hu_num(sw["switches"])} helyett.</p>
+    <p><b>{hu_num(sw["testable"])} váltás ellenőrizhető</b> a név szerinti listákon: ennyinél van szavazás a váltás előtt is és után is.
+    A többinél a lista vagy nem létezik (1998 előtt), vagy nem esett szavazás a két időpont közé.</p>
+  </div>
+</section>
+
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Egyetért-e a két nyilvántartás</span><span class="tag">{esc(tally)}</span></h2>
+  <div class="prose hero-meta" style="margin-bottom:10px">
+    <p><b>„Egyezik"</b> — a váltás utáni első szavazástól a lista már az új frakciót írja.
+    <b>„A váltás napján még a régi"</b> — aznap még a régit, utána az újat; a változás a nap közben lépett életbe.
+    <b>„Tovább tartja a régit"</b> — a lista a régi frakciót írja még hónapokkal a rekord dátuma után is.
+    <b>„Más frakciót nevez meg"</b> — a lista olyat ír, amit a rekord egyik sora sem említ.</p>
+    <p>Az utolsó két csoport nem hiba az oldalon: a két forrás mond mást. Név szerint ki vannak írva.</p>
+  </div>
+  <div class="filters" role="group" aria-label="Szűrés az ítélet szerint">
+    <button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>
+    {"".join(f'<button type="button" data-posf="{esc(k)}" aria-pressed="false">{esc(k)} {hu_num(v[k])}</button>' for k in VERDICT_ORDER if v.get(k))}
+    <input type="search" data-filter-table="sw" placeholder="név vagy frakció" aria-label="Szűrés" style="min-width:150px"><span class="n" id="swn" aria-live="polite"></span>
+  </div>
+  <div class="tablewrap"><table id="sw" data-page-size="30" data-counter="swn"><thead><tr>
+    <th scope="col" class="sortable" data-key="num">Mikor</th><th scope="col">Ki</th>
+    <th scope="col">Miből mibe</th><th scope="col">A két forrás</th><th scope="col">A lista szerint utána</th>
+  </tr></thead><tbody>{"".join(rows)}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">A dátum és a két frakció a képviselő adatlapjáról való; az
+  utolsó oszlop az, amit a név szerinti listák írtak róla a váltás után, a következő váltásáig. A módszer és a
+  három hibás mérés, ami idáig vezetett: <a href="modszer/index.html#frakciovaltas">módszer</a>.</div>
+</section>
+{cite_html(inp, 'frakciovaltas/index.html', 'Frakcióváltás 1990 óta', 'frakciovaltas')}
+""" + page_tail(inp, 0)
+
+
 def build_echo_page(inp: dict) -> str:
     """visszhang/index.html — the passages that appear word for word in more than one member's speech.
 
@@ -4533,6 +4614,12 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
 
+<section class="panel" id="frakciovaltas">{CORNERS}<h2><span data-kz-text>Frakcióváltás: két nyilvántartás ugyanarról</span></h2>
+<div class="hero-meta prose">Az Országgyűlés kétszer rögzíti ugyanazt a tényt, és a kettőt nem veti össze: a képviselő adatlapja dátumozott frakciósorokat tart, a név szerinti szavazások listái pedig minden szavazásnál külön megcímkézik a képviselőt. Az oldal összeveti őket.
+<br><br><b>Váltásnak az számít, ha egy mandátumon belül változik a frakció</b> — vagyis a rekordban két azonos ciklusú sor különböző frakciót nevez meg. A ciklushatár nem váltás: aki nyolc választás után nyolcadszor ül be ugyanabba a frakcióba, annak hét határa van és nulla váltása. A határokat is beszámítva {hu_num(985)} jönne ki a {hu_num(298)} helyett.
+<br><br>Az ellenőrzés a váltás előtti és utáni szavazásokat kérdezi meg, a <b>következő</b> váltásig — nyitott ablakkal az A→B→C pályájú képviselő A→B váltása hamis eltérésnek látszana, mert a lista később helyesen C-t ír. És minden váltást a <b>saját ciklusa</b> szavazásaival kell összevetni: a ciklus mezője szerint csoportosítva, de egy másik ciklus névsorával mérve egy 2013-as kilépés 2018-as szavazásokkal kerülne szembe, ami egyéves eltérésnek látszik és nem az. Mindhárom hibát elkövettem, mielőtt a mostani szám kijött.
+<br><br><b>Amit a mérés talált.</b> A {hu_num(298)} váltásból {hu_num(135)} ellenőrizhető. A két forrás {hu_num(106)}-nál egyezik, {hu_num(14)}-nél a lista a váltás napján még a régi frakciót írja, {hu_num(9)}-nél hónapokkal tovább is, {hu_num(6)}-nál pedig olyan frakciót nevez meg, amit a rekord egyik sora sem említ. Ez a {hu_num(15)} nem hiba az oldalon: a két forrás mond mást, és név szerint ki van írva.</div></section>
+
 <section class="panel" id="visszhang">{CORNERS}<h2><span data-kz-text>Visszhang: ugyanaz a szövegrész két szájból</span></h2>
 <div class="hero-meta prose">A jegyzőkönyv szövegét szavakra bontva, {hu_num(ECHO_WORDS)} szavas átfedő ablakokban hasonlítja össze az oldal, és minden olyan részt kiír, amely szó szerint megismétlődik egy másik képviselő felszólalásában. Az összevetés kisbetűs, központozás nélküli; a jegyzőkönyvvezető zárójeles közbevetései nem számítanak bele. Egy képviselő önmagát ismételve nem visszhang, és az egymást átfedő ablakok közül csak a leghosszabb marad, hogy egy szövegrész egyszer szerepeljen.
 <br><br>A {hu_num(ECHO_WORDS)} szavas alsó határ mérés eredménye, nem ízlésé: tíz szónál a találatok éle az udvariassági fordulat („köszönöm szépen a szót, tisztelt elnök asszony”) és az ülésvezetési közlés, harminc szónál ezek eltűnnek.
@@ -5634,6 +5721,7 @@ def build_landing() -> str:
   </form>
   <a class="panel door" href="{cdir}index.html">{CORNERS}<h2><span data-kz-text>A {CURRENT_CYCLE}. ciklus</span></h2><p>{hu_num(fl["votes"])} szavazás, {hu_num(roster_n)} képviselő, mindenki a maga helyén az ülésteremben; szavazásonként a szükséges többség, képviselőnként a hét számokban.</p><span class="go mono">ckl{CURRENT_CYCLE}/ →</span></a>
   <a class="panel door" href="szemely/index.html">{CORNERS}<h2><span data-kz-text>Pályaképek</span></h2><p>{hu_num(tot['people'])} személy {hu_date(tot['from'])[:4]} óta: mandátumok, frakciók, szavazási mérleg ciklusonként, és az életút egy tengelyen.</p><span class="go mono">szemely/ →</span></a>
+  {f'<a class="panel door" href="frakciovaltas/index.html">{CORNERS}<h2><span data-kz-text>Frakcióváltás</span></h2><p>Minden mandátum közbeni frakcióváltás 1990 óta, és hogy a két nyilvántartás ugyanazt mondja-e róla.</p><span class="go mono">frakciovaltas/ →</span></a>' if (inp.get("switches") or {}).get("items") else ""}
   {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
   <a class="panel door" href="arcel/index.html">{CORNERS}<h2><span data-kz-text>A Ház arcéle</span></h2><p>Ciklusonként hányan ülnek először a Házban, és mit rögzít a nyilvántartás a megválasztottak végzettségéről, nyelveiről, önkormányzati múltjáról.</p><span class="go mono">arcel/ →</span></a>
   <a class="panel door" href="lefedettseg/index.html">{CORNERS}<h2><span data-kz-text>Ameddig a jegyzőkönyv elér</span></h2><p>Hónapról hónapra: hol van név szerinti lista, hol csak összesítés, és mi az, ami már nem pótolható.</p><span class="go mono">lefedettseg/ →</span></a>
@@ -5683,6 +5771,9 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         (cd_ / "index.html").write_text(build_coverage_page(inp, {r["cycle"]: r["coverage"] for r in res}), encoding="utf-8")
         ad_ = out_dir / "arcel"; ad_.mkdir(parents=True, exist_ok=True)           # who sits there, across the ten cycles
         (ad_ / "index.html").write_text(build_profile_page(inp, landing_inputs()["rows"]), encoding="utf-8")
+        if (inp.get("switches") or {}).get("items"):                             # every mid-term change of faction
+            fd_ = out_dir / "frakciovaltas"; fd_.mkdir(parents=True, exist_ok=True)
+            (fd_ / "index.html").write_text(build_switch_page(inp), encoding="utf-8")
         items = [it for r in res for it in r["search"]]
         items += [{"k": "szemely", "c": 0, "t": stints[0]["name"], "s": f'pályakép · {", ".join(str(st["cycle"]) for st in sorted(stints, key=lambda r: r["cycle"]))}. ciklus', "u": f"szemely/{azon}.html"} for azon, stints in people.items()]
         items += [{"k": "szoszolo", "c": CURRENT_CYCLE, "t": r["name"],

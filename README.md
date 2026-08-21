@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 274 tests
+python3 -m unittest discover -s tests -t .      # offline; 278 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -588,6 +588,33 @@ single faction against 56 across factions, where cycle 42 is nearly even at 245 
 that resolve to a faction is level across the cycles — 85 to 95 per cent inside the repetitions themselves — so
 it is not an artefact of who could be identified. It is a real difference, and that is where the measurement
 stops.
+
+## Two records of the same fact, made to answer to each other
+
+The House writes down a member's faction twice and never reconciles the two. Their own record carries dated
+faction rows; every roll-call name list labels them independently at every vote. Where both exist, a claim about
+a change of faction is checkable rather than merely sourced, which is the only kind of claim worth publishing.
+
+There are 298 changes of faction inside a mandate since 1990, by 255 people, across
+261 mandates. Those are three answers to three different questions and the inventory I started
+from had merged two of them: its "261 switches" is the count of person-mandates, not of changes.
+A change between mandates is not a switch at all — counting every adjacent pair of rows gives 985, because a
+member returned across eight elections has seven boundaries and no switches.
+
+135 of them can be tested against the name lists, and the second half of the inventory's claim —
+that all of them agree — is not true either. 106 agree from the first vote after the change.
+14 show the old faction on the day of the change itself and the new one
+afterwards. 9 keep the old label for months: seven of them are the LMP members
+who left on 12 February 2013, whom the lists went on calling LMP for another 366 days. And
+6 name a faction neither record row mentions. Every one of the
+15 is printed on the page with the member's
+name on it, because a reconciliation nobody can audit is worth nothing.
+
+Three ways I measured it wrongly first, each recorded in the code because each is a trap. Counting row-adjacency
+rather than changes within a mandate. Leaving the window after a change open, so a member who went A to B to C
+read as a disagreement at A to B. And grouping by the record's cycle field while testing against whichever
+cycle's ballots I happened to be iterating, which put a 2013 departure against 2018 votes and looked exactly like
+a year-long discrepancy — the same shape as the real one, which is why it took a third look to separate them.
 
 ## Licence
 

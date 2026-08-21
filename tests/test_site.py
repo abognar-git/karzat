@@ -1766,3 +1766,64 @@ class NightlyRunsEveryDerivation(unittest.TestCase):
         self.assertGreater(len(before), 1, "only one cycle derived — the merge is untested")
         src = (ROOT / "scripts" / "derive_echo.py").read_text(encoding="utf-8")
         self.assertIn("out[\"cycles\"] = {**prev, **out[\"cycles\"]}", src)
+
+
+class FactionSwitches(unittest.TestCase):
+    """Two records of the same fact, and the page that makes them answer to each other.
+
+    The claim the inventory carried into this work was "261 switches, 255 people, 135 checkable, 135/135 agree".
+    Two of those four numbers were wrong: 261 counts person-cycles rather than switches, and the sources do not
+    all agree. The test guards the shape of the answer rather than the answer, so a resync can move the counts
+    without going red — but it cannot quietly turn a disagreement into agreement."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.sw = cls.inp.get("switches") or {}
+
+    def test_the_three_counts_answer_three_different_questions(self):
+        if not self.sw:
+            self.skipTest("no switch data derived — run: python3 -m scripts.derive_faction_switches")
+        items = self.sw["items"]
+        self.assertEqual(self.sw["switches"], len(items))
+        self.assertEqual(self.sw["people"], len({s["azon"] for s in items}))
+        self.assertEqual(self.sw["person_cycles"], len({(s["azon"], s["ciklus"]) for s in items}))
+        # switches ≥ person-cycles ≥ people, always: one mandate can hold several changes, one person several mandates
+        self.assertGreaterEqual(self.sw["switches"], self.sw["person_cycles"])
+        self.assertGreaterEqual(self.sw["person_cycles"], self.sw["people"])
+
+    def test_a_switch_is_inside_one_mandate_never_across_an_election(self):
+        if not self.sw:
+            self.skipTest("no switch data derived")
+        for s in self.sw["items"]:
+            self.assertNotEqual(s["from"], s["to"], f'{s["name"]}: a "switch" to the same faction')
+            self.assertTrue(s["since"] <= s["on"], f'{s["name"]}: the change predates the row it comes from')
+
+    def test_every_switch_carries_a_verdict_and_the_disagreements_are_not_hidden(self):
+        from scripts.build_site import build_switch_page, VERDICT_ORDER
+        if not self.sw:
+            self.skipTest("no switch data derived")
+        for s in self.sw["items"]:
+            self.assertIn(s["verdict"], VERDICT_ORDER, f'{s["name"]}: unknown verdict {s["verdict"]!r}')
+        html = build_switch_page(self.inp)
+        self.assertEqual(html.count("<tr data-p="), len(self.sw["items"]), "a switch is missing from the page")
+        # every disagreeing member is named on the page, by name, not folded into a count
+        for s in self.sw["items"]:
+            if s["verdict"] in ("tovább tartja a régit", "más frakciót nevez meg"):
+                self.assertIn(s["name"], html, f'{s["name"]}: a disagreement that the page does not name')
+
+    def test_the_verified_window_stops_at_the_next_change(self):
+        """Open-ended, a member who went A to B to C reads as a disagreement at A to B, because the list correctly
+        says C later. The bound is what makes the verdicts mean anything, so it is asserted in the data."""
+        if not self.sw:
+            self.skipTest("no switch data derived")
+        by_person = {}
+        for s in self.sw["items"]:
+            by_person.setdefault((s["azon"], s["ciklus"]), []).append(s)
+        chained = [v for v in by_person.values() if len(v) > 1]
+        if not chained:
+            self.skipTest("nobody changed faction twice inside one mandate")
+        for seq in chained:
+            seq.sort(key=lambda s: s["on"])
+            for a, b in zip(seq, seq[1:]):
+                self.assertEqual(a["until"], b["on"], f'{a["name"]}: the window does not end at the next change')

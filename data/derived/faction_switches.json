@@ -1,0 +1,4870 @@
+{
+ "generated_at": "2026-08-21",
+ "switches": 298,
+ "people": 255,
+ "person_cycles": 261,
+ "testable": 135,
+ "verdicts": {
+  "nincs név szerinti lista": 163,
+  "egyezik": 106,
+  "tovább tartja a régit": 9,
+  "a váltás napján még a régi": 14,
+  "más frakciót nevez meg": 6
+ },
+ "by_cycle": {
+  "1990-94": 97,
+  "1994-98": 65,
+  "1998-2002": 31,
+  "2002-2006": 27,
+  "2006-2010": 16,
+  "2010-2014": 33,
+  "2014-2018": 2,
+  "2018-2022": 17,
+  "2022-2026": 10
+ },
+ "items": [
+  {
+   "azon": "k006",
+   "name": "Király Zoltán",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1990-05-31",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k023",
+   "name": "Király Béla",
+   "ciklus": "1990-94",
+   "from": "független",
+   "to": "SZDSZ",
+   "since": "1990-05-02",
+   "on": "1990-11-12",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p010",
+   "name": "Pozsgay Imre",
+   "ciklus": "1990-94",
+   "from": "MSZP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1990-11-12",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "d061",
+   "name": "Dénes János",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1990-11-26",
+   "until": "1993-12-06",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b060",
+   "name": "Barcza Imre",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-02-25",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g355",
+   "name": "G. Nagyné Dr. Maczó Ágnes",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-06-18",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "u348",
+   "name": "Dr. Ugrin Emese",
+   "ciklus": "1990-94",
+   "from": "KDNP",
+   "to": "FKGP",
+   "since": "1990-05-02",
+   "on": "1991-08-26",
+   "until": "1992-08-31",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h278",
+   "name": "Dr. Horváth Tivadar",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "KDNP",
+   "since": "1990-05-02",
+   "on": "1991-08-27",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b205",
+   "name": "Balogh János",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "MDF",
+   "since": "1990-05-02",
+   "on": "1991-09-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "i107",
+   "name": "Dr. Ilkei Csaba",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-09-03",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g292",
+   "name": "Dr. Gali Ákos",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-09-09",
+   "until": "1993-04-26",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b336",
+   "name": "Beke Kata",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-12-04",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b269",
+   "name": "Dr. Bertha Zoltán",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-12-16",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b359",
+   "name": "Dr. Bilecz Endre",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1991-12-30",
+   "until": "1993-03-02",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b032",
+   "name": "Bejczy Sándor",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b279",
+   "name": "Bárdos Balázs",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b762",
+   "name": "Bélafi Antal",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b251",
+   "name": "Dr. Böröcz István",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "d176",
+   "name": "Dr. Dragon Pál",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h342",
+   "name": "Dr. Hajdu Istvánné",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h041",
+   "name": "Dr. Horváth László",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k025",
+   "name": "Dr. Kovács Béla",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "m035",
+   "name": "Dr. Mizsei Béla",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p270",
+   "name": "Dr. Pohankovics István",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p214",
+   "name": "Dr. Pásztor Gyula",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s174",
+   "name": "Dr. Sipos Imre",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s098",
+   "name": "Dr. Szabó János",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s078",
+   "name": "Dr. Szabó Lajos",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "t335",
+   "name": "Dr. Tarján Lászlóné",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "z191",
+   "name": "Dr. Zsiros Géza",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "a259",
+   "name": "Dr. Ómolnár Miklós",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k053",
+   "name": "Kapitány Ferenc",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k056",
+   "name": "Kocsenda Antal",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k024",
+   "name": "Kováts László",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k039",
+   "name": "Kósa András",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "n040",
+   "name": "Nagy Ferenc József",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "n052",
+   "name": "Nagy Varga Dezső",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "n075",
+   "name": "Németh Béla",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "o043",
+   "name": "Oláh Sándor",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p063",
+   "name": "Pintér István",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p048",
+   "name": "Pintér József",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p091",
+   "name": "Prepeliczay István",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "r122",
+   "name": "Rajkai Zsolt",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s034",
+   "name": "Szabó Lajos",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "t026",
+   "name": "Tóth Imre",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "v154",
+   "name": "Vincze Kálmán",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "v022",
+   "name": "Vörös Vince",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b030",
+   "name": "Dr. Balogh György",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-03-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h366",
+   "name": "Horváth László",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "Fidesz",
+   "since": "1990-11-27",
+   "on": "1992-03-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "l339",
+   "name": "Lakatos Józsefné",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-03-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "m268",
+   "name": "Mózs József",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "KDNP",
+   "since": "1990-05-02",
+   "on": "1992-03-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p273",
+   "name": "Palotás János",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-03-09",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b235",
+   "name": "Balogh Gábor",
+   "ciklus": "1990-94",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-03-17",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p116",
+   "name": "Petrenkó János",
+   "ciklus": "1990-94",
+   "from": "MSZP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-04-27",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "m188",
+   "name": "Dr. Mózes Mihály",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-06-23",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "u348",
+   "name": "Dr. Ugrin Emese",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1991-08-26",
+   "on": "1992-08-31",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g045",
+   "name": "Gerbovits Jenő",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "EKgP",
+   "since": "1990-05-02",
+   "on": "1992-09-14",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b129",
+   "name": "Bereczki Vilmos",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-09-21",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g050",
+   "name": "Dr. Győriványi Sándor",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-09-21",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "i027",
+   "name": "Dr. Iván Géza",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-09-21",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k085",
+   "name": "Dr. Kávássy Sándor",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-09-21",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "t076",
+   "name": "Dr. Torgyán József",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-09-21",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "i086",
+   "name": "István József",
+   "ciklus": "1990-94",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1992-09-21",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k321",
+   "name": "Kádár Péter",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "KDNP",
+   "since": "1990-05-02",
+   "on": "1992-11-30",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k375",
+   "name": "Dr. Kupa Mihály",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1991-09-30",
+   "on": "1993-02-15",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b359",
+   "name": "Dr. Bilecz Endre",
+   "ciklus": "1990-94",
+   "from": "független",
+   "to": "MDF",
+   "since": "1991-12-30",
+   "on": "1993-03-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g292",
+   "name": "Dr. Gali Ákos",
+   "ciklus": "1990-94",
+   "from": "független",
+   "to": "KDNP",
+   "since": "1991-09-09",
+   "on": "1993-04-26",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k187",
+   "name": "Dr. Kőrösi Imre",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-05-03",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "w377",
+   "name": "Dr. Weszelovszky Zoltán",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "Fidesz",
+   "since": "1992-02-17",
+   "on": "1993-06-14",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b211",
+   "name": "Dr. Balás István",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-06-15",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "d001",
+   "name": "Dr. Debreczeni József",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-06-15",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k341",
+   "name": "Király B. Izabella",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-06-15",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "c081",
+   "name": "Csurka István",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "d264",
+   "name": "Deme Zoltán",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b033",
+   "name": "Dr. Bogdán Emil",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "b384",
+   "name": "Dr. Bognár László",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1993-03-22",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "m230",
+   "name": "Dr. Móré László",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "r164",
+   "name": "Dr. Réti Miklós",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s266",
+   "name": "Dr. Szél Péter",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h283",
+   "name": "Horváth Lajos",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k140",
+   "name": "Kelemen József",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "m265",
+   "name": "Miklós Árpád",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s217",
+   "name": "Szabó Lukács",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s293",
+   "name": "Szilasy György",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": "1993-08-30",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "t120",
+   "name": "Tóth-Kurucz János",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "MIÉP",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "v185",
+   "name": "Varga Zoltán",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-07-05",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "e267",
+   "name": "Elek István",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-07-06",
+   "until": "1993-09-06",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "e003",
+   "name": "Dr. Eke Károly",
+   "ciklus": "1990-94",
+   "from": "független",
+   "to": "KDNP",
+   "since": "1990-05-02",
+   "on": "1993-07-12",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s293",
+   "name": "Szilasy György",
+   "ciklus": "1990-94",
+   "from": "MIÉP",
+   "to": "független",
+   "since": "1993-07-05",
+   "on": "1993-08-30",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h222",
+   "name": "Halász István",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-08-31",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "e267",
+   "name": "Elek István",
+   "ciklus": "1990-94",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1993-07-06",
+   "on": "1993-09-06",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k204",
+   "name": "Katona Kálmán",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "Fidesz",
+   "since": "1990-05-02",
+   "on": "1993-09-06",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "d061",
+   "name": "Dénes János",
+   "ciklus": "1990-94",
+   "from": "független",
+   "to": "MIÉP",
+   "since": "1990-11-26",
+   "on": "1993-12-06",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g064",
+   "name": "Gadó György",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1993-12-15",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "z198",
+   "name": "Dr. Zacsek Gyula",
+   "ciklus": "1990-94",
+   "from": "MDF",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1994-01-01",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "m318",
+   "name": "Dr. Molnár Tibor",
+   "ciklus": "1990-94",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1994-02-01",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "r049",
+   "name": "Dr. Rott Nándor",
+   "ciklus": "1990-94",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1990-05-02",
+   "on": "1994-02-08",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k235",
+   "name": "Kapronczi Mihály",
+   "ciklus": "1994-98",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1995-03-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "r169",
+   "name": "Dr. Rab Károly",
+   "ciklus": "1994-98",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1995-03-15",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "f193",
+   "name": "Fekete György",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1995-10-02",
+   "until": "1996-04-01",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s170",
+   "name": "Dr. Schamschula György",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1996-02-02",
+   "until": "1996-09-09",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "b150",
+   "name": "Barsiné Pataky Etelka",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "b233",
+   "name": "Dr. Bogár László",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "f191",
+   "name": "Dr. Farkas Gabriella",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "f065",
+   "name": "Dr. Für Lajos",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "j229",
+   "name": "Dr. Jeszenszky Géza",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "k152",
+   "name": "Dr. Kulin Ferenc",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "k196",
+   "name": "Dr. Kónya Imre",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "p346",
+   "name": "Dr. Pusztai Erzsébet",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "r002",
+   "name": "Dr. Raskó György",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s201",
+   "name": "Dr. Salamon László",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": "1996-12-10",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s080",
+   "name": "Dr. Szabó Iván",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s254",
+   "name": "Dr. Szabó Tamás",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "t168",
+   "name": "Dr. Tóth Tihamér",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "k071",
+   "name": "Katona Tamás",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "k343",
+   "name": "Kónyáné dr. Kutrucz Katalin",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s334",
+   "name": "Szabad György",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "z017",
+   "name": "Zsigmond Attila",
+   "ciklus": "1994-98",
+   "from": "MDF",
+   "to": "Néppárt-MDNP",
+   "since": "1994-06-28",
+   "on": "1996-03-11",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "f193",
+   "name": "Fekete György",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "KDNP",
+   "since": "1995-10-02",
+   "on": "1996-04-01",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "t284",
+   "name": "Dr. Tölgyessy Péter",
+   "ciklus": "1994-98",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1996-09-01",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "SZDSZ"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s170",
+   "name": "Dr. Schamschula György",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "FKGP",
+   "since": "1996-02-02",
+   "on": "1996-09-09",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s201",
+   "name": "Dr. Salamon László",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1996-03-11",
+   "on": "1996-12-10",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "a125",
+   "name": "Aszódi Ilona Katalin",
+   "ciklus": "1994-98",
+   "from": "MSZP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s630",
+   "name": "Dr. Solymosi József",
+   "ciklus": "1994-98",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-02-24",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "SZDSZ"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "f057",
+   "name": "Dr. Füzessy Tibor",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-16",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "g183",
+   "name": "Dr. Gáspár Miklós",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-16",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "h068",
+   "name": "Dr. Hasznos Miklós",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-16",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s333",
+   "name": "Dr. Szakál Ferenc",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-16",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "c067",
+   "name": "Csépe Béla",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "g253",
+   "name": "Dr. Giczy György",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "i042",
+   "name": "Dr. Isépy Tamás",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "k742",
+   "name": "Dr. Keresztes Sándor",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "k256",
+   "name": "Dr. Kovács Kálmán",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "l001",
+   "name": "Dr. Latorcai János",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "l266",
+   "name": "Dr. Leitner Gábor",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "p595",
+   "name": "Dr. Pálfi Dénes",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "p093",
+   "name": "Dr. Pálos Miklós",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "r312",
+   "name": "Dr. Rapcsák András",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "r315",
+   "name": "Dr. Rubovszky György",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s323",
+   "name": "Dr. Semjén Zsolt",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-11-03",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s361",
+   "name": "Dr. Surján László",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s371",
+   "name": "Dr. Szilágyiné Császár Terézia",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "v395",
+   "name": "Dr. Varga László",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "i226",
+   "name": "Ivanics István",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": "1997-09-07",
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "m277",
+   "name": "Mészáros Gyula",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "r316",
+   "name": "Rusznák Miklós",
+   "ciklus": "1994-98",
+   "from": "KDNP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-07-22",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "KDNP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "c067",
+   "name": "Csépe Béla",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "i042",
+   "name": "Dr. Isépy Tamás",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k256",
+   "name": "Dr. Kovács Kálmán",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "l001",
+   "name": "Dr. Latorcai János",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "l266",
+   "name": "Dr. Leitner Gábor",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "p595",
+   "name": "Dr. Pálfi Dénes",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "r312",
+   "name": "Dr. Rapcsák András",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "r315",
+   "name": "Dr. Rubovszky György",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "s361",
+   "name": "Dr. Surján László",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "v395",
+   "name": "Dr. Varga László",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "i226",
+   "name": "Ivanics István",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "1997-07-22",
+   "on": "1997-09-07",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "k239",
+   "name": "Kaszás Tibor",
+   "ciklus": "1994-98",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-10-13",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "SZDSZ"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s323",
+   "name": "Dr. Semjén Zsolt",
+   "ciklus": "1994-98",
+   "from": "független",
+   "to": "MDF",
+   "since": "1997-07-22",
+   "on": "1997-11-03",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "g355",
+   "name": "G. Nagyné Dr. Maczó Ágnes",
+   "ciklus": "1994-98",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1997-11-04",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "m283",
+   "name": "Morvai Ferenc",
+   "ciklus": "1994-98",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1998-01-30",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "b158",
+   "name": "Berregi István",
+   "ciklus": "1994-98",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1994-06-28",
+   "on": "1998-02-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "b034",
+   "name": "Bencsik János",
+   "ciklus": "1998-2002",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "1998-07-16",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [
+    "SZDSZ"
+   ],
+   "listed_after": []
+  },
+  {
+   "azon": "s217",
+   "name": "Szabó Lukács",
+   "ciklus": "1998-2002",
+   "from": "MIÉP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "1998-12-07",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MIÉP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s019",
+   "name": "Dr. Szabó Attila",
+   "ciklus": "1998-2002",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "1999-09-08",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c006",
+   "name": "Cseh Sándor",
+   "ciklus": "1998-2002",
+   "from": "MIÉP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "1999-09-16",
+   "until": "2001-09-20",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MIÉP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h009",
+   "name": "Dr. Helmeczy László",
+   "ciklus": "1998-2002",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "1999-12-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "g013",
+   "name": "Dr. Gyuga Pál",
+   "ciklus": "1998-2002",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2000-05-25",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s016",
+   "name": "Székely Zoltán",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2000-10-13",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h017",
+   "name": "Hortobágyi Krisztina",
+   "ciklus": "1998-2002",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2000-11-03",
+   "until": "2001-08-23",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c007",
+   "name": "Dr. Csúcs László",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-01-22",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 400,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "FKGP",
+    "független"
+   ]
+  },
+  {
+   "azon": "k030",
+   "name": "Dr. Kiszely Katalin",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-09-08",
+   "on": "2001-01-22",
+   "until": "2001-10-15",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "l264",
+   "name": "Lányi Zsolt",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-01-22",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "m012",
+   "name": "Molnár Róbert",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-01-22",
+   "until": "2001-10-15",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "p302",
+   "name": "Pápai Mihály",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-01-22",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "m011",
+   "name": "Molnár László",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-02-01",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "t076",
+   "name": "Dr. Torgyán József",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-05-07",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s017",
+   "name": "Dr. Szabadi Béla",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-06-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "z001",
+   "name": "Zakó László",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-06-27",
+   "until": "2001-12-27",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h017",
+   "name": "Hortobágyi Krisztina",
+   "ciklus": "1998-2002",
+   "from": "független",
+   "to": "MSZP",
+   "since": "2000-11-03",
+   "on": "2001-08-23",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "MSZP"
+   ]
+  },
+  {
+   "azon": "v004",
+   "name": "Dr. Várhelyi András",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-04",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "a006",
+   "name": "Atyánszky György",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c006",
+   "name": "Cseh Sándor",
+   "ciklus": "1998-2002",
+   "from": "független",
+   "to": "FKGP",
+   "since": "1999-09-16",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "FKGP"
+   ]
+  },
+  {
+   "azon": "c179",
+   "name": "Czoma Kálmán",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "t382",
+   "name": "Dr. Torgyán Józsefné Cseh  Mária",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "g208",
+   "name": "Gyimóthy Géza",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "p300",
+   "name": "Pallag László",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "z005",
+   "name": "Zsikla Győző",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-09-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k030",
+   "name": "Dr. Kiszely Katalin",
+   "ciklus": "1998-2002",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2001-01-22",
+   "on": "2001-10-15",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "m012",
+   "name": "Molnár Róbert",
+   "ciklus": "1998-2002",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2001-01-22",
+   "on": "2001-10-15",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "k027",
+   "name": "Koppánné Dr. Kertész Margit",
+   "ciklus": "1998-2002",
+   "from": "FKGP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2001-11-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "FKGP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "z001",
+   "name": "Zakó László",
+   "ciklus": "1998-2002",
+   "from": "független",
+   "to": "MIÉP",
+   "since": "2001-06-27",
+   "on": "2001-12-27",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "MIÉP"
+   ]
+  },
+  {
+   "azon": "g016",
+   "name": "Dr. Gidai Erzsébet",
+   "ciklus": "1998-2002",
+   "from": "MIÉP",
+   "to": "független",
+   "since": "1998-06-18",
+   "on": "2002-01-21",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MIÉP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b031",
+   "name": "Dr. Boros Imre",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2002-09-07",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b026",
+   "name": "Balogh Gyula",
+   "ciklus": "2002-2006",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2003-05-06",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k022",
+   "name": "Körömi Attila",
+   "ciklus": "2002-2006",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-04-13",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h021",
+   "name": "Hende Csaba",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-06-23",
+   "until": "2004-12-24",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b195",
+   "name": "Dr. Balsai István",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-09-06",
+   "until": "2005-04-04",
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "h141",
+   "name": "Dr. Horváth Balázs",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-09-06",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "k119",
+   "name": "Dr. Kelemen András",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-09-06",
+   "until": "2005-05-15",
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "f010",
+   "name": "Font Sándor",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-09-06",
+   "until": "2005-05-15",
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "s013",
+   "name": "Szászfalvi László",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-09-06",
+   "until": "2005-05-15",
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "b024",
+   "name": "Balogh László",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-07",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "l269",
+   "name": "Lezsák Sándor",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-07",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c016",
+   "name": "Csampa Zsolt",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "m132",
+   "name": "Dr. Medgyasszay László",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "f016",
+   "name": "Fülöp István",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": "2005-05-15",
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "p024",
+   "name": "Pichler Imre László",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": "2005-05-15",
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "p025",
+   "name": "Püski András",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "n004",
+   "name": "V. Németh Zsolt",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "e002",
+   "name": "Ékes József",
+   "ciklus": "2002-2006",
+   "from": "MDF",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2004-11-08",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "h021",
+   "name": "Hende Csaba",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-06-23",
+   "on": "2004-12-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "b195",
+   "name": "Dr. Balsai István",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-09-06",
+   "on": "2005-04-04",
+   "until": null,
+   "verdict": "más frakciót nevez meg",
+   "lag_days": null,
+   "listed_before": [
+    "MDF",
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "k119",
+   "name": "Dr. Kelemen András",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-09-06",
+   "on": "2005-05-15",
+   "until": null,
+   "verdict": "más frakciót nevez meg",
+   "lag_days": null,
+   "listed_before": [
+    "MDF",
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "f010",
+   "name": "Font Sándor",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-09-06",
+   "on": "2005-05-15",
+   "until": null,
+   "verdict": "más frakciót nevez meg",
+   "lag_days": null,
+   "listed_before": [
+    "MDF",
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "f016",
+   "name": "Fülöp István",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-11-08",
+   "on": "2005-05-15",
+   "until": null,
+   "verdict": "más frakciót nevez meg",
+   "lag_days": null,
+   "listed_before": [
+    "MDF",
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "p024",
+   "name": "Pichler Imre László",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-11-08",
+   "on": "2005-05-15",
+   "until": null,
+   "verdict": "más frakciót nevez meg",
+   "lag_days": null,
+   "listed_before": [
+    "MDF",
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "s013",
+   "name": "Szászfalvi László",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "Fidesz",
+   "since": "2004-09-06",
+   "on": "2005-05-15",
+   "until": null,
+   "verdict": "más frakciót nevez meg",
+   "lag_days": null,
+   "listed_before": [
+    "MDF",
+    "független"
+   ],
+   "listed_after": [
+    "Fidesz"
+   ]
+  },
+  {
+   "azon": "g010",
+   "name": "Dr. Gyimesi József",
+   "ciklus": "2002-2006",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2002-05-15",
+   "on": "2005-07-01",
+   "until": "2006-01-12",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "g010",
+   "name": "Dr. Gyimesi József",
+   "ciklus": "2002-2006",
+   "from": "független",
+   "to": "MDF",
+   "since": "2005-07-01",
+   "on": "2006-01-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "MDF"
+   ]
+  },
+  {
+   "azon": "l017",
+   "name": "Lengyel Zoltán",
+   "ciklus": "2006-2010",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2007-09-10",
+   "until": "2008-10-13",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "t009",
+   "name": "Tóth András",
+   "ciklus": "2006-2010",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2007-10-26",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "a013",
+   "name": "Almássy Kornél",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2008-09-29",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "v033",
+   "name": "Dr. Vas János",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2008-10-10",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "l017",
+   "name": "Lengyel Zoltán",
+   "ciklus": "2006-2010",
+   "from": "független",
+   "to": "MDF",
+   "since": "2007-09-10",
+   "on": "2008-10-13",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 406,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "MDF",
+    "független"
+   ]
+  },
+  {
+   "azon": "c023",
+   "name": "Császár Antal",
+   "ciklus": "2006-2010",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2008-10-27",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c004",
+   "name": "Dr. Csáky András",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c272",
+   "name": "Dr. Csapody Miklós",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "d176",
+   "name": "Dr. Dragon Pál",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2009-03-02",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "d349",
+   "name": "Dr. Dávid Ibolya",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h013",
+   "name": "Herényi Károly",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h039",
+   "name": "Hock Zoltán",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k219",
+   "name": "Karsai Péter",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k204",
+   "name": "Katona Kálmán",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "p023",
+   "name": "Pettkó András",
+   "ciklus": "2006-2010",
+   "from": "MDF",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-03-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MDF"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "g327",
+   "name": "Gulyás József",
+   "ciklus": "2006-2010",
+   "from": "SZDSZ",
+   "to": "független",
+   "since": "2006-05-16",
+   "on": "2009-12-05",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "SZDSZ"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s372",
+   "name": "Dr. Szili Katalin",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2010-10-04",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "i007",
+   "name": "Ivády Gábor",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2010-10-21",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "p045",
+   "name": "Pősze Lajos",
+   "ciklus": "2010-2014",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2010-12-13",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b085",
+   "name": "Baracskai József",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k041",
+   "name": "Dr. Kolber István",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "m038",
+   "name": "Dr. Molnár Csaba",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "o007",
+   "name": "Dr. Oláh Lajos",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "v013",
+   "name": "Dr. Vadai Ágnes",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "f021",
+   "name": "Ficsor Ádám",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "g030",
+   "name": "Gyurcsány Ferenc",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s056",
+   "name": "Szűcs Erika",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "v018",
+   "name": "Varju László",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "v047",
+   "name": "Vitányi Iván",
+   "ciklus": "2010-2014",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2011-10-24",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "e011",
+   "name": "Endrésik Zsolt",
+   "ciklus": "2010-2014",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2012-05-02",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "l036",
+   "name": "Dr. Lenhardt Balázs",
+   "ciklus": "2010-2014",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2012-11-08",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "r009",
+   "name": "Rozgonyi Ernő",
+   "ciklus": "2010-2014",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2012-12-06",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "d027",
+   "name": "Dr. Dorosz Dávid",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s100",
+   "name": "Dr. Schiffer András",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "s136",
+   "name": "Dr. Szél Bernadett",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2012-02-13",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "e012",
+   "name": "Ertsey Katalin",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "j013",
+   "name": "Jávor Benedek",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k104",
+   "name": "Karácsony Gergely",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "l038",
+   "name": "Lengyel Szilvia",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2012-10-08",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "m299",
+   "name": "Mile Lajos",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "o011",
+   "name": "Osztolykán Ágnes",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "s099",
+   "name": "Scheiring Gábor",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s111",
+   "name": "Szabó Rebeka",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s113",
+   "name": "Szabó Timea",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s121",
+   "name": "Szilágyi László",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s119",
+   "name": "Szilágyi Péter",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "v049",
+   "name": "Vágó Gábor",
+   "ciklus": "2010-2014",
+   "from": "LMP",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-02-12",
+   "until": null,
+   "verdict": "tovább tartja a régit",
+   "lag_days": 366,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "b023",
+   "name": "Balogh József",
+   "ciklus": "2010-2014",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-05-02",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "a014",
+   "name": "Dr. Ángyán József",
+   "ciklus": "2010-2014",
+   "from": "Fidesz",
+   "to": "független",
+   "since": "2010-05-14",
+   "on": "2013-06-22",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "d750",
+   "name": "Demeter Márta",
+   "ciklus": "2014-2018",
+   "from": "MSZP",
+   "to": "független",
+   "since": "2014-05-06",
+   "on": "2017-02-01",
+   "until": "2017-09-01",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "MSZP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "d750",
+   "name": "Demeter Márta",
+   "ciklus": "2014-2018",
+   "from": "független",
+   "to": "LMP",
+   "since": "2017-02-01",
+   "on": "2017-09-01",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "LMP"
+   ]
+  },
+  {
+   "azon": "b124",
+   "name": "Dr. Bősz Anett",
+   "ciklus": "2018-2022",
+   "from": "Párbeszéd",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-05-19",
+   "until": "2019-12-09",
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Párbeszéd"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "m064",
+   "name": "Dr. Mellár Tamás",
+   "ciklus": "2018-2022",
+   "from": "független",
+   "to": "Párbeszéd",
+   "since": "2018-05-08",
+   "on": "2018-05-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "Párbeszéd"
+   ]
+  },
+  {
+   "azon": "d028",
+   "name": "Dúró Dóra",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-05-30",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h080",
+   "name": "Dr. Hadházy Ákos",
+   "ciklus": "2018-2022",
+   "from": "LMP",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-06-23",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s136",
+   "name": "Dr. Szél Bernadett",
+   "ciklus": "2018-2022",
+   "from": "LMP",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-10-02",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "s771",
+   "name": "Szabó Szabolcs",
+   "ciklus": "2018-2022",
+   "from": "LMP",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-10-02",
+   "until": null,
+   "verdict": "a váltás napján még a régi",
+   "lag_days": 0,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "LMP",
+    "független"
+   ]
+  },
+  {
+   "azon": "v057",
+   "name": "Volner János",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-10-06",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "a018",
+   "name": "Dr. Apáti István",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-10-08",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "f039",
+   "name": "Dr. Fülöp Erik",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-10-08",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s158",
+   "name": "Székely Sándor",
+   "ciklus": "2018-2022",
+   "from": "DK",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2018-12-22",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "DK"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "h057",
+   "name": "Hegedűs Lorántné",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2019-02-26",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b124",
+   "name": "Dr. Bősz Anett",
+   "ciklus": "2018-2022",
+   "from": "független",
+   "to": "DK",
+   "since": "2018-05-19",
+   "on": "2019-12-09",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "független"
+   ],
+   "listed_after": [
+    "DK"
+   ]
+  },
+  {
+   "azon": "b132",
+   "name": "Bencsik János",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2019-02-18",
+   "on": "2020-02-20",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b084",
+   "name": "Bana Tibor",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2020-03-02",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "v068",
+   "name": "Dr. Varga-Damm Andrea",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2020-05-27",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "f028",
+   "name": "Farkas Gergely",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2020-05-27",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "s107",
+   "name": "Sneider Tamás",
+   "ciklus": "2018-2022",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2018-05-08",
+   "on": "2020-05-27",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "j020",
+   "name": "Jakab Péter",
+   "ciklus": "2022-2026",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2022-08-13",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "n026",
+   "name": "Dr. Navracsics Tibor",
+   "ciklus": "2022-2026",
+   "from": "Fidesz",
+   "to": "KDNP",
+   "since": "2022-05-02",
+   "on": "2022-09-22",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Fidesz"
+   ],
+   "listed_after": [
+    "KDNP"
+   ]
+  },
+  {
+   "azon": "v074",
+   "name": "Varga Ferenc",
+   "ciklus": "2022-2026",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2023-01-07",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b171",
+   "name": "Balassa Péter",
+   "ciklus": "2022-2026",
+   "from": "Jobbik",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2025-02-15",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Jobbik"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "b138",
+   "name": "Bakos Bernadett",
+   "ciklus": "2022-2026",
+   "from": "LMP",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2025-02-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c044",
+   "name": "Csárdi Antal",
+   "ciklus": "2022-2026",
+   "from": "LMP",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2025-02-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k154",
+   "name": "Dr. Keresztes László Lóránt",
+   "ciklus": "2022-2026",
+   "from": "LMP",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2025-02-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "k168",
+   "name": "Kanász-Nagy Máté",
+   "ciklus": "2022-2026",
+   "from": "LMP",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2025-02-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "u006",
+   "name": "Ungár Péter",
+   "ciklus": "2022-2026",
+   "from": "LMP",
+   "to": "független",
+   "since": "2022-05-02",
+   "on": "2025-02-16",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "LMP"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  },
+  {
+   "azon": "c047",
+   "name": "Dr. Cseh Katalin",
+   "ciklus": "2022-2026",
+   "from": "Momentum",
+   "to": "független",
+   "since": "2024-12-16",
+   "on": "2025-11-29",
+   "until": null,
+   "verdict": "egyezik",
+   "lag_days": null,
+   "listed_before": [
+    "Momentum"
+   ],
+   "listed_after": [
+    "független"
+   ]
+  }
+ ]
+}

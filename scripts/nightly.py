@@ -126,6 +126,7 @@ def main(argv: list[str] | None = None) -> int:
                  ["-m", "scripts.derive_committees"], ["-m", "scripts.derive_szoszolok"],
                  ["-m", "scripts.derive_kormany"], ["-m", "scripts.derive_bills"],
                  ["-m", "scripts.derive_echo", "--cycle", str(CURRENT_CYCLE)],
+                 ["-m", "scripts.derive_faction_switches"],
                  ["-m", "scripts.derive_facts"]):
         run(py + step, dry=dry, allow_fail=True)
     run(py + ["-m", "karzat", "freshness"], dry=dry, allow_fail=True)
