@@ -2625,13 +2625,14 @@ def build_echo_page(inp: dict) -> str:
         lag = ("egy ülésnapon" if f["same_day"] else
                f'{hu_num(f["lag_days"])} nap' if f.get("lag_days") is not None else "")
         scope = "egy frakción belül" if f.get("one_faction") else ("több frakció" if len(f.get("factions") or []) > 1 else "")
+        scope_html = f'<span class="sub">{esc(scope)}</span>' if scope else ""
         rows.append(
             f'<tr data-p="{"egy" if f.get("one_faction") else ("tobb" if len(f.get("factions") or []) > 1 else "")}"'
             f' data-f="{"aznap" if f["same_day"] else "kesobb"}" data-num="{f["words"]}" data-nv="{f["speakers"]}">'
             f'<td class="num mono">{hu_num(f["words"])}</td>'
             f'<td class="prose">„{esc(cut(f["passage"], 340))}”</td>'
             f'<td>{"".join(f"<div>{w}</div>" for w in who)}</td>'
-            f'<td class="mono">{esc(lag)}{f"<span class=&quot;sub&quot;>{esc(scope)}</span>" if scope else ""}</td></tr>')
+            f'<td class="mono">{esc(lag)}{scope_html}</td></tr>')
     n_same = e.get("same_day", 0)
     n_later = e.get("later_day", 0)
     n_one = e.get("one_faction_later_day", 0)
@@ -5633,6 +5634,7 @@ def build_landing() -> str:
   </form>
   <a class="panel door" href="{cdir}index.html">{CORNERS}<h2><span data-kz-text>A {CURRENT_CYCLE}. ciklus</span></h2><p>{hu_num(fl["votes"])} szavazás, {hu_num(roster_n)} képviselő, mindenki a maga helyén az ülésteremben; szavazásonként a szükséges többség, képviselőnként a hét számokban.</p><span class="go mono">ckl{CURRENT_CYCLE}/ →</span></a>
   <a class="panel door" href="szemely/index.html">{CORNERS}<h2><span data-kz-text>Pályaképek</span></h2><p>{hu_num(tot['people'])} személy {hu_date(tot['from'])[:4]} óta: mandátumok, frakciók, szavazási mérleg ciklusonként, és az életút egy tengelyen.</p><span class="go mono">szemely/ →</span></a>
+  {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
   <a class="panel door" href="arcel/index.html">{CORNERS}<h2><span data-kz-text>A Ház arcéle</span></h2><p>Ciklusonként hányan ülnek először a Házban, és mit rögzít a nyilvántartás a megválasztottak végzettségéről, nyelveiről, önkormányzati múltjáról.</p><span class="go mono">arcel/ →</span></a>
   <a class="panel door" href="lefedettseg/index.html">{CORNERS}<h2><span data-kz-text>Ameddig a jegyzőkönyv elér</span></h2><p>Hónapról hónapra: hol van név szerinti lista, hol csak összesítés, és mi az, ami már nem pótolható.</p><span class="go mono">lefedettseg/ →</span></a>
   <a class="panel door" href="modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer és adatok</span></h2><p>Minden szabály és számítás leírva; minden tábla letölthető CSV-ben és JSON-ban, ciklusonként az <span class="mono">adatok/</span> alatt.</p><span class="go mono">modszer/ →</span></a>

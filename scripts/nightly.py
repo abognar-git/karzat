@@ -115,8 +115,18 @@ def main(argv: list[str] | None = None) -> int:
         raise SystemExit(f"only {free_gb():.1f} GB free, want {MIN_FREE_GB} — stopping before the build")
 
     # ---- the expensive half ----------------------------------------------------------------------
-    for step in (["-m", "scripts.derive_mps"], ["-m", "scripts.derive_speeches"], ["-m", "scripts.derive_speech_texts", "--cycle", str(CURRENT_CYCLE)],
-                 ["-m", "scripts.derive_committees"], ["-m", "scripts.derive_szoszolok"], ["-m", "scripts.derive_bills"]):
+    # Every derivation the site reads from, not a subset. The subset was the bug: for a while this ran seven of the
+    # twelve, so a nightly refreshed the votes and the speeches while the footer's facts, the ministerial bench, the
+    # seating plan and the repeated-passage index kept yesterday's answer — and the page still said "frissítve ma".
+    # A stale number under a fresh timestamp is the one failure this project is built to prevent, and the pipeline
+    # was quietly producing it. tests/test_site.py::NightlyRunsEveryDerivation now fails if a new derive script is
+    # added without being wired in here.
+    for step in (["-m", "scripts.derive_mps"], ["-m", "scripts.derive_seating"], ["-m", "scripts.derive_speeches"],
+                 ["-m", "scripts.derive_speech_texts", "--cycle", str(CURRENT_CYCLE)],
+                 ["-m", "scripts.derive_committees"], ["-m", "scripts.derive_szoszolok"],
+                 ["-m", "scripts.derive_kormany"], ["-m", "scripts.derive_bills"],
+                 ["-m", "scripts.derive_echo", "--cycle", str(CURRENT_CYCLE)],
+                 ["-m", "scripts.derive_facts"]):
         run(py + step, dry=dry, allow_fail=True)
     run(py + ["-m", "karzat", "freshness"], dry=dry, allow_fail=True)
     run(py + ["-m", "scripts.build_site"], dry=dry)

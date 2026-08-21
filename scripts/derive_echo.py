@@ -185,6 +185,12 @@ def main(argv: list[str] | None = None) -> int:
         from datetime import datetime, timezone
         out["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d")
         p = DERIVED / "echo.json"
+        # --cycle rewrites one cycle, so the others are carried over rather than dropped: the nightly only has new
+        # text for the running cycle, and a run that quietly emptied the archive cycles would be the worse bug
+        if p.exists() and a.cycle:
+            prev = json.loads(p.read_text(encoding="utf-8")).get("cycles") or {}
+            out["cycles"] = {**prev, **out["cycles"]}
+            out["cycles"] = {k: out["cycles"][k] for k in sorted(out["cycles"], key=int, reverse=True)}
         p.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
         print("written", p)
     return 0

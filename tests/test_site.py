@@ -1719,3 +1719,50 @@ class Echo(unittest.TestCase):
                 body = " ".join(normalise_echo_words(texts[sp["id"]].get("paragraphs")))
                 self.assertIn(f["passage"], body,
                               f'{sp["id"]}: the passage is not in that speech after all')
+
+
+class NightlyRunsEveryDerivation(unittest.TestCase):
+    """The unattended run must regenerate everything the site reads, not a subset of it.
+
+    For a while it ran seven of the twelve derive scripts. A nightly therefore refreshed the votes and the speeches
+    while the footer's facts, the ministerial bench, the seating plan and the repeated-passage index kept the
+    previous answer — and every page still carried a fresh "frissítve" stamp above them. A stale number under a
+    current timestamp is precisely the failure the freshness contract exists to prevent, and the pipeline was
+    quietly manufacturing it.
+
+    So this compares the scripts that exist against the scripts the nightly names, rather than checking any one of
+    them: a derivation added next month is wired in or this fails."""
+
+    EXEMPT = {
+        # a helper that runs the other two with one cycle's date window — the nightly addresses the cycle directly
+        "derive_cycle",
+        # the current cycle's roster and vote index, rebuilt by the sync step itself before anything else runs
+        "derive_first_light",
+    }
+
+    def test_every_derive_script_is_named_in_the_nightly(self):
+        nightly = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        on_disk = {p.stem for p in (ROOT / "scripts").glob("derive_*.py")}
+        named = set(re.findall(r"scripts\.(derive_\w+)", nightly))
+        missing = sorted(on_disk - named - self.EXEMPT)
+        self.assertEqual(missing, [], f"the nightly never runs: {', '.join(missing)}")
+        self.assertTrue(named <= on_disk, f"the nightly names a script that does not exist: {named - on_disk}")
+
+    def test_the_facts_are_derived_after_what_they_count(self):
+        """tenyek.json is computed from the other derived files, so its step has to come last."""
+        nightly = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        order = re.findall(r"scripts\.(derive_\w+)", nightly)
+        self.assertIn("derive_facts", order)
+        self.assertEqual(order[-1], "derive_facts", f"derive_facts runs before {order[order.index('derive_facts') + 1:]}")
+
+    def test_deriving_one_cycle_does_not_drop_the_others(self):
+        """The nightly passes --cycle, and a run that rewrote echo.json with only the running cycle would silently
+        empty the three archive ones. The merge is asserted here because nothing on the page would show the loss."""
+        import json as _json
+        p = ROOT / "data" / "derived" / "echo.json"
+        if not p.exists():
+            self.skipTest("no echo data derived")
+        before = set(_json.loads(p.read_text(encoding="utf-8"))["cycles"])
+        self.assertGreater(len(before), 1, "only one cycle derived — the merge is untested")
+        src = (ROOT / "scripts" / "derive_echo.py").read_text(encoding="utf-8")
+        self.assertIn("out[\"cycles\"] = {**prev, **out[\"cycles\"]}", src)
