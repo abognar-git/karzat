@@ -6,6 +6,7 @@ real API does not use. tests/test_golden.py pins how every fixture is read.
 """
 
 import tempfile
+import json
 import unittest
 from datetime import date, datetime
 from pathlib import Path
@@ -168,3 +169,56 @@ class Caching(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SupersededPayloads(unittest.TestCase):
+    """A refresh must not be able to lose what the source used to say.
+
+    The cache is this project's only evidence of what the API answered on the day it was asked. `fetch` used to
+    overwrite it, so if parliament.hu amended a record — it publishes no changelog and the payloads carry no
+    version — the old bytes vanished and a published number could move with nothing anywhere to explain it. That
+    is the failure this whole project is built to prevent, arriving through the one door nobody was watching."""
+
+    def setUp(self):
+        self.tmp = Path(tempfile.mkdtemp())
+        self.api = api.WebApi(token="secrettoken", cache_dir=self.tmp, min_interval=0)
+        self.kw = {"p_szavdatum": "2020.01.01.10:00:00"}
+
+    def _fetch(self, body: bytes, refresh: bool = False) -> bytes:
+        class R:
+            def __init__(self, b):
+                self.content, self.status_code = b, 200
+        with mock.patch.object(self.api.session, "get", return_value=R(body)):
+            return self.api.fetch("szavazas", refresh=refresh, **self.kw)
+
+    def test_a_rewritten_record_keeps_its_predecessor(self):
+        first = b"<szavazas><eredmeny>Elfogadva</eredmeny></szavazas>"
+        second = b"<szavazas><eredmeny>Elutasitva</eredmeny></szavazas>"
+        self._fetch(first)
+        self.assertEqual(self._fetch(second, refresh=True), second)     # the cache moves on…
+        kept = list((self.tmp / ".superseded" / "szavazas").glob("*.xml"))
+        self.assertEqual(len(kept), 1)
+        self.assertEqual(kept[0].read_bytes(), first)                    # …and the old answer survives
+
+    def test_the_change_is_logged_without_the_token(self):
+        self._fetch(b"<szavazas><a/></szavazas>")
+        self._fetch(b"<szavazas><b/></szavazas>", refresh=True)
+        line = (self.tmp / ".superseded" / "changes.jsonl").read_text(encoding="utf-8").strip()
+        self.assertNotIn("secrettoken", line, "the change log leaked the API token")
+        rec = json.loads(line)
+        self.assertEqual(rec["service"], "szavazas")
+        self.assertEqual(rec["params"], self.kw)
+        self.assertNotEqual(rec["was"]["sha256"], rec["now"]["sha256"])
+
+    def test_an_unchanged_refresh_records_nothing(self):
+        body = b"<szavazas><a/></szavazas>"
+        self._fetch(body)
+        self._fetch(body, refresh=True)
+        self.assertFalse((self.tmp / ".superseded").exists(), "an identical refresh was logged as a change")
+
+    def test_the_watcher_asks_for_exactly_the_record_it_holds(self):
+        """The sweep turns a cache filename back into the parameter that produced it. If that round trip is not
+        exact the watcher re-fetches the wrong record, caches it under a new name, and reports nothing wrong."""
+        from scripts.watch_source import _param_from_key
+        for stem in ("2019-06-04T13-12-50", "2026-05-09T11-42-46", "1998-12-15T09-05-00"):
+            self.assertEqual(api.cache_key("szavazas", {"p_szavdatum": _param_from_key(stem)}), stem)

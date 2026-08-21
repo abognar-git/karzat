@@ -101,6 +101,10 @@ def main(argv: list[str] | None = None) -> int:
         run(py + ["-m", "karzat", "sync-speech-texts", "--ckl", str(CURRENT_CYCLE)], dry=dry, allow_fail=True)
         run(py + ["-m", "karzat", "sync-committees"], dry=dry, allow_fail=True)   # they carry the next sitting's invitation
         run(py + ["-m", "karzat", "sync-bills", "--cached"], dry=dry, allow_fail=True)
+        # Ask the source whether it still says what it said. A closed vote's detail is a historical fact, so a
+        # change there is news and nobody else is looking; 120 a night is a two-year sweep of the 79,829 cached
+        # records, which is the right pace for an integrity check running on somebody else's server.
+        run(py + ["-m", "scripts.watch_source", "--calls", "120"], dry=dry, allow_fail=True)
 
     # ---- did anything move? ----------------------------------------------------------------------
     run(py + ["-m", "scripts.derive_first_light"], dry=dry)

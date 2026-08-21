@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 279 tests
+python3 -m unittest discover -s tests -t .      # offline; 283 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -615,6 +615,30 @@ rather than changes within a mandate. Leaving the window after a change open, so
 read as a disagreement at A to B. And grouping by the record's cycle field while testing against whichever
 cycle's ballots I happened to be iterating, which put a 2013 departure against 2018 votes and looked exactly like
 a year-long discrepancy — the same shape as the real one, which is why it took a third look to separate them.
+
+## Watching the source that everything rests on
+
+This project has one dependency and it is somebody else's server. parliament.hu publishes no changelog, its
+payloads carry no version, and a record can be amended after the fact with no notice to anyone. Until now the
+cache made that invisible by construction: a refresh overwrote the stored bytes, so an amendment upstream would
+have been absorbed in silence and a number on a page would have moved with nothing anywhere to explain it. That
+is the failure the whole freshness contract exists to prevent, arriving through the one door nobody was watching.
+
+`WebApi.fetch` now compares before it writes. A refresh whose bytes differ keeps the superseded payload and
+appends a line naming the service, the parameters, and both hashes — the token never among them, which a test
+asserts. It costs one hash of something already in memory, and it turns every refresh the nightly already
+performs into a check of the source against itself.
+
+`scripts/watch_source.py` is what makes refreshes happen on purpose, and it is deliberately narrow and
+deliberately slow. Narrow, because only records that should never change prove anything: a committee's
+membership and a running cycle's motion change legitimately and constantly, but the detail of a vote held in
+2019 is a closed historical fact, and if it moves that is news. Slow, because 120 records a night against 79,829
+cached vote details is a two-year sweep — the right pace for an integrity check running on a server that is not
+mine. Records go in rotation, least recently checked first, so coverage grows evenly instead of re-asking the
+same thousand.
+
+Twenty-five records asked so far, nothing rewritten. The interesting number is the one that is not zero, and it
+may be years before there is one; the point is that if it happens, the old bytes will still be here.
 
 ## Licence
 

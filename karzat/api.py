@@ -180,8 +180,40 @@ class WebApi:
             raise ApiError(f"{service}: non-XML response ({len(raw)} bytes) for {masked}: {snippet!r}")
         self.consecutive_failures = 0
         path.parent.mkdir(parents=True, exist_ok=True)
+        # A refresh used to overwrite the cached payload, so if the House had quietly rewritten a record the old
+        # bytes vanished and nothing downstream could tell. The cache is this project's only evidence of what the
+        # API said on the day it was asked, and losing that silently is the failure that matters most here — a
+        # published number would change with no event anywhere to explain it.
+        #
+        # So a refresh whose bytes differ from what is on disk keeps the old copy and records the fact. It costs
+        # one hash of something already in memory, and it turns every refresh the nightly performs anyway into a
+        # check of the source against itself.
+        if path.exists():
+            old_raw = path.read_bytes()
+            if old_raw != raw:
+                self._record_change(service, params, path, old_raw, raw)
         path.write_bytes(raw)
         return raw
+
+    def _record_change(self, service: str, params: dict, path: Path, old_raw: bytes, new_raw: bytes) -> None:
+        """Keep the superseded payload and append one line to the change log. Never raises: a watcher that can
+        break the fetch it watches is worse than no watcher."""
+        try:
+            import hashlib as _h
+            keep = self.cache_dir / ".superseded" / service
+            keep.mkdir(parents=True, exist_ok=True)
+            stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+            (keep / f"{path.stem}.{stamp}.xml").write_bytes(old_raw)
+            log = self.cache_dir / ".superseded" / "changes.jsonl"
+            with log.open("a", encoding="utf-8") as fh:
+                fh.write(json.dumps({
+                    "seen": stamp, "service": service, "key": path.stem,
+                    "params": {k: str(v) for k, v in params.items() if k != "p_token"},
+                    "was": {"sha256": _h.sha256(old_raw).hexdigest(), "bytes": len(old_raw)},
+                    "now": {"sha256": _h.sha256(new_raw).hexdigest(), "bytes": len(new_raw)},
+                }, ensure_ascii=False) + "\n")
+        except Exception:
+            pass
 
     def get(self, service: str, **params: Any) -> Any:
         """fetch() + parse to plain dict/list (see xmlutil.to_dict)."""
