@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 268 tests
+python3 -m unittest discover -s tests -t .      # offline; 271 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -561,6 +561,33 @@ earlier, and it took a reviewer to see that I had walked back into it.
 I do not badge the status. Every answered interpellation reads `elfogadva`, including all 53 where
 the record's own log says the member rejected the answer, so a coloured badge would be the one genuine lie on
 the page.
+
+## The passages that turn up in more than one mouth
+
+The transcript is 60,703 speeches across four cycles, and `scripts/derive_echo.py` finds every run of thirty
+or more words that appears verbatim in speeches by two different members: 1,253 of them. Finding them was the
+easy half. Separating what they mean is the work, and it cannot be automated, because three quite different
+things look identical to a matcher.
+
+The first thing it found was a **template**: the Legislative Committee's report, read aloud by three members on
+three different days, seventy-four identical words, because the wording is the committee's and they were taking
+turns at the same job. At a ten-word window the whole top of the list was politeness formulas and the chair
+announcing who was taking the chair — which is why the threshold is thirty, a measured number rather than a
+chosen one. The second is **quotation**, the commonest reason two members share a passage: one is reading the
+other back to them, usually to disagree. Only the third is a line being carried, and the page cannot tell you
+which is which.
+
+So it does not try. It records what is measurable — who said it first, who repeated it, how many days later,
+whether they share a faction — and prints the passage. 741 of the repetitions are inside a single faction and
+days apart; 344 cross factions. Neither number is added to the other and neither is given a name, because the
+record cannot support one. A test asserts that the site's own prose never characterises a repetition; the
+transcript it quotes may say anything, and does.
+
+One figure I cannot explain and am therefore not interpreting: cycle 41 has 329 of its 437 repetitions inside a
+single faction against 56 across factions, where cycle 42 is nearly even at 245 and 201. The share of speeches
+that resolve to a faction is level across the cycles — 85 to 95 per cent inside the repetitions themselves — so
+it is not an artefact of who could be identified. It is a real difference, and that is where the measurement
+stops.
 
 ## Licence
 

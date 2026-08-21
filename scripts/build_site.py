@@ -263,6 +263,8 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
     km_path = DERIVED / "kormany.json"
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    ec_path = DERIVED / "echo.json"
+    echo = ((load_json(ec_path).get("cycles") or {}).get(str(cycle)) or {}) if ec_path.exists() else {}
     ir_path = DERIVED / "iromany_records.json"
     bill_recs = ((load_json(ir_path).get("records") or {}) if (cycle == CURRENT_CYCLE and ir_path.exists()) else {})  # motion records: current cycle only, izon is per-cycle
     # Also keyed by the bare number, because that is what a page is named after and what the roll calls carry. The
@@ -271,7 +273,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -291,6 +293,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
 
 
 CAST = ("igen", "nem", "tartozkodott")
+ECHO_WORDS = 30            # scripts/derive_echo.py --words; the page states it, so it lives in one place
 
 
 def compute_alignment(inp: dict) -> dict:
@@ -2042,7 +2045,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
   <div class="cyc-title"><span class="kicker" data-kz-text>{inp["cycle"]}. ciklus{"" if inp["closed"] else " · folyamatban"}</span><h1>{esc(cycle_title(inp["cycle"]))}</h1>
     <p class="lede">{hu_num(fl["votes"])} szavazás{" az első " + hu_num(sd["count"]) + " ülésnapról" if not inp["closed"] else ""}, mindegyik a saját oldalán: {"ki hogyan szavazott, és mennyi kellett hozzá" if not inp["archive"] else ("az arányok frakciónként és a szükséges többség; a név szerinti listák az adatállományban" if n_rolls > len(inp["order"]) // 10 else "az arányok frakciónként és a szükséges többség — név szerinti listát és tárgyat az API 1998 előtt nem ad")}.</p></div>
   <nav class="cyc-nav" aria-label="A ciklus oldalai">
-    <div class="grp"><span class="lbl">szavazások</span><a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a><a href="iromany/index.html">irományok</a></div>
+    <div class="grp"><span class="lbl">szavazások</span><a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a><a href="iromany/index.html">irományok</a>{'<a href="visszhang/index.html">visszhang</a>' if (inp.get("echo") or {}).get("items") else ""}</div>
     <div class="grp"><span class="lbl">emberek</span><a href="kepviselo/index.html">képviselők</a><a href="bizottsag/index.html">bizottságok</a><a href="felszolalas/index.html">felszólalások</a><a href="kepviselom/index.html">képviselőm</a></div>
     <div class="grp"><span class="lbl">eszközök</span><a href="feed/index.html">értesítések</a><a href="adatok/index.html">adatok</a><a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a><a href="{"../" * inp["base_depth"]}szemely/index.html">pályaképek</a><a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a></div>
   </nav>
@@ -2589,6 +2592,96 @@ def build_cohesion_page(inp: dict, co: dict) -> str:
   {"".join(pair_blocks)}
 </section>
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}kohezio/index.html', f'Kohézió — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-kohezio')}
+""" + page_tail(inp, 1)
+
+
+def normalise_echo_words(paragraphs: list[str]) -> list[str]:
+    """The same normalisation scripts/derive_echo.py compares with — imported by the test that re-checks a claimed
+    repetition against the transcript, so the two cannot drift into agreeing by accident."""
+    from scripts.derive_echo import normalise
+    return normalise(paragraphs)
+
+
+def build_echo_page(inp: dict) -> str:
+    """visszhang/index.html — the passages that appear word for word in more than one member's speech.
+
+    The framing is the feature. A matcher cannot tell a committee template from a quotation from a talking point,
+    and the page must not pretend otherwise, so it sorts nothing into those boxes: it prints what is measurable —
+    who said it first, who repeated it, how many days later, whether they share a faction — and lets the reader
+    see which of the three they are looking at. Nothing here says the word for what it might mean."""
+    e = inp.get("echo") or {}
+    items = e.get("items") or []
+    if not items:
+        return ""
+    facs = {f["id"]: f["colour"] for f in inp["facs"]}
+    rows = []
+    for i, f in enumerate(items):
+        who = []
+        for sp in f["speeches"]:
+            fac = sp.get("faction") or ""
+            dot = f'<i class="d" style="--c:{facs.get(fac, "#8a8a8a")}"></i>' if fac else ""
+            who.append(f'<a href="../felszolalas/{esc(sp["id"])}.html">{dot}{esc(sp["speaker"] or "—")}</a>'
+                       f'<span class="sub">{esc(fac)} · {esc(hu_date(sp["date"]) if sp["date"] else "")}</span>')
+        lag = ("egy ülésnapon" if f["same_day"] else
+               f'{hu_num(f["lag_days"])} nap' if f.get("lag_days") is not None else "")
+        scope = "egy frakción belül" if f.get("one_faction") else ("több frakció" if len(f.get("factions") or []) > 1 else "")
+        rows.append(
+            f'<tr data-p="{"egy" if f.get("one_faction") else ("tobb" if len(f.get("factions") or []) > 1 else "")}"'
+            f' data-f="{"aznap" if f["same_day"] else "kesobb"}" data-num="{f["words"]}" data-nv="{f["speakers"]}">'
+            f'<td class="num mono">{hu_num(f["words"])}</td>'
+            f'<td class="prose">„{esc(cut(f["passage"], 340))}”</td>'
+            f'<td>{"".join(f"<div>{w}</div>" for w in who)}</td>'
+            f'<td class="mono">{esc(lag)}{f"<span class=&quot;sub&quot;>{esc(scope)}</span>" if scope else ""}</td></tr>')
+    n_same = e.get("same_day", 0)
+    n_later = e.get("later_day", 0)
+    n_one = e.get("one_faction_later_day", 0)
+    n_across = e.get("across_factions", 0)
+    return page_head(f'Visszhang · {inp["cycle"]}. ciklus · karzat',
+                     f'A {inp["cycle"]}. ciklus jegyzőkönyvében szó szerint megismételt, legalább {hu_num(inp.get("echo", {}).get("words", 30))} szavas szövegrészek: ki mondta előbb, ki ismételte, mennyivel később.',
+                     1 + inp["base_depth"]) + \
+        topbar(inp, [("visszhang", None)], 1) + f"""
+<div class="hero-h"><h1>Visszhang</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(len(items))} szövegrész, amely két vagy több képviselő szájából hangzott el szó szerint</small></div>
+<p class="lede">A ciklus jegyzőkönyvéből minden olyan, legalább {hu_num(ECHO_WORDS)} szavas rész, amely szó szerint
+megismétlődik egy másik képviselő felszólalásában. A hossz nem véletlen: tíz szónál a lista tele volt
+udvariassági fordulattal, harmincnál már nem az.</p>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Mit jelent, ha ketten ugyanazt mondják</span></h2>
+  <div class="prose hero-meta">
+    <p>Háromfélét, és a keresés nem tudja megkülönböztetni őket — ezért ez az oldal nem is dönti el.</p>
+    <p><b>Sablon.</b> A bizottsági előadók ugyanazt a jelentést olvassák fel, mert a szöveg a bizottságé, nem az
+    övék. Ez váltás egy feladaton, nem összehangolás.</p>
+    <p><b>Idézés.</b> A leggyakoribb ok: az egyik képviselő felolvassa a másikat, rendszerint azért, hogy vitatkozzon
+    vele. Ez egyikükről sem állítás.</p>
+    <p><b>Átvett mondat.</b> Ugyanaz a szövegrész napokkal később, másik felszólalásban, másik szájból.</p>
+    <p>Amit az oldal ehelyett közöl: hány szó, kik mondták, milyen frakcióban, melyik napon, és mennyi idő telt el
+    köztük. A minősítés az olvasóé.</p>
+  </div>
+</section>
+
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>A szövegrészek</span><span class="tag">{hu_num(n_same)} egy ülésnapon · {hu_num(n_later)} később · {hu_num(n_one)} egy frakción belül és később · {hu_num(n_across)} frakciók között</span></h2>
+  <div class="filters" role="group" aria-label="Szűrés">
+    <button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>
+    <button type="button" data-posf="egy" aria-pressed="false">egy frakción belül</button>
+    <button type="button" data-posf="tobb" aria-pressed="false">több frakció</button>
+    <span class="sep"></span>
+    <button type="button" data-fac="all" class="on" aria-pressed="true">bármikor</button>
+    <button type="button" data-fac="aznap" aria-pressed="false">egy ülésnapon</button>
+    <button type="button" data-fac="kesobb" aria-pressed="false">később</button>
+    <input type="search" data-filter-table="echo" placeholder="szó a szövegrészben" aria-label="Szűrés a szövegrészre" style="min-width:160px"><span class="n" id="en" aria-live="polite"></span>
+  </div>
+  <div class="tablewrap"><table id="echo" data-page-size="25" data-counter="en"><thead><tr>
+    <th scope="col" class="sortable num" data-key="num">Szó</th><th scope="col">A szövegrész</th>
+    <th scope="col">Kik mondták</th><th scope="col" class="sortable" data-key="nv">Eltelt idő</th>
+  </tr></thead><tbody>{"".join(rows)}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">A szövegrész a jegyzőkönyv szava, kisbetűsítve és
+  központozás nélkül — így hasonlítja össze a keresés. A jegyzőkönyvvezető zárójeles közbevetései
+  („<span class="mono">Taps a kormánypártok soraiban.</span>”) nem számítanak bele: azok nem hangzottak el.
+  Ugyanaz a képviselő önmagát ismételve nem visszhang. A módszer leírása:
+  <a href="{"../" * inp["base_depth"]}modszer/index.html#visszhang">módszer</a>.</div>
+</section>
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}visszhang/index.html', f'Visszhang — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-visszhang')}
 """ + page_tail(inp, 1)
 
 
@@ -4294,6 +4387,9 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         (kd / "frakcio_parok.csv").write_text(ex.faction_pairs_csv(co, cycle), encoding="utf-8")
         (kd / "kepviselo_parok.csv").write_text(ex.mp_pairs_csv(co, inp["mps"], cycle), encoding="utf-8")
         (kd / "szavazasonkent.csv").write_text(ex.cohesion_votes_csv(co, cycle), encoding="utf-8")
+        if inp.get("echo", {}).get("items"):
+            vd = out_dir / "visszhang"; vd.mkdir(parents=True, exist_ok=True)
+            w(vd / "index.html", build_echo_page(inp))
         sd = out_dir / "szoros"; sd.mkdir(parents=True, exist_ok=True)
         (sd / "index.html").write_text(build_close_page(inp, cl), encoding="utf-8")
         (sd / "dontesek.csv").write_text(ex.decisions_csv(cl, cycle), encoding="utf-8")
@@ -4435,6 +4531,11 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="szoszolo">{CORNERS}<h2><span data-kz-text>Nemzetiségi szószólók</span></h2>
 <div class="hero-meta prose">A nemzetiségi listáról szószóló kerülhet az Országgyűlésbe, ha a lista nem szerez mandátumot: a szószóló ül az ülésteremben, felszólalhat és bizottságban dolgozik, de nem szavaz — a név szerinti listák sosem tartalmazzák. Az oldal külön kezeli őket: a nyitólap patkóján gyűrűvel vannak jelölve, a kártyájuk a nemzetiséget, a bizottságaikat és a felszólalásaik számát mutatja, és semmilyen névsor-, részvételi vagy frakciófegyelem-szám nem tartalmazza őket. Forrás: <span class="mono">szoszolok.cgi</span> és a saját képviselői adatlapjuk (ülőhely, bizottságok, felszólalásszám). Jelenleg {hu_num(len(((inp.get("szoszolok") or {{}}).get("people") or {{}})))} szószóló ül a teremben.</div></section>
+
+<section class="panel" id="visszhang">{CORNERS}<h2><span data-kz-text>Visszhang: ugyanaz a szövegrész két szájból</span></h2>
+<div class="hero-meta prose">A jegyzőkönyv szövegét szavakra bontva, {hu_num(ECHO_WORDS)} szavas átfedő ablakokban hasonlítja össze az oldal, és minden olyan részt kiír, amely szó szerint megismétlődik egy másik képviselő felszólalásában. Az összevetés kisbetűs, központozás nélküli; a jegyzőkönyvvezető zárójeles közbevetései nem számítanak bele. Egy képviselő önmagát ismételve nem visszhang, és az egymást átfedő ablakok közül csak a leghosszabb marad, hogy egy szövegrész egyszer szerepeljen.
+<br><br>A {hu_num(ECHO_WORDS)} szavas alsó határ mérés eredménye, nem ízlésé: tíz szónál a találatok éle az udvariassági fordulat („köszönöm szépen a szót, tisztelt elnök asszony”) és az ülésvezetési közlés, harminc szónál ezek eltűnnek.
+<br><br><b>Amit az oldal nem állít.</b> Hogy két azonos szövegrész mit jelent, azt a jegyzőkönyvből nem lehet eldönteni: lehet bizottsági sablon, amit az előadók váltásban olvasnak fel; lehet idézés, amikor az egyik képviselő a másikat olvassa fel; és lehet átvett mondat. A három ugyanúgy néz ki a keresés számára. Az oldal ezért a mérhetőt közli — hány szó, kik, milyen frakcióban, melyik napon, mennyi idővel később —, a minősítést nem.</div></section>
 
 <section class="panel" id="iromany">{CORNERS}<h2><span data-kz-text>Irományok: mit tart nyilván az adatlap, és mit nem</span></h2>
 <div class="hero-meta prose">Az iromány-adatlap (<span class="mono">iromany.cgi</span>) csak a futó ciklusban címezhető: az irományazonosító ciklusonként újraindul, az irománylista pedig a ciklusparamétert figyelmen kívül hagyja. A {hu_num(CURRENT_CYCLE)}. ciklusban a lista {hu_num(539)} tételt sorol, a szolgáltatás {hu_num(537)} számra ad választ — a különbség egyetlen szám, amely alatt három különböző indítvány fut, és a végpont egyet ad vissza belőlük. A korábbi ciklusoknál ezért csak az az iromány szerepel, amelyikről név szerint szavaztak.

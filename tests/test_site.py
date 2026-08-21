@@ -1666,3 +1666,56 @@ class Traffic(unittest.TestCase):
         self.assertEqual(paths, ["/ckl43/iromany/109.html"])       # assets are not pages
         for ip in ("66.249.66.1", "203.0.113.7"):
             self.assertNotIn(ip, blob, "an address survived into the aggregate")
+
+
+class Echo(unittest.TestCase):
+    """The page that shows passages repeated word for word in two members' speeches.
+
+    Its most important property is not a number: it is that the site never characterises what a repetition means.
+    A matcher cannot separate a committee template from a quotation from a talking point, so the page prints what
+    is measurable and names the three possibilities in the reader's hands. If a future edit ever slips a word like
+    "coordination" into the site's own prose, that is the moment this feature stops being honest."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+
+    def test_the_page_never_says_what_a_repetition_means(self):
+        from scripts.build_site import build_echo_page
+        html = build_echo_page(self.inp)
+        if not html:
+            self.skipTest("no echo data derived — run: python3 -m scripts.derive_echo")
+        # the record's own words are quoted and may say anything; the site's words are what is under test
+        ours = re.sub(r'<td class="prose">„.*?”</td>', "", html).lower()
+        for word in ("koordin", "összehangolt", "utasításra", "kampány", "propaganda", "sugalmaz"):
+            self.assertNotIn(word, ours, f"the site's own prose characterises the finding: {word!r}")
+        for kind in ("Sablon.", "Idézés.", "Átvett mondat."):      # …and it offers all three readings
+            self.assertIn(kind, html)
+
+    def test_every_row_links_both_speeches_and_no_cell_is_blank(self):
+        from scripts.build_site import build_echo_page, paged_speech_ids
+        html = build_echo_page(self.inp)
+        if not html:
+            self.skipTest("no echo data derived")
+        self.assertEqual(html.count("<td></td>"), 0)
+        paged = paged_speech_ids(self.inp)
+        hrefs = re.findall(r'href="\.\./felszolalas/([^"]+)\.html"', html)
+        self.assertTrue(hrefs)
+        for h in hrefs:
+            self.assertIn(h, paged, f"{h}: the echo links a speech page that is not written")
+        rows = re.findall(r"<tr data-p=.*?</tr>", html, re.S)
+        for r in rows:
+            self.assertGreaterEqual(len(re.findall(r"felszolalas/", r)), 2, "a row with fewer than two speakers")
+
+    def test_a_passage_really_is_in_both_speeches(self):
+        """The claim is verbatim repetition, so it is checked against the transcript rather than trusted."""
+        from scripts.build_site import normalise_echo_words
+        e = self.inp.get("echo") or {}
+        texts = (self.inp.get("texts") or {}).get("texts") or {}
+        if not e.get("items") or not texts:
+            self.skipTest("no echo data derived")
+        for f in e["items"][:20]:
+            for sp in f["speeches"]:
+                body = " ".join(normalise_echo_words(texts[sp["id"]].get("paragraphs")))
+                self.assertIn(f["passage"], body,
+                              f'{sp["id"]}: the passage is not in that speech after all')
