@@ -510,7 +510,7 @@
     b.addEventListener('click', function(){ box.value = b.getAttribute('data-q'); box.focus(); });
   });
   function say(t){ if (state) state.textContent = t; }
-  // Everything is loaded from this origin: the runtime, the worker and the three Parquet files. The page calls
+  // Everything is loaded from this origin: the runtime, the worker and the Parquet files. The page calls
   // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
   // Two lifecycle defects lived here, and both told the reader something untrue.
   //
@@ -544,17 +544,28 @@
     db = d;
     await db.instantiate(base + 'duckdb-eh.wasm');
     if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; throw new Error('__stopped'); }
-    conn = await db.connect();
-    if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; conn = null; throw new Error('__stopped'); }
+    var c = await db.connect();
+    if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; throw new Error('__stopped'); }
     // DuckDB fetches its parquet extension at run time, from extensions.duckdb.org, which the vendoring did not
     // cover and the static scan could not see: the CSP is what found it. Unblocked it would have meant every
     // reader of this page making a request to a third party — the exact thing vendoring the runtime prevents.
     // Ours is a mirror of the same layout, so the repository setting is all it takes.
-    await conn.query("SET custom_extension_repository='" + base + "ext'");
-    await conn.query("INSTALL parquet; LOAD parquet;");
-    say('táblák regisztrálása…');
-    await views(conn);
+    // `conn` is published only once the whole thing works. Assigning it here, before the extension and the
+    // views, meant that a failed INSTALL or a missing Parquet file cached a half-built connection for the
+    // life of the page: boot() handed it back on every later call, no views existed, and every query answered
+    // "does not exist" until the reader reloaded — which nothing told them to do.
+    try {
+      await c.query("SET custom_extension_repository='" + base + "ext'");
+      await c.query("INSTALL parquet; LOAD parquet;");
+      say('táblák regisztrálása…');
+      await views(c);
+    } catch (e) {
+      try { db.terminate(); } catch (e2) {}
+      db = null;
+      throw e;
+    }
     if (stale(mine)) throw new Error('__stopped');
+    conn = c;
     say('kész — a lekérdezés a te gépeden fut');
     return conn;
   }
@@ -570,8 +581,14 @@
   // A reader may DROP a view — it is their own database, in their own tab. Rebuilding the views costs a tenth
   // of a second, which is too much to pay on every query and nothing at all to pay on the one that failed.
   function droppedOne(msg) {
-    if (!/Catalog Error/.test(String(msg))) return false;
-    for (var i = 0; i < TABLES.length; i++) if (String(msg).indexOf(TABLES[i]) >= 0) return true;
+    var m = String(msg);
+    if (!/Catalog Error/.test(m)) return false;
+    // DuckDB appends 'Did you mean "szavazatok"?' to a plain typo, and the first version searched the whole
+    // message — so `FROM szavazatokk` announced "a táblák visszaállítása…" and rebuilt all eight views to fix
+    // a spelling mistake. Only the name the engine says is missing counts.
+    var miss = m.match(/with name ([^\s]+) does not exist/);
+    if (!miss) return false;
+    for (var i = 0; i < TABLES.length; i++) if (TABLES[i] === miss[1]) return true;
     return false;
   }
   // Everything that reaches innerHTML goes through this, including the column names. They did not, and

@@ -1,2 +1,8 @@
 -r requirements.txt
-# nothing else yet — tests use unittest from the standard library
+
+# Property-based tests (tests/test_properties.py). Every defect this project has shipped has been the same
+# kind: a data shape nobody imagined. A NULL in the first row of a result, a DECIMAL that arrives as its
+# unscaled integer, a field that usually holds one bill number and sometimes holds two, a per-cycle file that
+# is simply absent. The example tests catch what I thought of, which is the half that was never the problem.
+# Hypothesis invents the other half and then shrinks whatever breaks to the smallest case that still does.
+hypothesis>=6.100

@@ -1,10 +1,10 @@
-"""The whole roll-call corpus as three Parquet files, for anyone who would rather write SQL than click.
+"""The whole roll-call corpus as a handful of Parquet tables, for anyone who would rather write SQL than click.
 
     python3 -m scripts.derive_parquet
     python3 -m scripts.derive_parquet --out site/adatok
 
 The site publishes a CSV per cycle per table, which is the right shape for a spreadsheet and the wrong one for a
-question that spans 1990 to 2026: nine downloads and a join before you start. These three files are the same
+question that spans 1990 to 2026: nine downloads and a join before you start. These files are the same
 data in one piece — 79,829 votes, 17.4 million cast positions, the people who cast them, and what they said
 from the floor. Eight tables, not three; the argparse help and this sentence are the only places that number
 is written down, and both are checked against the manifest by the tests.
@@ -38,6 +38,21 @@ sys.path.insert(0, str(ROOT))
 from scripts.build_site import CURRENT_CYCLE   # the unsuffixed derived files belong to this one
 
 ROW_GROUP = 200_000          # ~1-3 MB compressed per group: small enough that a range request is worth making
+
+
+def rows_of(rows, key):
+    """The distinct values of one column, for the manifest's coverage note."""
+    return {r[key] for r in rows if r.get(key) is not None}
+
+
+def first_bill(v):
+    """One bill number from a speech's reference.
+
+    The record joins several with " · " when an agenda item covers more than one, and 28,106 rows carried a
+    string like "T/25 · T/26" that no join will ever match. `iromany` is the first, which is what a join wants;
+    `iromany_mind` keeps the whole string so nothing is lost. The same flattening the link table was built to
+    undo, reintroduced two functions later — worth naming rather than quietly patching."""
+    return (v or "").split(" · ")[0].strip() or None
 
 
 def speech_rows(cycle: int) -> list:
@@ -134,6 +149,7 @@ def build(out: Path) -> dict:
                 "iromany_db": len(v.get("motions") or []),
                 "igen": v.get("igen"), "nem": v.get("nem"), "tartozkodott": v.get("tartozkodott"),
                 "eredmeny": v.get("result_raw"), "fajta": v.get("kind"), "mod": v.get("mode"),
+                "megjegyzes": v.get("remark"), "titkos": bool(v.get("secret")),
                 "szabaly": (v.get("majority") or {}).get("rule"),
                 "szukseges": (v.get("majority") or {}).get("needed"),
             })
@@ -151,11 +167,12 @@ def build(out: Path) -> dict:
             people.append({"ciklus": c, "kepviselo_id": azon, "nev": m.get("name"),
                            "frakcio": m.get("faction"), "mandatum": m.get("mandate_kind"),
                            "megye": m.get("county"), "oevk": m.get("constituency_no"),
-                           "jelenlegi": bool(m.get("current"))})
+                           "ma_is_kepviselo": bool(m.get("current"))})
 
         for r in speech_rows(c):
             talk.append({"ciklus": c, "ulesnap": r.get("ulnap"), "datum": r.get("date"),
-                         "sorszam": r.get("seq"), "iromany": r.get("iromany"),
+                         "sorszam": r.get("seq"), "iromany": first_bill(r.get("iromany")),
+                         "iromany_mind": r.get("iromany") or None,
                          "kepviselo_id": r.get("azon"), "nev": r.get("name"), "frakcio": r.get("faction"),
                          "fajta": r.get("kind"), "szerep": r.get("role"), "kezdet": r.get("start"),
                          "hossz_mp": r.get("duration_s"), "ismetles": bool(r.get("reprint")),
@@ -173,7 +190,9 @@ def build(out: Path) -> dict:
         p = out / f"{name}.parquet"
         pq.write_table(t, p, compression="zstd", compression_level=9,
                        row_group_size=ROW_GROUP, use_dictionary=True, write_statistics=True)
-        written[name] = {"rows": t.num_rows, "bytes": p.stat().st_size, "columns": t.column_names}
+        cyc = sorted({r for r in (rows_of(rows, "ciklus"))}) if rows else []
+        written[name] = {"rows": t.num_rows, "bytes": p.stat().st_size, "columns": t.column_names,
+                         "cycles": [cyc[0], cyc[-1]] if cyc else None}
         print(f"  {name:14} {t.num_rows:10,} rows  {p.stat().st_size / 1e6:8.1f} MB  {len(t.column_names)} columns")
     return {"built_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), "tables": written}
 

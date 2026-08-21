@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 319 tests
+python3 -m unittest discover -s tests -t .      # offline; 353 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -673,7 +673,7 @@ in one piece — 79,829 votes, 17,444,402 cast positions,
 the committee seats, and every motion each vote names.
 
 The size is the surprising part. Seventeen million positions come to
-2.7 MB and all eight files together to 7.3 MB, because the columns
+2.7 MB and all eight files together to 7.8 MB, because the columns
 that dominate the row count — member, faction, position — are low cardinality and dictionary encoding is close
 to free on them. The entire named voting record of the Hungarian Parliament since 1990, plus every speech from
 the floor, is a smaller download than a photograph.
@@ -779,6 +779,46 @@ Two more defects on the way, both of which only a real browser would have shown.
 page, so `../assets/…` resolved against the wrong base, became `/assets/assets/…` and 404ed, surfacing only as a
 WebAssembly compile error that named no URL. Every path in the loader is absolute now, and a test greps for a
 relative one.
+
+## Testing the shapes I did not think of
+
+Sixteen defects came out of one afternoon's review of the Riport page. Going back over them, they were not
+sixteen kinds of mistake. They were one kind, sixteen times: **a data shape nobody imagined.** A NULL in the
+first row of a result, so a column of numbers was judged to be text. A DECIMAL that Arrow hands over as its
+unscaled integer, so 1,5 printed as 15. A field that usually holds one bill number and, on 28,106 rows, holds
+two joined with " · ". A per-cycle file that is simply absent, and a fallback that gave the 1990 parliament
+4,651 speeches dated 2026.
+
+Every one of them shipped with the suite green, and that is not an indictment of the suite. An example test
+checks the case its author thought of, and the case its author thought of was never the problem.
+
+So `tests/test_properties.py` does not name inputs. It describes the shape of a valid input and states
+something that must be true of every one of them — a date survives being written and read, a threshold never
+exceeds its base, a repair run twice is the same as run once, the chart picks the same columns whichever row
+came first, every motion in the record reaches the link table. Hypothesis invents a few hundred cases per
+property, reaching first for the empty string, the zero, the single element, the duplicate, the out-of-order.
+When one breaks it shrinks the failure to the smallest input that still breaks it, which is the difference
+between knowing there is a bug and knowing what the bug is.
+
+The first run failed four properties and **all four were mine**: three passed text to functions that take
+bytes, and one demanded that a timestamp round-trip keep its microseconds, which the API's second-resolution
+format cannot. Hypothesis shrank that one to `2000-01-01 00:00:00.000001` — the smallest datetime in range
+with anything to lose. The generator says so now rather than the round-trip quietly rounding, because a
+strategy that hides a limitation is how a green test comes to mean nothing.
+
+Which raises the question these tests have to answer about themselves: does a property that passes prove
+anything? So each was checked by mutation — break the code it guards, on purpose, and see whether it notices.
+Nine of ten mutations were caught. The one that walked past is the interesting one: a repair rewritten to emit
+`&amp;amp;` is still idempotent, because the second pass leaves a valid entity alone, while every ampersand in
+the corpus silently doubles. Idempotence was never the thing the repair owed. The property now asserts what it
+does owe — repair it, parse it, and the text reads back as it went in — and that mutation is caught too.
+
+One property earns its place without ever failing. `cache_key` gives the hot services readable filenames built
+from a few named parameters, which is worth a great deal when you are looking at 200,000 cached payloads, and
+means the key ignores every parameter it was not told about. No call site varies one today; I checked all
+fourteen. The property and its companion — which reads the call sites and compares them against the key — exist
+because that correspondence was held in nobody's head, and the failure it would cause is a payload served for
+the wrong question, from disk, with no request made and nothing to see.
 
 ## Licence
 

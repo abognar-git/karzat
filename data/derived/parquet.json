@@ -1,9 +1,9 @@
 {
- "built_at": "2026-08-21T18:21:46Z",
+ "built_at": "2026-08-21T19:32:17Z",
  "tables": {
   "szavazasok": {
    "rows": 79829,
-   "bytes": 1586323,
+   "bytes": 1848901,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -19,8 +19,14 @@
     "eredmeny",
     "fajta",
     "mod",
+    "megjegyzes",
+    "titkos",
     "szabaly",
     "szukseges"
+   ],
+   "cycles": [
+    34,
+    43
    ]
   },
   "szavazatok": {
@@ -33,11 +39,15 @@
     "kepviselo_id",
     "frakcio",
     "szavazat"
+   ],
+   "cycles": [
+    35,
+    43
    ]
   },
   "kepviselok": {
    "rows": 3263,
-   "bytes": 32002,
+   "bytes": 32026,
    "columns": [
     "ciklus",
     "kepviselo_id",
@@ -46,7 +56,11 @@
     "mandatum",
     "megye",
     "oevk",
-    "jelenlegi"
+    "ma_is_kepviselo"
+   ],
+   "cycles": [
+    34,
+    43
    ]
   },
   "szavazas_iromany": {
@@ -58,17 +72,22 @@
     "sorszam",
     "iromany",
     "targy"
+   ],
+   "cycles": [
+    35,
+    43
    ]
   },
   "felszolalasok": {
    "rows": 495191,
-   "bytes": 2219583,
+   "bytes": 2445266,
    "columns": [
     "ciklus",
     "ulesnap",
     "datum",
     "sorszam",
     "iromany",
+    "iromany_mind",
     "kepviselo_id",
     "nev",
     "frakcio",
@@ -78,6 +97,10 @@
     "hossz_mp",
     "ismetles",
     "technikai"
+   ],
+   "cycles": [
+    36,
+    43
    ]
   },
   "iromanyok": {
@@ -98,6 +121,10 @@
     "benyujto",
     "benyujto_fajta",
     "cimzett"
+   ],
+   "cycles": [
+    43,
+    43
    ]
   },
   "frakciovaltasok": {
@@ -114,7 +141,8 @@
     "meddig",
     "bizonyitek",
     "csuszas_nap"
-   ]
+   ],
+   "cycles": null
   },
   "bizottsagi_tagsag": {
    "rows": 276,
@@ -126,7 +154,8 @@
     "kepviselo_id",
     "nev",
     "frakcio"
-   ]
+   ],
+   "cycles": null
   }
  }
 }

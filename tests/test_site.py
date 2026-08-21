@@ -1956,32 +1956,57 @@ class ParquetCorpus(unittest.TestCase):
         self.assertEqual(self.votes.num_rows, site_totals()["votes"])
 
     def test_a_vote_s_rows_add_up_to_its_own_header(self):
+        """Stopping after three thousand votes sounded like a sample and was a prefix.
+
+        The table is written cycle by cycle, newest first, so the cap fell inside cycle 41 and the six older
+        parliaments were never reconciled at all — including the ones whose payloads needed repairs to parse.
+        A budget spent evenly across the cycles costs the same and covers all of them."""
         import collections
-        ts_col = self.pos.column("szavazas_id").to_pylist()
         by_ts = collections.defaultdict(collections.Counter)
-        for ts, p in zip(ts_col, self.pos.column("szavazat").to_pylist()):
+        for ts, p in zip(self.pos.column("szavazas_id").to_pylist(), self.pos.column("szavazat").to_pylist()):
             by_ts[ts][p] += 1
-        checked = 0
-        for i in range(self.votes.num_rows):
-            ts = self.votes.column("szavazas_id")[i].as_py()
-            counts = by_ts.get(ts)
-            if not counts:
-                continue                                   # a vote with no name-level list: tallies only
-            for col in ("igen", "nem", "tartozkodott"):
-                want = self.votes.column(col)[i].as_py()
-                if want is None:
-                    continue
-                self.assertEqual(counts.get(col, 0), want, f"{ts}: {col} header {want}, rows {counts.get(col, 0)}")
-            checked += 1
-            if checked >= 3000:
-                break
-        self.assertGreater(checked, 1000, "too few named votes checked to prove anything")
+        cyc = self.votes.column("ciklus").to_pylist()
+        rows_by_cycle = collections.defaultdict(list)
+        for i, c in enumerate(cyc):
+            rows_by_cycle[c].append(i)
+        per = max(60, 3000 // max(1, len(rows_by_cycle)))
+        checked = collections.Counter()
+        for c, idx in sorted(rows_by_cycle.items()):
+            step = max(1, len(idx) // per)                  # spread across the cycle, not its first rows
+            for i in idx[::step]:
+                ts = self.votes.column("szavazas_id")[i].as_py()
+                counts = by_ts.get(ts)
+                if not counts:
+                    continue                               # a vote with no name-level list: tallies only
+                for col in ("igen", "nem", "tartozkodott"):
+                    want = self.votes.column(col)[i].as_py()
+                    if want is None:
+                        continue
+                    self.assertEqual(counts.get(col, 0), want,
+                                     f"cycle {c} {ts}: {col} header {want}, rows {counts.get(col, 0)}")
+                checked[c] += 1
+        named = {c for c in rows_by_cycle if checked[c]}
+        self.assertGreaterEqual(len(named), 6, f"only {sorted(named)} were reconciled at all")
+        self.assertGreater(sum(checked.values()), 1000, "too few named votes checked to prove anything")
 
     def test_all_seven_positions_survive_the_export(self):
-        seen = set(self.pos.column("szavazat").to_pylist()[:3_000_000])
+        """The first three million rows are cycles 43 and 42. A cycle that collapsed its seven positions into
+        three would have passed this, which is precisely the mistake the column exists to prevent."""
+        import collections
+        cyc = self.pos.column("ciklus").to_pylist()
+        pos = self.pos.column("szavazat").to_pylist()
+        seen = collections.defaultdict(set)
+        for c, p in zip(cyc, pos):
+            seen[c].add(p)
+        every = set().union(*seen.values()) if seen else set()
         for p in ("igen", "nem", "tartozkodott", "jelen_nem_szavazott", "nem_szavazott",
-                  "bejelentett_hianyzo", "igazoltan_tavol"):
-            self.assertIn(p, seen, f"{p} is missing — the export collapsed the House's own distinctions")
+                      "bejelentett_hianyzo", "igazoltan_tavol"):
+            self.assertIn(p, every, f"{p} is missing — the export collapsed the House's own distinctions")
+        # and no cycle with a real roll call may have been flattened to the three headline positions
+        for c, vals in sorted(seen.items()):
+            if len(vals) <= 1:
+                continue                                   # a cycle with tallies only
+            self.assertGreater(len(vals), 3, f"cycle {c} carries only {sorted(vals)} — collapsed")
 
     def test_it_is_seekable_rather_than_one_block(self):
         """A single row group would mean any question downloads the whole file; the browser page depends on not."""
@@ -2184,8 +2209,10 @@ class ReportPage(unittest.TestCase):
 
         The guard is on the shape rather than the symptom: every interpolation into innerHTML in the SQL loader
         must go through esc()."""
-        block = self.js[self.js.index("function render(tbl)"):]
-        block = block[:block.index("runBtn.addEventListener")]
+        # the guard used to stop at render()'s end, one statement short of the chart's own innerHTML calls:
+        # those are static strings today, and a guard that cannot see them would not notice the day they are not
+        block = self._sql_block()
+        block = block[block.index("function render(tbl)"):]
         for raw in re.findall(r"innerHTML\s*=\s*([^;]+);", block):
             for interp in re.findall(r"\+\s*([A-Za-z_$][\w$.()\[\]]*)", raw):
                 if interp.startswith(("esc(", "cols.map", "rows.join")):
@@ -2440,6 +2467,44 @@ class ReportPage(unittest.TestCase):
             self.assertNotIn(word, self.html, f"a typed count survives: {word}")
         self.assertIn(f"{n} fájlban van", self.html, "the lede does not count the files it has")
 
+    def test_a_half_built_connection_is_never_published(self):
+        """`conn` used to be assigned the moment db.connect() returned, before the extension load and the view
+        registration. A failed INSTALL or a missing Parquet file therefore cached a half-built connection for
+        the life of the page: boot() handed it back on every later call, no views existed, and every query
+        answered "does not exist" until the reader reloaded — which nothing told them to do."""
+        js = self._sql_block()
+        b = js[js.index("  async function bootOnce("):js.index("  var TABLES =")]
+        setup = b[b.index("db.connect()"):b.index("conn = c;")]
+        self.assertNotIn("conn =", setup, "the connection is published before it is finished")
+        self.assertIn("await views(c)", setup, "the views are registered on something other than the new connection")
+        self.assertIn("catch (e)", setup, "a failure during setup leaves the engine half-built")
+
+    def test_a_typo_does_not_masquerade_as_a_dropped_table(self):
+        """DuckDB appends 'Did you mean "szavazatok"?' to a plain typo, and the recovery searched the whole
+        message — so `FROM szavazatokk` announced "a táblák visszaállítása…" and rebuilt all eight views to fix
+        a spelling mistake. Only the name the engine says is missing counts."""
+        import json, shutil, subprocess
+        if not shutil.which("node"):
+            self.skipTest("node not available")
+        js = self._sql_block()
+        fn = js[js.index("  function droppedOne("):js.index("  // Everything that reaches innerHTML")]
+        prog = ("var TABLES=['szavazasok','szavazatok','kepviselok'];\n" + fn +
+                "\nconsole.log(JSON.stringify({" +
+                "typo: droppedOne('Catalog Error: Table with name szavazatokk does not exist! Did you mean \"szavazatok\"?')," +
+                "dropped: droppedOne('Catalog Error: Table with name szavazatok does not exist!')," +
+                "unrelated: droppedOne('Binder Error: Referenced column \"x\" not found')}));")
+        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True, check=True).stdout)
+        self.assertEqual(got, {"typo": False, "dropped": True, "unrelated": False})
+
+    def test_the_page_lists_only_tables_that_are_actually_there(self):
+        """The manifest is committed and `site/adatok/` is not, so a clone built a page advertising eight
+        tables it did not have. The runtime got this check on the first day and the data never did."""
+        from scripts.build_site import SITE_DIR
+        for n in (self.inp.get("parquet") or {}).get("tables") or {}:
+            listed = f'<td class="mono">{n}</td>' in self.html
+            there = (SITE_DIR / "adatok" / f"{n}.parquet").exists()
+            self.assertEqual(listed, there, f"{n}: listed={listed} but present={there}")
+
     def test_a_downloaded_chart_carries_its_colours(self):
         """The chart's colours are CSS variables, which mean nothing in a file opened elsewhere. The export has
         to resolve them from the live tree — computing them on the detached clone returns nothing, which is what
@@ -2451,5 +2516,15 @@ class ReportPage(unittest.TestCase):
         self.assertIn("xmlns", fn)
 
     def test_the_page_says_what_the_runtime_costs_before_it_is_downloaded(self):
-        self.assertIn("6 MB", self.html)
+        """This asserted the literal "6 MB" and so passed for months on a page whose figure was wrong by five
+        times — a substring test agreeing with a typed number is two mistakes propping each other up. The size
+        itself is checked against the wire in test_the_runtime_size_on_the_page_is_the_size_on_the_wire; what
+        belongs here is that the reader is told before they wait, and that the cost is stated in the tag they
+        will be looking at while it loads."""
+        import re as _re
+        tag = _re.search(r'id="sqlstate">([^<]*)', self.html)
+        self.assertIsNotNone(tag, "the page has no state tag to warn in")
+        self.assertRegex(tag.group(1), r"(~\d+,\d+ MB|nincs telepítve)",
+                         "the tag names no download size before the reader waits for one")
+        self.assertIn("első használatkor", tag.group(1))
         self.assertIn("Kiszolgáló nincs mögötte", self.html)
