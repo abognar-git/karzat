@@ -45,6 +45,11 @@ FILES = {
     "tslib.mjs":          (f"{CDN}/npm/tslib@2.6.3/+esm", None),
     "duckdb-eh.wasm":     (f"{CDN}/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-eh.wasm", None),
     "duckdb-eh.worker.js": (f"{CDN}/npm/@duckdb/duckdb-wasm@1.29.0/dist/duckdb-browser-eh.worker.js", None),
+    # DuckDB downloads this itself, at run time, the first time a query touches a Parquet file. Vendoring the
+    # library is not enough — without a mirror the reader's browser calls extensions.duckdb.org. The path is the
+    # repository layout the engine expects, so pointing it at ours is one SET statement.
+    "ext/v1.1.1/wasm_eh/parquet.duckdb_extension.wasm":
+        ("https://extensions.duckdb.org/v1.1.1/wasm_eh/parquet.duckdb_extension.wasm", None),
 }
 # jsDelivr's absolute import paths -> our own files, so nothing reaches off-origin once served
 REWRITE = {
@@ -76,6 +81,7 @@ def main(argv: list[str] | None = None) -> int:
     got, changed = {}, []
     for name, (url, _) in FILES.items():
         p = OUT / name
+        p.parent.mkdir(parents=True, exist_ok=True)
         if p.exists() and not a.force:
             raw = p.read_bytes()
         else:

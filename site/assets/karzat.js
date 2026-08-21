@@ -523,6 +523,12 @@
     db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
     await db.instantiate(base + 'duckdb-eh.wasm');
     conn = await db.connect();
+    // DuckDB fetches its parquet extension at run time, from extensions.duckdb.org, which the vendoring did not
+    // cover and the static scan could not see: the CSP is what found it. Unblocked it would have meant every
+    // reader of this page making a request to a third party — the exact thing vendoring the runtime prevents.
+    // Ours is a mirror of the same layout, so the repository setting is all it takes.
+    await conn.query("SET custom_extension_repository='" + base + "ext'");
+    await conn.query("INSTALL parquet; LOAD parquet;");
     say('táblák regisztrálása…');
     for (var i = 0; i < 3; i++) {
       var name = ['szavazasok','szavazatok','kepviselok'][i];

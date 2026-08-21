@@ -694,6 +694,16 @@ million cast positions by faction takes 734 ms; the harder example, a window fun
 voted against their own faction's majority, takes 94. Nothing is sent anywhere, because there is nowhere to send
 it: the query runs on the reader's machine against static objects on a CDN.
 
+A Content-Security-Policy on the distribution then found the hole in that claim, which is the best argument
+for having one. `default-src 'none'` and each capability granted only where the built site actually uses it —
+a scan of six thousand pages found no off-origin image, stylesheet or script, so the policy could be strict
+rather than the usual `'self'` shrug. On the SQL page it immediately blocked a request I did not know the page
+made: DuckDB downloads its Parquet extension at run time from `extensions.duckdb.org`. Locally, with no policy,
+that succeeded silently — meaning every reader would have called a third party, the precise thing vendoring the
+runtime was supposed to prevent. I had verified the static files and could not see a run-time fetch; the policy
+could. The extension is mirrored now, pinned in the same lock, and the page makes zero off-origin requests,
+measured in a browser rather than argued from the source.
+
 The runtime is vendored rather than loaded from a public CDN, and that is the decision worth explaining. This
 site sets no cookie, runs no analytics and calls no third party, so a visit is known to nobody but the access
 log this project keeps for thirty days. A single `<script src="https://cdn…">` would undo that quietly, for

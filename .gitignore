@@ -25,27 +25,22 @@ venv/
 # generated run state (rebuilt by sync/freshness commands)
 data/*.json
 
-# generated per-vote / per-MP pages and every earlier cycle's tree (rebuilt by scripts/build_site.py from
-# committed data/derived inputs; the cycle-42 tree alone is ~500 MB of HTML — 2,599 roll calls, 214 records)
-site/szavazas/
-site/kepviselo/
-site/ckl*/
-site/szemely/
-site/adatok/
-site/iromany/
-site/kohezio/
-site/szoros/
-site/szamok/
-site/modszer/
-site/kereses/
-site/feed/
-site/felszolalas/
-site/kepviselom/
-site/bizottsag/
-site/arcel/
-site/lefedettseg/
-site/frakciovaltas/
-site/assets/portre/
+# Everything the build writes under site/ is generated; only these seven files are the committed, --check-ed
+# output. Listing directories to ignore meant a new page was tracked by default, and three of them were —
+# frakciovaltas/, visszhang/ and sql/ each slipped in before the suite caught it. Inverted, a new page is
+# ignored by default and has to be named to be kept, which is the safer way round.
+site/*
+!site/index.html
+!site/404.html
+!site/robots.txt
+!site/tenyek.json
+!site/assets/
+site/assets/*
+!site/assets/karzat.css
+!site/assets/karzat.js
+!site/assets/favicon.svg
+!site/assets/favicon.ico
+!site/assets/apple-touch-icon.png
 
 # editor/session config
 .claude/
