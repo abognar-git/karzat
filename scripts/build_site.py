@@ -2629,15 +2629,15 @@ def build_switch_page(inp: dict) -> str:
         rows.append(
             f'<tr data-p="{esc(it["verdict"])}" data-f="{esc(it["ciklus"] or "")}" data-num="{esc((it["on"] or "").replace("-", ""))}">'
             f'<td class="ts mono">{esc(hu_date(it["on"]) if it.get("on") else "—")}</td>'
-            f'<td><a href="szemely/{esc(it["azon"])}.html">{esc(it["name"] or "—")}</a><span class="sub">{esc(it["ciklus"] or "")}</span></td>'
+            f'<td><a href="../szemely/{esc(it["azon"])}.html">{esc(it["name"] or "—")}</a><span class="sub">{esc(it["ciklus"] or "")}</span></td>'
             f'<td>{dot(it["from"])} → {dot(it["to"])}</td>'
             f'<td>{esc(it["verdict"])}{lag}</td>'
             f'<td class="mono">{esc(listed)}</td></tr>')
     tally = " · ".join(f'{hu_num(v[k])} {k}' for k in VERDICT_ORDER if v.get(k))
     return page_head("Frakcióváltás · karzat",
                      f'Minden mandátum közbeni frakcióváltás {hu_num(1990)} óta — {hu_num(sw["switches"])} eset —, '
-                     f'és hogy a képviselő adatlapja meg a név szerinti listák ugyanazt mondják-e róla.', 0) + \
-        topbar(inp, [("frakcióváltás", None)], 0) + f"""
+                     f'és hogy a képviselő adatlapja meg a név szerinti listák ugyanazt mondják-e róla.', 1) + \
+        topbar(inp, [("frakcióváltás", None)], 1) + f"""
 <div class="hero-h"><h1>Frakcióváltás</h1><small class="label" data-kz-text>{hu_num(sw["switches"])} váltás · {hu_num(sw["people"])} ember · 1990 óta</small></div>
 <p class="lede">Amikor egy képviselő a mandátuma alatt frakciót vált, ezt két nyilvántartás is rögzíti — az
 adatlapja dátumozott frakciósorai, és a név szerinti szavazások listái, amelyek minden szavazásnál külön
@@ -2677,10 +2677,10 @@ megcímkézik. A kettőt senki nem veti össze. Ez az oldal összeveti.</p>
   </tr></thead><tbody>{"".join(rows)}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">A dátum és a két frakció a képviselő adatlapjáról való; az
   utolsó oszlop az, amit a név szerinti listák írtak róla a váltás után, a következő váltásáig. A módszer és a
-  három hibás mérés, ami idáig vezetett: <a href="modszer/index.html#frakciovaltas">módszer</a>.</div>
+  három hibás mérés, ami idáig vezetett: <a href="../modszer/index.html#frakciovaltas">módszer</a>.</div>
 </section>
 {cite_html(inp, 'frakciovaltas/index.html', 'Frakcióváltás 1990 óta', 'frakciovaltas')}
-""" + page_tail(inp, 0)
+""" + page_tail(inp, 1)
 
 
 def build_echo_page(inp: dict) -> str:

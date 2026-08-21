@@ -1827,3 +1827,32 @@ class FactionSwitches(unittest.TestCase):
             seq.sort(key=lambda s: s["on"])
             for a, b in zip(seq, seq[1:]):
                 self.assertEqual(a["until"], b["on"], f'{a["name"]}: the window does not end at the next change')
+
+
+class PagesLoadTheirAssets(unittest.TestCase):
+    """A page one level below the root has to say so, or it loads nothing.
+
+    frakciovaltas/index.html shipped once with depth 0, so its stylesheet href was `assets/karzat.css` — resolved
+    against its own directory, which has no assets — and it rendered as unstyled HTML on the live site. Nothing in
+    the suite noticed, because every test asked about content and none about the page's own furniture.
+
+    This checks the whole set: for each page the build writes below the root, the stylesheet, the script and the
+    topbar's home link must climb out of its directory exactly as far as the directory is deep."""
+
+    def test_every_site_wide_page_reaches_the_stylesheet(self):
+        from scripts.build_site import (build_switch_page, build_profile_page, build_coverage_page,
+                                        landing_inputs, load_inputs, available_cycles, coverage_rows)
+        inp = load_inputs()
+        pages = {"frakciovaltas/index.html": build_switch_page(inp),
+                 "arcel/index.html": build_profile_page(inp, landing_inputs()["rows"])}
+        for name, html in pages.items():
+            if not html:
+                continue
+            # The failure that matters is a path that resolves *inside* the page's own directory, because there is
+            # no assets/ there and the browser has nowhere to fall back to. Climbing too far is harmless — a
+            # browser clamps ../ at the root, so ../../assets/ from /arcel/ still lands on /assets/ — and both
+            # pages do it today. It is wrong and worth tidying, but it is not what took the stylesheet away.
+            for bad in re.findall(r'(?:href|src)="((?!\.\./|https?:|//|#|mailto:|data:)[^"]*assets/[^"]*)"', html):
+                self.fail(f"{name}: {bad} resolves inside the page's own directory, where no assets/ exists")
+            self.assertRegex(html, r'href="(\.\./)+assets/karzat\.css"', f"{name}: no stylesheet climbing out")
+            self.assertRegex(html, r'src="(\.\./)+assets/karzat\.js"', f"{name}: no script climbing out")
