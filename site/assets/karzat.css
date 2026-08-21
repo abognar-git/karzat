@@ -18,7 +18,16 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .kz-topbar nav{display:flex;align-items:center;gap:8px;min-width:0;color:var(--dim2);white-space:nowrap}.kz-topbar nav a,.kz-topbar nav .cur{min-width:0;overflow:hidden;text-overflow:ellipsis}.kz-topbar nav a:hover{color:var(--white)}.kz-topbar nav .cur{color:var(--white)}.sl{color:var(--border-hi)}
 .kz-topbar .kv{color:var(--dim2);white-space:nowrap}.kz-topbar .kv b{color:#d4d4d8;font-weight:400;margin-left:6px}.kz-topbar .cyc a{margin-left:2px;padding:6px 4px;display:inline-block}.kz-topbar .cyc a:hover{color:var(--white)}
 .kz-topbar .dot{width:6px;height:6px;border-radius:50%;background:#52525b;display:inline-block;margin-right:6px}
-@media(max-width:900px){.kz-topbar nav[aria-label="Útvonal"] a,.kz-topbar nav[aria-label="Útvonal"] .sl{display:none}}@media(max-width:760px){.kz-topbar .hide-sm{display:none}}/* Under 600px the bar used to hide every cycle but the current one, which saved room by removing the only way to
+@media(max-width:900px){.kz-topbar nav[aria-label="Útvonal"] a,.kz-topbar nav[aria-label="Útvonal"] .sl{display:none}
+/* The scrolling strip and the shrinkable right group were written for phones and stopped at 600px, so between
+   600 and 900 the bar was rigid and pushed the whole document sideways — 54px on a cycle page, and 138 once the
+   umbrella pages traded "Ciklus" for the longer "Ugrás a ciklusra". A tablet is where nobody looked. The fix is
+   not a new mechanism, it is the existing one applied at the width where it is actually needed. */
+.kz-topbar .r{flex:0 1 auto;min-width:0}
+.kz-topbar .cyc{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  mask-image:linear-gradient(to right,#000 calc(100% - 14px),transparent)}
+.kz-topbar .cyc::-webkit-scrollbar{display:none}
+.kz-topbar .cyc .hide-xs{display:none}}@media(max-width:760px){.kz-topbar .hide-sm{display:none}}/* Under 600px the bar used to hide every cycle but the current one, which saved room by removing the only way to
    reach the other nine: nine links measured 0x0 on a phone. They stay, as a strip that scrolls inside the bar if
    it must. The separators go instead — they cost width and carry nothing — and each link becomes a target the
    full 48px height of the bar, with the current cycle underlined rather than merely brighter. */
@@ -76,6 +85,8 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .hero-title a{color:var(--white);border-bottom:1px solid var(--dim3)}.hero-title a:hover{border-bottom-color:var(--white)}
 .hero-meta{color:var(--dim2);font-size:12px;font-family:var(--mono);letter-spacing:.02em}
 .hero-meta.prose{font-family:var(--sans);font-size:12.5px;color:var(--dim);letter-spacing:0}
+.prose .mono{overflow-wrap:anywhere}
+
 .speech{font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--text);max-width:72ch}.speech p{margin:0 0 .9em}.speech mark,.snip mark{background:rgba(255,255,255,.18);color:var(--white);padding:0 2px}
 .snip{font-family:var(--sans);font-size:12.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:0;text-transform:none}
 tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sans);font-size:12.5px;padding-top:10px}tr.dim td{color:var(--dim3)}tr.dim a{color:var(--dim2)}
@@ -93,6 +104,20 @@ tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sa
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}
 /* seat inspector */
+.chartbox{margin:0;border:1px solid var(--border);background:var(--panel-deep);padding:14px}
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+@media(max-width:700px){.chartbox{overflow-x:auto}.chartbox svg{min-width:660px}
+.chartbox figcaption{position:sticky;left:0}}
+.chartbox .ax{stroke:var(--border);stroke-width:1}
+.chartbox .grid{stroke:var(--line2);stroke-width:1}
+.chartbox .bar{fill:var(--c,#8a8a8a)}
+.chartbox .ln{fill:none;stroke:var(--c,#d4d4d8);stroke-width:1.5}
+.chartbox .pt{fill:var(--c,#d4d4d8)}
+.chartbox text{font-family:var(--mono);font-size:10px;fill:var(--dim2)}
+.chartbox text.v{fill:var(--text)}
+@media print{.chartbox{border-color:#999;background:#fff;overflow:visible}.chartbox text{fill:#333}
+.chartbox .ln{stroke:#333}.chartbox .ax{stroke:#999}.chartbox .grid{stroke:#ddd}
+.chartbox svg{min-width:0;break-inside:avoid}}
 .inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
@@ -303,6 +328,13 @@ td a{color:#d4d4d8;text-decoration:underline;text-decoration-color:var(--dim3);t
 .kz-terminal .scan:after{content:"";position:absolute;top:-10%;left:0;width:100%;height:2px;background:rgba(255,255,255,.08);animation:kz-scan 6s linear infinite}
 @keyframes kz-scan{0%{top:-10%}100%{top:110%}}
 @media (prefers-reduced-motion:reduce){.kz-terminal .scan:after,.kz-terminal .cursor{animation:none}}
-@media print{:root{--bg:#fff;--panel:#fff;--deep:#fff;--text:#111;--white:#000;--dim:#333;--dim2:#444;--dim3:#555;--border:#bbb;--border-hi:#999;--line2:#eee;--grid:transparent}
+@media print{:root{--bg:#fff;--panel:#fff;--deep:#fff;--text:#111;--white:#000;--dim:#333;--dim2:#444;--dim3:#555;--border:#bbb;--border-hi:#999;--line2:#eee;--grid:transparent;--panel-deep:#fff}
 body{background:#fff;color:#111}.kz-topbar,.pgr,.filters button,.copy,.kz-corner,.scan,.insp-hint{display:none!important}.kz-topbar+*{margin-top:0}
-tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}.panel,.kz-terminal{break-inside:avoid;border-color:#bbb}a{color:#000;text-decoration:underline}.chart svg .seat{opacity:1!important}}
+tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}
+/* .tablewrap and th paint themselves with literal rgba rather than tokens, so flipping the palette never
+   reached them: every table on the site printed as a black block with #444 headings on it. Found by lifting
+   the print rules onto the screen and looking, which is the only way to see a stylesheet nobody renders. */
+.tablewrap{background:#fff!important}th{background:#f2f2f2!important;color:#222!important}
+tbody tr.hl td,tr:target td{background:#f6f6f6!important}tr.grp td{background:#fafafa!important}
+tbody tr:hover td{background:transparent!important}
+#run,#stop{display:none!important}#q{border-color:#ccc!important;background:#fafafa!important;color:#111!important}.panel,.kz-terminal{break-inside:avoid;border-color:#bbb}a{color:#000;text-decoration:underline}.chart svg .seat{opacity:1!important}}

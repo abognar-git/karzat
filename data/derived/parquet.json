@@ -1,51 +1,131 @@
 {
- "built_at": "2026-08-21T09:21:12Z",
+ "built_at": "2026-08-21T18:21:46Z",
  "tables": {
   "szavazasok": {
    "rows": 79829,
-   "bytes": 1575909,
+   "bytes": 1586323,
    "columns": [
-    "cycle",
-    "ts",
-    "date",
-    "time",
+    "ciklus",
+    "szavazas_id",
+    "datum",
+    "ido",
     "slug",
-    "subject",
-    "motion",
+    "targy",
+    "iromany",
+    "iromany_db",
     "igen",
     "nem",
     "tartozkodott",
-    "result",
-    "kind",
-    "mode",
-    "rule",
-    "needed"
+    "eredmeny",
+    "fajta",
+    "mod",
+    "szabaly",
+    "szukseges"
    ]
   },
   "szavazatok": {
    "rows": 17444402,
-   "bytes": 2694239,
+   "bytes": 2696140,
    "columns": [
-    "cycle",
-    "ts",
-    "date",
-    "mp",
-    "faction",
-    "position"
+    "ciklus",
+    "szavazas_id",
+    "datum",
+    "kepviselo_id",
+    "frakcio",
+    "szavazat"
    ]
   },
   "kepviselok": {
    "rows": 3263,
-   "bytes": 32010,
+   "bytes": 32002,
    "columns": [
-    "cycle",
-    "mp",
-    "name",
-    "faction",
-    "mandate_kind",
-    "county",
-    "constituency_no",
-    "current"
+    "ciklus",
+    "kepviselo_id",
+    "nev",
+    "frakcio",
+    "mandatum",
+    "megye",
+    "oevk",
+    "jelenlegi"
+   ]
+  },
+  "szavazas_iromany": {
+   "rows": 104319,
+   "bytes": 747429,
+   "columns": [
+    "ciklus",
+    "szavazas_id",
+    "sorszam",
+    "iromany",
+    "targy"
+   ]
+  },
+  "felszolalasok": {
+   "rows": 495191,
+   "bytes": 2219583,
+   "columns": [
+    "ciklus",
+    "ulesnap",
+    "datum",
+    "sorszam",
+    "iromany",
+    "kepviselo_id",
+    "nev",
+    "frakcio",
+    "fajta",
+    "szerep",
+    "kezdet",
+    "hossz_mp",
+    "ismetles",
+    "technikai"
+   ]
+  },
+  "iromanyok": {
+   "rows": 537,
+   "bytes": 34421,
+   "columns": [
+    "ciklus",
+    "iromany",
+    "izon",
+    "cim",
+    "tipus",
+    "fo_tipus",
+    "jelleg",
+    "benyujtva",
+    "statusz",
+    "targyalas",
+    "kihirdetes",
+    "benyujto",
+    "benyujto_fajta",
+    "cimzett"
+   ]
+  },
+  "frakciovaltasok": {
+   "rows": 298,
+   "bytes": 8446,
+   "columns": [
+    "kepviselo_id",
+    "nev",
+    "ciklus_cimke",
+    "honnan",
+    "hova",
+    "mikortol",
+    "valtas_napja",
+    "meddig",
+    "bizonyitek",
+    "csuszas_nap"
+   ]
+  },
+  "bizottsagi_tagsag": {
+   "rows": 276,
+   "bytes": 6061,
+   "columns": [
+    "bizottsag",
+    "bizottsag_fajta",
+    "tisztseg",
+    "kepviselo_id",
+    "nev",
+    "frakcio"
    ]
   }
  }

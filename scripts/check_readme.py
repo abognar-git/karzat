@@ -24,6 +24,7 @@ site join this list; the mechanism does not change.
 from __future__ import annotations
 
 import argparse
+import json as _json
 import re
 import sys
 import unittest
@@ -34,6 +35,30 @@ sys.path.insert(0, str(ROOT))
 
 from karzat.api import SERVICES, WebApi  # noqa: E402
 from karzat.majority import Rule, Tally, needed  # noqa: E402
+
+_PQ = _json.loads((ROOT / "data" / "derived" / "parquet.json").read_text(encoding="utf-8"))["tables"] \
+    if (ROOT / "data" / "derived" / "parquet.json").exists() else {}
+
+
+def pqt(name: str) -> int:
+    """Rows in one exported table, from the manifest the derivation writes."""
+    return _PQ.get(name, {}).get("rows", 0)
+
+
+def pqb(name: str | None = None) -> float:
+    """Megabytes of one table, or of all of them."""
+    return (_PQ.get(name, {}).get("bytes", 0) if name else sum(v["bytes"] for v in _PQ.values())) / 1e6
+
+
+# Votes naming more than one motion: the link table has one row per motion, so the excess over the vote count
+# is exactly the number the single `iromany` column used to drop.
+PQ_MULTI = 0
+if _PQ:
+    import pyarrow.parquet as _pqf
+    _lp = ROOT / "site" / "adatok" / "szavazas_iromany.parquet"
+    if _lp.exists():
+        _t = _pqf.read_table(_lp, columns=["ciklus", "szavazas_id", "sorszam"])
+        PQ_MULTI = sum(1 for n in _t.column("sorszam") if n.as_py() == 2)
 
 README = ROOT / "README.md"
 FACTIONS = ROOT / "config" / "factions.yml"
@@ -176,6 +201,14 @@ def build() -> list[tuple[str, list]]:
 
     return [
         # Run it / status
+        # The Parquet section's figures were typed rather than generated — the one part of this README that
+        # was outside its own gate. They come from the manifest the derivation writes.
+        ("in one piece — {:,.0f} votes, {:,.0f} cast positions,\n{:,.0f} member-cycles, and five more tables: the\n{:,.0f} speeches from the floor",
+         [pqt("szavazasok"), pqt("szavazatok"), pqt("kepviselok"), pqt("felszolalasok")]),
+        ("Seventeen million positions come to\n{:.1f} MB and all eight files together to {:.1f} MB",
+         [pqb("szavazatok"), pqb()]),
+        ("drops the rest: {:,.0f} of\n{:,.0f} name more than one", [PQ_MULTI, pqt("szavazasok")]),
+        ("carries all {:,.0f} of\nthem", [pqt("szavazas_iromany")]),
         ("# offline; {:,.0f} tests", [tc["_total"]]),
         ("classifier with provenance; {:,.0f} tests", [tc.get("test_majority", 0)]),
         ("newest vote, last sync; {:,.0f} tests", [tc.get("test_freshness", 0)]),

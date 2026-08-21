@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 297 tests
+python3 -m unittest discover -s tests -t .      # offline; 319 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -663,22 +663,40 @@ instrumenting every read in every derivation. The honest cheaper answer is the o
 this corpus state under this code — and both halves are checkable, which is more than most published statistics
 offer. It costs 41 seconds a night.
 
-## The whole corpus in three files
+## The whole corpus in eight files
 
 The site publishes a CSV per cycle per table, which is right for a spreadsheet and wrong for a question that
 spans 1990 to 2026: nine downloads and a join before you start. `scripts/derive_parquet.py` writes the same data
-in one piece — 79829 votes, 17444402 cast positions, and
-3263 member-cycles.
+in one piece — 79,829 votes, 17,444,402 cast positions,
+3,263 member-cycles, and five more tables: the
+495,191 speeches from the floor, the bills, the faction switches,
+the committee seats, and every motion each vote names.
 
 The size is the surprising part. Seventeen million positions come to
-2.7 MB and all three files together to 4.3 MB, because the columns
+2.7 MB and all eight files together to 7.3 MB, because the columns
 that dominate the row count — member, faction, position — are low cardinality and dictionary encoding is close
-to free on them. The entire named voting record of the Hungarian Parliament since 1990 is a smaller download
-than a photograph.
+to free on them. The entire named voting record of the Hungarian Parliament since 1990, plus every speech from
+the floor, is a smaller download than a photograph.
 
 It is also seekable, in row groups rather than one block, so a question can pull only what answers it over
-ordinary HTTP range requests. That matters less at four megabytes than I expected it to, and it is the
+ordinary HTTP range requests. That matters less at seven megabytes than I expected it to, and it is the
 groundwork for running the queries in the browser rather than on a server there is none of.
+
+The speech table taught its own lesson, and the gate below did not catch it. The exporter fell back to the
+unsuffixed `speeches.json.gz` — the current cycle's file — whenever a per-cycle one was missing, which is true
+of cycles 34 and 35. So the 1990-94 and 1994-98 parliaments were each given 4,651 speeches dated 2026, spoken
+by members who would not sit for thirty years: 9,302 rows of fiction that parsed cleanly and counted plausibly.
+I had measured the right figure, 495,191, before writing the exporter; the exporter said
+504,493 and I did not compare the two. The gate then blessed the wrong number,
+because a figure registered after the defect is registered against it. So the check is arithmetic the machine
+does every run — no row may be dated outside the cycle it is filed under, and no two cycles may share a block
+of identical rows — rather than a number I remember to look at.
+
+That last table exists because writing this one found a defect in the previous version. A vote can name several
+motions and the export kept `motions[0]`, which is fine for six votes in seven and drops the rest: 10,960 of
+79,829 name more than one. A single column made that invisible — the value was
+always present and always plausible. `szavazas_iromany` carries all 104,319 of
+them, and a test asserts the two agree rather than trusting that they do.
 
 Two things are asserted rather than assumed, because both are ways a published extract can quietly disagree with
 the site it came from. Every named vote's positions must sum to the tallies its own header carries — checked
@@ -688,16 +706,29 @@ data is misread, and an export that did it silently would hand the mistake to ev
 
 ## SQL in the reader's browser, with no server anywhere
 
-The three Parquet files are 4.3 MB, which is small enough that a browser can hold the lot — so `sql/` loads a
-database compiled to WebAssembly, registers the files as views, and answers whatever you type. Grouping 17.4
+The Parquet files are 7.4 MB, small enough that a browser can hold the lot — so `riport/` loads a
+database compiled to WebAssembly, registers them as views, and answers whatever you type. Grouping 17.4
 million cast positions by faction takes 734 ms; the harder example, a window function and two joins to find who
 voted against their own faction's majority, takes 94. Nothing is sent anywhere, because there is nowhere to send
 it: the query runs on the reader's machine against static objects on a CDN.
 
+A result is also a chart, drawn in the site's own hand rather than a library's, and exportable as SVG, PNG or
+print-to-PDF. What the chart is allowed to say took more thought than drawing it. Offered a line over faction
+names it refuses and says why: a line between Fidesz and MSZP asserts a path from one to the other, and the
+order along that axis is whatever `ORDER BY` happened to produce. The check is that the labels ascend, not that
+they look like dates — the closest-votes example returns dates sorted by margin, which read as a timeline and
+are not one, and an earlier version of the test passed them.
+
+Two smaller things came out of looking at what a reader actually sees. The first version labelled the first and
+last point of a scatter and no others, so sixteen parties arrived with two names on them; and the whole figure
+was scaled down to fit a phone, which renders ten-unit type at three pixels. Neither is visible from the source.
+The columns are Hungarian now too — `frakcio`, `nev`, `szavazat` — because an English schema on a Hungarian site
+is a seam the reader has no reason to step over.
+
 A Content-Security-Policy on the distribution then found the hole in that claim, which is the best argument
 for having one. `default-src 'none'` and each capability granted only where the built site actually uses it —
 a scan of six thousand pages found no off-origin image, stylesheet or script, so the policy could be strict
-rather than the usual `'self'` shrug. On the SQL page it immediately blocked a request I did not know the page
+rather than the usual `'self'` shrug. On the Riport page it immediately blocked a request I did not know the page
 made: DuckDB downloads its Parquet extension at run time from `extensions.duckdb.org`. Locally, with no policy,
 that succeeded silently — meaning every reader would have called a third party, the precise thing vendoring the
 runtime was supposed to prevent. I had verified the static files and could not see a run-time fetch; the policy
@@ -707,9 +738,24 @@ measured in a browser rather than argued from the source.
 The runtime is vendored rather than loaded from a public CDN, and that is the decision worth explaining. This
 site sets no cookie, runs no analytics and calls no third party, so a visit is known to nobody but the access
 log this project keeps for thirty days. A single `<script src="https://cdn…">` would undo that quietly, for
-every visitor. So `scripts/fetch_duckdb.py` pulls the six files once, rewrites their imports to relative paths,
+every visitor. So `scripts/fetch_duckdb.py` pulls the seven files once, rewrites their imports to relative paths,
 and records every SHA-256 in a lock file; a refetch that does not match is an error rather than a warning,
-because this is executable code served to readers. The 35 MB is git-ignored — a clone rebuilds it, and the page
+because this is executable code served to readers.
+
+That last sentence is also why the runtime is not cached for a year. It was, `immutable`, on an unversioned
+name — which would have meant that a fix to the engine reached nobody who had already loaded the page. A
+content hash in the filename is the tidier answer and the wrong one here: `duckdb.mjs` imports its siblings by
+name from inside the file, so hashing means rewriting somebody else's module graph to buy propagation for an
+event that happens about never. A day's cache costs one conditional request, a 304 on unchanged bytes answered
+at the edge, and bounds the staleness at a day instead of a year.
+
+The size of that download was wrong on the page for as long as it existed, and the way it was wrong is worth
+recording. The page promised "~6 MB", which was the engine's gzipped size — correct as a number and false as a
+claim, because CloudFront declines to compress an object over 10 MB and the engine is 35.7. So it went out raw:
+five times what the reader was told, while the 2.8 MB Parquet extension beside it got brotli and looked like
+proof the thing worked. Measuring it needed a request to the live distribution, not a reading of the config,
+which said `Compress: True` and was telling the truth about its intent. The deploy pre-gzips the engine now and
+the page counts the bytes rather than remembering them. The 35 MB is git-ignored — a clone rebuilds it, and the page
 says the runtime is not installed rather than half-working.
 
 I red-teamed the page before shipping it, which found a third defect the tests would not have. Values in the

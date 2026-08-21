@@ -705,7 +705,16 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .kz-topbar nav{display:flex;align-items:center;gap:8px;min-width:0;color:var(--dim2);white-space:nowrap}.kz-topbar nav a,.kz-topbar nav .cur{min-width:0;overflow:hidden;text-overflow:ellipsis}.kz-topbar nav a:hover{color:var(--white)}.kz-topbar nav .cur{color:var(--white)}.sl{color:var(--border-hi)}
 .kz-topbar .kv{color:var(--dim2);white-space:nowrap}.kz-topbar .kv b{color:#d4d4d8;font-weight:400;margin-left:6px}.kz-topbar .cyc a{margin-left:2px;padding:6px 4px;display:inline-block}.kz-topbar .cyc a:hover{color:var(--white)}
 .kz-topbar .dot{width:6px;height:6px;border-radius:50%;background:#52525b;display:inline-block;margin-right:6px}
-@media(max-width:900px){.kz-topbar nav[aria-label="Útvonal"] a,.kz-topbar nav[aria-label="Útvonal"] .sl{display:none}}@media(max-width:760px){.kz-topbar .hide-sm{display:none}}/* Under 600px the bar used to hide every cycle but the current one, which saved room by removing the only way to
+@media(max-width:900px){.kz-topbar nav[aria-label="Útvonal"] a,.kz-topbar nav[aria-label="Útvonal"] .sl{display:none}
+/* The scrolling strip and the shrinkable right group were written for phones and stopped at 600px, so between
+   600 and 900 the bar was rigid and pushed the whole document sideways — 54px on a cycle page, and 138 once the
+   umbrella pages traded "Ciklus" for the longer "Ugrás a ciklusra". A tablet is where nobody looked. The fix is
+   not a new mechanism, it is the existing one applied at the width where it is actually needed. */
+.kz-topbar .r{flex:0 1 auto;min-width:0}
+.kz-topbar .cyc{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  mask-image:linear-gradient(to right,#000 calc(100% - 14px),transparent)}
+.kz-topbar .cyc::-webkit-scrollbar{display:none}
+.kz-topbar .cyc .hide-xs{display:none}}@media(max-width:760px){.kz-topbar .hide-sm{display:none}}/* Under 600px the bar used to hide every cycle but the current one, which saved room by removing the only way to
    reach the other nine: nine links measured 0x0 on a phone. They stay, as a strip that scrolls inside the bar if
    it must. The separators go instead — they cost width and carry nothing — and each link becomes a target the
    full 48px height of the bar, with the current cycle underlined rather than merely brighter. */
@@ -763,6 +772,8 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .hero-title a{color:var(--white);border-bottom:1px solid var(--dim3)}.hero-title a:hover{border-bottom-color:var(--white)}
 .hero-meta{color:var(--dim2);font-size:12px;font-family:var(--mono);letter-spacing:.02em}
 .hero-meta.prose{font-family:var(--sans);font-size:12.5px;color:var(--dim);letter-spacing:0}
+.prose .mono{overflow-wrap:anywhere}
+
 .speech{font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--text);max-width:72ch}.speech p{margin:0 0 .9em}.speech mark,.snip mark{background:rgba(255,255,255,.18);color:var(--white);padding:0 2px}
 .snip{font-family:var(--sans);font-size:12.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:0;text-transform:none}
 tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sans);font-size:12.5px;padding-top:10px}tr.dim td{color:var(--dim3)}tr.dim a{color:var(--dim2)}
@@ -780,6 +791,20 @@ tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sa
 .chart.pinned svg .seat:not(.hl){opacity:.35}
 tbody tr.hl td{background:rgba(255,255,255,.07)}
 /* seat inspector */
+.chartbox{margin:0;border:1px solid var(--border);background:var(--panel-deep);padding:14px}
+.chartbox svg{display:block;width:100%;height:auto;overflow:visible}
+@media(max-width:700px){.chartbox{overflow-x:auto}.chartbox svg{min-width:660px}
+.chartbox figcaption{position:sticky;left:0}}
+.chartbox .ax{stroke:var(--border);stroke-width:1}
+.chartbox .grid{stroke:var(--line2);stroke-width:1}
+.chartbox .bar{fill:var(--c,#8a8a8a)}
+.chartbox .ln{fill:none;stroke:var(--c,#d4d4d8);stroke-width:1.5}
+.chartbox .pt{fill:var(--c,#d4d4d8)}
+.chartbox text{font-family:var(--mono);font-size:10px;fill:var(--dim2)}
+.chartbox text.v{fill:var(--text)}
+@media print{.chartbox{border-color:#999;background:#fff;overflow:visible}.chartbox text{fill:#333}
+.chartbox .ln{stroke:#333}.chartbox .ax{stroke:#999}.chartbox .grid{stroke:#ddd}
+.chartbox svg{min-width:0;break-inside:avoid}}
 .inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--dim);position:relative}
 .inspector .insp-hint{color:var(--dim2);font-size:10px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
@@ -990,9 +1015,16 @@ td a{color:#d4d4d8;text-decoration:underline;text-decoration-color:var(--dim3);t
 .kz-terminal .scan:after{content:"";position:absolute;top:-10%;left:0;width:100%;height:2px;background:rgba(255,255,255,.08);animation:kz-scan 6s linear infinite}
 @keyframes kz-scan{0%{top:-10%}100%{top:110%}}
 @media (prefers-reduced-motion:reduce){.kz-terminal .scan:after,.kz-terminal .cursor{animation:none}}
-@media print{:root{--bg:#fff;--panel:#fff;--deep:#fff;--text:#111;--white:#000;--dim:#333;--dim2:#444;--dim3:#555;--border:#bbb;--border-hi:#999;--line2:#eee;--grid:transparent}
+@media print{:root{--bg:#fff;--panel:#fff;--deep:#fff;--text:#111;--white:#000;--dim:#333;--dim2:#444;--dim3:#555;--border:#bbb;--border-hi:#999;--line2:#eee;--grid:transparent;--panel-deep:#fff}
 body{background:#fff;color:#111}.kz-topbar,.pgr,.filters button,.copy,.kz-corner,.scan,.insp-hint{display:none!important}.kz-topbar+*{margin-top:0}
-tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}.panel,.kz-terminal{break-inside:avoid;border-color:#bbb}a{color:#000;text-decoration:underline}.chart svg .seat{opacity:1!important}}
+tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}
+/* .tablewrap and th paint themselves with literal rgba rather than tokens, so flipping the palette never
+   reached them: every table on the site printed as a black block with #444 headings on it. Found by lifting
+   the print rules onto the screen and looking, which is the only way to see a stylesheet nobody renders. */
+.tablewrap{background:#fff!important}th{background:#f2f2f2!important;color:#222!important}
+tbody tr.hl td,tr:target td{background:#f6f6f6!important}tr.grp td{background:#fafafa!important}
+tbody tr:hover td{background:transparent!important}
+#run,#stop{display:none!important}#q{border-color:#ccc!important;background:#fafafa!important;color:#111!important}.panel,.kz-terminal{break-inside:avoid;border-color:#bbb}a{color:#000;text-decoration:underline}.chart svg .seat{opacity:1!important}}
 """
 
 JS_PAGER = """
@@ -1522,17 +1554,40 @@ JS_SQL = """
   function say(t){ if (state) state.textContent = t; }
   // Everything is loaded from this origin: the runtime, the worker and the three Parquet files. The page calls
   // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
+  // Two lifecycle defects lived here, and both told the reader something untrue.
+  //
+  // `db` is not assigned until after `await import(...)`, so a stop clicked during the module download found
+  // `if (db)` false, terminated nothing, and let boot() carry on: the page said "megszakítva — a következő
+  // futtatás újraindítja az adatbázist" and then rendered the answer to the query it had just disowned. And
+  // because the handler re-enabled the run button, a second click passed the `if (conn)` guard and started a
+  // whole second boot — another Worker, another 35 MB instantiate — orphaning the first.
+  //
+  // A generation counter fixes both without racing: stop bumps it, every await checks it, and one in-flight
+  // promise is shared so a second click waits for the first boot rather than starting another. Terminating
+  // mid-instantiate leaves the library's own promise pending for ever, so the check has to be ours, not its.
+  var gen = 0, booting = null;
+  function stale(mine){ return mine !== gen; }
   async function boot(){
     if (conn) return conn;
+    if (booting) return booting;
+    booting = (async function(){ try { return await bootOnce(gen); } finally { booting = null; } })();
+    return booting;
+  }
+  async function bootOnce(mine){
     say('adatbázis betöltése…');
     // Absolute, all of them. A relative path here is resolved against whichever context does the fetching, and
     // the wasm is fetched by the worker rather than the page: '../assets/…' became '/assets/assets/…' and 404ed.
     var base = new URL('../assets/duckdb/', location.href).href;
     var duckdb = await import(base + 'duckdb.mjs');
+    if (stale(mine)) throw new Error('__stopped');
     var worker = new Worker(base + 'duckdb-eh.worker.js');
-    db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    var d = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    if (stale(mine)) { worker.terminate(); throw new Error('__stopped'); }
+    db = d;
     await db.instantiate(base + 'duckdb-eh.wasm');
+    if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; throw new Error('__stopped'); }
     conn = await db.connect();
+    if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; conn = null; throw new Error('__stopped'); }
     // DuckDB fetches its parquet extension at run time, from extensions.duckdb.org, which the vendoring did not
     // cover and the static scan could not see: the CSP is what found it. Unblocked it would have meant every
     // reader of this page making a request to a third party — the exact thing vendoring the runtime prevents.
@@ -1540,14 +1595,26 @@ JS_SQL = """
     await conn.query("SET custom_extension_repository='" + base + "ext'");
     await conn.query("INSTALL parquet; LOAD parquet;");
     say('táblák regisztrálása…');
-    for (var i = 0; i < 3; i++) {
-      var name = ['szavazasok','szavazatok','kepviselok'][i];
+    await views(conn);
+    if (stale(mine)) throw new Error('__stopped');
+    say('kész — a lekérdezés a te gépeden fut');
+    return conn;
+  }
+  var TABLES = (document.getElementById('q').dataset.tables || '').split(',').filter(Boolean);
+  async function views(conn) {
+    for (var i = 0; i < TABLES.length; i++) {
+      var name = TABLES[i];
       var url = new URL('../adatok/' + name + '.parquet', location.href).href;
       await db.registerFileURL(name + '.parquet', url, 4 /* HTTP */, false);
       await conn.query("CREATE OR REPLACE VIEW " + name + " AS SELECT * FROM read_parquet('" + name + ".parquet')");
     }
-    say('kész — a lekérdezés a te gépeden fut');
-    return conn;
+  }
+  // A reader may DROP a view — it is their own database, in their own tab. Rebuilding the views costs a tenth
+  // of a second, which is too much to pay on every query and nothing at all to pay on the one that failed.
+  function droppedOne(msg) {
+    if (!/Catalog Error/.test(String(msg))) return false;
+    for (var i = 0; i < TABLES.length; i++) if (String(msg).indexOf(TABLES[i]) >= 0) return true;
+    return false;
   }
   // Everything that reaches innerHTML goes through this, including the column names. They did not, and
   // SELECT 1 AS "<img src=x onerror=…>" ran the handler: the query is the reader's own, so the reach is theirs
@@ -1557,46 +1624,302 @@ JS_SQL = """
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
     });
   }
+  // Arrow hands a DECIMAL back as its unscaled integer, so 1.5 arrives as 15 and 0.0001 as 1. Printed raw that
+  // is not a formatting blemish, it is a wrong number on the reader's screen with nothing to mark it — the worst
+  // kind of defect this page could have, on a page whose whole claim is that the figures are the record's own.
+  // DuckDB types a bare `1.5` as DECIMAL(2,1), so a reader meets this without going looking for it.
+  // The bundle is minified, so the type's constructor is called `ti` and matching on its name finds nothing —
+  // the first version of this did exactly that and silently kept printing 15 for 1.5. Arrow's numeric type id
+  // survives minification; 7 is Decimal. Float64 also carries a `precision`, so `scale` alone would not do.
+  var ARROW_DECIMAL = 7;
+  function scales(tbl){
+    var m = {};
+    tbl.schema.fields.forEach(function(f){
+      var t = f.type;
+      if (t && t.typeId === ARROW_DECIMAL && typeof t.scale === 'number' && t.scale > 0) m[f.name] = t.scale;
+    });
+    return m;
+  }
+  function descale(v, sc){
+    if (v === null || v === undefined || !sc) return v;
+    var n = typeof v === 'bigint' ? Number(v) : (typeof v === 'number' ? v : Number(String(v)));
+    return isFinite(n) ? n / Math.pow(10, sc) : v;
+  }
   function render(tbl){
     var head = out.querySelector('thead'), body = out.querySelector('tbody');
     var cols = tbl.schema.fields.map(function(f){ return f.name; });
+    var sc = scales(tbl);
     head.innerHTML = '<tr>' + cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
-    var rows = [], n = 0;
+    // The count printed to the reader used to be the loop counter, which stopped at 501: not the rows the query
+    // returned, not the rows on screen, a third number that was neither. `numRows` is what the result holds.
+    var rows = [], keep = [], n = 0, total = tbl.numRows;
     for (var row of tbl) {
-      if (n++ >= 500) break;
+      if (n++ >= SHOWN) break;
+      var rec = {};
+      cols.forEach(function(c){ rec[c] = sc[c] ? descale(row[c], sc[c]) : row[c]; });
+      keep.push(rec);
       rows.push('<tr>' + cols.map(function(c){
-        var v = row[c];
+        var v = rec[c];
         if (v === null || v === undefined) v = '';
         return '<td' + (typeof v === 'number' || typeof v === 'bigint' ? ' class="num mono"' : '') + '>'
              + esc(v) + '</td>';
       }).join('') + '</tr>');
     }
     body.innerHTML = rows.join('') || '<tr><td>nincs sor</td></tr>';
-    return n;
+    last = { cols: cols, rows: keep, total: total };
+    draw();
+    return { total: total, shown: keep.length };
   }
   var stopBtn = document.getElementById('stop');
   if (stopBtn) stopBtn.addEventListener('click', function(){
     // SELECT count(*) FROM szavazatok a, szavazatok b is a trillion-row cross join and the worker will sit on it
     // for as long as it takes. Terminating is the only reliable brake; the next run boots a fresh one.
+    gen++;                                   // whatever is in flight is now somebody else's; see boot()
     if (db) { try { db.terminate(); } catch (e) {} }
-    db = null; conn = null;
+    db = null; conn = null; booting = null;
     runBtn.disabled = false; stopBtn.hidden = true;
     say('megszakítva — a következő futtatás újraindítja az adatbázist');
   });
+
+  // ── the chart ─────────────────────────────────────────────────────────────────────────────────────
+  // Drawn by hand in SVG rather than by a library, for the same reason the chamber and the day strip are: a
+  // charting library brings its own palette, type and grid, and would look like a guest on the page. Here the
+  // colours are the site's own variables and a faction gets the colour it has everywhere else.
+  // The colours are the site's own, handed to the page from config/factions.yml. They were a second palette
+  // typed out here, and every one of the twelve shared parties disagreed with the rest of the site: Fidesz was
+  // #f97316 in a chart and #f36f21 in the chamber beside it. Three parties that exist in the data — FKGP, MIÉP,
+  // Nemzetiségi képviselő — were missing entirely and drew grey, which reads as "no faction" and is a claim.
+  var FAC = JSON.parse(document.getElementById('q').dataset.factions || '{}');
+  var last = null, kind = 'oszlop';
+  var SHOWN = 500;                       // rows put in the table; the chart takes fewer still
+  function num(v){ return typeof v === 'bigint' ? Number(v) : (typeof v === 'number' ? v : null); }
+  function shape(rows, cols){
+    if (!rows.length || cols.length < 2) return null;
+    // a column's kind is what its values are across the result, not what the first row happens to hold
+    function kind(c){
+      var seen = 0;
+      for (var r = 0; r < rows.length && seen < 20; r++) {
+        var v = rows[r][c];
+        if (v === null || v === undefined) continue;
+        seen++;
+        if (num(v) === null) return 'text';
+      }
+      return seen ? 'num' : 'empty';
+    }
+    var labelCol = null, valueCol = null;
+    for (var i = 0; i < cols.length; i++) {
+      var k = kind(cols[i]);
+      if (k === 'num' && valueCol === null && i > 0) valueCol = cols[i];
+      else if (labelCol === null && k !== 'num') labelCol = cols[i];
+    }
+    if (labelCol === null) labelCol = cols[0];
+    if (valueCol === null) for (var j = cols.length - 1; j >= 0; j--) if (kind(cols[j]) === 'num') { valueCol = cols[j]; break; }
+    if (!valueCol) return null;
+    // after valueCol is settled, never before: computed first, the fallback's own column could end up in the
+    // label as well as on the axis. And by kind, not by row zero, for the same reason as everything else here.
+    var also = cols.filter(function(c){ return c !== labelCol && c !== valueCol && kind(c) !== 'num'; })
+                   .slice(0, 1);
+    // Is the x axis ordered? A line drawn between faction names asserts a path from Fidesz to MSZP, and there is
+    // none — the order is whatever ORDER BY happened to produce. A date or a number is ordered; a party is not,
+    // and the page says so rather than drawing the claim anyway.
+    var keys = rows.map(function(r){ var v = r[labelCol];
+      return num(v) !== null ? num(v) : (/^\\d{4}(-\\d{2})?(-\\d{2})?$/.test(String(v)) ? String(v) : null); });
+    // ORDER BY datum DESC is an axis with a direction, and the first version called it "names, not order"
+    var up = keys[0] !== null, down = keys[0] !== null;
+    for (var k = 1; k < keys.length; k++) {
+      if (keys[k] === null) { up = down = false; break; }
+      if (keys[k] < keys[k - 1]) up = false;
+      if (keys[k] > keys[k - 1]) down = false;
+    }
+    var ordered = up || down;
+    // the colour of a row: its own name if that is a faction, otherwise a faction column if the query has one
+    var facCol = null;
+    for (var f = 0; f < cols.length; f++) if (/^(frakcio|frakció|part|faction)$/i.test(cols[f])) facCol = cols[f];
+    return { labelCol: labelCol, valueCol: valueCol, ordered: ordered, facCol: facCol, also: also };
+  }
+  function svgEl(t, a){ var e = document.createElementNS('http://www.w3.org/2000/svg', t);
+    for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function label(r, sh){ return sh.also.reduce(function(t, c){
+    return r[c] == null ? t : t + ' → ' + String(r[c]); },
+    r[sh.labelCol] == null ? '—' : String(r[sh.labelCol])); }
+  function fmt(v, st){
+    var d = st && st < 1 ? Math.min(12, Math.ceil(-Math.log(st) / Math.LN10) + 1)
+                         : (Math.abs(v) >= 1 || v === 0 ? 3 : 8);
+    return Number(v).toLocaleString('hu-HU', {maximumFractionDigits: d});
+  }
+  function clip(v, n){ var t = String(v == null ? '' : v); return t.length > n ? t.slice(0, n - 1) + '…' : t; }
+  function colourOf(r, sh){ return FAC[String(r[sh.labelCol])] ||
+    (sh.facCol ? FAC[String(r[sh.facCol])] : null) || 'var(--dim3)'; }
+  // ticks a reader can hold in their head: 0 / 2000 / 4000, not 0 / 1528 / 3057
+  function step(range){ var raw = range / 4, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var n = raw / mag; return (n > 5 ? 10 : n > 2 ? 5 : n > 1 ? 2 : 1) * mag; }
+  function draw(){
+    var fig = document.getElementById('fig'), wrap = document.getElementById('chartwrap');
+    fig.innerHTML = '';
+    if (!last) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    if (kind === 'nincs') return;
+    var sh = shape(last.rows, last.cols);
+    if (!sh) { fig.innerHTML = '<div class="hero-meta prose">Ehhez az eredményhez nem rajzolható ábra: ' +
+      'egy megnevezés- és egy számoszlop kell hozzá.</div>'; return; }
+    if ((kind === 'vonal') && !sh.ordered) {
+      fig.innerHTML = '<div class="hero-meta prose"><b>Vonal itt nem rajzolható.</b> A vízszintes tengelyen ' +
+        'megnevezések állnak, nem sorrend — két szomszédos pont közé húzott vonal olyan átmenetet állítana, ' +
+        'ami nincs. Dátum vagy szám szerint rendezve a vonal működik; itt az oszlop vagy a pont a helyes ábra.</div>';
+      return;
+    }
+    var rows = last.rows.slice(0, 40);
+    var vals = rows.map(function(r){ return num(r[sh.valueCol]) || 0; });
+    var max = Math.max.apply(null, vals.concat([0])), min = Math.min.apply(null, vals.concat([0]));
+    var st = step((max - min) || 1);
+    var lo = Math.floor(min / st) * st, hi = Math.ceil(max / st) * st;
+    var W = 900, L = 190, Rr = 70, T = 14, rowH = 22, thin = 1;
+    var H = kind === 'oszlop' ? T + rows.length * rowH + 24 : 430;
+    var svg = svgEl('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': sh.valueCol + ' ' + sh.labelCol + ' szerint, ' + rows.length + ' sor'});
+    var span = (hi - lo) || 1;
+    if (kind === 'oszlop') {
+      if (lo < 0) svg.appendChild(svgEl('line', {x1: (L + (0 - lo) / span * (W - L - Rr)).toFixed(1),
+        y1: T, x2: (L + (0 - lo) / span * (W - L - Rr)).toFixed(1), y2: T + rows.length * rowH, class: 'ax'}));
+      rows.forEach(function(r, i){
+        var y = T + i * rowH, raw = num(r[sh.valueCol]), v = raw === null ? 0 : raw;
+        var full = W - L - Rr, zero = L + (0 - lo) / span * full;
+        var x1 = L + (Math.min(0, v) - lo) / span * full, w = Math.max(1, Math.abs(v) / span * full);
+        // no bar at all where the record holds no number: a zero-length bar would read as a zero
+        if (raw !== null) svg.appendChild(svgEl('rect', {x: x1.toFixed(1), y: y + 4, width: w,
+          height: rowH - 9, class: 'bar', style: '--c:' + colourOf(r, sh)}));
+        var t1 = svgEl('text', {x: L - 8, y: y + rowH / 2 + 2, 'text-anchor': 'end'});
+        t1.textContent = clip(label(r, sh), 29); svg.appendChild(t1);
+        var t2 = svgEl('text', {x: (x1 + w + 6).toFixed(1), y: y + rowH / 2 + 2, class: 'v'});
+        t2.textContent = raw === null ? '—' : fmt(v, st); svg.appendChild(t2);
+      });
+    } else {
+      // room under the axis for a full set of slanted labels: every point is named, not just the ends
+      var x0 = 92, y0 = H - 132, plotW = W - x0 - Rr;
+      // a 10-unit label needs ~12 units of clearance perpendicular to the axis; at -55° that is a pitch of 15
+      var every = thin = Math.ceil(12 / (Math.max(1, plotW / Math.max(1, rows.length - 1)) * 0.82));
+      var ticks = Math.max(1, Math.round(span / st));
+      for (var g = 0; g <= ticks; g++) {
+        var gy = y0 - g / ticks * (y0 - T), gv = lo + g * st;
+        svg.appendChild(svgEl('line', {x1: x0, y1: gy.toFixed(1), x2: x0 + plotW, y2: gy.toFixed(1), class: 'grid'}));
+        var gt = svgEl('text', {x: x0 - 8, y: (gy + 3).toFixed(1), 'text-anchor': 'end', class: g === ticks ? 'v' : ''});
+        gt.textContent = fmt(gv, st); svg.appendChild(gt);
+      }
+      svg.appendChild(svgEl('line', {x1: x0, y1: y0, x2: x0 + plotW, y2: y0, class: 'ax'}));
+      svg.appendChild(svgEl('line', {x1: x0, y1: T, x2: x0, y2: y0, class: 'ax'}));
+      var pts = rows.map(function(r, i){
+        return [x0 + (rows.length < 2 ? plotW / 2 : i / (rows.length - 1) * plotW),
+                y0 - ((num(r[sh.valueCol]) || 0) - lo) / span * (y0 - T)];
+      });
+      if (kind === 'vonal') svg.appendChild(svgEl('path', {d: 'M' + pts.map(function(q){ return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join('L'), class: 'ln'}));
+      rows.forEach(function(r, i){
+        if (num(r[sh.valueCol]) !== null)
+          svg.appendChild(svgEl('circle', {cx: pts[i][0].toFixed(1), cy: pts[i][1].toFixed(1), r: 3.5,
+                                           class: 'pt', style: '--c:' + colourOf(r, sh)}));
+        if (i % every) return;
+        var t = svgEl('text', {x: pts[i][0].toFixed(1), y: (y0 + 12).toFixed(1), 'text-anchor': 'end',
+                               transform: 'rotate(-55 ' + pts[i][0].toFixed(1) + ' ' + (y0 + 12).toFixed(1) + ')'});
+        t.textContent = clip(label(r, sh), 24);
+        svg.appendChild(t);
+      });
+    }
+    fig.appendChild(svg);
+    var cap = document.createElement('figcaption');
+    cap.className = 'hero-meta';
+    cap.textContent = sh.valueCol + ' — ' + sh.labelCol + ' szerint' +
+      ((last.total || last.rows.length) > rows.length
+        ? ' · az első ' + rows.length + ' sor a ' + (last.total || last.rows.length).toLocaleString('hu-HU') + '-ból' : '') +
+      (sh.also.length ? ' és ' + sh.also[0] : '') +
+      (thin > 1 ? ' · minden ' + thin + '. címke fér ki' : '') +
+      (sh.ordered ? '' : ' · a vízszintes tengely megnevezés, nem sorrend');
+    fig.appendChild(cap);
+  }
+  document.querySelectorAll('button[data-chart]').forEach(function(b){
+    b.addEventListener('click', function(){
+      kind = b.getAttribute('data-chart');
+      document.querySelectorAll('button[data-chart]').forEach(function(x){
+        var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      draw();
+    });
+  });
+  function svgText(){
+    var el = document.querySelector('#fig svg'); if (!el) return null;
+    var c = el.cloneNode(true);
+    c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    c.setAttribute('style', 'background:#0a0a0a');
+    // Read the computed style from the ORIGINAL node and write it onto the clone. Computing it on the clone
+    // returns nothing, because the clone is detached from the document and CSS variables resolve against the
+    // tree — the first version did that and produced a file with var(--c) in it, invisible outside this page.
+    var src = el.querySelectorAll('*'), dst = c.querySelectorAll('*');
+    for (var i = 0; i < src.length; i++) {
+      var cs = getComputedStyle(src[i]), n = dst[i];
+      if (n.classList.contains('bar') || n.classList.contains('pt')) n.setAttribute('fill', cs.fill);
+      if (n.classList.contains('ln')) { n.setAttribute('stroke', cs.stroke); n.setAttribute('fill', 'none'); }
+      if (n.classList.contains('ax') || n.classList.contains('grid')) n.setAttribute('stroke', cs.stroke);
+      if (n.tagName === 'text') {
+        n.setAttribute('fill', cs.fill);
+        n.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, monospace');
+        n.setAttribute('font-size', '10');
+      }
+      n.removeAttribute('class'); n.removeAttribute('style');
+    }
+    return '<?xml version="1.0" encoding="UTF-8"?>' + new XMLSerializer().serializeToString(c);
+  }
+  function save(blob, name){
+    var u = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = u; a.download = name; a.click(); setTimeout(function(){ URL.revokeObjectURL(u); }, 2000);
+  }
+  var dsvg = document.getElementById('dlsvg'), dpng = document.getElementById('dlpng'), dpr = document.getElementById('dlprint');
+  if (dsvg) dsvg.addEventListener('click', function(){
+    var t = svgText(); if (t) save(new Blob([t], {type: 'image/svg+xml'}), 'karzat-riport.svg'); });
+  if (dpng) dpng.addEventListener('click', function(){
+    var t = svgText(); if (!t) return;
+    var img = new Image();
+    img.onload = function(){
+      var cv = document.createElement('canvas');
+      cv.width = 1800; cv.height = Math.round(1800 * img.height / img.width) || 900;
+      var g = cv.getContext('2d');
+      g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, cv.width, cv.height);
+      g.drawImage(img, 0, 0, cv.width, cv.height);
+      cv.toBlob(function(b){ save(b, 'karzat-riport.png'); }, 'image/png');
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(t)));
+  });
+  if (dpr) dpr.addEventListener('click', function(){ window.print(); });
   runBtn.addEventListener('click', async function(){
     runBtn.disabled = true; took.textContent = '';
     if (stopBtn) stopBtn.hidden = false;
+    var mine = gen;
     try {
       var c = await boot();
+      if (stale(mine)) return;
       var t0 = performance.now();
-      var res = await c.query(box.value);
-      var n = render(res);
-      took.textContent = n + ' sor · ' + Math.round(performance.now() - t0) + ' ms';
+      var res;
+      try {
+        res = await c.query(box.value);
+      } catch (e1) {
+        if (!droppedOne(e1.message || e1)) throw e1;
+        say('a táblák visszaállítása…');
+        await views(c);
+        t0 = performance.now();
+        res = await c.query(box.value);
+        say('kész — a táblák visszaálltak');
+      }
+      if (stale(mine)) return;
+      var r = render(res);
+      took.textContent = r.total.toLocaleString('hu-HU') + ' sor'
+        + (r.total > r.shown ? ' · az első ' + r.shown + ' látszik' : '')
+        + ' · ' + Math.round(performance.now() - t0) + ' ms';
+      say('kész — a lekérdezés a te gépeden fut');
     } catch (e) {
+      if (String(e && e.message) === '__stopped' || stale(mine)) return;
       out.querySelector('thead').innerHTML = '';
       out.querySelector('tbody').innerHTML = '<tr><td class="mono">' + esc(e.message || e) + '</td></tr>';
+      // the previous query's chart used to stay on screen under the error, captioned with its own columns,
+      // reading as though it answered the query that had just failed
+      last = null; draw();
       say('hiba — a lekérdezés nem futott le');
-    } finally { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; }
+    } finally { if (!stale(mine)) { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; } }
   });
 })();
 """
@@ -1690,21 +2013,29 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
     rel = "../" * depth
     sync_txt = sync_stamp(inp)
     parts = []
-    crumbs = [(f'{inp["cycle"]}. ciklus', f'{rel}{cycle_dir(inp["cycle"])}index.html' if crumbs else None)] + list(crumbs)
+    # Six pages — riport, arcél, lefedettség, frakcióváltás, módszer, keresés — answer over all ten cycles, and
+    # were built with the cycle pages' machinery, so they inherited its identity: the breadcrumb read
+    # "43. ciklus / riport" and the strip marked 43 as where you are. Both were false. On these the trail starts
+    # at the site, and no cycle is current — each of the ten is somewhere to go, not somewhere you are.
+    wide = bool(inp.get("site_wide"))
+    if not wide:
+        crumbs = [(f'{inp["cycle"]}. ciklus',
+                   f'{rel}{cycle_dir(inp["cycle"])}index.html' if crumbs else None)] + list(crumbs)
+    crumbs = list(crumbs)
     for i, (name, href) in enumerate(crumbs):
         if i:
             parts.append('<span class="sl">/</span>')
         parts.append(f'<a href="{esc(href)}">{esc(name)}</a>' if href else f'<span class="cur" aria-current="page">{esc(name)}</span>')
     cur_i = inp["cycles"].index(inp["cycle"]) if inp["cycle"] in inp["cycles"] else 0
     def cyc_link(i: int, c: int) -> str:
-        if c == inp["cycle"]:
+        if c == inp["cycle"] and not wide:
             return f'<b aria-current="true">{c}</b>'
-        near = ' class="near"' if abs(i - cur_i) == 1 else ""
+        near = ' class="near"' if abs(i - cur_i) == 1 and not wide else ""
         return f'<a href="{rel}{cycle_dir(c)}index.html"{near}>{c}</a>'
     switch = ' <span class="sl">·</span> '.join(cyc_link(i, c) for i, c in enumerate(inp["cycles"]))
     return (f'<header class="kz-topbar"><div class="l"><a class="brand" href="{rel}index.html"><i></i>karzat</a>'
             + (f'<span class="sep"></span><nav aria-label="Útvonal">{"".join(parts)}</nav>' if crumbs else "")
-            + f'</div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{switch}</nav><span class="sep hide-sm"></span>'
+            + f'</div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">{"Ugrás a ciklusra " if wide else "Ciklus "}</span>{switch}</nav><span class="sep hide-sm"></span>'
             f'<span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_txt)}</b></span></div></header>\n<main class="kz-main"><div class="wrap">')
 
 
@@ -2779,74 +3110,151 @@ megcímkézik. A kettőt senki nem veti össze. Ez az oldal összeveti.</p>
 """ + page_tail(inp, 1)
 
 
+TABLE_NOTE = {
+    "szavazasok": "egy szavazás",
+    "szavazatok": "egy képviselő egy szavazata",
+    "kepviselok": "egy képviselő egy ciklusban",
+    "szavazas_iromany": "egy szavazás egy irománya",
+    "felszolalasok": "egy felszólalás az ülésteremben",
+    "iromanyok": "egy benyújtott iromány",
+    "frakciovaltasok": "egy frakcióváltás",
+    "bizottsagi_tagsag": "egy bizottsági tisztség",
+}
+
 SQL_EXAMPLES = [
     ("Frakciónként hány szavazatot adtak le 1990 óta",
-     "SELECT faction, count(*) AS szavazat\nFROM szavazatok\nWHERE faction IS NOT NULL\nGROUP BY 1 ORDER BY 2 DESC\nLIMIT 20;"),
-    ("A hét pozíció megoszlása — a Ház ennyifélét különböztet meg",
-     "SELECT position, count(*) AS db,\n       round(100.0*count(*)/sum(count(*)) OVER (), 2) AS szazalek\nFROM szavazatok GROUP BY 1 ORDER BY 2 DESC;"),
+     "SELECT frakcio, count(*) AS szavazat\nFROM szavazatok\nWHERE frakcio IS NOT NULL\nGROUP BY 1 ORDER BY 2 DESC\nLIMIT 20;"),
+    ("A hétféle szavazat megoszlása — a Ház ennyit különböztet meg",
+     "SELECT szavazat, count(*) AS db,\n       round(100.0*count(*)/sum(count(*)) OVER (), 2) AS szazalek\nFROM szavazatok GROUP BY 1 ORDER BY 2 DESC;"),
     ("Ki szavazott a legtöbbször a frakciója többsége ellen a 43. ciklusban",
-     "WITH tobbseg AS (\n  SELECT ts, faction, position,\n         row_number() OVER (PARTITION BY ts, faction ORDER BY count(*) DESC) AS r\n  FROM szavazatok WHERE cycle = 43 AND position IN ('igen','nem','tartozkodott')\n  GROUP BY 1,2,3)\nSELECT k.name, k.faction, count(*) AS ellene\nFROM szavazatok v\nJOIN tobbseg t ON t.ts = v.ts AND t.faction = v.faction AND t.r = 1\nJOIN kepviselok k ON k.mp = v.mp AND k.cycle = v.cycle\nWHERE v.cycle = 43 AND v.position IN ('igen','nem','tartozkodott')\n  AND v.position <> t.position\nGROUP BY 1,2 ORDER BY 3 DESC LIMIT 15;"),
+     "WITH tobbseg AS (\n  SELECT szavazas_id, frakcio, szavazat,\n         row_number() OVER (PARTITION BY szavazas_id, frakcio ORDER BY count(*) DESC) AS r\n  FROM szavazatok WHERE ciklus = 43 AND szavazat IN ('igen','nem','tartozkodott')\n  GROUP BY 1,2,3)\nSELECT k.nev, k.frakcio, count(*) AS ellene\nFROM szavazatok v\nJOIN tobbseg t ON t.szavazas_id = v.szavazas_id AND t.frakcio = v.frakcio AND t.r = 1\nJOIN kepviselok k ON k.kepviselo_id = v.kepviselo_id AND k.ciklus = v.ciklus\nWHERE v.ciklus = 43 AND v.szavazat IN ('igen','nem','tartozkodott')\n  AND v.szavazat <> t.szavazat\nGROUP BY 1,2 ORDER BY 3 DESC LIMIT 15;"),
     ("A legszorosabb döntések: hány szavazaton múltak",
-     "SELECT date, subject, igen, nem, needed, igen - needed AS kulonbseg\nFROM szavazasok\nWHERE needed IS NOT NULL AND igen IS NOT NULL\nORDER BY abs(igen - needed) ASC\nLIMIT 20;"),
-    ("Szavazások évente, ciklusonként",
-     "SELECT cycle, substr(date, 1, 4) AS ev, count(*) AS szavazas\nFROM szavazasok WHERE date IS NOT NULL\nGROUP BY 1,2 ORDER BY 2;"),
+     "SELECT datum, targy, igen, nem, szukseges, igen - szukseges AS kulonbseg\nFROM szavazasok\nWHERE szukseges IS NOT NULL AND igen IS NOT NULL\nORDER BY abs(igen - szukseges) ASC\nLIMIT 20;"),
+    ("Hány szavazás volt évente",
+     "SELECT substr(datum, 1, 4) AS ev, count(*) AS szavazas\nFROM szavazasok WHERE datum IS NOT NULL\nGROUP BY 1 ORDER BY 1;"),
+    ("Ki beszélt a legtöbbet a 43. ciklusban — órában",
+     "SELECT nev, frakcio,\n       round(sum(hossz_mp)/3600.0, 1) AS ora,\n       count(*) AS felszolalas\nFROM felszolalasok\nWHERE ciklus = 43 AND NOT technikai AND hossz_mp IS NOT NULL\nGROUP BY 1,2 ORDER BY 3 DESC LIMIT 15;"),
+    ("Beszéd és szavazat: ki szólalt fel sokat, és ki csak gombot nyomott",
+     "WITH b AS (\n  SELECT kepviselo_id, count(*) AS felszolalas\n  FROM felszolalasok WHERE ciklus = 43 AND NOT technikai\n  GROUP BY 1),\nsz AS (\n  SELECT kepviselo_id, count(*) AS szavazat\n  FROM szavazatok WHERE ciklus = 43 AND szavazat IN ('igen','nem','tartozkodott')\n  GROUP BY 1)\nSELECT k.nev, k.frakcio, coalesce(b.felszolalas, 0) AS felszolalas, sz.szavazat\nFROM kepviselok k\nLEFT JOIN b ON b.kepviselo_id = k.kepviselo_id\nJOIN sz ON sz.kepviselo_id = k.kepviselo_id\nWHERE k.ciklus = 43\nORDER BY 3 DESC LIMIT 20;"),
+    ("Melyik irományról szavazott a legtöbbször a Ház",
+     "SELECT i.iromany, count(DISTINCT i.szavazas_id) AS szavazas, any_value(i.targy) AS targy\nFROM szavazas_iromany i\nWHERE i.iromany IS NOT NULL\nGROUP BY 1 ORDER BY 2 DESC LIMIT 15;"),
+    ("Frakcióváltások: honnan hová, és hányan",
+     "SELECT honnan, hova, count(*) AS db\nFROM frakciovaltasok\nGROUP BY 1,2 ORDER BY 3 DESC LIMIT 20;"),
 ]
 
 
-def build_sql_page(inp: dict) -> str:
-    """sql/index.html — the corpus queried in the reader's own browser, with no server anywhere.
 
-    The database is WebAssembly and the three Parquet files are ordinary static objects, so a question that would
+def file_size(n: int) -> str:
+    """A 33 kB file is not "0,0 MB". Three of the eight tables printed a size nothing has."""
+    return f"{hu_dec(n / 1e6, 1)} MB" if n >= 100_000 else f"{hu_num(round(n / 1000))} kB"
+
+
+def chart_colours(inp: dict) -> dict:
+    """Every faction the corpus names, with the colour the rest of the site gives it.
+
+    `facs_all` is built across all ten cycles by the caller; a faction that appears only in an old one still
+    needs a colour here, because the Riport queries all of them at once."""
+    out = dict(inp.get("facs_all") or {})
+    for c in inp.get("cycles") or []:
+        for f in factions(c):
+            out.setdefault(f["id"], f["colour"])
+    return out
+
+
+def runtime_wire_bytes() -> int:
+    """What a first visit really pulls down for the query engine, compressed the way the deploy serves it.
+
+    The page used to promise "~6 MB" from a number somebody had measured once. It was the gzipped size of the
+    engine, and the engine was not being served gzipped — CloudFront refuses to compress an object over 10 MB,
+    so 35.7 MB crossed the wire while the 2.8 MB extension beside it got brotli. Both halves are fixed: the
+    deploy pre-compresses it, and the sentence counts rather than remembers."""
+    import gzip as _gz
+    d = SITE_DIR / "assets" / "duckdb"
+    total = 0
+    for name in ("duckdb.mjs", "apache-arrow.mjs", "tslib.mjs", "flatbuffers.mjs", "duckdb-eh.worker.js",
+                 "duckdb-eh.wasm", "ext/v1.1.1/wasm_eh/parquet.duckdb_extension.wasm"):
+        f = d / name
+        if f.exists():
+            total += len(_gz.compress(f.read_bytes(), 9))     # every one of them is compressed in transit
+    return total
+
+
+def build_report_page(inp: dict) -> str:
+    """riport/index.html — the corpus queried in the reader's own browser, with no server anywhere.
+
+    The database is WebAssembly and the Parquet tables are ordinary static objects, so a question that would
     normally need an API and a backend is answered by the reader's laptop against files on a CDN. That is not a
-    trick: it is what a 4.3 MB corpus makes possible, and the reason the export was worth building first.
+    trick: it is what a seven-megabyte corpus makes possible, and the reason the export was worth building first.
 
-    Two honesties the page owes. The runtime is a 6 MB download on first use, stated before anybody waits for it.
+    Two honesties the page owes. The runtime is a download before anybody can ask anything, and the page says how
+    big before they wait for it. That figure is measured here rather than typed: it said "~6 MB" while the file
+    went out uncompressed at 35.7, because 6 MB was its gzipped size and CloudFront declines to compress anything
+    over ten. The deploy sends it pre-gzipped now, and this counts the bytes that will actually cross the wire.
     And it is served from our own origin rather than a public CDN, because a site that sets no cookie and calls no
     third party should not start doing so on one page."""
     pq = (inp.get("parquet") or {}).get("tables") or {}
     have = (SITE_DIR / "assets" / "duckdb" / "duckdb-eh.wasm").exists()   # SITE is the index file, not the tree
+    runtime_mb = f"~{hu_dec(runtime_wire_bytes() / 1e6, 1)} MB" if have else "~6 MB"
     ex = "".join(
         f'<button type="button" class="ex" data-q="{esc(q)}">{esc(t)}</button>' for t, q in SQL_EXAMPLES)
     rows = "".join(
-        f'<tr><td class="mono">{esc(n)}</td><td class="num mono">{hu_num(v["rows"])}</td>'
-        f'<td class="num mono">{v["bytes"] / 1e6:.1f} MB</td>'
+        f'<tr><td class="mono">{esc(n)}</td><td class="sub">{esc(TABLE_NOTE.get(n, ""))}</td>'
+        f'<td class="num mono">{hu_num(v["rows"])}</td>'
+        f'<td class="num mono">{file_size(v["bytes"])}</td>'
         f'<td class="mono sub">{esc(", ".join(v["columns"]))}</td></tr>'
         for n, v in pq.items())
     warn = "" if have else (
         '<div class="hero-meta prose"><b>A lekérdező nincs telepítve ebben a példányban.</b> '
         'A futtatókörnyezet nincs a repóban (35 MB); egy klón a <span class="mono">python3 -m scripts.fetch_duckdb</span> '
-        'paranccsal tölti le. A Parquet-fájlok addig is letölthetők és bármilyen DuckDB-vel lekérdezhetők.</div>')
-    return page_head("SQL · karzat",
-                     "A teljes névsoros szavazási rekord 1990 óta, SQL-lel lekérdezve a saját böngésződben — "
-                     "szerver nélkül, a lekérdezés nem hagyja el a gépedet.", 1) + \
-        topbar(inp, [("sql", None)], 1) + f"""
-<div class="hero-h"><h1>SQL</h1><small class="label" data-kz-text>{hu_num(sum(v["rows"] for v in pq.values()))} sor · a lekérdezés a te gépeden fut</small></div>
-<p class="lede">A teljes korpusz három Parquet-fájl, összesen {sum(v["bytes"] for v in pq.values()) / 1e6:.1f} MB.
-Ez az oldal betölti őket egy böngészőben futó adatbázisba, és onnantól bármit kérdezhetsz tőlük SQL-ben.
-Szerver nincs: a lekérdezésed nem megy el sehová, mert nincs hová mennie.</p>
+        'paranccsal tölti le. A Parquet-fájlok addig is letölthetők, és bármelyik DuckDB-vel lekérdezhetők.</div>')
+    return page_head("Riport · karzat",
+                     "A teljes név szerinti szavazási rekord 1990 óta, SQL-lel kérdezve a saját "
+                     "böngésződben — kiszolgáló nélkül, a lekérdezés nem hagyja el a gépedet.", 1) + \
+        topbar(inp, [("riport", None)], 1) + f"""
+<div class="hero-h"><h1>Riport</h1><small class="label" data-kz-text>{hu_num(sum(v["rows"] for v in pq.values()))} sor · a lekérdezés a te gépeden fut</small></div>
+<p class="lede">A teljes név szerinti szavazási rekord 1990 óta — a szavazások, a leadott szavazatok, a
+képviselők, a felszólalások és ami hozzájuk tartozik — {hu_num(len(pq))} fájlban van, összesen
+{hu_dec(sum(v["bytes"] for v in pq.values()) / 1e6, 1)} MB. Az oldal betölti őket egy adatbázisba, ami a te
+böngésződben fut, és onnantól SQL-lel kérdezhető. Kiszolgáló nincs mögötte: a lekérdezés a saját gépeden fut le,
+és nem megy el sehová.</p>
 {warn}
 <section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Kérdezz</span><span class="tag" id="sqlstate">a futtatókörnyezet betöltése ~6 MB, első használatkor</span></h2>
+  <h2><span data-kz-text>Kérdezz</span><span class="tag" id="sqlstate">a futtatókörnyezet betöltése {runtime_mb}, első használatkor</span></h2>
   <div class="filters" role="group" aria-label="Példák">{ex}</div>
   <label class="lbl" for="q">Lekérdezés</label>
-  <textarea id="q" rows="8" spellcheck="false" style="width:100%;background:rgba(0,0,0,.45);color:var(--text);border:1px solid var(--border);font-family:var(--mono);font-size:12px;padding:10px">{esc(SQL_EXAMPLES[0][1])}</textarea>
+  <textarea id="q" rows="8" spellcheck="false" data-tables="{esc(",".join(pq))}" data-factions="{esc(json.dumps(chart_colours(inp), ensure_ascii=False, separators=(",", ":")))}" style="width:100%;background:rgba(0,0,0,.45);color:var(--text);border:1px solid var(--border);font-family:var(--mono);font-size:12px;padding:10px">{esc(SQL_EXAMPLES[0][1])}</textarea>
   <div style="margin-top:8px"><button type="button" id="run">futtatás</button> <button type="button" id="stop" hidden>megszakítás</button> <span class="sub" id="took"></span></div>
   <div class="tablewrap" style="margin-top:12px"><table id="out"><thead></thead><tbody></tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Három tábla: <span class="mono">szavazasok</span>,
-  <span class="mono">szavazatok</span>, <span class="mono">kepviselok</span>. A
-  <span class="mono">position</span> oszlop mind a hét értéket tartja, amit a Ház megkülönböztet — ezek
-  igen/nem/tartózkodásra egyszerűsítése a leggyakoribb félreolvasás ezen az adaton.</div>
+  <div id="chartwrap" hidden style="margin-top:14px">
+    <div class="filters" role="group" aria-label="Ábra">
+      <button type="button" data-chart="oszlop" class="on" aria-pressed="true">oszlop</button>
+      <button type="button" data-chart="vonal" aria-pressed="false">vonal</button>
+      <button type="button" data-chart="pont" aria-pressed="false">pont</button>
+      <button type="button" data-chart="nincs" aria-pressed="false">csak tábla</button>
+      <span class="sep"></span>
+      <button type="button" id="dlsvg">SVG</button>
+      <button type="button" id="dlpng">PNG</button>
+      <button type="button" id="dlprint">nyomtatás / PDF</button>
+    </div>
+    <figure id="fig" class="chartbox"></figure>
+  </div>
+  <div class="hero-meta prose" style="margin-top:8px">{len(pq)} tábla áll rendelkezésre; a lista alább, a
+  <i>táblák</i> szakaszban. A leggyakrabban használt három: <span class="mono">szavazasok</span> (egy sor egy
+  szavazás), <span class="mono">szavazatok</span> (egy sor egy leadott szavazat) és
+  <span class="mono">kepviselok</span> (egy sor egy képviselő egy ciklusban). A
+  <span class="mono">szavazat</span> oszlop mind a hét értéket megtartja, amit a Ház megkülönböztet; ezek
+  igen–nem–tartózkodásra egyszerűsítése a leggyakoribb félreolvasás ezen az adaton.</div>
 </section>
 
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>A táblák</span></h2>
-  <div class="tablewrap"><table><thead><tr><th>Fájl</th><th class="num">Sor</th><th class="num">Méret</th><th>Oszlopok</th></tr></thead><tbody>{rows}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Ugyanez a három fájl a saját gépeden is működik, böngésző nélkül:
+  <div class="tablewrap"><table><thead><tr><th>Fájl</th><th>Egy sor</th><th class="num">Sor</th><th class="num">Méret</th><th>Oszlopok</th></tr></thead><tbody>{rows}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Ugyanez a {hu_num(len(pq))} fájl böngésző nélkül, a saját gépeden is használható:
   <span class="mono">duckdb -c "SELECT * FROM 'https://ogykarzat.hu/adatok/szavazatok.parquet' LIMIT 5"</span>.
-  Az adatbázis-motor a te böngésződben fut, a saját kiszolgálónkról töltve — nem CDN-ről, mert ez az oldal nem
-  hív harmadik felet.</div>
+  Az adatbázist maga a böngésződ futtatja, és ugyanarról a kiszolgálóról tölti le, ahonnan ez a lap jött —
+  nem egy idegen CDN-ről. Ez az oldal nem hív harmadik felet.</div>
 </section>
-{cite_html(inp, 'sql/index.html', 'SQL a korpusz fölött', 'sql')}
+{cite_html(inp, 'riport/index.html', 'Riport a korpusz fölött', 'riport')}
 """ + page_tail(inp, 1)
 
 
@@ -4712,8 +5120,8 @@ def build_search_page(inp: dict, n_items: int) -> str:
   <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button><button type="button" data-sk="szoszolo" aria-pressed="false">szószólók</button><button type="button" data-sk="kormany" aria-pressed="false">kormánytagok</button></div>
   <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
   <div class="tablewrap"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr></tbody></table></div>
-  <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../iromany/index.html">irományok</a> · <a href="../kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
-  <div class="hero-meta prose" style="margin-top:8px">A találatok listája a gépeléskor töltődik be (<span class="mono">kereses/index.json</span>); szavazások közvetlenül a ciklus címlapján kereshetők, tárgy szerint; a felszólalások szövegében a ciklus <a href="../felszolalas/kereses.html">felszólalás-keresője</a>.</div>
+  <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../{cycle_dir(inp["cycle"])}iromany/index.html">irományok</a> · <a href="../{cycle_dir(inp["cycle"])}kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
+  <div class="hero-meta prose" style="margin-top:8px">A találatok listája a gépeléskor töltődik be (<span class="mono">kereses/index.json</span>); szavazások közvetlenül a ciklus címlapján kereshetők, tárgy szerint; a felszólalások szövegében a {inp["cycle"]}. ciklus <a href="../{cycle_dir(inp["cycle"])}felszolalas/kereses.html">felszólalás-keresője</a>.</div>
 </section>
 """ + page_tail(inp, 1)
 
@@ -5899,7 +6307,7 @@ def build_landing() -> str:
   </form>
   <a class="panel door" href="{cdir}index.html">{CORNERS}<h2><span data-kz-text>A {CURRENT_CYCLE}. ciklus</span></h2><p>{hu_num(fl["votes"])} szavazás, {hu_num(roster_n)} képviselő, mindenki a maga helyén az ülésteremben; szavazásonként a szükséges többség, képviselőnként a hét számokban.</p><span class="go mono">ckl{CURRENT_CYCLE}/ →</span></a>
   <a class="panel door" href="szemely/index.html">{CORNERS}<h2><span data-kz-text>Pályaképek</span></h2><p>{hu_num(tot['people'])} személy {hu_date(tot['from'])[:4]} óta: mandátumok, frakciók, szavazási mérleg ciklusonként, és az életút egy tengelyen.</p><span class="go mono">szemely/ →</span></a>
-  {f'<a class="panel door" href="sql/index.html">{CORNERS}<h2><span data-kz-text>SQL</span></h2><p>A teljes szavazási rekord 1990 óta, SQL-lel lekérdezve a saját böngésződben — szerver nélkül.</p><span class="go mono">sql/ →</span></a>' if (inp.get("parquet") or {}).get("tables") else ""}
+  {f'<a class="panel door" href="riport/index.html">{CORNERS}<h2><span data-kz-text>Riport</span></h2><p>Kérdezd a teljes rekordot SQL-lel, és rajzold ki — a saját böngésződben, kiszolgáló nélkül.</p><span class="go mono">riport/ →</span></a>' if (inp.get("parquet") or {}).get("tables") else ""}
   {f'<a class="panel door" href="frakciovaltas/index.html">{CORNERS}<h2><span data-kz-text>Frakcióváltás</span></h2><p>Minden mandátum közbeni frakcióváltás 1990 óta, és hogy a két nyilvántartás ugyanazt mondja-e róla.</p><span class="go mono">frakciovaltas/ →</span></a>' if (inp.get("switches") or {}).get("items") else ""}
   {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
   <a class="panel door" href="arcel/index.html">{CORNERS}<h2><span data-kz-text>A Ház arcéle</span></h2><p>Ciklusonként hányan ülnek először a Házban, és mit rögzít a nyilvántartás a megválasztottak végzettségéről, nyelveiről, önkormányzati múltjáról.</p><span class="go mono">arcel/ →</span></a>
@@ -5944,18 +6352,19 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         for c in available_cycles():
             for f in factions(c):
                 inp["facs_all"].setdefault(f["id"], f["colour"])
+        wide_inp = dict(inp, site_wide=True, base_depth=0)   # these live at the site root, not under a cycle
         md_ = out_dir / "modszer"; md_.mkdir(parents=True, exist_ok=True)
-        (md_ / "index.html").write_text(build_method_page(inp), encoding="utf-8")
+        (md_ / "index.html").write_text(build_method_page(wide_inp), encoding="utf-8")
         cd_ = out_dir / "lefedettseg"; cd_.mkdir(parents=True, exist_ok=True)     # where the record reaches, and where it stops
-        (cd_ / "index.html").write_text(build_coverage_page(inp, {r["cycle"]: r["coverage"] for r in res}), encoding="utf-8")
+        (cd_ / "index.html").write_text(build_coverage_page(wide_inp, {r["cycle"]: r["coverage"] for r in res}), encoding="utf-8")
         ad_ = out_dir / "arcel"; ad_.mkdir(parents=True, exist_ok=True)           # who sits there, across the ten cycles
-        (ad_ / "index.html").write_text(build_profile_page(inp, landing_inputs()["rows"]), encoding="utf-8")
+        (ad_ / "index.html").write_text(build_profile_page(wide_inp, landing_inputs()["rows"]), encoding="utf-8")
         if (inp.get("parquet") or {}).get("tables"):                             # the corpus, queryable in a browser
-            qd_ = out_dir / "sql"; qd_.mkdir(parents=True, exist_ok=True)
-            (qd_ / "index.html").write_text(build_sql_page(inp), encoding="utf-8")
+            qd_ = out_dir / "riport"; qd_.mkdir(parents=True, exist_ok=True)
+            (qd_ / "index.html").write_text(build_report_page(wide_inp), encoding="utf-8")
         if (inp.get("switches") or {}).get("items"):                             # every mid-term change of faction
             fd_ = out_dir / "frakciovaltas"; fd_.mkdir(parents=True, exist_ok=True)
-            (fd_ / "index.html").write_text(build_switch_page(inp), encoding="utf-8")
+            (fd_ / "index.html").write_text(build_switch_page(wide_inp), encoding="utf-8")
         items = [it for r in res for it in r["search"]]
         items += [{"k": "szemely", "c": 0, "t": stints[0]["name"], "s": f'pályakép · {", ".join(str(st["cycle"]) for st in sorted(stints, key=lambda r: r["cycle"]))}. ciklus', "u": f"szemely/{azon}.html"} for azon, stints in people.items()]
         items += [{"k": "szoszolo", "c": CURRENT_CYCLE, "t": r["name"],
@@ -5965,21 +6374,21 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
                    "u": f"szemely/{azon}.html"} for azon, r in ((inp["kormany"] or {}).get("people") or {}).items()]
         sd_ = out_dir / "kereses"; sd_.mkdir(parents=True, exist_ok=True)
         (sd_ / "index.json").write_text(json.dumps(items, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-        (sd_ / "index.html").write_text(build_search_page(inp, len(items)), encoding="utf-8")
+        (sd_ / "index.html").write_text(build_search_page(wide_inp, len(items)), encoding="utf-8")
         pd = out_dir / "szemely"
         pd.mkdir(parents=True, exist_ok=True)
         pw = _Writer()
         sz_people = (inp["szoszolok"] or {}).get("people") or {}
         km_people = (inp["kormany"] or {}).get("people") or {}
-        pw(pd / "index.html", build_person_index(inp, people, sz_people, km_people))
+        pw(pd / "index.html", build_person_index(wide_inp, people, sz_people, km_people))
         for azon, stints in people.items():
-            pw(pd / f"{azon}.html", build_person_page(inp, azon, stints))
+            pw(pd / f"{azon}.html", build_person_page(wide_inp, azon, stints))
             people_n += 1
         for azon, r in sz_people.items():
-            pw(pd / f"{azon}.html", build_spokesperson_page(inp, azon, r))     # the same address, no vote to count
+            pw(pd / f"{azon}.html", build_spokesperson_page(wide_inp, azon, r))     # the same address, no vote to count
             people_n += 1
         for azon, r in km_people.items():
-            pw(pd / f"{azon}.html", build_kormany_page(inp, azon, r))          # a minister without a mandate: likewise
+            pw(pd / f"{azon}.html", build_kormany_page(wide_inp, azon, r))          # a minister without a mandate: likewise
             people_n += 1
         prune(pd, pw.written)
     return {"index": res[0]["index"], "vote_pages": sum(r["vote_pages"] for r in res), "mp_pages": sum(r["mp_pages"] for r in res),

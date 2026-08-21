@@ -512,17 +512,40 @@
   function say(t){ if (state) state.textContent = t; }
   // Everything is loaded from this origin: the runtime, the worker and the three Parquet files. The page calls
   // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
+  // Two lifecycle defects lived here, and both told the reader something untrue.
+  //
+  // `db` is not assigned until after `await import(...)`, so a stop clicked during the module download found
+  // `if (db)` false, terminated nothing, and let boot() carry on: the page said "megszakítva — a következő
+  // futtatás újraindítja az adatbázist" and then rendered the answer to the query it had just disowned. And
+  // because the handler re-enabled the run button, a second click passed the `if (conn)` guard and started a
+  // whole second boot — another Worker, another 35 MB instantiate — orphaning the first.
+  //
+  // A generation counter fixes both without racing: stop bumps it, every await checks it, and one in-flight
+  // promise is shared so a second click waits for the first boot rather than starting another. Terminating
+  // mid-instantiate leaves the library's own promise pending for ever, so the check has to be ours, not its.
+  var gen = 0, booting = null;
+  function stale(mine){ return mine !== gen; }
   async function boot(){
     if (conn) return conn;
+    if (booting) return booting;
+    booting = (async function(){ try { return await bootOnce(gen); } finally { booting = null; } })();
+    return booting;
+  }
+  async function bootOnce(mine){
     say('adatbázis betöltése…');
     // Absolute, all of them. A relative path here is resolved against whichever context does the fetching, and
     // the wasm is fetched by the worker rather than the page: '../assets/…' became '/assets/assets/…' and 404ed.
     var base = new URL('../assets/duckdb/', location.href).href;
     var duckdb = await import(base + 'duckdb.mjs');
+    if (stale(mine)) throw new Error('__stopped');
     var worker = new Worker(base + 'duckdb-eh.worker.js');
-    db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    var d = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    if (stale(mine)) { worker.terminate(); throw new Error('__stopped'); }
+    db = d;
     await db.instantiate(base + 'duckdb-eh.wasm');
+    if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; throw new Error('__stopped'); }
     conn = await db.connect();
+    if (stale(mine)) { try { db.terminate(); } catch (e) {} db = null; conn = null; throw new Error('__stopped'); }
     // DuckDB fetches its parquet extension at run time, from extensions.duckdb.org, which the vendoring did not
     // cover and the static scan could not see: the CSP is what found it. Unblocked it would have meant every
     // reader of this page making a request to a third party — the exact thing vendoring the runtime prevents.
@@ -530,14 +553,26 @@
     await conn.query("SET custom_extension_repository='" + base + "ext'");
     await conn.query("INSTALL parquet; LOAD parquet;");
     say('táblák regisztrálása…');
-    for (var i = 0; i < 3; i++) {
-      var name = ['szavazasok','szavazatok','kepviselok'][i];
+    await views(conn);
+    if (stale(mine)) throw new Error('__stopped');
+    say('kész — a lekérdezés a te gépeden fut');
+    return conn;
+  }
+  var TABLES = (document.getElementById('q').dataset.tables || '').split(',').filter(Boolean);
+  async function views(conn) {
+    for (var i = 0; i < TABLES.length; i++) {
+      var name = TABLES[i];
       var url = new URL('../adatok/' + name + '.parquet', location.href).href;
       await db.registerFileURL(name + '.parquet', url, 4 /* HTTP */, false);
       await conn.query("CREATE OR REPLACE VIEW " + name + " AS SELECT * FROM read_parquet('" + name + ".parquet')");
     }
-    say('kész — a lekérdezés a te gépeden fut');
-    return conn;
+  }
+  // A reader may DROP a view — it is their own database, in their own tab. Rebuilding the views costs a tenth
+  // of a second, which is too much to pay on every query and nothing at all to pay on the one that failed.
+  function droppedOne(msg) {
+    if (!/Catalog Error/.test(String(msg))) return false;
+    for (var i = 0; i < TABLES.length; i++) if (String(msg).indexOf(TABLES[i]) >= 0) return true;
+    return false;
   }
   // Everything that reaches innerHTML goes through this, including the column names. They did not, and
   // SELECT 1 AS "<img src=x onerror=…>" ran the handler: the query is the reader's own, so the reach is theirs
@@ -547,46 +582,302 @@
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
     });
   }
+  // Arrow hands a DECIMAL back as its unscaled integer, so 1.5 arrives as 15 and 0.0001 as 1. Printed raw that
+  // is not a formatting blemish, it is a wrong number on the reader's screen with nothing to mark it — the worst
+  // kind of defect this page could have, on a page whose whole claim is that the figures are the record's own.
+  // DuckDB types a bare `1.5` as DECIMAL(2,1), so a reader meets this without going looking for it.
+  // The bundle is minified, so the type's constructor is called `ti` and matching on its name finds nothing —
+  // the first version of this did exactly that and silently kept printing 15 for 1.5. Arrow's numeric type id
+  // survives minification; 7 is Decimal. Float64 also carries a `precision`, so `scale` alone would not do.
+  var ARROW_DECIMAL = 7;
+  function scales(tbl){
+    var m = {};
+    tbl.schema.fields.forEach(function(f){
+      var t = f.type;
+      if (t && t.typeId === ARROW_DECIMAL && typeof t.scale === 'number' && t.scale > 0) m[f.name] = t.scale;
+    });
+    return m;
+  }
+  function descale(v, sc){
+    if (v === null || v === undefined || !sc) return v;
+    var n = typeof v === 'bigint' ? Number(v) : (typeof v === 'number' ? v : Number(String(v)));
+    return isFinite(n) ? n / Math.pow(10, sc) : v;
+  }
   function render(tbl){
     var head = out.querySelector('thead'), body = out.querySelector('tbody');
     var cols = tbl.schema.fields.map(function(f){ return f.name; });
+    var sc = scales(tbl);
     head.innerHTML = '<tr>' + cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
-    var rows = [], n = 0;
+    // The count printed to the reader used to be the loop counter, which stopped at 501: not the rows the query
+    // returned, not the rows on screen, a third number that was neither. `numRows` is what the result holds.
+    var rows = [], keep = [], n = 0, total = tbl.numRows;
     for (var row of tbl) {
-      if (n++ >= 500) break;
+      if (n++ >= SHOWN) break;
+      var rec = {};
+      cols.forEach(function(c){ rec[c] = sc[c] ? descale(row[c], sc[c]) : row[c]; });
+      keep.push(rec);
       rows.push('<tr>' + cols.map(function(c){
-        var v = row[c];
+        var v = rec[c];
         if (v === null || v === undefined) v = '';
         return '<td' + (typeof v === 'number' || typeof v === 'bigint' ? ' class="num mono"' : '') + '>'
              + esc(v) + '</td>';
       }).join('') + '</tr>');
     }
     body.innerHTML = rows.join('') || '<tr><td>nincs sor</td></tr>';
-    return n;
+    last = { cols: cols, rows: keep, total: total };
+    draw();
+    return { total: total, shown: keep.length };
   }
   var stopBtn = document.getElementById('stop');
   if (stopBtn) stopBtn.addEventListener('click', function(){
     // SELECT count(*) FROM szavazatok a, szavazatok b is a trillion-row cross join and the worker will sit on it
     // for as long as it takes. Terminating is the only reliable brake; the next run boots a fresh one.
+    gen++;                                   // whatever is in flight is now somebody else's; see boot()
     if (db) { try { db.terminate(); } catch (e) {} }
-    db = null; conn = null;
+    db = null; conn = null; booting = null;
     runBtn.disabled = false; stopBtn.hidden = true;
     say('megszakítva — a következő futtatás újraindítja az adatbázist');
   });
+
+  // ── the chart ─────────────────────────────────────────────────────────────────────────────────────
+  // Drawn by hand in SVG rather than by a library, for the same reason the chamber and the day strip are: a
+  // charting library brings its own palette, type and grid, and would look like a guest on the page. Here the
+  // colours are the site's own variables and a faction gets the colour it has everywhere else.
+  // The colours are the site's own, handed to the page from config/factions.yml. They were a second palette
+  // typed out here, and every one of the twelve shared parties disagreed with the rest of the site: Fidesz was
+  // #f97316 in a chart and #f36f21 in the chamber beside it. Three parties that exist in the data — FKGP, MIÉP,
+  // Nemzetiségi képviselő — were missing entirely and drew grey, which reads as "no faction" and is a claim.
+  var FAC = JSON.parse(document.getElementById('q').dataset.factions || '{}');
+  var last = null, kind = 'oszlop';
+  var SHOWN = 500;                       // rows put in the table; the chart takes fewer still
+  function num(v){ return typeof v === 'bigint' ? Number(v) : (typeof v === 'number' ? v : null); }
+  function shape(rows, cols){
+    if (!rows.length || cols.length < 2) return null;
+    // a column's kind is what its values are across the result, not what the first row happens to hold
+    function kind(c){
+      var seen = 0;
+      for (var r = 0; r < rows.length && seen < 20; r++) {
+        var v = rows[r][c];
+        if (v === null || v === undefined) continue;
+        seen++;
+        if (num(v) === null) return 'text';
+      }
+      return seen ? 'num' : 'empty';
+    }
+    var labelCol = null, valueCol = null;
+    for (var i = 0; i < cols.length; i++) {
+      var k = kind(cols[i]);
+      if (k === 'num' && valueCol === null && i > 0) valueCol = cols[i];
+      else if (labelCol === null && k !== 'num') labelCol = cols[i];
+    }
+    if (labelCol === null) labelCol = cols[0];
+    if (valueCol === null) for (var j = cols.length - 1; j >= 0; j--) if (kind(cols[j]) === 'num') { valueCol = cols[j]; break; }
+    if (!valueCol) return null;
+    // after valueCol is settled, never before: computed first, the fallback's own column could end up in the
+    // label as well as on the axis. And by kind, not by row zero, for the same reason as everything else here.
+    var also = cols.filter(function(c){ return c !== labelCol && c !== valueCol && kind(c) !== 'num'; })
+                   .slice(0, 1);
+    // Is the x axis ordered? A line drawn between faction names asserts a path from Fidesz to MSZP, and there is
+    // none — the order is whatever ORDER BY happened to produce. A date or a number is ordered; a party is not,
+    // and the page says so rather than drawing the claim anyway.
+    var keys = rows.map(function(r){ var v = r[labelCol];
+      return num(v) !== null ? num(v) : (/^\d{4}(-\d{2})?(-\d{2})?$/.test(String(v)) ? String(v) : null); });
+    // ORDER BY datum DESC is an axis with a direction, and the first version called it "names, not order"
+    var up = keys[0] !== null, down = keys[0] !== null;
+    for (var k = 1; k < keys.length; k++) {
+      if (keys[k] === null) { up = down = false; break; }
+      if (keys[k] < keys[k - 1]) up = false;
+      if (keys[k] > keys[k - 1]) down = false;
+    }
+    var ordered = up || down;
+    // the colour of a row: its own name if that is a faction, otherwise a faction column if the query has one
+    var facCol = null;
+    for (var f = 0; f < cols.length; f++) if (/^(frakcio|frakció|part|faction)$/i.test(cols[f])) facCol = cols[f];
+    return { labelCol: labelCol, valueCol: valueCol, ordered: ordered, facCol: facCol, also: also };
+  }
+  function svgEl(t, a){ var e = document.createElementNS('http://www.w3.org/2000/svg', t);
+    for (var k in a) e.setAttribute(k, a[k]); return e; }
+  function label(r, sh){ return sh.also.reduce(function(t, c){
+    return r[c] == null ? t : t + ' → ' + String(r[c]); },
+    r[sh.labelCol] == null ? '—' : String(r[sh.labelCol])); }
+  function fmt(v, st){
+    var d = st && st < 1 ? Math.min(12, Math.ceil(-Math.log(st) / Math.LN10) + 1)
+                         : (Math.abs(v) >= 1 || v === 0 ? 3 : 8);
+    return Number(v).toLocaleString('hu-HU', {maximumFractionDigits: d});
+  }
+  function clip(v, n){ var t = String(v == null ? '' : v); return t.length > n ? t.slice(0, n - 1) + '…' : t; }
+  function colourOf(r, sh){ return FAC[String(r[sh.labelCol])] ||
+    (sh.facCol ? FAC[String(r[sh.facCol])] : null) || 'var(--dim3)'; }
+  // ticks a reader can hold in their head: 0 / 2000 / 4000, not 0 / 1528 / 3057
+  function step(range){ var raw = range / 4, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var n = raw / mag; return (n > 5 ? 10 : n > 2 ? 5 : n > 1 ? 2 : 1) * mag; }
+  function draw(){
+    var fig = document.getElementById('fig'), wrap = document.getElementById('chartwrap');
+    fig.innerHTML = '';
+    if (!last) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    if (kind === 'nincs') return;
+    var sh = shape(last.rows, last.cols);
+    if (!sh) { fig.innerHTML = '<div class="hero-meta prose">Ehhez az eredményhez nem rajzolható ábra: ' +
+      'egy megnevezés- és egy számoszlop kell hozzá.</div>'; return; }
+    if ((kind === 'vonal') && !sh.ordered) {
+      fig.innerHTML = '<div class="hero-meta prose"><b>Vonal itt nem rajzolható.</b> A vízszintes tengelyen ' +
+        'megnevezések állnak, nem sorrend — két szomszédos pont közé húzott vonal olyan átmenetet állítana, ' +
+        'ami nincs. Dátum vagy szám szerint rendezve a vonal működik; itt az oszlop vagy a pont a helyes ábra.</div>';
+      return;
+    }
+    var rows = last.rows.slice(0, 40);
+    var vals = rows.map(function(r){ return num(r[sh.valueCol]) || 0; });
+    var max = Math.max.apply(null, vals.concat([0])), min = Math.min.apply(null, vals.concat([0]));
+    var st = step((max - min) || 1);
+    var lo = Math.floor(min / st) * st, hi = Math.ceil(max / st) * st;
+    var W = 900, L = 190, Rr = 70, T = 14, rowH = 22, thin = 1;
+    var H = kind === 'oszlop' ? T + rows.length * rowH + 24 : 430;
+    var svg = svgEl('svg', {viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': sh.valueCol + ' ' + sh.labelCol + ' szerint, ' + rows.length + ' sor'});
+    var span = (hi - lo) || 1;
+    if (kind === 'oszlop') {
+      if (lo < 0) svg.appendChild(svgEl('line', {x1: (L + (0 - lo) / span * (W - L - Rr)).toFixed(1),
+        y1: T, x2: (L + (0 - lo) / span * (W - L - Rr)).toFixed(1), y2: T + rows.length * rowH, class: 'ax'}));
+      rows.forEach(function(r, i){
+        var y = T + i * rowH, raw = num(r[sh.valueCol]), v = raw === null ? 0 : raw;
+        var full = W - L - Rr, zero = L + (0 - lo) / span * full;
+        var x1 = L + (Math.min(0, v) - lo) / span * full, w = Math.max(1, Math.abs(v) / span * full);
+        // no bar at all where the record holds no number: a zero-length bar would read as a zero
+        if (raw !== null) svg.appendChild(svgEl('rect', {x: x1.toFixed(1), y: y + 4, width: w,
+          height: rowH - 9, class: 'bar', style: '--c:' + colourOf(r, sh)}));
+        var t1 = svgEl('text', {x: L - 8, y: y + rowH / 2 + 2, 'text-anchor': 'end'});
+        t1.textContent = clip(label(r, sh), 29); svg.appendChild(t1);
+        var t2 = svgEl('text', {x: (x1 + w + 6).toFixed(1), y: y + rowH / 2 + 2, class: 'v'});
+        t2.textContent = raw === null ? '—' : fmt(v, st); svg.appendChild(t2);
+      });
+    } else {
+      // room under the axis for a full set of slanted labels: every point is named, not just the ends
+      var x0 = 92, y0 = H - 132, plotW = W - x0 - Rr;
+      // a 10-unit label needs ~12 units of clearance perpendicular to the axis; at -55° that is a pitch of 15
+      var every = thin = Math.ceil(12 / (Math.max(1, plotW / Math.max(1, rows.length - 1)) * 0.82));
+      var ticks = Math.max(1, Math.round(span / st));
+      for (var g = 0; g <= ticks; g++) {
+        var gy = y0 - g / ticks * (y0 - T), gv = lo + g * st;
+        svg.appendChild(svgEl('line', {x1: x0, y1: gy.toFixed(1), x2: x0 + plotW, y2: gy.toFixed(1), class: 'grid'}));
+        var gt = svgEl('text', {x: x0 - 8, y: (gy + 3).toFixed(1), 'text-anchor': 'end', class: g === ticks ? 'v' : ''});
+        gt.textContent = fmt(gv, st); svg.appendChild(gt);
+      }
+      svg.appendChild(svgEl('line', {x1: x0, y1: y0, x2: x0 + plotW, y2: y0, class: 'ax'}));
+      svg.appendChild(svgEl('line', {x1: x0, y1: T, x2: x0, y2: y0, class: 'ax'}));
+      var pts = rows.map(function(r, i){
+        return [x0 + (rows.length < 2 ? plotW / 2 : i / (rows.length - 1) * plotW),
+                y0 - ((num(r[sh.valueCol]) || 0) - lo) / span * (y0 - T)];
+      });
+      if (kind === 'vonal') svg.appendChild(svgEl('path', {d: 'M' + pts.map(function(q){ return q[0].toFixed(1) + ' ' + q[1].toFixed(1); }).join('L'), class: 'ln'}));
+      rows.forEach(function(r, i){
+        if (num(r[sh.valueCol]) !== null)
+          svg.appendChild(svgEl('circle', {cx: pts[i][0].toFixed(1), cy: pts[i][1].toFixed(1), r: 3.5,
+                                           class: 'pt', style: '--c:' + colourOf(r, sh)}));
+        if (i % every) return;
+        var t = svgEl('text', {x: pts[i][0].toFixed(1), y: (y0 + 12).toFixed(1), 'text-anchor': 'end',
+                               transform: 'rotate(-55 ' + pts[i][0].toFixed(1) + ' ' + (y0 + 12).toFixed(1) + ')'});
+        t.textContent = clip(label(r, sh), 24);
+        svg.appendChild(t);
+      });
+    }
+    fig.appendChild(svg);
+    var cap = document.createElement('figcaption');
+    cap.className = 'hero-meta';
+    cap.textContent = sh.valueCol + ' — ' + sh.labelCol + ' szerint' +
+      ((last.total || last.rows.length) > rows.length
+        ? ' · az első ' + rows.length + ' sor a ' + (last.total || last.rows.length).toLocaleString('hu-HU') + '-ból' : '') +
+      (sh.also.length ? ' és ' + sh.also[0] : '') +
+      (thin > 1 ? ' · minden ' + thin + '. címke fér ki' : '') +
+      (sh.ordered ? '' : ' · a vízszintes tengely megnevezés, nem sorrend');
+    fig.appendChild(cap);
+  }
+  document.querySelectorAll('button[data-chart]').forEach(function(b){
+    b.addEventListener('click', function(){
+      kind = b.getAttribute('data-chart');
+      document.querySelectorAll('button[data-chart]').forEach(function(x){
+        var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      draw();
+    });
+  });
+  function svgText(){
+    var el = document.querySelector('#fig svg'); if (!el) return null;
+    var c = el.cloneNode(true);
+    c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    c.setAttribute('style', 'background:#0a0a0a');
+    // Read the computed style from the ORIGINAL node and write it onto the clone. Computing it on the clone
+    // returns nothing, because the clone is detached from the document and CSS variables resolve against the
+    // tree — the first version did that and produced a file with var(--c) in it, invisible outside this page.
+    var src = el.querySelectorAll('*'), dst = c.querySelectorAll('*');
+    for (var i = 0; i < src.length; i++) {
+      var cs = getComputedStyle(src[i]), n = dst[i];
+      if (n.classList.contains('bar') || n.classList.contains('pt')) n.setAttribute('fill', cs.fill);
+      if (n.classList.contains('ln')) { n.setAttribute('stroke', cs.stroke); n.setAttribute('fill', 'none'); }
+      if (n.classList.contains('ax') || n.classList.contains('grid')) n.setAttribute('stroke', cs.stroke);
+      if (n.tagName === 'text') {
+        n.setAttribute('fill', cs.fill);
+        n.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, monospace');
+        n.setAttribute('font-size', '10');
+      }
+      n.removeAttribute('class'); n.removeAttribute('style');
+    }
+    return '<?xml version="1.0" encoding="UTF-8"?>' + new XMLSerializer().serializeToString(c);
+  }
+  function save(blob, name){
+    var u = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = u; a.download = name; a.click(); setTimeout(function(){ URL.revokeObjectURL(u); }, 2000);
+  }
+  var dsvg = document.getElementById('dlsvg'), dpng = document.getElementById('dlpng'), dpr = document.getElementById('dlprint');
+  if (dsvg) dsvg.addEventListener('click', function(){
+    var t = svgText(); if (t) save(new Blob([t], {type: 'image/svg+xml'}), 'karzat-riport.svg'); });
+  if (dpng) dpng.addEventListener('click', function(){
+    var t = svgText(); if (!t) return;
+    var img = new Image();
+    img.onload = function(){
+      var cv = document.createElement('canvas');
+      cv.width = 1800; cv.height = Math.round(1800 * img.height / img.width) || 900;
+      var g = cv.getContext('2d');
+      g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, cv.width, cv.height);
+      g.drawImage(img, 0, 0, cv.width, cv.height);
+      cv.toBlob(function(b){ save(b, 'karzat-riport.png'); }, 'image/png');
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(t)));
+  });
+  if (dpr) dpr.addEventListener('click', function(){ window.print(); });
   runBtn.addEventListener('click', async function(){
     runBtn.disabled = true; took.textContent = '';
     if (stopBtn) stopBtn.hidden = false;
+    var mine = gen;
     try {
       var c = await boot();
+      if (stale(mine)) return;
       var t0 = performance.now();
-      var res = await c.query(box.value);
-      var n = render(res);
-      took.textContent = n + ' sor · ' + Math.round(performance.now() - t0) + ' ms';
+      var res;
+      try {
+        res = await c.query(box.value);
+      } catch (e1) {
+        if (!droppedOne(e1.message || e1)) throw e1;
+        say('a táblák visszaállítása…');
+        await views(c);
+        t0 = performance.now();
+        res = await c.query(box.value);
+        say('kész — a táblák visszaálltak');
+      }
+      if (stale(mine)) return;
+      var r = render(res);
+      took.textContent = r.total.toLocaleString('hu-HU') + ' sor'
+        + (r.total > r.shown ? ' · az első ' + r.shown + ' látszik' : '')
+        + ' · ' + Math.round(performance.now() - t0) + ' ms';
+      say('kész — a lekérdezés a te gépeden fut');
     } catch (e) {
+      if (String(e && e.message) === '__stopped' || stale(mine)) return;
       out.querySelector('thead').innerHTML = '';
       out.querySelector('tbody').innerHTML = '<tr><td class="mono">' + esc(e.message || e) + '</td></tr>';
+      // the previous query's chart used to stay on screen under the error, captioned with its own columns,
+      // reading as though it answered the query that had just failed
+      last = null; draw();
       say('hiba — a lekérdezés nem futott le');
-    } finally { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; }
+    } finally { if (!stale(mine)) { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; } }
   });
 })();
 

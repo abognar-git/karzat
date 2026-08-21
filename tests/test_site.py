@@ -5,6 +5,7 @@ inputs or the builder and rebuild. `python3 -m scripts.build_site --check` is th
 """
 
 import json
+import math
 import re
 import unittest
 from pathlib import Path
@@ -1956,13 +1957,13 @@ class ParquetCorpus(unittest.TestCase):
 
     def test_a_vote_s_rows_add_up_to_its_own_header(self):
         import collections
-        ts_col = self.pos.column("ts").to_pylist()
+        ts_col = self.pos.column("szavazas_id").to_pylist()
         by_ts = collections.defaultdict(collections.Counter)
-        for ts, p in zip(ts_col, self.pos.column("position").to_pylist()):
+        for ts, p in zip(ts_col, self.pos.column("szavazat").to_pylist()):
             by_ts[ts][p] += 1
         checked = 0
         for i in range(self.votes.num_rows):
-            ts = self.votes.column("ts")[i].as_py()
+            ts = self.votes.column("szavazas_id")[i].as_py()
             counts = by_ts.get(ts)
             if not counts:
                 continue                                   # a vote with no name-level list: tallies only
@@ -1977,7 +1978,7 @@ class ParquetCorpus(unittest.TestCase):
         self.assertGreater(checked, 1000, "too few named votes checked to prove anything")
 
     def test_all_seven_positions_survive_the_export(self):
-        seen = set(self.pos.column("position").to_pylist()[:3_000_000])
+        seen = set(self.pos.column("szavazat").to_pylist()[:3_000_000])
         for p in ("igen", "nem", "tartozkodott", "jelen_nem_szavazott", "nem_szavazott",
                   "bejelentett_hianyzo", "igazoltan_tavol"):
             self.assertIn(p, seen, f"{p} is missing — the export collapsed the House's own distinctions")
@@ -1989,7 +1990,135 @@ class ParquetCorpus(unittest.TestCase):
         self.assertLess(self.pos.nbytes and (self.dir / "szavazatok.parquet").stat().st_size, 60_000_000)
 
 
-class SqlPage(unittest.TestCase):
+class ExportedRowsBelongToTheirCycle(unittest.TestCase):
+    """A row carries a cycle number, and that number is a claim about when the thing happened.
+
+    The speech exporter fell back to the unsuffixed `speeches.json.gz` — the CURRENT cycle's file — whenever a
+    per-cycle one was missing. Cycles 34 and 35 have none, so the 1990-94 and 1994-98 parliaments were each
+    given 4,651 speeches dated 2026, by members who would not sit for thirty years. 9,302 rows of fiction that
+    parsed cleanly, counted plausibly, and were wrong only if you compared a date against its cycle.
+
+    I had the correct figure — 495,191 — measured before the exporter was written, and did not compare it with
+    the 504,493 the exporter produced. So the check is arithmetic the machine does every run, not a number I
+    remember to look at."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.d = ROOT / "site" / "adatok"
+        if not (cls.d / "felszolalasok.parquet").exists():
+            raise unittest.SkipTest("parquet not built")
+
+    def _spans(self):
+        """The date each cycle's own votes span, from the votes table — an independent witness."""
+        import pyarrow.parquet as pq
+        t = pq.read_table(self.d / "szavazasok.parquet", columns=["ciklus", "datum"])
+        span = {}
+        for c, dt in zip(t.column("ciklus").to_pylist(), t.column("datum").to_pylist()):
+            if not dt:
+                continue
+            lo, hi = span.get(c, (dt, dt))
+            span[c] = (min(lo, dt), max(hi, dt))
+        return span
+
+    def test_no_speech_is_dated_outside_the_cycle_it_is_filed_under(self):
+        import pyarrow.parquet as pq
+        span = self._spans()
+        t = pq.read_table(self.d / "felszolalasok.parquet", columns=["ciklus", "datum"])
+        bad = {}
+        for c, dt in zip(t.column("ciklus").to_pylist(), t.column("datum").to_pylist()):
+            if not dt or c not in span:
+                continue
+            lo, hi = span[c]
+            # a sitting day may sit a little outside the votes' own span; a whole parliament may not
+            if dt < lo[:4] + "-01-01" or dt > str(int(hi[:4]) + 1) + "-12-31":
+                bad[c] = bad.get(c, 0) + 1
+        self.assertEqual(bad, {}, f"speeches filed under a cycle they cannot belong to: {bad}")
+
+    def test_two_cycles_never_share_an_identical_block_of_speeches(self):
+        """The symptom the date check would miss if the fallback ever pointed at a same-era file: two cycles
+        holding the very same rows."""
+        import pyarrow.parquet as pq
+        t = pq.read_table(self.d / "felszolalasok.parquet", columns=["ciklus", "datum", "ulesnap", "sorszam"])
+        seen = {}
+        for c, dt, u, sq in zip(*[t.column(k).to_pylist() for k in ("ciklus", "datum", "ulesnap", "sorszam")]):
+            seen.setdefault(c, set()).add((dt, u, sq))
+        cycles = sorted(seen)
+        for i, a in enumerate(cycles):
+            for b in cycles[i + 1:]:
+                if not seen[a] or not seen[b]:
+                    continue
+                shared = len(seen[a] & seen[b])
+                self.assertLess(shared, min(len(seen[a]), len(seen[b])) * 0.5,
+                                f"cycles {a} and {b} share {shared} identical speech rows")
+
+    def test_every_exported_table_s_cycle_numbers_are_ones_the_site_builds(self):
+        import pyarrow.parquet as pq
+        from scripts.build_site import available_cycles
+        known = set(available_cycles())
+        for name in ("szavazasok", "szavazatok", "kepviselok", "szavazas_iromany", "felszolalasok"):
+            f = self.d / f"{name}.parquet"
+            if not f.exists():
+                continue
+            got = set(pq.read_table(f, columns=["ciklus"]).column("ciklus").to_pylist())
+            self.assertTrue(got <= known, f"{name} carries cycles the site does not build: {sorted(got - known)}")
+
+
+class UmbrellaPages(unittest.TestCase):
+    """Six pages answer over all ten cycles, and were built with the cycle pages' machinery.
+
+    They inherited its identity with it: the breadcrumb read "43. ciklus / riport" and the cycle strip marked 43
+    as where the reader was. Both were false — the Riport queries 1990 to 2026, the coverage page draws the edge
+    of the whole record, the ledger counts switches across ten cycles. A reader who saw the trail would fairly
+    conclude only the current cycle was in there.
+
+    The same inheritance also put them one directory too deep: `../../assets/karzat.js` from `site/riport/`.
+    Browsers clamp `..` at the root so nothing broke, which is exactly why it survived — it would have broken
+    the day the site were served from a subpath."""
+
+    ROOTED = ("riport", "arcel", "lefedettseg", "frakciovaltas", "modszer", "kereses", "szemely")
+
+    def page(self, name):
+        p = ROOT / "site" / name / "index.html"
+        if not p.exists():
+            self.skipTest(f"{name}/ not built")
+        return p
+
+    def test_none_of_them_claims_to_be_inside_a_cycle(self):
+        for name in self.ROOTED:
+            h = self.page(name).read_text(encoding="utf-8")
+            m = re.search(r'<nav aria-label="Útvonal">(.*?)</nav>', h, re.S)
+            crumb = re.sub("<[^>]+>", " ", m.group(1)) if m else ""
+            self.assertNotIn("ciklus", crumb, f"{name}/ says it is under a cycle: {crumb.strip()!r}")
+            self.assertIsNone(re.search(r'aria-current="true">\d+</b>', h),
+                              f"{name}/ marks a cycle as the one the reader is in")
+
+    def test_a_career_page_does_not_date_itself_to_the_current_cycle(self):
+        """A pályakép spans whatever cycles the person served. Gyimóthy Géza left the House in 1998 and his page
+        said "43. ciklus" at the head of its trail, because it was built with the current cycle's machinery."""
+        pages = sorted((ROOT / "site" / "szemely").glob("*.html"))
+        if len(pages) < 20:
+            self.skipTest("career pages not built")
+        for p in pages[:40] + pages[-40:]:
+            h = p.read_text(encoding="utf-8")
+            m = re.search(r'<nav aria-label="Útvonal">(.*?)</nav>', h, re.S)
+            self.assertNotIn("ciklus", re.sub("<[^>]+>", " ", m.group(1)) if m else "",
+                             f"{p.name} dates itself to a cycle")
+
+    def test_every_link_stays_inside_the_site(self):
+        """`../..` from a page one level down leaves the tree. A browser clamps it and a subpath deploy does
+        not, so the check is on the path rather than on whether a request happens to succeed."""
+        site = (ROOT / "site").resolve()
+        for name in self.ROOTED:
+            p = self.page(name)
+            for href in sorted(set(re.findall(r'(?:href|src)="([^"#?]+)"', p.read_text(encoding="utf-8")))):
+                if href.startswith(("http", "mailto:", "data:", "/")):
+                    continue
+                t = (p.parent / href).resolve()
+                self.assertIn(site, [t, *t.parents], f"{name}/index.html → {href} escapes the site root")
+                self.assertTrue(t.exists(), f"{name}/index.html → {href} does not exist")
+
+
+class ReportPage(unittest.TestCase):
     """The corpus queried in the reader's own browser. Two properties are the whole point of the design.
 
     Nothing may reach off-origin. This site sets no cookie, runs no analytics and calls no third party, so one
@@ -2002,11 +2131,11 @@ class SqlPage(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from scripts.build_site import build_sql_page, build_assets
+        from scripts.build_site import build_report_page, build_assets
         cls.inp = load_inputs()
         if not (cls.inp.get("parquet") or {}).get("tables"):
             raise unittest.SkipTest("no parquet built — run: python3 -m scripts.derive_parquet")
-        cls.html = build_sql_page(cls.inp)
+        cls.html = build_report_page(cls.inp)
         cls.js = build_assets()["karzat.js"]
 
     def test_the_page_and_its_runtime_call_no_third_party(self):
@@ -2071,6 +2200,256 @@ class SqlPage(unittest.TestCase):
         self.assertIn('id="stop"', self.html)
         self.assertIn("db.terminate()", self.js)
 
+    def test_a_cancelled_boot_stays_cancelled(self):
+        """`db` is assigned after `await import(...)`, so a stop clicked during the module download found
+        `if (db)` false, terminated nothing, and let the boot run on: the page said "megszakítva — a következő
+        futtatás újraindítja az adatbázist" and then rendered the answer to the query it had just disowned.
+        Both halves of that sentence were false, which is the worst thing a status line can be.
+
+        Terminating mid-instantiate leaves the library's own promise pending for ever, so the abandonment has
+        to be ours: a generation counter the stop handler bumps and every await checks."""
+        js = self._sql_block()
+        self.assertIn("var gen = 0, booting = null;", js)
+        self.assertIn("function stale(mine)", js)
+        stop = js[js.index("if (stopBtn) stopBtn.addEventListener"):]
+        stop = stop[:stop.index("});")]
+        self.assertIn("gen++", stop, "the stop handler does not invalidate what is in flight")
+        boot = js[js.index("  async function bootOnce("):js.index("  var TABLES =")]
+        self.assertGreaterEqual(boot.count("stale(mine)"), 4,
+                                "the boot does not check for abandonment after each await")
+        self.assertIn("if (stale(mine)) { worker.terminate();", boot,
+                      "a worker created after the stop is left running")
+
+    def test_two_clicks_cannot_start_two_databases(self):
+        """The old stop handler re-enabled the run button and nulled `conn`, so a second click sailed past the
+        `if (conn)` guard and began a whole second boot — another Worker, another 35 MB instantiate — with the
+        second assignment to `db` orphaning the first. One in-flight promise, shared."""
+        js = self._sql_block()
+        b = js[js.index("  async function boot(){"):js.index("  async function bootOnce(")]
+        self.assertIn("if (booting) return booting;", b, "concurrent callers each start their own boot")
+        self.assertIn("finally { booting = null; }", b, "a failed boot is never retried")
+
+    def test_the_status_line_follows_the_run_that_just_finished(self):
+        """say() was only ever called from inside boot(), and boot() short-circuits once `conn` exists. So one
+        failed query pinned "hiba — a lekérdezés nem futott le" to the tag for the rest of the session, beside
+        every correct answer that followed. On a page whose claim is that the figures are the record's own, a
+        status line contradicting the table is the wrong thing to leave standing."""
+        js = self._sql_block()
+        h = js[js.index("  runBtn.addEventListener('click'"):]
+        ok = h[:h.index("} catch (e) {")]
+        self.assertIn("say('kész", ok, "a successful run does not clear a previous error")
+        self.assertIn("__stopped", h, "an abandoned boot is reported to the reader as a failure")
+
+    def test_the_chart_is_drawn_in_the_site_s_own_language(self):
+        """A charting library would bring its own palette, type and grid and look like a guest on the page. The
+        chart is hand-drawn SVG like the chamber and the day strip, so matching the design is structural."""
+        for lib in ("chart.js", "d3.", "vega", "plotly", "echarts"):
+            self.assertNotIn(lib, self.js.lower(), f"a charting library crept in: {lib}")
+        self.assertIn("createElementNS('http://www.w3.org/2000/svg'", self.js)
+        self.assertIn("chartbox", self.html)
+
+    def _chart_fns(self):
+        """The chart's decisions run under node rather than being grepped for.
+
+        Every earlier defect on this page was one a grep would have passed: the substitution that ate three
+        words left the source looking right, and the export test passed on a file that carried var(--c). These
+        two functions decide what the reader is shown, so they are executed against fabricated rows."""
+        import shutil
+        if not shutil.which("node"):
+            self.skipTest("node not available")
+        js = self._sql_block()
+        return (js[js.index("  function num(v){"):js.index("  function svgEl(")]
+                + js[js.index("  function step(range){"):js.index("  function draw(){")])
+
+    def _sql_block(self):
+        """Three functions in the bundle are called step() and two are somebody else's. Every lookup here is
+        scoped to the SQL loader first, because a test that reads the pager's step() would pass on anything."""
+        start = self.js.index("  var box = document.getElementById('q'); if (!box) return;")
+        return self.js[start:self.js.index("})();", self.js.index("  function draw(){", start))]
+
+    def test_every_exported_table_is_registered_by_the_loader(self):
+        """The loader had the three table names written into it. Adding a fourth to the export would have left
+        it unregistered and invisible from the page, with nothing failing anywhere — so the list now comes from
+        the manifest the page is built from, and this checks that it still does."""
+        import re as _re
+        names = list((self.inp.get("parquet") or {}).get("tables") or {})
+        m = _re.search(r'data-tables="([^"]*)"', self.html)
+        self.assertIsNotNone(m, "the page does not carry its table list")
+        self.assertEqual(m.group(1).split(","), names)
+        js = self._sql_block()
+        self.assertNotIn("['szavazasok','szavazatok','kepviselok']", js, "the loader hard-codes its tables again")
+        for n in names:
+            self.assertIn(n, self.html, f"{n} is exported but never named on the page")
+
+    def test_no_vote_loses_a_motion_to_the_export(self):
+        """`szavazasok.iromany` is the first motion of however many a vote names, and 10,960 of 79,829 name more
+        than one — so for one vote in seven the single column was a quiet truncation. The link table carries all
+        of them, and this asserts the two agree rather than trusting that they do."""
+        import pyarrow.parquet as _pq
+        d = ROOT / "site" / "adatok"
+        if not (d / "szavazas_iromany.parquet").exists():
+            self.skipTest("parquet not built")
+        v = _pq.read_table(d / "szavazasok.parquet", columns=["ciklus", "szavazas_id", "iromany", "iromany_db"])
+        li = _pq.read_table(d / "szavazas_iromany.parquet", columns=["ciklus", "szavazas_id", "sorszam", "iromany"])
+        self.assertEqual(li.num_rows, sum(x.as_py() or 0 for x in v.column("iromany_db")),
+                         "the link table and the per-vote count disagree")
+        firsts = {(c.as_py(), t.as_py()): i.as_py()
+                  for c, t, n, i in zip(li.column("ciklus"), li.column("szavazas_id"),
+                                        li.column("sorszam"), li.column("iromany")) if n.as_py() == 1}
+        bad = [(c.as_py(), t.as_py()) for c, t, i, n in
+               zip(v.column("ciklus"), v.column("szavazas_id"), v.column("iromany"), v.column("iromany_db"))
+               if n.as_py() and firsts.get((c.as_py(), t.as_py())) != i.as_py()]
+        self.assertEqual(bad[:3], [], f"{len(bad)} votes disagree with their own first link row")
+        self.assertGreater(sum(1 for n in v.column("iromany_db") if (n.as_py() or 0) > 1), 1000,
+                           "no vote names more than one motion — the fixture is not the real corpus")
+
+    def test_a_line_is_refused_when_the_x_axis_is_not_a_sequence(self):
+        """A line between Fidesz and MSZP asserts a path from one to the other, and there is none — the order is
+        whatever ORDER BY produced. The subtler case is the one that caught me: dates *sorted by margin* look
+        like a timeline and are not one, so the check is on the sequence, not on the shape of the labels.
+
+        `ORDER BY datum DESC` is an axis with a direction too, and calling it "names, not order" was its own
+        small lie — the first version tested only for ascending."""
+        import json, subprocess
+        cases = {
+            "faction names": [{"faction": "Fidesz", "n": 3}, {"faction": "MSZP", "n": 2}],
+            "years ascending": [{"ev": "1990", "n": 3}, {"ev": "1991", "n": 2}, {"ev": "1992", "n": 9}],
+            # two rows are monotonic in one direction whatever they hold, so an unsorted axis needs three:
+            # this is the closest-votes query's real shape, dates ordered by margin rather than by time
+            "dates out of order": [{"date": "2019-05-02", "n": 1}, {"date": "1998-11-03", "n": 2},
+                                   {"date": "2007-03-19", "n": 3}],
+            "dates descending": [{"date": "2026-08-11", "n": 1}, {"date": "2026-05-09", "n": 2},
+                                 {"date": "1990-05-02", "n": 3}],
+            "numbers ascending": [{"cycle": 41, "n": 5}, {"cycle": 42, "n": 7}, {"cycle": 43, "n": 6}],
+            "a string column wins the label from a numeric one":
+                [{"cycle": 41, "ev": "b", "n": 5}, {"cycle": 42, "ev": "a", "n": 7}],
+        }
+        prog = self._chart_fns() + "\nconst C = " + json.dumps(cases, ensure_ascii=False) + ";\n" + \
+            "const o = {}; for (const k in C) o[k] = shape(C[k], Object.keys(C[k][0])).ordered;\n" + \
+            "console.log(JSON.stringify(o));"
+        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True,
+                                        check=True).stdout)
+        self.assertEqual(got, {"faction names": False, "years ascending": True,
+                               "dates out of order": False, "dates descending": True,
+                               "numbers ascending": True,
+                               "a string column wins the label from a numeric one": False})
+
+    def test_the_y_axis_lands_on_numbers_a_reader_can_hold(self):
+        """The first version divided the range by four and printed the result: 0 / 1528 / 3057 / 4585 / 6113.
+        Every value on it is correct and none of them is a number anybody reads off a chart."""
+        import json, subprocess
+        prog = self._chart_fns() + "\nconsole.log(JSON.stringify([1, 37, 6113, 7882237, 0.42].map(step)));"
+        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True,
+                                        check=True).stdout)
+        for r, st in zip([1, 37, 6113, 7882237, 0.42], got):
+            mant = st / 10 ** math.floor(math.log10(st))
+            self.assertIn(round(mant, 6), (1.0, 2.0, 5.0), f"step {st} for range {r} is not 1/2/5×10ⁿ")
+            self.assertLessEqual(st * 4, r * 2.5, f"step {st} makes the axis far taller than the data")
+
+    def test_every_point_is_named_and_carries_its_faction_colour(self):
+        """The shipped version labelled only the first and last point, so a scatter of sixteen parties named
+        two of them — which the reader saw before I did. And where the rows are people, the colour comes from
+        the query's own faction column rather than from a name that is in no palette."""
+        js = self._sql_block()
+        block = js[js.index("    } else {"):js.index("    fig.appendChild(svg);")]
+        self.assertNotIn("[0, rows.length - 1]", block, "only the end points are labelled")
+        self.assertIn("rows.forEach", block, "the labels are not drawn per row")
+        fn = js[js.index("  function colourOf("):js.index("  function step(range){")]
+        self.assertIn("sh.facCol", fn, "a faction column in the query does not colour the marks")
+
+    def test_a_decimal_is_descaled_before_it_reaches_the_reader(self):
+        """Arrow returns a DECIMAL as its unscaled integer, so 1.5 arrives as 15 and 0.0001 as 1, and the page
+        printed them raw. DuckDB types a bare `1.5` as DECIMAL(2,1), so a reader met this without going looking.
+
+        The first fix matched on the type's constructor name and did nothing at all: the bundle is minified and
+        the class is called `ti`. The guard is on the Arrow type id, which survives minification, and on the
+        comment that says why — a later reader deleting the magic number would reinstate the bug."""
+        js = self._sql_block()
+        fn = js[js.index("  function scales(tbl)"):js.index("  function render(tbl)")]
+        self.assertIn("typeId === ARROW_DECIMAL", fn, "decimal columns are detected by something else")
+        self.assertNotIn("constructor.name", fn, "the minified class name is being matched again")
+        self.assertIn("ARROW_DECIMAL = 7", js)
+        r = js[js.index("  function render(tbl)"):js.index("  var stopBtn")]
+        self.assertIn("descale(row[c]", r, "the rendered value is not descaled")
+
+    def test_the_row_count_shown_is_the_result_s_own(self):
+        """The count printed was the render loop's counter, which stops at 501: not the rows the query returned,
+        not the rows on screen, a third number that was neither, and the only one the reader saw."""
+        js = self._sql_block()
+        r = js[js.index("  function render(tbl)"):js.index("  var stopBtn")]
+        self.assertIn("tbl.numRows", r, "the total is still counted by the loop")
+        self.assertIn("total: total, shown:", r)
+        h = js[js.index("var r = render(res);"):js.index("var r = render(res);") + 400]
+        self.assertIn("r.total", h)
+        self.assertIn("az első ' + r.shown + ' látszik", h, "a truncated table does not say so")
+
+    def test_a_column_s_kind_is_judged_across_the_result(self):
+        """shape() read row zero and decided. A LEFT JOIN puts a NULL in the first row as easily as anywhere, and
+        the chart then vanished with "no numeric column" over a result full of numbers."""
+        import json, subprocess
+        cases = {
+            "null in the first row": [{"f": "a", "n": None}, {"f": "b", "n": 7}, {"f": "c", "n": 12}],
+            "all values null": [{"f": "a", "n": None}, {"f": "b", "n": None}],
+        }
+        prog = self._chart_fns() + "\nconst C = " + json.dumps(cases) + ";\n" + \
+            "const o = {}; for (const k in C) { const s = shape(C[k], Object.keys(C[k][0]));\n" + \
+            "  o[k] = s && s.valueCol; }\nconsole.log(JSON.stringify(o));"
+        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True,
+                                        check=True).stdout)
+        self.assertEqual(got["null in the first row"], "n", "a NULL in row zero still hides the chart")
+        self.assertIsNone(got["all values null"], "a column of nothing was charted as numbers")
+
+    def test_a_dropped_view_comes_back(self):
+        """`DROP VIEW szavazatok` is a legal thing for a reader to type in their own database, and it left the
+        session answering "does not exist" to everything with no hint that reloading was the cure."""
+        js = self._sql_block()
+        self.assertIn("function droppedOne(", js)
+        self.assertIn("await views(c)", js, "the views are never rebuilt after a catalog error")
+        self.assertIn("a táblák visszaálltak", js, "the recovery is silent")
+
+    def test_the_runtime_size_on_the_page_is_the_size_on_the_wire(self):
+        """The page promised "~6 MB" for as long as it existed. That was the engine's gzipped size, and the
+        engine was not served gzipped: CloudFront will not compress an object over 10 MB, so 35.7 MB crossed the
+        wire. The number was right about the bytes and wrong about the download, which is the hardest kind of
+        wrong to notice — the config said `Compress: True` and meant it.
+
+        Two halves, so two assertions: the deploy pre-compresses what CloudFront will not, and the page counts
+        what the deploy will send rather than carrying a figure somebody measured once."""
+        import gzip as _gz
+        d = ROOT / "site" / "assets" / "duckdb"
+        if not (d / "duckdb-eh.wasm").exists():
+            self.skipTest("runtime not vendored")
+        from scripts.build_site import runtime_wire_bytes
+        mb = runtime_wire_bytes() / 1e6
+        self.assertIn(f"~{mb:.1f} MB".replace(".", ","), self.html,
+                      "the page's figure is not the measured one")
+        raw = (d / "duckdb-eh.wasm").stat().st_size
+        self.assertGreater(raw, 10 * 1024 * 1024, "the engine no longer exceeds CloudFront's compression ceiling")
+        dep = (ROOT / "scripts" / "deploy_aws.py").read_text(encoding="utf-8")
+        self.assertIn("CF_COMPRESS_MAX", dep, "nothing pre-compresses what CloudFront declines to")
+        self.assertIn('"ContentEncoding": "gzip"', dep)
+        self.assertLess(len(_gz.compress((d / "duckdb-eh.wasm").read_bytes(), 9)), raw / 3,
+                        "gzip no longer earns its place here")
+
+    def test_no_count_in_the_page_s_prose_is_typed(self):
+        """The lede said "három fájl" after the export grew to eight — the same failure the README gate exists to
+        catch, inside the page itself. Every count on this page comes from the manifest."""
+        n = len((self.inp.get("parquet") or {}).get("tables") or {})
+        self.assertGreater(n, 3)
+        for word in ("három fájl", "három tábla", "Három tábla"):
+            self.assertNotIn(word, self.html, f"a typed count survives: {word}")
+        self.assertIn(f"{n} fájlban van", self.html, "the lede does not count the files it has")
+
+    def test_a_downloaded_chart_carries_its_colours(self):
+        """The chart's colours are CSS variables, which mean nothing in a file opened elsewhere. The export has
+        to resolve them from the live tree — computing them on the detached clone returns nothing, which is what
+        the first version did: a valid SVG with var(--c) in it and no colour outside this page."""
+        fn = self.js[self.js.index("function svgText()"):]
+        fn = fn[:fn.index("function save(")]
+        self.assertIn("getComputedStyle(src[i])", fn, "the export reads styles from the clone, not the original")
+        self.assertIn("n.removeAttribute('class')", fn, "class attributes survive and would carry no styling")
+        self.assertIn("xmlns", fn)
+
     def test_the_page_says_what_the_runtime_costs_before_it_is_downloaded(self):
         self.assertIn("6 MB", self.html)
-        self.assertIn("szerver nélkül", self.html)
+        self.assertIn("Kiszolgáló nincs mögötte", self.html)

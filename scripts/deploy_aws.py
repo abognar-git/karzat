@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures as cf
 import hashlib
+import gzip
 import mimetypes
 import sys
 import time
@@ -45,9 +46,29 @@ CONTENT_TYPE = {
 # The stylesheet and the script are versionless names, so a long cache means a reader can hold yesterday's CSS over
 # today's HTML — which is how a chart drawn with new class names came to render as black rectangles for a day. They
 # are small and CloudFront answers the revalidation, so they follow the HTML's own short life instead.
+CF_COMPRESS_MAX = 10 * 1024 * 1024      # CloudFront will not compress an object larger than this
+
+
+def size_of(p) -> int:
+    return p.stat().st_size
+
+
+def gz_md5(p) -> tuple:
+    """The length and digest of what will actually be stored, so an unchanged file is not re-sent every run."""
+    import hashlib
+    body = gzip.compress(p.read_bytes(), 9)
+    return len(body), hashlib.md5(body).hexdigest()
+
 CACHE = {".html": "public, max-age=300", ".css": "public, max-age=300", ".js": "public, max-age=300",
          ".xml": "public, max-age=900",
-         ".wasm": "public, max-age=31536000, immutable", ".mjs": "public, max-age=31536000, immutable",
+         # The vendored runtime is executable code served to readers — fetch_duckdb.py treats a hash mismatch as
+         # an error rather than a warning for exactly that reason. `immutable` for a year on an unversioned name
+         # contradicted it: a fix to the engine would never have reached anybody who had already loaded the page.
+         # A content hash in the filename would let the year stand, but duckdb.mjs imports its siblings by name
+         # from inside the file, so hashing means rewriting somebody else's module graph — new machinery, new
+         # ways to break quietly, for an event that happens about never. A day's cache costs one conditional
+         # request that is a 304 on unchanged bytes, answered at the edge, and bounds the staleness at a day.
+         ".wasm": "public, max-age=86400", ".mjs": "public, max-age=86400",
          ".parquet": "public, max-age=3600",
          ".webp": "public, max-age=2592000", ".png": "public, max-age=2592000",
          ".jpg": "public, max-age=2592000", ".ico": "public, max-age=2592000"}
@@ -170,7 +191,8 @@ def main(argv: list[str] | None = None) -> int:
         key = str(p.relative_to(SITE))
         size = p.stat().st_size
         cur = have.get(key)
-        if cur and not args.force and cur[0] == size and "-" not in cur[1] and cur[1] == md5(p):
+        want = gz_md5(p) if (p.suffix.lower() == ".wasm" and size > CF_COMPRESS_MAX) else (size, md5(p))
+        if cur and not args.force and cur[0] == want[0] and "-" not in cur[1] and cur[1] == want[1]:
             continue
         todo.append((p, key))
     print(f"to upload: {len(todo):,} objects ({sum(p.stat().st_size for p, _ in todo) / 1e9:.2f} GB)")
@@ -186,6 +208,17 @@ def main(argv: list[str] | None = None) -> int:
                  "CacheControl": CACHE.get(ext, CACHE_DEFAULT)}
         if ext == ".gz":
             extra.update({"ContentEncoding": "gzip", "ContentType": "text/csv; charset=utf-8"})
+        if ext == ".wasm" and size_of(p) > CF_COMPRESS_MAX:
+            # CloudFront compresses between 1 KB and 10 MB and silently declines outside that band, so the
+            # 35.7 MB engine went out raw while the 2.8 MB extension beside it got brotli. The page meanwhile
+            # told the reader "~6 MB", which was the compressed size of a file nobody was being served
+            # compressed. Sending it pre-gzipped makes the sentence true: 35.7 MB becomes 7.0.
+            # gzip rather than brotli because a pre-compressed object cannot negotiate — every browser that
+            # can run WebAssembly accepts gzip, and 7.0 MB served to everyone beats 5.4 MB served to most.
+            extra.update({"ContentEncoding": "gzip"})
+            s3.put_object(Bucket=args.bucket, Key=key, Body=gzip.compress(p.read_bytes(), 9), **extra)
+            done[0] += 1
+            return
         s3.upload_file(str(p), args.bucket, key, ExtraArgs=extra)
         done[0] += 1
         if done[0] % 2000 == 0:
