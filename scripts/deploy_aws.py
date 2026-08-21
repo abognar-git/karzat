@@ -35,6 +35,10 @@ CONTENT_TYPE = {
     ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8",
     ".txt": "text/plain; charset=utf-8", ".svg": "image/svg+xml",
     ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg", ".ico": "image/x-icon",
+    # Without these two the runtime goes out as application/octet-stream, which CloudFront does not compress:
+    # 34 MB on the wire instead of 6. The type is what decides, not the extension.
+    ".wasm": "application/wasm", ".mjs": "text/javascript; charset=utf-8",
+    ".parquet": "application/vnd.apache.parquet",
 }
 # HTML is short-lived (the site is rebuilt when parliament sits) and the feeds shorter still; a portrait is the same
 # picture for as long as the person has the same face, so it is cached for a month rather than a day.
@@ -43,6 +47,8 @@ CONTENT_TYPE = {
 # are small and CloudFront answers the revalidation, so they follow the HTML's own short life instead.
 CACHE = {".html": "public, max-age=300", ".css": "public, max-age=300", ".js": "public, max-age=300",
          ".xml": "public, max-age=900",
+         ".wasm": "public, max-age=31536000, immutable", ".mjs": "public, max-age=31536000, immutable",
+         ".parquet": "public, max-age=3600",
          ".webp": "public, max-age=2592000", ".png": "public, max-age=2592000",
          ".jpg": "public, max-age=2592000", ".ico": "public, max-age=2592000"}
 CACHE_DEFAULT = "public, max-age=86400"

@@ -1987,3 +1987,90 @@ class ParquetCorpus(unittest.TestCase):
         md = self.pq.ParquetFile(self.dir / "szavazatok.parquet").metadata
         self.assertGreater(md.num_row_groups, 10, "the positions are one block, so no query can seek")
         self.assertLess(self.pos.nbytes and (self.dir / "szavazatok.parquet").stat().st_size, 60_000_000)
+
+
+class SqlPage(unittest.TestCase):
+    """The corpus queried in the reader's own browser. Two properties are the whole point of the design.
+
+    Nothing may reach off-origin. This site sets no cookie, runs no analytics and calls no third party, so one
+    `<script src="https://cdn…">` would quietly undo that for every visitor. The runtime is vendored and pinned;
+    a test that only checked the page renders would not notice the day somebody reinstates the CDN one-liner.
+
+    And every path must be absolute. The wasm is fetched by the worker rather than the page, so a relative path
+    resolves against the wrong base — '../assets/…' became '/assets/assets/…' and 404ed, and the only symptom was
+    a WebAssembly compile error with no mention of a URL."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import build_sql_page, build_assets
+        cls.inp = load_inputs()
+        if not (cls.inp.get("parquet") or {}).get("tables"):
+            raise unittest.SkipTest("no parquet built — run: python3 -m scripts.derive_parquet")
+        cls.html = build_sql_page(cls.inp)
+        cls.js = build_assets()["karzat.js"]
+
+    def test_the_page_and_its_runtime_call_no_third_party(self):
+        for m in re.findall(r'(?:src|href)="(https?://[^"]+)"', self.html):
+            self.fail(f"the SQL page loads {m} from off-origin")
+        self.assertNotIn("cdn.jsdelivr", self.js, "the loader reaches for a CDN")
+        d = ROOT / "site" / "assets" / "duckdb"
+        if not d.is_dir():
+            self.skipTest("runtime not vendored — run: python3 -m scripts.fetch_duckdb")
+        for f in d.glob("*.mjs"):
+            self.assertIsNone(re.search(rb'from\s*["\']https://', f.read_bytes()),
+                              f"{f.name} imports from off-origin at run time")
+
+    def test_the_vendored_runtime_matches_its_lock(self):
+        import hashlib
+        lock = ROOT / "reference" / "duckdb-wasm.lock"
+        d = ROOT / "site" / "assets" / "duckdb"
+        if not lock.exists() or not d.is_dir():
+            self.skipTest("runtime not vendored")
+        want = {}
+        for ln in lock.read_text(encoding="utf-8").splitlines():
+            if ln.strip() and not ln.startswith("#"):
+                h, name = ln.split(None, 1)          # the file is "<sha256>  <name>"
+                want[name.strip()] = h
+        for name, h in want.items():
+            p = d / name.strip()
+            self.assertTrue(p.exists(), f"{name} is missing from the vendored runtime")
+            self.assertEqual(hashlib.sha256(p.read_bytes()).hexdigest(), h,
+                             f"{name} does not match the lock — executable code served to readers has changed")
+
+    def test_the_loader_resolves_every_path_absolutely(self):
+        block = self.js[self.js.index("var base = new URL"):]
+        block = block[:block.index("say('kész")]
+        for rel in re.findall(r"""(?:import|Worker|instantiate)\(\s*['"](\.\.?/[^'"]+)['"]""", block):
+            self.fail(f"a relative path survives in the loader: {rel}")
+        self.assertIn("new URL('../assets/duckdb/', location.href)", self.js)
+        self.assertIn("new URL('../adatok/'", self.js)
+
+    def test_nothing_from_a_query_reaches_innerHTML_unescaped(self):
+        """A red-team pass found this after the page was built and before it shipped.
+
+        Values were escaped and column names were not, so `SELECT 1 AS "<img src=x onerror=…>"` put a live
+        element in the header and ran the handler. The reach is the reader's own — they typed the query, the
+        origin holds no cookie and no session, and nothing here reads a query from the URL — but a known
+        injection is not something to serve, and the fix is one call.
+
+        The guard is on the shape rather than the symptom: every interpolation into innerHTML in the SQL loader
+        must go through esc()."""
+        block = self.js[self.js.index("function render(tbl)"):]
+        block = block[:block.index("runBtn.addEventListener")]
+        for raw in re.findall(r"innerHTML\s*=\s*([^;]+);", block):
+            for interp in re.findall(r"\+\s*([A-Za-z_$][\w$.()\[\]]*)", raw):
+                if interp.startswith(("esc(", "cols.map", "rows.join")):
+                    continue
+                self.fail(f"unescaped interpolation into innerHTML: {interp} in {raw[:70]}")
+        self.assertIn("esc(c)", block, "column names are not escaped")
+        self.assertIn("esc(v)", block, "values are not escaped")
+
+    def test_a_runaway_query_can_be_stopped(self):
+        """`SELECT count(*) FROM szavazatok a, szavazatok b` is a trillion-row cross join; the worker will sit on
+        it until the tab is closed. Terminating the worker is the only reliable brake."""
+        self.assertIn('id="stop"', self.html)
+        self.assertIn("db.terminate()", self.js)
+
+    def test_the_page_says_what_the_runtime_costs_before_it_is_downloaded(self):
+        self.assertIn("6 MB", self.html)
+        self.assertIn("szerver nélkül", self.html)

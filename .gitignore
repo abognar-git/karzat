@@ -60,3 +60,6 @@ data/derived/speech_texts_ckl*.json.gz
 
 # the traffic aggregate is operational, not a site input: it changes daily and nothing builds from it
 data/derived/traffic.json
+
+# DuckDB-WASM, vendored onto our own origin by scripts/fetch_duckdb.py; 35 MB does not belong in a history
+site/assets/duckdb/

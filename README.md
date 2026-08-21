@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 291 tests
+python3 -m unittest discover -s tests -t .      # offline; 297 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -685,6 +685,44 @@ the site it came from. Every named vote's positions must sum to the tallies its 
 across three thousand votes, since a mismatch would mean the file and the pages disagree and one of them is
 wrong. And all seven positions must survive: collapsing them into yes, no and abstain is the commonest way this
 data is misread, and an export that did it silently would hand the mistake to everyone who downloaded it.
+
+## SQL in the reader's browser, with no server anywhere
+
+The three Parquet files are 4.3 MB, which is small enough that a browser can hold the lot — so `sql/` loads a
+database compiled to WebAssembly, registers the files as views, and answers whatever you type. Grouping 17.4
+million cast positions by faction takes 734 ms; the harder example, a window function and two joins to find who
+voted against their own faction's majority, takes 94. Nothing is sent anywhere, because there is nowhere to send
+it: the query runs on the reader's machine against static objects on a CDN.
+
+The runtime is vendored rather than loaded from a public CDN, and that is the decision worth explaining. This
+site sets no cookie, runs no analytics and calls no third party, so a visit is known to nobody but the access
+log this project keeps for thirty days. A single `<script src="https://cdn…">` would undo that quietly, for
+every visitor. So `scripts/fetch_duckdb.py` pulls the six files once, rewrites their imports to relative paths,
+and records every SHA-256 in a lock file; a refetch that does not match is an error rather than a warning,
+because this is executable code served to readers. The 35 MB is git-ignored — a clone rebuilds it, and the page
+says the runtime is not installed rather than half-working.
+
+I red-teamed the page before shipping it, which found a third defect the tests would not have. Values in the
+result table were escaped and column names were not, so `SELECT 1 AS "<img src=x onerror=…>"` put a live element
+in the header and ran the handler — verified in a browser, not reasoned about. The reach is the reader's own:
+they type the query, the origin holds no cookie and no session, and nothing reads a query from the URL. It is
+still a known injection and it is fixed, with a test that asserts every interpolation into `innerHTML` goes
+through the escaper rather than asserting the one payload.
+
+The same pass established three things that are *not* wrong, which is worth writing down because I would
+otherwise have assumed the first two and been unable to say so. The WebAssembly sandbox has no filesystem, so
+`read_csv_auto('/etc/passwd')` returns "no files found". A query naming a remote URL is refused — but by the
+other origin's CORS policy rather than by anything here, so a permissively-configured target would be fetched by
+the reader's browser, and that is a property of the engine rather than a hole in the page. And a runaway query
+had no brake at all: a cross join over 17.4 million rows sits in the worker until the tab is closed. There is a
+cancel now; it terminates the worker, because nothing else reliably stops it.
+
+Two more defects on the way, both of which only a real browser would have shown. The deploy had no content type for
+`.wasm`, so the runtime would have gone out as `application/octet-stream`, which CloudFront does not compress —
+34 MB on the wire instead of 6. And the wasm path was relative: it is fetched by the worker rather than by the
+page, so `../assets/…` resolved against the wrong base, became `/assets/assets/…` and 404ed, surfacing only as a
+WebAssembly compile error that named no URL. Every path in the loader is absolute now, and a test greps for a
+relative one.
 
 ## Licence
 

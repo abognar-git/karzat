@@ -502,6 +502,90 @@
 
 
 (function(){
+  var box = document.getElementById('q'); if (!box) return;
+  var runBtn = document.getElementById('run'), out = document.getElementById('out');
+  var state = document.getElementById('sqlstate'), took = document.getElementById('took');
+  var db = null, conn = null;
+  document.querySelectorAll('button.ex').forEach(function(b){
+    b.addEventListener('click', function(){ box.value = b.getAttribute('data-q'); box.focus(); });
+  });
+  function say(t){ if (state) state.textContent = t; }
+  // Everything is loaded from this origin: the runtime, the worker and the three Parquet files. The page calls
+  // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
+  async function boot(){
+    if (conn) return conn;
+    say('adatbázis betöltése…');
+    // Absolute, all of them. A relative path here is resolved against whichever context does the fetching, and
+    // the wasm is fetched by the worker rather than the page: '../assets/…' became '/assets/assets/…' and 404ed.
+    var base = new URL('../assets/duckdb/', location.href).href;
+    var duckdb = await import(base + 'duckdb.mjs');
+    var worker = new Worker(base + 'duckdb-eh.worker.js');
+    db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    await db.instantiate(base + 'duckdb-eh.wasm');
+    conn = await db.connect();
+    say('táblák regisztrálása…');
+    for (var i = 0; i < 3; i++) {
+      var name = ['szavazasok','szavazatok','kepviselok'][i];
+      var url = new URL('../adatok/' + name + '.parquet', location.href).href;
+      await db.registerFileURL(name + '.parquet', url, 4 /* HTTP */, false);
+      await conn.query("CREATE OR REPLACE VIEW " + name + " AS SELECT * FROM read_parquet('" + name + ".parquet')");
+    }
+    say('kész — a lekérdezés a te gépeden fut');
+    return conn;
+  }
+  // Everything that reaches innerHTML goes through this, including the column names. They did not, and
+  // SELECT 1 AS "<img src=x onerror=…>" ran the handler: the query is the reader's own, so the reach is theirs
+  // alone on an origin with no cookie and no session — but a known injection is not something to ship.
+  function esc(v){
+    return String(v).replace(/[&<>"']/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+  function render(tbl){
+    var head = out.querySelector('thead'), body = out.querySelector('tbody');
+    var cols = tbl.schema.fields.map(function(f){ return f.name; });
+    head.innerHTML = '<tr>' + cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+    var rows = [], n = 0;
+    for (var row of tbl) {
+      if (n++ >= 500) break;
+      rows.push('<tr>' + cols.map(function(c){
+        var v = row[c];
+        if (v === null || v === undefined) v = '';
+        return '<td' + (typeof v === 'number' || typeof v === 'bigint' ? ' class="num mono"' : '') + '>'
+             + esc(v) + '</td>';
+      }).join('') + '</tr>');
+    }
+    body.innerHTML = rows.join('') || '<tr><td>nincs sor</td></tr>';
+    return n;
+  }
+  var stopBtn = document.getElementById('stop');
+  if (stopBtn) stopBtn.addEventListener('click', function(){
+    // SELECT count(*) FROM szavazatok a, szavazatok b is a trillion-row cross join and the worker will sit on it
+    // for as long as it takes. Terminating is the only reliable brake; the next run boots a fresh one.
+    if (db) { try { db.terminate(); } catch (e) {} }
+    db = null; conn = null;
+    runBtn.disabled = false; stopBtn.hidden = true;
+    say('megszakítva — a következő futtatás újraindítja az adatbázist');
+  });
+  runBtn.addEventListener('click', async function(){
+    runBtn.disabled = true; took.textContent = '';
+    if (stopBtn) stopBtn.hidden = false;
+    try {
+      var c = await boot();
+      var t0 = performance.now();
+      var res = await c.query(box.value);
+      var n = render(res);
+      took.textContent = n + ' sor · ' + Math.round(performance.now() - t0) + ' ms';
+    } catch (e) {
+      out.querySelector('thead').innerHTML = '';
+      out.querySelector('tbody').innerHTML = '<tr><td class="mono">' + esc(e.message || e) + '</td></tr>';
+      say('hiba — a lekérdezés nem futott le');
+    } finally { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; }
+  });
+})();
+
+
+(function(){
   // On a narrow screen the ten cycles are a strip that scrolls inside the top bar, and on an older cycle's page
   // the one you are reading sits off to the right where you cannot see it. This brings it into view. It is an
   // instant jump, not a scroll animation, so it is right for reduced-motion readers too and needs no guard; and

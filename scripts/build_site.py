@@ -263,6 +263,8 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
     km_path = DERIVED / "kormany.json"
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    pqf = DERIVED / "parquet.json"
+    parquet = load_json(pqf) if pqf.exists() else {}
     rc_path = DERIVED / "receipt.json"
     receipt = load_json(rc_path) if rc_path.exists() else {}
     fs_path = DERIVED / "faction_switches.json"
@@ -277,7 +279,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -1508,6 +1510,92 @@ JS_SEARCH = """
 })();
 """
 
+JS_SQL = """
+(function(){
+  var box = document.getElementById('q'); if (!box) return;
+  var runBtn = document.getElementById('run'), out = document.getElementById('out');
+  var state = document.getElementById('sqlstate'), took = document.getElementById('took');
+  var db = null, conn = null;
+  document.querySelectorAll('button.ex').forEach(function(b){
+    b.addEventListener('click', function(){ box.value = b.getAttribute('data-q'); box.focus(); });
+  });
+  function say(t){ if (state) state.textContent = t; }
+  // Everything is loaded from this origin: the runtime, the worker and the three Parquet files. The page calls
+  // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
+  async function boot(){
+    if (conn) return conn;
+    say('adatbázis betöltése…');
+    // Absolute, all of them. A relative path here is resolved against whichever context does the fetching, and
+    // the wasm is fetched by the worker rather than the page: '../assets/…' became '/assets/assets/…' and 404ed.
+    var base = new URL('../assets/duckdb/', location.href).href;
+    var duckdb = await import(base + 'duckdb.mjs');
+    var worker = new Worker(base + 'duckdb-eh.worker.js');
+    db = new duckdb.AsyncDuckDB(new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING), worker);
+    await db.instantiate(base + 'duckdb-eh.wasm');
+    conn = await db.connect();
+    say('táblák regisztrálása…');
+    for (var i = 0; i < 3; i++) {
+      var name = ['szavazasok','szavazatok','kepviselok'][i];
+      var url = new URL('../adatok/' + name + '.parquet', location.href).href;
+      await db.registerFileURL(name + '.parquet', url, 4 /* HTTP */, false);
+      await conn.query("CREATE OR REPLACE VIEW " + name + " AS SELECT * FROM read_parquet('" + name + ".parquet')");
+    }
+    say('kész — a lekérdezés a te gépeden fut');
+    return conn;
+  }
+  // Everything that reaches innerHTML goes through this, including the column names. They did not, and
+  // SELECT 1 AS "<img src=x onerror=…>" ran the handler: the query is the reader's own, so the reach is theirs
+  // alone on an origin with no cookie and no session — but a known injection is not something to ship.
+  function esc(v){
+    return String(v).replace(/[&<>"']/g, function(m){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+    });
+  }
+  function render(tbl){
+    var head = out.querySelector('thead'), body = out.querySelector('tbody');
+    var cols = tbl.schema.fields.map(function(f){ return f.name; });
+    head.innerHTML = '<tr>' + cols.map(function(c){ return '<th>' + esc(c) + '</th>'; }).join('') + '</tr>';
+    var rows = [], n = 0;
+    for (var row of tbl) {
+      if (n++ >= 500) break;
+      rows.push('<tr>' + cols.map(function(c){
+        var v = row[c];
+        if (v === null || v === undefined) v = '';
+        return '<td' + (typeof v === 'number' || typeof v === 'bigint' ? ' class="num mono"' : '') + '>'
+             + esc(v) + '</td>';
+      }).join('') + '</tr>');
+    }
+    body.innerHTML = rows.join('') || '<tr><td>nincs sor</td></tr>';
+    return n;
+  }
+  var stopBtn = document.getElementById('stop');
+  if (stopBtn) stopBtn.addEventListener('click', function(){
+    // SELECT count(*) FROM szavazatok a, szavazatok b is a trillion-row cross join and the worker will sit on it
+    // for as long as it takes. Terminating is the only reliable brake; the next run boots a fresh one.
+    if (db) { try { db.terminate(); } catch (e) {} }
+    db = null; conn = null;
+    runBtn.disabled = false; stopBtn.hidden = true;
+    say('megszakítva — a következő futtatás újraindítja az adatbázist');
+  });
+  runBtn.addEventListener('click', async function(){
+    runBtn.disabled = true; took.textContent = '';
+    if (stopBtn) stopBtn.hidden = false;
+    try {
+      var c = await boot();
+      var t0 = performance.now();
+      var res = await c.query(box.value);
+      var n = render(res);
+      took.textContent = n + ' sor · ' + Math.round(performance.now() - t0) + ' ms';
+    } catch (e) {
+      out.querySelector('thead').innerHTML = '';
+      out.querySelector('tbody').innerHTML = '<tr><td class="mono">' + esc(e.message || e) + '</td></tr>';
+      say('hiba — a lekérdezés nem futott le');
+    } finally { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; }
+  });
+})();
+"""
+
+
 JS_CYCLESTRIP = """
 (function(){
   // On a narrow screen the ten cycles are a strip that scrolls inside the top bar, and on an older cycle's page
@@ -2529,7 +2617,7 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" rol
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet, script and favicon (committed, checked, never hand-edited)."""
-    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_CYCLESTRIP + "\n" + JS_BOOT).strip() + "\n"}
+    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -2682,6 +2770,77 @@ megcímkézik. A kettőt senki nem veti össze. Ez az oldal összeveti.</p>
   három hibás mérés, ami idáig vezetett: <a href="../modszer/index.html#frakciovaltas">módszer</a>.</div>
 </section>
 {cite_html(inp, 'frakciovaltas/index.html', 'Frakcióváltás 1990 óta', 'frakciovaltas')}
+""" + page_tail(inp, 1)
+
+
+SQL_EXAMPLES = [
+    ("Frakciónként hány szavazatot adtak le 1990 óta",
+     "SELECT faction, count(*) AS szavazat\nFROM szavazatok\nWHERE faction IS NOT NULL\nGROUP BY 1 ORDER BY 2 DESC\nLIMIT 20;"),
+    ("A hét pozíció megoszlása — a Ház ennyifélét különböztet meg",
+     "SELECT position, count(*) AS db,\n       round(100.0*count(*)/sum(count(*)) OVER (), 2) AS szazalek\nFROM szavazatok GROUP BY 1 ORDER BY 2 DESC;"),
+    ("Ki szavazott a legtöbbször a frakciója többsége ellen a 43. ciklusban",
+     "WITH tobbseg AS (\n  SELECT ts, faction, position,\n         row_number() OVER (PARTITION BY ts, faction ORDER BY count(*) DESC) AS r\n  FROM szavazatok WHERE cycle = 43 AND position IN ('igen','nem','tartozkodott')\n  GROUP BY 1,2,3)\nSELECT k.name, k.faction, count(*) AS ellene\nFROM szavazatok v\nJOIN tobbseg t ON t.ts = v.ts AND t.faction = v.faction AND t.r = 1\nJOIN kepviselok k ON k.mp = v.mp AND k.cycle = v.cycle\nWHERE v.cycle = 43 AND v.position IN ('igen','nem','tartozkodott')\n  AND v.position <> t.position\nGROUP BY 1,2 ORDER BY 3 DESC LIMIT 15;"),
+    ("A legszorosabb döntések: hány szavazaton múltak",
+     "SELECT date, subject, igen, nem, needed, igen - needed AS kulonbseg\nFROM szavazasok\nWHERE needed IS NOT NULL AND igen IS NOT NULL\nORDER BY abs(igen - needed) ASC\nLIMIT 20;"),
+    ("Szavazások évente, ciklusonként",
+     "SELECT cycle, substr(date, 1, 4) AS ev, count(*) AS szavazas\nFROM szavazasok WHERE date IS NOT NULL\nGROUP BY 1,2 ORDER BY 2;"),
+]
+
+
+def build_sql_page(inp: dict) -> str:
+    """sql/index.html — the corpus queried in the reader's own browser, with no server anywhere.
+
+    The database is WebAssembly and the three Parquet files are ordinary static objects, so a question that would
+    normally need an API and a backend is answered by the reader's laptop against files on a CDN. That is not a
+    trick: it is what a 4.3 MB corpus makes possible, and the reason the export was worth building first.
+
+    Two honesties the page owes. The runtime is a 6 MB download on first use, stated before anybody waits for it.
+    And it is served from our own origin rather than a public CDN, because a site that sets no cookie and calls no
+    third party should not start doing so on one page."""
+    pq = (inp.get("parquet") or {}).get("tables") or {}
+    have = (SITE_DIR / "assets" / "duckdb" / "duckdb-eh.wasm").exists()   # SITE is the index file, not the tree
+    ex = "".join(
+        f'<button type="button" class="ex" data-q="{esc(q)}">{esc(t)}</button>' for t, q in SQL_EXAMPLES)
+    rows = "".join(
+        f'<tr><td class="mono">{esc(n)}</td><td class="num mono">{hu_num(v["rows"])}</td>'
+        f'<td class="num mono">{v["bytes"] / 1e6:.1f} MB</td>'
+        f'<td class="mono sub">{esc(", ".join(v["columns"]))}</td></tr>'
+        for n, v in pq.items())
+    warn = "" if have else (
+        '<div class="hero-meta prose"><b>A lekérdező nincs telepítve ebben a példányban.</b> '
+        'A futtatókörnyezet nincs a repóban (35 MB); egy klón a <span class="mono">python3 -m scripts.fetch_duckdb</span> '
+        'paranccsal tölti le. A Parquet-fájlok addig is letölthetők és bármilyen DuckDB-vel lekérdezhetők.</div>')
+    return page_head("SQL · karzat",
+                     "A teljes névsoros szavazási rekord 1990 óta, SQL-lel lekérdezve a saját böngésződben — "
+                     "szerver nélkül, a lekérdezés nem hagyja el a gépedet.", 1) + \
+        topbar(inp, [("sql", None)], 1) + f"""
+<div class="hero-h"><h1>SQL</h1><small class="label" data-kz-text>{hu_num(sum(v["rows"] for v in pq.values()))} sor · a lekérdezés a te gépeden fut</small></div>
+<p class="lede">A teljes korpusz három Parquet-fájl, összesen {sum(v["bytes"] for v in pq.values()) / 1e6:.1f} MB.
+Ez az oldal betölti őket egy böngészőben futó adatbázisba, és onnantól bármit kérdezhetsz tőlük SQL-ben.
+Szerver nincs: a lekérdezésed nem megy el sehová, mert nincs hová mennie.</p>
+{warn}
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Kérdezz</span><span class="tag" id="sqlstate">a futtatókörnyezet betöltése ~6 MB, első használatkor</span></h2>
+  <div class="filters" role="group" aria-label="Példák">{ex}</div>
+  <label class="lbl" for="q">Lekérdezés</label>
+  <textarea id="q" rows="8" spellcheck="false" style="width:100%;background:rgba(0,0,0,.45);color:var(--text);border:1px solid var(--border);font-family:var(--mono);font-size:12px;padding:10px">{esc(SQL_EXAMPLES[0][1])}</textarea>
+  <div style="margin-top:8px"><button type="button" id="run">futtatás</button> <button type="button" id="stop" hidden>megszakítás</button> <span class="sub" id="took"></span></div>
+  <div class="tablewrap" style="margin-top:12px"><table id="out"><thead></thead><tbody></tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Három tábla: <span class="mono">szavazasok</span>,
+  <span class="mono">szavazatok</span>, <span class="mono">kepviselok</span>. A
+  <span class="mono">position</span> oszlop mind a hét értéket tartja, amit a Ház megkülönböztet — ezek
+  igen/nem/tartózkodásra egyszerűsítése a leggyakoribb félreolvasás ezen az adaton.</div>
+</section>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>A táblák</span></h2>
+  <div class="tablewrap"><table><thead><tr><th>Fájl</th><th class="num">Sor</th><th class="num">Méret</th><th>Oszlopok</th></tr></thead><tbody>{rows}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Ugyanez a három fájl a saját gépeden is működik, böngésző nélkül:
+  <span class="mono">duckdb -c "SELECT * FROM 'https://ogykarzat.hu/adatok/szavazatok.parquet' LIMIT 5"</span>.
+  Az adatbázis-motor a te böngésződben fut, a saját kiszolgálónkról töltve — nem CDN-ről, mert ez az oldal nem
+  hív harmadik felet.</div>
+</section>
+{cite_html(inp, 'sql/index.html', 'SQL a korpusz fölött', 'sql')}
 """ + page_tail(inp, 1)
 
 
@@ -5734,6 +5893,7 @@ def build_landing() -> str:
   </form>
   <a class="panel door" href="{cdir}index.html">{CORNERS}<h2><span data-kz-text>A {CURRENT_CYCLE}. ciklus</span></h2><p>{hu_num(fl["votes"])} szavazás, {hu_num(roster_n)} képviselő, mindenki a maga helyén az ülésteremben; szavazásonként a szükséges többség, képviselőnként a hét számokban.</p><span class="go mono">ckl{CURRENT_CYCLE}/ →</span></a>
   <a class="panel door" href="szemely/index.html">{CORNERS}<h2><span data-kz-text>Pályaképek</span></h2><p>{hu_num(tot['people'])} személy {hu_date(tot['from'])[:4]} óta: mandátumok, frakciók, szavazási mérleg ciklusonként, és az életút egy tengelyen.</p><span class="go mono">szemely/ →</span></a>
+  {f'<a class="panel door" href="sql/index.html">{CORNERS}<h2><span data-kz-text>SQL</span></h2><p>A teljes szavazási rekord 1990 óta, SQL-lel lekérdezve a saját böngésződben — szerver nélkül.</p><span class="go mono">sql/ →</span></a>' if (inp.get("parquet") or {}).get("tables") else ""}
   {f'<a class="panel door" href="frakciovaltas/index.html">{CORNERS}<h2><span data-kz-text>Frakcióváltás</span></h2><p>Minden mandátum közbeni frakcióváltás 1990 óta, és hogy a két nyilvántartás ugyanazt mondja-e róla.</p><span class="go mono">frakciovaltas/ →</span></a>' if (inp.get("switches") or {}).get("items") else ""}
   {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
   <a class="panel door" href="arcel/index.html">{CORNERS}<h2><span data-kz-text>A Ház arcéle</span></h2><p>Ciklusonként hányan ülnek először a Házban, és mit rögzít a nyilvántartás a megválasztottak végzettségéről, nyelveiről, önkormányzati múltjáról.</p><span class="go mono">arcel/ →</span></a>
@@ -5784,6 +5944,9 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         (cd_ / "index.html").write_text(build_coverage_page(inp, {r["cycle"]: r["coverage"] for r in res}), encoding="utf-8")
         ad_ = out_dir / "arcel"; ad_.mkdir(parents=True, exist_ok=True)           # who sits there, across the ten cycles
         (ad_ / "index.html").write_text(build_profile_page(inp, landing_inputs()["rows"]), encoding="utf-8")
+        if (inp.get("parquet") or {}).get("tables"):                             # the corpus, queryable in a browser
+            qd_ = out_dir / "sql"; qd_.mkdir(parents=True, exist_ok=True)
+            (qd_ / "index.html").write_text(build_sql_page(inp), encoding="utf-8")
         if (inp.get("switches") or {}).get("items"):                             # every mid-term change of faction
             fd_ = out_dir / "frakciovaltas"; fd_.mkdir(parents=True, exist_ok=True)
             (fd_ / "index.html").write_text(build_switch_page(inp), encoding="utf-8")
