@@ -202,6 +202,17 @@ def ext_url(u: str | None) -> str:
     return "https://" + u
 
 
+def hu_the(n: int) -> str:
+    """"a" or "az" before a Hungarian ordinal, which depends on how the number is said, not how it is written.
+
+    1 is "első", 5 "ötödik", 1000 "ezredik" — all vowels — and so is anything whose reading starts with one of
+    them: 1000, 1500, 500. "a 1." is the kind of slip a reader notices immediately and a builder never does."""
+    t = str(abs(int(n)))
+    if t[0] == "5" or t[0] == "1" and len(t) in (1, 4, 7):
+        return "az"
+    return "a"
+
+
 def hu_dec(x, places: int = 2) -> str:
     """A decimal with the Hungarian comma: 0.87 → '0,87'."""
     return "—" if x is None else f"{x:.{places}f}".replace(".", ",")
@@ -261,6 +272,8 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
     km_path = DERIVED / "kormany.json"
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    ipf = DERIVED / "idealpoints.json"
+    idealpoints = load_json(ipf) if ipf.exists() else {}
     sbf = DERIVED / "search_bench.json"
     search_bench = load_json(sbf) if sbf.exists() else {}
     pqf = DERIVED / "parquet.json"
@@ -279,7 +292,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "search_bench": search_bench, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "search_bench": search_bench, "idealpoints": idealpoints, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -2746,6 +2759,73 @@ def mp_exports(inp: dict, azon: str) -> tuple[str, str]:
     return ex.mp_export(mp, rec, inp["by_ts"], inp["cycle"])
 
 
+def mp_name(inp: dict, azon: str) -> str:
+    return ((inp.get("mps") or {}).get(azon) or {}).get("name") or azon
+
+
+def mp_axis_panel(inp: dict, azon: str) -> str:
+    """Where this member sits on the cycle's axis, and where that is relative to their own group.
+
+    The cohesion page shows the groups; this shows the person, which is what a reader came for. The number
+    that matters is not the position but the distance from the member's own faction: a group whose members
+    all sit within a tenth of each other has no interior, and one where somebody sits two standard deviations
+    out has a name worth knowing.
+
+    The interval is a bootstrap over resampled votes, and it is drawn rather than hidden because a member who
+    cast forty votes and one who cast four thousand are not known to the same accuracy."""
+    ip = ((inp.get("idealpoints") or {}).get("cycles") or {}).get(str(inp["cycle"])) or {}
+    me = (ip.get("positions") or {}).get(azon)
+    if not me:
+        return ""
+    fac = me.get("faction")
+    peers = [v["x"] for v in ip["positions"].values() if v.get("faction") == fac] if fac else []
+    n = len(peers)
+    mean = sum(peers) / n if n else me["x"]
+    sd = (sum((q - mean) ** 2 for q in peers) / n) ** 0.5 if n > 1 else 0.0
+    z = (me["x"] - mean) / sd if sd > 1e-6 else 0.0
+    rank = sorted(peers).index(me["x"]) + 1 if n > 1 and me["x"] in peers else None
+    # What a reader came for is not a coordinate. It is whether their member votes with their group or not,
+    # and how unusual that makes them — so the sentence leads with the ordering and mentions the number last.
+    # Distance from the group's centre and the count of votes against it correlate at about +0.6 across the
+    # cycles: related, and not the same thing, which is why both are on this page.
+    where = ("a frakciója közepe táján áll" if abs(z) < 1 else
+             "a frakciója szélén áll" if abs(z) < 2 else "szokatlanul messze áll a frakciójától")
+    if n > 1 and rank:
+        sentence = (f'A szavazatai alapján <b>{esc(where)}</b>: ha a {esc(fac)} {hu_num(n)} képviselőjét ezen '
+                    f'a vonalon sorba rendezzük, ő {hu_the(rank)} {hu_num(rank)}. Aki a frakciója szélén van, '
+                    f'gyakrabban szavazott a saját többsége ellen — de nem mindig, és a lap fentebb külön is '
+                    f'megszámolja, hányszor. A helye {hu_dec(me["x"], 2)}, a frakció átlaga {hu_dec(mean, 2)}.')
+    else:
+        sentence = (f'A helye ezen a vonalon {hu_dec(me["x"], 2)}. Frakciótárs nélkül nincs mihez mérni, '
+                    f'ezért itt csak az látszik, hol áll a Házon belül.')
+    xs = sorted(ip["positions"].values(), key=lambda v: v["x"])
+    lo, hi = xs[0]["x"], xs[-1]["x"]
+    span = (hi - lo) or 1.0
+    W, H = 900, 64
+    marks = []
+    for v in ip["positions"].values():
+        cx = 20 + (v["x"] - lo) / span * (W - 40)
+        same = v.get("faction") == fac
+        marks.append(f'<circle cx="{cx:.1f}" cy="34" r="{3 if same else 2}" class="pt" '
+                     f'style="--c:{"var(--white)" if same else "var(--dim3)"};opacity:{0.9 if same else 0.35}"/>')
+    cx = 20 + (me["x"] - lo) / span * (W - 40)
+    e1 = 20 + (me["x"] - me["sd"] - lo) / span * (W - 40)
+    e2 = 20 + (me["x"] + me["sd"] - lo) / span * (W - 40)
+    marks.append(f'<line x1="{e1:.1f}" y1="34" x2="{e2:.1f}" y2="34" class="ax" style="stroke-width:2"/>')
+    marks.append(f'<circle cx="{cx:.1f}" cy="34" r="6" style="fill:none;stroke:var(--white);stroke-width:2"/>')
+    return f"""<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Hol áll a tengelyen</span><span class="tag">{hu_num(me["votes"])} igen/nem szavazatból</span></h2>
+  <figure class="chartbox"><svg viewBox="0 0 {W} {H}" role="img"
+    aria-label="{esc(mp_name(inp, azon))} helye a {inp["cycle"]}. ciklus becsült tengelyén">{"".join(marks)}</svg>
+    <figcaption class="hero-meta">Minden pont egy képviselő; a világosak a frakciótársak, a karika ő maga, a
+    vonal a becslés bizonytalansága.</figcaption></figure>
+  <div class="hero-meta prose" style="margin-top:8px">{sentence}
+  A helyek csak ezen a rajzon belül jelentenek valamit: más ciklus számaival nem vethetők össze.
+  <a href="../../modszer/index.html#tengely">Mit mér és mit nem</a>.</div>
+</section>
+"""
+
+
 def build_mp_page(inp: dict, azon: str) -> str:
     mp = inp["mps"][azon]
     # an MP has a dissent channel when a faction plurality exists to differ from: not for a person who ended the
@@ -2869,8 +2949,13 @@ def build_mp_page(inp: dict, azon: str) -> str:
     coms = committees_in_cycle(mp, inp["cycle"])
     com_rows = "".join(f'<tr><td><a href="../bizottsag/{cslug(c["committee"])}.html">{esc(c["committee"] or "")}</a>{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(c["subcommittee"]) + "</span>") if c.get("subcommittee") else ""}</td><td>{esc(c.get("role") or "")}</td>'
                        f'<td class="ts mono">{esc(c.get("from") or "")}{" – " + esc(c["to"]) if c.get("to") else " –"}</td></tr>' for c in coms)
+    # The exports are written only for the live cycles, and the page linked them regardless: two dead links
+    # on every archive member's page. Nothing failed, because nothing checks a link that only exists on a
+    # page nobody had reason to open twice.
+    twin_links = ("" if inp["archive"] else
+                  f' · <a href="{esc(azon)}.csv">CSV</a> · <a href="{esc(azon)}.json">JSON</a>')
     all_votes_panel = ("" if inp["archive"] else f'''<section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel · a legfrissebb elöl · <a href="{esc(azon)}.csv">CSV</a> · <a href="{esc(azon)}.json">JSON</a></span></h2>
+  <h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel · a legfrissebb elöl{twin_links}</span></h2>
   {mp_year_buttons}
   <div class="filters" role="group" aria-label="Szűrés egyezés szerint"><button type="button" data-alf="all" class="on" aria-pressed="true">mind</button><button type="button" data-alf="with" aria-pressed="false">frakcióval</button><button type="button" data-alf="against" aria-pressed="false">frakció ellen</button><button type="button" data-alf="none" aria-pressed="false">nem adott le szavazatot</button><input type="search" data-filter-table="mine" placeholder="tárgy, szám" aria-label="Szűrés tárgyra" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
   <div class="tablewrap"><table id="mine" data-page-size="25" data-counter="rn"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{all_rows}</tbody></table></div>
@@ -2937,8 +3022,9 @@ def build_mp_page(inp: dict, azon: str) -> str:
   <h2><span data-kz-text>Szavazatok a frakció többségével szemben</span><span class="tag">{len(devs)}{f' · <a href="{esc(azon)}.xml" type="application/atom+xml" title="a képviselő különvéleményei Atom-csatornaként">Atom</a>' if has_channel else " · függetlenként nincs frakciótöbbség — csatorna nincs"}</span></h2>
   <div class="tablewrap"><table data-page-size="25"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
 </section>
+{mp_axis_panel(inp, azon)}
 {all_votes_panel}
-{cite_html(inp, f'{cycle_dir(inp["cycle"])}kepviselo/{azon}.html', f'{mp["name"]} ({mp.get("faction") or "—"}), {inp["cycle"]}. ciklus', f'{inp["cycle"]}-{azon}', f'{azon}.json', f'{azon}.csv')}
+{cite_html(inp, f'{cycle_dir(inp["cycle"])}kepviselo/{azon}.html', f'{mp["name"]} ({mp.get("faction") or "—"}), {inp["cycle"]}. ciklus', f'{inp["cycle"]}-{azon}', *(() if inp["archive"] else (f'{azon}.json', f'{azon}.csv')))}
 """ + page_tail(inp, 1)
 
 
@@ -3028,6 +3114,93 @@ def _f2(x) -> str:
     return hu_dec(x, 2)
 
 
+def axis_section(inp: dict) -> str:
+    """The cohesion page's last section: the one axis the roll calls describe, and how well it describes them.
+
+    The agreement matrix above it is a grid of numbers, and the question it cannot answer is whether the grid
+    is really a line. If it is, every figure in it follows from one position per member. That is the whole
+    reason this sits here rather than on a page of its own — and the reason it sits on a per-cycle page is
+    that the positions are not comparable between cycles, so a page showing all ten at once would invite the
+    one comparison the method does not licence.
+
+    The fit is printed beside the picture, not under it. A model that calls 92% of votes right where guessing
+    the majority already calls 82% has found much less than the first number suggests, and the 39th cycle is
+    exactly that case."""
+    ip = ((inp.get("idealpoints") or {}).get("cycles") or {}).get(str(inp["cycle"]))
+    if not ip:
+        return f"""<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Egy tengely</span><span class="tag">nem becsülhető</span></h2>
+  <div class="hero-meta prose">Ebben a ciklusban nincs név szerinti szavazás, amiből a képviselők helyzetét
+  meg lehetne becsülni — a jegyzőkönyv csak frakciónkénti összesítést őrzött meg. Hogy meddig ér el a
+  névsoros rekord és hol szakad meg, azt a <a href="{"../" * (1 + inp["base_depth"])}lefedettseg/index.html">lefedettség</a>
+  lapja rajzolja meg.</div>
+</section>"""
+
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    facs = list(ip["factions"].items())
+    lo = min(v["mean"] - v["sd"] for _, v in facs)
+    hi = max(v["mean"] + v["sd"] for _, v in facs)
+    span = (hi - lo) or 1.0
+    W, ROW = 900, 26
+    H = 26 + ROW * len(facs)
+    bars = []
+    for i, (f, v) in enumerate(facs):
+        y = 18 + i * ROW
+        x1 = 150 + (v["mean"] - v["sd"] - lo) / span * (W - 210)
+        x2 = 150 + (v["mean"] + v["sd"] - lo) / span * (W - 210)
+        cx = 150 + (v["mean"] - lo) / span * (W - 210)
+        c = colour.get(f, "#8a8a8a")
+        bars.append(
+            f'<line x1="{x1:.1f}" y1="{y}" x2="{x2:.1f}" y2="{y}" class="ax" style="stroke:{c};stroke-width:2;opacity:.5"/>'
+            f'<circle cx="{cx:.1f}" cy="{y}" r="4" style="fill:{c}"/>'
+            f'<text x="142" y="{y + 3}" text-anchor="end">{esc(f)}</text>'
+            f'<text x="{cx:.1f}" y="{y - 8}" text-anchor="middle" class="v">{hu_dec(v["mean"], 2)}</text>')
+    # a fit this weak is not a picture to be read straight; say so above it, not in a footnote
+    # The lede names what the axis turned out to be — except where it did not turn out to be that. Claiming
+    # "the two ends are government and opposition" above a paragraph that says the opposite is worse than
+    # saying nothing, and the 39th cycle is exactly that case.
+    second = 100 * ip["second_dimension"]
+    second_line = (f'Egy második vonal ehhez már csak {hu_dec(second, 1)}%-ot tenne hozzá, ezért csak egy van.'
+                   if second < 2 else
+                   f'Egy második vonal még {hu_dec(second, 1)}%-ot tenne hozzá — itt tehát nem elég egy.')
+    # Told before the picture, not after it. A reader who has already read the chart as a finding will not
+    # unread it because of a caveat underneath.
+    weak = ip["apre"] < 0.75 or ip["second_dimension"] > 0.02
+    found = ('A vonal két vége a <b>kormánypártok</b> és az <b>ellenzék</b>. Ezt senki nem mondta meg a '
+             'modellnek: nem tudja, ki kormánypárti és ki ellenzéki, csak azt, ki hogyan szavazott.'
+             if not (ip["apre"] < 0.75 or ip["second_dimension"] > 0.02) else
+             'A sorrendet senki nem adta meg előre — a szavazatokból jött ki, és ebben a ciklusban nem a '
+             'kormány–ellenzék határ mentén.')
+    fit_line = ("" if weak else                       # the warning above already carries these numbers
+                f'Ha minden szavazásnál a többségre tippelnél, a leadott szavazatok '
+                f'<b>{hu_dec(100 * ip["null"], 1)}%-át</b> találnád el. Ezzel a sorrenddel '
+                f'<b>{hu_dec(100 * ip["correct"], 1)}%-át</b> — ennyit tesz hozzá ez az egy vonal. '
+                f'{second_line} ')
+    warn = ("" if not weak else
+            '<div class="hero-meta prose" data-axis="weak" style="margin-top:8px">'
+            '<b>Ebben a ciklusban egy vonal kevés.</b> '
+            f'A többségre tippelve a szavazatok {hu_dec(100 * ip["null"], 1)}%-át találnád el, ezzel a '
+            f'sorrenddel {hu_dec(100 * ip["correct"], 1)}%-át — jóval kisebb a különbség, mint a többi '
+            f'ciklusban, és egy második vonal még {hu_dec(second, 1)}%-ot tenne hozzá. Ami itt kijött, az nem '
+            'is a kormány–ellenzék határ: a legerősebb szembenállás egyetlen frakció és az összes többi '
+            'között húzódik.</div>')
+    return f"""<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Egy tengely</span><span class="tag">{hu_num(ip["members"])} képviselő · {hu_num(ip["votes"])} megosztott szavazás</span></h2>
+  <p class="lede">Amit itt látsz: minden frakció kapott egy helyet egy vonalon — akik együtt szavaznak,
+  egymás mellé kerülnek. {found}</p>
+  {warn}
+  <figure class="chartbox" style="margin-top:12px"><svg viewBox="0 0 {W} {H}" role="img"
+    aria-label="A frakciók helye a becsült tengelyen, {inp["cycle"]}. ciklus">{"".join(bars)}</svg>
+    <figcaption class="hero-meta" data-axis="scale">A pont a frakció átlagos helye, a mellette lévő csík azt mutatja, mennyire
+    szórtak szét a tagjai: a rövid csík egységes frakció, a hosszú megosztott. A számok önmagukban nem
+    jelentenek semmit, csak a távolságok — és <b>csak ezen az egy rajzon belül</b>, mert minden ciklus vonala
+    a saját szavazásaiból készül.</figcaption>
+  </figure>
+  <div class="hero-meta prose" style="margin-top:8px">{fit_line}<a href="{"../" * (1 + inp["base_depth"])}modszer/index.html#tengely">A módszer és a korlátai</a>.</div>
+</section>
+"""
+
+
 def build_cohesion_page(inp: dict, co: dict) -> str:
     """kohezio/index.html — per faction Rice and AI over the cycle, the faction × faction agreement matrix, and per
     faction the least-agreeing MP pairs; formulas named on the page; CSVs beside it."""
@@ -3083,6 +3256,7 @@ def build_cohesion_page(inp: dict, co: dict) -> str:
   <h2><span data-kz-text>Képviselőpárok</span><span class="tag">frakción belül · legalább 20 közös szavazás · <a href="kepviselo_parok.csv">CSV</a></span></h2>
   {"".join(pair_blocks)}
 </section>
+{axis_section(inp)}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}kohezio/index.html', f'Kohézió — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-kohezio')}
 """ + page_tail(inp, 1)
 
@@ -5125,6 +5299,11 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         for key, toks in shards.items():
             iw(idx_dir / f"{key}.json", json.dumps(toks, ensure_ascii=False, separators=(",", ":")))
         prune(idx_dir, iw.written, (".json",))
+        # The previous version's directory is left where it is, locally and on the distribution. A reader
+        # whose cached script is still the old one asks for `idx/` for as long as the script's five minutes
+        # last, and deleting it would turn a working old client into a broken one for the sake of tidiness.
+        # The deploy reports it as an orphan every run, so it is visible rather than forgotten; the next
+        # deploy after the window has long passed can pass --prune.
         sw(spd / SEARCH_META, json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
         sw(spd / "kereses.html", build_speech_search_page(inp, len(meta), sum(1 for r in subs if speech_id(r) in texts_map)))
         prune(spd, sw.written)
@@ -5287,6 +5466,34 @@ def build_method_page(inp: dict) -> str:
 <section class="panel" id="azonositas">{CORNERS}<h2><span data-kz-text>Ki kicsoda</span></h2>
 <div class="hero-meta prose">A névsor „Név (Frakció)” alakban ír, azonosító nélkül. A feloldás sorrendje: (1) a jelenlegi képviselőlista pontos „Név (Frakció)” címkéje; (2) a képviselői adatlapok saját névírása (a Dr., a második keresztnév, az ékezet ott úgy szerepel, ahogy a névsorban); (3) a puszta név minden forrásból (adatlapok, Wikidata címkék). Ha többen jönnek szóba, az marad, akinek az adatlapja szerinti frakciótörténete az adott ciklusban a névsor frakcióját mutatja; aki így sem egyértelmű, feloldatlan marad, névvel. Egy ellenőrzés minden ciklusra: minden feloldott személynek van az adatlapján sora arra a ciklusra, a névsor frakciójával. A Wikidata P4966 azonosítója az API <span class="mono">p_azon</span>-ja.</div></section>
 
+<section class="panel" id="tengely">{CORNERS}<h2><span data-kz-text>A tengely</span></h2>
+<div class="prose">A kohéziós lapok utolsó szakasza minden képviselőnek egy helyet ad egy vonalon, és minden
+szavazásnak egy vágást azon a vonalon. A modell kétparaméteres logisztikus tételválasz-modell (2PL): annak a
+valószínűsége, hogy az <i>i</i> képviselő igent nyom a <i>j</i> szavazáson, σ(a<sub>j</sub>·x<sub>i</sub> +
+b<sub>j</sub>). A tengely jelentését senki nem adja meg előre — az jön ki, ami a szavazatokat a legjobban
+megmagyarázza.
+<h3>Amit nem mond</h3>
+<b>Ciklusok között nem összehasonlítható.</b> Minden ciklus tengelye a saját szavazásaiból készül, közös tétel
+és közös skála nélkül; a 42. ciklus +1,2-je és a 43. ciklus +1,2-je nem ugyanaz a hely. Az összekötéshez
+(„bridging") olyan képviselők vagy tételek kellenének, amik átérnek a ciklusok közt — ezt a becslés nem
+kísérli meg.
+<b>1998 előtt nincs.</b> A 34. ciklusban egyetlen név szerinti szavazás sincs, a 35-ösben egy — nincs miből
+becsülni. Meddig ér el a névsoros rekord: <a href="../lefedettseg/index.html">lefedettség</a>.
+<b>Az irány megállapodás.</b> A tengelynek nincs önmagában vett iránya; a rajz úgy van tájolva, hogy egy minden
+becsülhető ciklusban jelen lévő frakció essen jobbra. Korábban a legnagyobb frakcióra tájoltuk, de az pártot
+váltott a 42. és a 43. ciklus közt, és a kép átrendeződést mutatott volna, ami nem történt meg.
+<h3>Mit jelent, ha rosszul illeszkedik</h3>
+A becslés mellett két szám áll: hány szavazatot talál el a modell, és hányat talál el a puszta többségi szabály.
+A kettő különbsége az egyetlen őszinte válasz arra, hogy ér-e valamit — 92% önmagában soknak hangzik, ha a
+többségi szabály már 82%-ot hoz. Ahol ez a különbség kicsi és a maradékban még szerkezet van, ott a Ház nem egy
+törésvonal mentén szavazott, és a lap ezt kiírja a kép fölé, nem alá.
+<h3>A becslés részletei</h3>
+Csak a megosztott szavazások (legalább 2,5% kisebbség), csak a legalább 20 igen/nem szavazatot leadó képviselők.
+A hiányzó szavazat hiány, nem nulla. A pozíciókon standard normális prior van: nélküle egy olyan képviselő, aki
+soha nem szavazott a saját oldala ellen, tökéletesen elkülöníthető, a likelihoodnak nincs maximuma rá, és a
+becslés elszalad — az első futásban két képviselő +9,5-re került egy egyes szórású skálán. A bizonytalanság
+szavazásokra vett bootstrap. Kód: <span class="mono">scripts/derive_idealpoints.py</span>.</div>
+</section>
 <section class="panel" id="tobbseg">{CORNERS}<h2><span data-kz-text>Többségi szabály és jelenlét</span></h2>
 <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col">kód</th><th scope="col">szabály</th><th scope="col">küszöb</th><th scope="col">alap</th><th scope="col">az API „Szavazási mód” szövege</th><th scope="col">jogszabályi hely</th></tr></thead><tbody>{rule_rows}</tbody></table></div>
 <div class="hero-meta prose" style="margin-top:8px">A szabályt minden szavazásnál az Országgyűlés maga jelöli meg a „Szavazási mód” mezőben; az oldal ebből számolja a küszöböt és összeveti az „Elfogadás” mezővel („számítás egyezik / eltér”). Jelenlévő: aki igennel, nemmel vagy tartózkodással szavazott — a leadott szavazatok, az API „Összes szavazat” mezője; aki „jelen, nem szavazott”, nincs az alapban. Ez nem értelmezés, a jegyzőkönyv dönti el: a 38. ciklus 272 szavazásán mond ellent az Elfogadva/Elutasítva mezőnek, ha a jelen lévő nem szavazókat is beleszámoljuk, és egyen sem, ha nem. Az összes képviselő: az aznap érvényes mandátumok száma (üresedéskor 199-nél kevesebb — egy 2014. december 1-jei kétharmados titkos szavazás 132 igennel ment át: a 197 mandátum kétharmada), ahol az adatlapok ismerik; különben 2014. május 6-a előtt 386, azóta 199. A szabályok jogszabályi helye az Alaptörvény és a Házszabály (10/2014. (II. 24.) OGY határozat) hatályos szövegével egyeztetve (njt.hu, 2026. augusztus 19.); az egyetlen, amire ott nincs alap, az API 2014-es „az összes képviselő 4/5-ével” címkéje.</div></section>

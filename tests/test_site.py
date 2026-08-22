@@ -2251,6 +2251,157 @@ class TheSpeechSearchRanks(unittest.TestCase):
         self.assertNotIn("43,8", html, "a figure from a run that never shipped is back on the page")
 
 
+class TheAxisSaysWhatItKnows(unittest.TestCase):
+    """The one axis the roll calls describe, and the three ways it could lie about itself.
+
+    The first fit put two Fidesz members of cycle 42 at +9.5 on a scale whose standard deviation is one. They
+    were the two most active members in the House — 2,063 votes each, and not one against their own side. A
+    member who is never on the losing side is perfectly separable: the likelihood has no maximum for them and
+    the estimate runs until the iteration count stops it, at a number that looks like an extraordinary finding
+    and is an artefact of arithmetic. Nothing would have flagged it; the page would have named two people as
+    outliers for being the opposite.
+
+    The prior is what bounds it, and these are what keep the prior there."""
+
+    @classmethod
+    def setUpClass(cls):
+        import json as _json
+        f = ROOT / "data" / "derived" / "idealpoints.json"
+        if not f.exists():
+            raise unittest.SkipTest("run: python3 -m scripts.derive_idealpoints")
+        cls.ip = _json.loads(f.read_text(encoding="utf-8"))["cycles"]
+
+    def test_no_position_runs_away(self):
+        """The signature of a runaway estimate is a gap, not a large number.
+
+        My first version of this test bounded |x| at four and failed on cycle 41, where a DK member sits at
+        −5.63. That member voted against the majority 95.9% of the time and their group's mean is −5.58: they
+        are typical of their bloc, and the axis is simply wider in a parliament whose 2,008 divided votes
+        identify the blocs sharply. A prior fixes a scale convention weakly; strong data moves the posterior
+        away from it, which is the arithmetic working rather than failing.
+
+        What separation actually produced was two members at +9.5 with the next highest at +1.2 — a chasm
+        between them and the whole House. So the test is on the chasm."""
+        for cyc, r in self.ip.items():
+            xs = sorted(v["x"] for v in r["positions"].values())
+            span = xs[-1] - xs[0]
+            if len(xs) < 10 or span <= 0:
+                continue
+            # Not the gap below the single most extreme member: the two runaways sat together, so there was
+            # no gap between them and my first version of this check sailed past the very bug it was written
+            # for. The gap that matters is between a HANDFUL of members and the rest, at either end — real
+            # polarisation separates two large blocs, an artefact separates one or two people from everybody.
+            for k in (1, 2, 3):
+                for lo, hi, where in ((xs[k - 1], xs[k], "bottom"), (xs[-k - 1], xs[-k], "top")):
+                    self.assertLess((hi - lo) / span, 0.25,
+                                    f"cycle {cyc}: {k} member(s) at the {where} stand {hi - lo:.2f} clear of "
+                                    f"the rest on a {span:.2f} axis — the mark of an estimate that ran away")
+
+    def test_a_faction_is_not_wider_than_the_house(self):
+        """The symptom the separation produced: one group's internal spread larger than the gap between the
+        blocs, which contradicts every cohesion figure on the same page."""
+        for cyc, r in self.ip.items():
+            means = [v["mean"] for v in r["factions"].values() if v["n"] >= 5]
+            if len(means) < 2:
+                continue
+            span = max(means) - min(means)
+            for f, v in r["factions"].items():
+                if v["n"] >= 5:
+                    self.assertLess(v["sd"], span,
+                                    f"cycle {cyc}: {f} is spread wider ({v['sd']:.2f}) than the whole House ({span:.2f})")
+
+    def test_the_axis_is_oriented_on_something_that_does_not_move(self):
+        """Orienting each cycle so the largest group sits on the right flipped the axis between the 42nd and
+        the 43rd, because the largest group changed party. The same picture would have read as a realignment
+        that never happened."""
+        anchors = {r.get("anchor") for r in self.ip.values()}
+        self.assertEqual(len(anchors), 1, f"the axis is anchored on different groups in different cycles: {anchors}")
+        for cyc, r in self.ip.items():
+            a = r.get("anchor")
+            if a and a in r["factions"]:
+                others = [v["mean"] for f, v in r["factions"].items() if f != a]
+                if others:
+                    self.assertGreater(r["factions"][a]["mean"], min(others),
+                                       f"cycle {cyc}: the anchor is not on the right-hand side")
+
+    def test_a_fit_worth_nothing_is_not_presented_as_a_fit(self):
+        """Cycle 39 classifies 92.1% of votes where guessing the majority already gets 82.0% — an APRE of
+        56% against 90-plus everywhere else, and 5.2% of structure left over. One line cannot hold two
+        cleavages, and the page has to say so above the picture rather than under it."""
+        from scripts.build_site import load_inputs, build_cohesion_page
+        import karzat.analytics as analytics
+        weak = [c for c, r in self.ip.items() if r["apre"] < 0.75 or r["second_dimension"] > 0.03]
+        self.assertIn("39", weak, "cycle 39 no longer measures as the poor fit this test is about")
+        for cyc in weak:
+            inp = load_inputs(int(cyc))
+            html = build_cohesion_page(inp, analytics.cohesion(inp))
+            # On the marker, not the wording: this assertion broke the moment the prose was rewritten
+            # from "tengely" to "vonal", which is a test measuring the copy rather than the contract.
+            self.assertIn('data-axis="weak"', html, f"cycle {cyc} draws a poor fit without saying so")
+
+    def test_the_lede_never_claims_what_the_warning_denies(self):
+        """The panel's opening names what the axis turned out to be — the government/opposition split — and
+        for one cycle in eight that is false. Asserting it above a paragraph that contradicts it is worse
+        than saying nothing, and it is the kind of contradiction that survives review because each half is
+        written and read separately."""
+        from scripts.build_site import load_inputs, build_cohesion_page
+        import karzat.analytics as analytics
+        for cyc, r in self.ip.items():
+            inp = load_inputs(int(cyc))
+            html = build_cohesion_page(inp, analytics.cohesion(inp))
+            weak = r["apre"] < 0.75 or r["second_dimension"] > 0.02
+            claims = "A vonal két vége a <b>kormánypártok</b>" in html
+            self.assertEqual(claims, not weak,
+                             f"cycle {cyc}: the opening {'claims' if claims else 'omits'} the "
+                             f"government/opposition reading on a {'poor' if weak else 'good'} fit")
+
+    def test_the_figures_beside_each_other_add_up(self):
+        """A reader checked the arithmetic and it did not work: the page said the model gets 98.5% right and
+        that a second axis would add 0.2%, leaving 1.5% unaccounted for. The 0.2% was a ratio of singular
+        values from the residual matrix — a fine diagnostic, and not the thing the sentence claimed. It is
+        measured in votes now, so the three numbers on the page are in one currency and can be added."""
+        for cyc, r in self.ip.items():
+            self.assertLessEqual(r["correct"] + r["second_dimension"], 1.0 + 1e-9,
+                                 f"cycle {cyc}: the model and a second axis together call more than every vote")
+            self.assertGreaterEqual(r["correct"], r["null"] - 1e-9,
+                                    f"cycle {cyc}: the model is worse than guessing the majority")
+            self.assertGreaterEqual(r["second_dimension"], 0.0)
+
+    def test_a_cycle_with_no_named_record_gets_no_axis(self):
+        """Cycle 34 has no roll call naming members and cycle 35 has one. An empty chart would imply the
+        estimate was made and came out flat."""
+        from scripts.build_site import load_inputs, build_cohesion_page
+        import karzat.analytics as analytics
+        for cyc in (34, 35):
+            self.assertNotIn(str(cyc), self.ip, f"cycle {cyc} has positions it cannot have")
+            inp = load_inputs(cyc)
+            html = build_cohesion_page(inp, analytics.cohesion(inp))
+            self.assertIn("nem becsülhető", html)
+            self.assertIn("lefedettseg/index.html", html, "the empty state does not point at the coverage page")
+
+    def test_the_page_never_invites_a_comparison_between_cycles(self):
+        """The positions are estimated per cycle from votes the other cycles never saw, so +1.2 here and +1.2
+        there are different places. The claim is easy to make by accident and impossible to see once made."""
+        from scripts.build_site import load_inputs, build_cohesion_page
+        import karzat.analytics as analytics
+        inp = load_inputs(42)
+        html = build_cohesion_page(inp, analytics.cohesion(inp))
+        self.assertIn('data-axis="scale"', html, "the chart has no note about what its numbers mean")
+        cap = html[html.index('data-axis="scale"'):]
+        cap = cap[:cap.index("</figcaption>")]
+        self.assertIn("csak ezen az egy rajzon belül", cap,
+                      "the caption does not say the numbers are confined to this one chart")
+
+    def test_every_position_carries_its_uncertainty(self):
+        """A member with forty votes and one with four thousand are not known to the same accuracy, and a
+        chart drawing them as identical dots says they are."""
+        for cyc, r in self.ip.items():
+            for azon, v in r["positions"].items():
+                self.assertIn("sd", v, f"cycle {cyc} {azon}: no interval")
+                self.assertGreaterEqual(v["sd"], 0.0)
+                self.assertGreaterEqual(v["votes"], 20, "a position estimated from too few votes was kept")
+
+
 class UmbrellaPages(unittest.TestCase):
     """Six pages answer over all ten cycles, and were built with the cycle pages' machinery.
 

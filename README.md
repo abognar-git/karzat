@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 379 tests
+python3 -m unittest discover -s tests -t .      # offline; 388 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -779,6 +779,54 @@ Two more defects on the way, both of which only a real browser would have shown.
 page, so `../assets/…` resolved against the wrong base, became `/assets/assets/…` and 404ed, surfacing only as a
 WebAssembly compile error that named no URL. Every path in the loader is absolute now, and a test greps for a
 relative one.
+
+## One axis, and the parliament it does not fit
+
+The cohesion pages measure how tightly each group votes together and how often any two agree. That second
+table is a ten-by-ten grid, and the question it cannot answer is whether the grid is really a line — because
+if it is, every number in it follows from a single position per member.
+
+`scripts/derive_idealpoints.py` fits the field's standard model to find out: a one-dimensional two-parameter
+logistic item-response model, σ(a·x + b), the arithmetic that scores an exam candidate on a latent ability
+from which questions they answered. Nobody declares what the axis means. It comes out of the votes.
+
+| cycle | model | majority rule | APRE | second dimension |
+|---|---|---|---|---|
+| 43 | 99.7% | 78.0% | 98.5% | 0.2% |
+| 42 | 98.1% | 78.2% | 91.1% | 0.4% |
+| 41 | 98.5% | 75.9% | 93.8% | 0.2% |
+| 40 | 98.0% | 76.4% | 91.7% | 0.7% |
+| **39** | **92.1%** | **82.0%** | **56.0%** | **5.2%** |
+| 38 | 98.4% | 60.8% | 96.0% | 0.3% |
+| 37 | 98.7% | 60.6% | 96.8% | 0.1% |
+| 36 | 97.0% | 67.9% | 90.6% | 0.5% |
+
+Seven parliaments are a line. The eighth is the interesting one. In 2010–14 the model classifies 92.1% of
+votes where guessing each vote's majority already gets 82.0%, and 5.2% of structure is left over — so the fit
+is much weaker than the raw percentage suggests, which is why the null model is printed beside it. Looking at
+what the axis found there: Jobbik at one extreme and everyone else bunched at the other, with Fidesz and MSZP
+close together despite their majorities voting the same way in only 26% of divided votes. One line cannot hold
+two cleavages, and rather than pick one it splits the difference. The page says so above the chart.
+
+Two mistakes on the way, both of the kind that produce a plausible number with a false explanation.
+
+The first fit put two Fidesz members of cycle 42 at +9.5 on a scale whose standard deviation is one. They were
+the two most active members in the House — 2,063 votes each, not one against their own side. A member who is
+never on the losing side is perfectly separable: the likelihood has no maximum for them and the estimate runs
+until the iteration count stops it. Published, it would have named two people as extremists for being the most
+disciplined members present. A standard normal prior bounds it, and that is the whole of what "bayesian" is
+doing in the name of the method — Fidesz's internal spread fell from 1.23 to 0.10.
+
+The second was orientation. The axis has no inherent direction, so each cycle was turned to put the largest
+group on the right — and the largest group changed party between the 42nd and the 43rd, so the axis flipped
+meaning between two adjacent parliaments and the same picture would have read as a realignment that never
+happened. It anchors on a group present in every estimable cycle instead.
+
+The positions are not comparable between cycles: each is estimated from votes the others never saw, so +1.2
+here and +1.2 there are different places. That is also why this lives on the per-cycle cohesion page and not
+on a page of its own — a page showing all eight at once would invite the one comparison the method does not
+licence. Cycles 34 and 35 have no named roll calls at all and get an empty state pointing at the coverage
+page, because an empty chart would imply the estimate was made and came out flat.
 
 ## The search that did not rank
 

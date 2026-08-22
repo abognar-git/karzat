@@ -132,6 +132,9 @@ def main(argv: list[str] | None = None) -> int:
                  ["-m", "scripts.derive_echo", "--cycle", str(CURRENT_CYCLE)],
                  ["-m", "scripts.derive_faction_switches"],
                  ["-m", "scripts.derive_facts"], ["-m", "scripts.derive_parquet"],
+                 # after the parquet, which it reads; and only the open cycle, because a closed parliament's
+                 # votes are finished and refitting all eight takes a quarter of an hour every night
+                 ["-m", "scripts.derive_idealpoints", "--cycle", str(CURRENT_CYCLE)],
                  # last of all: the receipt hashes what everything above just wrote
                  ["-m", "scripts.derive_receipt"]):
         run(py + step, dry=dry, allow_fail=True)
