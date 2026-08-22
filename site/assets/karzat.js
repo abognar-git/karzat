@@ -121,17 +121,19 @@
 
 (function(){
   // felszolalas/kereses.html: terms are AND-ed; each term matches tokens by prefix (3+ letters, accents folded); the index
-  // is sharded by the token's first two letters (idx/xx.json), the results table lists the speeches newest first and
+  // is sharded by the token's first two letters (idx2/xx.json; the digit is a format version, see the builder), the results table lists the speeches newest first and
   // fetches the visible pages' texts for a snippet.
   var q = document.getElementById('spq'), body = document.getElementById('spres'), n = document.getElementById('spn'), table = body && body.closest('table');
+  var byDate = document.getElementById('spdate');
+  var SHOW_MAX = 200;        // rows built into the table; the pager walks these twenty at a time
   if (!q || !body) return;
   function fold(s){ return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   var meta = null, metaFailed = false, metaWaiters = [], shards = {}, texts = {}, seq = 0;
   function get(url, cb){ var x = new XMLHttpRequest(); x.open('GET', url); x.onload = function(){ if (x.status >= 400) return cb(null); try { cb(JSON.parse(x.responseText)); } catch (e) { cb(null); } }; x.onerror = function(){ cb(null); }; x.send(); }
-  function shard2(key, cb){ if (shards[key] !== undefined) return cb(shards[key]); get('idx/' + key + '.json', function(d){ shards[key] = d || {}; cb(shards[key]); }); }
+  function shard2(key, cb){ if (shards[key] !== undefined) return cb(shards[key]); get('idx2/' + key + '.json', function(d){ shards[key] = d || {}; cb(shards[key]); }); }
   function shard(term, cb){ shard2(term.slice(0, 2), function(sh){ if (sh && sh.__split) shard2(term.slice(0, 3), cb); else cb(sh); }); }   // a big two-letter shard is split by the third letter
-  function withMeta(cb){ if (meta) return cb(); if (metaFailed) return cb(); metaWaiters.push(cb); if (metaWaiters.length > 1) return; get('meta.json', function(d){ if (d) meta = d; else metaFailed = true; var w = metaWaiters; metaWaiters = []; w.forEach(function(f){ f(); }); }); }
+  function withMeta(cb){ if (meta) return cb(); if (metaFailed) return cb(); metaWaiters.push(cb); if (metaWaiters.length > 1) return; get('meta2.json', function(d){ if (d) meta = d; else metaFailed = true; var w = metaWaiters; metaWaiters = []; w.forEach(function(f){ f(); }); }); }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
   function search(){
@@ -143,20 +145,60 @@
     withMeta(step);
     terms.forEach(function(t, i){
       shard(t, function(sh){
-        var ids = {};
-        for (var k in sh) if (k !== '__split' && k.indexOf(t) === 0) { var arr = sh[k]; for (var j = 0; j < arr.length; j++) ids[arr[j]] = 1; }
-        sets[i] = ids; step();
+        // One typed word can match many indexed tokens by prefix, and BM25 wants them treated as one term:
+        // its frequency in a document is the sum over the tokens that matched, and its document frequency is
+        // the number of documents any of them reached.
+        var tf = {};
+        for (var k in sh) if (k !== '__split' && k.indexOf(t) === 0) {
+          var arr = sh[k];
+          for (var j = 0; j + 1 < arr.length; j += 2) tf[arr[j]] = (tf[arr[j]] || 0) + arr[j + 1];
+        }
+        sets[i] = tf; step();
       });
     });
     function render(){
-      if (!meta) { body.innerHTML = '<tr><td colspan="3" class="hero-meta">A kereső listája (meta.json) nem tölthető be.</td></tr>'; n.textContent = ''; return; }
+      if (!meta) { body.innerHTML = '<tr><td colspan="3" class="hero-meta">A kereső listája (meta2.json) nem tölthető be.</td></tr>'; n.textContent = ''; return; }
+      // Ranked, not filtered. Requiring every word and then ordering by date is what this page did, and on
+      // 492 questions the record answers for itself it put the right speech in the first ten 7.7% of the
+      // time — a long question matched almost nothing, and what it matched came back by accident of date.
+      // BM25 over the same index finds 40.6% — the figure the page quotes comes from
+      // data/derived/search_bench.json, and this comment is the last place a copy of it lives by hand. A word that appears in half the speeches counts for little; a
+      // word that appears in twelve counts for a great deal; a short speech saying it twice beats a long one
+      // saying it twice. Nothing here is new to information retrieval, and none of it was on this page.
+      var N = meta.length, k1 = 1.5, bb = 0.75, avg = 0;
+      for (var i = 0; i < N; i++) avg += (meta[i][7] || 0);
+      avg = avg / Math.max(1, N) || 1;
+      var score = {}, any = false;
+      for (var s = 0; s < sets.length; s++) {
+        var df = 0, tfs = sets[s];
+        for (var kk in tfs) df++;
+        if (!df) continue;
+        var idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
+        for (var d in tfs) {
+          var f = tfs[d], dl = meta[d][7] || avg;
+          score[d] = (score[d] || 0) + idf * f * (k1 + 1) / (f + k1 * (1 - bb + bb * dl / avg));
+          any = true;
+        }
+      }
       var hits = [];
-      for (var i = 0; i < meta.length; i++) { var ok = true; for (var s = 0; s < sets.length; s++) { if (!sets[s][i]) { ok = false; break; } } if (ok) hits.push(i); }
-      hits.reverse();                                                       // ids are chronological: newest first
+      if (any) { for (var d2 in score) hits.push(+d2);
+                 hits.sort(function(a, b){ return score[b] - score[a] || b - a; }); }
+      if (byDate && byDate.checked) hits.sort(function(a, b){ return b - a; });   // ids are chronological
+      // Dropping the requirement that every word appear turns a sentence-length question into most of the
+      // corpus: "a magyar gazdaság helyzete és a jövő évi költségvetés" scores 19,602 of cycle 40's 24,365
+      // speeches, and building a row for each of them is five megabytes of HTML into innerHTML — the tab
+      // stops responding. Ranked results have a long tail by construction and nobody reads past the first
+      // page of it; the cut is stated rather than silent, because a hidden cut is how a search comes to look
+      // like it found nothing beyond what it showed.
+      var scored = hits.length;
+      if (hits.length > SHOW_MAX) hits = hits.slice(0, SHOW_MAX);
       body.innerHTML = hits.map(function(i){ var m = meta[i]; var who = m[3] ? '<a href="../kepviselo/' + esc(m[3]) + '.html">' + esc(m[2]) + '</a>' : esc(m[2]);
         return '<tr data-i="' + i + '"><td class="ts mono"><a href="' + esc(m[0]) + '.html">' + esc(m[1]) + '</a></td><td>' + who + '<span class="sub">' + esc(m[4] || '') + (m[6] ? ' · ' + esc(m[6]) : '') + '</span></td><td>' + esc(m[5] || '') + '<span class="snip"></span></td></tr>'; }).join('')
         || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
-      n.textContent = hits.length + ' találat';
+      n.textContent = (scored > hits.length
+        ? 'a legjobb ' + hits.length + ' a ' + scored.toLocaleString('hu-HU') + ' találatból'
+        : hits.length + ' találat')
+        + (any && !(byDate && byDate.checked) ? ' · relevancia szerint' : '');
       if (window.__karzatRerender && table) window.__karzatRerender(table, true);
       snippets(terms);
     }
@@ -181,6 +223,10 @@
       if (texts[m[0]]) fill(texts[m[0]]); else get(m[0] + '.json', function(d){ texts[m[0]] = d; fill(d); });
     });
   }
+  // The order switch had no listener at all: ticking it changed nothing until the reader happened to
+  // type another character, at which point the results silently rearranged themselves. A control that
+  // does nothing when used is worse than one that is not there.
+  if (byDate) byDate.addEventListener('change', search);
   q.addEventListener('input', function(){ syncUrl(); search(); });
   if (table) table.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('button')) setTimeout(function(){ snippets((fold(q.value).match(/[a-z0-9]{3,}/g) || [])); }, 50); });
   document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('nav.pgr button'); if (b && table && b.closest('nav.pgr') && b.closest('nav.pgr').previousElementSibling && b.closest('nav.pgr').previousElementSibling.contains(table)) setTimeout(function(){ snippets((fold(q.value).match(/[a-z0-9]{3,}/g) || [])); }, 50); });

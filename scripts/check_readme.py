@@ -60,6 +60,17 @@ if _PQ:
         _t = _pqf.read_table(_lp, columns=["ciklus", "szavazas_id", "sorszam"])
         PQ_MULTI = sum(1 for n in _t.column("sorszam") if n.as_py() == 2)
 
+_SB = _json.loads((ROOT / "data" / "derived" / "search_bench.json").read_text(encoding="utf-8")) \
+    if (ROOT / "data" / "derived" / "search_bench.json").exists() else {"cycles": {}}
+
+
+def sb(cycle: int, which: str, field: str) -> float:
+    """A figure the search benchmark measured. Typed once into the page, drifted by three points, and the
+    test that guarded it asserted the drifted value — so the README's copy is gated like every other number."""
+    c = (_SB.get("cycles") or {}).get(str(cycle)) or {}
+    v = (c.get(which) or {}).get(field, 0)
+    return 100 * v if field == "recall10" else v
+
 README = ROOT / "README.md"
 FACTIONS = ROOT / "config" / "factions.yml"
 
@@ -209,6 +220,10 @@ def build() -> list[tuple[str, list]]:
          [pqb("szavazatok"), pqb()]),
         ("drops the rest: {:,.0f} of\n{:,.0f} name more than one", [PQ_MULTI, pqt("szavazasok")]),
         ("carries all {:,.0f} of\nthem", [pqt("szavazas_iromany")]),
+        ("| every word required, newest first | {:.1f}% | {:.3f} | — |",
+         [sb(42, "was", "recall10"), sb(42, "was", "mrr")]),
+        ("| **the same index, scored by BM25** | **{:.1f}%** | **{:.3f}** | **nothing** |",
+         [sb(42, "now", "recall10"), sb(42, "now", "mrr")]),
         ("# offline; {:,.0f} tests", [tc["_total"]]),
         ("classifier with provenance; {:,.0f} tests", [tc.get("test_majority", 0)]),
         ("newest vote, last sync; {:,.0f} tests", [tc.get("test_freshness", 0)]),

@@ -261,6 +261,8 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     szoszolok = load_json(sz_path) if (cycle == CURRENT_CYCLE and sz_path.exists()) else None                      # so is the spokesperson list
     km_path = DERIVED / "kormany.json"
     kormany = load_json(km_path) if (cycle == CURRENT_CYCLE and km_path.exists()) else None                        # the ministerial bench's non-MP members
+    sbf = DERIVED / "search_bench.json"
+    search_bench = load_json(sbf) if sbf.exists() else {}
     pqf = DERIVED / "parquet.json"
     parquet = load_json(pqf) if pqf.exists() else {}
     rc_path = DERIVED / "receipt.json"
@@ -277,7 +279,7 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "search_bench": search_bench, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -1385,17 +1387,19 @@ JS_CITE = """
 JS_SPEECHSEARCH = """
 (function(){
   // felszolalas/kereses.html: terms are AND-ed; each term matches tokens by prefix (3+ letters, accents folded); the index
-  // is sharded by the token's first two letters (idx/xx.json), the results table lists the speeches newest first and
+  // is sharded by the token's first two letters (idx2/xx.json; the digit is a format version, see the builder), the results table lists the speeches newest first and
   // fetches the visible pages' texts for a snippet.
   var q = document.getElementById('spq'), body = document.getElementById('spres'), n = document.getElementById('spn'), table = body && body.closest('table');
+  var byDate = document.getElementById('spdate');
+  var SHOW_MAX = 200;        // rows built into the table; the pager walks these twenty at a time
   if (!q || !body) return;
   function fold(s){ return String(s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase(); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   var meta = null, metaFailed = false, metaWaiters = [], shards = {}, texts = {}, seq = 0;
   function get(url, cb){ var x = new XMLHttpRequest(); x.open('GET', url); x.onload = function(){ if (x.status >= 400) return cb(null); try { cb(JSON.parse(x.responseText)); } catch (e) { cb(null); } }; x.onerror = function(){ cb(null); }; x.send(); }
-  function shard2(key, cb){ if (shards[key] !== undefined) return cb(shards[key]); get('idx/' + key + '.json', function(d){ shards[key] = d || {}; cb(shards[key]); }); }
+  function shard2(key, cb){ if (shards[key] !== undefined) return cb(shards[key]); get('idx2/' + key + '.json', function(d){ shards[key] = d || {}; cb(shards[key]); }); }
   function shard(term, cb){ shard2(term.slice(0, 2), function(sh){ if (sh && sh.__split) shard2(term.slice(0, 3), cb); else cb(sh); }); }   // a big two-letter shard is split by the third letter
-  function withMeta(cb){ if (meta) return cb(); if (metaFailed) return cb(); metaWaiters.push(cb); if (metaWaiters.length > 1) return; get('meta.json', function(d){ if (d) meta = d; else metaFailed = true; var w = metaWaiters; metaWaiters = []; w.forEach(function(f){ f(); }); }); }
+  function withMeta(cb){ if (meta) return cb(); if (metaFailed) return cb(); metaWaiters.push(cb); if (metaWaiters.length > 1) return; get('meta2.json', function(d){ if (d) meta = d; else metaFailed = true; var w = metaWaiters; metaWaiters = []; w.forEach(function(f){ f(); }); }); }
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
   function search(){
@@ -1407,20 +1411,60 @@ JS_SPEECHSEARCH = """
     withMeta(step);
     terms.forEach(function(t, i){
       shard(t, function(sh){
-        var ids = {};
-        for (var k in sh) if (k !== '__split' && k.indexOf(t) === 0) { var arr = sh[k]; for (var j = 0; j < arr.length; j++) ids[arr[j]] = 1; }
-        sets[i] = ids; step();
+        // One typed word can match many indexed tokens by prefix, and BM25 wants them treated as one term:
+        // its frequency in a document is the sum over the tokens that matched, and its document frequency is
+        // the number of documents any of them reached.
+        var tf = {};
+        for (var k in sh) if (k !== '__split' && k.indexOf(t) === 0) {
+          var arr = sh[k];
+          for (var j = 0; j + 1 < arr.length; j += 2) tf[arr[j]] = (tf[arr[j]] || 0) + arr[j + 1];
+        }
+        sets[i] = tf; step();
       });
     });
     function render(){
-      if (!meta) { body.innerHTML = '<tr><td colspan="3" class="hero-meta">A kereső listája (meta.json) nem tölthető be.</td></tr>'; n.textContent = ''; return; }
+      if (!meta) { body.innerHTML = '<tr><td colspan="3" class="hero-meta">A kereső listája (meta2.json) nem tölthető be.</td></tr>'; n.textContent = ''; return; }
+      // Ranked, not filtered. Requiring every word and then ordering by date is what this page did, and on
+      // 492 questions the record answers for itself it put the right speech in the first ten 7.7% of the
+      // time — a long question matched almost nothing, and what it matched came back by accident of date.
+      // BM25 over the same index finds 40.6% — the figure the page quotes comes from
+      // data/derived/search_bench.json, and this comment is the last place a copy of it lives by hand. A word that appears in half the speeches counts for little; a
+      // word that appears in twelve counts for a great deal; a short speech saying it twice beats a long one
+      // saying it twice. Nothing here is new to information retrieval, and none of it was on this page.
+      var N = meta.length, k1 = 1.5, bb = 0.75, avg = 0;
+      for (var i = 0; i < N; i++) avg += (meta[i][7] || 0);
+      avg = avg / Math.max(1, N) || 1;
+      var score = {}, any = false;
+      for (var s = 0; s < sets.length; s++) {
+        var df = 0, tfs = sets[s];
+        for (var kk in tfs) df++;
+        if (!df) continue;
+        var idf = Math.log(1 + (N - df + 0.5) / (df + 0.5));
+        for (var d in tfs) {
+          var f = tfs[d], dl = meta[d][7] || avg;
+          score[d] = (score[d] || 0) + idf * f * (k1 + 1) / (f + k1 * (1 - bb + bb * dl / avg));
+          any = true;
+        }
+      }
       var hits = [];
-      for (var i = 0; i < meta.length; i++) { var ok = true; for (var s = 0; s < sets.length; s++) { if (!sets[s][i]) { ok = false; break; } } if (ok) hits.push(i); }
-      hits.reverse();                                                       // ids are chronological: newest first
+      if (any) { for (var d2 in score) hits.push(+d2);
+                 hits.sort(function(a, b){ return score[b] - score[a] || b - a; }); }
+      if (byDate && byDate.checked) hits.sort(function(a, b){ return b - a; });   // ids are chronological
+      // Dropping the requirement that every word appear turns a sentence-length question into most of the
+      // corpus: "a magyar gazdaság helyzete és a jövő évi költségvetés" scores 19,602 of cycle 40's 24,365
+      // speeches, and building a row for each of them is five megabytes of HTML into innerHTML — the tab
+      // stops responding. Ranked results have a long tail by construction and nobody reads past the first
+      // page of it; the cut is stated rather than silent, because a hidden cut is how a search comes to look
+      // like it found nothing beyond what it showed.
+      var scored = hits.length;
+      if (hits.length > SHOW_MAX) hits = hits.slice(0, SHOW_MAX);
       body.innerHTML = hits.map(function(i){ var m = meta[i]; var who = m[3] ? '<a href="../kepviselo/' + esc(m[3]) + '.html">' + esc(m[2]) + '</a>' : esc(m[2]);
         return '<tr data-i="' + i + '"><td class="ts mono"><a href="' + esc(m[0]) + '.html">' + esc(m[1]) + '</a></td><td>' + who + '<span class="sub">' + esc(m[4] || '') + (m[6] ? ' · ' + esc(m[6]) : '') + '</span></td><td>' + esc(m[5] || '') + '<span class="snip"></span></td></tr>'; }).join('')
         || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
-      n.textContent = hits.length + ' találat';
+      n.textContent = (scored > hits.length
+        ? 'a legjobb ' + hits.length + ' a ' + scored.toLocaleString('hu-HU') + ' találatból'
+        : hits.length + ' találat')
+        + (any && !(byDate && byDate.checked) ? ' · relevancia szerint' : '');
       if (window.__karzatRerender && table) window.__karzatRerender(table, true);
       snippets(terms);
     }
@@ -1445,6 +1489,10 @@ JS_SPEECHSEARCH = """
       if (texts[m[0]]) fill(texts[m[0]]); else get(m[0] + '.json', function(d){ texts[m[0]] = d; fill(d); });
     });
   }
+  // The order switch had no listener at all: ticking it changed nothing until the reader happened to
+  // type another character, at which point the results silently rearranged themselves. A control that
+  // does nothing when used is worse than one that is not there.
+  if (byDate) byDate.addEventListener('change', search);
   q.addEventListener('input', function(){ syncUrl(); search(); });
   if (table) table.addEventListener('click', function(e){ if (e.target.closest && e.target.closest('button')) setTimeout(function(){ snippets((fold(q.value).match(/[a-z0-9]{3,}/g) || [])); }, 50); });
   document.addEventListener('click', function(e){ var b = e.target.closest && e.target.closest('nav.pgr button'); if (b && table && b.closest('nav.pgr') && b.closest('nav.pgr').previousElementSibling && b.closest('nav.pgr').previousElementSibling.contains(table)) setTimeout(function(){ snippets((fold(q.value).match(/[a-z0-9]{3,}/g) || [])); }, 50); });
@@ -3206,6 +3254,25 @@ def runtime_wire_bytes() -> int:
     return total
 
 
+def build_moved_page(inp: dict, href: str, name: str) -> str:
+    """A page that used to be somewhere else, saying so and pointing at where it went.
+
+    A static site cannot answer 301, and a bare 404 tells a reader with an old link nothing about whether the
+    thing still exists. This says both: the address changed, the page did not."""
+    return page_head(f"{name} · karzat", f"Ez az oldal átköltözött: {name}.", 1) + \
+        topbar(inp, [(name.lower(), None)], 1) + f"""
+<div class="hero-h"><h1>Átköltözött</h1></div>
+<p class="lede">Ez az oldal új címre került: <a href="{esc(href)}">{esc(name)}</a>. A tartalom megvan, csak
+máshol — és többet tud, mint amikor itt volt.</p>
+<section class="panel deep">{CORNERS}
+  <h2><span data-kz-text>Hova tovább</span></h2>
+  <div class="hero-meta prose"><a href="{esc(href)}">{esc(name)}</a> — a teljes név szerinti szavazási rekord
+  SQL-lel kérdezve a saját böngésződben. Ha könyvjelződ volt ide, érdemes frissíteni.</div>
+</section>
+<meta http-equiv="refresh" content="5; url={esc(href)}">
+""" + page_tail(inp, 1)
+
+
 def build_report_page(inp: dict) -> str:
     """riport/index.html — the corpus queried in the reader's own browser, with no server anywhere.
 
@@ -4646,25 +4713,29 @@ def speech_search_index(inp: dict) -> tuple[list[list], dict[str, dict[str, list
     are in the meta (they list, they do not match)."""
     texts = (inp["texts"] or {}).get("texts") or {}
     meta: list[list] = []
-    shards: dict[str, dict[str, list[int]]] = {}
+    shards: dict[str, dict[str, list[int]]] = {}     # token -> [doc, tf, doc, tf, …]
     for i, r in enumerate(substantive_rows(inp)):
         sid = speech_id(r)
         t = texts.get(sid)
         azon = (t or {}).get("azon") or r.get("azon")               # the payload's own id first, the list's resolution otherwise
+        toks = fold_tokens(" ".join(t["paragraphs"])) if t else []
         meta.append([sid, r["date"], r.get("name") or r.get("speaker_label") or "—", azon if azon in inp["mps"] else None, r.get("kind"), cut(r.get("event") or "", 90),
-                     hu_mmss(r["duration_s"]) if r.get("duration_s") else None])
+                     hu_mmss(r["duration_s"]) if r.get("duration_s") else None, len(toks)])
         if not t:
             continue
-        seen: set[str] = set()
-        for tok in fold_tokens(" ".join(t["paragraphs"])):
-            if tok in seen:
-                continue
-            seen.add(tok)
-            shards.setdefault(tok[:2], {}).setdefault(tok, []).append(i)
+        # How often, not merely whether. The postings used to be a set of document ids, which is all a boolean
+        # AND needs and all the page could do with them: match every term, then order by date. Measured against
+        # 492 queries the record supplies its own answers to, that search finds 7.7% of the right speeches in
+        # its first ten. The same terms scored by BM25 find 40.6% — the count is what the ranking is made of.
+        # (Both are cycle 42's, from scripts/bench_search.py. An earlier draft of these comments said
+        # 43.8%, which came from a six-character stemmer that never shipped, and the page copied it.)
+        from collections import Counter as _C
+        for tok, tf in _C(toks).items():
+            shards.setdefault(tok[:2], {}).setdefault(tok, []).extend((i, min(tf, 255)))
     # a two-letter shard past the size limit is split into three-letter shards; a stub tells the script where to look
     out: dict[str, dict] = {}
     for key, toks in shards.items():
-        size = sum(len(k) + 4 + 6 * len(v) for k, v in toks.items())        # a rough JSON byte estimate
+        size = sum(len(k) + 4 + 4 * len(v) for k, v in toks.items())        # a rough JSON byte estimate
         if size > SHARD_LIMIT:
             out[key] = {"__split": 1}
             for k, v in toks.items():
@@ -4673,6 +4744,12 @@ def speech_search_index(inp: dict) -> tuple[list[list], dict[str, dict[str, list
             out[key] = toks
     return meta, out
 
+
+# Bumped whenever the shape of a posting list or a meta row changes, because both are cached for a
+# day and the script that reads them for five minutes. The version is in the path, not in the file:
+# a marker inside would still be fetched from the stale cache that holds the old shape.
+SEARCH_INDEX_DIR = "idx2"
+SEARCH_META = "meta2.json"
 
 SHARD_LIMIT = 250_000      # bytes of JSON, roughly; above it a first-two-letters shard is split by the third letter
 
@@ -4750,17 +4827,44 @@ def build_day_page(inp: dict, ulnap: int, day_rows: list[dict], texts: dict) -> 
 """ + page_tail(inp, 1)
 
 
+def search_bench_sentence(inp: dict) -> str:
+    """What the bench measured, in a sentence, from the file it wrote.
+
+    These two figures were typed into the page from a run I did by hand with a different tokeniser, and they
+    had drifted three points before anybody read them — in a project that gates its README on exactly this
+    mistake. A page does not get told what it scores; it looks it up."""
+    cyc = inp["cycle"]
+    all_b = (inp.get("search_bench") or {}).get("cycles") or {}
+    b = all_b.get(str(cyc)) or {}
+    if not b:                                    # a cycle with too few bills to ask about borrows the largest
+        cyc = max((int(k) for k in all_b), key=lambda k: all_b[str(k)]["questions"], default=0)
+        b = all_b.get(str(cyc)) or {}
+    if not b:
+        return ("a változás mérése a <span class=\"mono\">scripts/bench_search.py</span> paranccsal "
+                "reprodukálható.")
+    return (f'a {cyc}. ciklus {hu_num(b["questions"])} kérdésén mérve — egy iromány tárgya a kérdés, a '
+            f'hozzá benyújtott felszólalások a jó válaszok — az a keresés az első tíz találat közé a jó '
+            f'felszólalást az esetek {hu_dec(100 * b["was"]["recall10"], 1)}%-ában tette be, ez pedig '
+            f'{hu_dec(100 * b["now"]["recall10"], 1)}%-ában '
+            f'(<span class="mono">scripts/bench_search.py</span>).')
+
+
 def build_speech_search_page(inp: dict, n_meta: int, n_texts: int) -> str:
     """felszolalas/kereses.html — a box over the fetched speech texts of the cycle."""
+    bench_txt = search_bench_sentence(inp)
     return page_head(f'Keresés a felszólalásokban · {inp["cycle"]}. ciklus · karzat', f'Szókeresés a {inp["cycle"]}. ciklus felszólalásainak jegyzőkönyvi szövegében: előtag szerint, ékezet nélkül is; a találatok szövegrészlettel.', 1 + inp["base_depth"]) + \
         topbar(inp, [("felszólalások", "index.html"), ("keresés", None)], 1) + f"""
 <div class="hero-h"><h1>Keresés a felszólalásokban</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(n_meta)} érdemi felszólalás · {hu_num(n_texts)} szöveg betöltve</small></div>
 <section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Keresés</span><span class="tag">szó eleje szerint · ékezet nélkül is · több szó: mind szerepel</span></h2>
-  <div class="filters"><input id="spq" type="search" placeholder="pl. oktatás · MÁV · vasút · adó" aria-label="Keresés a szövegekben" autofocus style="min-width:min(100%,420px)"><span class="n" id="spn" aria-live="polite"></span></div>
+  <h2><span data-kz-text>Keresés</span><span class="tag">szó eleje szerint · ékezet nélkül is · relevancia szerint rendezve</span></h2>
+  <div class="filters"><input id="spq" type="search" placeholder="pl. oktatás · MÁV · vasút · adó" aria-label="Keresés a szövegekben" autofocus style="min-width:min(100%,420px)"><span class="n" id="spn" aria-live="polite"></span>
+  <label class="sub" style="margin-left:10px"><input type="checkbox" id="spdate"> időrendben</label></div>
   <div class="tablewrap"><table data-page-size="20"><thead><tr><th scope="col">Nap</th><th scope="col">Felszólaló</th><th scope="col">Napirendi pont · részlet</th></tr></thead><tbody id="spres"><tr><td colspan="3" class="hero-meta">Kezdj el gépelni (legalább három betű).</td></tr></tbody></table></div>
   <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle: a napok listája az <a href="index.html">előző oldalon</a>, a szövegek a napok lapjairól.</div></noscript>
-  <div class="hero-meta prose" style="margin-top:8px">A keresés a szó elejére illeszt („oktat” megtalálja az oktatást, oktatásit, oktatásügyet), legalább három betűtől, ékezetek nélkül is; több szó esetén mindegyiknek szerepelnie kell a szövegben. Szótövezés nincs. Csak a betöltött szövegekben keres; a szövegrészlet a jegyzőkönyvből való, a találat oldalán a teljes szöveg. A napok listái és a szövegek: <span class="mono">felszolalas/</span>; kulcsszóra figyelni csatornán: <a href="../feed/index.html">értesítések</a>.</div>
+  <div class="hero-meta prose" style="margin-top:8px">A keresés a szó elejére illeszt („oktat” megtalálja az oktatást, oktatásit, oktatásügyet), legalább három betűtől, ékezetek nélkül is; több szó esetén nem kell mindegyiknek szerepelnie: a találatok relevancia
+  szerint állnak sorban (BM25), tehát az számít, hány kifejezés illeszkedik, mennyire ritkák, és milyen hosszú a
+  felszólalás, ami tartalmazza őket. Korábban minden szót megkövetelt a kereső, és a találatokat dátum szerint
+  adta vissza; {bench_txt} Időrendet a fenti kapcsolóval kérhetsz. Szótövezés nincs. Csak a betöltött szövegekben keres; a szövegrészlet a jegyzőkönyvből való, a találat oldalán a teljes szöveg. A napok listái és a szövegek: <span class="mono">felszolalas/</span>; kulcsszóra figyelni csatornán: <a href="../feed/index.html">értesítések</a>.</div>
 </section>
 """ + page_tail(inp, 1)
 
@@ -5009,12 +5113,19 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         for uln, day_rows in by_day.items():
             sw(spd / f"nap{uln}.html", build_day_page(inp, uln, day_rows, texts_map))
         meta, shards = speech_search_index(inp)
-        idx_dir = spd / "idx"; idx_dir.mkdir(parents=True, exist_ok=True)
+        # The index lives at a versioned address, and the reason is a window this project measured rather than
+        # imagined. A shard used to hold [doc, doc, …]; it now holds [doc, tf, doc, tf, …]. The JSON is cached
+        # for a day and the script for five minutes, so after a deploy a returning reader has the new code and
+        # the old index for up to twenty-four hours — and the new code reads a document id as a frequency:
+        # two postings in five vanish and the rest score on numbers that mean nothing. Silently, plausibly.
+        # A new path cannot be answered from a cache that has never seen it, which is the only fix that does
+        # not depend on timing. The old `idx/` is left behind and the deploy now reports it as an orphan.
+        idx_dir = spd / SEARCH_INDEX_DIR; idx_dir.mkdir(parents=True, exist_ok=True)
         iw = _Writer()
         for key, toks in shards.items():
             iw(idx_dir / f"{key}.json", json.dumps(toks, ensure_ascii=False, separators=(",", ":")))
         prune(idx_dir, iw.written, (".json",))
-        sw(spd / "meta.json", json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
+        sw(spd / SEARCH_META, json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
         sw(spd / "kereses.html", build_speech_search_page(inp, len(meta), sum(1 for r in subs if speech_id(r) in texts_map)))
         prune(spd, sw.written)
         kmd = out_dir / "kepviselom"; kmd.mkdir(parents=True, exist_ok=True)
@@ -6392,6 +6503,14 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         if (inp.get("parquet") or {}).get("tables"):                             # the corpus, queryable in a browser
             qd_ = out_dir / "riport"; qd_.mkdir(parents=True, exist_ok=True)
             (qd_ / "index.html").write_text(build_report_page(wide_inp), encoding="utf-8")
+            # The page was `sql/` until it was renamed, and the deploy uploads without pruning, so the old
+            # address stayed live — serving a page that queries `faction` against a table that now says
+            # `frakcio`. A reader with the old link got a binder error, which is worse than a missing page:
+            # it looks like the data is broken rather than the address. A rename owes its old address a
+            # forwarding note, and the note is generated so it cannot drift from where it points.
+            sq_ = out_dir / "sql"; sq_.mkdir(parents=True, exist_ok=True)
+            (sq_ / "index.html").write_text(build_moved_page(wide_inp, "../riport/index.html", "Riport"),
+                                            encoding="utf-8")
         if (inp.get("switches") or {}).get("items"):                             # every mid-term change of faction
             fd_ = out_dir / "frakciovaltas"; fd_.mkdir(parents=True, exist_ok=True)
             (fd_ / "index.html").write_text(build_switch_page(wide_inp), encoding="utf-8")

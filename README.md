@@ -164,7 +164,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 368 tests
+python3 -m unittest discover -s tests -t .      # offline; 379 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -779,6 +779,42 @@ Two more defects on the way, both of which only a real browser would have shown.
 page, so `../assets/…` resolved against the wrong base, became `/assets/assets/…` and 404ed, surfacing only as a
 WebAssembly compile error that named no URL. Every path in the loader is absolute now, and a test greps for a
 relative one.
+
+## The search that did not rank
+
+The plan was semantic search. The record's texts are searchable by word prefix, and the obvious next step is
+embeddings — find the speech that is about the same thing in other words. Before building it I wanted a number,
+and the record turned out to supply both halves of one for nothing: an iromány's `targy` is a short description
+of what a bill is about, written by the House rather than by the members who debated it, and every speech filed
+against that bill is a right answer. That is 492 questions over cycle 42's 12,047 speeches, and 888 over cycle
+40's 20,179.
+
+The first thing it measured was this project's own search, finding the right speech in its first ten **7.7%** of
+the time. Not because the ranking was poor — because there was none. The page required every typed word to
+appear and then ordered the survivors by date. A question of more than two or three words matched almost
+nothing, and whatever it matched came back by accident of when it was said. I had described this page to myself
+as "prefix search, no stemming", which is true and is not the thing that was wrong with it.
+
+| | recall@10 | MRR | what it ships to the reader |
+|---|---|---|---|
+| every word required, newest first | 7.7% | 0.245 | — |
+| **the same index, scored by BM25** | **40.6%** | **0.723** | **nothing** |
+| LSA over the corpus itself, k=256 | 30.8% | 0.441 | ~15 MB per cycle |
+| multilingual-e5-small, speech in passages | 39.2% | 0.593 | ~100 MB model |
+| e5 and word overlap, half and half | 47.0% | 0.685 | ~100 MB model |
+| e5 distilled to one vector per term | 0.7% | 0.015 | 43 MB |
+
+Four of those five are the semantic search I set out to build, and every one of them needs something shipped to
+the reader that BM25 does not. The best beats BM25 by three points of recall for a hundred megabytes of model in
+the browser. The one that ships no model scores 0.7%, because these embeddings do not average over a query's
+words that way — a result worth writing down, since averaging them is the obvious thing to try.
+
+So the index carries the count as well as the fact, the page scores instead of filtering, and the improvement
+is between 26 and 44 points of recall@10 depending on the cycle. `scripts/bench_search.py` is the measurement,
+runnable against any cycle; the numbers above are its output, and the page tells the reader both of them.
+
+The bench is the part worth keeping. It cost an afternoon and it changed the answer: the feature I was asked
+for was not the feature that was missing, and nothing but a measurement would have said so.
 
 ## Testing the shapes I did not think of
 

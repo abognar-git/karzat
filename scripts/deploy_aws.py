@@ -170,6 +170,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--force", action="store_true",
                     help="upload even when the object is byte-identical — the way to apply changed cache headers, "
                          "which the sameness check would otherwise skip for every unchanged file")
+    ap.add_argument("--prune", action="store_true",
+                    help="delete objects with no local file; off by default, because a build that\n"
+                         "half-failed would otherwise take the site down with it")
     ap.add_argument("--no-invalidate", action="store_true")
     args = ap.parse_args(argv)
     import boto3
@@ -183,7 +186,11 @@ def main(argv: list[str] | None = None) -> int:
     roots = [SITE / n for n in args.only.split(",")] if args.only else [SITE]
     files = [p for r in roots for p in ([r] if r.is_file() else r.rglob("*")) if p.is_file()]
     print(f"local: {len(files):,} files, {sum(p.stat().st_size for p in files) / 1e9:.2f} GB")
-    have = {} if args.dry_run else remote_index(s3, args.bucket)
+    # The dry run used to skip the listing, so it answered "240,785 objects, 7.02 GB" whatever the state of
+    # the bucket — a report whose entire job is to say what would change, and which could not say it. Listing
+    # is a few hundred requests and no writes; the run that is supposed to tell you what a deploy will do is
+    # the one place worth paying for it.
+    have = remote_index(s3, args.bucket)
     print(f"remote: {len(have):,} objects already there")
 
     todo = []
@@ -196,6 +203,25 @@ def main(argv: list[str] | None = None) -> int:
             continue
         todo.append((p, key))
     print(f"to upload: {len(todo):,} objects ({sum(p.stat().st_size for p, _ in todo) / 1e9:.2f} GB)")
+
+    # Objects with no local file. The deploy has never deleted anything, which is the right default — a build
+    # that half-failed would otherwise take the site down with it — but silence about orphans is not. The
+    # `sql/` page survived its own rename and went on serving a query written against column names that no
+    # longer existed, so a reader with the old link met a binder error rather than a moved page. Nothing in
+    # the deploy said the address had been left behind.
+    orphans = sorted(set(have) - {key for _, key in ((p, str(p.relative_to(SITE))) for p in files)})
+    if orphans:
+        print(f"orphans: {len(orphans):,} objects are live with no local file — a rename or a removal")
+        for k in orphans[:12]:
+            print(f"    {k}")
+        if len(orphans) > 12:
+            print(f"    … and {len(orphans) - 12:,} more")
+        print("  they are NOT deleted; pass --prune to remove them, or leave a forwarding page in the build")
+        if args.prune and not args.dry_run:
+            for i in range(0, len(orphans), 1000):
+                s3.delete_objects(Bucket=args.bucket,
+                                  Delete={"Objects": [{"Key": k} for k in orphans[i:i + 1000]]})
+            print(f"  pruned {len(orphans):,}")
     if args.dry_run or not todo:
         return 0
 

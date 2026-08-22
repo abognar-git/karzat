@@ -2088,6 +2088,169 @@ class ExportedRowsBelongToTheirCycle(unittest.TestCase):
             self.assertTrue(got <= known, f"{name} carries cycles the site does not build: {sorted(got - known)}")
 
 
+class TheSpeechSearchRanks(unittest.TestCase):
+    """The search over the record's texts required every typed word and then ordered by date.
+
+    Measured against 492 questions the record answers for itself — an iromány's subject as the question, the
+    speeches filed against that bill as the answer — that put the right speech in the first ten 7.7% of the
+    time in cycle 42, and 5.3% in cycle 40. Not because the ranking was poor: because there was none. A long
+    question matched almost nothing, and whatever it matched came back by accident of when it was said.
+
+    The same index scored by BM25 finds 40.6% and 31.5%. `scripts/bench_search.py` is the measurement; these
+    are the invariants that keep the index and the page able to do it at all."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import build_assets, load_inputs, speech_search_index
+        cls.inp = load_inputs()
+        if not (cls.inp.get("texts") or {}).get("texts"):
+            raise unittest.SkipTest("no speech texts derived")
+        cls.meta, cls.idx = speech_search_index(cls.inp)
+        cls.js = build_assets()["karzat.js"]
+
+    def test_a_posting_carries_how_often_not_merely_whether(self):
+        """A set of document ids is all a boolean AND needs, and all this index used to hold. BM25 is made of
+        the counts, so their absence is the whole defect, in one line."""
+        pairs = 0
+        for key, toks in self.idx.items():
+            if "__split" in toks:
+                continue
+            for tok, arr in toks.items():
+                self.assertEqual(len(arr) % 2, 0, f"{tok}: a posting list of odd length is not (doc, tf) pairs")
+                for j in range(1, len(arr), 2):
+                    self.assertGreaterEqual(arr[j], 1, f"{tok}: a frequency below one")
+                    self.assertLessEqual(arr[j], 255, f"{tok}: a frequency that will not fit a byte")
+                pairs += len(arr) // 2
+        self.assertGreater(pairs, 1000, "the index is too small to be the real one")
+
+    def test_every_document_declares_its_length(self):
+        """BM25 divides by it. A missing length silently becomes the average, which flatters long speeches —
+        exactly the bias the length normalisation exists to remove."""
+        for row in self.meta:
+            self.assertEqual(len(row), 8, "a meta row has no length field")
+            self.assertIsInstance(row[7], int)
+            self.assertGreaterEqual(row[7], 0)
+        self.assertGreater(sum(r[7] for r in self.meta), 0, "every document is empty")
+
+    def test_a_posting_never_names_a_document_that_is_not_in_the_meta(self):
+        n = len(self.meta)
+        for key, toks in self.idx.items():
+            if "__split" in toks:
+                continue
+            for tok, arr in toks.items():
+                for j in range(0, len(arr), 2):
+                    self.assertLess(arr[j], n, f"{tok}: posting for document {arr[j]} of {n}")
+
+    def test_a_long_question_does_not_build_a_table_nobody_can_read(self):
+        """Dropping the requirement that every word appear turns a sentence into most of the corpus. Measured
+        on cycle 40: "a magyar gazdaság helyzete és a jövő évi költségvetés" scores 19,602 of 24,365 speeches,
+        and a row for each is about five megabytes of HTML into innerHTML — the tab stops responding.
+
+        Ranked results have a long tail by construction and nobody reads it. The cut is fine; a silent cut is
+        not, because a search that shows two hundred of nineteen thousand and says "200 találat" has told the
+        reader something false about the record."""
+        js = self.js[self.js.index("  var q = document.getElementById('spq')"):]
+        js = js[:js.index("})();")]
+        self.assertIn("SHOW_MAX", js, "every scored document is rendered")
+        self.assertIn("hits.slice(0, SHOW_MAX)", js)
+        self.assertIn("a legjobb ", js, "the count does not say the list was cut")
+        self.assertIn("' a ' + scored", js, "the count does not say how many were scored")
+
+    def test_each_cycle_quotes_its_own_measurement(self):
+        """The sentence names a cycle because the figures differ by a factor of four between them — cycle 43
+        goes 14.9% to 59.1%, cycle 40 5.3% to 31.5%. Printing one cycle's result on another's page, unlabelled,
+        would be a true number about the wrong parliament."""
+        import json as _json
+        from scripts.build_site import build_speech_search_page, load_inputs, speech_search_index
+        bench = _json.loads((ROOT / "data" / "derived" / "search_bench.json").read_text(encoding="utf-8"))
+        for cyc in sorted(int(k) for k in bench["cycles"]):
+            inp = load_inputs(cyc)
+            if not (inp.get("texts") or {}).get("texts"):
+                continue
+            meta, _ = speech_search_index(inp)
+            html = build_speech_search_page(inp, len(meta), len(meta))
+            b = bench["cycles"][str(cyc)]
+            self.assertIn(f"a {cyc}. ciklus", html, f"cycle {cyc} quotes another cycle's measurement")
+            for v in (b["was"]["recall10"], b["now"]["recall10"]):
+                self.assertIn(f"{100 * v:.1f}".replace(".", ","), html)
+
+    def test_the_index_moves_when_its_shape_changes(self):
+        """A shard held [doc, doc, …] and now holds [doc, tf, doc, tf, …]. The JSON is cached for a day and
+        the script for five minutes, so after a deploy a returning reader runs the new code against the old
+        index for up to twenty-four hours — and the new code reads a document id as a frequency. Two postings
+        in five disappear and the rest are scored on numbers that mean nothing, with no error anywhere.
+
+        Yesterday the same class of bug went live with a Parquet column rename, and it was found by a reader's
+        error message rather than by anything here. A cache cannot answer a path it has never seen, so the
+        version is in the path; this asserts the script and the builder agree on which one."""
+        from scripts.build_site import SEARCH_INDEX_DIR, SEARCH_META
+        js = self.js[self.js.index("  var q = document.getElementById('spq')"):]
+        js = js[:js.index("})();")]
+        self.assertIn(f"'{SEARCH_INDEX_DIR}/' + key", js, "the script reads a different directory from the one built")
+        self.assertIn(f"'{SEARCH_META}'", js, "the script reads a different meta file from the one built")
+        self.assertNotEqual(SEARCH_INDEX_DIR, "idx", "the shape changed but the address did not")
+        self.assertNotEqual(SEARCH_META, "meta.json")
+
+    def test_an_old_index_could_not_be_read_as_a_new_one(self):
+        """The specific silent failure, written down so nobody restores the shared path thinking it harmless:
+        an old posting list parsed as pairs loses its last entry when the count is odd and turns document ids
+        into frequencies."""
+        old = [3, 7, 11, 42, 58]                       # five documents, the shape before this change
+        tf = {}
+        for j in range(0, len(old) - 1, 2):
+            tf[old[j]] = tf.get(old[j], 0) + old[j + 1]
+        self.assertEqual(tf, {3: 7, 11: 42}, "the failure mode is not what the comment says it is")
+        self.assertNotIn(58, tf, "the last document survives, so the example is wrong")
+
+    def test_the_page_scores_rather_than_filters(self):
+        js = self.js[self.js.index("felszolalas/kereses.html: terms are AND-ed"):] \
+            if "felszolalas/kereses.html: terms are AND-ed" in self.js else self.js
+        block = self.js[self.js.index("  var q = document.getElementById('spq')"):]
+        block = block[:block.index("})();")]
+        self.assertIn("k1 = 1.5", block, "the page no longer computes BM25")
+        self.assertIn("Math.log(1 + (N - df + 0.5)", block, "the inverse document frequency is gone")
+        self.assertNotIn("hits.reverse()", block, "the results are ordered by date again")
+        self.assertIn("meta[d][7]", block, "the length normalisation is not reading the document length")
+
+    def test_the_reader_can_still_ask_for_chronological_order(self):
+        """Ranking is the right default and not the only thing anyone wants; a reader following a debate wants
+        the order it happened in. Taking that away would be trading one imposed order for another."""
+        from scripts.build_site import build_speech_search_page
+        html = build_speech_search_page(self.inp, len(self.meta), len(self.meta))
+        self.assertIn('id="spdate"', html)
+        self.assertIn("időrendben", html)
+        block = self.js[self.js.index("  var q = document.getElementById('spq')"):]
+        self.assertIn("byDate && byDate.checked", block)
+
+    def test_no_label_still_describes_the_search_that_was_replaced(self):
+        """The tag directly above the search box read "több szó: mind szerepel" — every word must appear — on
+        all ten pages, which is the opposite of what the box now does. My own grep missed it because I searched
+        for the words I had written in the prose, not the ones somebody else had written in the label."""
+        from scripts.build_site import build_speech_search_page, speech_search_index
+        meta, _ = speech_search_index(self.inp)
+        html = build_speech_search_page(self.inp, len(meta), len(meta))
+        for stale in ("mind szerepel", "mindegyiknek szerepelnie kell", "AND-elve"):
+            self.assertNotIn(stale, html, f"a label still promises the old behaviour: {stale}")
+        self.assertIn("relevancia szerint rendezve", html)
+
+    def test_the_page_states_what_it_measured(self):
+        """The change is defensible because it was measured, and a reader has no way to know that unless the
+        page says so. Both figures come from scripts/bench_search.py."""
+        from scripts.build_site import build_speech_search_page
+        html = build_speech_search_page(self.inp, len(self.meta), len(self.meta))
+        self.assertIn("BM25", html)
+        # This asserted the literal 43,8 and so agreed with a figure that had drifted three points from what
+        # the benchmark measures — a test pinning a typed number is two mistakes holding each other up. The
+        # page and the assertion now read the same file the measurement writes.
+        import json as _json
+        bench = _json.loads((ROOT / "data" / "derived" / "search_bench.json").read_text(encoding="utf-8"))
+        b = bench["cycles"][str(self.inp["cycle"])]
+        for value in (b["was"]["recall10"], b["now"]["recall10"]):
+            printed = f"{100 * value:.1f}".replace(".", ",")
+            self.assertIn(printed, html, f"the page does not quote the measured {printed}%")
+        self.assertNotIn("43,8", html, "a figure from a run that never shipped is back on the page")
+
+
 class UmbrellaPages(unittest.TestCase):
     """Six pages answer over all ten cycles, and were built with the cycle pages' machinery.
 

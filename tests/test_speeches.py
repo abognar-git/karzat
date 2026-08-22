@@ -108,14 +108,42 @@ class Texts(unittest.TestCase):
         self.assertTrue(all(not r["technical"] and not r.get("reprint") for r in subs))
         meta, shards = speech_search_index(inp)
         self.assertEqual(len(meta), len(subs))
-        self.assertTrue(all(len(k) == 2 for k in shards))                                        # sharded by the first two letters
+        # Sharded by the first two letters, and a shard over the size limit is split by the third — which
+        # cycle 43 did not do until the postings grew a frequency beside each document. The assertion used to
+        # be that every key is two letters, so the split broke it; the contract is that a key is two letters
+        # or three, and that a two-letter key holding a split marker holds nothing else.
+        self.assertTrue(all(len(k) in (2, 3) for k in shards), f"odd shard keys: {[k for k in shards if len(k) not in (2, 3)]}")
+        for key, toks in shards.items():
+            if "__split" in toks:
+                self.assertEqual(len(key), 2, "a three-letter shard cannot be split again")
+                self.assertEqual(set(toks), {"__split"}, f"{key} is both split and holds tokens")
+
+        def postings(tok):
+            """Follow the shards the way the page's script does, and read the pairs as pairs.
+
+            `assertIn(i, shards[tok[:2]][tok])` was the old check and it could pass for the wrong reason: in a
+            flat [doc, tf, doc, tf, …] list a document number equal to some other posting's frequency reads as
+            present. It also could not see a token that had moved into a three-letter shard."""
+            sh = shards.get(tok[:2]) or {}
+            if "__split" in sh:
+                sh = shards.get(tok[:3]) or {}
+            arr = sh.get(tok)
+            self.assertIsNotNone(arr, f"{tok!r} is in no shard the script would look in")
+            self.assertEqual(len(arr) % 2, 0, f"{tok!r}: a posting list of odd length is not pairs")
+            return {arr[j]: arr[j + 1] for j in range(0, len(arr), 2)}
+
         texts = (inp["texts"] or {}).get("texts") or {}
         if texts:
-            # every token of a fetched text points at its speech's position in the meta
+            # every token of a fetched text points at its speech's position in the meta, with a real count
             sid, t = next(iter(texts.items()))
             i = next(k for k, m in enumerate(meta) if m[0] == sid)
-            for tok in fold_tokens(" ".join(t["paragraphs"]))[:20]:
-                self.assertIn(i, shards[tok[:2]][tok])
+            body = fold_tokens(" ".join(t["paragraphs"]))
+            import collections as _c
+            counted = _c.Counter(body)
+            for tok in body[:20]:
+                post = postings(tok)
+                self.assertIn(i, post, f"{tok!r} does not point at the speech it came from")
+                self.assertEqual(post[i], min(counted[tok], 255), f"{tok!r}: the frequency is not the count")
             page = build_speech_page(inp, next(r for r in subs if speech_id(r) == sid), t, None, None, None)
             self.assertIn('<div class="speech">', page)
             self.assertIn("A jegyzőkönyv szövege", page)
