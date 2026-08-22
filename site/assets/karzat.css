@@ -50,14 +50,19 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .wrap{max-width:1400px;margin:0 auto}
 .crumbs{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:0 0 10px}.crumbs a:hover{color:var(--white)}
 /* the cycle page's head: the term as the title, the cycle's pages grouped at the side */
-.cyc-head{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.9fr);gap:14px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+/* The nav sits on its own row at full width rather than beside the title. Four groups in the header's
+   right half were 80px columns with "szoros szavazások" colliding into the next one; two by two fixed the
+   collision by making the header two bands tall, which cost more than it bought. Full width is both: four
+   comfortable columns, and one band instead of two. */
+.cyc-head{display:grid;grid-template-columns:1fr;gap:16px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.cyc-title{max-width:78ch}
 .cyc-title .kicker{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
 .cyc-title h1{font-size:34px;line-height:1.1;letter-spacing:-.02em}.cyc-title .lede{margin-top:10px;max-width:58ch}
-.cyc-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;padding-top:8px}
+.cyc-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 28px;padding-top:2px}
 .cyc-nav .grp{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:11px;letter-spacing:.04em}
 .cyc-nav .lbl{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim3);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .cyc-nav a{color:var(--dim);padding:2px 0;border-bottom:1px solid transparent}.cyc-nav a:hover,.cyc-nav a:focus-visible{color:var(--white)}
-@media(max-width:900px){.cyc-head{grid-template-columns:1fr}.cyc-nav{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cyc-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
 a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
 .hero-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;margin:0 0 6px}
 .portrait{filter:grayscale(1) contrast(1.12) brightness(.92);border:1px solid var(--border);background:#111;object-fit:cover;display:block;flex:0 0 auto}
@@ -288,6 +293,32 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog summary:hover{color:var(--white)}
 .profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13.5px;line-height:1.65}
 .profile b{color:var(--text);font-weight:400}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.floorrow{border-top:1px solid var(--border)}.floorrow:first-of-type{border-top:0}
+.floorrow>summary{position:relative;cursor:pointer;display:grid;grid-template-columns:52px 104px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 2px 9px 20px;color:var(--dim);font-size:13px;list-style:none}
+.floorrow>summary>.mono{white-space:nowrap}
+.floorrow>summary:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
+.floorrow>summary::-webkit-details-marker{display:none}
+.floorrow>summary::before{content:"+";position:absolute;left:2px;color:var(--dim2);font-family:var(--mono)}
+.floorrow[open]>summary::before{content:"–"}
+.floorrow>summary:hover,.floorrow[open]>summary{color:var(--white)}
+.floorrow>summary .t{color:var(--text);overflow-wrap:anywhere}
+.floorrow>summary .num{color:var(--white);font-variant-numeric:tabular-nums}
+.floorrow>summary .dim{color:var(--dim2);font-size:10px;white-space:nowrap}
+.floorbody{padding:2px 0 16px 24px;border-left:1px solid var(--line2);margin-left:6px}
+.floorbody .fbars .row{grid-template-columns:minmax(0,164px) 1fr 104px;align-items:center}
+.floorbody .fbars .row .k{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+.floorbody .fbars .row .v{white-space:nowrap}
+@media(max-width:640px){.floorbody{padding-left:12px}.floorbody .fbars .row{grid-template-columns:minmax(0,104px) 1fr 84px}}
+.stagelist{list-style:none;margin:0 0 10px;padding:0;font-size:12px;color:var(--dim)}
+.stagelist li{display:flex;justify-content:space-between;gap:12px;max-width:56ch;padding:2px 0;border-bottom:1px dotted var(--line2)}
+@media(max-width:640px){.floorrow>summary{grid-template-columns:52px minmax(0,1fr);row-gap:2px}
+.floorrow>summary .t,.floorrow>summary .dim{grid-column:1/-1}}
+/* Print: a closed <details> hides its content on the ::details-content slot, so styling the child does
+   nothing — every breakdown vanished from the paper with the section still inviting a click. Reveal the
+   slot, and drop the +/- marker and the invitation with it. */
+@media print{.floorrow::details-content{content-visibility:visible!important;block-size:auto!important}
+.floorrow>summary::before{content:""}.floorrow>summary{padding-left:2px}}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}

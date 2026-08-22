@@ -750,14 +750,19 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .wrap{max-width:1400px;margin:0 auto}
 .crumbs{font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2);margin:0 0 10px}.crumbs a:hover{color:var(--white)}
 /* the cycle page's head: the term as the title, the cycle's pages grouped at the side */
-.cyc-head{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.9fr);gap:14px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+/* The nav sits on its own row at full width rather than beside the title. Four groups in the header's
+   right half were 80px columns with "szoros szavazások" colliding into the next one; two by two fixed the
+   collision by making the header two bands tall, which cost more than it bought. Full width is both: four
+   comfortable columns, and one band instead of two. */
+.cyc-head{display:grid;grid-template-columns:1fr;gap:16px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.cyc-title{max-width:78ch}
 .cyc-title .kicker{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
 .cyc-title h1{font-size:34px;line-height:1.1;letter-spacing:-.02em}.cyc-title .lede{margin-top:10px;max-width:58ch}
-.cyc-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;padding-top:8px}
+.cyc-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 28px;padding-top:2px}
 .cyc-nav .grp{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:11px;letter-spacing:.04em}
 .cyc-nav .lbl{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim3);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .cyc-nav a{color:var(--dim);padding:2px 0;border-bottom:1px solid transparent}.cyc-nav a:hover,.cyc-nav a:focus-visible{color:var(--white)}
-@media(max-width:900px){.cyc-head{grid-template-columns:1fr}.cyc-nav{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.cyc-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
 a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
 .hero-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 18px;margin:0 0 6px}
 .portrait{filter:grayscale(1) contrast(1.12) brightness(.92);border:1px solid var(--border);background:#111;object-fit:cover;display:block;flex:0 0 auto}
@@ -988,6 +993,32 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog summary:hover{color:var(--white)}
 .profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13.5px;line-height:1.65}
 .profile b{color:var(--text);font-weight:400}
+.vh{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.floorrow{border-top:1px solid var(--border)}.floorrow:first-of-type{border-top:0}
+.floorrow>summary{position:relative;cursor:pointer;display:grid;grid-template-columns:52px 104px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:9px 2px 9px 20px;color:var(--dim);font-size:13px;list-style:none}
+.floorrow>summary>.mono{white-space:nowrap}
+.floorrow>summary:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
+.floorrow>summary::-webkit-details-marker{display:none}
+.floorrow>summary::before{content:"+";position:absolute;left:2px;color:var(--dim2);font-family:var(--mono)}
+.floorrow[open]>summary::before{content:"–"}
+.floorrow>summary:hover,.floorrow[open]>summary{color:var(--white)}
+.floorrow>summary .t{color:var(--text);overflow-wrap:anywhere}
+.floorrow>summary .num{color:var(--white);font-variant-numeric:tabular-nums}
+.floorrow>summary .dim{color:var(--dim2);font-size:10px;white-space:nowrap}
+.floorbody{padding:2px 0 16px 24px;border-left:1px solid var(--line2);margin-left:6px}
+.floorbody .fbars .row{grid-template-columns:minmax(0,164px) 1fr 104px;align-items:center}
+.floorbody .fbars .row .k{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+.floorbody .fbars .row .v{white-space:nowrap}
+@media(max-width:640px){.floorbody{padding-left:12px}.floorbody .fbars .row{grid-template-columns:minmax(0,104px) 1fr 84px}}
+.stagelist{list-style:none;margin:0 0 10px;padding:0;font-size:12px;color:var(--dim)}
+.stagelist li{display:flex;justify-content:space-between;gap:12px;max-width:56ch;padding:2px 0;border-bottom:1px dotted var(--line2)}
+@media(max-width:640px){.floorrow>summary{grid-template-columns:52px minmax(0,1fr);row-gap:2px}
+.floorrow>summary .t,.floorrow>summary .dim{grid-column:1/-1}}
+/* Print: a closed <details> hides its content on the ::details-content slot, so styling the child does
+   nothing — every breakdown vanished from the paper with the section still inviting a click. Reveal the
+   slot, and drop the +/- marker and the invitation with it. */
+@media print{.floorrow::details-content{content-visibility:visible!important;block-size:auto!important}
+.floorrow>summary::before{content:""}.floorrow>summary{padding-left:2px}}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
 .cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:11px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
@@ -2550,9 +2581,10 @@ def build_index(inp: dict, hero_ts: str) -> str:
   <div class="cyc-title"><span class="kicker" data-kz-text>{inp["cycle"]}. ciklus{"" if inp["closed"] else " · folyamatban"}</span><h1>{esc(cycle_title(inp["cycle"]))}</h1>
     <p class="lede">{hu_num(fl["votes"])} szavazás{" az első " + hu_num(sd["count"]) + " ülésnapról" if not inp["closed"] else ""}, mindegyik a saját oldalán: {"ki hogyan szavazott, és mennyi kellett hozzá" if not inp["archive"] else ("az arányok frakciónként és a szükséges többség; a név szerinti listák az adatállományban" if n_rolls > len(inp["order"]) // 10 else "az arányok frakciónként és a szükséges többség — név szerinti listát és tárgyat az API 1998 előtt nem ad")}.</p></div>
   <nav class="cyc-nav" aria-label="A ciklus oldalai">
-    <div class="grp"><span class="lbl">szavazások</span><a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a><a href="iromany/index.html">irományok</a>{'<a href="visszhang/index.html">visszhang</a>' if (inp.get("echo") or {}).get("items") else ""}</div>
-    <div class="grp"><span class="lbl">emberek</span><a href="kepviselo/index.html">képviselők</a><a href="bizottsag/index.html">bizottságok</a><a href="felszolalas/index.html">felszólalások</a><a href="kepviselom/index.html">képviselőm</a></div>
-    <div class="grp"><span class="lbl">eszközök</span><a href="feed/index.html">értesítések</a><a href="adatok/index.html">adatok</a><a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a><a href="{"../" * inp["base_depth"]}szemely/index.html">pályaképek</a><a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a></div>
+    <div class="grp"><span class="lbl">szavazások</span><a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a></div>
+    <div class="grp"><span class="lbl">viták</span><a href="iromany/index.html">irományok</a>{'<a href="beszedido/index.html">beszédidő</a>' if has_floor(inp) else ""}<a href="felszolalas/index.html">felszólalások</a>{'<a href="visszhang/index.html">visszhang</a>' if (inp.get("echo") or {}).get("items") else ""}</div>
+    <div class="grp"><span class="lbl">emberek</span><a href="kepviselo/index.html">képviselők</a><a href="{"../" * inp["base_depth"]}szemely/index.html">pályaképek</a><a href="bizottsag/index.html">bizottságok</a><a href="kepviselom/index.html">képviselőm</a></div>
+    <div class="grp"><span class="lbl">eszközök</span><a href="feed/index.html">értesítések</a><a href="adatok/index.html">adatok</a><a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a><a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a></div>
   </nav>
 </div>
 {closed_line}
@@ -3252,11 +3284,11 @@ def build_cohesion_page(inp: dict, co: dict) -> str:
   <div class="tablewrap" style="border:0"><table><thead><tr><th scope="col"></th>{head}</tr></thead><tbody>{"".join(mrows)}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">Azoknak a szavazásoknak a hányada, ahol a két frakció leadott szavazatainak többsége ugyanaz volt — csak ott számolva, ahol mindkettő adott le szavazatot.</div>
 </section>
+{axis_section(inp)}
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Képviselőpárok</span><span class="tag">frakción belül · legalább 20 közös szavazás · <a href="kepviselo_parok.csv">CSV</a></span></h2>
   {"".join(pair_blocks)}
 </section>
-{axis_section(inp)}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}kohezio/index.html', f'Kohézió — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-kohezio')}
 """ + page_tail(inp, 1)
 
@@ -4236,7 +4268,11 @@ def build_data_page(inp: dict, out_dir: Path | None = None) -> str:
              ("../kohezio/frakcio_parok.csv", None, "frakciópárok többségi álláspontjának egyezése"),
              ("../kohezio/kepviselo_parok.csv", None, "képviselőpárok egyezése frakción belül"),
              ("../szoros/dontesek.csv", None, "minden döntés a küszöbéhez mérve, a hiányzó-feltevéssel"),
-             ("../szamok/havonta.csv", None, "a ciklus hónapról hónapra")]
+             ("../szamok/havonta.csv", None, "a ciklus hónapról hónapra"),
+             ] + ([("../beszedido/vitak.csv", None, "évenként minden vita és minden iromány nélküli sáv: mennyi ideig tartott, hány felszólalással"),
+                   ("../beszedido/bontas.csv", None, "ugyanaz az idő háromfelé bontva: frakció, a felszólalás fajtája, a vita szakasza"),
+                   ("../beszedido/frakciok.csv", None, "évenként és frakciónként a beszédidő és a Ház időarányos összetétele — az arány két fele")]
+                  if has_floor(inp) else [])
     def size(rel):
         if out_dir is None:
             return ""
@@ -5079,7 +5115,7 @@ def build_speeches_page(inp: dict) -> str:
     return page_head(f'Felszólalások · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus felszólalásai ülésnaponként és fajtánként, a képviselői adatlapokkal egyeztetve.', 1 + inp["base_depth"]) + \
         topbar(inp, [("felszólalások", None)], 1) + f"""
 <div class="hero-h"><h1>Felszólalások</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(sp.get("count", 0))} sor · {hu_num(sp.get("substantive", 0))} érdemi felszólalás · {hu_num(len(days))} ülésnap · {hu_num(n_tx)} szöveg</small></div>
-<p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig — naponként egy lap, {"érdemi felszólalásonként egy lap a jegyzőkönyvi szöveggel" if not inp["archive"] else "érdemi felszólalásonként egy lap ott, ahol a jegyzőkönyvi szöveg be van töltve (archív ciklus: a sorok a napi lapokon)"}. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent. <a href="kereses.html">Keresés a szövegekben</a>.</p>
+<p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig — naponként egy lap, {"érdemi felszólalásonként egy lap a jegyzőkönyvi szöveggel" if not inp["archive"] else "érdemi felszólalásonként egy lap ott, ahol a jegyzőkönyvi szöveg be van töltve (archív ciklus: a sorok a napi lapokon)"}. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent. <a href="kereses.html">Keresés a szövegekben</a>.{' <a href="../beszedido/index.html">Mire ment el a Ház ideje</a>.' if has_floor(inp) else ""}</p>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Ülésnaponként</span><span class="tag">a legfrissebb elöl · <a href="../adatok/felszolalasok.csv">CSV, mind</a></span></h2>
   <div class="tablewrap"><table data-page-size="25" data-counter="dn"><thead><tr><th scope="col">Nap</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Sor</th><th scope="col" class="num">Érdemi</th></tr></thead><tbody>{trs or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
@@ -5091,6 +5127,336 @@ def build_speeches_page(inp: dict) -> str:
   <div class="hero-meta prose" style="margin-top:8px">Ellenőrzés: a képviselői adatlap saját „felszólalás” száma erre a ciklusra {hu_num(chk.get("agree", 0))} / {hu_num(chk.get("mps", 0))} képviselőnél megegyezik az itteni érdemi számmal (akinek valamelyik forrás szerint volt felszólalása); ahol nem, a képviselő oldala mindkettőt írja. Aki nem képviselő (miniszter, köztársasági elnök), névvel és tisztséggel szerepel, oldal nélkül.</div>
 </section>
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}felszolalas/index.html', f'Felszólalások — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-felszolalas')}
+""" + page_tail(inp, 1)
+
+
+def has_floor(inp: dict) -> bool:
+    """Is there a single substantive speech with both a length and a date? Beszédidő exists only then.
+
+    The cycle index links the page and build_cycle writes it, and the two must agree or the nav points at a
+    404 — so both ask this one question rather than each testing something that looks equivalent."""
+    return any(not r.get("technical") and r.get("duration_s") and r.get("date")
+               for r in (inp.get("speeches") or {}).get("speeches") or [])
+
+
+def long_days(inp: dict) -> list[tuple[str, int]]:
+    """Sitting days whose own durations add up to more than the calendar day holds, longest first.
+
+    Three of the record's 1,855 sitting days do this: 2011-12-01 at 28.0 hours, 2019-11-20 at 25.9 and
+    2022-10-26 at 25.0. I looked for the usual causes and none of them is present — no repeated sorszám, no
+    speech listed twice, no single length out of the ordinary (the December 2011 day is 428 two-minute
+    speeches averaging 1.7 minutes, which is what an obstruction looks like), and the following calendar day
+    has sittings of its own, so it is not simply a sitting that ran past midnight and was filed under its
+    start date. The record does not say why, so neither does the page: it prints which days and by how much
+    and leaves the explanation open, which is the honest position and also the one that stays true if the
+    reason turns out to be something I would not have guessed."""
+    per: dict[str, int] = {}
+    for r in (inp.get("speeches") or {}).get("speeches") or []:
+        if not r.get("technical") and r.get("duration_s") and r.get("date"):
+            per[r["date"]] = per.get(r["date"], 0) + r["duration_s"]
+    return sorted(((d, s) for d, s in per.items() if s > 24 * 3600), key=lambda kv: -kv[1])
+
+
+def long_day_note(inp: dict) -> str:
+    """The sentence the year table carries when one of its days is longer than a day."""
+    bad = long_days(inp)
+    if not bad:
+        return ""
+    which = ", ".join(f"{hu_date(d)} ({hu_dec(s / 3600, 1)} óra)" for d, s in bad[:3])
+    return (f' <b>Egy figyelmeztetés a számokhoz:</b> {hu_num(len(bad))} olyan ülésnap van ebben a ciklusban, '
+            f'ahol a jegyzőkönyv saját időadatai együtt többet adnak ki, mint amennyi egy naptári napba fér — '
+            f'{which}. Nem ismétlődő sor és nem kirívó hosszúság okozza, és a következő naptári napon külön '
+            f'ülésnap van, tehát nem egyszerűen éjfélen átnyúló ülésről van szó. A forrás nem mondja meg, '
+            f'miért, ezért én sem: az érintett idő itt marad, megjelölve.')
+
+
+def floor_bill_links(inp: dict, bills: list[str], have: set[int], depth: int) -> str:
+    """A debate's bill numbers, each a link where that bill has a page of its own.
+
+    In the closed cycles about two debates in five link, and they carry more than four fifths of the debated
+    time: a bill only gets a page once a roll call has named it, and the bills the House argues over for
+    hours are the ones that end in a division. The current cycle links nearly all of them, because
+    `merge_motion_records` gives every motion in the registry a page whether it has been voted on yet or
+    not. The rest are printed plain rather than linked to a page that does not exist."""
+    out = []
+    for b in bills:
+        n, _ = an.bill_key(b)
+        out.append(f'<a href="{"../" * depth}iromany/{n}.html">{esc(b)}</a>' if n in have else f'<span>{esc(b)}</span>')
+    return " · ".join(out)
+
+
+def floor_split(inp: dict, split: dict[str, int], total: int, label: str, colour: dict | None = None) -> str:
+    """One labelled stacked bar per entry of a breakdown — the same component the vote pages use for tallies."""
+    if not split or not total:
+        return ""
+    rows = []
+    for k, secs in split.items():
+        c = (colour or {}).get(k) or "var(--dim3)"
+        # the label is written out in full and clipped by the stylesheet, not cut to a character count here:
+        # a Python slice at 22 turns "vezérszónoki felszólalás" into "vezérszónoki felszólal", which reads as
+        # a different word rather than a shortened one, and no width of column would have fixed it
+        rows.append(f'<div class="row"><span class="k" title="{esc(k)}">{esc(k)}</span>'
+                    f'<span class="stack" aria-hidden="true"><i style="width:{100 * secs / total:.1f}%;background:{c}" '
+                    f'title="{esc(k)}: {esc(hu_hours(secs))}"></i></span>'
+                    f'<span class="mono v" style="text-align:right">{esc(hu_hours(secs))}'
+                    f'<span class="sub">{hu_dec(100 * secs / total, 1)}%</span></span></div>')
+    return (f'<div class="fbars"><div class="row hdr"><span>{esc(label)}</span><span></span>'
+            f'<span class="mono" style="text-align:right">idő<span class="sub">a vitán belül</span></span></div>'
+            + "".join(rows) + "</div>")
+
+
+def floor_ratio_panel(inp: dict, factions: dict[str, int], expected: dict[str, float],
+                      seats: dict[str, float], unattributed: float, scope: str) -> str:
+    """Floor time against how big the House was while it was being spoken.
+
+    A governing majority that holds two thirds of the chamber and takes two fifths of the speaking time is
+    not a thing a list of subjects can show, and it is not an opinion either: both numbers are counted.
+    `expected` is the faction's share of the chamber weighted by when the speaking happened, so a faction
+    that left in March is measured against the House it actually sat in, not against a year it did not
+    finish. The API publishes no mandate count and the page never calls this one.
+
+    `unattributed` is the share of the scope's floor time spoken by people in no faction — ministers who are
+    not members, the nationality spokespersons, the chair. The table cannot hold them, so it says how much
+    of the year it is leaving out, as a number: a caveat without its magnitude is a caveat that does not
+    work, and a reader who takes a column summing to 100% for a share of the whole year is off by up to a
+    sixth in the older cycles."""
+    total = sum(factions.values())
+    etotal = sum(expected.get(f, 0.0) for f in factions)
+    if not total or not etotal:
+        return ""
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    rows = []
+    for f, secs in factions.items():
+        e = expected.get(f)
+        if not e:
+            continue                                   # spoke but sat in no roll call: no size to divide by
+        share, size = secs / total, e / etotal
+        rows.append((share / size, f, share, size, seats.get(f) or 0.0, secs))
+    if not rows:
+        return ""
+    rows.sort(key=lambda r: -r[2])
+    # The caveat that makes the column readable rather than accusatory, and it is measured, not assumed.
+    # Across 199 faction-years since 1998 the ratio falls with size: factions under a twentieth of the House
+    # average 1.86×, those over half average 0.56×. Most of that is the allocation rule — a vezérszónoki slot
+    # belongs to a faction, not to its members, so a large faction's per-member figure is pushed down
+    # arithmetically. Comparing the largest faction of each era at its own size, before 2010 it ran 0.80× at
+    # 43.6% of the House and from 2010 on 0.56× at 57.3%, where a purely per-faction rule alone would predict
+    # 0.61×: a residual survives, but nothing like the whole gap. Printing "1,00× is what its weight
+    # deserves" over that would invite every reader to read a mechanical number as a silencing.
+    biggest = max(rows, key=lambda r: r[4])
+    smallest = min(rows, key=lambda r: r[4])
+    # the bar is scaled to the largest ratio actually present, not to a round number chosen in advance: with a
+    # fixed ceiling of 4 the two factions above it drew identical full-width bars, which is the picture saying
+    # they are equal about the one pair the table exists to tell apart
+    span = max(r[0] for r in rows) or 1.0
+    trs = "".join(
+        f'<tr><td>{esc(f)}</td><td class="num mono">{hu_dec(100 * share, 1)}%</td>'
+        f'<td class="num mono">{hu_dec(100 * size, 1)}%</td><td class="num mono">{hu_dec(n, 1)}</td>'
+        f'<td class="num mono"><b style="color:{"var(--white)" if ratio >= 1 else "var(--dim2)"}">{hu_dec(ratio, 2)}×</b></td>'
+        f'<td><span class="stack" aria-hidden="true" style="display:flex;height:6px;background:var(--line2);min-width:90px" '
+        f'title="{esc(f)}: {hu_dec(ratio, 2)}× — a legnagyobb ebben a táblában {hu_dec(span, 2)}×">'
+        f'<i style="display:block;height:100%;width:{100 * ratio / span:.1f}%;background:{colour.get(f, "var(--dim3)")}"></i>'
+        f'<em style="display:block;width:1px;height:100%;background:var(--dim);margin-left:-1px" '
+        f'title="1,00× — ekkora lenne a súlya szerint"></em></span></td></tr>'
+        for ratio, f, share, size, n, secs in rows)
+    return f"""<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Ki mennyit beszélt</span><span class="tag">{esc(scope)} · a beszédidő és a Ház összetétele egymás mellett</span></h2>
+  <p class="lede" data-floor="ratio-caveat">Egy frakció mérete és a beszédideje nem ugyanaz a dolog:
+  a <b>vezérszónoki</b> idő <b>frakciónként</b> jár, nem képviselőnként, és a napirend előtti felszólalás is.
+  Ezért a nagy frakciók egy főre jutó száma már számtanilag lejjebb kerül — <b>az 1,00× nem az a küszöb, ami
+  alatt valakit elhallgattatnak</b>. Az utolsó oszlop egyszerűen elosztja a kettőt. Ebben a táblában a
+  legnagyobb frakció ({esc(biggest[1])}, {hu_dec(biggest[4], 1)} fő) {hu_dec(biggest[0], 2)}×, a legkisebb
+  ({esc(smallest[1])}, {hu_dec(smallest[4], 1)} fő) {hu_dec(smallest[0], 2)}×. A szám akkor mond valamit, ha
+  <b>hasonló méretű frakciókat</b> hasonlítasz össze, vagy <b>ugyanazt a frakciót</b> évről évre.</p>
+  <div class="tablewrap"><table><caption class="vh">Frakciónként a frakciók beszédidejéből való részesedés, a Ház összetétele és a kettő hányadosa</caption>
+    <thead><tr><th scope="col">Frakció</th><th scope="col" class="num">A frakciók idejéből</th>
+    <th scope="col" class="num">A Házból</th><th scope="col" class="num">Fő</th><th scope="col" class="num">Arány</th>
+    <th scope="col"><span class="vh">Ábra: az arány, az 1,00× jelölve</span></th></tr></thead><tbody>{trs}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Két dolgot érdemes tudni a számokról. Az első oszlop
+  <b>a frakciók egymás közti aránya</b>, nem az évé: a beszédidő {hu_dec(100 * unattributed, 1)}%-át olyanok
+  mondták, akik egyetlen névsorban sem szerepelnek (nem képviselő miniszter, nemzetiségi szószóló, a levezető
+  elnök), és ők nem férnek ebbe a táblába. A „Házból” oszlop pedig <b>nem évi átlag, hanem időarányos</b>:
+  minden felszólalás a saját hosszával számít bele annak a névsornak az összetételébe, ami aznap érvényes volt
+  — így az a frakció, amelyik évközben megszűnt, nem egy egész év létszámával van elosztva. A névsor a jelen
+  lévőket és a távollévőket is kiírja, tehát a Ház teljes összetételét mutatja; a tényleges mandátumszámot a
+  W-API nem közli, és ez a lap nem is nevezi annak.</div>
+</section>"""
+
+
+def build_floor_page(inp: dict, ft: dict) -> str:
+    """beszedido/index.html — the cycle's floor time: the years, who used it, and on what terms."""
+    cycle, depth = inp["cycle"], 1 + inp["base_depth"]
+    years = ft["years"]
+    total = ft["seconds"] or 1
+    yrows = "".join(
+        f'<tr><td class="ts mono"><a href="{y["year"]}.html">{y["year"]}</a></td>'
+        f'<td class="num mono">{esc(hu_hours(y["seconds"]))}</td><td class="num mono">{hu_num(y["days"])}</td>'
+        f'<td class="num mono">{hu_num(y["speeches"])}</td><td class="num mono">{hu_num(len(y["debates"]))}</td>'
+        f'<td class="num mono">{hu_dec(100 * y["attributed"] / (y["seconds"] or 1), 0)}%</td>'
+        f'<td><span class="stack" aria-hidden="true" style="display:flex;height:6px;background:var(--line2);min-width:90px">'
+        f'<i style="display:block;height:100%;width:{100 * y["seconds"] / max(x["seconds"] for x in years):.1f}%;'
+        f'background:var(--dim3)"></i></span></td></tr>' for y in years)
+    # The cycle-wide figures are the years' own, re-weighted by how much speaking each year held — not a
+    # roster assembled out of per-faction annual maxima, which is what stood here and is a House that never
+    # sat: cycle 36 came out at 417 members of a 386-seat chamber, and every ratio on the panel was inflated
+    # by the same factor with a footnote underneath calling it the roll calls' own count.
+    fac_all: dict[str, int] = {}
+    exp_all: dict[str, float] = {}
+    seat_all: dict[str, float] = {}
+    wtotal = sum(y["weighted"] for y in years) or 1
+    for y in years:
+        for f, s in y["factions"].items():
+            fac_all[f] = fac_all.get(f, 0) + s
+        for f, e in y["expected"].items():
+            exp_all[f] = exp_all.get(f, 0.0) + e * y["weighted"] / wtotal
+        for f, n in y["seats"].items():
+            seat_all[f] = seat_all.get(f, 0.0) + n * y["weighted"] / wtotal
+    fac_all = dict(sorted(fac_all.items(), key=lambda kv: -kv[1]))
+    unattr = 1 - sum(fac_all.values()) / total
+    forms = ft["forms"]
+    frows = "".join(
+        f'<tr><td>{esc(k)}</td><td class="num mono">{esc(hu_hours(s))}</td>'
+        f'<td class="num mono">{hu_dec(100 * s / total, 1)}%</td>'
+        f'<td><span class="stack" aria-hidden="true" style="display:flex;height:6px;background:var(--line2);min-width:90px">'
+        f'<i style="display:block;height:100%;width:{100 * s / max(forms.values()):.1f}%;background:var(--dim3)"></i>'
+        f'</span></td></tr>' for k, s in forms.items())
+    stages = ft["stages"]
+    srows = "".join(
+        f'<tr><td>{esc(k)}</td><td class="num mono">{esc(hu_hours(s))}</td>'
+        f'<td class="num mono">{hu_dec(100 * s / max(sum(stages.values()), 1), 1)}%</td></tr>'
+        for k, s in list(stages.items())[:12])
+    n_deb = sum(len(y["debates"]) for y in years)
+    attributed = sum(y["attributed"] for y in years)
+    slot_s = total - attributed
+    return page_head(f'Beszédidő · {cycle}. ciklus · karzat',
+                     f'A {cycle}. ciklus érdemi felszólalásainak ideje évenként, vitánként és formánként — a Ház saját napirendjéből számolva.',
+                     depth) + topbar(inp, [("beszédidő", None)], 1) + f"""
+<div class="hero-h"><h1>Beszédidő</h1><small class="label" data-kz-text>{cycle}. ciklus · {esc(hu_hours(ft["seconds"]))} · {hu_num(ft["speeches"])} mért idejű érdemi felszólalás · {hu_num(n_deb)} vita</small></div>
+<p class="lede">Mire ment el a Ház ideje: {esc(hu_hours(ft["seconds"]))} érdemi felszólalás {hu_num(len(years))} év
+alatt, a Ház saját napirendje szerint felosztva. Minden felszólalásnak van napirendi pontja, és ebből az időből
+{hu_dec(100 * attributed / total, 0)}% irományhoz is kötődik — mindkettőt az Országgyűlés írja, nem én. Ez a lap
+összeadja a másodperceket és ezek szerint csoportosítja őket: <b>nincs benne egyetlen témakör, kategória vagy
+címke sem, amit én találtam volna ki</b>. Egy vita annyi, amennyit a jegyzőkönyv egy tárgyra fordított — az
+„általános vita megkezdése”, „folytatása” és „lezárása” ugyanaz a vita, külön szakaszként számon tartva. Ami
+kimarad: az a felszólalás, amelynek a jegyzőkönyv nem őrzött meg hosszat.</p>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Évről évre</span><span class="tag">{hu_num(len(years))} év · <a href="vitak.csv">CSV, minden vita</a></span></h2>
+  <div class="tablewrap"><table><caption class="vh">Évenként a beszédidő, az ülésnapok, a felszólalások és a viták száma</caption><thead><tr><th scope="col">Év</th><th scope="col" class="num">Idő</th>
+    <th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Felszólalás</th>
+    <th scope="col" class="num">Vita</th><th scope="col" class="num">Irományhoz kötve</th>
+    <th scope="col"><span class="vh">Ábra</span></th></tr></thead><tbody>{yrows}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Az „irományhoz kötve” oszlop azt mondja meg, az év
+  mennyi idejéről tudni, milyen ügyről szólt. A többi olyan napirendi pont alatt hangzott el, ami nem nevez
+  meg irományt — ezek évenként külön sorban szerepelnek, összesen {esc(hu_hours(slot_s))}
+  ({hu_dec(100 * slot_s / total, 1)}% a cikluson belül). Nem téma, hanem időkeret: a legnagyobb közülük a
+  napirend előtti felszólalásoké.{long_day_note(inp)}</div>
+</section>
+{floor_ratio_panel(inp, fac_all, exp_all, seat_all, unattr, f"{cycle}. ciklus") if len(years) > 1 else ""}
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Milyen jogcímen</span><span class="tag">{hu_num(len(forms))} fajta</span></h2>
+  <p class="lede">Nem arról, <i>miről</i> beszélt a Ház, hanem arról, <i>milyen jogon jutott valaki szóhoz</i>.
+  A vezérszónoki idő frakciónként jár, nem képviselőnként — ezért lehet, hogy a legnagyobb frakció beszél a
+  legkevesebbet a súlyához képest.</p>
+  <div class="tablewrap"><table><caption class="vh">A felszólalás fajtái és a rájuk fordított idő</caption><thead><tr><th scope="col">Fajta (az API szövege)</th><th scope="col" class="num">Idő</th>
+    <th scope="col" class="num">Hányad</th><th scope="col"><span class="vh">Ábra</span></th></tr></thead>
+    <tbody>{frows}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px" data-floor="forms-warning"><b>Ez a lista ciklusok között nem
+  hasonlítható össze.</b> A <b>2014 előtti</b> jegyzőkönyvek „expozét” és „sürgősség indoklását” írnak ott, ahol a
+  későbbiek „előterjesztő nyitóbeszédét”: két ciklus fajtánkénti megoszlását egymás mellé téve nem a Házat
+  mérnénk, hanem azt, ki és mikor gépelte a jegyzőkönyvet. Egy cikluson belül viszont ugyanaz a szókincs.</div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>A vita szakaszai</span><span class="tag">a tizenkét legnagyobb</span></h2>
+  <div class="tablewrap" style="border:0"><table><caption class="vh">A vita szakaszai és a rájuk fordított idő</caption><thead><tr><th scope="col">Szakasz (a napirendi pont szövegéből)</th>
+    <th scope="col" class="num">Idő</th><th scope="col" class="num">Hányad</th></tr></thead><tbody>{srows}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Minden irományt megnevező napirendi pont
+  „<span class="mono">&lt;szakasz&gt; &lt;irományszám&gt; &lt;cím&gt;</span>” alakú, kivétel nélkül, így a
+  szakasz és a tárgy szétválasztása nem becslés, hanem osztás az irományszám mentén. A hányad a szakaszos
+  időre vetítve, nem a ciklus egészére.</div>
+</section>
+{cite_html(inp, f'{cycle_dir(cycle)}beszedido/index.html', f'Beszédidő — {cycle}. ciklus', f'{cycle}-beszedido', csv_href='vitak.csv')}
+""" + page_tail(inp, 1)
+
+
+FLOOR_OPEN = 20            # how many of a year's debates are printed opened up, largest first
+
+
+def build_floor_year_page(inp: dict, ft: dict, y: dict, have: set[int]) -> str:
+    """beszedido/<year>.html — one year's debates, the longest twenty of them opened up.
+
+    Only the longest twenty carry their faction and form breakdown, and the number is a stated rule on the
+    page rather than a silent cap. A year holds up to 1,225 debates (2015); giving every one of them an
+    expandable breakdown would put some seventy thousand elements in the document, which is the same mistake
+    this project already made once by rendering 17,584 result rows into a page that then took seconds to
+    paint. The twenty largest are between a fifth and three quarters of a year depending on how concentrated
+    it was, the table below lists every one of them, and the CSV beside the page carries the breakdowns for
+    all — so the page prints that share rather than promising a range."""
+    cycle, depth = inp["cycle"], 1 + inp["base_depth"]
+    colour = {f["id"]: f["colour"] for f in inp["facs"]}
+    tot = y["seconds"] or 1
+    opened = []
+    for i, d in enumerate(y["debates"][:FLOOR_OPEN], 1):
+        stages = "".join(f'<li><span>{esc(k)}</span> <span class="mono">{esc(hu_hours(v))}</span></li>'
+                         for k, v in d["stages"].items())
+        opened.append(
+            f'<details class="floorrow"><summary><span class="mono num">{hu_dec(100 * d["seconds"] / tot, 1)}%</span>'
+            f'<span class="mono">{esc(hu_hours(d["seconds"]))}</span>'
+            f'<span class="t">{esc(d["title"] or "—")}</span>'
+            f'<span class="mono dim">{esc(" · ".join(d["bills"]))}</span></summary>'
+            f'<div class="floorbody">'
+            f'<div class="hero-meta mono" style="margin-bottom:6px">{floor_bill_links(inp, d["bills"], have, depth)}'
+            f' · {hu_num(d["speeches"])} felszólalás</div>'
+            + (f'<ul class="stagelist">{stages}</ul>' if stages else "")
+            + floor_split(inp, d["factions"], d["seconds"], "Frakció", colour)
+            + floor_split(inp, d["forms"], d["seconds"], "Fajta")
+            + '</div></details>')
+    trs = "".join(
+        f'<tr><td class="num mono">{esc(hu_hours(d["seconds"]))}</td>'
+        f'<td class="num mono">{hu_dec(100 * d["seconds"] / tot, 2)}%</td>'
+        f'<td class="mono">{floor_bill_links(inp, d["bills"], have, depth)}</td>'
+        f'<td>{esc(d["title"] or "—")}</td><td class="num mono">{hu_num(d["speeches"])}</td></tr>'
+        for d in y["debates"])
+    slots = "".join(
+        f'<tr><td class="num mono">{esc(hu_hours(d["seconds"]))}</td>'
+        f'<td class="num mono">{hu_dec(100 * d["seconds"] / tot, 1)}%</td>'
+        f'<td>{esc(d["event"])}</td><td class="num mono">{hu_num(d["speeches"])}</td></tr>'
+        for d in y["slots"])
+    slot_s = tot - y["attributed"]
+    top = sum(d["seconds"] for d in y["debates"][:FLOOR_OPEN])
+    return page_head(f'Beszédidő {y["year"]} · {cycle}. ciklus · karzat',
+                     f'A Ház {y["year"]}. évi érdemi felszólalásainak ideje vitánként — a {cycle}. ciklus.',
+                     depth) + topbar(inp, [("beszédidő", "index.html"), (y["year"], None)], 1) + f"""
+<div class="hero-h"><h1>{y["year"]}</h1><small class="label" data-kz-text>{esc(hu_hours(y["seconds"]))} mért idejű érdemi felszólalás · {hu_num(y["days"])} ülésnap · {hu_num(len(y["debates"]))} vita · {cycle}. ciklus</small></div>
+<p class="lede">Ennyi időt töltött a Ház tárgyalással ebben az évben, és ezekkel az ügyekkel. A sorrend az
+időé. A <b>{hu_num(min(FLOOR_OPEN, len(y["debates"])))} leghosszabb vita felnyitható</b> — együtt az év
+{hu_dec(100 * top / tot, 0)}%-a —, alattuk mind a {hu_num(len(y["debates"]))} egy táblában.</p>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>A leghosszabb viták</span><span class="tag">kattints a sorra a bontásért</span></h2>
+  {"".join(opened) or '<div class="hero-meta prose">Ebben az évben nincs irományhoz kötött vita.</div>'}
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Iromány nélkül</span><span class="tag">{esc(hu_hours(slot_s))} · {hu_dec(100 * slot_s / tot, 1)}% az évből</span></h2>
+  <div class="tablewrap" style="border:0"><table><caption class="vh">Az irományt meg nem nevező napirendi pontok és a rájuk fordított idő</caption><thead><tr><th scope="col" class="num">Idő</th>
+    <th scope="col" class="num">Hányad</th><th scope="col">Napirendi pont</th>
+    <th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{slots or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
+  <div class="hero-meta prose" style="margin-top:8px">Ezek nem témák, hanem időkeretek: a napirendi pont
+  nem nevez meg ügyet. Külön sorban maradnak, mert szétosztva őket a témák között az év egy jelentős része
+  csendben átcímkéződne olyasminek, amiről nem szólt.</div>
+</section>
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Minden vita</span><span class="tag">{hu_num(len(y["debates"]))} sor · <a href="vitak.csv">CSV</a> · <a href="bontas.csv">a bontásokkal</a></span></h2>
+  <div class="tablewrap"><table data-page-size="25" data-counter="dv"><caption class="vh">Az év minden vitája időrendben, a leghosszabbal kezdve</caption><thead><tr><th scope="col" class="num">Idő</th>
+    <th scope="col" class="num">Hányad</th><th scope="col">Iromány</th><th scope="col">Tárgy (az Országgyűlés címe)</th>
+    <th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{trs or '<tr><td colspan="5">—</td></tr>'}</tbody></table></div>
+  <div class="filters"><span class="n" id="dv" aria-live="polite"></span></div>
+  <div class="hero-meta prose" style="margin-top:8px">Egy sor egy vita, nem egy iromány, és <b>ugyanaz az
+  iromány több sorban is szerepelhet</b>, ha a Ház különböző társaságban vette elő: Finnország NATO-csatlakozását
+  az általános vitán Svédországéval együtt tárgyalták, a bizottsági jelentések vitáján viszont önmagában. Egy
+  iromány teljes idejéhez tehát az őt megnevező sorokat kell összeadni; az év összegét viszont a sorok adják ki,
+  mert egyetlen felszólalás sem szerepel kétszer.</div>
+</section>
+{floor_ratio_panel(inp, y["factions"], y["expected"], y["seats"], 1 - sum(y["factions"].values()) / tot, y["year"])}
+{cite_html(inp, f'{cycle_dir(cycle)}beszedido/{y["year"]}.html', f'Beszédidő {y["year"]} — {cycle}. ciklus', f'{cycle}-beszedido-{y["year"]}', csv_href='vitak.csv')}
 """ + page_tail(inp, 1)
 
 
@@ -5307,6 +5673,19 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         sw(spd / SEARCH_META, json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
         sw(spd / "kereses.html", build_speech_search_page(inp, len(meta), sum(1 for r in subs if speech_id(r) in texts_map)))
         prune(spd, sw.written)
+        # Beszédidő: the same speech rows the pages above list, added up by what the House said they were about.
+        # Only where the lists were synced at all — an archive cycle with no speech file has nothing to divide.
+        ft = an.floor_time(inp) if has_floor(inp) else {"years": []}
+        if ft["years"]:
+            fld = out_dir / "beszedido"; fld.mkdir(parents=True, exist_ok=True)
+            flw = _Writer()
+            flw(fld / "index.html", build_floor_page(inp, ft))
+            for fy in ft["years"]:
+                flw(fld / f'{fy["year"]}.html', build_floor_year_page(inp, ft, fy, set(bs)))
+            flw(fld / "vitak.csv", ex.floor_debates_csv(ft, cycle))
+            flw(fld / "bontas.csv", ex.floor_breakdown_csv(ft, cycle))
+            flw(fld / "frakciok.csv", ex.floor_factions_csv(ft, cycle))
+            prune(fld, flw.written)
         kmd = out_dir / "kepviselom"; kmd.mkdir(parents=True, exist_ok=True)
         (kmd / "index.html").write_text(build_kepviselom_page(inp), encoding="utf-8")
         compact = {name: [[x["county"], x["no"], 1 if x["partial"] else 0] for x in lst] for name, lst in (oevk_settlements().get("settlements") or {}).items()}

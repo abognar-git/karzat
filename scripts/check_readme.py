@@ -71,6 +71,121 @@ def sb(cycle: int, which: str, field: str) -> float:
     v = (c.get(which) or {}).get(field, 0)
     return 100 * v if field == "recall10" else v
 
+_FLOOR: dict = {}
+
+
+def floor() -> dict:
+    """The Beszédidő figures, recomputed from the same two inputs the pages use.
+
+    `analytics.floor_time` reads only `speeches` and `store`, so this needs neither `load_inputs` nor the
+    alignment — eight cycles of gzip and eight position files, a few seconds, and the gate stays runnable.
+    Everything the README says about the feature comes from here, including the claim that nothing fails to
+    partition: that one is the whole method resting on a `str.partition`, so it is the last figure that
+    should be taken on trust."""
+    if _FLOOR:
+        return _FLOOR
+    import gzip as _g
+    from karzat.analytics import floor_time, split_event
+    D = ROOT / "data" / "derived"
+    hours = rows = cycles = named = unsplit = long_days = 0
+    lo = hi = None
+    y23 = None
+    for ck in (36, 37, 38, 39, 40, 41, 42, None):
+        sfx = f"_ckl{ck}" if ck else ""
+        sp = D / f"speeches{sfx}.json.gz"
+        if not sp.exists():
+            continue
+        speeches = _json.loads(_g.decompress(sp.read_bytes()))
+        sub = [r for r in speeches.get("speeches") or []
+               if not r.get("technical") and r.get("duration_s") and r.get("date")]
+        if not sub:
+            continue
+        cycles += 1
+        rows += len(sub)
+        hours += sum(r["duration_s"] for r in sub)
+        dates = [r["date"] for r in sub]
+        lo = min(dates) if lo is None else min(lo, min(dates))
+        hi = max(dates) if hi is None else max(hi, max(dates))
+        per_day: dict[str, int] = {}
+        for r in sub:
+            per_day[r["date"]] = per_day.get(r["date"], 0) + r["duration_s"]
+            if r.get("iromany"):
+                named += 1
+                unsplit += 1 if split_event(r.get("event"), r["iromany"])[0] is None else 0
+        long_days += sum(1 for s in per_day.values() if s > 24 * 3600)
+        if ck == 42:
+            # the archive cycles' stores are gzipped and the current one is not, the same as everywhere else
+            _s = D / "votes_positions_ckl42.json"
+            store = (_json.loads(_g.decompress((_s.with_suffix(".json.gz")).read_bytes()))
+                     if not _s.exists() else _json.loads(_s.read_text(encoding="utf-8")))
+            ft = floor_time({"speeches": speeches, "store": store})
+            y23 = next(y for y in ft["years"] if y["year"] == "2023")
+    # The size confound, recomputed rather than remembered. The ratio a faction shows is not a free choice:
+    # a vezérszónoki slot belongs to a faction whatever its size, so a large faction's per-member figure is
+    # pushed down arithmetically. The README states how much of the gap that accounts for, so the gate has
+    # to be able to recompute both the bands and the two eras' largest factions.
+    pts = []
+    for ck2 in (36, 37, 38, 39, 40, 41, 42, None):
+        s2 = D / f"speeches{'_ckl' + str(ck2) if ck2 else ''}.json.gz"
+        if not s2.exists():
+            continue
+        p2 = D / f"votes_positions{'_ckl' + str(ck2) if ck2 else ''}.json"
+        st2 = (_json.loads(_g.decompress(p2.with_suffix(".json.gz").read_bytes())) if not p2.exists()
+               else _json.loads(p2.read_text(encoding="utf-8")))
+        for y in floor_time({"speeches": _json.loads(_g.decompress(s2.read_bytes())), "store": st2})["years"]:
+            if y["days"] < 30:                       # a part-year says nothing about a habit
+                continue
+            tot2 = sum(y["factions"].values())
+            etot = sum(y["expected"].get(f, 0.0) for f in y["factions"]) or 1
+            for f, sec in y["factions"].items():
+                e = y["expected"].get(f)
+                if e:
+                    size = e / etot
+                    pts.append((int(y["year"]), size, (sec / tot2) / size, y["seats"].get(f) or 0.0))
+    small = [p[2] for p in pts if p[1] < 0.05]
+    large = [p[2] for p in pts if p[1] >= 0.50]
+    biggest = {}
+    for yr, size, ratio, n2 in pts:                  # the largest faction of each year
+        if yr not in biggest or n2 > biggest[yr][2]:
+            biggest[yr] = (size, ratio, n2)
+    pre = [v for yr, v in biggest.items() if yr < 2010]
+    post = [v for yr, v in biggest.items() if yr >= 2010]
+    pre_sz, pre_r = sum(v[0] for v in pre) / len(pre), sum(v[1] for v in pre) / len(pre)
+    post_sz, post_r = sum(v[0] for v in post) / len(post), sum(v[1] for v in post) / len(post)
+    _FLOOR.update(faction_years=len(pts), band_small=sum(small) / len(small), band_large=sum(large) / len(large),
+                  pre_ratio=pre_r, pre_size=100 * pre_sz, post_ratio=post_r, post_size=100 * post_sz,
+                  mech=pre_r * pre_sz / post_sz)      # what a purely per-faction rule alone would predict
+    # The one assumption under every hour on those pages: that videoido is a stopwatch and not a clip.
+    # The transcript is the outside witness, so the figure the README quotes for it is recomputed here too.
+    tpts = []
+    for sfx in ("_ckl42", ""):
+        tf = D / f"speech_texts{sfx}.json.gz"
+        if not tf.exists():
+            continue
+        for t in _json.loads(_g.decompress(tf.read_bytes()))["texts"].values():
+            if t.get("duration_s") and t.get("chars") and 20 <= t["duration_s"] <= 3600:
+                tpts.append((t["duration_s"], t["chars"]))
+    tmx = sum(d for d, _ in tpts) / len(tpts)
+    tmy = sum(c for _, c in tpts) / len(tpts)
+    corr = (sum((d - tmx) * (c - tmy) for d, c in tpts)
+            / (sum((d - tmx) ** 2 for d, _ in tpts) * sum((c - tmy) ** 2 for _, c in tpts)) ** 0.5)
+    trates = sorted(c / (d / 60) for d, c in tpts)
+    _FLOOR.update(text_pairs=len(tpts), text_r=corr, text_rate=trates[len(trates) // 2])
+
+    fac_total = sum(y23["factions"].values())
+    e23 = sum(y23["expected"].get(f, 0.0) for f in y23["factions"]) or 1
+    gov = sum(s for f, s in y23["factions"].items() if f in ("Fidesz", "KDNP"))
+    gov_e = sum(y23["expected"].get(f, 0.0) for f in ("Fidesz", "KDNP"))
+    gov_share, gov_size = 100 * gov / fac_total, 100 * gov_e / e23
+    slot = next(s for s in y23["slots"] if "előtti" in s["event"])
+    _FLOOR.update(cycles=cycles, rows=rows, hours=hours / 3600, first=lo, last=hi,
+                  named=named, unsplit=unsplit, long_days=long_days,
+                  gov_share=gov_share, gov_size=gov_size, gov_ratio=gov_share / gov_size,
+                  slot_share=100 * slot["seconds"] / y23["seconds"],
+                  vezer=100 * y23["forms"]["vezérszónoki felszólalás"] / y23["seconds"])
+    return _FLOOR
+
+
 README = ROOT / "README.md"
 FACTIONS = ROOT / "config" / "factions.yml"
 
@@ -292,6 +407,26 @@ def build() -> list[tuple[str, list]]:
          [sp43.get("record_check", {}).get("agree", 0), sp43.get("record_check", {}).get("mps", 0), sp42.get("record_check", {}).get("agree", 0), sp42.get("record_check", {}).get("mps", 0)]),
         ("Cycle 43: {:,.0f} rows over {:,.0f} sitting days, {:,.0f} substantive; cycle 42: {:,.0f} rows over {:,.0f} days",
          [sp43.get("count", 0), len(sp43.get("days") or []), sp43.get("substantive", 0), sp42.get("count", 0), len(sp42.get("days") or [])]),
+        # Beszédidő — karzat.analytics.floor_time(), recomputed by floor() above
+        ("of the {:,.0f} that do, **{:,.0f}** fail to partition on the number",
+         [floor()["named"], floor()["unsplit"]]),
+        ("napirend előtti alone is {:.1f}% of 2023", [floor()["slot_share"]]),
+        # the years rather than the exact dates: NUMPAT reads a figure, not an ISO date, and the day-level
+        # span of the record is the coverage page's job anyway
+        ("{:,.0f} cycles carry it — {:,.0f} substantive speeches, {:,.0f} hours, {} to {}",
+         [floor()["cycles"], floor()["rows"], floor()["hours"], int(floor()["first"][:4]), int(floor()["last"][:4])]),
+        ("the governing parties took {:.1f}% of the floor time on {:.1f}% of the roster, {:.2f}×",
+         [floor()["gov_share"], floor()["gov_size"], floor()["gov_ratio"]]),
+        ("not per member — is {:.1f}% of that year", [floor()["vezer"]]),
+        ("across {:,.0f} faction-years since 1998 the ratio falls with size", [floor()["faction_years"]]),
+        ("factions under a twentieth of the House average {:.2f}× and those over half average {:.2f}×",
+         [floor()["band_small"], floor()["band_large"]]),
+        ("before 2010 it ran {:.2f}× at {:.1f}% of the House, from 2010 on {:.2f}× at {:.1f}%, where a purely per-faction rule alone would predict {:.2f}×",
+         [floor()["pre_ratio"], floor()["pre_size"], floor()["post_ratio"], floor()["post_size"], floor()["mech"]]),
+        ("{:,.0f} sitting days whose own durations add up to more than a calendar day",
+         [floor()["long_days"]]),
+        ("over the {:,.0f} speeches carrying both, characters against seconds correlate at {:.2f} and the median rate is {:,.0f} characters a minute",
+         [floor()["text_pairs"], floor()["text_r"], floor()["text_rate"]]),
         # the landing page — scripts.build_site.build_landing()
         ("the arrow keys walk the seats; then the ten cycles since 1990 as stacked composition bars (mandates in force on each constituent sitting, read from the records' dated rows — {:,.0f} in the strip)",
          [_landing().count('<a class="cyc')]),

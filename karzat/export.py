@@ -254,6 +254,32 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
             ("yes_majority, qualified", "több igen, mint nem · minősített (nem egyszerű) többséget kívánt"),
             ("hypo_igen, flips_if_all_voted", "számított feltevés: hány igen lenne, ha minden szavazatot le nem adó a frakciója többségével szavazott volna, és megfordulna-e a kimenetel"),
         ]),
+        ("beszedido/vitak.csv — évenként minden vita és minden iromány nélküli sáv", [
+            ("cycle, year", "ciklus és naptári év; egy vita az évén belül értendő, ezért ami két évre nyúlik, két sorban van"),
+            ("kind", "vita = a napirendi pont irományt nevez meg · sav = nem nevez meg (napirend előtti, napirend utáni, politikai vita)"),
+            ("iromany", "a vita minden irományszáma „ · ”-tal elválasztva — összevont vitánál több; sávnál üres"),
+            ("bills", "hány irományt fog össze ez a vita (1 = önálló, 2+ = összevont)"),
+            ("title", "a napirendi pont szövege az irományszám után, a Ház saját címe; sávnál a napirendi pont neve"),
+            ("seconds, speeches", "a vitára fordított érdemi felszólalási idő és a felszólalások száma"),
+            ("share_of_year", "seconds osztva az év teljes érdemi idejével; egy éven belül a sorok kiadják az 1,0-t"),
+            ("FIGYELEM", "ugyanaz az iromány több sorban is lehet, ha a Ház más társaságban vagy más évben vette elő — GROUP BY iromany előtt ezt érdemes tudni; az évösszeg viszont pontos, mert egy felszólalás sem szerepel kétszer"),
+        ]),
+        ("beszedido/bontas.csv — ugyanaz az idő háromfelé bontva, hosszú formában", [
+            ("cycle, year, kind, item", "a vitak.csv sorára mutat: item = az ott lévő iromany (vitánál) vagy title (sávnál)"),
+            ("dimension", "frakcio | fajta | szakasz"),
+            ("value", "a bontás értéke: a frakció neve, a felszólalás fajtája az API szövegével, vagy a vita szakasza a napirendi pont szövegéből"),
+            ("seconds", "ennyi idő esik erre az értékre a vitán belül"),
+            ("miért hosszú és nem széles", "a három szókincs ciklusonként más — oszloponként egy frakció más oszlopkészletet adna minden ciklusra"),
+        ]),
+        ("beszedido/frakciok.csv — évenként és frakciónként a beszédidő és a Ház összetétele", [
+            ("seconds", "a frakció érdemi felszólalási ideje abban az évben"),
+            ("share_of_faction_time", "a frakciók egymás közti aránya — NEM az évé: a frakció nélküli felszólalók (nem képviselő miniszter, nemzetiségi szószóló, levezető elnök) nincsenek a nevezőben"),
+            ("unattributed", "az év beszédidejének ez a hányada frakció nélküli — minden soron ugyanaz, hogy a fájl ne legyen enélkül olvasható"),
+            ("share_of_house", "a frakció helye a Házban, IDŐARÁNYOSAN: minden felszólalás a saját hosszával számít bele annak a névsornak az összetételébe, ami aznap érvényes volt"),
+            ("mean_seats", "ugyanez főben kifejezve, ezért tizedes — egy évközben megszűnt frakciónál jóval kisebb, mint a legnagyobb létszáma"),
+            ("ratio", "share_of_faction_time / share_of_house. Az 1,00 nem küszöb: a vezérszónoki idő frakciónként jár, nem képviselőnként, ezért a nagy frakciók száma számtanilag lejjebb kerül"),
+            ("mandátum", "ez nem mandátumszám — a W-API nem közöl ilyet; a névsor a jelen lévőket és a távollévőket is kiírja, tehát a Ház összetételét mutatja"),
+        ]),
         ("egy szavazás oldala mellett: <slug>.json és <slug>.csv", [
             ("json", "a szavazás sora + indítványok + frakciónkénti összesítés + a teljes névsor (ülőhellyel, ahol ismert)"),
             ("csv", "a névsor: ts, p_azon, name, faction, position, position_label, against_faction, sector, row, seat"),
@@ -301,6 +327,72 @@ def bills_csv(bs: dict[int, dict[str, Any]], cycle: int) -> str:
              "own_votes": b["own_votes"], "amendment_votes": b["amendment_votes"], "first": b["first"], "last": b["last"],
              "final_outcome": b["final_outcome"], "final_result": b["final_result"], "href": b["href"]} for n, b in sorted(bs.items())]
     return _csv(rows, ["cycle", "number", "prefix", "label", "title", "votes", "own_votes", "amendment_votes", "first", "last", "final_outcome", "final_result", "href"])
+
+
+def floor_debates_csv(ft: dict[str, Any], cycle: int) -> str:
+    """One row per debate and per subject-less slot, so a year's floor time adds up in the file too.
+
+    `kind` separates the two: a `vita` is an agenda item that named a bill, a `sav` is one that named none.
+    Summing `seconds` over a year gives the year, which is the property the page depends on and the reason a
+    joint debate is one row carrying every number it covered rather than several rows sharing it out."""
+    rows = []
+    for y in ft["years"]:
+        for d in y["debates"]:
+            rows.append({"cycle": cycle, "year": y["year"], "kind": "vita", "iromany": " · ".join(d["bills"]),
+                         "bills": len(d["bills"]), "title": d["title"], "seconds": d["seconds"], "speeches": d["speeches"],
+                         "share_of_year": d["seconds"] / y["seconds"] if y["seconds"] else None})
+        for d in y["slots"]:
+            rows.append({"cycle": cycle, "year": y["year"], "kind": "sav", "iromany": None, "bills": 0,
+                         "title": d["event"], "seconds": d["seconds"], "speeches": d["speeches"],
+                         "share_of_year": d["seconds"] / y["seconds"] if y["seconds"] else None})
+    return _csv(rows, ["cycle", "year", "kind", "iromany", "bills", "title", "seconds", "speeches", "share_of_year"])
+
+
+def floor_breakdown_csv(ft: dict[str, Any], cycle: int) -> str:
+    """The same time cut three ways, long-form: which faction, what kind of speech, which stage of the debate.
+
+    Long rather than wide because the three vocabularies are open-ended and cycle-specific — a column per
+    faction would be a different set of columns for every cycle, and a reader joining two files would get
+    silent nulls where a faction simply did not exist yet."""
+    rows = []
+    for y in ft["years"]:
+        for scope, items, key in (("vita", y["debates"], lambda d: " · ".join(d["bills"])),
+                                  ("sav", y["slots"], lambda d: d["event"])):
+            for d in items:
+                for dim, split in (("frakcio", d["factions"]), ("fajta", d["forms"]), ("szakasz", d.get("stages") or {})):
+                    for k, secs in split.items():
+                        rows.append({"cycle": cycle, "year": y["year"], "kind": scope, "item": key(d),
+                                     "dimension": dim, "value": k, "seconds": secs})
+    return _csv(rows, ["cycle", "year", "kind", "item", "dimension", "value", "seconds"])
+
+
+def floor_factions_csv(ft: dict[str, Any], cycle: int) -> str:
+    """Per year and faction: speaking time, the chamber it was spoken in, and the two divided.
+
+    `share_of_house` is time-weighted, not an annual average: every speech counts with its own length
+    towards the composition of the roll call in force that day, so a faction that dissolved in March is
+    measured against the House it sat in rather than a year it did not finish. `mean_seats` is the same
+    weighting expressed as a headcount, which is why it is a decimal. Neither is a mandate count — the API
+    publishes none — and the columns are named for what they are so that nobody joins them to a seat table
+    and calls the difference an error.
+
+    `share_of_faction_time` has factions in its denominator, not the year: speeches by people in no faction
+    (ministers who are not members, nationality spokespersons, the chair) are outside it. `unattributed`
+    repeats the year's share of those on every row so the file cannot be read without it."""
+    rows = []
+    for y in ft["years"]:
+        tot = sum(y["factions"].values()) or 1
+        etot = sum(y["expected"].get(f, 0.0) for f in y["factions"]) or 1
+        unattr = 1 - sum(y["factions"].values()) / (y["seconds"] or 1)
+        for f, secs in y["factions"].items():
+            e = y["expected"].get(f)
+            rows.append({"cycle": cycle, "year": y["year"], "faction": f, "seconds": secs,
+                         "share_of_faction_time": secs / tot, "mean_seats": round(y["seats"].get(f) or 0.0, 2),
+                         "share_of_house": (e / etot) if e else None,
+                         "ratio": ((secs / tot) / (e / etot)) if e else None,
+                         "unattributed": round(unattr, 4)})
+    return _csv(rows, ["cycle", "year", "faction", "seconds", "share_of_faction_time", "mean_seats",
+                       "share_of_house", "ratio", "unattributed"])
 
 
 def motion_records_csv(by_num: dict[int, dict[str, Any]], cycle: int, texts: dict[str, Any]) -> str:

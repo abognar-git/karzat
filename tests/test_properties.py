@@ -764,6 +764,55 @@ class AVerdictIsNeverBetterThanItsVotes(unittest.TestCase):
         self.assertIsNot(passed, True, f"{rule.name}: a decision carried on an empty base")
 
 
+class AnAgendaItemSplitsWithoutLosingItself(unittest.TestCase):
+    """`split_event` decides what every hour on the Beszédidő pages is *about*, by partitioning a string.
+
+    It is the whole feature resting on one `str.partition`, and the real corpus agrees with it on every one
+    of its rows — which is exactly the situation where an example test proves nothing. The interesting inputs
+    are the ones the House has not written yet: a title that repeats its own bill number, a stage that is
+    empty, a number that occurs inside a longer number, a bill string that is only separators.
+
+    Two things must hold whatever comes in. Nothing may be invented — every character of the stage and the
+    subject has to come from the event itself. And it must never raise, because a derivation over half a
+    million speeches must not be stoppable by one odd agenda item."""
+
+    @given(st.text(max_size=40), st.one_of(st.none(), st.text(max_size=20),
+                                           st.sampled_from(["T/1", "T/11", "H/2 · T/3", " · ", "", "T/1 · T/1"])))
+    @SETTINGS
+    def test_it_never_raises_and_never_invents(self, event, iromany):
+        from karzat.analytics import split_event
+        stage, subject = split_event(event, iromany)
+        for part in (stage, subject):
+            if part is not None:
+                self.assertIn(part.strip(), event, f"{part!r} is not part of {event!r}")
+
+    @given(st.text(alphabet="abcdef ", min_size=1, max_size=12),
+           st.sampled_from(["T", "H", "B", "S", "Ü"]), st.integers(min_value=1, max_value=99999),
+           st.text(alphabet="ghijkl ", min_size=1, max_size=12))
+    @SETTINGS
+    def test_a_well_formed_item_splits_back_into_its_two_halves(self, stage, prefix, n, title):
+        """The shape the record actually uses: '<stage> <number> <title>' must come apart into exactly those."""
+        from karzat.analytics import split_event
+        assume(stage.strip() and title.strip())
+        num = f"{prefix}/{n}"
+        assume(num not in stage and num not in title)
+        got_stage, got_title = split_event(f"{stage.strip()} {num} {title.strip()}", num)
+        self.assertEqual(got_stage, stage.strip())
+        self.assertEqual(got_title, title.strip())
+
+    @given(st.sampled_from(["T/1", "T/12", "T/123"]), st.text(alphabet="0123456789", max_size=3))
+    @SETTINGS
+    def test_a_number_inside_a_longer_number_still_partitions_on_the_first_hit(self, num, tail):
+        """'T/12' occurs inside 'T/123'. The partition takes the first occurrence, so the subject may begin
+        with the rest of the longer number — ugly, but it is still the record's own text, and nothing is
+        lost. What must not happen is a crash or a subject invented out of nothing."""
+        from karzat.analytics import split_event
+        event = f"Általános vita {num}{tail} valamiről"
+        stage, subject = split_event(event, num)
+        self.assertEqual(stage, "Általános vita")
+        self.assertIn(subject, event)
+
+
 class ADurationKeepsItsPlaceValue(unittest.TestCase):
     """The magnitude bug, in its own class because it is the exact shape of the worst defect of the week.
 

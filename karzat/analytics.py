@@ -294,3 +294,191 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
             fd.pop("ai_w", None); fd.pop("ai_n", None)
         out.append(d)
     return {"months": out}
+
+
+# -- floor time ----------------------------------------------------------------------------------
+
+def split_event(event: str | None, iromany: str | None) -> tuple[str | None, str | None]:
+    """An agenda-item title into the stage it is and the matter it is about.
+
+    Every agenda item that names a bill is written '<stage> <number> <title>' — 'Általános vita folytatása
+    T/4181 Magyarország 2024. évi központi költségvetéséről'. What precedes the number is the stage, what
+    follows is the subject, and both are the House's own words.
+
+    One thing this does *not* prove, and the sentence that used to stand here implied it did: that every
+    agenda item contains its bill number is true by construction, because `parse_felszolalasok` extracts
+    `iromany` by regexing this same string. It would hold for garbled input too. What is external evidence
+    is the shape of what comes out — across all eight cycles the stage side is a closed vocabulary of a few
+    dozen phrases the House reuses, no extracted subject is empty, and no partition cuts a number in half
+    (the character after the match is never another digit, so 'T/12' is never found inside 'T/123'). A
+    subject may perfectly well *begin* with a digit — 'A/167 1,3 millióval csökkent a szegénységben élők
+    száma' is the House's own question, and my first version of that check flagged it, which was measuring
+    my expectations rather than the record. That distinction is what the tests encode.
+
+    This matters because the stage is exactly what fragments a year. The 2024 budget appears under five
+    different agenda items — the general debate begun, continued, continued and closed, the committee
+    reports, the closing vote — and counted as five items it is five middling entries instead of the
+    largest single thing the House did that year. Dropping the stage from the identity collapses them;
+    keeping it as its own breakdown loses nothing.
+
+    A joint debate names several bills ('T/8217 · T/8218'), and only the first number appears where the
+    title begins, so the whole string after it is the subject of all of them together."""
+    if not event:
+        return None, None
+    first = (iromany or "").split(" · ")[0].strip()
+    if not first or first not in event:
+        return None, event.strip() or None
+    before, _, after = event.partition(first)
+    return (before.strip() or None), (after.strip(" –—-:,") or None)
+
+
+def floor_time(inp: dict[str, Any]) -> dict[str, Any]:
+    """Where the cycle's substantive floor time went: per year, per debate, and in what form.
+
+    The question "what does the House talk about" usually invites a topic model, and this project does not
+    build one, because the labels would be mine. They do not need to be: the record already says what every
+    speech is about. All of them carry an agenda item and four in five carry a bill number, and both are
+    written by the House. Nothing here classifies anything — it adds up seconds and groups them by strings
+    the source supplies.
+
+    Three decisions worth naming, because each of them could have been made dishonestly:
+
+      **The row is the debate, not the bill.** A joint debate — Finland's NATO accession beside Sweden's,
+      the Fundamental Law amendment beside the act implementing it — is one item on the agenda and one
+      block of time. Splitting it between its bills would invent a number, and charging it all to the
+      first would understate the rest, so it stays one row wearing every number it carried. Cycle 42
+      spends 8.6% of its floor time this way. The shares therefore sum to the year, which is the point.
+
+      **The slots keep their own lines.** A fifth of the time sits under agenda items that name no bill,
+      and 'Napirend előtti felszólalások' alone is a sixth of a year. That is not a subject, it is a
+      container — spreading it over the subjects would quietly redistribute the largest single entry.
+
+      **Faction size is measured, not looked up.** The API publishes no seat count, so the denominator
+      here is the members a faction had in that year's roll calls, absentees included, which is the
+      roster the record can actually show. It is close to the mandate count and it is not the same thing,
+      so every page that prints the ratio says which it is.
+
+    `forms` counts the kinds of speech, and those are not comparable between cycles: the pre-2014 lists say
+    'expozé' and 'sürgősség indoklása' where the later ones say 'előterjesztő nyitóbeszéde', so a chart of
+    one cycle's vocabulary against another's would be measuring the transcriber.
+
+    One assumption underlies every hour on these pages and it is worth stating that it was tested rather
+    than assumed. `duration_s` is the API's `videoido` — a video timecode, not a stopwatch at the microphone
+    — so if it carried the walk to the podium, the chair's interruptions or clip padding, every figure here
+    would be wrong in the same direction and no internal sum would reveal it, because they would all still
+    tie. The transcript is an independent witness: over the 17,448 speeches that have both a length and a
+    loaded text, characters against seconds correlate at r = 0.98 and the median rate is 910 characters a
+    minute, which is ordinary Hungarian speech. Padding would show as short speeches yielding fewer
+    characters per second than long ones; the record does the opposite (1,007 a minute under a minute,
+    847 over ten), which is what pauses in a long speech look like. The clock measures speaking."""
+    sp = (inp.get("speeches") or {}).get("speeches") or []
+    rows = [r for r in sp if not r.get("technical") and r.get("duration_s") and (r.get("date") or "")]
+    years: dict[str, dict[str, Any]] = {}
+    stages_all: dict[str, int] = {}
+    forms_all: dict[str, int] = {}
+
+    def bucket(store: dict, key: Any, seed: dict) -> dict:
+        d = store.get(key)
+        if d is None:
+            d = store[key] = dict(seed, seconds=0, speeches=0, factions={}, forms={})
+        return d
+
+    for r in rows:
+        y = r["date"][:4]
+        secs = r["duration_s"]
+        yr = years.get(y)
+        if yr is None:
+            yr = years[y] = {"year": y, "seconds": 0, "speeches": 0, "days": set(), "debates": {}, "slots": {},
+                             "forms": {}, "factions": {}, "expected": {}, "seats": {}, "weighted": 0}
+        yr["seconds"] += secs
+        yr["speeches"] += 1
+        yr["days"].add(r.get("ulnap"))
+        form = r.get("kind") or "—"
+        fac = r.get("faction") or None
+        yr["forms"][form] = yr["forms"].get(form, 0) + secs
+        forms_all[form] = forms_all.get(form, 0) + secs
+        if fac:
+            yr["factions"][fac] = yr["factions"].get(fac, 0) + secs
+        stage, subject = split_event(r.get("event"), r.get("iromany"))
+        numbers = [x.strip() for x in (r.get("iromany") or "").split(" · ") if x.strip()]
+        if numbers:
+            # the debate's identity is its bills and its subject — the stage is deliberately not part of it
+            d = bucket(yr["debates"], (" · ".join(numbers), subject or ""),
+                       {"bills": numbers, "title": subject, "stages": {}})
+            if stage:
+                d["stages"][stage] = d["stages"].get(stage, 0) + secs
+                stages_all[stage] = stages_all.get(stage, 0) + secs
+        else:
+            d = bucket(yr["slots"], subject or "—", {"event": subject or "—"})
+        d["seconds"] += secs
+        d["speeches"] += 1
+        if fac:
+            d["factions"][fac] = d["factions"].get(fac, 0) + secs
+        d["forms"][form] = d["forms"].get(form, 0) + secs
+
+    # THE DENOMINATOR, and it has to be time-resolved because the numerator is.
+    #
+    # Each speech carries its own faction label, so a faction that dissolved in March contributes no seconds
+    # from April. Counting its members over the whole year and dividing charges it twelve months of size for
+    # three months of speech. The MDF sat in cycle 38 until 16 March 2009 and appears in no roll call after
+    # it — a year-long roster made it 0.51× where the House it actually spoke in makes it about 3.3×, and the
+    # page colours anything under 1.00 differently, so the picture flipped too, not only the figure.
+    #
+    # A roll call lists the whole House, absentees included: 383–386 rows in a 386-seat chamber, 197–199 in a
+    # 199-seat one. So each one is a snapshot of the composition on its date, and the honest expectation for
+    # a faction is its share of the chamber *at the moments the speaking happened* — every speech weighted by
+    # its own length against the roll call in force that day. Both sides of the ratio then answer the same
+    # question about the same instants.
+    #
+    # This also disposes of a subtler error the union count carried: summing per-faction member sets
+    # double-counts anyone who changed faction mid-year (403 against 392 real people in 2009), so the
+    # denominator exceeded the House. A snapshot cannot, because it is the House.
+    store = inp.get("store") or {}
+    fac_names = store.get("factions") or []
+    snaps: dict[str, dict[str, int]] = {}
+    for ts, rows_ in (store.get("positions") or {}).items():
+        if not rows_:
+            continue
+        counts: dict[str, int] = {}
+        for _key, fi, _code in rows_:
+            if 0 <= fi < len(fac_names):
+                counts[fac_names[fi]] = counts.get(fac_names[fi], 0) + 1
+        if counts:
+            snaps[ts[:10].replace(".", "-")] = counts       # the day's last roll call speaks for the day
+    snap_dates = sorted(snaps)
+    if snap_dates:
+        import bisect as _bisect
+        for r in rows:
+            i = _bisect.bisect_right(snap_dates, r["date"]) - 1
+            counts = snaps[snap_dates[max(i, 0)]]           # before the first roll call: the earliest House
+            house = sum(counts.values()) or 1
+            yr = years[r["date"][:4]]
+            secs = r["duration_s"]
+            for f, n in counts.items():
+                yr["expected"][f] = yr["expected"].get(f, 0.0) + secs * n / house
+                yr["seats"][f] = yr["seats"].get(f, 0.0) + secs * n
+            yr["weighted"] += secs
+
+    out_years = []
+    for y in sorted(years):
+        yr = years[y]
+        yr["days"] = len(yr["days"])
+        w = yr["weighted"] or 1
+        yr["seats"] = {f: n / w for f, n in sorted(yr["seats"].items(), key=lambda kv: -kv[1])}
+        yr["house"] = sum(yr["seats"].values())
+        yr["expected"] = {f: e / w for f, e in sorted(yr["expected"].items(), key=lambda kv: -kv[1])}
+        yr["debates"] = sorted(yr["debates"].values(), key=lambda d: (-d["seconds"], d["bills"][0]))
+        yr["slots"] = sorted(yr["slots"].values(), key=lambda d: (-d["seconds"], d["event"]))
+        yr["attributed"] = sum(d["seconds"] for d in yr["debates"])
+        for d in yr["debates"]:
+            d["stages"] = dict(sorted(d["stages"].items(), key=lambda kv: -kv[1]))
+        for d in yr["debates"] + yr["slots"]:
+            d["factions"] = dict(sorted(d["factions"].items(), key=lambda kv: -kv[1]))
+            d["forms"] = dict(sorted(d["forms"].items(), key=lambda kv: -kv[1]))
+        for k in ("forms", "factions"):
+            yr[k] = dict(sorted(yr[k].items(), key=lambda kv: -kv[1]))
+        out_years.append(yr)
+    return {"years": out_years, "seconds": sum(y["seconds"] for y in out_years),
+            "speeches": sum(y["speeches"] for y in out_years),
+            "stages": dict(sorted(stages_all.items(), key=lambda kv: -kv[1])),
+            "forms": dict(sorted(forms_all.items(), key=lambda kv: -kv[1]))}

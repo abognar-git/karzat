@@ -486,7 +486,19 @@ class Cycle42(unittest.TestCase):
             self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
         self.assertIn('href="../ckl43/index.html" class="near">43</a>', page)  # the cycle switch (43 is the neighbour of 42)
         self.assertIn('<span class="kicker" data-kz-text>42. ciklus</span><h1>2022. május 2. — 2026. május 8.</h1>', page)   # the term is the title
-        self.assertEqual(page.count('<div class="grp">'), 3)                    # the cycle's pages, grouped: szavazások · emberek · eszközök
+        # Four groups, and each entry under the question it answers. This used to be three, and the odd one
+        # out was not the count but the filing: pályaképek (people's careers) sat under "eszközök", visszhang
+        # (repeated passages in speeches) under "szavazások", and beszédidő under "emberek" although it is
+        # about what was debated. A parliament debates and then votes, so "viták" is a group, not a leftover.
+        self.assertEqual(page.count('<div class="grp">'), 4)
+        nav = re.search(r'<nav class="cyc-nav".*?</nav>', page, re.S).group(0)   # .lbl is used elsewhere too
+        groups = dict(re.findall(r'<span class="lbl">([^<]+)</span>(.*?)</div>', nav, re.S))
+        self.assertEqual(list(groups), ["szavazások", "viták", "emberek", "eszközök"])
+        for label, entry in (("szavazások", "kohézió"), ("szavazások", "szoros szavazások"),
+                             ("viták", "irományok"), ("viták", "beszédidő"), ("viták", "felszólalások"),
+                             ("viták", "visszhang"), ("emberek", "képviselők"), ("emberek", "pályaképek"),
+                             ("emberek", "bizottságok"), ("eszközök", "adatok"), ("eszközök", "módszer")):
+            self.assertIn(f">{entry}</a>", groups[label], f"{entry} is not under {label}")
         self.assertNotIn("ciklusok: ", page)                                      # the cycle list lives in the top bar, once
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
         self.assertEqual(page.count('data-y="2023"'), 719)
