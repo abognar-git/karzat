@@ -251,8 +251,17 @@ def evaluate(rule: Rule | str, tally: Tally) -> Verdict:
                        tally.present_is_assumed, info.basis,
                        "plurality vote: not decidable from a yes/no tally")
     assert n is not None and b is not None
+    # `b > 0` is the whole of the empty-House case, and the rules disagreed about it: two-thirds of nobody is
+    # nought, so `0 >= 0` carried the motion, while more-than-half of nobody is one, so the same empty tally
+    # was rejected. Four rules passing a decision nobody voted for, two refusing it.
+    #
+    # This corrects nothing that was ever published. The corpus holds 31 votes with a rule and nobody present,
+    # every one of them `egyszeru`, whose empty threshold is 1 — so all 31 read "Elutasítva", which is what
+    # the record itself says. The four rules that would have carried them have never met an empty base.
+    # The guard is here because a threshold is not made right by not being called, and because two rules
+    # answering an identical tally differently is a disagreement one of them has to be losing.
     return Verdict(rule.value, info.label_hu, info.base, b, n, tally.yes, tally.yes - n,
-                   tally.yes >= n, tally.present_is_assumed, info.basis, note)
+                   b > 0 and tally.yes >= n, tally.present_is_assumed, info.basis, note)
 
 
 def evaluate_all(tally: Tally) -> dict[str, Verdict]:

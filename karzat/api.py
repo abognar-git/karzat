@@ -203,7 +203,16 @@ class WebApi:
             keep = self.cache_dir / ".superseded" / service
             keep.mkdir(parents=True, exist_ok=True)
             stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
-            (keep / f"{path.stem}.{stamp}.xml").write_bytes(old_raw)
+            # The filename used to be stem + a one-second stamp, so two rewrites of the same record inside one
+            # second wrote to the same path and the first payload was gone. The log would say the source
+            # changed a record three times while the evidence for two of them no longer existed — this
+            # feature failing at exactly the job it was added to do, and quietly, which is the worst of it.
+            #
+            # The content hash makes the name a function of the bytes: a payload already kept lands on its own
+            # path and rewrites itself, so re-recording is idempotent, and two different payloads in the same
+            # second cannot collide. The stamp stays because knowing when it was seen is half the point.
+            digest = _h.sha256(old_raw).hexdigest()[:12]
+            (keep / f"{path.stem}.{stamp}.{digest}.xml").write_bytes(old_raw)
             log = self.cache_dir / ".superseded" / "changes.jsonl"
             with log.open("a", encoding="utf-8") as fh:
                 fh.write(json.dumps({

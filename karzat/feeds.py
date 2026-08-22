@@ -38,7 +38,8 @@ RECENT_DAYS = 5            # … and every entry of the newest five sitting days
 MAX_ENTRIES = 600          # hard ceiling on the file
 INDEPENDENT = "független"  # not a faction: independents have no faction plurality to dissent from — they are not in the dissent channels
 
-POS_HU = {"igen": "igen", "nem": "nem", "tartozkodott": "tartózkodott"}
+# was a three-entry copy of a seven-entry table; see normalise.POSITION_LABEL
+from karzat.normalise import POSITION_LABEL as POS_HU
 
 
 def slug(text: str) -> str:

@@ -14,8 +14,8 @@ import io
 import json
 from typing import Any
 
-POSITION_LABEL = {"igen": "igen", "nem": "nem", "tartozkodott": "tartózkodott", "jelen_nem_szavazott": "jelen, nem szavazott",
-                  "nem_szavazott": "nem szavazott", "bejelentett_hianyzo": "előre bejelentett hiányzó", "igazoltan_tavol": "igazoltan távol"}
+from karzat.normalise import POSITION_LABEL   # one table, beside the codes it names
+
 
 
 def _csv(rows: list[dict[str, Any]], columns: list[str]) -> str:

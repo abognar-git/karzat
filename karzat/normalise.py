@@ -45,6 +45,23 @@ POSITIONS: dict[str, str] = {
     "Előre bejelentett hiányzó": "bejelentett_hianyzo",
     "Ig.távol": "igazoltan_tavol",
 }
+# How each code is written for a reader, and the order the House itself prints them in. This lived in three
+# separate copies — the exporter's, the builder's, and the feeds' — and the feeds' held three of the seven, so
+# a dissent feed that ever carried one of the other four would have printed `jelen_nem_szavazott` at readers.
+# It never has, because dissent is defined over the three cast positions; the trap was waiting for the day the
+# definition widened. One table, beside the codes it names, and a test that the two agree.
+POSITION_ORDER: tuple[str, ...] = ("igen", "nem", "tartozkodott", "jelen_nem_szavazott",
+                                   "nem_szavazott", "bejelentett_hianyzo", "igazoltan_tavol")
+POSITION_LABEL: dict[str, str] = {
+    "igen": "igen",
+    "nem": "nem",
+    "tartozkodott": "tartózkodott",
+    "jelen_nem_szavazott": "jelen, nem szavazott",
+    "nem_szavazott": "nem szavazott",
+    "bejelentett_hianyzo": "előre bejelentett hiányzó",
+    "igazoltan_tavol": "igazoltan távol",
+}
+
 ABSENT_POSITIONS = ("nem_szavazott", "bejelentett_hianyzo", "igazoltan_tavol")
 # The "jelen lévő" base of the present-based majorities is the votes cast (igen + nem + tartózkodott) — the API's own
 # "Összes szavazat". Evidence, not interpretation: with the present-not-voting ("Jelen, nem szav.") counted in, the
@@ -437,15 +454,36 @@ SUBSTANTIVE_KINDS = {
 
 
 def _duration_s(v: str | None) -> int | None:
-    """'25:40' → 1540; '1:02:03' → 3723; '' → None."""
+    """'25:40' → 1540; '1:02:03' → 3723; '' → None.
+
+    `str.isdigit()` is true of the superscript digits — '²', '³', '¹' are Unicode category No — and `int()`
+    rejects every one of them, so the guard and the conversion disagreed and `'²:30'` raised a ValueError out
+    of the middle of a derivation. Nothing in the record has ever contained one. That is not the point: a
+    parser fed raw payload text must not be able to stop a nightly run over half a million speeches, and the
+    two lines must agree about what a digit is. `str.isascii()` makes them agree.
+
+    A field this cannot read is a field not recorded — None, which every caller already handles — rather than
+    an exception, because a duration is a detail and the speech is not."""
     if not v or ":" not in v:
         return None
-    parts = [int(x) for x in v.strip().split(":") if x.strip().isdigit()]
-    if not parts:
+    fields = [x.strip() for x in v.split(":")]
+    while fields and not fields[-1]:                    # '25:40:' is 25 minutes 40 seconds with a stray colon
+        fields.pop()
+    while fields and not fields[0]:
+        fields.pop(0)
+    if not fields or not all(x.isascii() and x.isdigit() for x in fields):
+        # An unreadable field used to be filtered out of the fold, and dropping a field shifts every field
+        # after it down a magnitude: '1::03' folded to 63 where the writing says 3663, a speech of an hour
+        # recorded as one of a minute. Not one of the 400,086 duration fields in the cache is anything but
+        # M:SS, H:MM:SS or empty, so no published figure has ever been wrong — the parser was.
+        #
+        # A gap in the middle is genuinely ambiguous: '1::03' could be an hour and three seconds, or a minute
+        # and three seconds with a typo. This project does not guess. Nothing recorded beats a number 58 times
+        # too small, because the missing one is visible and the wrong one is not.
         return None
     total = 0
-    for x in parts:
-        total = total * 60 + x
+    for x in fields:
+        total = total * 60 + int(x)
     return total
 
 

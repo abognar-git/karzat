@@ -62,9 +62,7 @@ ASSETS_DIR = SITE_DIR / "assets"
 CORNERS = '<span class="kz-corner tl"></span><span class="kz-corner tr"></span><span class="kz-corner bl"></span><span class="kz-corner br"></span>'
 FACTIONS = ROOT / "config" / "factions.yml"
 
-POSITION_ORDER = ["igen", "nem", "tartozkodott", "jelen_nem_szavazott", "nem_szavazott", "bejelentett_hianyzo", "igazoltan_tavol"]
-POSITION_LABEL = {"igen": "igen", "nem": "nem", "tartozkodott": "tartózkodott", "jelen_nem_szavazott": "jelen, nem szavazott",
-                  "nem_szavazott": "nem szavazott", "bejelentett_hianyzo": "előre bejelentett hiányzó", "igazoltan_tavol": "igazoltan távol"}
+from karzat.normalise import POSITION_LABEL, POSITION_ORDER   # one table, beside the codes
 HU_MONTHS = ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december']
 
 

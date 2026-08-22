@@ -186,6 +186,13 @@ def assess(*, sitting_days: Iterable[date] | None, newest_vote_at: datetime | No
 
     if newest_vote_at is None:
         status = "empty"
+    elif not occurred:
+        # A list was fetched and holds no day that has happened — an empty list, or a cycle whose first
+        # sitting is still ahead. `missed` is then empty for want of anything to compare, and the verdict
+        # used to come out "current": the site asserting currency on the strength of knowing nothing.
+        # "unknown" is what the docstring at the top of this file already reserves for exactly that state,
+        # and the difference between the two is the difference between measuring and assuming.
+        status = "unknown"
     elif days is None:
         status = "unknown"
     elif missed:

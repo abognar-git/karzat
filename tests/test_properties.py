@@ -32,7 +32,7 @@ from __future__ import annotations
 import math
 import sys
 import unittest
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -596,6 +596,267 @@ class TwoDifferentRequestsNeverShareACacheFile(unittest.TestCase):
             self.assertEqual(missing, set(),
                              f"{svc} is called with {sorted(missing)}, which its cache key ignores — "
                              f"two different requests would share one file")
+
+
+class TheSevenPositionsAreNamedEverywhereTheyAppear(unittest.TestCase):
+    """The House distinguishes seven ways of not voting yes, and collapsing them into three is the commonest
+    way this data is misread. The project says so on the page, in the export's dictionary and in the README.
+
+    It also kept three copies of the table that writes them out for a reader — the exporter's, the builder's
+    and the feeds' — and the feeds' held three of the seven. No dissent feed has ever carried one of the other
+    four, because dissent is defined over the three cast positions, so nothing was wrong on the site. The trap
+    was set for the day that definition widened: a feed printing `jelen_nem_szavazott` at its readers.
+
+    Same shape as the chart's invented faction palette earlier the same day — a second copy of a table that
+    drifted from the first. So: one table, beside the codes it names, and these assert the two cannot part."""
+
+    def test_every_code_the_parser_can_emit_has_a_name(self):
+        from karzat.normalise import POSITIONS, POSITION_LABEL
+        self.assertEqual(set(POSITIONS.values()), set(POSITION_LABEL),
+                         "a position the parser produces has no Hungarian name, or a name has no position")
+
+    def test_the_printing_order_lists_each_position_once(self):
+        from karzat.normalise import POSITION_LABEL, POSITION_ORDER
+        self.assertEqual(sorted(POSITION_ORDER), sorted(POSITION_LABEL))
+        self.assertEqual(len(POSITION_ORDER), len(set(POSITION_ORDER)), "a position is printed twice")
+
+    def test_nobody_keeps_a_second_copy_of_the_table(self):
+        """The check that would have caught the drift: three modules, one object."""
+        from karzat.export import POSITION_LABEL as exported
+        from karzat.feeds import POS_HU as in_feeds
+        from karzat.normalise import POSITION_LABEL as canonical
+        from scripts.build_site import POSITION_LABEL as on_pages
+        for name, table in (("export", exported), ("feeds", in_feeds), ("build_site", on_pages)):
+            self.assertIs(table, canonical, f"{name} keeps its own copy of the position names")
+
+    @given(st.sampled_from(sorted(__import__("karzat.normalise", fromlist=["x"]).POSITION_LABEL)))
+    @SETTINGS
+    def test_a_name_is_never_the_code_itself(self, code):
+        """A fallback of `.get(code, code)` is how an unlabelled position reaches a reader looking like a
+        database column. The mark of that is an underscore in running Hungarian text.
+
+        My first version of this also asserted the label differed from the code with its underscores turned
+        to spaces, and Hypothesis produced `nem_szavazott` in a second: "nem szavazott" is simply the correct
+        phrase, and the property was wrong rather than the table. Left in the comment because it is the whole
+        lesson — the tool does not find your bugs first, it finds your assumptions."""
+        from karzat.normalise import POSITION_LABEL
+        label = POSITION_LABEL[code]
+        self.assertNotIn("_", label, f"{code} is printed as an identifier rather than a phrase")
+        self.assertTrue(label.strip(), f"{code} has an empty name")
+
+
+class CurrencyIsClaimedOnlyOnEvidence(unittest.TestCase):
+    """The freshness verdict is the one sentence on every page that makes a claim about the present, and the
+    rule this project set itself is that it may never say more than the record supports.
+
+    It said more. `missed` is the list of sitting days later than the newest vote, so when no sitting day has
+    happened yet — an empty list, or a cycle whose first sitting is still ahead — `missed` was empty for want
+    of anything to compare, and the verdict came out "current". The site asserting currency on the strength of
+    knowing nothing. `unknown` is what this module's own docstring reserves for that state.
+
+    A property rather than an example because the interesting inputs are combinations: a list that is empty, a
+    list entirely in the future, a vote before or after the last known sitting, a sync that is fresh or stale.
+    """
+
+    @st.composite
+    def _world(draw):
+        from karzat.freshness import BUDAPEST
+        base = datetime(2026, 8, 18, 9, 0, tzinfo=BUDAPEST)
+        offsets = draw(st.lists(st.integers(min_value=-40, max_value=40), max_size=4, unique=True))
+        days = draw(st.one_of(st.none(), st.just([(base.date() + timedelta(days=o)) for o in offsets])))
+        newest = draw(st.one_of(st.none(),
+                                st.integers(min_value=-60, max_value=10)
+                                  .map(lambda o: base + timedelta(days=o))))
+        sync = draw(st.one_of(st.none(),
+                              st.integers(min_value=0, max_value=200)
+                                .map(lambda h: base - timedelta(hours=h))))
+        return days, newest, sync, base
+
+    @given(_world())
+    @SETTINGS
+    def test_current_means_a_sitting_day_has_happened_and_is_covered(self, world):
+        from karzat.freshness import assess
+        days, newest, sync, now = world
+        f = assess(sitting_days=days, newest_vote_at=newest, last_sync_at=sync, now=now)
+        if f.status != "current":
+            return
+        self.assertIsNotNone(f.newest_vote_day, "current with no vote to be current about")
+        self.assertIsNotNone(f.latest_sitting_day,
+                             "current while no sitting day is known to have happened")
+        self.assertGreaterEqual(f.newest_vote_day, f.latest_sitting_day,
+                                "current while the newest vote predates the last sitting day")
+        self.assertEqual(f.missed_sitting_days, (), "current with a sitting day missing")
+
+    @given(_world())
+    @SETTINGS
+    def test_the_sentence_never_names_a_day_the_verdict_does_not_hold(self, world):
+        """The two sentences are written from the verdict, so a status that changes without them changing is
+        a sentence that has come loose from its own evidence."""
+        from karzat.freshness import assess
+        days, newest, sync, now = world
+        f = assess(sitting_days=days, newest_vote_at=newest, last_sync_at=sync, now=now)
+        for sentence in (f.sentence_hu, f.sentence_en):
+            self.assertTrue(sentence.strip(), f"status {f.status} produced no sentence")
+            if f.latest_sitting_day is None:
+                self.assertNotIn("legutóbbi ülésnap", sentence,
+                                 "the sentence names a most recent sitting day the verdict does not have")
+
+
+class AParserNeverStopsTheRun(unittest.TestCase):
+    """Totality. A derivation reads half a million rows in one pass, and a parser that raises on a shape it
+    did not expect does not lose that row — it loses the night.
+
+    `_duration_s` guarded its conversion with `str.isdigit()`, which is true of the superscript digits, and
+    converted with `int()`, which rejects every one of them. `'²:30'` raised a ValueError out of the middle of
+    the speech derivation. Nothing in the record has ever held a '²'; the two lines disagreeing about what a
+    digit is, is the defect, and the record's future contents are not mine to promise."""
+
+    TEXT = st.text(alphabet=st.characters(blacklist_categories=("Cs",), max_codepoint=0x2FFF), max_size=24)
+
+    @given(st.one_of(st.none(), TEXT))
+    @SETTINGS
+    def test_a_duration_is_a_number_or_nothing_and_never_an_exception(self, v):
+        from karzat.normalise import _duration_s
+        out = _duration_s(v)
+        self.assertTrue(out is None or isinstance(out, int), f"{v!r} produced {out!r}")
+        if isinstance(out, int):
+            self.assertGreaterEqual(out, 0, f"{v!r} produced a negative duration")
+
+    @given(st.integers(min_value=0, max_value=59), st.integers(min_value=0, max_value=59))
+    @SETTINGS
+    def test_minutes_and_seconds_are_read_as_minutes_and_seconds(self, m, sec):
+        from karzat.normalise import _duration_s
+        self.assertEqual(_duration_s(f"{m}:{sec:02d}"), m * 60 + sec)
+
+    @given(st.integers(min_value=0, max_value=9), st.integers(min_value=0, max_value=59),
+           st.integers(min_value=0, max_value=59))
+    @SETTINGS
+    def test_three_fields_are_hours_minutes_seconds(self, h, m, sec):
+        from karzat.normalise import _duration_s
+        self.assertEqual(_duration_s(f"{h}:{m:02d}:{sec:02d}"), h * 3600 + m * 60 + sec)
+
+
+class AVerdictIsNeverBetterThanItsVotes(unittest.TestCase):
+    """`passed` is the site's headline for a vote, and the arithmetic that produces it and the threshold
+    printed beside it are two different code paths. A pass that is not a majority would be the worst
+    single wrong thing this site could print."""
+
+    @given(st.sampled_from(list(Rule)), tallies())
+    @SETTINGS
+    def test_a_vote_that_passed_had_more_yes_than_no(self, rule, t):
+        v = evaluate(rule, t)
+        passed = v.get("passed") if isinstance(v, dict) else getattr(v, "passed", None)
+        if passed is not True:
+            return
+        self.assertGreater(t.yes, t.no,
+                           f"{rule.name}: passed with {t.yes} yes against {t.no} no")
+
+    @given(st.sampled_from(list(Rule)), tallies())
+    @SETTINGS
+    def test_an_empty_house_never_carries_a_verdict(self, rule, t):
+        """The degenerate base, asserted at the verdict rather than at the threshold. `_more_than_half(0)` is
+        1 and `_at_least_fraction(0, 2, 3)` is 0, so the rules disagree about the empty case; what matters to
+        a reader is that neither can produce a decision out of nobody."""
+        if base_of(rule, t) not in (0, None):
+            return
+        v = evaluate(rule, t)
+        passed = v.get("passed") if isinstance(v, dict) else getattr(v, "passed", None)
+        self.assertIsNot(passed, True, f"{rule.name}: a decision carried on an empty base")
+
+
+class ADurationKeepsItsPlaceValue(unittest.TestCase):
+    """The magnitude bug, in its own class because it is the exact shape of the worst defect of the week.
+
+    An unreadable field was filtered out of the positional fold, and dropping a field shifts every field after
+    it down a magnitude: `'1::03'` folded to 63 where the writing says 3663 — a speech of an hour recorded as
+    one of a minute. No exception, no gap in the data, a plausible number that is 58 times too small. The same
+    shape as a DECIMAL printed unscaled, and the same reason it would never have been noticed.
+
+    None of the 400,086 duration fields in the cache is anything but M:SS, H:MM:SS or empty, so no published
+    figure has ever been wrong. The parser was."""
+
+    @given(st.lists(st.one_of(st.integers(min_value=0, max_value=999).map(str),
+                              st.just(""), st.just("²"), st.just("-2"), st.text(alphabet="ab", max_size=2)),
+                    min_size=1, max_size=4).map(":".join))
+    @SETTINGS
+    def test_a_readable_leading_field_never_loses_its_magnitude(self, v):
+        """Policy-free: whatever an unreadable field is taken to mean, it may not be deleted. If the first
+        field reads as a number, the answer is either nothing at all or at least that number's own place."""
+        from karzat.normalise import _duration_s
+        out = _duration_s(v)
+        if out is None:
+            return
+        fields = [x.strip() for x in v.split(":")]
+        while fields and not fields[-1]:
+            fields.pop()
+        while fields and not fields[0]:
+            fields.pop(0)
+        if not fields or not (fields[0].isascii() and fields[0].isdigit()):
+            return
+        self.assertGreaterEqual(out, int(fields[0]) * 60 ** (len(fields) - 1),
+                                f"{v!r} -> {out}: a field was dropped and the rest slid down a magnitude")
+
+    @given(st.integers(min_value=0, max_value=9), st.integers(min_value=0, max_value=59),
+           st.integers(min_value=0, max_value=59))
+    @SETTINGS
+    def test_a_trailing_colon_does_not_change_the_reading(self, h, m, sec):
+        """`'25:40:'` is a stray colon, not a third field; the record has produced worse."""
+        from karzat.normalise import _duration_s
+        self.assertEqual(_duration_s(f"{m}:{sec:02d}:"), _duration_s(f"{m}:{sec:02d}"))
+
+
+class TheSupersededStoreLosesNothing(unittest.TestCase):
+    """The change watcher keeps the payload the source overwrote, and it was overwriting them itself.
+
+    The kept file was named for the record and a stamp at one-second resolution, so two rewrites of the same
+    record inside one second landed on one path and the earlier payload was gone. The log would then say the
+    source changed a record three times while the evidence for two of them no longer existed — this feature
+    failing at precisely the job it exists to do, silently, in the direction that looks like nothing happened.
+
+    tests/test_api.py exercises one change and asserts one file, which is true of both the broken and the
+    fixed version. The property is about sequences, which is why an example never reached it."""
+
+    @given(st.lists(st.binary(min_size=1, max_size=40).map(lambda b: b"<v>" + b + b"</v>"),
+                    min_size=2, max_size=6))
+    @settings(max_examples=40, deadline=None, suppress_health_check=[HealthCheck.too_slow])
+    def test_every_logged_change_still_has_its_payload_on_disk(self, bodies):
+        import hashlib, json as _json, tempfile
+        from karzat.api import WebApi
+        d = Path(tempfile.mkdtemp())
+        api = WebApi(token="x", cache_dir=d)
+        svc, params = "szavazasok", {"p_datum_tol": "2026.05.01", "p_datum_ig": "2026.05.31"}
+        path = api.cache_path(svc, params)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        transitions = [(a, b) for a, b in zip(bodies, bodies[1:]) if a != b]
+        for a, b in transitions:
+            api._record_change(svc, params, path, a, b)
+        log = d / ".superseded" / "changes.jsonl"
+        if not transitions:
+            return
+        lines = [_json.loads(x) for x in log.read_text(encoding="utf-8").strip().splitlines()]
+        kept = sorted((d / ".superseded").rglob("*.xml"))
+        on_disk = {hashlib.sha256(f.read_bytes()).hexdigest() for f in kept}
+        self.assertEqual(len(lines), len(transitions))
+        for ln in lines:
+            self.assertIn(ln["was"]["sha256"], on_disk,
+                          "the log records a change whose superseded payload is gone")
+
+    @given(st.binary(min_size=1, max_size=40).map(lambda b: b"<v>" + b + b"</v>"))
+    @settings(max_examples=25, deadline=None, suppress_health_check=[HealthCheck.too_slow])
+    def test_recording_the_same_change_twice_keeps_one_file(self, body):
+        """Idempotence: the nightly can re-see a transition, and a second copy of the same bytes is noise."""
+        import tempfile
+        from karzat.api import WebApi
+        d = Path(tempfile.mkdtemp())
+        api = WebApi(token="x", cache_dir=d)
+        svc, params = "szavazasok", {"p_datum_tol": "2026.05.01", "p_datum_ig": "2026.05.31"}
+        path = api.cache_path(svc, params)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        api._record_change(svc, params, path, body, b"<v>new</v>")
+        first = sorted((d / ".superseded").rglob("*.xml"))
+        api._record_change(svc, params, path, body, b"<v>new</v>")
+        self.assertEqual(len(sorted((d / ".superseded").rglob("*.xml"))), len(first),
+                         "re-recording one transition left two copies of the same payload")
 
 
 
