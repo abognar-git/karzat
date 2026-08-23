@@ -25,8 +25,11 @@ const path = require('node:path');
 const read = (s) => new Promise((r) => { let b = ''; s.on('data', (c) => (b += c)); s.on('end', () => r(b)); });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function http(url) {
-  const r = await fetch(url);
+async function http(url, method = 'GET') {
+  // Every call to Chrome carries a deadline. Without one, a socket that accepts and then says nothing hangs
+  // the retry loop below for as long as the job is allowed to live — the gate does not report a wrong answer,
+  // it reports nothing at all, which in CI burns the whole run and is the other way a gate gets switched off.
+  const r = await fetch(url, { method, signal: AbortSignal.timeout(15000) });
   if (!r.ok) throw new Error(`${url} -> ${r.status}`);
   return r.json();
 }
@@ -81,13 +84,17 @@ async function auditOne(session, page, axeSource, opts) {
   // seconds and a raised heap to finish it — for a verdict identical to the smaller archive index beside it,
   // because they are the same template with more rows. So the rules run on the representative one and the
   // worst case is still weighed, which is the half that actually differs.
-  const net = { requests: 0, bytes: 0, failed: [] };
+  const net = { requests: 0, bytes: 0, failed: [], status: 0 };
   let loaded = false;
   session.on((m) => {
     if (m.method === 'Network.requestWillBeSent') net.requests += 1;
     else if (m.method === 'Network.loadingFinished') net.bytes += m.params.encodedDataLength || 0;
     else if (m.method === 'Network.loadingFailed') net.failed.push(m.params.errorText || 'failed');
     else if (m.method === 'Page.loadEventFired') loaded = true;
+    // A page served as a 404 is Chrome's error page, and an error page passes almost every rule there is —
+    // it only tripped the `lang` check by accident. The document's own status is recorded and judged.
+    else if (m.method === 'Network.responseReceived' && m.params.type === 'Document'
+             && !net.status) net.status = m.params.response.status;
   });
   await session.send('Network.enable');
   await session.send('Page.enable');
@@ -127,6 +134,20 @@ async function auditOne(session, page, axeSource, opts) {
                  a.forEach(x => { try { x.finish(); } catch {} }); })()`,
     awaitPromise: true,
   });
+
+  // A search page as built is a box and a heading — 100 elements against the 1,723 it holds once somebody
+  // has typed. Auditing only the empty state leaves 94% of the markup a reader sees unexamined, and results
+  // lists are exactly where unlabelled controls and unreadable snippets live. So the page is used first.
+  if (page.interact) {
+    await session.send('Runtime.evaluate', { expression: page.interact, awaitPromise: true });
+    for (let i = 0; i < 60; i++) {                 // up to 6 s for the shards to arrive and render
+      const n = await session.send('Runtime.evaluate', {
+        expression: 'document.getElementsByTagName("*").length', returnByValue: true });
+      if ((n.result.value || 0) > (page.interactMin || 300)) break;
+      await sleep(100);
+    }
+    await sleep(400);
+  }
 
   // THE CONTRAST RULE COULD NOT SEE ANYTHING, AND SAID NOTHING ABOUT IT.
   //
@@ -226,19 +247,27 @@ async function motionCheck(session, page) {
 (async () => {
   const job = JSON.parse(await read(process.stdin));
   const axeSource = fs.readFileSync(job.axe, 'utf8');
-  const port = 9200 + (process.pid % 700);
+  // Port 0 lets the OS pick a free one and Chrome writes it into the profile. Picking a number from the pid
+  // meant 700 possible ports and a leftover browser on one of them answering for a session that was not ours.
   const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'karzat-audit-'));
   const chrome = spawn(job.chrome, [
     '--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check',
     '--disable-extensions', '--hide-scrollbars', '--force-color-profile=srgb',
-    '--allow-file-access-from-files', `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`,
+    '--js-flags=--max-old-space-size=4096',        // the largest page is 217,364 elements
+    '--remote-debugging-port=0', `--user-data-dir=${profile}`,
     'about:blank',
   ], { stdio: 'ignore' });
+  let port = 0;
+  for (let i = 0; i < 200 && !port; i++) {
+    try { port = parseInt(fs.readFileSync(path.join(profile, 'DevToolsActivePort'), 'utf8').split('\n')[0], 10) || 0; }
+    catch { await sleep(50); }
+  }
+  if (!port) throw new Error('Chrome never wrote DevToolsActivePort');
 
   const out = { pages: [], error: null };
   try {
     let version = null;
-    for (let i = 0; i < 100 && !version; i++) {           // Chrome needs a moment to open the port
+    for (let i = 0; i < 60 && !version; i++) {            // the port is open; the endpoint may lag a beat
       try { version = await http(`http://127.0.0.1:${port}/json/version`); } catch { await sleep(100); }
     }
     if (!version) throw new Error('Chrome did not open its debugging port');
@@ -251,7 +280,8 @@ async function motionCheck(session, page) {
       for (let i = 1; i <= 4 && !target; i++) {
         target = await http(`http://127.0.0.1:${port}/json/new?${encodeURIComponent(page.url)}`)
           .catch(async () => {                            // newer Chrome wants PUT for /json/new
-            const r = await fetch(`http://127.0.0.1:${port}/json/new?${encodeURIComponent(page.url)}`, { method: 'PUT' });
+            const r = await fetch(`http://127.0.0.1:${port}/json/new?${encodeURIComponent(page.url)}`,
+                                  { method: 'PUT', signal: AbortSignal.timeout(15000) });
             return r.ok ? r.json() : null;
           })
           .catch(() => null);
@@ -271,7 +301,8 @@ async function motionCheck(session, page) {
         if (motion) Object.assign(sink, err); else out.pages.push(err);
       } finally {
         session.close();
-        await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`).catch(() => {});
+        await fetch(`http://127.0.0.1:${port}/json/close/${target.id}`,
+                    { signal: AbortSignal.timeout(5000) }).catch(() => {});
       }
     }
   } catch (e) {

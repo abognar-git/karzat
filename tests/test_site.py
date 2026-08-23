@@ -92,9 +92,9 @@ class Build(unittest.TestCase):
         n_sz = len((inp["szoszolok"] or {}).get("people") or {})
         n_km = len((inp["kormany"] or {}).get("people") or {})
         self.assertEqual(len(data), len(inp["plan"]["coords"]) + n_sz + n_km)   # one entry per person in the room, no more
-        self.assertEqual(self.page.count('<g class="seat" role="button"'), len(inp["plan"]["coords"]))
-        self.assertEqual(self.page.count('<g class="seat sz" role="button"'), n_sz)
-        self.assertEqual(self.page.count('<g class="seat km" role="button"'), n_km)
+        self.assertEqual(self.page.count('<a class="seat" href='), len(inp["plan"]["coords"]))
+        self.assertEqual(self.page.count('<a class="seat sz" href='), n_sz)
+        self.assertEqual(self.page.count('<a class="seat km" href='), n_km)
         n_pres = self.page.count('<g class="seat pres"')                        # the presidium on the platform: the same members, a second handle
         self.assertEqual(self.page.count('class="hit"'), len(data) + n_pres)    # the whole seat cell answers to the pointer
         self.assertGreaterEqual(n_pres, 1)                                      # at least the Speaker
@@ -212,7 +212,12 @@ class Build(unittest.TestCase):
         from the corpus. What must not come back is a claim of being live."""
         js = build_assets()["karzat.js"]
         self.assertIn("prefers-reduced-motion", js)                  # the whole boot choreography is skipped for reduced motion
-        self.assertTrue(js.lstrip().startswith("(function(){"))
+        # The property is that the bundle's first statement is a wrapper, so nothing leaks to the global scope
+        # and nothing runs before it. Matching the raw first characters also forbade a comment above it, which
+        # is how this failed: the explanation of why that block has to come first is worth more than the
+        # convenience of a one-line assertion, so the leading comments are skipped and the statement checked.
+        first = "\n".join(l for l in js.split("\n") if l.strip() and not l.lstrip().startswith("//"))
+        self.assertTrue(first.startswith("(function(){"), f"the bundle does not open with a wrapper: {first[:60]!r}")
         stamp = sync_stamp(load_inputs())                                       # the last sync, whatever it was
         for page in (self.page, self.cyc):
             log = re.search(r'<div class="log">(.*?)</div>', page, re.S).group(1)
@@ -716,8 +721,17 @@ class ResearchPages(unittest.TestCase):
         from scripts.build_site import build_numbers_page
         page = build_numbers_page(self.inp, self.ms)
         self.assertIn("<title>Számok · 43. ciklus · karzat</title>", page)
-        self.assertEqual(page.count('role="img" aria-label="'), 5)                     # every chart is named
+        # Every chart is named — checked by looking at every chart, not by counting them. The assertion was
+        # `count(...) == 5`, so adding the per-sitting-day view failed a test about accessible names with a
+        # page on which every name was present. A test that fixes the number forbids the sixth chart.
+        svgs = re.findall(r"<svg\b[^>]*>", page)
+        self.assertGreaterEqual(len(svgs), 6, "the page lost a chart")
+        self.assertEqual([s for s in svgs if not re.search(r'aria-label="[^"]+"', s)], [],
+                         "a chart with no accessible name")
         self.assertIn('class="tswrap"', page)
+        # Both readings of the vote count are in the markup: the switch is an upgrade, not a requirement.
+        self.assertEqual(page.count('class="view" data-label='), 2)
+        self.assertIn('data-label="ülésnaponként"', page)
 
     def test_data_page(self):
         from scripts.build_site import build_data_page
@@ -2360,20 +2374,33 @@ class TheAxisSaysWhatItKnows(unittest.TestCase):
             self.assertIn('data-axis="weak"', html, f"cycle {cyc} draws a poor fit without saying so")
 
     def test_the_lede_never_claims_what_the_warning_denies(self):
-        """The panel's opening names what the axis turned out to be — the government/opposition split — and
-        for one cycle in eight that is false. Asserting it above a paragraph that contradicts it is worse
-        than saying nothing, and it is the kind of contradiction that survives review because each half is
-        written and read separately."""
+        """The panel must not assert above the picture what it retracts below it.
+
+        The opening used to name what the axis turned out to be — the government/opposition split — which is
+        false for one cycle in eight, and this asserted the sentence appeared exactly where the fit was good.
+        Then the section was rewritten and the sentence was deleted from the builder entirely: the reading is
+        no longer claimed anywhere, only *denied* on the cycle where a single line is not enough. So the test
+        was searching for a string that exists nowhere, which meant it could only pass on a poor fit — a test
+        that has quietly inverted into a check that the feature is missing. It is on the contract now: the
+        percentages that describe the fit are stated once, in the warning where the fit is poor and in the
+        lede where it is not, and the government/opposition reading is asserted on no page at all. The
+        neighbouring test learned this same lesson from this same rewrite; this one had not."""
         from scripts.build_site import load_inputs, build_cohesion_page
         import karzat.analytics as analytics
         for cyc, r in self.ip.items():
             inp = load_inputs(int(cyc))
             html = build_cohesion_page(inp, analytics.cohesion(inp))
             weak = r["apre"] < 0.75 or r["second_dimension"] > 0.02
-            claims = "A vonal két vége a <b>kormánypártok</b>" in html
-            self.assertEqual(claims, not weak,
-                             f"cycle {cyc}: the opening {'claims' if claims else 'omits'} the "
-                             f"government/opposition reading on a {'poor' if weak else 'good'} fit")
+            warned = 'data-axis="weak"' in html
+            fit_line = "ennyit tesz hozzá ez az egy vonal" in html
+            self.assertEqual(warned, weak, f"cycle {cyc}: the warning is {'missing' if weak else 'shown'} "
+                                           f"on a {'poor' if weak else 'good'} fit")
+            self.assertNotEqual(warned, fit_line, f"cycle {cyc}: the fit's numbers are stated twice or not "
+                                                  f"at all — they belong in exactly one of the two blocks")
+            denial = "nem is a kormány–ellenzék határ" in html
+            self.assertEqual(denial, weak, f"cycle {cyc}: the denial does not match the fit")
+            self.assertEqual(html.count("kormány–ellenzék"), 1 if weak else 0,
+                             f"cycle {cyc}: the government/opposition reading is claimed rather than only denied")
 
     def test_the_figures_beside_each_other_add_up(self):
         """A reader checked the arithmetic and it did not work: the page said the model gets 98.5% right and

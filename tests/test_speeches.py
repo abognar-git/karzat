@@ -340,8 +340,11 @@ class LooseEnds(unittest.TestCase):
         self.assertNotIn("Település szerint keresni még nem lehet", page)
 
     def test_citations_are_read_not_remembered(self):
-        from karzat.majority import RULES, Rule
-        flagged = [r for r, info in RULES.items() if any("VERIFY" in b for b in info.basis)]
+        from karzat.majority import NO_BASIS, RULES, Rule
+        # Keyed on the constant the page prints, not on a word inside it: the flag used to be the English
+        # "(VERIFY)" — a note to myself that reached the reader in a table of Hungarian legal citations — and
+        # translating it silently unhooked this test.
+        flagged = [r for r, info in RULES.items() if any(NO_BASIS in b for b in info.basis)]
         self.assertEqual(flagged, [Rule.NEGYOTOD_OSSZES])                                  # the one with no basis found
         self.assertIn("HHSZ 62. § (1)", " ".join(RULES[Rule.ABSZOLUT].basis))
         self.assertIn("HHSZ 60. § (7)", " ".join(RULES[Rule.KETHARMAD_JELENLEVO].basis))

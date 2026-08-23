@@ -63,6 +63,41 @@ class EveryTemplateIsSampled(unittest.TestCase):
         self.assertEqual(missing, [], "the registry names pages the build does not produce")
 
 
+class EveryScrollingBoxCanBeReachedByAKeyboard(unittest.TestCase):
+    """Statically, because the browser audit can only see this where the content happens to be wide.
+
+    A container with `overflow-x:auto` scrolls, and without a `tabindex` a keyboard cannot put focus in it to
+    scroll it. axe reports that only when the content actually overflows at the width being measured: taking
+    the attribute off all three tables of a page was caught on one of them at 390px and on none at 1280px.
+    So the rule the sample cannot enforce is enforced here instead — every class the stylesheet gives an
+    `overflow` to has to carry the attribute at every point the builder emits it.
+    """
+
+    OVERFLOW = re.compile(r"\.([a-z][\w-]*)\s*\{[^}]*overflow(?:-x)?\s*:\s*(?:auto|scroll)", re.I)
+    # A scrolling box whose own children are all focusable does not need a tab stop of its own: the cycle
+    # switcher is a row of links, and a keyboard reaches every one of them by tabbing.
+    EXEMPT = {"cyc"}
+
+    def test_every_class_the_stylesheet_scrolls_carries_a_tabindex(self):
+        """Read at the point of authorship rather than over the output.
+
+        Walking all 160,395 built pages does work — it is how the one straggler here was found, the Riport
+        page's chart box — but it takes fourteen minutes, and a check nobody will wait for is a check that
+        gets skipped. Every scrolling container is emitted from this one file as a literal, so scanning the
+        source is both exact and instant, and it fails where the mistake is made instead of one build later.
+        """
+        src = BUILDER.read_text(encoding="utf-8")
+        css = __import__("scripts.build_site", fromlist=["build_assets"]).build_assets()["karzat.css"]
+        classes = {m.group(1) for m in self.OVERFLOW.finditer(css)} - self.EXEMPT
+        self.assertTrue(classes, "no scrolling class found — has the stylesheet or this pattern changed?")
+        bad = []
+        for c in sorted(classes):
+            for m in re.finditer(rf'<\w+[^>]*\bclass="[^"]*\b{re.escape(c)}\b[^"]*"[^>]*>', src):
+                if "tabindex" not in m.group(0):
+                    bad.append(f"  .{c}: {m.group(0)[:120]}")
+        self.assertEqual(bad, [], "scrolling boxes a keyboard cannot reach:\n" + "\n".join(bad))
+
+
 class TheReaderIsNotSentAnywhereElse(unittest.TestCase):
     """The site's stated position is that a visit is known to nobody but this project's own log. That is a
     promise about what the pages make the browser do, and until now nothing checked it.
@@ -142,3 +177,83 @@ class NobodyIsExcluded(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TheSitemapNamesPagesThatExist(unittest.TestCase):
+    """A sitemap is a recommendation to a crawler, and a wrong one spends somebody else's bandwidth on 404s.
+
+    It deliberately lists a fraction of the site: the doors, and one career page per human the record names.
+    Naming all 160,395 pages at the two-second crawl delay this site asks for would be a request to spend four
+    days fetching what one Parquet file hands over in a single request — which is the argument robots.txt
+    already makes, so the sitemap makes it too."""
+
+    def setUp(self):
+        self.site = ROOT / "site"
+        self.sm = self.site / "sitemap.xml"
+        if not self.sm.exists():
+            self.skipTest("site/ is not built")
+
+    def test_it_is_well_formed_and_every_address_is_a_page_that_exists(self):
+        import xml.etree.ElementTree as ET
+        root = ET.fromstring(self.sm.read_text(encoding="utf-8"))
+        ns = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+        locs = [e.text or "" for e in root.findall(".//s:loc", ns)]
+        self.assertGreater(len(locs), 100, "the sitemap is suspiciously short")
+        self.assertLess(len(locs), 50_000, "a sitemap file may hold 50,000 URLs; split it before it grows past")
+        self.assertEqual(len(locs), len(set(locs)), "the same address is listed twice")
+        from scripts.build_site import SITE_URL
+        missing = []
+        for loc in locs:
+            self.assertTrue(loc.startswith(SITE_URL + "/"), loc)
+            rel = loc[len(SITE_URL) + 1:]
+            if not (self.site / rel).exists():
+                missing.append(rel)
+        self.assertEqual(missing[:5], [], f"{len(missing)} addresses point at nothing")
+
+    def test_robots_points_at_it(self):
+        self.assertIn("Sitemap:", (self.site / "robots.txt").read_text(encoding="utf-8"))
+
+    def test_it_leaves_out_what_a_crawler_should_not_be_asked_to_walk(self):
+        """The scope is a decision, not an oversight, so it is written down here."""
+        body = self.sm.read_text(encoding="utf-8")
+        for leaf in ("/szavazas/", "/felszolalas/nap", "/iromany/1.html", "/kepviselo/"):
+            if leaf == "/kepviselo/":
+                self.assertNotIn("/kepviselo/0", body, "per-MP pages are covered by szemely/, which does not move")
+            else:
+                self.assertNotIn(leaf, body, f"{leaf} pages are reachable from an index and need not be listed")
+        self.assertIn("/szemely/", body, "the career pages are the ones a name search should find")
+
+    def test_it_names_every_career_page_and_not_a_subset(self):
+        """The half the sitemap exists for, counted rather than sampled.
+
+        It was written with robots.txt, before the cross-cycle pages and the careers were built — so a clean
+        build produced a sitemap of the ten cycles and nothing else: no keresés, no módszer, and none of the
+        people. Every build until now had been incremental and found the previous run's `szemely/` still on
+        disk, which is the sort of bug that only appears the first time the output directory is emptied. So
+        the count is asserted against what is actually there, not the presence of the string."""
+        on_disk = {f.name for f in (self.site / "szemely").glob("*.html")} - {"index.html"}
+        listed = set(re.findall(r"/szemely/([^<]+\.html)", self.sm.read_text(encoding="utf-8"))) - {"index.html"}
+        self.assertEqual(sorted(on_disk - listed)[:5], [], f"{len(on_disk - listed)} career pages are not listed")
+        self.assertEqual(sorted(listed - on_disk)[:5], [], "the sitemap lists a career page that is not built")
+
+
+class EveryColourTheStylesheetAsksForExists(unittest.TestCase):
+    """A `var(--name)` nobody defined is not a syntax error — it is a rule that silently does nothing.
+
+    Three rules for the Számok view switch referred to `--line` and `--muted`, which this project has never
+    had; its tokens are `--border`, `--dim` and `--line2`. The pressed button therefore had no background at
+    all, and `border:1px solid var(--line)` fell back to `currentColor`. None of that showed in a screenshot,
+    because the pressed state also set a text colour and that part did work — so the control looked finished.
+
+    Custom properties may also be set on an element, and six of them are: the seating chart and the bar widths
+    pass geometry in through `style="--w:…"`. Those count as defined, so the builder source is read too.
+    """
+
+    def test_no_rule_refers_to_a_custom_property_that_is_never_set(self):
+        css = __import__("scripts.build_site", fromlist=["build_assets"]).build_assets()["karzat.css"]
+        src = BUILDER.read_text(encoding="utf-8")
+        defined = set(re.findall(r"(--[\w-]+)\s*:", css)) | set(re.findall(r"(--[\w-]+)\s*:", src))
+        used = set(re.findall(r"var\(\s*(--[\w-]+)", css))
+        self.assertGreater(len(used), 20, "no custom properties found — has the stylesheet changed shape?")
+        self.assertEqual(sorted(used - defined), [],
+                         "the stylesheet asks for colours nobody defines; these rules do nothing")

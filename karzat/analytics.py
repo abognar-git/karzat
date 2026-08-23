@@ -256,8 +256,14 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
     for ts in order:
         v = by_ts[ts]
         m = v["on_date"][:7]
-        d = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "factions": {}})
+        d = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "days": set(), "factions": {}})
         d["votes"] += 1
+        # The sitting days behind the month, because a month is not a unit of parliamentary activity and the
+        # bar chart reads as though it were: December 2025 shows 182 votes over 4 sitting days and December
+        # 2023 shows 181 over 3 — near-identical columns over 46 and 60 votes a day. The count is the House's
+        # output; the count per sitting day is its pace, and the page can only offer both if this is here.
+        if v.get("on_date"):
+            d["days"].add(v["on_date"])
         if v.get("kind") == "dontes":
             d["decisions"] += 1
             if (v.get("majority") or {}).get("rule") not in (None, "egyszeru", "relativ"):
@@ -269,7 +275,7 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
         for v in rec["votes"]:
             m = v["ts"][:4] + "-" + v["ts"][5:7]
             f = v.get("faction") or "—"
-            fd = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "factions": {}})["factions"].setdefault(f, {"in_roll": 0, "cast": 0, "with": 0, "against": 0})
+            fd = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "days": set(), "factions": {}})["factions"].setdefault(f, {"in_roll": 0, "cast": 0, "with": 0, "against": 0})
             fd["in_roll"] += 1
             if v["position"] in CAST:
                 fd["cast"] += 1
@@ -287,6 +293,8 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
     out = []
     for m in sorted(months):
         d = months[m]
+        d["days"] = len(d["days"])
+        d["per_day"] = (d["votes"] / d["days"]) if d["days"] else None
         for f, fd in d["factions"].items():
             fd["participation"] = fd["cast"] / fd["in_roll"] if fd["in_roll"] else None
             fd["dissent"] = fd["against"] / fd["cast"] if fd["cast"] else None

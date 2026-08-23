@@ -116,6 +116,9 @@ PAGE_KINDS: dict[str, object] = {
     "cycle index (closed)": "ckl42/index.html",
     "cycle index (archive)": "ckl39/index.html",
     "cycle index (biggest)": "ckl34/index.html",   # 21,674 votes; weighed, not rule-checked
+    # The same two pages again, after somebody has typed into them. See INTERACT.
+    "speech search (used)": "ckl43/felszolalas/kereses.html",
+    "search (used)": "kereses/index.html",
     "vote (closed)": _first("ckl42/szavazas"),
     "mp (archive)": _first("ckl39/kepviselo"),
 }
@@ -145,12 +148,27 @@ COVERS: dict[str, str] = {
     "switches": "build_switch_page",
     "cycle index (closed)": "build_index", "cycle index (archive)": "build_index",
     "cycle index (biggest)": "build_index",
+    "speech search (used)": "build_speech_search_page", "search (used)": "build_search_page",
     "vote (closed)": "build_vote_page", "mp (archive)": "build_mp_page",
 }
 
 # Sampled for weight but not for rules: the same template as a kind already checked, only much bigger, where
 # axe would spend three minutes to repeat a verdict it has already given.
 WEIGHT_ONLY = {"cycle index (biggest)"}
+
+# kind -> what to do to the page before the rules run, because a page nobody has used is not the page.
+# The query is a common Hungarian word so that the result list is long enough to be worth auditing.
+def _type(box: str, word: str) -> str:
+    return (f"(async () => {{ const b = document.getElementById('{box}'); if (!b) return;"
+            f" b.value = {word!r}; b.dispatchEvent(new Event('input', {{bubbles: true}}));"
+            f" b.form && b.form.dispatchEvent(new Event('submit', {{bubbles: true, cancelable: true}}));"
+            f" }})()")
+
+
+INTERACT: dict[str, tuple[str, int]] = {
+    "speech search (used)": (_type("spq", "oktatás"), 400),
+    "search (used)": (_type("sq", "alaptörvény"), 300),
+}
 
 # Every kind not listed below measured under 78 kB and 790 elements. 1.4 MB of headroom on that was
 # decoration; this is about 2.5x, which is a real ceiling and still not a nuisance.
@@ -176,6 +194,11 @@ BUDGETS: dict[str, tuple[int, int]] = {
     "landing": (220_000, 5_000),                     # the chamber, every seat drawn
     "mp (archive)": (180_000, 4_000),
     "close votes": (140_000, 4_000),
+    # After a query. The site-wide search fetches one static index on the first keystroke and the speech
+    # search fetches the shards its words fall in — a real cost, paid once, and only by somebody searching.
+    # It was invisible until the audit started using the page instead of looking at it.
+    "search (used)": (900_000, 2_000),
+    "speech search (used)": (300_000, 4_000),
 }
 
 # Rules whose impact axe calls moderate but whose absence is structural rather than arguable: a page with no
@@ -226,8 +249,10 @@ def resolve(kinds: list[str] | None, origin: str) -> tuple[list[dict], list[str]
         if not rel or not (SITE / rel).exists():
             missing.append(kind)
             continue
-        pages.append({"kind": kind, "path": rel, "url": f"{origin}/{rel}",
-                      "weightOnly": kind in WEIGHT_ONLY})
+        entry = {"kind": kind, "path": rel, "url": f"{origin}/{rel}", "weightOnly": kind in WEIGHT_ONLY}
+        if kind in INTERACT:
+            entry["interact"], entry["interactMin"] = INTERACT[kind]
+        pages.append(entry)
     return pages, missing
 
 
@@ -290,7 +315,11 @@ class Origin:
 def run(pages: list[dict], viewport: str, chrome: str) -> dict:
     job = {"chrome": chrome, "axe": str(AXE), "pages": pages, "viewport": VIEWPORTS[viewport],
            "motionCheck": viewport == "desktop"}
-    p = subprocess.run(["node", str(DRIVER)], input=json.dumps(job), capture_output=True, text=True)
+    try:
+        p = subprocess.run(["node", str(DRIVER)], input=json.dumps(job), capture_output=True, text=True,
+                           timeout=60 * 20)
+    except subprocess.TimeoutExpired:
+        return {"error": "the driver did not finish in 20 minutes", "pages": []}
     if not p.stdout.strip():
         return {"error": (p.stderr or "the driver printed nothing").strip()[:2000], "pages": []}
     return json.loads(p.stdout)
@@ -342,6 +371,9 @@ def judge(report: dict, viewport: str) -> tuple[list[str], list[str]]:
             hard.append(f"{where}: {pg['net']['bytes']:,} bytes over the wire, budget {max_b:,}")
         if pg["nodes"] > max_n:
             hard.append(f"{where}: {pg['nodes']:,} DOM nodes, budget {max_n:,}")
+        if pg["net"].get("status") not in (200, 0):
+            hard.append(f"{where}: the server answered {pg['net']['status']} — an error page passes almost "
+                        f"every rule there is, so it must not be audited as if it were the page")
         if pg.get("blocking", 0) > BLOCKING:
             soft.append(f"{where}: {pg['blocking']} render-blocking resources in <head>")
         for e in pg["net"]["failed"]:

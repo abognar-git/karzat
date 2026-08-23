@@ -99,6 +99,7 @@ tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sa
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s,filter .2s;cursor:crosshair}
 .chart svg .seat{transition:opacity .15s,filter .15s;outline:none;cursor:pointer}
+.chart svg a.seat:focus-visible .today,.landing .chamber-today a.seat:focus-visible .today{stroke:var(--white);stroke-width:2;paint-order:stroke}
 .chart svg .seat[data-pos="nem_szavazott"],.chart svg .seat[data-pos="bejelentett_hianyzo"],.chart svg .seat[data-pos="igazoltan_tavol"],.chart svg .seat[data-pos="jelen_nem_szavazott"]{opacity:.55}
 .chart svg .seat.dim{opacity:.12}
 .chart svg .seat.hl,.chart svg .seat:hover,.chart svg .seat:focus-visible{opacity:1}
@@ -143,6 +144,23 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .seatshape{fill:rgba(255,255,255,.035);stroke:rgba(255,255,255,.12);stroke-width:.35;vector-effect:non-scaling-stroke}.seatshape.occ{fill:rgba(255,255,255,.06)}
 .ts .axis{stroke:var(--border-hi);stroke-width:1}.ts .axl{font-size:9px;fill:var(--dim2);font-family:var(--mono)}.tswrap{overflow-x:auto}.tswrap svg{min-width:480px;display:block}
 .seclabel{font-size:5px;fill:var(--dim2);font-family:var(--mono);letter-spacing:.1em}.seclabel.s{font-size:3.4px;letter-spacing:.15em;fill:var(--dim3)}.seat-empty{fill:none;stroke:var(--border-hi);stroke-width:.6}.aisle{stroke:var(--line2);stroke-width:.8}.fbarc{fill:none;stroke:var(--border-hi);stroke-width:.8;stroke-dasharray:2 2}
+[data-s]{transition:opacity .12s}
+[data-s].dim{opacity:.1}
+.viewsw{position:absolute;top:12px;right:16px;display:inline-flex;border:1px solid var(--border)}
+.vbtn{background:none;border:0;border-right:1px solid var(--border);color:var(--dim);font:inherit;
+  font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;cursor:pointer}
+.vbtn:last-child{border-right:0}
+.vbtn[aria-pressed="true"]{background:var(--line2);color:var(--white)}
+.switched .vlab{display:none}
+.lg-hint{color:var(--dim2);font-size:.78rem;letter-spacing:.02em;text-transform:none}
+.legend.pick .f{cursor:pointer;background:none;border:0;font:inherit;color:inherit;padding:0}
+.legend.pick .f[aria-pressed="true"]{color:var(--white)}
+.mostrip{display:flex;flex-wrap:wrap;gap:3px;margin:2px 0 10px}
+.mostrip .mo{font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--dim);padding:3px 6px;border:1px solid var(--border);text-decoration:none;line-height:1}
+.mostrip .mo:hover,.mostrip .mo:focus-visible{color:var(--white);border-color:var(--border-hi);background:rgba(255,255,255,.05)}
+.mostrip .mo.on{color:var(--white);border-color:var(--dim3)}
+.moread{min-height:3.2em;border-top:1px solid var(--line2);padding-top:8px;margin-top:2px}
+.moread b{color:var(--text);font-weight:400}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
 /* numbers */
@@ -170,6 +188,12 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .counts span.sub{color:var(--dim2);text-transform:none;letter-spacing:.05em;margin-top:3px}
 /* directory / tables */
 .filters{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;align-items:center}
+/* A control only a script can work is not offered until the script has said it is here. `html.js` is set
+   by the first line of karzat.js; without it these are simply absent rather than present and inert. */
+.filters button,.filters input,.filters select,.filters .n{display:none}
+html.js .filters button,html.js .filters input,html.js .filters select{display:inline-block}
+html.js .filters .n{display:inline}
+.filters:not(:has(a)):not(:has(.lbl)){margin:0}html.js .filters{margin:6px 0 10px}
 .filters button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:6px 10px;min-height:26px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:color .15s,border-color .15s}
 .filters button:hover{color:var(--white);border-color:var(--border-hi)}.filters button.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}
 .filters input{border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:5px 9px;font-family:var(--mono);font-size:11px;min-width:220px}
@@ -184,6 +208,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .landing .chamber-today figcaption .sub{text-transform:none;letter-spacing:.05em;margin-left:6px}.landing .chamber-today .legend{margin-top:6px}
 .landing .chamber-today .today{transition:opacity .15s}
 .landing .chamber-today .seat{transition:opacity .15s;outline:none;cursor:pointer}
+a.seat{text-decoration:none}
 .landing .chamber-today .seat.dim{opacity:.12}
 .landing .chamber-today .legend .f[data-f="szószóló"] i{box-sizing:border-box}
 .landing .chamber-today .seat.hl,.landing .chamber-today .seat:hover,.landing .chamber-today .seat:focus-visible{opacity:1}
@@ -244,7 +269,7 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
 .life .lane.axis{min-height:16px}
 .life .lane.axis .track{height:12px;background:none}
 .life .lane.axis i{position:absolute;left:var(--x);transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--dim3);font-style:normal}
-@media (max-width:640px){.life .ln{flex-basis:56px;font-size:8px}.life .sp b{font-size:9.5px}}
+@media (max-width:640px){.viewsw{position:static;margin:0 0 10px}.life .ln{flex-basis:56px;font-size:8px}.life .sp b{font-size:9.5px}}
 /* the asset declarations: one square per document, grouped by the year the record states */
 .vny{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
 .vny .yr{display:flex;flex-direction:column;align-items:center;gap:4px}
@@ -340,7 +365,7 @@ th.sortable{cursor:pointer}th.sortable:hover{color:var(--white)}th.sortable .sor
 tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(24,24,27,.5)}
 td.num{text-align:right;white-space:nowrap;font-family:var(--mono)}td.ts{white-space:nowrap;color:var(--dim2);font-family:var(--mono);font-size:11px}td.ts a:hover{color:var(--white)}
 td .sub{color:var(--dim2);font-size:11px;display:block;font-family:var(--mono);letter-spacing:.02em}
-td a{color:#d4d4d8;text-decoration:underline;text-decoration-color:var(--dim3);text-underline-offset:2px}td a:hover{color:var(--white);text-decoration-color:var(--white)}
+td a{color:var(--text);text-decoration:underline;text-decoration-color:var(--dim3);text-underline-offset:2px}td a:hover{color:var(--white);text-decoration-color:var(--white)}
 .pos{display:inline-flex;align-items:center;gap:6px}.pos svg{width:12px;height:12px;flex:none}
 .d{width:9px;height:9px;border-radius:50%;background:var(--c);display:inline-block;flex:none}
 .g{width:12px;height:12px;border-radius:50%;display:inline-block;box-sizing:border-box;flex:none}
@@ -363,8 +388,19 @@ td a{color:#d4d4d8;text-decoration:underline;text-decoration-color:var(--dim3);t
 @keyframes kz-blink{0%,100%{opacity:1}50%{opacity:0}}
 .kz-terminal .scan:after{content:"";position:absolute;top:-10%;left:0;width:100%;height:2px;background:rgba(255,255,255,.08);animation:kz-scan 6s linear infinite}
 @keyframes kz-scan{0%{top:-10%}100%{top:110%}}
-@media (prefers-reduced-motion:reduce){.kz-terminal .scan:after,.kz-terminal .cursor{animation:none}}
-@media print{:root{--bg:#fff;--panel:#fff;--deep:#fff;--text:#111;--white:#000;--dim:#333;--dim2:#444;--dim3:#555;--border:#bbb;--border-hi:#999;--line2:#eee;--grid:transparent;--panel-deep:#fff}
+@media (prefers-reduced-motion:reduce){.kz-terminal .scan:after,.kz-terminal .cursor{animation:none}[data-s]{transition:none}}
+/* Printing a public record is a thing people do with it, and three declarations were missing here.
+   `color-scheme:dark` is set on <html> and never reset, so Chrome painted all four page margins
+   near-black — 15% of a multi-page sheet. `--terminal` was left out of the flip, so the footer block
+   printed as a black slab with #444 text and a #000 link on it, at a contrast of 1.0. And a table
+   with `overflow-x:auto` is clipped at the sheet edge with nothing to say so: the 20-page MP index
+   printed without the words `Részvétel` and `Frakció ellen` at all, and the cycle index printed the
+   header `EREDMÉNY` forty times and `Elfogadva` never. A table that looks complete and is not is the
+   worst thing a record site can put on paper. */
+@media print{html{color-scheme:light}:root{--bg:#fff;--panel:#fff;--deep:#fff;--text:#111;--white:#000;--dim:#333;--dim2:#444;--dim3:#555;--border:#bbb;--border-hi:#999;--line2:#eee;--grid:transparent;--panel-deep:#fff;--terminal:#fff}
+.tablewrap,.tswrap,.covwrap,.turnwrap,.stripwrap{overflow:visible!important}
+.tablewrap table{font-size:9.5px}.tablewrap th,.tablewrap td{padding:2px 4px}
+
 body{background:#fff;color:#111}.kz-topbar,.pgr,.filters button,.copy,.kz-corner,.scan,.insp-hint{display:none!important}.kz-topbar+*{margin-top:0}
 tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}
 /* .tablewrap and th paint themselves with literal rgba rather than tokens, so flipping the palette never

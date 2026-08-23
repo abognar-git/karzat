@@ -29,7 +29,7 @@ negyotod_jelenlevo    at least four-fifths of the MPs *present*          HHSZ 65
                                                                           46/1994 Házszabály 140. § (1) said the same)
 negyotod_osszes       at least four-fifths of *all* MPs (160 of 199)     seen in the API's own vocabulary
                                                                           ("Listás az összes képviselő 4/5-ével", 2014);
-                                                                          no basis found in the consolidated texts (VERIFY)
+                                                                          " + NO_BASIS + "
 relativ               plurality among candidates, no yes/no threshold    11. cikk (4) KE 2nd round (the most valid votes,
                                                                           "tekintet nélkül a szavazásban részt vevők számára")
 
@@ -63,6 +63,11 @@ from typing import Any
 SEATS_DEFAULT = 199
 
 
+# Printed to the reader in the `jogszabályi hely` column of modszer/index.html, and named here so that the
+# page and the test that counts these cannot drift apart. It used to read "(VERIFY)" — a note to myself that
+# reached the reader, in English, in a table of Hungarian legal citations.
+NO_BASIS = "a hatályos szövegekben nem találtam hozzá jogszabályi helyet"
+
 class Rule(str, Enum):
     EGYSZERU = "egyszeru"
     ABSZOLUT = "abszolut"
@@ -80,7 +85,8 @@ class RuleInfo:
     label_en: str
     base: str                 # "present" | "seats" | "candidates"
     formula: str
-    basis: tuple[str, ...]    # citations, each may end with "(VERIFY)"
+    basis: tuple[str, ...]    # citations; where none was found the entry says so, in Hungarian,
+                          # because this column is printed to the reader on modszer/index.html
 
 
 RULES: dict[Rule, RuleInfo] = {
@@ -121,7 +127,7 @@ RULES: dict[Rule, RuleInfo] = {
     Rule.NEGYOTOD_OSSZES: RuleInfo(
         Rule.NEGYOTOD_OSSZES, "Összes képviselő négyötöde", "Four-fifths of all MPs",
         "seats", "ceil(4*seats/5)",
-        ("W-API 'Szavazási mód' = 'Listás az összes képviselő 4/5-ével' (observed 2014); no basis found in the consolidated Alaptörvény or House Rules texts (VERIFY)",),
+        ("W-API „Szavazási mód” = „Listás az összes képviselő 4/5-ével” (a rekordban 2014-ben fordul elő); " + NO_BASIS + "",),
     ),
     Rule.RELATIV: RuleInfo(
         Rule.RELATIV, "Relatív többség", "Plurality among candidates",

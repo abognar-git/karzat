@@ -71,6 +71,40 @@ def sb(cycle: int, which: str, field: str) -> float:
     v = (c.get(which) or {}).get(field, 0)
     return 100 * v if field == "recall10" else v
 
+_MONTHS: dict = {}
+
+
+def months(cycle: int) -> dict:
+    """Votes and sitting days per month, from the committed vote index rather than `analytics.monthly`.
+
+    The Számok page's per-day view exists because two months can carry the same bar and mean different things,
+    and the README says which two. `monthly()` would give the same figures but wants the alignment behind it;
+    the count of votes and the count of distinct dates need only the index, which is committed, so the gate
+    stays a few seconds rather than a few minutes."""
+    if cycle in _MONTHS:
+        return _MONTHS[cycle]
+    import gzip as _g
+    f = ROOT / "data" / "derived" / f"votes_index_ckl{cycle}.json.gz"
+    out: dict[str, dict] = {}
+    if f.exists():
+        for v in _json.loads(_g.decompress(f.read_bytes()))["votes"]:
+            d = v.get("on_date")
+            if not d:
+                continue
+            m = out.setdefault(d[:7], {"votes": 0, "days": set()})
+            m["votes"] += 1
+            m["days"].add(d)
+        for m in out.values():
+            m["days"] = len(m["days"])
+            m["per_day"] = m["votes"] / m["days"]
+    _MONTHS[cycle] = out
+    return out
+
+
+def mo(cycle: int, month: str, field: str) -> float:
+    return (months(cycle).get(month) or {}).get(field, 0)
+
+
 _FLOOR: dict = {}
 
 
@@ -338,6 +372,11 @@ def build() -> list[tuple[str, list]]:
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
 
     return [
+        # The Számok page's per-day view: the pair that makes the case for it, from the committed vote index.
+        ("December\n2023 and December 2025 are {:,.0f} and {:,.0f} votes, which is the same bar twice, and\n"
+         "{:.1f} against {:.1f} votes a day",
+         [mo(42, "2023-12", "votes"), mo(42, "2025-12", "votes"),
+          mo(42, "2023-12", "per_day"), mo(42, "2025-12", "per_day")]),
         # Run it / status
         # The Parquet section's figures were typed rather than generated — the one part of this README that
         # was outside its own gate. They come from the manifest the derivation writes.
@@ -455,7 +494,7 @@ def build() -> list[tuple[str, list]]:
         ("and their own kind in the search index ({:,.0f} entries)",
          [sum(1 for it in _json.loads((ROOT / "site" / "kereses" / "index.json").read_text(encoding="utf-8")) if it["k"] == "szoszolo")]),
         ("with them the **{:,.0f} nationality spokespersons**", [_json.loads((ROOT / "data" / "derived" / "szoszolok.json").read_text(encoding="utf-8"))["count"]]),
-        ("all {:,.0f} mandate-holders placed where their own record puts them,", [_landing().count('<g class="seat" role="button"')]),
+        ("all {:,.0f} mandate-holders placed where their own record puts them,", [_landing().count('<a class="seat" href=')]),
         ("The {:,.0f} seats still left as outlines",
          [_landing().count('polygon points') - _landing().count('class="seatshape occ"')]),
         # the ministerial bench — data/derived/kormany.json

@@ -1,3 +1,88 @@
+// First statement in the bundle, before anything can throw. Controls that only a script can operate were
+// shipped as static markup on 5,146 pages — filter and sort buttons, complete with `aria-pressed`, so a
+// screen reader announced a state that could never change and a reader without JavaScript was offered
+// affordances that did nothing. The stylesheet hides them until this line runs, which is the only honest
+// signal that they will work.
+(function(){ document.documentElement.classList.add('js'); })();
+
+
+(function(){
+  // The month strip is a row of real links; this makes hovering or focusing one worth doing before you
+  // click it. The readout says what the House did that month and offers the two ways onward, so the charts
+  // above stop being a picture you can only look at. Nothing here is required: without it every month is
+  // still a link to that month's votes.
+  var strip = document.querySelector('.mostrip'); if (!strip) return;
+  var out = document.getElementById('moread'); if (!out) return;
+  var hint = out.innerHTML, cur = null;
+  function show(a){
+    if (a === cur) return;
+    if (cur) cur.classList.remove('on');
+    cur = a; if (!a) { out.innerHTML = hint; return; }
+    a.classList.add('on');   // a highlight, not aria-current: the mouse being over a link does not make it the current one
+    // The link's own name, read back rather than reassembled. Writing the sentence twice meant writing the
+    // rule for "a" against "az" twice as well — a rule about how a numeral is said, not how it is spelt —
+    // and the second copy printed "a 1 döntésből". One sentence, built by hu_the() in the builder.
+    var t = a.getAttribute('aria-label') || '', i = t.indexOf(' — ');
+    var b = document.createElement('b');
+    b.textContent = i < 0 ? t : t.slice(0, i);
+    var link = document.createElement('a');
+    link.href = a.getAttribute('href');
+    link.textContent = 'a hónap szavazásai';
+    out.textContent = '';
+    out.appendChild(b);
+    out.appendChild(document.createTextNode((i < 0 ? '' : t.slice(i)) + '  → '));
+    out.appendChild(link);
+  }
+  strip.addEventListener('mouseover', function(e){ var a = e.target.closest('.mo'); if (a) show(a); });
+  strip.addEventListener('focusin', function(e){ var a = e.target.closest('.mo'); if (a) show(a); });
+  strip.addEventListener('mouseleave', function(){ show(null); });
+})();
+
+(function(){
+  // The legend is a colour key in the markup and becomes a filter here — a span upgraded to a button rather
+  // than a button shipped and hoped for. Three of the five charts draw ten overlapping lines, which is a
+  // hairball nobody can read; one click leaves one faction visible on all of them at once, because the
+  // question is almost always about one faction and never about the tangle.
+  // Two guards, because `.legend .f[data-f]` is not unique to this page and the first version was happy to
+  // take either of the others. The cycle index carries the same legend as a plain colour key beside its
+  // chamber and has no series at all — upgrading it would have produced ten buttons that do nothing, which is
+  // the exact fault this round has been chasing. The landing page's legend already filters the seats, and its
+  // entries are real buttons carrying data-hf; a second click handler on top of that is worse than useless.
+  var page = document.querySelector('.kz-main') || document.body;
+  if (!page.querySelector('[data-s]')) return;
+  var legend = document.querySelector('.legend'); if (!legend) return;
+  var items = Array.prototype.slice.call(legend.querySelectorAll('.f[data-f]'))
+    .filter(function(b){ return b.tagName === 'SPAN' && !b.hasAttribute('data-hf'); });
+  if (!items.length) return;
+  var only = 'all', known = {};
+  items.forEach(function(b){ known[b.getAttribute('data-f')] = 1; });
+  function apply(){
+    // Only what the legend names. The qualified-majority line is a series like any other but belongs to no
+    // faction, and the first version dimmed it too: choosing Fidesz made an unrelated chart nearly vanish.
+    page.querySelectorAll('[data-s]').forEach(function(el){
+      var s = el.getAttribute('data-s');
+      el.classList.toggle('dim', only !== 'all' && known[s] === 1 && s !== only);
+    });
+    items.forEach(function(b){ b.setAttribute('aria-pressed', String(only === b.getAttribute('data-f'))); });
+  }
+  legend.classList.add('pick');
+  var hint = document.createElement('span');
+  hint.className = 'lg-hint';
+  hint.textContent = '— kattints egyre, és csak az marad az ábrákon';
+  legend.appendChild(hint);
+  items.forEach(function(b){
+    b.setAttribute('role', 'button');
+    b.setAttribute('tabindex', '0');
+    b.setAttribute('aria-pressed', 'false');
+    b.title = b.getAttribute('data-f') + ' kiemelése — még egy kattintás visszahozza mindet';
+    function toggle(){ only = (only === b.getAttribute('data-f')) ? 'all' : b.getAttribute('data-f'); apply(); }
+    b.addEventListener('click', toggle);
+    b.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  });
+  apply();
+})();
+
+
 (function(){
   // Every table with data-page-size gets a pager: 25 rows at a time, prev / next / page numbers / 'mind'.
   // Filters mark excluded rows with data-x and call table.__pager.render(true); sorters re-append rows and
@@ -132,6 +217,7 @@
   var byDate = document.getElementById('spdate');
   var SHOW_MAX = 200;        // rows built into the table; the pager walks these twenty at a time
   if (!q || !body) return;
+  body.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni (legalább három betű).</td></tr>';
   function fold(s){ return String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
   var meta = null, metaFailed = false, metaWaiters = [], shards = {}, texts = {}, seq = 0;
@@ -363,13 +449,19 @@
 (function(){
   var tbody = document.getElementById('rows'), n = document.getElementById('n'); if (!tbody) return;
   var rows = Array.prototype.slice.call(tbody.rows), rule = 'all', result = 'all', year = 'all', q = '';
+  // A month can arrive in the address: the Számok charts point here, one bar to one month. Without a script
+  // the link still lands on the list at #dir and shows all of it — less, but never a broken promise. The
+  // banner says which month is showing and offers the way back out, because a filtered list that does not
+  // say it is filtered is a list that lies about how much the House did.
+  var month = (new URLSearchParams(location.search).get('m') || 'all');
+  if (!/^\d{4}-\d{2}$/.test(month)) month = 'all';
   var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   var table = tbody.closest('table');
   function render(){
     var k = 0;
     rows.forEach(function(r, i){
-      var ok = (rule === 'all' || r.getAttribute('data-rule') === rule) && (result === 'all' || r.getAttribute('data-result') === result) && (year === 'all' || r.getAttribute('data-y') === year) && (!q || hay[i].indexOf(q) >= 0);
+      var ok = (rule === 'all' || r.getAttribute('data-rule') === rule) && (result === 'all' || r.getAttribute('data-result') === result) && (year === 'all' || r.getAttribute('data-y') === year) && (month === 'all' || r.getAttribute('data-m') === month) && (!q || hay[i].indexOf(q) >= 0);
       if (ok) { r.removeAttribute('data-x'); k++; } else r.setAttribute('data-x', '');
     });
     if (window.__karzatRerender) window.__karzatRerender(table, true); else n.textContent = k + ' / ' + rows.length;
@@ -377,6 +469,15 @@
   document.querySelectorAll('button[data-rule]').forEach(function(b){ b.addEventListener('click', function(){ rule = b.getAttribute('data-rule'); press('button[data-rule]', b); render(); }); });
   document.querySelectorAll('button[data-result]').forEach(function(b){ b.addEventListener('click', function(){ result = b.getAttribute('data-result'); press('button[data-result]', b); render(); }); });
   document.querySelectorAll('button[data-year]').forEach(function(b){ b.addEventListener('click', function(){ year = b.getAttribute('data-year'); press('button[data-year]', b); render(); }); });
+  if (month !== 'all') {
+    var host = document.getElementById('dir') || tbody.closest('section') || tbody.parentNode;
+    var note = document.createElement('div');
+    note.className = 'hero-meta prose';
+    note.style.margin = '8px 0';
+    note.innerHTML = 'Csak <b>' + month + '</b> szavazásai láthatók. ' +
+      '<a href="' + location.pathname + '#dir">mind a ' + rows.length + '</a>';
+    host.insertBefore(note, host.firstChild);
+  }
   document.getElementById('q').addEventListener('input', function(e){ q = e.target.value.trim().toLowerCase(); render(); });
   render();
 })();
@@ -434,7 +535,16 @@
   svg.addEventListener('focusout', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (pinned !== g.getAttribute('data-az')) mark(g.getAttribute('data-az'), false); reset(); });
   function pin(az){ if (pinned) mark(pinned, false); pinned = az; chart.classList.add('pinned'); mark(az, true); render(az); }
   function unpin(){ if (pinned) mark(pinned, false); pinned = null; chart.classList.remove('pinned'); box.innerHTML = hint; }
-  svg.addEventListener('click', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) { unpin(); return; } var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); });
+  // Each seat is a real link to that person's career page — that is what a keyboard and a reader without
+  // JavaScript get. Where the script is running the card is the better answer, so the click is intercepted;
+  // a modified click (new tab, new window) is left alone, because the reader asked for the page.
+  svg.addEventListener('click', function(e){
+    var g = e.target.closest('.seat[data-az]');
+    if (!g) { unpin(); return; }
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+    e.preventDefault();
+    var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az);
+  });
   svg.addEventListener('keydown', function(e){ var g = e.target.closest('.seat[data-az]'); if (!g) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); var az = g.getAttribute('data-az'); if (pinned === az) unpin(); else pin(az); } });
   box.addEventListener('click', function(e){ if (e.target.closest('[data-unpin]')) unpin(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') unpin(); });
@@ -484,6 +594,35 @@
   apply();
 })();
 
+(function(){
+  // The same month counted two ways. Both charts are in the page already; this hides one and adds the switch.
+  var panel = document.getElementById('szavazasszam'); if (!panel) return;
+  var bar = panel.querySelector('.viewsw'); if (!bar) return;
+  var views = Array.prototype.slice.call(panel.querySelectorAll('.view'));
+  if (views.length < 2) return;
+  // Out of the heading. A screen reader builds a heading's name from everything inside it, so leaving the
+  // switch there made the h2 announce "Szavazások havonta ülésnaponként" and put the two buttons in the
+  // reading order twice. The placeholder sits in the markup inside the h2 and is empty until now, so moving
+  // it here costs nothing and keeps the tab order — heading, switch, chart.
+  panel.querySelector('h2').insertAdjacentElement('afterend', bar);
+  var btns = [];
+  function pick(i){
+    views.forEach(function(v, j){ v.hidden = j !== i; });
+    btns.forEach(function(b, j){ b.setAttribute('aria-pressed', String(j === i)); });
+  }
+  views.forEach(function(v, i){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'vbtn';
+    b.textContent = v.getAttribute('data-label');
+    b.addEventListener('click', function(){ pick(i); });
+    bar.appendChild(b);
+    btns.push(b);
+  });
+  panel.classList.add('switched');
+  pick(0);
+})();
+
 
 (function(){
   var t = document.getElementById('mine'); if (!t) return;
@@ -519,6 +658,9 @@
 
 (function(){
   var q = document.getElementById('sq'), out = document.getElementById('sres'), n = document.getElementById('sn'); if (!q || !out) return;
+  // The slot ships with the sentence a reader without JavaScript needs. We are running, so replace it with
+  // the one that is true here — the instruction "start typing" is only honest once typing does something.
+  out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>';
   var items = null, loading = false, kind = 'all', cyc = 'all';
   function fold(s){ return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
