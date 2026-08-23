@@ -257,3 +257,55 @@ class EveryColourTheStylesheetAsksForExists(unittest.TestCase):
         self.assertGreater(len(used), 20, "no custom properties found — has the stylesheet changed shape?")
         self.assertEqual(sorted(used - defined), [],
                          "the stylesheet asks for colours nobody defines; these rules do nothing")
+
+
+class TwoPagesOfOneCycleAgreeOnHowManyDaysItSat(unittest.TestCase):
+    """The cycle index prints "192 ülésnap" and the Számok page printed 106 of them, and nothing compared the
+    two — so a five-fold overstatement of the House's pace sat in the accessible name of every month link on a
+    chart captioned "mikor volt sűrű a Ház napirendje".
+
+    `monthly()` had built its day count as the set of dates a vote fell on, which is a real and useful number
+    and is not an ülésnap: the House sits and need not divide. Cycle 42 has 106 such dates against the
+    record's own 192 numbered sittings; April 2023 has one against five, so the page announced 21.0 votes a
+    day where the true pace was 4.2. Every check the feature had agreed with it, including the README's,
+    because the README's gate recomputed the figure the same wrong way — two implementations of one mistake
+    read as verification.
+
+    What no check did was compare the number against the same cycle's other page. This does, over the built
+    site, for every cycle that has both. It is deliberately a cross-page test rather than a unit one: the
+    defect was not in either page's arithmetic but in the two of them meaning different things by one word.
+    """
+
+    MONTH = re.compile(r'data-m="(\d{4}-\d\d)"[^>]*data-sittings="(\d*)"')
+
+    def setUp(self):
+        self.site = ROOT / "site"
+        if not (self.site / "index.html").exists():
+            self.skipTest("site/ is not built")
+
+    def test_the_month_strip_adds_up_to_the_cycle_card(self):
+        checked = []
+        for card in sorted(self.site.glob("ckl*/index.html")):
+            cyc = card.parent.name
+            strip = card.parent / "szamok" / "index.html"
+            if not strip.exists():
+                continue
+            # On the card's own machine-readable attribute, not on the rendered digits: the figure is emitted
+            # as <b data-kz-number="192">192</b><span data-kz-text>ülésnap</span>, and my first pattern tried
+            # to walk the markup between the number and the word, matched nothing, and quietly compared zero
+            # cycles. A test that passes by checking nothing is the exact failure this class exists to catch,
+            # which is why the number of cycles actually compared is asserted at the end.
+            m = re.search(r'data-kz-number="(\d+)"[^<]*</b><span data-kz-text>ülésnap</span>',
+                          card.read_text(encoding="utf-8"))
+            if not m:                       # cycles with no ulesnap list print no such figure, by design
+                continue
+            said = int(m.group(1))
+            got = [int(n) for _mo, n in self.MONTH.findall(strip.read_text(encoding="utf-8")) if n]
+            if not got:                     # the cycle's chart says it counts vote days instead, and is labelled so
+                self.assertIn("szavazási naponként", strip.read_text(encoding="utf-8"),
+                              f"{cyc}: no sittings on the strip and no statement that this is a different count")
+                continue
+            self.assertEqual(sum(got), said,
+                             f"{cyc}: the cycle card says {said} ülésnap, the month strip adds up to {sum(got)}")
+            checked.append(cyc)
+        self.assertGreaterEqual(len(checked), 5, "too few cycles compared — has the markup changed?")

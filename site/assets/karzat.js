@@ -36,6 +36,37 @@
   strip.addEventListener('mouseover', function(e){ var a = e.target.closest('.mo'); if (a) show(a); });
   strip.addEventListener('focusin', function(e){ var a = e.target.closest('.mo'); if (a) show(a); });
   strip.addEventListener('mouseleave', function(){ show(null); });
+  strip.addEventListener('focusout', function(e){
+    if (!strip.contains(e.relatedTarget)) show(null);   // the readout stopped naming a month nobody was on
+  });
+
+  // The arrow keys, because the panel promised them. The heading said "lépkedj a nyilakkal" and only
+  // mouseover, focusin and mouseleave were ever bound, so the arrows scrolled the page — a control that is
+  // dead WITH a script, which is worse than the no-JS case this project writes its rules against. The tag and
+  // the readout hint are set here rather than in the markup, so the promise is made by the code that keeps it.
+  var tag = document.getElementById('motag');
+  if (tag) tag.textContent = 'vidd rá az egeret, vagy lépkedj a nyilakkal';
+  out.textContent = 'Válassz egy hónapot: itt jelenik meg, mit csinált a Ház akkor — és innen tovább lehet '
+                  + 'menni a hónap szavazásaihoz.';
+  hint = out.innerHTML;
+  var mos = Array.prototype.slice.call(strip.querySelectorAll('.mo'));
+  strip.setAttribute('role', 'group');
+  strip.setAttribute('aria-label', 'A ciklus hónapjai — ' + mos.length + ' hónap');
+  // A roving tab stop, applied by the script: without it every month keeps its own, which is the right
+  // fallback. 39 stops become one, and the arrows walk the rest.
+  mos.forEach(function(a, i){ a.tabIndex = i ? -1 : 0; });
+  strip.addEventListener('keydown', function(e){
+    var i = mos.indexOf(document.activeElement);
+    if (i < 0) return;
+    var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1
+          : e.key === 'Home' ? 0 : e.key === 'End' ? mos.length - 1 : -1;
+    if (j < 0 && e.key !== 'Home') return;
+    // Clamped, not wrapped. The chamber's seat walker wraps because a chamber is a ring; this is a timeline,
+    // and ArrowRight on the last month of a cycle must not land on the first.
+    j = Math.max(0, Math.min(mos.length - 1, j));
+    e.preventDefault();
+    mos[i].tabIndex = -1; mos[j].tabIndex = 0; mos[j].focus();
+  });
 })();
 
 (function(){

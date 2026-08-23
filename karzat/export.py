@@ -242,6 +242,7 @@ def adatszotar() -> list[tuple[str, list[tuple[str, str]]]]:
         ]),
         ("szamok/havonta.csv — a ciklus hónapról hónapra, frakciónként egy sor", [
             ("votes, decisions, qualified, roll_calls", "a hónap szavazásai · döntései · minősített többséget kívánó döntései · név szerinti listái"),
+            ("sittings, vote_days", "a hónap ülésnapjai a jegyzőkönyv számozása szerint (1998 előtt üres: az API nem közöl ülésnaplistát) · azoknak a napoknak a száma, amelyeken szavazás volt. A kettő nem ugyanaz: a Ház ülésezhet szavazás nélkül"),
             ("in_roll, cast, with, against, participation, dissent, ai", "a frakció tagjaira: névsorban · leadott · frakcióval · ellene · leadott/névsor · ellene/leadott · egyetértési index (súlyozott havi átlag)"),
         ]),
         ("iromany/iromanyok.csv — minden iromány, amelyről név szerint szavaztak", [
@@ -428,7 +429,11 @@ def monthly_csv(months: list[dict[str, Any]], cycle: int) -> str:
     rows = []
     for d in months:
         for f, x in sorted(d["factions"].items()):
+            # sittings and vote_days as two named columns rather than one called "days": the chart is drawn from
+            # the first and the page used to print the second under the first's name, so the twin carries both
+            # and the reader can see they are not the same number.
             rows.append({"cycle": cycle, "month": d["month"], "votes": d["votes"], "decisions": d["decisions"], "qualified": d["qualified"], "roll_calls": d["roll_calls"],
+                         "sittings": d.get("sittings"), "vote_days": d.get("vote_days"),
                          "faction": f, "in_roll": x["in_roll"], "cast": x["cast"], "with": x["with"], "against": x["against"],
                          "participation": x["participation"], "dissent": x["dissent"], "ai": x.get("ai")})
-    return _csv(rows, ["cycle", "month", "votes", "decisions", "qualified", "roll_calls", "faction", "in_roll", "cast", "with", "against", "participation", "dissent", "ai"])
+    return _csv(rows, ["cycle", "month", "votes", "decisions", "qualified", "roll_calls", "sittings", "vote_days", "faction", "in_roll", "cast", "with", "against", "participation", "dissent", "ai"])

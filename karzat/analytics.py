@@ -256,14 +256,19 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
     for ts in order:
         v = by_ts[ts]
         m = v["on_date"][:7]
-        d = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "days": set(), "factions": {}})
+        d = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "vote_days": set(), "factions": {}})
         d["votes"] += 1
-        # The sitting days behind the month, because a month is not a unit of parliamentary activity and the
-        # bar chart reads as though it were: December 2025 shows 182 votes over 4 sitting days and December
-        # 2023 shows 181 over 3 — near-identical columns over 46 and 60 votes a day. The count is the House's
-        # output; the count per sitting day is its pace, and the page can only offer both if this is here.
+        # The days behind the month, because a month is not a unit of parliamentary activity and the bar chart
+        # reads as though it were: two Decembers can carry the same bar over very different fortnights.
+        #
+        # These are VOTE DAYS — the dates a vote was taken — and the first version of this called them
+        # ülésnap, which they are not: the House sits and does not necessarily divide. Cycle 42 has 106 vote
+        # days against the record's own 192 numbered sittings, so a rate built on this denominator overstates
+        # the pace by 1.8x for the cycle and 5x for April 2023, on a chart whose caption promises to show when
+        # the agenda was busy. The record's sittings are added below, where it has them, and the name here
+        # says which of the two this is.
         if v.get("on_date"):
-            d["days"].add(v["on_date"])
+            d["vote_days"].add(v["on_date"])
         if v.get("kind") == "dontes":
             d["decisions"] += 1
             if (v.get("majority") or {}).get("rule") not in (None, "egyszeru", "relativ"):
@@ -275,7 +280,7 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
         for v in rec["votes"]:
             m = v["ts"][:4] + "-" + v["ts"][5:7]
             f = v.get("faction") or "—"
-            fd = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "days": set(), "factions": {}})["factions"].setdefault(f, {"in_roll": 0, "cast": 0, "with": 0, "against": 0})
+            fd = months.setdefault(m, {"month": m, "votes": 0, "decisions": 0, "qualified": 0, "roll_calls": 0, "vote_days": set(), "factions": {}})["factions"].setdefault(f, {"in_roll": 0, "cast": 0, "with": 0, "against": 0})
             fd["in_roll"] += 1
             if v["position"] in CAST:
                 fd["cast"] += 1
@@ -290,11 +295,24 @@ def monthly(inp: dict[str, Any], co: dict[str, Any] | None = None) -> dict[str, 
                 if m in months and f in months[m]["factions"] and x["cast"]:
                     fd = months[m]["factions"][f]
                     fd["ai_w"] = fd.get("ai_w", 0.0) + x["ai"] * x["cast"]; fd["ai_n"] = fd.get("ai_n", 0) + x["cast"]
+    # The record's own numbered sittings per month, where the cycle has them: the API publishes no ulesnap list
+    # before 1998, so cycles 34 and 35 get None rather than a number that looks like one. Counted by NUMBER and
+    # not by distinct date, because two sittings can share a date (a rendes and a rendkivuli) and the House
+    # numbers them separately — the same rule sitting_weeks() follows, so the two pages agree.
+    sittings: dict[str, int] = {}
+    for r in (inp.get("idx") or {}).get("sitting_days") or []:
+        if r.get("date"):
+            sittings[r["date"][:7]] = sittings.get(r["date"][:7], 0) + 1
     out = []
     for m in sorted(months):
         d = months[m]
-        d["days"] = len(d["days"])
-        d["per_day"] = (d["votes"] / d["days"]) if d["days"] else None
+        d["vote_days"] = len(d["vote_days"])
+        d["sittings"] = sittings.get(m) if sittings else None
+        # Votes per sitting day is the pace; votes per vote day is a different and much flatter thing, because
+        # a sitting day need not divide at all. Where the record does not list sittings, there is no pace to
+        # report and the page says which number it is showing instead of quietly swapping the denominator.
+        d["per_sitting"] = (d["votes"] / d["sittings"]) if d.get("sittings") else None
+        d["per_vote_day"] = (d["votes"] / d["vote_days"]) if d["vote_days"] else None
         for f, fd in d["factions"].items():
             fd["participation"] = fd["cast"] / fd["in_roll"] if fd["in_roll"] else None
             fd["dissent"] = fd["against"] / fd["cast"] if fd["cast"] else None

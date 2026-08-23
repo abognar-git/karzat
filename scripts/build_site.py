@@ -2210,6 +2210,37 @@ JS_MONTHS = """
   strip.addEventListener('mouseover', function(e){ var a = e.target.closest('.mo'); if (a) show(a); });
   strip.addEventListener('focusin', function(e){ var a = e.target.closest('.mo'); if (a) show(a); });
   strip.addEventListener('mouseleave', function(){ show(null); });
+  strip.addEventListener('focusout', function(e){
+    if (!strip.contains(e.relatedTarget)) show(null);   // the readout stopped naming a month nobody was on
+  });
+
+  // The arrow keys, because the panel promised them. The heading said "lépkedj a nyilakkal" and only
+  // mouseover, focusin and mouseleave were ever bound, so the arrows scrolled the page — a control that is
+  // dead WITH a script, which is worse than the no-JS case this project writes its rules against. The tag and
+  // the readout hint are set here rather than in the markup, so the promise is made by the code that keeps it.
+  var tag = document.getElementById('motag');
+  if (tag) tag.textContent = 'vidd rá az egeret, vagy lépkedj a nyilakkal';
+  out.textContent = 'Válassz egy hónapot: itt jelenik meg, mit csinált a Ház akkor — és innen tovább lehet '
+                  + 'menni a hónap szavazásaihoz.';
+  hint = out.innerHTML;
+  var mos = Array.prototype.slice.call(strip.querySelectorAll('.mo'));
+  strip.setAttribute('role', 'group');
+  strip.setAttribute('aria-label', 'A ciklus hónapjai — ' + mos.length + ' hónap');
+  // A roving tab stop, applied by the script: without it every month keeps its own, which is the right
+  // fallback. 39 stops become one, and the arrows walk the rest.
+  mos.forEach(function(a, i){ a.tabIndex = i ? -1 : 0; });
+  strip.addEventListener('keydown', function(e){
+    var i = mos.indexOf(document.activeElement);
+    if (i < 0) return;
+    var j = e.key === 'ArrowRight' ? i + 1 : e.key === 'ArrowLeft' ? i - 1
+          : e.key === 'Home' ? 0 : e.key === 'End' ? mos.length - 1 : -1;
+    if (j < 0 && e.key !== 'Home') return;
+    // Clamped, not wrapped. The chamber's seat walker wraps because a chamber is a ring; this is a timeline,
+    // and ArrowRight on the last month of a cycle must not land on the first.
+    j = Math.max(0, Math.min(mos.length - 1, j));
+    e.preventDefault();
+    mos[i].tabIndex = -1; mos[j].tabIndex = 0; mos[j].focus();
+  });
 })();
 
 (function(){
@@ -4488,29 +4519,47 @@ def svg_series(labels: list[str], series: list[tuple[str, str, list]], kind: str
         if i % step == 0 or i == n - 1:
             parts.append(f'<text x="{x(i):.1f}" y="{h - 6}" class="axl" text-anchor="middle">{esc(lab)}</text>')
     if kind == "bars":
-        name, colour, vs = series[0]
+        # `sname`, not `name`: unpacking into `name` rebound the function's own parameter, so the accessible
+        # name below was built from the last series instead of the chart. Every multi-series chart announced
+        # itself as "DK: Fidesz, DK, MSZP…" — and worse, the caller's named() helper injects the chart title by
+        # replacing the literal `aria-label=":`, which the shadowed value made impossible, so the title had
+        # never once been injected. axe cannot catch this: it checks that an accessible name exists, not that
+        # it says anything.
+        sname, colour, vs = series[0]
         bw = max(2.0, iw / n * 0.6)
         for i, v in enumerate(vs):
             if v is None: continue
             parts.append(f'<rect x="{x(i) - bw / 2:.1f}" y="{y(v):.1f}" width="{bw:.1f}" height="{pad_t + ih - y(v):.1f}" fill="{colour}"><title>{esc(labels[i])}: {esc(fmt(v))}</title></rect>')
     else:
-        for name, colour, vs in series:
+        for sname, colour, vs in series:
             pts = [(x(i), y(v)) for i, v in enumerate(vs) if v is not None]
             if len(pts) > 1:
-                parts.append(f'<polyline data-s="{esc(name)}" points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" fill="none" stroke="{colour}" stroke-width="1.4"/>')
+                parts.append(f'<polyline data-s="{esc(sname)}" points="{" ".join(f"{a:.1f},{b:.1f}" for a, b in pts)}" fill="none" stroke="{colour}" stroke-width="1.4"/>')
             for i, v in enumerate(vs):
                 if v is None: continue
-                parts.append(f'<circle data-s="{esc(name)}" cx="{x(i):.1f}" cy="{y(v):.1f}" r="2.2" fill="{colour}"><title>{esc(name)} · {esc(labels[i])}: {esc(fmt(v))}</title></circle>')
+                parts.append(f'<circle data-s="{esc(sname)}" cx="{x(i):.1f}" cy="{y(v):.1f}" r="2.2" fill="{colour}"><title>{esc(sname)} · {esc(labels[i])}: {esc(fmt(v))}</title></circle>')
     # the accessible name says what the picture is and where the same numbers are in text (the table below)
-    label = f'{name}: {", ".join(n for n, _, _ in series)} — {labels[0]} … {labels[-1]}, {n} hónap; a számok a táblázatban' if labels else name
+    label = (f'{name + ": " if name else ""}{", ".join(n for n, _, _ in series)} — {labels[0]} … {labels[-1]}, '
+             f'{n} hónap; a számok a táblázatban') if labels else name
     return f'<div class="tswrap" tabindex="0"><svg viewBox="0 0 {w} {h}" class="ts" role="img" aria-label="{esc(label)}">{"".join(parts)}</svg></div>'
 
 
 def month_summary(d: dict) -> str:
-    """One month in a sentence: the month strip's link name, and what the readout says in the browser."""
-    bits = [f'{hu_num(d["votes"])} szavazás', f'{hu_num(d["days"])} ülésnap']
-    if d["per_day"]:
-        bits.append(f'{hu_dec(d["per_day"], 1)} szavazás naponta')
+    """One month in a sentence: the month strip's link name, and what the readout says in the browser.
+
+    The first version said "N ülésnap" and meant the dates on which a vote was taken, which is a different and
+    much smaller number — 106 against the record's 192 for cycle 42, and 1 against 5 for April 2023. It was in
+    the accessible name of every month link, so the wrong figure was what a screen reader read out. Where the
+    record lists sittings the sentence uses them; where it does not, it names what it is counting instead."""
+    bits = [f'{hu_num(d["votes"])} szavazás']
+    if d.get("sittings"):
+        bits.append(f'{hu_num(d["sittings"])} ülésnap')
+        if d.get("per_sitting"):
+            bits.append(f'{hu_dec(d["per_sitting"], 1)} szavazás ülésnaponként')
+    else:
+        bits.append(f'{hu_num(d["vote_days"])} nap, amelyen szavaztak')
+        if d.get("per_vote_day"):
+            bits.append(f'{hu_dec(d["per_vote_day"], 1)} szavazás ezeken a napokon')
     bits.append(f'{hu_num(d["qualified"])} minősített {hu_the(d["decisions"])} {hu_num(d["decisions"])} döntésből')
     return f'{d["month"]} — ' + ", ".join(bits)
 
@@ -4523,32 +4572,77 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
     pct = lambda v: f"{100 * v:.0f}%"
     ser = lambda key: [(f, colour.get(f, "#8a8a8a"), [((d["factions"].get(f) or {}).get(key)) for d in ms]) for f in facs]
     charts = [
-        ("Minősített többségű döntések aránya", svg_series(labels, [("minősített", "#a1a1aa", [(d["qualified"] / d["decisions"]) if d["decisions"] else None for d in ms])], "lines", 1.0, pct), "a hónap döntéseiből mennyi kívánt kétharmadot, négyötödöt vagy abszolút többséget"),
-        ("Részvétel frakciónként", svg_series(labels, ser("participation"), "lines", 1.0, pct), "leadott szavazat / névsorban szereplés, a frakció tagjaira összesítve"),
-        ("Frakció elleni szavazatok aránya", svg_series(labels, ser("dissent"), "lines", None, lambda v: f"{100 * v:.1f}%".replace(".", ",")), "a frakció többségétől eltérő leadott szavazatok aránya"),
-        ("Egyetértési index frakciónként", svg_series(labels, ser("ai"), "lines", 1.0, lambda v: hu_dec(v)), "leadott szavazatokkal súlyozott havi átlag"),
+        ("Minősített többségű döntések aránya", svg_series(labels, [("minősített", "#a1a1aa", [(d["qualified"] / d["decisions"]) if d["decisions"] else None for d in ms])], "lines", 1.0, pct, name="Minősített többségű döntések aránya"), "a hónap döntéseiből mennyi kívánt kétharmadot, négyötödöt vagy abszolút többséget"),
     ]
-    def named(t, svg):
-        return svg.replace('aria-label=":', 'aria-label="' + esc(t) + ':', 1)
+    # Everything below this line is computed from roll calls, and two cycles have none: the API's `nev_szerint`
+    # is empty before 1998. Cycle 34 was drawing three faction charts containing nothing at all — empty axes
+    # labelled 100%, an empty legend, and a havonta.csv that is one header row — which reads as "these
+    # factions were at zero" rather than "the record does not say". Cycle 35 is worse in its way: one roll call
+    # in 8,144 votes draws seven isolated dots that look like a series. So the coverage is stated on every
+    # cycle, and where there is nothing to draw the charts are replaced by the sentence rather than shipped
+    # empty.
+    n_votes = sum(d["votes"] for d in ms)
+    n_roll = sum(d["roll_calls"] for d in ms)
+    fac_charts = [
+        ("Részvétel frakciónként", svg_series(labels, ser("participation"), "lines", 1.0, pct, name="Részvétel frakciónként"), "leadott szavazat / névsorban szereplés, a frakció tagjaira összesítve"),
+        ("Frakció elleni szavazatok aránya", svg_series(labels, ser("dissent"), "lines", None, lambda v: f"{100 * v:.1f}%".replace(".", ","), name="Frakció elleni szavazatok aránya"), "a frakció többségétől eltérő leadott szavazatok aránya"),
+        ("Egyetértési index frakciónként", svg_series(labels, ser("ai"), "lines", 1.0, lambda v: hu_dec(v), name="Egyetértési index frakciónként"), "leadott szavazatokkal súlyozott havi átlag"),
+    ] if n_roll else []
+    charts += fac_charts
+    # named() used to live here: it injected the chart's title by replacing the literal `aria-label=":`, a
+    # string svg_series never emitted, so for as long as it existed it returned its input unchanged. The title
+    # is passed to svg_series directly now, where the parameter for it always was.
     # Two ways of counting the same month, because the tall-bar reading is a trap: a month with many votes and
     # many sitting days is a normal month, and a month with the same total on half the days is a fortnight of
     # very long days. Both are built and both are in the page; a script hides one and offers the switch, so a
     # reader without one gets two charts stacked rather than a control that does nothing.
+    # Which denominator the second view can honestly use depends on the cycle. The record publishes no ulesnap
+    # list before 1998, so cycles 34 and 35 have only the days a vote happened on — a different quantity, and
+    # naming it "ülésnap" is what the first version did: it printed 5x the true pace for April 2023 under a
+    # caption promising to show when the agenda was busy. The label follows the arithmetic, per cycle.
+    has_sittings = any(d.get("sittings") for d in ms)
+    rate_label, rate_key, rate_note = (
+        ("ülésnaponként", "per_sitting",
+         "ugyanaz a hónap elosztva a Ház ülésnapjaival, ahogy a jegyzőkönyv számozza őket — ez mutatja meg, "
+         "mikor volt sűrű a napirend. Egy ülésnapon nem feltétlenül szavaznak.")
+        if has_sittings else
+        ("szavazási naponként", "per_vote_day",
+         "ugyanaz a hónap elosztva azokkal a napokkal, amelyeken szavaztak — nem ülésnaponként: ehhez a "
+         "ciklushoz a rekord nem ad ülésnaplistát, az API 1998 előttre nem közöl ilyet"))
     views = [
-        ("havonta", svg_series(labels, [("szavazás", "#a1a1aa", [d["votes"] for d in ms])], "bars"),
+        ("havonta", svg_series(labels, [("szavazás", "#a1a1aa", [d["votes"] for d in ms])], "bars",
+                               name="Szavazások havonta"),
          "minden szavazás, jelenlét-megállapítással együtt"),
-        ("ülésnaponként", svg_series(labels, [("szavazás naponta", "#a1a1aa", [d["per_day"] for d in ms])],
-                                     "bars", None, lambda v: hu_dec(v, 1)),
-         "ugyanaz a hónap elosztva az ülésnapjai számával — ez mutatja meg, mikor volt sűrű a Ház napirendje"),
+        (rate_label, svg_series(labels, [(f"szavazás {rate_label}", "#a1a1aa", [d[rate_key] for d in ms])],
+                                "bars", None, lambda v: hu_dec(v, 1), name=f"Szavazások {rate_label}"),
+         rate_note),
     ]
     blocks = (f'<section class="panel" id="szavazasszam">{CORNERS}'
               f'<h2><span data-kz-text>Szavazások</span><span class="viewsw"></span></h2>'
               + "".join(f'<div class="view" data-label="{esc(lab)}"><h3 class="vlab">{esc(lab)}</h3>'
-                        f'<div class="chart">{named("Szavazások " + lab, svg)}</div>'
+                        f'<div class="chart">{svg}</div>'
                         f'<div class="hero-meta" style="margin-top:6px">{esc(note)}</div></div>'
                         for lab, svg, note in views)
               + '</section>')
-    blocks += "".join(f'<section class="panel">{CORNERS}<h2><span data-kz-text>{esc(t)}</span></h2><div class="chart">{named(t, svg)}</div><div class="hero-meta" style="margin-top:6px">{esc(note)}</div></section>' for t, svg, note in charts)
+    blocks += "".join(f'<section class="panel">{CORNERS}<h2><span data-kz-text>{esc(t)}</span></h2><div class="chart">{svg}</div><div class="hero-meta" style="margin-top:6px">{esc(note)}</div></section>' for t, svg, note in charts)
+    # One sentence about what the faction figures rest on, on every cycle — the reader of a chart drawn from
+    # one roll call in eight thousand deserves the same warning as the reader of a page that has none.
+    if n_roll:
+        blocks += (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Mire épülnek a frakciószámok</span></h2>'
+                   f'<p class="hero-meta prose">A részvétel, a frakció elleni arány és az egyetértési index csak '
+                   f'név szerinti szavazásból számolható, mert csak ott derül ki, ki hogyan szavazott. Ebben a '
+                   f'ciklusban {hu_num(n_votes)} szavazásból {hu_num(n_roll)} ilyen '
+                   f'({hu_dec(100 * n_roll / n_votes, 1)}%); a többi szavazásnál a rekord csak a végeredményt '
+                   f'közli. A hónapok, ahol nincs pont, nem nulla részvételt jelentenek, hanem azt, hogy abban a '
+                   f'hónapban nem volt név szerinti szavazás.</p></section>')
+    else:
+        blocks += (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Frakciónkénti számok nincsenek</span></h2>'
+                   f'<p class="hero-meta prose">Ebből a ciklusból a rekord egyetlen név szerinti szavazást sem '
+                   f'közöl — az API <span class="mono">nev_szerint</span> mezője 1998 előttre üres —, ezért '
+                   f'részvétel, frakció elleni arány és egyetértési index nem számolható. Ami megvan, az fent '
+                   f'látható: {hu_num(n_votes)} szavazás a maga eredményével és frakciótámogatásával. Hogy '
+                   f'meddig ér a jegyzőkönyv, azt a <a href="../../lefedettseg/index.html">lefedettség</a> '
+                   f'oldal mondja meg ciklusonként.</p></section>')
     blocks += speaking_panel(inp)
     # One month strip for all five charts, rather than a link on every point of every one of them: that would
     # be some 235 tab stops for 47 months. Each entry is a real link to the cycle's vote list narrowed to that
@@ -4559,18 +4653,18 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
         # root-plus-cycle_dir gives ckl42/ckl42/, which is the third time today I have made exactly this
         # mistake in exactly this shape. tests/test_links.py catches it; the habit is what needs fixing.
         f'<a class="mo" href="../index.html?m={esc(d["month"])}#dir" '
-        f'data-m="{esc(d["month"])}" data-votes="{d["votes"]}" data-days="{d["days"]}" '
-        f'data-perday="{hu_dec(d["per_day"], 0) if d["per_day"] else ""}" '
+        f'data-m="{esc(d["month"])}" data-votes="{d["votes"]}" '
+        f'data-sittings="{d["sittings"] if d.get("sittings") else ""}" data-votedays="{d["vote_days"]}" '
         f'data-qual="{d["qualified"]}" data-dec="{d["decisions"]}" '
         # The whole summary on the link itself, not only in the readout below: a screen reader announces a
         # link's own name on focus and has no reason to go looking at a panel elsewhere on the page for it.
         f'title="{esc(month_summary(d))}" aria-label="{esc(month_summary(d))}">'
         f'{esc(d["month"][2:])}</a>' for d in ms)
     months_panel = f"""<section class="panel" id="months">{CORNERS}
-  <h2><span data-kz-text>Hónapról hónapra</span><span class="tag">vidd rá az egeret, vagy lépkedj a nyilakkal</span></h2>
+  <h2><span data-kz-text>Hónapról hónapra</span><span class="tag" id="motag">minden hónap a saját szavazásaihoz vezet</span></h2>
   <div class="mostrip">{strip}</div>
-  <div class="moread hero-meta prose" id="moread">Válassz egy hónapot: itt jelenik meg, mit csinált a Ház
-  akkor — és innen tovább lehet menni a hónap szavazásaihoz.</div>
+  <div class="moread hero-meta prose" id="moread">Minden hónap neve megmondja, mit csinált a Ház akkor, és a
+  hivatkozás a hónap szavazásaihoz visz.</div>
 </section>
 """
     # A colour key in the markup, a filter once a script is running: the entries stay <span> so that a

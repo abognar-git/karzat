@@ -77,26 +77,35 @@ _MONTHS: dict = {}
 def months(cycle: int) -> dict:
     """Votes and sitting days per month, from the committed vote index rather than `analytics.monthly`.
 
-    The Számok page's per-day view exists because two months can carry the same bar and mean different things,
-    and the README says which two. `monthly()` would give the same figures but wants the alignment behind it;
-    the count of votes and the count of distinct dates need only the index, which is committed, so the gate
-    stays a few seconds rather than a few minutes."""
+    The Számok page's per-sitting-day view exists because two months can carry the same bar and mean different
+    things, and the README says which two. `monthly()` would give the same figures but wants the alignment
+    behind it; these need only the index, which is committed, so the gate stays a few seconds.
+
+    The sittings come from the index's own `sitting_days` and are counted BY NUMBER rather than by distinct
+    date, because the House numbers two sittings on one date separately — the rule `sitting_weeks()` follows.
+    The first version of this counted the dates a vote was taken on and called them sitting days, which is how
+    the README came to print a pace 1.5x too fast: a gate that recomputes a figure the wrong way agrees with
+    a page that prints it the wrong way, and the agreement reads as verification."""
     if cycle in _MONTHS:
         return _MONTHS[cycle]
     import gzip as _g
     f = ROOT / "data" / "derived" / f"votes_index_ckl{cycle}.json.gz"
     out: dict[str, dict] = {}
     if f.exists():
-        for v in _json.loads(_g.decompress(f.read_bytes()))["votes"]:
+        idx = _json.loads(_g.decompress(f.read_bytes()))
+        for v in idx["votes"]:
             d = v.get("on_date")
             if not d:
                 continue
-            m = out.setdefault(d[:7], {"votes": 0, "days": set()})
+            m = out.setdefault(d[:7], {"votes": 0, "vote_days": set(), "sittings": 0})
             m["votes"] += 1
-            m["days"].add(d)
+            m["vote_days"].add(d)
+        for r in idx.get("sitting_days") or []:
+            if r.get("date") and r["date"][:7] in out:
+                out[r["date"][:7]]["sittings"] += 1
         for m in out.values():
-            m["days"] = len(m["days"])
-            m["per_day"] = m["votes"] / m["days"]
+            m["vote_days"] = len(m["vote_days"])
+            m["per_sitting"] = (m["votes"] / m["sittings"]) if m["sittings"] else None
     _MONTHS[cycle] = out
     return out
 
@@ -374,9 +383,12 @@ def build() -> list[tuple[str, list]]:
     return [
         # The Számok page's per-day view: the pair that makes the case for it, from the committed vote index.
         ("December\n2023 and December 2025 are {:,.0f} and {:,.0f} votes, which is the same bar twice, and\n"
-         "{:.1f} against {:.1f} votes a day",
+         "{:.1f} against {:.1f} votes a sitting day",
          [mo(42, "2023-12", "votes"), mo(42, "2025-12", "votes"),
-          mo(42, "2023-12", "per_day"), mo(42, "2025-12", "per_day")]),
+          mo(42, "2023-12", "per_sitting"), mo(42, "2025-12", "per_sitting")]),
+        # The month whose two readings differ most, and the one that made the wrong denominator visible.
+        ("April 2023 carried {:,.0f} votes across {:,.0f} sitting days, a pace of {:.1f}",
+         [mo(42, "2023-04", "votes"), mo(42, "2023-04", "sittings"), mo(42, "2023-04", "per_sitting")]),
         # Run it / status
         # The Parquet section's figures were typed rather than generated — the one part of this README that
         # was outside its own gate. They come from the manifest the derivation writes.
