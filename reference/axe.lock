@@ -1,0 +1,4 @@
+# axe-core 4.13.0 (MPL-2.0), the engine scripts/audit_a11y.py runs.
+# Fetched by scripts/fetch_axe.py. Build tooling: never served to a reader.
+af175b9d96ee93c21a036152e1b905b0b95304d4ae8c2c921c7609100ba8df7e  LICENSE
+c24f097bd2f451d4f933e8bc7d8d539f8672a2ebcb5cc9f9f3eec8ca9470a0c1  axe.min.js

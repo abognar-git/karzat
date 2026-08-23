@@ -186,6 +186,18 @@ def floor() -> dict:
     return _FLOOR
 
 
+
+_GATE = _json.loads((ROOT / "data" / "derived" / "a11y.json").read_text(encoding="utf-8")) \
+    if (ROOT / "data" / "derived" / "a11y.json").exists() else {}
+
+
+def gate(k: str):
+    """What the accessibility gate recorded about its own coverage — written by
+    `python3 -m scripts.audit_a11y --write`, not asserted here. Reading it rather than recomputing keeps this
+    check runnable: counting off-origin references means opening every one of the site's HTML files."""
+    return _GATE.get(k, 0)
+
+
 README = ROOT / "README.md"
 FACTIONS = ROOT / "config" / "factions.yml"
 
@@ -427,6 +439,16 @@ def build() -> list[tuple[str, list]]:
          [floor()["long_days"]]),
         ("over the {:,.0f} speeches carrying both, characters against seconds correlate at {:.2f} and the median rate is {:,.0f} characters a minute",
          [floor()["text_pairs"], floor()["text_r"], floor()["text_rate"]]),
+        # the accessibility and performance gate — scripts/audit_a11y.py, tests/test_a11y.py
+        ("{:,.0f} HTML files is not something anyone audits, and nobody needs to: it is {:,.0f} templates",
+         [gate("html"), gate("kinds")]),
+        ("axe-core {:g} is vendored and SHA-256 pinned", [float(".".join(str(gate("axe")).split(".")[:2]))]),
+        ("The built site now makes {:,.0f} requests off its own origin", [gate("offsite")]),
+        # the accessibility and performance gate — recorded by scripts/audit_a11y.py --write
+        ("{:,.0f} HTML files is not something anyone audits, and nobody needs to: it is {:,.0f} templates",
+         [gate("html"), gate("kinds")]),
+        ("axe-core {:g} is vendored and SHA-256 pinned", [float(".".join(str(gate("axe")).split(".")[:2]))]),
+        ("The built site now makes {:,.0f} requests off its own origin", [gate("offsite")]),
         # the landing page — scripts.build_site.build_landing()
         ("the arrow keys walk the seats; then the ten cycles since 1990 as stacked composition bars (mandates in force on each constituent sitting, read from the records' dated rows — {:,.0f} in the strip)",
          [_landing().count('<a class="cyc')]),

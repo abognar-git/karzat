@@ -58,3 +58,8 @@ data/derived/traffic.json
 
 # DuckDB-WASM, vendored onto our own origin by scripts/fetch_duckdb.py; 35 MB does not belong in a history
 site/assets/duckdb/
+
+# axe-core is build tooling, not a site input: 580 kB of somebody else's minified JavaScript does not
+# belong in this history. The lock beside it is committed, so a fetch either reproduces those bytes or
+# stops. Same reasoning as site/assets/duckdb/.
+reference/axe/

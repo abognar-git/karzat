@@ -1,0 +1,12 @@
+{
+ "kinds": 38,
+ "html": 160395,
+ "offsite": 0,
+ "axe": "4.13.0",
+ "viewports": [
+  "desktop",
+  "mobile"
+ ],
+ "serious": 0,
+ "soft": 14
+}

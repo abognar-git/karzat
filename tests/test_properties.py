@@ -375,7 +375,7 @@ class TheChartReadsAResultTheSameWayWhicheverRowIsFirst(unittest.TestCase):
             raise unittest.SkipTest("node is not available")
         from scripts.build_site import build_assets
         js = build_assets()["karzat.js"]
-        start = js.index("  var box = document.getElementById('q'); if (!box) return;")
+        start = js.index("// @sql-block")     # a marker, not a line: the line moved once and took ten tests
         blk = js[start:js.index("})();", js.index("  function draw(){", start))]
         cls.fns = (blk[blk.index("  function num(v){"):blk.index("  function svgEl(")]
                    + blk[blk.index("  function step(range){"):blk.index("  function draw(){")])

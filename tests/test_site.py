@@ -1018,11 +1018,19 @@ class Portraits(unittest.TestCase):
         self.assertIn('loading="lazy"', html)
         self.assertIn('width="192" height="256"', html)          # the file's own size, so nothing is resampled
 
-    def test_a_person_without_one_keeps_the_original_url(self):
-        from scripts.build_site import portrait_src
-        self.assertEqual(portrait_src({"p_azon": "nobody-here", "photo_url": "https://example.invalid/x"}),
-                         "https://example.invalid/x")
+    def test_a_person_without_one_gets_no_picture_rather_than_somebody_elses_server(self):
+        """The old rule was that a person the manifest does not carry keeps the record's own URL, so that
+        anyone added since the last render still had a face. It put `<img src="https://www.parlament.hu/…">`
+        on 59 pages for 22 people — and 21 of those URLs answer 404, so the browser called a third party in
+        order to be told nothing while `onerror` removed the empty image. Meanwhile the site's standing claim
+        is that a visit is known to nobody but its own log. Our copy, or nothing."""
+        from scripts.build_site import PHOTO_BASE, portrait_src
+        self.assertEqual(portrait_src({"p_azon": "nobody-here", "photo_url": PHOTO_BASE + "nobody-here"}), "")
+        self.assertEqual(portrait_src({"p_azon": "nobody-here", "photo_url": "https://example.invalid/x"}), "")
         self.assertEqual(portrait_src({"p_azon": "nobody-here"}), "")
+        # the exception, and the only one: a Commons file, licensed and credited beside the picture
+        commons = "https://upload.wikimedia.org/wikipedia/commons/1/2/x.jpg"
+        self.assertEqual(portrait_src({"p_azon": "nobody-here", "photo_url": commons}), commons)
 
     def test_the_manifest_matches_the_files_it_claims(self):
         from scripts.build_site import PORTRAITS
@@ -2617,7 +2625,7 @@ class ReportPage(unittest.TestCase):
     def _sql_block(self):
         """Three functions in the bundle are called step() and two are somebody else's. Every lookup here is
         scoped to the SQL loader first, because a test that reads the pager's step() would pass on anything."""
-        start = self.js.index("  var box = document.getElementById('q'); if (!box) return;")
+        start = self.js.index("// @sql-block")
         return self.js[start:self.js.index("})();", self.js.index("  function draw(){", start))]
 
     def test_every_exported_table_is_registered_by_the_loader(self):

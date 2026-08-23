@@ -268,15 +268,21 @@ class LooseEnds(unittest.TestCase):
     def test_portraits_are_our_own_copy_black_and_white_and_attributed(self):
         """The picture used to be linked where it lives; it is now a grey WebP of ours, the size it is drawn at.
         What has not changed: lazy, no referrer, attributed in the title, and nothing at all when there is no
-        picture. A person the manifest does not carry still falls back to the original URL."""
+        picture.
+
+        What has: a person the manifest does not carry no longer falls back to the record's own URL. That
+        fallback put `<img src="https://www.parlament.hu/…">` on 59 pages, for 22 people — and 21 of those
+        URLs answer 404, so a reader's browser called a third party in order to be told nothing and `onerror`
+        removed the empty image before anyone noticed. The site's standing claim is that a visit is known to
+        nobody but its own log. Our copy, or no picture."""
         from scripts.build_site import PHOTO_BASE, PORTRAITS, build_assets, build_mp_index, portrait_html
         inp = load_inputs()
         h = portrait_html(inp["mps"]["a011"], "hero")
-        if "a011" in PORTRAITS:
-            self.assertIn('src="/assets/portre/a011.webp"', h)
-            self.assertIn('width="192" height="256"', h)
-        else:
-            self.assertIn(f'src="{PHOTO_BASE}a011"', h)
+        self.assertIn("a011", PORTRAITS, "the fixture MP needs a local portrait for this to test anything")
+        self.assertIn('src="/assets/portre/a011.webp"', h)
+        self.assertIn('width="192" height="256"', h)
+        # somebody with a photo_url the manifest does not carry gets nothing, not a hotlink
+        self.assertEqual(portrait_html({"p_azon": "zzz", "name": "x", "photo_url": PHOTO_BASE + "zzz"}), "")
         self.assertIn('referrerpolicy="no-referrer"', h)
         self.assertIn('loading="lazy"', h)
         self.assertIn('title="fénykép: parlament.hu"', h)
@@ -285,7 +291,10 @@ class LooseEnds(unittest.TestCase):
         self.assertIn(".portrait{filter:grayscale(1)", css)                             # still grey for remote ones
         page = build_mp_page(inp, "a011")
         self.assertIn('class="portrait hero"', page)
-        self.assertEqual(build_mp_index(inp).count('class="portrait thumb"'), len(inp["mps"]))
+        have = sum(1 for az in inp["mps"] if az in PORTRAITS)
+        self.assertEqual(build_mp_index(inp).count('class="portrait thumb"'), have)
+        self.assertGreater(have, len(inp["mps"]) * 0.95, "the portrait cache has gone stale")
+        self.assertNotIn(PHOTO_BASE, build_mp_index(inp))                               # no third party, ever
         self.assertIn("PHOTO_BASE + esc(az) + PHOTO_EXT", build_assets()["karzat.js"])  # the inspector too
 
     def test_committees_from_records_and_the_api(self):

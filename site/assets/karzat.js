@@ -7,7 +7,12 @@
     var tbody = table.tBodies[0]; if (!tbody) return;
     var counter = table.getAttribute('data-counter') ? document.getElementById(table.getAttribute('data-counter')) : null;
     var wrap = table.closest('.tablewrap') || table;
-    var nav = document.createElement('nav'); nav.className = 'pgr'; nav.setAttribute('aria-label', 'Lapozás');
+    var nav = document.createElement('nav'); nav.className = 'pgr';
+    // Two paginated tables on one page produced two <nav>s called 'Lapozás', which in a landmark list is
+    // two entries a reader cannot tell apart. The table's own caption or the heading above it names them.
+    var named = (table.caption && table.caption.textContent.trim())
+             || (function(sec){ var h = sec && sec.querySelector('h2'); return h ? h.textContent.trim() : ''; })(table.closest('section'));
+    nav.setAttribute('aria-label', named ? 'Lapozás: ' + named.slice(0, 60) : 'Lapozás');
     wrap.parentNode.insertBefore(nav, wrap.nextSibling);
     function render(reset){
       if (reset) page = 1;
@@ -548,8 +553,11 @@
 
 
 (function(){
-  var box = document.getElementById('q'); if (!box) return;
-  var runBtn = document.getElementById('run'), out = document.getElementById('out');
+  // @sql-block — tests/test_site.py finds the loader by this marker. It used to key on the line below,
+  // which meant a guard fix silently unhooked ten tests at once; a marker is a promise, a line is not.
+  var box = document.getElementById('q'), runBtn = document.getElementById('run');
+  if (!box || !runBtn) return;                       // a cycle index has #q too — its filter — and no console
+  var out = document.getElementById('out');
   var state = document.getElementById('sqlstate'), took = document.getElementById('took');
   var db = null, conn = null;
   document.querySelectorAll('button.ex').forEach(function(b){
