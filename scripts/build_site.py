@@ -1240,8 +1240,11 @@ JS_INDEX = """
     var note = document.createElement('div');
     note.className = 'hero-meta prose';
     note.style.margin = '8px 0';
-    note.innerHTML = 'Csak <b>' + month + '</b> szavazásai láthatók. ' +
-      '<a href="' + location.pathname + '#dir">mind a ' + rows.length + '</a>';
+    var honap = ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december'];
+    var mi = +month.slice(5, 7);
+    var mnev = (mi >= 1 && mi <= 12) ? month.slice(0, 4) + '. ' + honap[mi - 1] : month;
+    note.innerHTML = 'Ez a lista most csak egy hónapot mutat: <b>' + mnev + '</b> szavazásait. ' +
+      '<a href="' + location.pathname + '#dir">a teljes lista: mind a ' + rows.length + ' szavazás</a>';
     host.insertBefore(note, host.firstChild);
   }
   document.getElementById('q').addEventListener('input', function(e){ q = e.target.value.trim().toLowerCase(); render(); });
@@ -2581,20 +2584,20 @@ def chart_block(view: dict, inp: dict) -> str:
         geo = plan["geometry"]
         n_sz, n_km = len(sz_seats), len(km_seats)
         note = ((f'Az Országház alaprajza, mindenki a saját helyén. Az emelvény felől nézve balra az ellenzék, jobbra a kormányoldal. '
-                 + (f'{hu_num(n_sz)} helyen nemzetiségi szószóló, {hu_num(n_km)} helyen mandátum nélküli kormánytag ül — ők nem szavaznak. ' if n_sz or n_km else
-                    'A szószólók és a mandátum nélküli kormánytagok nincsenek berajzolva: az Országgyűlés mindkét listát csak jelen időben adja ki, lezárt ciklusra tehát nem tudjuk, ki hol ült. ')
+                 + (f'{hu_num(n_sz)} helyen nemzetiségi szószóló ül, {hu_num(n_km)} helyen pedig a kormány olyan tagja, aki nem képviselő — ők nem szavaznak. ' if n_sz or n_km else
+                    'A nemzetiségi szószólók és a kormány nem képviselő tagjai nincsenek berajzolva: róluk az Országgyűlés csak a mai állapotról ad listát, ezért egy lezárt ciklusnál nem tudjuk, ki hol ült. ')
                  + f'{info.get("empty", 0) - n_sz - n_km} üres hely.')
                 if info.get("seats_in_plan") else
                 (f'Ülésrend a képviselői adatlapokból, az emelvény felől nézve: balra az ellenzék, jobbra a kormányoldal. Halvány karika: üres hely ({info.get("empty", 0)}).'))
     else:
         svg = seat_svg_fallback(view, facs, align_here, presidium(inp["mps"], view["on_date"]))
-        note = ("Ugyanaz a terem ugyanúgy olvasva, de a helyek kiosztása a miénk: frakciónként, azon belül szavazat szerint. "
-                "Az ülésrendet az Országgyűlés csak a jelenlegi ciklusra adja meg — ez tehát nem a valódi ülésrend.")
+        note = ("Ezen a rajzon egy jel egy képviselő, de ez nem a valódi ülésrend: a képviselőket mi rendeztük el, frakciónként, azon belül szavazat szerint. "
+                "A valódi ülésrendet az Országgyűlés csak a jelenlegi ciklusra adja meg.")
     if n_against:
         note += f' Fehér gyűrű: {n_against} képviselő a frakciója többsége ellen szavazott.'
     payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/").replace("<!--", "<\\u0021--")
     inspector = ('<div class="inspector" id="insp" aria-live="polite">'
-                 f'<div class="insp-hint">{"Egy ülőhelyre" if plan else "Egy jelre"} mutatva vagy koppintva a képviselő; kattintás rögzíti, <span class="mono">Esc</span> vagy a padlóra kattintás elengedi.</div></div>'
+                 f'<div class="insp-hint">{"Egy ülőhelyre" if plan else "Egy jelre"} mutatva vagy koppintva megjelenik, ki az és hogyan szavazott. Egy kattintás rögzíti; az <span class="mono">Esc</span> billentyű vagy a padlóra kattintás elengedi.</div></div>'
                  f'<script type="application/json" id="insp-data">{payload}</script>')
     return f'<div class="chart">{svg}</div>{inspector}{legend_html(view, facs, n_against)}<div class="hero-meta" style="margin-top:8px">{note}</div>'
 
@@ -2608,9 +2611,9 @@ def verdict_block(view: dict, inp: dict) -> str:
     tally = (f'<div class="tally"><div><b class="mono" data-kz-number="{view["igen"]}">{view["igen"]}</b><span>igen</span></div><div><b class="mono" data-kz-number="{view["nem"]}">{view["nem"]}</b><span>nem</span></div>'
              f'<div><b class="mono" data-kz-number="{view["tartozkodott"]}">{view["tartozkodott"]}</b><span>tartózkodott</span></div></div>')
     if view["kind"] == "jelenlet":
-        return tally + f'<div class="hero-meta">Jelenlét megállapítása — nem döntés. Jelen: {esc(view.get("present"))}.</div>'
+        return tally + f'<div class="hero-meta">Ez jelenlét-megállapítás: a Ház itt csak azt rögzítette, ki van jelen a teremben — nem döntött semmiről. Jelen: {esc(view.get("present"))}.</div>'
     if not m:
-        return tally + '<div class="hero-meta">Nincs számított küszöb.</div>'
+        return tally + '<div class="hero-meta">Ehhez a szavazáshoz az API nem közli, hányan szavaztak igennel, ezért az oldal nem tud küszöböt számolni.</div>'
     share = round(100 * view["igen"] / m["base"], 1) if m.get("base") else 0
     need_pct = round(100 * m["needed"] / m["base"], 1) if m.get("base") else 50
     verdict_ok = m.get("agrees_with_source")
@@ -2635,7 +2638,7 @@ def verdict_block(view: dict, inp: dict) -> str:
             f'<dt>Szavazási mód</dt><dd>{esc(view["mode"])}</dd>'
             f'<dt>Szabály</dt><dd>{esc(rule_info.label_hu if rule_info else "—")}</dd>'
             f'<dt>Alap</dt><dd class="mono">{m.get("base")} {base_word}{base_note}</dd>'
-            f'<dt>Eredmény</dt><dd>{result_badge(view)} <span class="hero-meta">számítás {"egyezik" if verdict_ok else ("eltér" if verdict_ok is False else "—")}</span></dd>'
+            f'<dt>Eredmény</dt><dd>{result_badge(view)} <span class="hero-meta">{"az oldal újraszámolta: egyezik a forrás szerinti eredménnyel" if verdict_ok else ("az oldal újraszámolta: eltér a forrás szerinti eredménytől" if verdict_ok is False else "—")}</span></dd>'
             + (f'<dt>Nem szavazott</dt><dd class="mono">{counts.get("nem_szavazott", 0)} · jelen, nem szavazott {counts.get("jelen_nem_szavazott", 0)} · előre bejelentett hiányzó {counts.get("bejelentett_hianyzo", 0)}' + (f' · igazoltan távol {counts["igazoltan_tavol"]}' if counts.get("igazoltan_tavol") else "") + '</dd>' if view["roll_call_available"] else '')
             + '</dl>'
             + (f'<div class="fbars"><div class="row hdr"><span></span><span></span><span class="mono" style="text-align:right">igen – nem – tart.<span class="sub">egyetértési index · 1 = egyhangú</span></span></div>{"".join(fb)}</div>' if fb else ''))
@@ -2756,7 +2759,7 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
   <div class="log">{log}</div>
   <div class="method">
     <h3>Honnan</h3>
-    Az Országgyűlés nyilvános Web API-jából, szavazásonként és név szerint; a képviselőket a Wikidata azonosítói kötik össze a ciklusokon át. A szükséges többség az, amit az Országgyűlés maga jelöl meg minden szavazásnál — az oldal csak utánaszámol. Jelenlévőnek azt vesszük, aki igennel, nemmel vagy tartózkodással szavazott — a leadott szavazatok, ahogy az Országgyűlés maga számol.
+    Az adatok forrása az Országgyűlés nyilvános adatszolgáltatása, a Web API. Onnan jön minden szavazás, és ahol a Ház név szerint rögzítette, a név szerinti lista is. A képviselőket a Wikidata azonosítói kötik össze a ciklusokon át. A szükséges többséget minden szavazásnál maga az Országgyűlés jelöli meg — az oldal csak utánaszámol. Jelenlévőnek azt vesszük, aki igennel, nemmel vagy tartózkodással szavazott: ez a leadott szavazatok száma, így számol az Országgyűlés is.
     <h3>Mit nem</h3>
     Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek az oldal jelölései, nem a pártokéi. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
   </div>
@@ -2940,9 +2943,9 @@ def vote_exports(inp: dict, ts: str) -> tuple[str, str]:
 def archive_note(inp: dict, view: dict) -> str:
     """What an archive cycle's vote page says instead of the chamber and the roll call."""
     if view.get("roll_call_available"):
-        return (f'<div class="hero-meta prose" style="margin-top:14px">Archív ciklus: a név szerinti lista ({hu_num(len(view["positions"]))} sor) nem oldalanként, hanem a ciklus '
-                f'<a href="../adatok/index.html">adatállományában</a> (<span class="mono">nevsorok.csv.gz</span>) és az adatbázisban van; itt a frakciónkénti számok.</div>')
-    return '<div class="hero-meta prose" style="margin-top:14px">Archív ciklus, név szerinti lista nélkül: az API 1998 előtt csak a frakciónkénti számokat adja.</div>'
+        return (f'<div class="hero-meta prose" style="margin-top:14px">Archív ciklus: ezen az oldalon a frakciónkénti számok látszanak. A név szerinti lista ({hu_num(len(view["positions"]))} sor) is megvan, csak nem itt, hanem a ciklus '
+                f'<a href="../adatok/index.html">adatállományában</a> (<span class="mono">nevsorok.csv.gz</span>) és az adatbázisban.</div>')
+    return '<div class="hero-meta prose" style="margin-top:14px">Archív ciklus, és ehhez a szavazáshoz nincs név szerinti lista: az API nem közli, ki hogyan szavazott. 1998 előtti szavazásnál ez a rendes állapot — abból az időből egyetlen név szerinti lista maradt fenn.</div>'
 
 
 STRIP_MAX = 160          # bars drawn around the current vote; a long sitting day is windowed, and the page says so
@@ -3216,7 +3219,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
         items_html = ""
     else:
         motions_note = ("" if stat_now is None or stat_now == len(items) else
-                        f'Eltérés: az adatlap {stat_now} önálló indítványt számol, a lista {len(items)} tételt talál.')
+                        f'Eltérés: a parlament.hu adatlapja {stat_now} önálló indítványt számol, az itteni lista {len(items)} tételt talál.')
         items_html = (f'<div class="hero-meta" style="margin:10px 0 4px"><span class="lbl">a jelenlegi ciklusban</span> {len(items)} iromány' + (f' · {kind_txt}' if kind_txt else '') + '</div>'
                       f'<div class="tablewrap" tabindex="0"><table data-page-size="25"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
                       + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
@@ -3282,7 +3285,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
     if inp["speeches"] is None:
         sp_note = "A ciklus felszólalás-listái nincsenek betöltve."
     elif rec_stat and rec_stat.get("speeches") is not None and rec_stat["speeches"] != len(sp_sub):
-        sp_note = f'Az adatlap erre a ciklusra {hu_num(rec_stat["speeches"])} felszólalást és {hu_num(rec_stat["technical"] or 0)} eljárási sort számol; a napi listák szerint itt {hu_num(len(sp_sub))} érdemi és {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor van.'
+        sp_note = f'A parlament.hu adatlapja erre a ciklusra {hu_num(rec_stat["speeches"])} felszólalást és {hu_num(rec_stat["technical"] or 0)} eljárási sort számol; a napi listák szerint itt {hu_num(len(sp_sub))} érdemi és {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor van. A két forrás itt nem ugyanazt a számot adja; a lenti táblázat a napi listákat követi.'
     sp_trs = "".join(f'<tr><td class="ts mono"><a href="{speech_href(inp, r, "../felszolalas/")}">{esc(r["date"] or "")}</a></td><td>{esc(cut(r["event"] or "—", 120))}{(" <span class=" + chr(34) + "sub" + chr(34) + ">" + esc(r["iromany"]) + "</span>") if r.get("iromany") else ""}</td>'
                      f'<td>{esc(r["kind"] or "")}</td><td class="mono">{esc(r["role"] or "")}</td><td class="num mono">{hu_mmss(r["duration_s"]) if r.get("duration_s") else "—"}</td></tr>' for r in sp_sub)
     coms = committees_in_cycle(mp, inp["cycle"])
@@ -3301,7 +3304,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
 </section>''')
     if inp["archive"]:
         all_votes_panel = (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel</span></h2>'
-                           f'<div class="hero-meta prose">Archív ciklus: a képviselő minden név szerinti szavazata a ciklus <a href="../adatok/index.html">adatállományában</a> (<span class="mono">nevsorok.csv.gz</span>, p_azon szerint) és az adatbázisban; itt a frakciója többségével szembeni szavazatai vannak felsorolva.</div></section>')
+                           f'<div class="hero-meta prose">Archív ciklus: itt nem az összes szavazata látszik, hanem csak azok, ahol a frakciója többségével szemben szavazott. Minden név szerinti szavazata megvan a ciklus <a href="../adatok/index.html">adatállományában</a> — a <span class="mono">nevsorok.csv.gz</span> fájlban, a képviselő p_azon kódja szerint szűrhető — és az adatbázisban is.</div></section>')
     return page_head(f'{mp["name"]} ({mp.get("faction") or "—"}){" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat',
                      f'{mp["name"]} — {mp.get("faction") or ""}, {mandate_text(mp)}: szavazási részvétel és a frakcióval való egyezés a {inp["cycle"]}. ciklusban.', 1 + inp["base_depth"],
                      feeds=([(f"{azon}.xml", f'karzat · {mp["name"]} — különvéleményei · {inp["cycle"]}. ciklus')] if has_channel else []) + [(f"{azon}-heti.xml", f'karzat · {mp["name"]} — heti összefoglaló · {inp["cycle"]}. ciklus')]) + \
@@ -3315,7 +3318,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
   {digest_now or '<div class="hero-meta">—</div>'}
   <div class="tablewrap" tabindex="0" style="margin-top:10px"><table data-page-size="25" data-counter="wn"><thead><tr><th scope="col">Hét</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Névsorban</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciója ellen</th><th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{"".join(wrows) or '<tr><td colspan="6">—</td></tr>'}</tbody></table></div>
   <div class="filters"><span class="n" id="wn" aria-live="polite"></span></div>
-  <div class="hero-meta prose" style="margin-top:8px">Hét: naptári hét, csak az ülésnapjai számítanak; csak a mandátum idejére eső hetek. Névsorban: hány név szerinti szavazás névsorában szerepelt a hét összes ilyen szavazásából; leadott: igen, nem vagy tartózkodott; frakciója ellen: a frakciója többségétől eltérő leadott szavazat (döntetlennél nincs többség; függetlennek nincs frakciója: —); felszólalás: érdemi felszólalás a napi listák szerint (ülésvezetés, bejelentés nélkül; — ahol a lista nincs betöltve).</div>
+  <div class="hero-meta prose" style="margin-top:8px">Hét: naptári hét; a dátum az első és az utolsó ülésnapja. Csak olyan hét látszik, amelyen volt ülésnap, és amely a képviselő mandátumának idejére esik. Névsorban: a hét név szerinti szavazásai közül hányban szerepelt a neve a névsorban. Név szerinti az a szavazás, ahol nevenként rögzítik, ki mit szavazott — a jelenlét-megállapítás is ilyen, ott csak azt rögzítik, ki van jelen a teremben. Leadott: hányszor szavazott igennel, nemmel vagy tartózkodott. Frakciója ellen: hány leadott szavazata tért el attól, ahogy ugyanazon a szavazáson a frakciója többsége szavazott. Például a frakció többsége igennel szavaz, a képviselő nemmel — ez egy frakció elleni szavazat. Döntetlennél nincs frakciótöbbség, és nincs mitől eltérni; a független képviselőnek nincs frakciója — nála gondolatjel áll. Felszólalás: érdemi felszólalásainak száma a napi listák szerint; az ülésvezetés és a bejelentés nem számít bele. Ahová a lista még nem ér el, ott gondolatjel áll.</div>
 </section>
 <section class="{"grid" if not inp["closed"] else "grid one"}">
   <section class="panel">{CORNERS}
@@ -3325,7 +3328,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
       <dt>Leadott szavazat</dt><dd class="mono">{cast} / {in_roll} ({part})</dd>
       <dt>Frakciójával</dt><dd class="mono">{al["with"]} · ellene {al["against"]} · egyezés {with_pct}</dd>
     </dl>
-    <div class="hero-meta prose" style="margin-top:8px">„Frakciójával”: a frakciója leadott szavazatainak többségével egyezően.</div>
+    <div class="hero-meta prose" style="margin-top:8px">„Frakciójával”: azt szavazta, amit a frakciójából szavazatot leadók közül a legtöbben; „ellene”: mást. Az egyezés a frakcióval egyező szavazatok száma osztva az egyező és az ellene leadott szavazatok együttes számával.</div>
   </section>
 {seat_panel}
 </section>
@@ -3606,16 +3609,16 @@ def build_cohesion_page(inp: dict, co: dict) -> str:
     return page_head(f'Kohézió · {inp["cycle"]}. ciklus · karzat', f'Frakciók összetartása a {inp["cycle"]}. ciklusban: Rice-index, egyetértési index, frakciók közti egyezés, képviselőpárok.', 1 + inp["base_depth"]) + \
         topbar(inp, [("kohézió", None)], 1) + f"""
 <div class="hero-h"><h1>Kohézió</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · frakciók összetartása a név szerinti szavazásokon</small></div>
-<p class="lede">Két szokásos mérőszám, mindkettő csak számolás: a Rice-index az igen–nem egyöntetűség (|igen − nem| / (igen + nem)), az egyetértési index a három leadott opcióé ((legnagyobb − (összes − legnagyobb)/2) / összes; Hix–Noury–Roland). 1 = mindenki ugyanúgy szavazott.</p>
+<p class="lede">Ez az oldal azt méri, mennyire szavazott egyben egy-egy frakció. Két szokásos mérőszámot használ, mindkettő csak számolás. A Rice-index csak az igeneket és a nemeket nézi: a kettő különbsége, osztva a kettő összegével — ez az igen–nem egyöntetűség. Az egyetértési index mindhárom gombot nézi, a tartózkodást is: a legnagyobb tábor, mínusz a maradék fele, osztva az összes leadott szavazattal. Ezt a szakirodalom Hix–Noury–Roland-indexnek hívja. Mindkettő 1,00, ha mindenki, aki gombot nyomott, ugyanazt nyomta. Minél megosztottabb a frakció, annál kisebb a szám.</p>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Frakciónként</span><span class="tag">leadott szavazatokkal súlyozott átlagok · <a href="frakciok.csv">CSV</a> · szavazásonként: <a href="szavazasonkent.csv">CSV</a> · különvélemények csatornaként: <a href="../feed/index.html">értesítések</a></span></h2>
   <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Frakció</th><th scope="col" class="num">Szavazás</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Egyetértési index</th><th scope="col" class="num">Rice</th><th scope="col" class="num">Egyhangú</th><th scope="col" class="num">Nem egyhangú</th><th scope="col" class="num">Kisebbségi szavazatok</th></tr></thead><tbody>{rows}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">„Egyhangú”: minden leadott szavazat azonos; „kisebbségi szavazatok”: a frakció többségétől eltérő leadott szavazatok (döntetlennél nincs többség, így ellene sincs — a képviselőoldalak „frakció ellen” összege). Jelenlét-megállapítás nem számít.{" A „független” sor nem frakció — egymástól független képviselők összesítése, a száma nem összetartás." if "független" in pf else ""}</div>
+  <div class="hero-meta prose" style="margin-top:8px">„Kisebbségi szavazat”: egy képviselő mást nyom, mint a frakciója többsége — a többség igennel szavaz, ő nemmel. Egy kivétel van: döntetlennél nincs többség, így kisebbségi szavazat sincs. A képviselőoldalak ugyanezt „frakció ellen” néven számolják; az ott kiírt számok összege adja ki ezt az oszlopot. „Egyhangú”: olyan szavazás, ahol kisebbségi szavazat nem esett. A jelenlét-megállapítás — amikor a Ház csak azt rögzíti, ki van jelen a teremben — ezekbe a számokba nem számít bele.{" A „független” sor nem frakció — egymástól független képviselők összesítése, a száma nem összetartás." if "független" in pf else ""}</div>
 </section>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Frakciók egymással</span><span class="tag">a többségi álláspontok egyezése · <a href="frakcio_parok.csv">CSV</a></span></h2>
   <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th scope="col"><span class="vh">Frakció</span></th>{head}</tr></thead><tbody>{"".join(mrows)}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Azoknak a szavazásoknak a hányada, ahol a két frakció leadott szavazatainak többsége ugyanaz volt — csak ott számolva, ahol mindkettő adott le szavazatot.</div>
+  <div class="hero-meta prose" style="margin-top:8px">Minden cella egy arány: hány szavazáson nyomta a két frakció többsége ugyanazt a gombot, osztva azzal, hány szavazáson volt mindkét frakciónak többsége. Ahol az egyik frakció nem szavazott, vagy döntetlenre oszlott, az a szavazás nem számít.</div>
 </section>
 {axis_section(inp)}
 <section class="panel">{CORNERS}
@@ -5214,10 +5217,13 @@ def speaking_panel(inp: dict) -> str:
             f'<div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Frakció</th><th class="num">Idő</th>'
             f'<th class="num">A mikrofonból</th><th class="num">A helyekből</th><th class="num">Felszólalás</th></tr></thead>'
             f'<tbody>{"".join(trs)}</tbody></table></div>'
-            f'<div class="hero-meta">A jegyzőkönyv percre pontos hosszai összeadva, minden felszólalás egyszer: a közös '
-            f'vitában elhangzottakat a lista minden érintett irományhoz újranyomtatja, ugyanazzal az idővel, és ebben a '
-            f'ciklusban {hu_num(sp["reprints_skipped"])} ilyen másolat van. „Érdemi”: az ülésvezetés, a bejelentések és az '
-            f'elnöki eredményhirdetés nélkül — a sorok 42 százaléka, az időnek a töredéke.</div></section>')
+            f'<div class="hero-meta">Az idő a jegyzőkönyvből jön: ott rögzítik, meddig tartott egy felszólalás. '
+            f'Minden felszólalást egyszer számolunk. Ez azért fontos, mert amikor több iromány vitáját közösen tartják meg, '
+            f'a felszólalások listája ugyanazt a felszólalást minden érintett irományhoz újra kiírja, ugyanazzal az idővel. '
+            f'Ebben a ciklusban {hu_num(sp["reprints_skipped"])} ilyen másolat van — ezeket nem adjuk hozzá még egyszer. '
+            f'„Érdemi”: ebbe nem számít bele az ülésvezetés, a bejelentés, és az sem, amikor az elnök kihirdeti a szavazás '
+            f'eredményét. Sok ilyen sor van — a sorok 42 százaléka —, de az időnek csak a töredékét adja: az elnök sokszor '
+            f'szólal meg, de röviden.</div></section>')
 
 
 def speeches_by_mp(inp: dict) -> dict[str, list[dict]]:
@@ -5724,8 +5730,9 @@ def long_day_note(inp: dict) -> str:
     which = ", ".join(f"{hu_date(d)} ({hu_dec(s / 3600, 1)} óra)" for d, s in bad[:3])
     return (f' <b>Egy figyelmeztetés a számokhoz:</b> {hu_num(len(bad))} olyan ülésnap van ebben a ciklusban, '
             f'ahol a jegyzőkönyv saját időadatai együtt többet adnak ki, mint amennyi egy naptári napba fér — '
-            f'{which}. Nem ismétlődő sor és nem kirívó hosszúság okozza, és a következő naptári napon külön '
-            f'ülésnap van, tehát nem egyszerűen éjfélen átnyúló ülésről van szó. A forrás nem mondja meg, '
+            f'{which}. Nem az okozza, hogy egy felszólalás kétszer szerepelne, és nem is egyetlen kirívóan '
+            f'hosszú időadat. A következő naptári napon külön ülésnap van, tehát nem egyszerűen éjfélen '
+            f'átnyúló ülésről van szó. A forrás nem mondja meg, '
             f'miért, ezért én sem: az érintett idő itt marad, megjelölve.')
 
 
@@ -5821,24 +5828,27 @@ def floor_ratio_panel(inp: dict, factions: dict[str, int], expected: dict[str, f
         for ratio, f, share, size, n, secs in rows)
     return f"""<section class="panel">{CORNERS}
   <h2><span data-kz-text>Ki mennyit beszélt</span><span class="tag">{esc(scope)} · a beszédidő és a Ház összetétele egymás mellett</span></h2>
-  <p class="lede" data-floor="ratio-caveat">Egy frakció mérete és a beszédideje nem ugyanaz a dolog:
-  a <b>vezérszónoki</b> idő <b>frakciónként</b> jár, nem képviselőnként, és a napirend előtti felszólalás is.
-  Ezért a nagy frakciók egy főre jutó száma már számtanilag lejjebb kerül — <b>az 1,00× nem az a küszöb, ami
-  alatt valakit elhallgattatnak</b>. Az utolsó oszlop egyszerűen elosztja a kettőt. Ebben a táblában a
-  legnagyobb frakció ({esc(biggest[1])}, {hu_dec(biggest[4], 1)} fő) {hu_dec(biggest[0], 2)}×, a legkisebb
-  ({esc(smallest[1])}, {hu_dec(smallest[4], 1)} fő) {hu_dec(smallest[0], 2)}×. A szám akkor mond valamit, ha
-  <b>hasonló méretű frakciókat</b> hasonlítasz össze, vagy <b>ugyanazt a frakciót</b> évről évre.</p>
+  <p class="lede" data-floor="ratio-caveat">Az „Arány” oszlop a két százalékos oszlopot osztja el egymással:
+  a frakció részét a frakciók beszédidejéből és a részét a Házból. Az 1,00× azt jelenti, hogy a kettő egyforma.
+  De egy frakció mérete és a beszédideje nem ugyanaz a dolog: a <b>vezérszónoki</b> idő — amikor a frakció
+  kijelölt szónoka mondja el a frakció álláspontját — <b>frakciónként</b> jár, nem képviselőnként, és a
+  napirend előtti felszólalás is. Ilyen időt a kis frakció is kap, ezért a nagy frakciók aránya már a szabály
+  miatt is lejjebb kerül — <b>az 1,00× nem az a küszöb, ami alatt valakit elhallgattatnak</b>. Ebben a
+  táblában a legnagyobb frakció ({esc(biggest[1])}, {hu_dec(biggest[4], 1)} fő) {hu_dec(biggest[0], 2)}×, a
+  legkisebb ({esc(smallest[1])}, {hu_dec(smallest[4], 1)} fő) {hu_dec(smallest[0], 2)}×. A szám akkor mond
+  valamit, ha <b>hasonló méretű frakciókat</b> hasonlítasz össze, vagy <b>ugyanazt a frakciót</b> évről évre.</p>
   <div class="tablewrap" tabindex="0"><table><caption class="vh">Frakciónként a frakciók beszédidejéből való részesedés, a Ház összetétele és a kettő hányadosa</caption>
     <thead><tr><th scope="col">Frakció</th><th scope="col" class="num">A frakciók idejéből</th>
     <th scope="col" class="num">A Házból</th><th scope="col" class="num">Fő</th><th scope="col" class="num">Arány</th>
     <th scope="col"><span class="vh">Ábra: az arány, az 1,00× jelölve</span></th></tr></thead><tbody>{trs}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Két dolgot érdemes tudni a számokról. Az első oszlop
-  <b>a frakciók egymás közti aránya</b>, nem az évé: a beszédidő {hu_dec(100 * unattributed, 1)}%-át olyanok
-  mondták, akik egyetlen névsorban sem szerepelnek (nem képviselő miniszter, nemzetiségi szószóló, a levezető
-  elnök), és ők nem férnek ebbe a táblába. A „Házból” oszlop pedig <b>nem évi átlag, hanem időarányos</b>:
-  minden felszólalás a saját hosszával számít bele annak a névsornak az összetételébe, ami aznap érvényes volt
-  — így az a frakció, amelyik évközben megszűnt, nem egy egész év létszámával van elosztva. A névsor a jelen
-  lévőket és a távollévőket is kiírja, tehát a Ház teljes összetételét mutatja; a tényleges mandátumszámot a
+  <div class="hero-meta prose" style="margin-top:8px">Két dolgot érdemes tudni a számokról. Az első: a tábla
+  csak a frakciókat mutatja. A beszédidőből {hu_dec(100 * unattributed, 1)}% olyan felszólalóké, akik mellé a
+  jegyzőkönyv nem ír frakciót — nem képviselő miniszter, nemzetiségi szószóló, a levezető elnök —, ők ebből a
+  táblából kimaradnak. Az első oszlop tehát <b>a frakciók egymás közti aránya</b>, nem az egész időé. A
+  második: a „Házból” oszlop <b>nem évi átlag</b>. Minden felszólalásnál az aznap érvényes névsor számít — a
+  névsor a név szerinti szavazás listája, amelyben a Ház minden tagja szerepel, a távollévők is —, és minden
+  felszólalás a saját hosszával számít bele. Így az a frakció, amelyik évközben megszűnt, nem egy egész év
+  létszámával van elosztva. A névsor a Ház teljes összetételét mutatja, de nem hivatalos mandátumszám: azt a
   W-API nem közli, és ez a lap nem is nevezi annak.</div>
 </section>"""
 
@@ -5893,23 +5903,25 @@ def build_floor_page(inp: dict, ft: dict) -> str:
                      depth) + topbar(inp, [("beszédidő", None)], 1) + f"""
 <div class="hero-h"><h1>Beszédidő</h1><small class="label" data-kz-text>{cycle}. ciklus · {esc(hu_hours(ft["seconds"]))} · {hu_num(ft["speeches"])} mért idejű érdemi felszólalás · {hu_num(n_deb)} vita</small></div>
 <p class="lede">Mire ment el a Ház ideje: {esc(hu_hours(ft["seconds"]))} érdemi felszólalás {hu_num(len(years))} év
-alatt, a Ház saját napirendje szerint felosztva. Minden felszólalásnak van napirendi pontja, és ebből az időből
-{hu_dec(100 * attributed / total, 0)}% irományhoz is kötődik — mindkettőt az Országgyűlés írja, nem én. Ez a lap
-összeadja a másodperceket és ezek szerint csoportosítja őket: <b>nincs benne egyetlen témakör, kategória vagy
-címke sem, amit én találtam volna ki</b>. Egy vita annyi, amennyit a jegyzőkönyv egy tárgyra fordított — az
-„általános vita megkezdése”, „folytatása” és „lezárása” ugyanaz a vita, külön szakaszként számon tartva. Ami
-kimarad: az a felszólalás, amelynek a jegyzőkönyv nem őrzött meg hosszat.</p>
+alatt. Érdemi az, ahol valaki a tárgyhoz szól — az ülésvezetés, a bejelentés és a többi eljárási sor nincs benne.
+Minden felszólalás egy napirendi ponthoz tartozik, és ebből az időből {hu_dec(100 * attributed / total, 0)}%
+irományhoz is kötődik. Az iromány a Házhoz benyújtott irat: törvényjavaslat, határozati javaslat, jelentés és a
+többi. A napirendi pontot és az irományszámot is az Országgyűlés írja, nem én. Ez a lap csak összeadja a
+másodperceket, és ezek szerint csoportosítja őket: <b>nincs benne egyetlen témakör, kategória vagy címke sem,
+amit én találtam volna ki</b>. Egy tárgy egy vita akkor is, ha a Ház több lépésben tárgyalta: az „általános vita
+megkezdése”, „folytatása” és „lezárása” ugyanaz a vita; a szakaszait a lap külön is kimutatja. Ami kimarad: az a
+felszólalás, amelynek a jegyzőkönyv nem őrzött meg hosszat.</p>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Évről évre</span><span class="tag">{hu_num(len(years))} év · <a href="vitak.csv">CSV, minden vita</a></span></h2>
   <div class="tablewrap" tabindex="0"><table><caption class="vh">Évenként a beszédidő, az ülésnapok, a felszólalások és a viták száma</caption><thead><tr><th scope="col">Év</th><th scope="col" class="num">Idő</th>
     <th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Felszólalás</th>
     <th scope="col" class="num">Vita</th><th scope="col" class="num">Irományhoz kötve</th>
     <th scope="col"><span class="vh">Ábra</span></th></tr></thead><tbody>{yrows}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Az „irományhoz kötve” oszlop azt mondja meg, az év
-  mennyi idejéről tudni, milyen ügyről szólt. A többi olyan napirendi pont alatt hangzott el, ami nem nevez
-  meg irományt — ezek évenként külön sorban szerepelnek, összesen {esc(hu_hours(slot_s))}
-  ({hu_dec(100 * slot_s / total, 1)}% a cikluson belül). Nem téma, hanem időkeret: a legnagyobb közülük a
-  napirend előtti felszólalásoké.{long_day_note(inp)}</div>
+  <div class="hero-meta prose" style="margin-top:8px">Az „irományhoz kötve” oszlop azt mondja meg, hogy az
+  év idejéből mennyiről lehet tudni, melyik ügyről szólt. A többi olyan napirendi pont alatt hangzott el,
+  amelyik nem nevez meg irományt — ezek évenként külön sorban szerepelnek, összesen {esc(hu_hours(slot_s))}
+  ({hu_dec(100 * slot_s / total, 1)}% a cikluson belül). Ezek nem témák, hanem időkeretek: a napirend időt ad
+  rájuk, de ügyet nem nevez meg. A legnagyobb közülük a napirend előtti felszólalásoké.{long_day_note(inp)}</div>
 </section>
 {floor_ratio_panel(inp, fac_all, exp_all, seat_all, unattr, f"{cycle}. ciklus") if len(years) > 1 else ""}
 <section class="panel">{CORNERS}
@@ -5929,10 +5941,11 @@ kimarad: az a felszólalás, amelynek a jegyzőkönyv nem őrzött meg hosszat.<
   <h2><span data-kz-text>A vita szakaszai</span><span class="tag">a tizenkét legnagyobb</span></h2>
   <div class="tablewrap" tabindex="0" style="border:0"><table><caption class="vh">A vita szakaszai és a rájuk fordított idő</caption><thead><tr><th scope="col">Szakasz (a napirendi pont szövegéből)</th>
     <th scope="col" class="num">Idő</th><th scope="col" class="num">Hányad</th></tr></thead><tbody>{srows}</tbody></table></div>
-  <div class="hero-meta prose" style="margin-top:8px">Minden irományt megnevező napirendi pont
-  „<span class="mono">&lt;szakasz&gt; &lt;irományszám&gt; &lt;cím&gt;</span>” alakú, kivétel nélkül, így a
-  szakasz és a tárgy szétválasztása nem becslés, hanem osztás az irományszám mentén. A hányad a szakaszos
-  időre vetítve, nem a ciklus egészére.</div>
+  <div class="hero-meta prose" style="margin-top:8px">Ha egy napirendi pont irományt nevez meg, a szövege
+  kivétel nélkül így épül fel: „<span class="mono">&lt;szakasz&gt; &lt;irományszám&gt; &lt;cím&gt;</span>”.
+  Ezért nem kell találgatni: a szöveget az irományszámnál vágom ketté — ami előtte áll, az a szakasz, ami
+  utána, az a tárgy. A „Hányad” oszlop nem a ciklus teljes idejéhez képest értendő, hanem ahhoz az időhöz,
+  amelyiknél a napirendi pont szakaszt is megnevez.</div>
 </section>
 {cite_html(inp, f'{cycle_dir(cycle)}beszedido/index.html', f'Beszédidő — {cycle}. ciklus', f'{cycle}-beszedido', csv_href='vitak.csv')}
 """ + page_tail(inp, 1)
@@ -6000,8 +6013,8 @@ időé. A <b>{hu_num(min(FLOOR_OPEN, len(y["debates"])))} leghosszabb vita felny
     <th scope="col" class="num">Hányad</th><th scope="col">Napirendi pont</th>
     <th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{slots or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">Ezek nem témák, hanem időkeretek: a napirendi pont
-  nem nevez meg ügyet. Külön sorban maradnak, mert szétosztva őket a témák között az év egy jelentős része
-  csendben átcímkéződne olyasminek, amiről nem szólt.</div>
+  időt ad, de nem nevez meg ügyet. Külön sorban maradnak. Ha szétosztanám őket a viták között, az év egy
+  jelentős része olyan ügyekhez kerülne, amelyekről valójában nem szólt.</div>
 </section>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Minden vita</span><span class="tag">{hu_num(len(y["debates"]))} sor · <a href="vitak.csv">CSV</a> · <a href="bontas.csv">a bontásokkal</a></span></h2>
@@ -6097,13 +6110,13 @@ def build_kepviselom_page(inp: dict) -> str:
     return page_head(f'Ki a képviselőm? · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus képviselői választókerület szerint (megye, OEVK) és az országos listáról; névre szűrhető; minden képviselőnél a heti összefoglaló és a különvélemény-csatorna.', 1 + inp["base_depth"]) + \
         topbar(inp, [("képviselőm", None)], 1) + f"""
 <div class="hero-h"><h1>Ki a képviselőm?</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(len(egy))} egyéni választókerület · {hu_num(len(lis) + len(other))} listás képviselő{" · a ciklus teljes névsora" if inp["closed"] else ""}</small></div>
-<p class="lede">Egyéni választókerületben a megye és a kerület száma azonosítja a képviselőt; a listás képviselőknek nincs kerületük.{" Lezárt ciklus: mindenki, aki a ciklus névsoraiban szerepelt." if inp["closed"] else ""} Minden képviselő oldalán ott a heti összefoglalója és a különvélemény-csatornája.</p>
+<p class="lede">Az egyéni választókerületben megválasztott képviselőt a megye és a kerület száma azonosítja. A listás képviselő listáról szerzett mandátumot, nem választókerületben — neki nincs saját kerülete.{" Lezárt ciklus: mindenki, aki a ciklus névsoraiban szerepelt." if inp["closed"] else ""} Minden képviselő oldalán ott a heti összefoglalója és a különvélemény-csatornája — ez utóbbi azokat a szavazásait gyűjti, ahol a frakciója többségével szemben szavazott.</p>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Irányítószám vagy település</span><span class="tag">a választókerületi törvény melléklete · {hu_num(oevk_n_settlements)} település és kerület · {hu_num(n_zip)} irányítószám</span></h2>
   <div class="filters"><input id="town" type="search" placeholder="pl. 1114 · 9021 · Szombathely · Budapest XI. kerület" aria-label="Irányítószám vagy település" autocomplete="off" inputmode="text" style="min-width:min(100%,360px)"></div>
   <div id="townres" aria-live="polite"></div>
   <script type="application/json" id="oevk-map">{oevk_map_json}</script>
-  <div class="hero-meta prose" style="margin-top:8px">Négy számjegy irányítószámként, minden más településnévként keres. Az irányítószám a települést (Budapesten a kerületet) azonosítja, nem a választókerületet: a kódok a Wikidata adataiból (P281) illeszkednek a melléklet neveihez, Budapesten pedig a kódképzés szabályából (1XYZ → XY. kerület). Egy irányítószám több települést is takarhat (közös posta) — ilyenkor mind látszik. A választókerületek településlistája a választókerületi törvény mellékletéből (2011. évi CCIII. tv., 2. melléklet, a hatályos szöveg); ahol egy város vagy budapesti kerület több választókerülethez tartozik, a melléklet utcánként húzza a határt — ott minden szóba jövő kerület látszik, és a lakcím dönt (a pontos kerület a valasztas.hu keresőjében). Település nélküli képviselő a listás.</div>
+  <div class="hero-meta prose" style="margin-top:8px">Négy számjegy irányítószámként keres, minden más településnévként. Az irányítószám a települést azonosítja — Budapesten a kerületet —, nem a választókerületet. Egy irányítószámhoz több település is tartozhat, mert több falut szolgálhat ki egy közös posta; ilyenkor mind látszik. Hogy melyik település melyik választókerülethez tartozik, azt a választókerületi törvény melléklete sorolja fel (2011. évi CCIII. törvény, 2. melléklet, a ma hatályos szöveg). Van olyan város és budapesti kerület, amelyik több választókerülethez tartozik: ott a melléklet utcánként húzza meg a határt. Ilyenkor minden szóba jövő választókerület látszik, és a lakcím dönt — a pontos választókerület a valasztas.hu keresőjében nézhető meg. Az irányítószámok a Wikidata adataiból jönnek (P281), névre illesztve a melléklet településneveihez; Budapesten a kódképzés szabálya adja a kerületet (1XYZ → XY. kerület). A listás képviselő nem kötődik településhez — őt az országos listás táblázat sorolja fel lejjebb.</div>
 </section>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Egyéni választókerületek</span><span class="tag">megye · kerület · képviselő</span></h2>
@@ -6403,13 +6416,16 @@ def build_method_page(inp: dict) -> str:
 <div class="hero-meta prose">Az Országgyűlés nyilvános Web API-ja (parlament.hu, XML): a szavazások listája ciklusonként és a szavazások név szerinti listája (<span class="mono">szavazasok</span>, <span class="mono">szavazas</span>), a képviselők adatlapjai (<span class="mono">kepviselo</span>: frakciótörténet, választások, ülőhely — az utóbbi csak a jelenlegi ciklusra), az ülésnapok (<span class="mono">ulesnap</span>, 1998-tól), a jelenlegi ciklus irományai (<span class="mono">iromanyok</span>). Az ülésterem alaprajza a parlament.hu saját képviselő-oldalainak ülésrend-lekérdezéséből, {hu_num(274)} hellyel. A képviselők névsora 1990 óta a parlament.hu képviselőlistájából. Ami itt van: {hu_num(tot["votes"])} szavazás, {hu_num(tot["roll_calls"])} név szerinti lista, {hu_num(tot["people"])} képviselő, {len(tot["cycles"])} ciklus.</div></section>
 
 <section class="panel" id="azonositas">{CORNERS}<h2><span data-kz-text>Ki kicsoda</span></h2>
-<div class="hero-meta prose">A névsor „Név (Frakció)” alakban ír, azonosító nélkül. A feloldás sorrendje: (1) a jelenlegi képviselőlista pontos „Név (Frakció)” címkéje; (2) a képviselői adatlapok saját névírása (a Dr., a második keresztnév, az ékezet ott úgy szerepel, ahogy a névsorban); (3) a puszta név minden forrásból (adatlapok, Wikidata címkék). Ha többen jönnek szóba, az marad, akinek az adatlapja szerinti frakciótörténete az adott ciklusban a névsor frakcióját mutatja; aki így sem egyértelmű, feloldatlan marad, névvel. Egy ellenőrzés minden ciklusra: minden feloldott személynek van az adatlapján sora arra a ciklusra, a névsor frakciójával. A Wikidata P4966 azonosítója az API <span class="mono">p_azon</span>-ja.</div></section>
+<div class="hero-meta prose">A névsor „Név (Frakció)” alakban ír, azonosító nélkül — a nevet az oldalnak kell személyhez kötnie; ezt hívjuk feloldásnak. A feloldás sorrendje: (1) a jelenlegi képviselőlista pontos „Név (Frakció)” címkéje; (2) a képviselői adatlapok saját névírása (a Dr., a második keresztnév, az ékezet ott úgy szerepel, ahogy a névsorban); (3) a puszta név minden forrásból (adatlapok, Wikidata címkék). Ha többen jönnek szóba, az marad, akinek az adatlapja szerinti frakciótörténete az adott ciklusban a névsor frakcióját mutatja; aki így sem egyértelmű, feloldatlan marad, névvel. Egy ellenőrzés minden ciklusra: minden feloldott személynek van az adatlapján sora arra a ciklusra, a névsor frakciójával. A Wikidata P4966 azonosítója az API <span class="mono">p_azon</span>-ja.</div></section>
 
 <section class="panel" id="tengely">{CORNERS}<h2><span data-kz-text>A tengely</span></h2>
 <div class="prose">A kohéziós lapok utolsó szakasza minden képviselőnek egy helyet ad egy vonalon, és minden
-szavazásnak egy vágást azon a vonalon. A modell kétparaméteres logisztikus tételválasz-modell (2PL): annak a
-valószínűsége, hogy az <i>i</i> képviselő igent nyom a <i>j</i> szavazáson, σ(a<sub>j</sub>·x<sub>i</sub> +
-b<sub>j</sub>). A tengely jelentését senki nem adja meg előre — az jön ki, ami a szavazatokat a legjobban
+szavazásnak egy vágást azon a vonalon. A modell kétparaméteres logisztikus tételválasz-modell (2PL). Szavakban:
+minden képviselő kap egy számot — a helyét a vonalon (x<sub>i</sub>) —, és minden szavazás kap kettőt
+(a<sub>j</sub>, b<sub>j</sub>), amelyek együtt megmondják, hol vág a vonalon és milyen élesen. Annak a
+valószínűsége, hogy az <i>i</i> képviselő igent nyom a <i>j</i> szavazáson: σ(a<sub>j</sub>·x<sub>i</sub> +
+b<sub>j</sub>) — a σ egy S-alakú görbe, amely bármilyen számból 0 és 1 közé eső valószínűséget csinál. A
+tengely jelentését senki nem adja meg előre — az jön ki, ami a szavazatokat a legjobban
 megmagyarázza.
 <h3>Amit nem mond</h3>
 <b>Ciklusok között nem összehasonlítható.</b> Minden ciklus tengelye a saját szavazásaiból készül, közös tétel
@@ -6427,24 +6443,28 @@ A kettő különbsége az egyetlen őszinte válasz arra, hogy ér-e valamit —
 többségi szabály már 82%-ot hoz. Ahol ez a különbség kicsi és a maradékban még szerkezet van, ott a Ház nem egy
 törésvonal mentén szavazott, és a lap ezt kiírja a kép fölé, nem alá.
 <h3>A becslés részletei</h3>
-Csak a megosztott szavazások (legalább 2,5% kisebbség), csak a legalább 20 igen/nem szavazatot leadó képviselők.
-A hiányzó szavazat hiány, nem nulla. A pozíciókon standard normális prior van: nélküle egy olyan képviselő, aki
-soha nem szavazott a saját oldala ellen, tökéletesen elkülöníthető, a likelihoodnak nincs maximuma rá, és a
-becslés elszalad — az első futásban két képviselő +9,5-re került egy egyes szórású skálán. A bizonytalanság
-szavazásokra vett bootstrap. Kód: <span class="mono">scripts/derive_idealpoints.py</span>.</div>
+Mi kerül a becslésbe? Csak a megosztott szavazások: ahol a kisebbik oldalra legalább két szavazat jutott, és ez
+eléri az igenek és nemek együttes számának 2,5 százalékát. És csak az a képviselő kap helyet, aki ezeken a
+szavazásokon legalább 20 igen vagy nem szavazatot adott le. A hiányzó szavazat hiány, nem nulla: aki nem szavazott, arról a modell ott nem tanul semmit.
+A helyekre egy előzetes feltevés van téve (standard normális prior), amely a becslést a nulla közelébe húzza.
+Nélküle egy olyan képviselő, aki soha nem szavazott a saját oldala ellen, tökéletesen elkülöníthető: a modell
+annál jobbnak látja a helyét, minél kijjebb tolja — nincs legjobb véges hely —, és a becslés elszalad. Az első
+futásban két képviselő a +9,5 pontra került egy olyan skálán, amelynek a szórása egy. A bizonytalansági sáv
+bootstrap: a becslés sokszor újrafut úgy, hogy a szavazásokat véletlenszerűen újrahúzza, és a sáv azt mutatja,
+mennyit mozog közben a hely. Kód: <span class="mono">scripts/derive_idealpoints.py</span>.</div>
 </section>
 <section class="panel" id="tobbseg">{CORNERS}<h2><span data-kz-text>Többségi szabály és jelenlét</span></h2>
 <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th scope="col">kód</th><th scope="col">szabály</th><th scope="col">küszöb</th><th scope="col">alap</th><th scope="col">az API „Szavazási mód” szövege</th><th scope="col">jogszabályi hely</th></tr></thead><tbody>{rule_rows}</tbody></table></div>
-<div class="hero-meta prose" style="margin-top:8px">A szabályt minden szavazásnál az Országgyűlés maga jelöli meg a „Szavazási mód” mezőben; az oldal ebből számolja a küszöböt és összeveti az „Elfogadás” mezővel („számítás egyezik / eltér”). Jelenlévő: aki igennel, nemmel vagy tartózkodással szavazott — a leadott szavazatok, az API „Összes szavazat” mezője; aki „jelen, nem szavazott”, nincs az alapban. Ez nem értelmezés, a jegyzőkönyv dönti el: a 38. ciklus 272 szavazásán mond ellent az Elfogadva/Elutasítva mezőnek, ha a jelen lévő nem szavazókat is beleszámoljuk, és egyen sem, ha nem. Az összes képviselő: az aznap érvényes mandátumok száma (üresedéskor 199-nél kevesebb — egy 2014. december 1-jei kétharmados titkos szavazás 132 igennel ment át: a 197 mandátum kétharmada), ahol az adatlapok ismerik; különben 2014. május 6-a előtt 386, azóta 199. A szabályok jogszabályi helye az Alaptörvény és a Házszabály (10/2014. (II. 24.) OGY határozat) hatályos szövegével egyeztetve (njt.hu, 2026. augusztus 19.); az egyetlen, amire ott nincs alap, az API 2014-es „az összes képviselő 4/5-ével” címkéje.</div></section>
+<div class="hero-meta prose" style="margin-top:8px">A szabályt minden szavazásnál az Országgyűlés maga jelöli meg a „Szavazási mód” mezőben; az oldal ebből számolja a küszöböt és összeveti az „Elfogadás” mezővel („számítás egyezik / eltér”). Ahol a szabálynak van igen/nem küszöbe, az mindig egy alapból számolódik: vagy a jelenlévőkből, vagy az összes képviselőből — a tábla „alap” oszlopa mondja meg, melyikből. Ki számít jelenlévőnek? Aki igennel, nemmel vagy tartózkodással szavazott. Ez a leadott szavazatok száma — az API „Összes szavazat” mezője. Aki „jelen, nem szavazott”, az nincs az alapban. Ezt nem az oldal döntötte el, hanem a jegyzőkönyv: ha a jelen lévő, de nem szavazó képviselőket is beleszámoljuk, a számítás a 38. ciklus 272 szavazásán mond ellent az Elfogadva/Elutasítva mezőnek; ha nem számoljuk bele, egyen sem. Mennyi az összes képviselő? Ahány mandátum aznap érvényes volt — üresedéskor kevesebb, mint a teljes létszám. Példa: 2014. december 1-jén egy, az összes képviselő kétharmadát kívánó titkos szavazás 132 igennel ment át, mert aznap 197 mandátum volt érvényes, és ennek a kétharmada — felfelé kerekítve — 132. Az érvényes mandátumokat az oldal a képviselői adatlapokból veszi; ahol az adatlapok nem mondják meg, a korszak teljes létszámával számol: 2014. május 6-a előtt 386, azóta 199. A szabályok jogszabályi helye az Alaptörvény és a Házszabály (10/2014. (II. 24.) OGY határozat) hatályos szövegével egyeztetve (njt.hu, 2026. augusztus 19.); az egyetlen, amire ott nincs alap, az API 2014-es „az összes képviselő 4/5-ével” címkéje.</div></section>
 
 <section class="panel" id="frakcio">{CORNERS}<h2><span data-kz-text>Frakciójával és ellene</span></h2>
-<div class="hero-meta prose">Egy szavazáson egy frakció többségi álláspontja a leadott szavazatai (igen, nem, tartózkodott) közül a legtöbb; ha kettő egyenlő, nincs többségi álláspont, és senki sem „vele” vagy „ellene” azon a szavazáson. Egy képviselő „frakciójával”: leadott szavazata megegyezik a frakciója többségi álláspontjával; „ellene”: eltér. A le nem adott állapotok (jelen, nem szavazott; nem szavazott; előre bejelentett hiányzó; igazoltan távol) részvétel, nem egyezés. A frakció az, amit a névsor az adott szavazásnál ír; a személy oldalán az utolsó név szerinti szavazásán feltüntetett frakció. A „független” nem frakció: a független képviselők együtt számolt száma nem összetartás.</div></section>
+<div class="hero-meta prose">Egy szavazáson egy frakció többségi álláspontja az a leadott szavazat — igen, nem vagy tartózkodott —, amelyikből a legtöbb van. Ha az élen két álláspont ugyanannyi szavazatot kapott, nincs többségi álláspont, és azon a szavazáson senki sem „vele” és senki sem „ellene”. Egy képviselő a frakciójával szavazott, ha a leadott szavazata megegyezik ezzel az állásponttal; ellene, ha eltér tőle. Példa: a frakció többsége igennel szavaz, egy képviselő nemmel — ez egy frakció elleni szavazat. Aki nem adott le szavazatot (jelen, nem szavazott; nem szavazott; előre bejelentett hiányzó; igazoltan távol), az a részvételnél számít, nem az egyezésnél. A frakció az, amit a névsor az adott szavazásnál ír; a személy oldalán az utolsó név szerinti szavazásán feltüntetett frakció. A „független” nem frakció: a független képviselők együtt számolt száma nem összetartás.</div></section>
 
 <section class="panel" id="kohezio">{CORNERS}<h2><span data-kz-text>Kohézió</span></h2>
-<div class="hero-meta prose">Rice-index: |igen − nem| / (igen + nem). Egyetértési index (Hix–Noury–Roland): (legnagyobb − (összes − legnagyobb)/2) / összes, az igen–nem–tartózkodott leadott szavazatokból. Ciklusra a leadott szavazatokkal súlyozott átlag. Frakciók egyezése: azon szavazások hányada, ahol mindkettő adott le szavazatot és a többségi álláspontjuk azonos. Képviselőpárok: közös leadott szavazásaikból az azonos szavazatok hányada, legalább 20 közös szavazásnál.</div></section>
+<div class="hero-meta prose">Mindkét index azt méri, mennyire szavazott egyben a frakció. Rice-index: |igen − nem| / (igen + nem) — a nagyobbik és a kisebbik tábor különbsége, osztva a kettő összegével; a tartózkodás nem számít bele. 1,00 = aki igent vagy nemet nyomott, mind ugyanazt nyomta; 0 = fele igen, fele nem. Egyetértési index (Hix–Noury–Roland): (legnagyobb − (összes − legnagyobb)/2) / összes — a „legnagyobb” a legtöbb szavazatot kapott gomb, az „összes” a leadott igen, nem és tartózkodott együtt. 1,00 = mindenki ugyanazt nyomta; 0 = a három gomb egyenlően oszlik meg. Ciklusra súlyozott átlag: minden szavazás akkora súllyal számít, ahány szavazat ott az indexbe beleszámít — a Rice-indexnél az igenek és a nemek, az egyetértési indexnél mindhárom gomb. Két frakció egyezése: azoknak a szavazásoknak a hányada, ahol mindkettőnek volt többségi álláspontja, és a kettő azonos volt. Két képviselő egyezése: a közös szavazásaik — ahol mindketten leadtak szavazatot — mekkora részén szavaztak ugyanúgy; a szám csak legalább 20 közös szavazásnál jelenik meg. A jelenlét-megállapítás — amikor a Ház csak azt rögzíti, ki van jelen a teremben — ezekbe a számokba nem számít bele.</div></section>
 
 <section class="panel" id="szoros">{CORNERS}<h2><span data-kz-text>Szoros szavazások</span></h2>
-<div class="hero-meta prose">Különbség = igen − szükséges. „Több igen, mint nem — mégis elutasítva”: minősített többséget kívánó döntés, ahol igen &gt; nem és a küszöb nem teljesült. „Ahol a hiányzók döntöttek”: számított feltevés — ha a névsorban szereplő, szavazatot le nem adó képviselők mind a frakciójuk többségével szavaztak volna, más lenne-e a kimenetel; jelenléthez kötött küszöbnél a jelenlét is nő velük. Feltevés, nem tény, és így is van feliratozva.</div></section>
+<div class="hero-meta prose">Különbség = igen − szükséges: hány igennel volt a döntés a küszöb fölött, vagy hány igen hiányzott hozzá. „Több igen, mint nem — mégis elutasítva”: olyan döntés, amelyhez minősített többség kellett — az egyszerű többségnél szigorúbb küszöb —, és több volt az igen, mint a nem, de a küszöböt nem érte el. „Ahol a hiányzók döntöttek”: számított feltevés. A kérdés: ha a névsorban szereplő, de szavazatot le nem adó képviselők mind a frakciójuk többségével szavaztak volna, más lenne-e a kimenetel? Ahol a küszöb a jelenlévőkből számolódik, ott velük a jelenlét is nőne, és a küszöböt az oldal ebből a megnőtt jelenlétből számolja újra. Feltevés, nem tény, és így is van feliratozva.</div></section>
 
 <section class="panel" id="oldalak">{CORNERS}<h2><span data-kz-text>Az oldalak</span></h2>
 <div class="hero-meta prose">A ciklus címlapján a kiemelt szavazás a ciklus utolsó, összes képviselő kétharmadával elfogadott döntése (a 43. és 42. ciklusban kézzel választva: a tizenhatodik és a tizenötödik Alaptörvény-módosítás). Az ülésrend a 43. ciklusra a parlament.hu alaprajza; a korábbi ciklusokra nincs ülőhely-adat, ott a szavazás-ábra frakciónként rendezett. A szavazás oldalán az ülőhely-vizsgáló „utolsó 20” csíkja a képviselő addig tartott utolsó húsz név szerinti szavazása: frakciójával (szín), ellene (fehér), többség nélkül (szürke), nem adott le (üres). Egy iromány oldala a szavazásait gyűjti a szám szerint: az „n/k” alak az n-es irományhoz tartozik; hogy a javaslatról magáról vagy egy módosítóról szólt-e, a kimenetel szövege mondja meg („önálló indítvány…”, „módosító…”). A frissesség mondata a legutóbbi ülésnaphoz méri a betöltött szavazásokat, és a szinkron időpontját írja, nem eltelt időt.</div></section>
@@ -6481,7 +6501,7 @@ WHERE p.position IN ('igen','nem','tartozkodott') AND m.majority_position IS NOT
 
 <section class="panel" id="nyugta">{CORNERS}<h2><span data-kz-text>Nyugta: melyik korpuszból, melyik kódból</span></h2>
 <div class="hero-meta prose">Az oldal minden száma generált, nem beírt — ezt a README-kapu kényszeríti ki. De a „generált” csak azt mondja meg, <i>hogyan</i>, azt nem, hogy <i>miből</i>. Ehhez három dolgot kell egymáshoz rögzíteni, és ez a nyugta rögzíti őket.
-<br><br><b>A korpusz.</b> {hu_num((inp.get("receipt") or {}).get("payloads") or 0)} letöltött payload tartalmi lenyomata egyetlen gyökérbe fésülve, névsorrendben. Bármelyik payload hozzáadása, törlése vagy módosítása elmozdítja a gyökeret — kipróbálva: egy nyolcbájtos megjegyzés egyetlen fájlban megváltoztatja. Tartalom szerint, nem módosítási idő szerint: egy újralekérés, ami ugyanazokat a bájtokat hozza, nem látszhat változásnak, egy másik bájtokat hozó viszont igen.
+<br><br><b>A korpusz.</b> {hu_num((inp.get("receipt") or {}).get("payloads") or 0)} letöltött payload — egy-egy elmentett nyers válasz a forrásból — tartalmi lenyomata egyetlen gyökérbe fésülve, névsorrendben. A lenyomat a tartalomból számolt rövid kód: ha a tartalom egyetlen bájtja változik, a kód is megváltozik. Bármelyik payload hozzáadása, törlése vagy módosítása elmozdítja a gyökeret — kipróbálva: egy nyolcbájtos megjegyzés egyetlen fájlban megváltoztatja. Tartalom szerint, nem módosítási idő szerint: egy újralekérés, ami ugyanazokat a bájtokat hozza, nem látszhat változásnak, egy másik bájtokat hozó viszont igen.
 <br><br><b>A kód.</b> A commit, és hogy tiszta volt-e a munkakönyvtár a build idején. A piszkos állapot piszkosként van rögzítve, nem csendben a committhoz rendelve — épp az az eset, amikor egy reprodukálni próbáló olvasó elakadna, és nem tudná, miért.
 <br><br><b>A származtatott fájlok.</b> Mindegyik saját lenyomata, hogy a nyugta újraszámolás nélkül is összevethető legyen a lemezzel (<span class="mono">python3 -m scripts.derive_receipt --verify</span>).
 <br><br><b>Amit nem állít:</b> hogy egy adott szám egy adott payloadból jött. Ehhez minden levezetés minden olvasását műszerezni kellene; az őszinte, olcsóbb válasz ez — <i>ebből a korpuszállapotból, ezzel a kóddal</i>. Mindkettő ellenőrizhető.
@@ -6602,12 +6622,12 @@ def build_profile_page(inp: dict, rows: list[dict]) -> str:
                      "az 1990 óta megválasztottak végzettségéről, nyelveiről és önkormányzati múltjáról.", 1) + \
         topbar(inp, [("arcél", None)], 1) + f"""
 <div class="hero-h"><h1>A Ház arcéle</h1><small class="label" data-kz-text>{hu_num(len(people))} ember {hu_num(len(turn))} ciklusban · 1990 óta</small>
-<p class="lede">Egyetlen mutató hasonlítható itt ciklusról ciklusra: hányan ülnek először a Házban. A mandátumokat 1990 óta hiánytalanul rögzítik, ezt tehát össze lehet vetni. A végzettség, a nyelv és az önkormányzati múlt nem ilyen — azok az adatlap mai állapotát mutatják, dátum nélkül, egyenetlenül kitöltve, ezért itt egyszer szerepelnek, mindenkire együtt.</p></div>
+<p class="lede">Egyetlen mutatót lehet itt ciklusról ciklusra összevetni: azt, hogy hányan ülnek először a Házban. Ezt azért lehet, mert a mandátumokat 1990 óta hiánytalanul rögzítik. A végzettség, a nyelv és az önkormányzati múlt nem ilyen. Ott az látszik, ami ma áll a képviselő adatlapján — hogy mikor került oda, nem tudni, és a régebbi adatlapok sokszor hiányosak. Ezért ez a három itt egyszer szerepel, mindenkire együtt, nem ciklusonként.</p></div>
 <section class="panel deep turn">{CORNERS}
   <h2><span data-kz-text>Újak és visszatérők</span><span class="tag">világos: első ciklusos · sötét: már ült a Házban</span></h2>
   <div class="turnwrap" tabindex="0"><svg viewBox="0 -14 {width:.0f} {ch + 42:.0f}" role="img"
     aria-label="Ciklusonként az első ciklusos képviselők aránya 1990-től: {", ".join(f'{t["cycle"]}. ciklus {t["share"]:.0f} százalék' for t in turn)}.">{"".join(bars)}</svg></div>
-  <div class="hero-meta">A ciklus névsora mindenki, aki a ciklus alatt mandátumot viselt, az évközi belépőkkel együtt — ezért nagyobb a szám a 199 fős Házban is. „Első ciklusos”: a képviselői adatlap választási sorai szerint ez az első ciklusa. A legnagyobb csere a {peak["cycle"]}. ciklusé ({peak["share"]:.0f}%), a legkisebb a {low["cycle"]}. ciklusé ({low["share"]:.0f}%).</div>
+  <div class="hero-meta">A ciklus névsorában mindenki benne van, aki a ciklus alatt mandátumot viselt — az évközben belépők is. Ezért nagyobb a szám a 199 fős Házban is. „Első ciklusos” az, akinek az adatlapján szereplő választási sorok szerint ez az első ciklusa. A legnagyobb csere a {peak["cycle"]}. ciklusé ({peak["share"]:.0f}%), a legkisebb a {low["cycle"]}. ciklusé ({low["share"]:.0f}%).</div>
 </section>
 <section class="grid">
   <section class="panel">{CORNERS}
@@ -6710,7 +6730,8 @@ def build_coverage_page(inp: dict, by_cycle: dict[int, list[dict]]) -> str:
                    f'<span class="sub">{esc(CYCLE_SPAN.get(c, ""))}</span></td>'
                    f'<td class="num mono">{hu_num(v)}</td><td class="num mono">{hu_num(nm)}<span class="sub">{share}</span></td>'
                    f'<td class="num mono">{hu_num(sc) if sc else "—"}</td><td class="num mono">{hu_num(sd) if sd else "—"}</td></tr>')
-    cap_note = (f'{hu_num(cap.get("votes_recovered_by_day_scan") or 0)} szavazás került elő a napi bontású újralistázással, '
+    cap_note = (f'Ez a határ egész hónapok listáját is levágta. Ezeket az oldal naponként újra lekérdezte, '
+                f'és így {hu_num(cap.get("votes_recovered_by_day_scan") or 0)} szavazás került elő '
                 f'{hu_num(len(cap.get("months_originally_truncated") or []))} hónapból.') if cap else ""
     return page_head("Ameddig a jegyzőkönyv elér · karzat",
                      "Mit tartalmaz az Országgyűlés nyilvános adata és mit nem: hónapról hónapra a szavazások száma és az, "
@@ -6737,10 +6758,10 @@ def build_coverage_page(inp: dict, by_cycle: dict[int, list[dict]]) -> str:
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Amit nem lehet pótolni</span></h2>
     <div class="prose hero-meta">
-      <p><b>Név szerinti lista 1998 előtt nincs.</b> A 34. és a 35. ciklus szavazásainál a válasz üres névsort ad — nem a lekérdezés hiányos, az Országgyűlés akkor még nem így rögzítette. Ezeknél a szavazásoknál csak az igen / nem / tartózkodás összesítés van meg, és az oldal sem mutat többet.</p>
-      <p><b>{hu_num(len(short_days))} ülésnap véglegesen csonka.</b> A szavazáslista egy válaszban legfeljebb 400 sort ad, és a legkésőbbieket tartja meg; a paraméterei csak dátumot fogadnak, időpontot nem. Amelyik napon egymagában több mint 400 szavazás volt, annak a korábbi szavazásaihoz ezen a végponton nem vezet út. {cap_note}</p>
+      <p><b>Név szerinti lista 1998 előtt nincs.</b> A 34. és a 35. ciklus szavazásainál nincs meg, ki hogyan szavazott: a lekérdezés üres névsort kap. Ez nem a letöltés hibája: az Országgyűlés adatbázisa ebből az időszakból nem őrzi, ki hogyan szavazott. Ami megvan: hány igen, hány nem, hány tartózkodás. Az oldal sem mutat többet.</p>
+      <p><b>{hu_num(len(short_days))} ülésnap véglegesen csonka.</b> A szavazások listája egyszerre legfeljebb 400 szavazást ad ki, és mindig a legkésőbbieket tartja meg. Szűkíteni csak napra lehet, órára vagy percre nem. Ha egy napon több mint 400 szavazás volt, a nap korábbi szavazásai ezért kimaradnak — nincs olyan beállítás, amivel elkérhetők lennének. {cap_note}</p>
       <p><b>{hu_num(tot_s)} titkos szavazás.</b> Ezeknél nincs mit letölteni: a szavazás titkos volt, az eredmény nyilvános, a leadott szavazatok nem.</p>
-      <p><b>Irományok csak a futó ciklusból.</b> A 43. ciklus irományairól adatlap kérhető — benyújtó, állapot, eseménynapló, és ami elhangzott —, a korábbi ciklusokéról nem: az adatlap ciklusonként újrainduló irományazonosító szerint címezhető, az irománylista pedig a ciklusparamétert figyelmen kívül hagyja. A régebbi ciklusoknál ezért csak az az iromány szerepel, amelyikről név szerint szavaztak — hogy összesen hány volt, ezen a végponton nem állapítható meg.</p>
+      <p><b>Irományok csak a futó ciklusból.</b> Iromány mindaz, amit a Házhoz benyújtanak — például törvényjavaslat, határozati javaslat, kérdés, interpelláció. A 43. ciklus irományairól le lehet kérni az adatlapot: ki nyújtotta be, hol tart, mi történt vele, mi hangzott el róla. A korábbi ciklusokéról nem lehet. Az adatlapot ugyanis egy olyan azonosítóval kell kérni, amely minden ciklusban elölről indul, az irománylista pedig akkor is a futó ciklust adja, ha egy korábbit kérnek tőle. A régebbi ciklusokból ezért csak az az iromány szerepel az oldalon, amelyikről név szerint szavaztak. Hogy egy korábbi ciklusban összesen hány iromány volt, az irománylistából nem deríthető ki.</p>
     </div>
   </section>
 </section>

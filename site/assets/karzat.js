@@ -505,8 +505,11 @@
     var note = document.createElement('div');
     note.className = 'hero-meta prose';
     note.style.margin = '8px 0';
-    note.innerHTML = 'Csak <b>' + month + '</b> szavazásai láthatók. ' +
-      '<a href="' + location.pathname + '#dir">mind a ' + rows.length + '</a>';
+    var honap = ['január', 'február', 'március', 'április', 'május', 'június', 'július', 'augusztus', 'szeptember', 'október', 'november', 'december'];
+    var mi = +month.slice(5, 7);
+    var mnev = (mi >= 1 && mi <= 12) ? month.slice(0, 4) + '. ' + honap[mi - 1] : month;
+    note.innerHTML = 'Ez a lista most csak egy hónapot mutat: <b>' + mnev + '</b> szavazásait. ' +
+      '<a href="' + location.pathname + '#dir">a teljes lista: mind a ' + rows.length + ' szavazás</a>';
     host.insertBefore(note, host.firstChild);
   }
   document.getElementById('q').addEventListener('input', function(e){ q = e.target.value.trim().toLowerCase(); render(); });

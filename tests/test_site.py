@@ -321,7 +321,7 @@ class VotePages(unittest.TestCase):
 
     def test_quorum_page_explains_itself(self):
         page = build_vote_page(self.inp, "2026.05.09.10:45:47")
-        self.assertIn("Jelenlét megállapítása — nem döntés", page)
+        self.assertIn("csak azt rögzítette, ki van jelen a teremben", page)
         self.assertEqual(page.count("<tr data-f="), 199)
 
     def test_view_model_expands_positions_from_the_store(self):
@@ -1238,7 +1238,7 @@ class Coverage(unittest.TestCase):
                 votes = sum(r["votes"] for r in by_cycle[c])
                 self.assertGreater(sum(r["named"] for r in by_cycle[c]) / max(votes, 1), 0.9)
         self.assertIn("1998", html)
-        self.assertIn("nem a lekérdezés hiányos", visible_text(html).replace(" ", " "))
+        self.assertIn("nem a letöltés hibája", visible_text(html).replace(" ", " "))
 
     def test_a_month_two_cycles_share_is_added_up_not_overwritten(self):
         """Nothing forbids a cycle's last vote and the next cycle's first from falling in the same month — the
