@@ -732,6 +732,19 @@ class ResearchPages(unittest.TestCase):
         # Both readings of the vote count are in the markup: the switch is an upgrade, not a requirement.
         self.assertEqual(page.count('class="view" data-label='), 2)
         self.assertIn('data-label="ülésnaponként"', page)
+        # Every chart panel explains its own arithmetic, closed by default and usable without a script:
+        # a native <details> per panel — the votes panel shares one across its two views.
+        self.assertEqual(page.count('<details class="how">'), 5)
+        self.assertEqual(page.count("Miből számoltuk"), 5)
+        # The cycle's peaks are real links into the same ?m= drill-down the strip uses, and every month the
+        # line names is a month the strip actually has — the contract, not the wording.
+        self.assertIn('class="mopeaks', page)
+        for m in re.findall(r'mopeaks[^>]*>.*?</div>', page, re.S)[0].split('href="../index.html?m=')[1:]:
+            self.assertIn(f'data-m="{m[:7]}"', page, f"the peaks line names {m[:7]}, which is not in the strip")
+        # "a számok a táblázatban" is a promise in six accessible names, so the table must carry what the
+        # charts draw: the day column and the agreement index were the two it lacked.
+        self.assertIn('<th scope="col" class="num">Ülésnap<span class="sub">szavazás/nap</span></th>', page)
+        self.assertIn('részvétel · ellene · index', page)
 
     def test_data_page(self):
         from scripts.build_site import build_data_page

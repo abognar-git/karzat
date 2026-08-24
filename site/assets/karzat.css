@@ -161,6 +161,15 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .mostrip .mo.on{color:var(--white);border-color:var(--dim3)}
 .moread{min-height:3.2em;border-top:1px solid var(--line2);padding-top:8px;margin-top:2px}
 .moread b{color:var(--text);font-weight:400}
+.mopeaks{margin:2px 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim2)}
+.mopeaks a{color:var(--dim);text-decoration:underline;text-decoration-color:var(--dim3);text-underline-offset:2px}
+.mopeaks a:hover,.mopeaks a:focus-visible{color:var(--white)}
+.how{margin-top:8px}
+.how summary{cursor:pointer;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.how summary:hover,.how summary:focus-visible{color:var(--white)}
+.how summary:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
+.how .prose{color:var(--dim);margin-top:6px;max-width:70ch;font-size:.9em}
+.how .prose a{color:var(--dim)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
 /* numbers */

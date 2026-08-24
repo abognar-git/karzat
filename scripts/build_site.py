@@ -879,6 +879,15 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .mostrip .mo.on{color:var(--white);border-color:var(--dim3)}
 .moread{min-height:3.2em;border-top:1px solid var(--line2);padding-top:8px;margin-top:2px}
 .moread b{color:var(--text);font-weight:400}
+.mopeaks{margin:2px 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim2)}
+.mopeaks a{color:var(--dim);text-decoration:underline;text-decoration-color:var(--dim3);text-underline-offset:2px}
+.mopeaks a:hover,.mopeaks a:focus-visible{color:var(--white)}
+.how{margin-top:8px}
+.how summary{cursor:pointer;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
+.how summary:hover,.how summary:focus-visible{color:var(--white)}
+.how summary:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
+.how .prose{color:var(--dim);margin-top:6px;max-width:70ch;font-size:.9em}
+.how .prose a{color:var(--dim)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
 /* numbers */
@@ -4544,6 +4553,18 @@ def svg_series(labels: list[str], series: list[tuple[str, str, list]], kind: str
     return f'<div class="tswrap" tabindex="0"><svg viewBox="0 0 {w} {h}" class="ts" role="img" aria-label="{esc(label)}">{"".join(parts)}</svg></div>'
 
 
+def how_block(text: str) -> str:
+    """A chart panel's "Miből számoltuk" — the numerator, the denominator and what is excluded, in words.
+
+    Every sentence in these is a checkable claim about what the arithmetic in karzat/analytics.py does, which
+    is why they are written here as constants against that code rather than generated: the one failure mode a
+    generated explanation cannot have is saying more than the code it describes, and that is the only failure
+    mode that matters in a block whose job is to let the reader audit the chart above it. A native <details>:
+    closed it is one line, it needs no script, and a keyboard opens it with Enter like everything else."""
+    return (f'<details class="how"><summary>Miből számoltuk</summary>'
+            f'<div class="prose">{text}</div></details>')
+
+
 def month_summary(d: dict) -> str:
     """One month in a sentence: the month strip's link name, and what the readout says in the browser.
 
@@ -4560,7 +4581,9 @@ def month_summary(d: dict) -> str:
         bits.append(f'{hu_num(d["vote_days"])} nap, amelyen szavaztak')
         if d.get("per_vote_day"):
             bits.append(f'{hu_dec(d["per_vote_day"], 1)} szavazás ezeken a napokon')
-    bits.append(f'{hu_num(d["qualified"])} minősített {hu_the(d["decisions"])} {hu_num(d["decisions"])} döntésből')
+    # "a 124 döntésből 11 esetben kellett minősített többség" — a sentence, not a ledger line. "esetben"
+    # carries the suffix so no numeral is ever inflected, which is the house rule for generated Hungarian.
+    bits.append(f'{hu_the(d["decisions"])} {hu_num(d["decisions"])} döntésből {hu_num(d["qualified"])} esetben kellett minősített többség')
     return f'{d["month"]} — ' + ", ".join(bits)
 
 
@@ -4572,7 +4595,11 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
     pct = lambda v: f"{100 * v:.0f}%"
     ser = lambda key: [(f, colour.get(f, "#8a8a8a"), [((d["factions"].get(f) or {}).get(key)) for d in ms]) for f in facs]
     charts = [
-        ("Minősített többségű döntések aránya", svg_series(labels, [("minősített", "#a1a1aa", [(d["qualified"] / d["decisions"]) if d["decisions"] else None for d in ms])], "lines", 1.0, pct, name="Minősített többségű döntések aránya"), "a hónap döntéseiből mennyi kívánt kétharmadot, négyötödöt vagy abszolút többséget"),
+        ("Minősített többségű döntések aránya", svg_series(labels, [("minősített", "#a1a1aa", [(d["qualified"] / d["decisions"]) if d["decisions"] else None for d in ms])], "lines", 1.0, pct, name="Minősített többségű döntések aránya"), "a hónap döntéseiből mennyi kívánt kétharmadot, négyötödöt vagy abszolút többséget",
+         'A Ház döntéseinek egy részéhez nem elég az egyszerű többség: kétharmad, négyötöd vagy az összes '
+         'képviselő fele kell hozzá. Ez az ábra azt mutatja, hogy a hónap döntéseiből mennyi volt ilyen.<br><br>'
+         'A jelenlét-megállapítások itt nincsenek benne, mert azok nem döntések. Hogy melyik szavazáshoz '
+         'milyen többség kellett, azt a <a href="../../modszer/index.html">módszer</a> oldal sorolja fel.'),
     ]
     # Everything below this line is computed from roll calls, and two cycles have none: the API's `nev_szerint`
     # is empty before 1998. Cycle 34 was drawing three faction charts containing nothing at all — empty axes
@@ -4584,9 +4611,24 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
     n_votes = sum(d["votes"] for d in ms)
     n_roll = sum(d["roll_calls"] for d in ms)
     fac_charts = [
-        ("Részvétel frakciónként", svg_series(labels, ser("participation"), "lines", 1.0, pct, name="Részvétel frakciónként"), "leadott szavazat / névsorban szereplés, a frakció tagjaira összesítve"),
-        ("Frakció elleni szavazatok aránya", svg_series(labels, ser("dissent"), "lines", None, lambda v: f"{100 * v:.1f}%".replace(".", ","), name="Frakció elleni szavazatok aránya"), "a frakció többségétől eltérő leadott szavazatok aránya"),
-        ("Egyetértési index frakciónként", svg_series(labels, ser("ai"), "lines", 1.0, lambda v: hu_dec(v), name="Egyetértési index frakciónként"), "leadott szavazatokkal súlyozott havi átlag"),
+        ("Részvétel frakciónként", svg_series(labels, ser("participation"), "lines", 1.0, pct, name="Részvétel frakciónként"), "leadott szavazat / névsorban szereplés, a frakció tagjaira összesítve",
+         'Azt mutatja, hogy a frakció tagjai a szavazások mekkora részén nyomtak gombot.<br><br>'
+         'Gombnyomásnak az igen, a nem és a tartózkodom számít. Aki a névsorban szerepel, de nem szavazott — '
+         'mert hiányzott, vagy jelen volt és nem nyomott gombot —, az csökkenti a részvételt. A '
+         'jelenlét-megállapítások is beleszámítanak, mert ott is készül névsor és ott is gombot nyomnak.'),
+        ("Frakció elleni szavazatok aránya", svg_series(labels, ser("dissent"), "lines", None, lambda v: f"{100 * v:.1f}%".replace(".", ","), name="Frakció elleni szavazatok aránya"), "a frakció többségétől eltérő leadott szavazatok aránya",
+         'Azt mutatja, milyen gyakran szavazott valaki másképp, mint a saját frakciójának a többsége. '
+         'Példa: a frakció többsége igennel szavaz, egy képviselő nemmel — ez egy frakció elleni szavazat.<br><br>'
+         'Két eset nem számít bele. Ha a frakción belül döntetlen az állás, akkor nincs mivel szembemenni — '
+         'ott senki nem szavaz a frakciója ellen. A jelenlét-megállapításon pedig nincs igazi állásfoglalás, '
+         'ott sem lehet senki „ellene” — az ott nyomott gombok viszont beleszámítanak az összes szavazatba, '
+         'ezért ez az arányt kicsit lefelé húzza. Aki hiányzott, az nem a frakciója ellen szavazott: az a '
+         'részvételnél látszik.'),
+        ("Egyetértési index frakciónként", svg_series(labels, ser("ai"), "lines", 1.0, lambda v: hu_dec(v), name="Egyetértési index frakciónként"), "leadott szavazatokkal súlyozott havi átlag",
+         'Azt méri, mennyire szavazott egyben a frakció. 1,00 = mindenki, aki gombot nyomott, ugyanazt '
+         'nyomta. 0 = a frakció három egyenlő részre szakadt: igen, nem, tartózkodás.<br><br>'
+         'A havi érték átlag, amelyben a nagyobb szavazások többet nyomnak a latban. A jelenlét-megállapítások '
+         'itt nem számítanak: attól, hogy valaki jelen van, még nem ért egyet senkivel.'),
     ] if n_roll else []
     charts += fac_charts
     # named() used to live here: it injected the chart's title by replacing the literal `aria-label=":`, a
@@ -4603,12 +4645,12 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
     has_sittings = any(d.get("sittings") for d in ms)
     rate_label, rate_key, rate_note = (
         ("ülésnaponként", "per_sitting",
-         "ugyanaz a hónap elosztva a Ház ülésnapjaival, ahogy a jegyzőkönyv számozza őket — ez mutatja meg, "
-         "mikor volt sűrű a napirend. Egy ülésnapon nem feltétlenül szavaznak.")
+         "ugyanez a szám az ülésnapokra elosztva: így látszik, mikor volt sűrű a napirend. Ülésnap az is, "
+         "amikor nem szavaznak.")
         if has_sittings else
         ("szavazási naponként", "per_vote_day",
-         "ugyanaz a hónap elosztva azokkal a napokkal, amelyeken szavaztak — nem ülésnaponként: ehhez a "
-         "ciklushoz a rekord nem ad ülésnaplistát, az API 1998 előttre nem közöl ilyet"))
+         "ugyanez a szám azokra a napokra elosztva, amikor szavaztak. Ülésnapokra nem tudjuk elosztani: 1998 "
+         "előttről nincs meg az ülésnapok listája."))
     views = [
         ("havonta", svg_series(labels, [("szavazás", "#a1a1aa", [d["votes"] for d in ms])], "bars",
                                name="Szavazások havonta"),
@@ -4623,26 +4665,34 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
                         f'<div class="chart">{svg}</div>'
                         f'<div class="hero-meta" style="margin-top:6px">{esc(note)}</div></div>'
                         for lab, svg, note in views)
+              + how_block(
+                  'Ide minden szavazás beleszámít. Az is, amikor a Ház csak azt rögzíti, hogy ki van jelen '
+                  'a teremben — ez a jelenlét-megállapítás. Az ilyen nem döntés, csak jelenlét, ezért a '
+                  'döntéseket számoló ábrákban nincs benne.<br><br>'
+                  'Az „ülésnaponként” nézet azt mutatja, hány szavazás jutott egy ülésnapra. Ülésnap az, '
+                  'amikor a Ház ülésezik — akkor is, ha aznap egyet sem szavaznak. Ha egy napra két ülés '
+                  'esik, az kettőnek számít, mert a jegyzőkönyv is így számozza. 1998 előttről nincs meg az '
+                  'ülésnapok listája, ott azokkal a napokkal osztunk, amikor szavaztak — az ábra felirata '
+                  'ilyenkor ezt mondja.')
               + '</section>')
-    blocks += "".join(f'<section class="panel">{CORNERS}<h2><span data-kz-text>{esc(t)}</span></h2><div class="chart">{svg}</div><div class="hero-meta" style="margin-top:6px">{esc(note)}</div></section>' for t, svg, note in charts)
+    blocks += "".join(f'<section class="panel">{CORNERS}<h2><span data-kz-text>{esc(t)}</span></h2><div class="chart">{svg}</div><div class="hero-meta" style="margin-top:6px">{esc(note)}</div>{how_block(how)}</section>' for t, svg, note, how in charts)
     # One sentence about what the faction figures rest on, on every cycle — the reader of a chart drawn from
     # one roll call in eight thousand deserves the same warning as the reader of a page that has none.
     if n_roll:
         blocks += (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Mire épülnek a frakciószámok</span></h2>'
-                   f'<p class="hero-meta prose">A részvétel, a frakció elleni arány és az egyetértési index csak '
-                   f'név szerinti szavazásból számolható, mert csak ott derül ki, ki hogyan szavazott. Ebben a '
-                   f'ciklusban {hu_num(n_votes)} szavazásból {hu_num(n_roll)} ilyen '
-                   f'({hu_dec(100 * n_roll / n_votes, 1)}%); a többi szavazásnál a rekord csak a végeredményt '
-                   f'közli. A hónapok, ahol nincs pont, nem nulla részvételt jelentenek, hanem azt, hogy abban a '
-                   f'hónapban nem volt név szerinti szavazás.</p></section>')
+                   f'<p class="hero-meta prose">A fenti három frakciós ábrához tudni kell, ki hogyan szavazott. '
+                   f'Ez csak a név szerinti szavazásokból derül ki. Ebben a ciklusban {hu_num(n_votes)} '
+                   f'szavazásból {hu_num(n_roll)} ilyen ({hu_dec(100 * n_roll / n_votes, 1)}%) — a többinél '
+                   f'csak a végeredményt ismerjük. Ahol az ábrán nincs pont, ott abban a hónapban nem volt '
+                   f'név szerinti szavazás. Az nem nulla, hanem hiányzó adat.</p></section>')
     else:
         blocks += (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Frakciónkénti számok nincsenek</span></h2>'
-                   f'<p class="hero-meta prose">Ebből a ciklusból a rekord egyetlen név szerinti szavazást sem '
-                   f'közöl — az API <span class="mono">nev_szerint</span> mezője 1998 előttre üres —, ezért '
-                   f'részvétel, frakció elleni arány és egyetértési index nem számolható. Ami megvan, az fent '
-                   f'látható: {hu_num(n_votes)} szavazás a maga eredményével és frakciótámogatásával. Hogy '
-                   f'meddig ér a jegyzőkönyv, azt a <a href="../../lefedettseg/index.html">lefedettség</a> '
-                   f'oldal mondja meg ciklusonként.</p></section>')
+                   f'<p class="hero-meta prose">Ehhez a ciklushoz nem maradt fenn név szerinti szavazás: 1998 '
+                   f'előttről a parlament adatbázisa nem őrzi, ki hogyan szavazott, csak a végeredményt. Ezért '
+                   f'itt nem tudjuk kiszámolni a részvételt, a frakció elleni szavazatokat és az egyetértési '
+                   f'indexet. Ami megvan, az fent látható: {hu_num(n_votes)} szavazás, mindegyik a maga '
+                   f'eredményével. Hogy melyik korszakból mi maradt fenn, azt a '
+                   f'<a href="../../lefedettseg/index.html">lefedettség</a> oldal mutatja.</p></section>')
     blocks += speaking_panel(inp)
     # One month strip for all five charts, rather than a link on every point of every one of them: that would
     # be some 235 tab stops for 47 months. Each entry is a real link to the cycle's vote list narrowed to that
@@ -4660,9 +4710,34 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
         # link's own name on focus and has no reason to go looking at a panel elsewhere on the page for it.
         f'title="{esc(month_summary(d))}" aria-label="{esc(month_summary(d))}">'
         f'{esc(d["month"][2:])}</a>' for d in ms)
+    # The cycle's peaks, as one line of real links: April 1994 and December 2023 exist whether or not a
+    # reader walks 47 months with a mouse, and a superlative is a computation, not a judgement — maxima only,
+    # each linking into the same ?m= drill-down the strip uses. Ties are all named rather than one being
+    # silently preferred.
+    def peak(key):
+        vals = [(d.get(key) or 0, d["month"]) for d in ms]
+        mx = max((v for v, _ in vals), default=0)
+        return (mx, [m for v, m in vals if v == mx]) if mx else None
+
+    def moref(m):
+        return f'<a href="../index.html?m={esc(m)}#dir">{esc(m)}</a>'
+
+    peaks = []
+    pv = peak("votes")
+    if pv:
+        peaks.append(f'legtöbb szavazás {" és ".join(moref(m) for m in pv[1])} ({hu_num(pv[0])})')
+    pr = peak("per_sitting" if has_sittings else "per_vote_day")
+    if pr:
+        unit = "szavazás/ülésnap" if has_sittings else "szavazás/szavazási nap"
+        peaks.append(f'legsűrűbb hónap {" és ".join(moref(m) for m in pr[1])} ({hu_dec(pr[0], 1)} {unit})')
+    pq = peak("qualified")
+    if pq:
+        peaks.append(f'legtöbb minősített többségű döntés {" és ".join(moref(m) for m in pq[1])} ({hu_num(pq[0])})')
+    peaks_line = (f'<div class="mopeaks hero-meta">A ciklus csúcsai: {" · ".join(peaks)}</div>' if peaks else "")
     months_panel = f"""<section class="panel" id="months">{CORNERS}
   <h2><span data-kz-text>Hónapról hónapra</span><span class="tag" id="motag">minden hónap a saját szavazásaihoz vezet</span></h2>
   <div class="mostrip">{strip}</div>
+  {peaks_line}
   <div class="moread hero-meta prose" id="moread">Minden hónap neve megmondja, mit csinált a Ház akkor, és a
   hivatkozás a hónap szavazásaihoz visz.</div>
 </section>
@@ -4670,15 +4745,30 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
     # A colour key in the markup, a filter once a script is running: the entries stay <span> so that a
     # reader without JavaScript gets the key and not a row of buttons that do nothing.
     legend = "".join(f'<span class="f" data-f="{esc(f)}"><i style="background:{colour.get(f, "#8a8a8a")}"></i>{esc(f)}</span>' for f in facs)
-    head = "".join(f'<th scope="col" class="num">{esc(f)}<span class="sub">részvétel · ellene</span></th>' for f in facs)
+    # Every chart's numbers, literally. The six pictures promise "a számok a táblázatban" in their accessible
+    # names, and until now the table held neither the sitting days the second chart divides by nor the
+    # agreement index the sixth draws — a promise checked nowhere and false in two places. The day column
+    # carries the same denominator the chart uses and is named accordingly per cycle; the index rides in the
+    # faction cell's sub line, and the qualified count carries its share of the decisions, which is what the
+    # third chart actually plots.
+    day_head = "Ülésnap" if has_sittings else "Szavazási nap"
+    head = "".join(f'<th scope="col" class="num">{esc(f)}<span class="sub">részvétel · ellene · index</span></th>' for f in facs)
     def cell(x):
         part = pct(x["participation"]) if x and x["participation"] is not None else "—"
         dis = f'{100 * x["dissent"]:.1f}%'.replace(".", ",") if x and x["dissent"] is not None else "—"
-        return f'<td class="num mono">{part}<span class="sub">{dis}</span></td>'
+        ai = hu_dec(x["ai"]) if x and x.get("ai") is not None else "—"
+        return f'<td class="num mono">{part}<span class="sub">{dis} · {ai}</span></td>'
     trs = []
     for d in ms:
         cells = "".join(cell(d["factions"].get(f)) for f in facs)
-        trs.append(f'<tr><td class="mono">{esc(d["month"])}</td><td class="num mono">{d["votes"]}</td><td class="num mono">{d["decisions"]}</td><td class="num mono">{d["qualified"]}</td>{cells}</tr>')
+        nday = d.get("sittings") if has_sittings else d["vote_days"]
+        rate = d.get("per_sitting") if has_sittings else d.get("per_vote_day")
+        day_td = (f'<td class="num mono">{nday}<span class="sub">{hu_dec(rate, 1)}/nap</span></td>'
+                  if nday else '<td class="num mono">—</td>')
+        share = f'{100 * d["qualified"] / d["decisions"]:.0f}%' if d["decisions"] else "—"
+        trs.append(f'<tr><td class="mono">{esc(d["month"])}</td><td class="num mono">{d["votes"]}</td>{day_td}'
+                   f'<td class="num mono">{d["decisions"]}</td>'
+                   f'<td class="num mono">{d["qualified"]}<span class="sub">{share}</span></td>{cells}</tr>')
     return page_head(f'Számok · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus hónapról hónapra: szavazások, minősített többség, részvétel, frakció elleni szavazatok, egyetértési index.', 1 + inp["base_depth"]) + \
         topbar(inp, [("számok", None)], 1) + f"""
 <div class="hero-h"><h1>Számok</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · hónapról hónapra</small></div>
@@ -4686,7 +4776,7 @@ def build_numbers_page(inp: dict, ms: list[dict]) -> str:
 {months_panel}{blocks}
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>A táblázat</span><span class="tag"><a href="havonta.csv">CSV</a></span></h2>
-  <div class="tablewrap" tabindex="0"><table data-page-size="50"><thead><tr><th scope="col">Hónap</th><th scope="col" class="num">Szavazás</th><th scope="col" class="num">Döntés</th><th scope="col" class="num">Minősített</th>{head}</tr></thead><tbody>{"".join(trs)}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table data-page-size="50"><thead><tr><th scope="col">Hónap</th><th scope="col" class="num">Szavazás</th><th scope="col" class="num">{day_head}<span class="sub">szavazás/nap</span></th><th scope="col" class="num">Döntés</th><th scope="col" class="num">Minősített<span class="sub">a döntésekből</span></th>{head}</tr></thead><tbody>{"".join(trs)}</tbody></table></div>
 </section>
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}szamok/index.html', f'Számok — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-szamok')}
 """ + page_tail(inp, 1)
@@ -7524,6 +7614,7 @@ def build_landing() -> str:
   {f'<a class="panel door" href="riport/index.html">{CORNERS}<h2><span data-kz-text>Riport</span></h2><p>Kérdezd a teljes rekordot SQL-lel, és rajzold ki — a saját böngésződben, kiszolgáló nélkül.</p><span class="go mono">riport/ →</span></a>' if (inp.get("parquet") or {}).get("tables") else ""}
   {f'<a class="panel door" href="frakciovaltas/index.html">{CORNERS}<h2><span data-kz-text>Frakcióváltás</span></h2><p>Minden mandátum közbeni frakcióváltás 1990 óta, és hogy a két nyilvántartás ugyanazt mondja-e róla.</p><span class="go mono">frakciovaltas/ →</span></a>' if (inp.get("switches") or {}).get("items") else ""}
   {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
+  {f'<a class="panel door" href="{cdir}beszedido/index.html">{CORNERS}<h2><span data-kz-text>Beszédidő</span></h2><p>Mire ment el a Ház ideje: melyik vita hány órát kapott, és abból melyik frakció mennyit beszélt — a jegyzőkönyv saját címkéi szerint.</p><span class="go mono">{cdir}beszedido/ →</span></a>' if has_floor(inp) else ""}
   <a class="panel door" href="arcel/index.html">{CORNERS}<h2><span data-kz-text>A Ház arcéle</span></h2><p>Ciklusonként hányan ülnek először a Házban, és mit rögzít a nyilvántartás a megválasztottak végzettségéről, nyelveiről, önkormányzati múltjáról.</p><span class="go mono">arcel/ →</span></a>
   <a class="panel door" href="lefedettseg/index.html">{CORNERS}<h2><span data-kz-text>Ameddig a jegyzőkönyv elér</span></h2><p>Hónapról hónapra: hol van név szerinti lista, hol csak összesítés, és mi az, ami már nem pótolható.</p><span class="go mono">lefedettseg/ →</span></a>
   <a class="panel door" href="modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer és adatok</span></h2><p>Minden szabály és számítás leírva; minden tábla letölthető CSV-ben és JSON-ban, ciklusonként az <span class="mono">adatok/</span> alatt.</p><span class="go mono">modszer/ →</span></a>
