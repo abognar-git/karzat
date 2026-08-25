@@ -14,6 +14,11 @@ headers are set per extension — HTML short-lived (the site is rebuilt when par
 
 The credentials come from a named profile in ~/.aws/credentials; nothing is read from the repository, and no
 secret is ever printed.
+
+Directory URLs (`/ckl43/javadalmazas/` as opposed to `…/index.html`) are answered by a CloudFront Function
+attached once with `python3 -m scripts.attach_rewrite --profile karzat` — see that script for the shape and
+for why the slashless form is a redirect rather than a rewrite. It is not part of the upload path; a deploy
+never needs to touch it.
 """
 
 from __future__ import annotations
