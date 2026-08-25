@@ -3,9 +3,11 @@
 <!-- karzat — the local half of the hybrid nightly.
 
      parlament.hu answers its API on the reader's network and serves its portal page to the datacenter's, so
-     the sync runs HERE, on the machine whose connection the service accepts, and hands the cache to the
-     scheduled CodeBuild run (04:40 CET) through s3://karzat-ops. This job is the cheap half only: a few
-     polite API calls and an upload, minutes, not the build.
+     the sync runs HERE, on the machine whose connection the service accepts. While the AWS account's silent
+     45-minute build cap stands (a new-account limit; a support case lifts it), this job runs the WHOLE
+     chain — sync, handover to s3://karzat-ops, build, tests, README gate, deploy — and alerts the same SNS
+     topic on failure. Once the cap is lifted: re-enable the karzat-nightly schedule (EventBridge Scheduler,
+     eu-central-1) and put --sync-only back in place of --refresh-days/--handover/--sns-topic below.
 
      Install:   cp config/hu.ogykarzat.sync.plist ~/Library/LaunchAgents/
                 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/hu.ogykarzat.sync.plist
@@ -24,9 +26,13 @@
         <string>/Users/host/.pyenv/versions/3.11.5/bin/python3</string>
         <string>-m</string>
         <string>scripts.nightly</string>
-        <string>--sync-only</string>
         <string>--profile</string>
         <string>karzat</string>
+        <string>--refresh-days</string>
+        <string>7</string>
+        <string>--handover</string>
+        <string>--sns-topic</string>
+        <string>arn:aws:sns:eu-central-1:508888023472:karzat-nightly</string>
     </array>
     <key>WorkingDirectory</key>
     <string>/Users/host/Claude - Projects/karzat</string>

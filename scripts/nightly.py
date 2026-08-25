@@ -123,6 +123,12 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-state-age", type=float, default=0, metavar="HOURS",
                     help="with --no-sync: refuse to run when the sync state is older than this many hours — the "
                          "guard that turns a silently dead local sync into a loud scheduled failure (0 = off)")
+    ap.add_argument("--handover", action="store_true",
+                    help="after the sync, also upload data/raw and the state to the ops bucket on a full run — "
+                         "keeps the scheduled build's cache current while the whole chain runs locally")
+    ap.add_argument("--sns-topic", default="",
+                    help="publish a failure alert to this SNS topic ARN when the run dies — the property the "
+                         "whole nightly is built around is that failure is loud, wherever the run happens to live")
     ap.add_argument("--refresh-days", type=float, default=0, metavar="DAYS",
                     help="rebuild and publish even with nothing new once the last publish is older than this many "
                          "days, so the freshness stamp ages only so far through a recess (0 = off)")
@@ -131,6 +137,25 @@ def main(argv: list[str] | None = None) -> int:
                     help='named AWS profile; pass "" in a role-based environment such as the scheduled build')
     ap.add_argument("--bucket", default=os.environ.get("KARZAT_BUCKET", "karzat-hu"))
     args = ap.parse_args(argv)
+    try:
+        return _run(args)
+    except BaseException as e:
+        code = e.code if isinstance(e, SystemExit) else 1
+        if args.sns_topic and not args.dry_run and code not in (0, None):
+            try:
+                import boto3
+                sess = boto3.Session(profile_name=args.profile) if args.profile else boto3.Session()
+                sess.client("sns", region_name="eu-central-1").publish(
+                    TopicArn=args.sns_topic, Subject="karzat: az éjszakai futás elbukott",
+                    Message=f"A helyi futás hibára futott: {e}\nAz oldal változatlan maradt. "
+                            f"Napló: ~/Library/Logs/karzat-sync.log")
+                log("failure alert published")
+            except Exception as pub:
+                log(f"the failure alert itself failed: {pub}")
+        raise
+
+
+def _run(args: argparse.Namespace) -> int:
     dry = args.dry_run
     py = [sys.executable]
 
@@ -164,12 +189,13 @@ def main(argv: list[str] | None = None) -> int:
         # records, which is the right pace for an integrity check running on somebody else's server.
         run(py + ["-m", "scripts.watch_source", "--calls", "120"], dry=dry, allow_fail=True)
 
-    if args.sync_only:
+    if args.sync_only or args.handover:
         if dry:
-            log("--sync-only: would upload data/raw and the sync state to the ops bucket, then stop")
-            return 0
-        upload_cache(args.profile, args.ops_bucket)
-        log("synced and handed over; the scheduled build takes it from here")
+            log("would upload data/raw and the sync state to the ops bucket")
+        else:
+            upload_cache(args.profile, args.ops_bucket)
+    if args.sync_only:
+        log("synced and handed over; the scheduled build takes it from here" if not dry else "--sync-only: would stop here")
         return 0
 
     # ---- did anything move? ----------------------------------------------------------------------
