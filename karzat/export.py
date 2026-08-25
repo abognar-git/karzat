@@ -349,6 +349,21 @@ def floor_debates_csv(ft: dict[str, Any], cycle: int) -> str:
     return _csv(rows, ["cycle", "year", "kind", "iromany", "bills", "title", "seconds", "speeches", "share_of_year"])
 
 
+def floor_speakers_csv(sp: dict[str, Any], cycle: int) -> str:
+    """One row per speaker per kind: the Szónokok table's full breakdown, in seconds.
+
+    The input is speaking_time()'s per_mp, so the reprint rule is already applied — a joint-debate speech is
+    in here once. Substantive rows only: the chair's procedural lines are not floor time in this sense, and
+    the panel above the download says the same."""
+    rows = []
+    for azon, e in sorted(sp["per_mp"].items(), key=lambda kv: -kv[1].get("substantive", 0)):
+        for kind, secs in sorted((e.get("kinds") or {}).items(), key=lambda kv: -kv[1]):
+            rows.append({"cycle": cycle, "azon": azon, "name": e.get("name"), "faction": e.get("faction"),
+                         "kind": kind, "seconds": secs,
+                         "speaker_total_s": e.get("substantive", 0), "speaker_speeches": e.get("sub_speeches", 0)})
+    return _csv(rows, ["cycle", "azon", "name", "faction", "kind", "seconds", "speaker_total_s", "speaker_speeches"])
+
+
 def floor_breakdown_csv(ft: dict[str, Any], cycle: int) -> str:
     """The same time cut three ways, long-form: which faction, what kind of speech, which stage of the debate.
 

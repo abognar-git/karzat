@@ -144,6 +144,15 @@ class FloorTime(unittest.TestCase):
         cls.cycles = {c: load_inputs(c) for c in cls.CYCLES}
         cls.ft = {c: floor_time(inp) for c, inp in cls.cycles.items()}
 
+    def test_every_kind_the_record_uses_has_a_plain_word_definition(self):
+        """The jogcím popup and glossary explain the record's labels; a label without an explanation is a
+        hover that shows nothing and a glossary with a hole. New vocabulary arrives when old cycles are
+        loaded or the House renames a form — this fails the build instead of shipping the hole."""
+        from scripts.build_site import KIND_DEFS
+        missing = {k for ft in self.ft.values() for k in ft["forms"] if k not in KIND_DEFS}
+        self.assertEqual(sorted(missing), [], "kinds with no definition: add them to build_site.KIND_DEFS")
+
+
     def test_every_second_lands_in_exactly_one_row(self):
         """The page states shares of a year, so a second counted twice or not at all is a wrong percentage.
 

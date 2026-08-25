@@ -115,6 +115,103 @@
 
 
 (function(){
+  // The charts' points already carry their exact figures as <title> children — the browser shows them, but
+  // slowly, and only when the cursor lands on a four-pixel dot. This reads the same titles and shows the
+  // nearest point's figure instantly, wherever the cursor is over the chart. Pointer-only by design: the
+  // same numbers are in the table below and in every point's title, so a keyboard or touch reader loses
+  // nothing that this adds.
+  if (!window.matchMedia || !matchMedia('(hover:hover)').matches) return;
+  document.querySelectorAll('.tswrap').forEach(function(wrap){
+    var svg = wrap.querySelector('svg.ts'); if (!svg) return;
+    var tip = null, pts = null, raf = 0;
+    function collect(){
+      pts = [];
+      svg.querySelectorAll('circle,rect').forEach(function(el){
+        var t = el.querySelector('title'); if (!t) return;
+        var r = el.getBoundingClientRect();
+        pts.push({ el: el, x: r.left + r.width / 2, y: r.top + Math.min(r.height / 2, 8), text: t.textContent });
+      });
+    }
+    function hide(){ if (tip) { tip.remove(); tip = null; } pts = null; }
+    wrap.addEventListener('mouseenter', collect);
+    wrap.addEventListener('mouseleave', hide);
+    wrap.addEventListener('scroll', hide);            // positions cached in client space go stale on scroll
+    wrap.addEventListener('mousemove', function(e){
+      if (raf) return;
+      raf = requestAnimationFrame(function(){
+        raf = 0;
+        if (!pts) collect();
+        var best = null, bd = Infinity;
+        for (var i = 0; i < pts.length; i++) {
+          var p = pts[i];
+          if (p.el.classList.contains('dim')) continue;      // the legend filter hides these; so does the tip
+          var dx = p.x - e.clientX, dy = p.y - e.clientY, d = dx * dx + dy * dy / 4;
+          if (d < bd) { bd = d; best = p; }
+        }
+        if (!best) { hide(); return; }
+        if (!tip) {
+          tip = document.createElement('div');
+          tip.className = 'tstip';
+          tip.setAttribute('aria-hidden', 'true');
+          wrap.appendChild(tip);
+        }
+        tip.textContent = best.text;
+        var wr = wrap.getBoundingClientRect();
+        var left = best.x - wr.left + wrap.scrollLeft, top = best.y - wr.top - 26;
+        tip.style.left = Math.max(0, Math.min(left - tip.offsetWidth / 2, wrap.scrollWidth - tip.offsetWidth)) + 'px';
+        tip.style.top = Math.max(0, top) + 'px';
+      });
+    });
+  });
+})();
+
+
+(function(){
+  // The kind names carry their plain-word definition in data-def; hovering one shows it in the same box the
+  // charts use for their readout. Pointer-only: the identical text sits in the "Mit jelentenek a jogcímek?"
+  // glossary right above the table, which is the keyboard, touch and no-script path.
+  if (window.matchMedia && matchMedia('(hover:hover)').matches) {
+    var tip = null;
+    document.addEventListener('mouseover', function(e){
+      var t = e.target.closest && e.target.closest('.term');
+      if (!t) { if (tip) { tip.remove(); tip = null; } return; }
+      if (!tip) {
+        tip = document.createElement('div');
+        tip.className = 'tstip';
+        tip.style.maxWidth = '340px';
+        tip.style.whiteSpace = 'normal';
+        tip.setAttribute('aria-hidden', 'true');
+      }
+      tip.textContent = t.getAttribute('data-def') || '';
+      var host = t.closest('.tablewrap') || t.parentElement;
+      if (getComputedStyle(host).position === 'static') host.style.position = 'relative';
+      host.appendChild(tip);
+      var hr = host.getBoundingClientRect(), tr = t.getBoundingClientRect();
+      tip.style.left = Math.max(0, tr.left - hr.left + host.scrollLeft) + 'px';
+      var above = tr.top - hr.top - tip.offsetHeight - 6;
+      tip.style.top = (above >= 0 ? above : tr.bottom - hr.top + 6) + 'px';
+    });
+  }
+})();
+
+(function(){
+  // The jogcím panel ships one finished table per faction and this only chooses which one is visible: no
+  // arithmetic runs here, so the browser cannot disagree with the builder. The buttons live in a .filters
+  // block, which the stylesheet keeps hidden until html.js — without a script there is one table and no
+  // control pointing at the others.
+  var box = document.getElementById('jogcim'); if (!box) return;
+  var btns = box.querySelectorAll('button[data-fft]'); if (!btns.length) return;
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var want = b.getAttribute('data-fft');
+      box.querySelectorAll('.ffv').forEach(function(v){ v.hidden = v.getAttribute('data-ffv') !== want; });
+      btns.forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    });
+  });
+})();
+
+
+(function(){
   // Every table with data-page-size gets a pager: 25 rows at a time, prev / next / page numbers / 'mind'.
   // Filters mark excluded rows with data-x and call table.__pager.render(true); sorters re-append rows and
   // call render(false). Without JS the whole table is in the page.

@@ -164,6 +164,14 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .mopeaks{margin:2px 0 8px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--dim2)}
 .mopeaks a{color:var(--dim);text-decoration:underline;text-decoration-color:var(--dim3);text-underline-offset:2px}
 .mopeaks a:hover,.mopeaks a:focus-visible{color:var(--white)}
+.tswrap{position:relative}
+.tstip{position:absolute;pointer-events:none;background:var(--terminal);border:1px solid var(--border-hi);
+  color:var(--text);font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:3px 7px;
+  white-space:nowrap;z-index:5}
+.term{text-decoration:underline dotted;text-decoration-color:var(--dim3);text-underline-offset:3px;cursor:help}
+.gloss{margin:6px 0 0}
+.gloss dt{color:var(--text);font-family:var(--mono);font-size:11px;margin-top:8px}
+.gloss dd{margin:2px 0 0;color:var(--dim)}
 .how{margin-top:8px}
 .how summary{cursor:pointer;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
 .how summary:hover,.how summary:focus-visible{color:var(--white)}

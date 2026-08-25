@@ -929,6 +929,91 @@ class SpeakingTime(unittest.TestCase):
         self.assertLessEqual(by_fac, sp["total"])           # …and some members of the House have no faction
         self.assertGreaterEqual(sp["total"], sp["substantive"])
 
+    def test_the_speakers_table_inherits_the_reprint_rule_and_ranks_by_the_stated_number(self):
+        """Szónokok says its order is the measured substantive time; the first row must actually hold the
+        maximum, the kind breakdown must add up to the speaker's own total, and the whole thing must sit on
+        speaking_time() — a second implementation of "count each speech once" is how the 6.68× overstatement
+        would come back wearing a new panel."""
+        from scripts.build_site import speakers_panel, speaking_time
+        import re as _re
+        sp = speaking_time(self.inp)
+        html = speakers_panel(self.inp)
+        top_azon = max((a for a, e in sp["per_mp"].items() if e.get("substantive")),
+                       key=lambda a: sp["per_mp"][a]["substantive"])
+        first = _re.search(r"<tbody><tr[^>]*>(.*?)</tr>", html, _re.S).group(1)   # the row carries data-f for the filter
+        top = sp["per_mp"][top_azon]
+        self.assertIn(top["name"], first, "the first row is not the speaker with the most measured time")
+        for azon, e in sp["per_mp"].items():
+            if e.get("kinds"):
+                self.assertEqual(sum(e["kinds"].values()), e["substantive"],
+                                 f"{azon}: the kind breakdown does not add up to the speaker's total")
+        self.assertIn('href="szonokok.csv"', html, "the table advertises its CSV twin")
+        self.assertIn("a vezérszónoki idő a frakcióé", html, "the role caveat is the panel's licence to rank")
+
+    def test_the_floor_page_order_and_filters_are_what_the_reader_asked_for(self):
+        """Szónokok before Milyen jogcímen before A vita szakaszai; both filterable; every per-faction
+        variant hidden in the markup so a scriptless reader meets one table and no dead control."""
+        from scripts.build_site import load_inputs, build_floor_page
+        import karzat.analytics as an
+        inp = load_inputs()
+        html = build_floor_page(inp, an.floor_time(inp))
+        i1, i2, i3 = html.index(">Szónokok<"), html.index(">Milyen jogcímen<"), html.index(">A vita szakaszai<")
+        self.assertLess(i1, i2, "Szónokok is not before Milyen jogcímen")
+        self.assertLess(i2, i3, "Milyen jogcímen is not before A vita szakaszai")
+        self.assertIn('data-filter-table="szonokok"', html)
+        self.assertIn('data-rowf="all" data-table="szonokok"', html)
+        import re as _re
+        variants = _re.findall(r'data-ffv="([^"]*)"( hidden)?', html)
+        self.assertGreaterEqual(len(variants), 2, "no per-faction variant was built")
+        for name, hid in variants:
+            self.assertEqual(bool(hid), name != "", f"variant {name or 'mind'}: wrong initial visibility")
+
+    def test_the_kind_by_faction_split_never_exceeds_the_unfiltered_table(self):
+        """The filter's licence: a per-faction figure is a subset of the figure beside it, or it is wrong."""
+        from scripts.build_site import load_inputs
+        import karzat.analytics as an
+        ft = an.floor_time(load_inputs())
+        fbf = ft["forms_by_faction"]
+        self.assertTrue(fbf)
+        for kind, secs in ft["forms"].items():
+            self.assertLessEqual(sum(kv.get(kind, 0) for kv in fbf.values()), secs, kind)
+        # and the totals stay honest against the raw rows under the same rules the page states
+        rows = (load_inputs()["speeches"] or {}).get("speeches") or []
+        dedup = sum(int(r["duration_s"]) for r in rows
+                    if not r.get("technical") and r.get("duration_s") and r.get("date") and not r.get("reprint"))
+        self.assertEqual(ft["seconds"], dedup, "floor_time no longer equals the deduplicated substantive sum")
+
+    def test_every_label_a_definition_family_covers_is_actually_covered(self):
+        """The glossary families track the vocabularies they explain, mechanically: a rule majority.py can
+        classify, a position normalise.py can print, or a voting mode the committed indexes carry, with no
+        definition behind it, is a hover that shows nothing — the hole ships silently unless this fails."""
+        from karzat.normalise import POSITION_LABEL
+        from karzat.majority import RULES
+        from scripts.build_site import POSITION_DEFS, RULE_DEFS, MODE_DEFS
+        self.assertEqual([l for l in POSITION_LABEL.values() if l not in POSITION_DEFS], [])
+        self.assertEqual([r.label_hu for r in RULES.values() if r.label_hu not in RULE_DEFS], [])
+        import gzip as _gz, json as _json
+        from pathlib import Path as _P
+        root = _P(__file__).resolve().parent.parent / "data" / "derived"
+        modes = set()
+        for f in (root / "votes_index.json", root / "votes_index_ckl42.json.gz"):
+            if not f.exists():
+                continue
+            raw = _gz.decompress(f.read_bytes()) if f.suffix == ".gz" else f.read_bytes()
+            modes |= {v.get("mode") for v in _json.loads(raw)["votes"] if v.get("mode")}
+        self.assertTrue(modes)
+        self.assertEqual(sorted(m for m in modes if m not in MODE_DEFS), [],
+                         "voting modes with no definition — add them to MODE_DEFS")
+
+    def test_the_speakers_csv_is_the_table_in_long_form(self):
+        from scripts.build_site import speaking_time
+        from karzat.export import floor_speakers_csv
+        sp = speaking_time(self.inp)
+        body = floor_speakers_csv(sp, 43)
+        lines = body.strip().split("\n")
+        want = sum(len(e.get("kinds") or {}) for e in sp["per_mp"].values())
+        self.assertEqual(len(lines) - 1, want, "one row per speaker per kind")
+
     def test_the_panel_accounts_for_every_second(self):
         """The faction column would otherwise stop short of 100% with no explanation; the remainder is a row."""
         from scripts.build_site import speaking_panel, speaking_time

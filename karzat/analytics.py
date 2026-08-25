@@ -402,6 +402,9 @@ def floor_time(inp: dict[str, Any]) -> dict[str, Any]:
     years: dict[str, dict[str, Any]] = {}
     stages_all: dict[str, int] = {}
     forms_all: dict[str, int] = {}
+    # the cycle's kinds split by faction, for the jogcím table's faction filter: same loop, same rows, so a
+    # figure there can never disagree with the unfiltered table beside it
+    forms_by_fac: dict[str, dict[str, int]] = {}
 
     def bucket(store: dict, key: Any, seed: dict) -> dict:
         d = store.get(key)
@@ -425,6 +428,8 @@ def floor_time(inp: dict[str, Any]) -> dict[str, Any]:
         forms_all[form] = forms_all.get(form, 0) + secs
         if fac:
             yr["factions"][fac] = yr["factions"].get(fac, 0) + secs
+            fb = forms_by_fac.setdefault(fac, {})
+            fb[form] = fb.get(form, 0) + secs
         stage, subject = split_event(r.get("event"), r.get("iromany"))
         numbers = [x.strip() for x in (r.get("iromany") or "").split(" · ") if x.strip()]
         if numbers:
@@ -507,4 +512,6 @@ def floor_time(inp: dict[str, Any]) -> dict[str, Any]:
     return {"years": out_years, "seconds": sum(y["seconds"] for y in out_years),
             "speeches": sum(y["speeches"] for y in out_years),
             "stages": dict(sorted(stages_all.items(), key=lambda kv: -kv[1])),
-            "forms": dict(sorted(forms_all.items(), key=lambda kv: -kv[1]))}
+            "forms": dict(sorted(forms_all.items(), key=lambda kv: -kv[1])),
+            "forms_by_faction": {f: dict(sorted(kv.items(), key=lambda x: -x[1]))
+                                 for f, kv in sorted(forms_by_fac.items(), key=lambda x: -sum(x[1].values()))}}
