@@ -44,6 +44,82 @@ browser — no server, the index ships as static shards.
 
 ![Typing into the speech search; results narrow as the word grows](docs/media/kereses.gif)
 
+## For the citizen
+
+**Who is my MP?** A postcode is the sharpest thing most people know about where they live. Type
+one and the page walks it to the constituency and the member — and where a city is split
+street by street, it says so rather than guessing.
+[→ Ki a képviselőm?](https://ogykarzat.hu/ckl43/kepviselom/index.html)
+
+![Typing a postcode; the page resolves it to a town, then to its constituencies and members](docs/media/kepviselom.gif)
+
+**Alerts, as feeds rather than a mailing list.** Every vote where a member broke with their own
+faction is an Atom channel — for the whole House, for one faction, or for one member. So are the
+weekly digests, the verbatim speech stream, and the committee invitations. No account, no
+tracking, no summarising: your reader gets the record, and the filtering is yours.
+[→ Értesítések](https://ogykarzat.hu/ckl43/feed/index.html)
+
+![The notifications page: dissent channels for the cycle, per faction and per member, plus weekly digests](docs/media/feed.png)
+
+**What the House is paid.** Every member's stated gross for the month the datasheet publishes,
+in one sortable table, with the statute's own multipliers printed only where the arithmetic lands
+on them to the forint. Offices are shown as information, never as explanation.
+[→ Javadalmazás](https://ogykarzat.hu/ckl43/javadalmazas/index.html)
+
+![The whole House's pay in one table, with statutory multipliers and part-month marks](docs/media/javadalmazas.png)
+
+## For the analyst
+
+**One axis, and the parliament it does not fit.** Factions placed on a single line estimated from
+the votes alone — with the fit stated, the spread of each faction drawn, and the warning that the
+numbers mean nothing outside their own chart.
+[→ Kohézió](https://ogykarzat.hu/ckl43/kohezio/index.html)
+
+![The estimated left-right axis: each faction a point with its spread, and the fit stated underneath](docs/media/kohezio.png)
+
+**Where the absences decided.** Every decision measured against the threshold it needed, and the
+counterfactual named as a counterfactual: what would have happened if everyone on the roll had
+voted with their faction.
+[→ Szoros szavazások](https://ogykarzat.hu/ckl38/szoros/index.html)
+
+![Close votes with the assumption spelled out: the tally, the threshold, and the yes-if-everyone-voted column](docs/media/szoros.png)
+
+**Where the House's time went.** Speaking time by debate, by faction, by kind, by stage — and by
+person, ranked, filterable, with the caveat that a leader's slot and a backbencher's are different
+roles rather than different diligence.
+[→ Beszédidő](https://ogykarzat.hu/ckl43/beszedido/index.html)
+
+![Filtering the speakers table to one faction and then another](docs/media/beszedido.gif)
+
+**Passages that turn up in more than one mouth.** Text repeated word for word by two different
+members: how many words, who, and how much later.
+[→ Visszhang](https://ogykarzat.hu/ckl43/visszhang/index.html)
+
+![Repeated passages, the members who spoke them, and the time between](docs/media/visszhang.png)
+
+## For the researcher
+
+**SQL over the whole corpus, in your own browser.** Eight Parquet files and DuckDB-WASM: the
+query runs on your machine, nothing is uploaded, and the result draws itself. Seventeen million
+voting positions grouped in about five seconds on a laptop.
+[→ Riport](https://ogykarzat.hu/riport/index.html)
+
+![Typing a GROUP BY over 17 million rows, running it in the browser, and the chart it draws](docs/media/riport.gif)
+
+Every table the site draws is also a download — per-cycle CSV and JSON under `adatok/`, the whole
+corpus as Parquet — and each build writes a receipt that hashes what it read, so a number can be
+traced to the payload it came from.
+
+## Where the record stops
+
+The most important page is the one that draws the edge of what can be known: month by month since
+1990, where the record names every member and where it only counts them, which days the source's
+own 400-row cap truncated, and which of those can never be recovered. A site that only showed what
+it has would be quietly claiming the rest does not exist.
+[→ Ameddig a jegyzőkönyv elér](https://ogykarzat.hu/lefedettseg/index.html)
+
+![Month by month since 1990: light bars where the record names members, dark where it only counts them](docs/media/lefedettseg.png)
+
 ## The record it stands on
 
 | | |
@@ -85,12 +161,22 @@ python3 -m scripts.check_readme    # the number gate over this file and the log
 The derived inputs are committed, so a clone builds the full site offline. Live syncing
 needs your own (free) parlament.hu API token — see `.env.example`.
 
-## Data for researchers
+## Everything else it does
 
-Every table the site draws is downloadable: per-cycle CSV/JSON under `adatok/` on the
-site, and the whole corpus as eight Parquet files — plus an in-browser SQL console
-(DuckDB-WASM) at [ogykarzat.hu/riport](https://ogykarzat.hu/riport/index.html), where the
-queries run on your machine and nothing is sent anywhere.
+| | |
+|---|---|
+| [The law's path](https://ogykarzat.hu/ckl43/iromany/index.html) | Every motion with its lifecycle events, the votes taken on it, and its promulgation — from the register's own datasheets |
+| [The House's profile](https://ogykarzat.hu/arcel/index.html) | Cycle by cycle: who sits for the first time, and what the record states about degrees, languages and local-government pasts |
+| [Faction switches](https://ogykarzat.hu/frakciovaltas/index.html) | Every mid-mandate switch since 1990, and whether the two registries tell the same story about it |
+| [Committees](https://ogykarzat.hu/ckl43/bizottsag/index.html) | Membership per cycle, reconstructed from the members' own records where the API gives only the present |
+| [Sitting days](https://ogykarzat.hu/ckl43/felszolalas/index.html) | One page per day: the votes, the speeches, and the citation block for quoting any of it |
+| [Weekly digests](https://ogykarzat.hu/ckl43/feed/heti.xml) | Per member and per cycle: on the roll, cast, against their faction, substantive speeches |
+| [Search](https://ogykarzat.hu/kereses/index.html) | Members, careers and motions across every cycle, accent-folded, in one box |
+| [Method and data](https://ogykarzat.hu/modszer/index.html) | Every rule and every calculation written out, with the downloads beside them |
+| Career pages | One per person who ever held a mandate, with per-cycle records and cross-cycle history |
+| Vote exports | Every vote also as JSON and CSV, at the same address as its page |
+
+## Licence
 
 | Layer | Licence |
 |---|---|
