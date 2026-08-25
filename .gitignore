@@ -52,7 +52,8 @@ data/derived/speech_texts_ckl*.json.gz
 *.png
 !site/assets/*.png
 !tests/fixtures/*.png
-!docs/media/*.png          # the README's own screenshots — the front page is nothing without them
+# the README's own screenshots (a comment must have its own line here — a trailing one joins the pattern)
+!docs/media/*.png
 
 # the traffic aggregate is operational, not a site input: it changes daily and nothing builds from it
 data/derived/traffic.json
