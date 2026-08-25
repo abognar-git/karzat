@@ -188,6 +188,17 @@ def main(argv: list[str] | None = None) -> int:
            "current": sum(1 for m in out_mps.values() if m["current"]),
            "with_record": sum(1 for m in out_mps.values() if m["has_record"]), "mps": out_mps}
     OUT = out_path
+    # Remuneration history: the datasheet publishes one month and forgets it, so the site remembers.
+    # Append-only per member per period; the widget can grow a series as syncs accumulate. Nothing is
+    # interpolated and no month is invented — a gap in the file is a month nobody queried.
+    hist_p = OUT.parent / "remuneration_history.json"
+    hist = json.loads(hist_p.read_text(encoding="utf-8")) if hist_p.exists() else {}
+    for _azon, _m in out.get("mps", {}).items():
+        for _r in _m.get("remuneration") or []:
+            if _r.get("gross") and _r.get("period"):
+                hist.setdefault(_azon, {})[_r["period"]] = _r["gross"]
+    if hist:
+        hist_p.write_text(json.dumps(hist, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"written {OUT}: {out['count']} people, {out['current']} current; with seat {sum(1 for m in out_mps.values() if m['seat'] and m['seat'].get('sector') is not None)}, "
           f"with QID {sum(1 for m in out_mps.values() if m['wikidata_qid'])}, with record {out['with_record']}")

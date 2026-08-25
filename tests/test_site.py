@@ -305,7 +305,9 @@ class VotePages(unittest.TestCase):
         self.assertEqual(len(a011[9]), 20)                                    # the last 20 roll calls up to this vote
         self.assertEqual(a011[9][-1], "a")                                    # …ending in this vote: against
         self.assertEqual(page.count('class="seat"'), 198)
-        self.assertEqual(page.count('tabindex="-1"'), 198)                    # one tab stop for the chamber; the script walks the seats
+        # one tab stop for the chamber; the script walks the seats — the presidium's six dots included,
+        # since the QA round gave them the same idiom instead of the button role they falsely announced
+        self.assertEqual(ts_page_count := page.count('tabindex="-1"'), 198 + page.count('class="seat pres"'), ts_page_count)
         self.assertEqual(page.count("<tr data-f="), len(re.findall(r'<tr data-f="[^>]*data-az="', page)))   # every roll-call row is linked to a seat
         # the hero vote has no dissenters and says nothing about rings
         hero = build_vote_page(self.inp, HERO_TS)
@@ -744,7 +746,11 @@ class ResearchPages(unittest.TestCase):
         # "a számok a táblázatban" is a promise in six accessible names, so the table must carry what the
         # charts draw: the day column and the agreement index were the two it lacked.
         self.assertIn('<th scope="col" class="num">Ülésnap<span class="sub">szavazás/nap</span></th>', page)
-        self.assertIn('részvétel · ellene · index', page)
+        # the header's three metrics each carry their definition — the same sentence the how-block opens
+        # with, from METRIC_DEFS, so header and explanation cannot drift apart
+        from scripts.build_site import METRIC_DEFS
+        for t in ("részvétel", "ellene", "index"):
+            self.assertIn(f'data-def="{METRIC_DEFS[t]}">{t}</span>', page)
 
     def test_data_page(self):
         from scripts.build_site import build_data_page
@@ -1005,6 +1011,94 @@ class SpeakingTime(unittest.TestCase):
         self.assertEqual(sorted(m for m in modes if m not in MODE_DEFS), [],
                          "voting modes with no definition — add them to MODE_DEFS")
 
+    def test_the_remuneration_page_counts_everyone_and_marks_part_months(self):
+        """One row per member whose datasheet states an amount; the lede's median is the rows' own; a mandate
+        that ended inside the stated month is marked on its row — the outlier explains itself or not at all."""
+        from scripts.build_site import build_remuneration_page, HU_MONTH_NUM
+        html = build_remuneration_page(self.inp)
+        import re as _re
+        n = sum(1 for m in self.inp["mps"].values() if any(x.get("gross") for x in m.get("remuneration") or []))
+        self.assertEqual(len(_re.findall(r"<tr data-f=", html)), n)
+        gs = sorted((x["gross"] for m in self.inp["mps"].values() for x in m.get("remuneration") or [] if x.get("gross")), reverse=True)
+        med = gs[len(gs) // 2] if len(gs) % 2 else (gs[len(gs) // 2 - 1] + gs[len(gs) // 2]) // 2
+        from scripts.build_site import hu_num
+        self.assertIn(hu_num(med), html, "the lede's median is not the rows' median")
+        period = next(x.get("period") for m in self.inp["mps"].values() for x in m.get("remuneration") or [] if x.get("gross"))
+        y, mo = period.replace(".", "").split()[0], HU_MONTH_NUM[period.replace(".", "").split()[1]]
+        enders = [m for m in self.inp["mps"].values()
+                  if (m.get("mandate_to") or "").startswith(f"{y}-{mo}") and any(x.get("gross") for x in m.get("remuneration") or [])]
+        if enders:
+            self.assertIn("tört hónap — a mandátum vége:", html)
+
+    def test_the_404_stands_at_any_depth(self):
+        """CloudFront serves the error document at whatever path missed, so its assets must be root-absolute:
+        a reader two directories deep met an unstyled page, which is the one page that should never look
+        broken — it is where the lost arrive."""
+        from scripts.build_site import build_404
+        import re as _re
+        h = build_404()
+        rel = [u for u in _re.findall(r'(?:href|src)="([^"]*assets/[^"]*)"', h) if not u.startswith("/")]
+        self.assertEqual(rel, [], "the 404 references assets relatively; it breaks below the root")
+        # …and not only the assets: EVERY link on the page, the footer's fact line included — the QA round
+        # found two relative footer hrefs that broke everywhere but a root-level miss
+        loose = [u for u in _re.findall(r'(?:href|src)="([^"]+)"', h)
+                 if not u.startswith(("/", "http://", "https://", "#", "mailto:"))]
+        self.assertEqual(loose, [], "a relative link on the 404 resolves against whatever path missed")
+
+    def test_the_landing_offers_no_dead_controls_and_the_pay_door(self):
+        """Without a script the landing must offer nothing it cannot honour: the chamber legend ships as inert
+        spans (information, not controls) and the presidium seats carry no button role. And the pay table's
+        door stands where the 43rd cycle tile used to — the reader asked for the swap."""
+        from scripts.build_site import build_landing
+        h = build_landing()
+        legend = h.split('<div class="legend">', 1)[1].split("</div>", 1)[0]
+        self.assertNotIn("<button", legend)
+        self.assertIn('<span class="f" data-hf=', legend)
+        self.assertNotIn('class="seat pres" role="button"', h)
+        self.assertIn("javadalmazas/index.html", h)
+        self.assertNotIn(">A 43. ciklus</span>", h)
+        # the door order tells the story: people first, the floor after, the tools last
+        i_j, i_a, i_m = h.find("Javadalmazás</span>"), h.find("A Ház arcéle</span>"), h.find("Módszer és adatok</span>")
+        self.assertTrue(0 < i_j < i_a < i_m, (i_j, i_a, i_m))
+
+    def test_the_widget_and_the_house_page_share_one_anchor(self):
+        """The MP widget's band sentence and the House page's x-column come from remuneration_anchor(),
+        cached on inp — this asserts they actually use it: the widget names a band only on a forint-exact
+        multiple of the same anchor the page found, and the base member's widget says base, cited."""
+        from scripts.build_site import remuneration_html, remuneration_anchor, OGYTV_SCHEDULE
+        base, covered, mults = remuneration_anchor(self.inp)
+        self.assertTrue(base, "no anchor found — the whole layer would be silent")
+        base_azon = next(a for a, m in self.inp["mps"].items()
+                         if any(x.get("gross") == base for x in m.get("remuneration") or []))
+        h = remuneration_html(self.inp, self.inp["mps"][base_azon])
+        self.assertIn("Ez maga az alapösszeg (Ogytv. 104. § (1))", h)
+        import re as _re
+        for azon, m in list(self.inp["mps"].items())[:400]:
+            g = next((x["gross"] for x in m.get("remuneration") or [] if x.get("gross")), None)
+            if not g:
+                continue
+            h = remuneration_html(self.inp, m)
+            named = _re.search(r"Az összeg az alap (\d,\d\d)-szerese", h)
+            exact = next((mm for _r, mm, _c in OGYTV_SCHEDULE
+                          if abs(g - base * float(mm.replace(",", "."))) <= 1), None)
+            if named:
+                self.assertEqual(named.group(1), exact, f"{azon}: a widget más sávot mond, mint az aritmetika")
+
+    def test_the_ratio_column_prints_only_exact_statutory_multiples(self):
+        """The x-column is arithmetic or absent: every printed multiplier is in the statute's own table, and
+        the anchor the page found explains most of the House to the forint — if either stops being true, the
+        column has started guessing and must fail here rather than ship."""
+        from scripts.build_site import build_remuneration_page, OGYTV_SCHEDULE
+        import re as _re
+        html = build_remuneration_page(self.inp)
+        body = _re.search(r'<tbody>(.*?)</tbody>', html[html.find('id="jav"'):], _re.S).group(1)
+        printed = _re.findall(r">(\d,\d\d)×</td>", body)
+        law = {m for _r, m, _c in OGYTV_SCHEDULE}
+        self.assertEqual(sorted(set(printed) - law), [], "a multiplier outside the statute's table")
+        n_rows = len(_re.findall(r"<tr data-f=", body))
+        self.assertGreaterEqual(len(printed) / n_rows, 0.8,
+                                "the anchor no longer explains the House — the column must not guess")
+
     def test_the_speakers_csv_is_the_table_in_long_form(self):
         from scripts.build_site import speaking_time
         from karzat.export import floor_speakers_csv
@@ -1250,6 +1344,7 @@ class RecordPanels(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.mps = json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
+        cls.inp = load_inputs()
 
     def test_every_declaration_gets_a_square_and_the_filed_ones_a_link(self):
         from scripts.build_site import declarations_html
@@ -1277,16 +1372,42 @@ class RecordPanels(unittest.TestCase):
         from scripts.build_site import remuneration_html
         azon = next(a for a, m in self.mps.items() if m.get("remuneration"))
         mp = self.mps[azon]
-        html = remuneration_html(mp)
+        html = remuneration_html(self.inp, mp)
         self.assertIn(mp["remuneration"][0]["period"], html)
         self.assertIn("Egyetlen hónap", html)
         parts = [mp["remuneration"][0].get(k) or 0 for k in ("gross", "constituency_allowance", "housing_allowance")]
         self.assertEqual("összesen" in html, sum(1 for v in parts if v) > 1)   # no total when there is one line
 
     def test_nothing_recorded_renders_nothing(self):
+        """Declarations and pay vanish on an empty record; schooling instead SAYS the record is empty — a reader
+        who wonders why there is no degree deserves the source's own answer rather than a silent gap."""
         from scripts.build_site import declarations_html, remuneration_html, schooling_html
-        for fn in (declarations_html, remuneration_html, schooling_html):
-            self.assertEqual(fn({"declarations": [], "remuneration": [], "schools": [], "languages": []}), "")
+        empty = {"declarations": [], "remuneration": [], "schools": [], "languages": []}
+        self.assertEqual(declarations_html(empty), "")
+        self.assertEqual(remuneration_html(self.inp, empty), "")
+        absence = schooling_html(empty)
+        self.assertIn("nem közöl iskolai", absence)
+        self.assertNotIn("<table", absence)
+
+
+class MonthlyCsv(unittest.TestCase):
+    """The download the month table advertises must cover every month the table shows — the QA round found
+    ckl34's file empty and ckl35's covering 1 month of 39, because rows existed only per (month, faction)."""
+
+    def test_every_month_gets_a_row_even_without_factions(self):
+        from karzat.export import monthly_csv
+        months = [{"month": "1990-05", "votes": 3, "decisions": 2, "qualified": 1, "roll_calls": 0,
+                   "sittings": 2, "vote_days": 1, "factions": {}},
+                  {"month": "1990-06", "votes": 5, "decisions": 4, "qualified": 0, "roll_calls": 5,
+                   "sittings": 3, "vote_days": 2,
+                   "factions": {"MDF": {"in_roll": 10, "cast": 9, "with": 8, "against": 1,
+                                        "participation": 0.9, "dissent": 0.1, "ai": 0.8}}}]
+        out = monthly_csv(months, 34)
+        lines = out.strip().split("\n")
+        self.assertEqual(len(lines), 3)                       # header + one bare month row + one faction row
+        self.assertIn("1990-05", out)
+        bare = next(l for l in lines if "1990-05" in l)
+        self.assertIn(",3,2,1,0,", bare)                      # the month's own numbers survive without a faction
 
 
 class Coverage(unittest.TestCase):

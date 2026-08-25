@@ -564,6 +564,14 @@
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') unpin(); });
   // the legend filters: one faction at a time, the rest dimmed (a second click clears it)
   var fac = 'all';
+  // the legend ships as inert spans (information without a script); the running script upgrades each into
+  // the toggle button it binds below — no reader ever meets a focusable control that does nothing
+  document.querySelectorAll('.chamber-today .legend span.f[data-hf]').forEach(function(sp){
+    var b = document.createElement('button'); b.type = 'button'; b.className = sp.className;
+    b.setAttribute('data-hf', sp.getAttribute('data-hf')); b.setAttribute('data-f', sp.getAttribute('data-f') || '');
+    b.setAttribute('aria-pressed', 'false'); b.title = 'csak ' + sp.getAttribute('data-hf') + ' — mégegyszer: mind';
+    b.innerHTML = sp.innerHTML; sp.parentNode.replaceChild(b, sp);
+  });
   document.querySelectorAll('.chamber-today .legend button[data-hf]').forEach(function(b){
     b.addEventListener('click', function(){
       fac = (fac === b.getAttribute('data-hf')) ? 'all' : b.getAttribute('data-hf');

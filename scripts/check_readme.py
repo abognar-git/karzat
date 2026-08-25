@@ -380,7 +380,19 @@ def build() -> list[tuple[str, list]]:
     p176 = Tally(yes=0, no=0, present=176, seats=seats)
     n = lambda rule, t: needed(Rule(rule), t)  # noqa: E731
 
+    def _jav():
+        from scripts.build_site import OGYTV_SCHEDULE
+        mps = _json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
+        gs = [x["gross"] for m in mps.values() for x in m.get("remuneration") or [] if x.get("gross")]
+        mults = [float(m.replace(",", ".")) for _r, m, _c in OGYTV_SCHEDULE]
+        best = max({g for g in gs}, key=lambda b: sum(1 for g in gs if any(abs(g - b * mu) <= 1 for mu in mults)))
+        cov = sum(1 for g in gs if any(abs(g - best * mu) <= 1 for mu in mults))
+        return {"rows": len(gs), "covered": cov}
+    jav = _jav()
+
     return [
+        ("its statutory multiples land on {:,.0f} of the month's {:,.0f} stated amounts to the forint",
+         [jav["covered"], jav["rows"]]),
         # The Számok page's per-day view: the pair that makes the case for it, from the committed vote index.
         ("December\n2023 and December 2025 are {:,.0f} and {:,.0f} votes, which is the same bar twice, and\n"
          "{:.1f} against {:.1f} votes a sitting day",

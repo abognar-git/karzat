@@ -172,6 +172,10 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .gloss{margin:6px 0 0}
 .gloss dt{color:var(--text);font-family:var(--mono);font-size:11px;margin-top:8px}
 .gloss dd{margin:2px 0 0;color:var(--dim)}
+.ppos{position:relative;height:8px;background:var(--line2);margin-top:8px}
+.ppos i{position:absolute;top:-2px;width:2px;height:12px;display:block}
+.ppos i.med{background:var(--dim3)}
+.ppos i.me{background:var(--white)}
 .how{margin-top:8px}
 .how summary{cursor:pointer;color:var(--dim2);font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
 .how summary:hover,.how summary:focus-visible{color:var(--white)}
@@ -211,6 +215,11 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 html.js .filters button,html.js .filters input,html.js .filters select{display:inline-block}
 html.js .filters .n{display:inline}
 .filters:not(:has(a)):not(:has(.lbl)){margin:0}html.js .filters{margin:6px 0 10px}
+.cite .copy,[data-fact-next]{display:none}
+html.js .cite .copy{display:inline-block}html.js [data-fact-next]{display:inline-block}
+.filters label.sub{display:none}html.js .filters label.sub{display:inline}
+/* a sentence that promises a hover popup is only shown to readers who can actually get one */
+.hover-hint{display:none}@media (hover:hover){html.js .hover-hint{display:inline}}
 .filters button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:6px 10px;min-height:26px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:color .15s,border-color .15s}
 .filters button:hover{color:var(--white);border-color:var(--border-hi)}.filters button.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}
 .filters input{border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:5px 9px;font-family:var(--mono);font-size:11px;min-width:220px}

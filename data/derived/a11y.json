@@ -1,6 +1,6 @@
 {
- "kinds": 40,
- "html": 160395,
+ "kinds": 41,
+ "html": 160396,
  "offsite": 0,
  "axe": "4.13.0",
  "viewports": [
@@ -8,5 +8,5 @@
   "mobile"
  ],
  "serious": 0,
- "soft": 15
+ "soft": 16
 }

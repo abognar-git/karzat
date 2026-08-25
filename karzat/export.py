@@ -349,6 +349,19 @@ def floor_debates_csv(ft: dict[str, Any], cycle: int) -> str:
     return _csv(rows, ["cycle", "year", "kind", "iromany", "bills", "title", "seconds", "speeches", "share_of_year"])
 
 
+def remuneration_csv(mps: dict, cycle: int) -> str:
+    """Every current member's stated monthly remuneration, as the datasheet gives it: one gross figure for
+    the query month. No breakdown exists in the source and none is invented here; a government office's pay
+    is outside this record entirely."""
+    rows = []
+    for azon, m in sorted(mps.items(), key=lambda kv: -((kv[1].get("remuneration") or [{}])[0].get("gross") or 0)):
+        for r in m.get("remuneration") or []:
+            if r.get("gross"):
+                rows.append({"cycle": cycle, "azon": azon, "name": m.get("name"), "faction": m.get("faction"),
+                             "period": r.get("period"), "gross_huf": r["gross"]})
+    return _csv(rows, ["cycle", "azon", "name", "faction", "period", "gross_huf"])
+
+
 def floor_speakers_csv(sp: dict[str, Any], cycle: int) -> str:
     """One row per speaker per kind: the Szónokok table's full breakdown, in seconds.
 
@@ -443,6 +456,15 @@ def motion_records_csv(by_num: dict[int, dict[str, Any]], cycle: int, texts: dic
 def monthly_csv(months: list[dict[str, Any]], cycle: int) -> str:
     rows = []
     for d in months:
+        # pre-1998 months carry no per-faction roll data, but the month itself still counts votes, decisions
+        # and days — a month without factions gets one row with the faction fields empty, so the CSV the page
+        # advertises as "a ciklus hónapról hónapra" actually covers every month of the cycle
+        if not d["factions"]:
+            rows.append({"cycle": cycle, "month": d["month"], "votes": d["votes"], "decisions": d["decisions"],
+                         "qualified": d["qualified"], "roll_calls": d["roll_calls"],
+                         "sittings": d.get("sittings"), "vote_days": d.get("vote_days"), "faction": "",
+                         "in_roll": "", "cast": "", "with": "", "against": "",
+                         "participation": "", "dissent": "", "ai": ""})
         for f, x in sorted(d["factions"].items()):
             # sittings and vote_days as two named columns rather than one called "days": the chart is drawn from
             # the first and the page used to print the second under the first's name, so the twin carries both
