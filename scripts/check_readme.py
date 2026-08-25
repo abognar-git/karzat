@@ -242,6 +242,7 @@ def gate(k: str):
 
 
 README = ROOT / "README.md"
+ENGINEERING = ROOT / "docs" / "ENGINEERING.md"     # the build log: the front page moved off it, the gate did not
 FACTIONS = ROOT / "config" / "factions.yml"
 
 
@@ -622,6 +623,19 @@ def build() -> list[tuple[str, list]]:
         ("{:,.0f} of the hero vote's {:,.0f} placed, the {:,.0f} MPs whose mandates",
          [sum(1 for pp in hero["positions"] if pp.get("mp_azon") in seat_plan["coords"]), len(hero["positions"]),
           sum(1 for pp in hero["positions"] if pp.get("mp_azon") not in seat_plan["coords"])]),
+        # -- the front page's table: born as zeros, filled by --sync, so no number there was ever typed
+        ("| Recorded votes, 1990 → today | **{:,.0f}** |", [dbs["votes"]]),
+        ("| Roll calls naming every member | **{:,.0f}** |", [dbs["votes_with_roll_call"]]),
+        ("| Individual voting positions | **{:,.0f}** |", [dbs["positions"]]),
+        ("| Unresolved names among them | **{:,.0f}** |", [dbs["positions_unresolved"]]),
+        # NOT dbs["mp"]: db_summary is a snapshot of the last SQLite load and its person count predates a
+        # resolver fix; the roster union across the committed per-cycle files is the current, tested truth
+        ("| People who ever held a mandate | **{:,.0f}** |",
+         [len({a for f in sorted((ROOT / "data" / "derived").glob("mps*.json"))
+               for a in _json.loads(f.read_text(encoding="utf-8"))["mps"]})]),
+        ("| Floor speeches indexed | **{:,.0f}** |", [dbs["speeches"]]),
+        ("| Sitting days | **{:,.0f}** |", [dbs["sitting_days"]]),
+        ("| Offline tests guarding all of it | **{:,.0f}** |", [tc["_total"]]),
     ]
 
 
@@ -645,38 +659,43 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--sync", action="store_true", help="rewrite registered figures in the README")
     args = ap.parse_args(argv)
 
-    text = README.read_text(encoding="utf-8")
+    files = [f for f in (README, ENGINEERING) if f.exists()]
+    texts = {f: f.read_text(encoding="utf-8") for f in files}
+    dirty: set = set()
     errors: list[str] = []
     synced: list[str] = []
     checked = 0
 
     for template, values in build():
         rx = as_regex(template)
-        hits = list(rx.finditer(text))
+        hits = [(f, m) for f in files for m in rx.finditer(texts[f])]
         if len(hits) > 1:
-            errors.append(f"{template!r} matches the README {len(hits)} times; a registered fragment must be unique")
+            errors.append(f"{template!r} matches {len(hits)} times across the README and the log; "
+                          "a registered fragment must be unique")
             continue
         if not hits:
-            errors.append(f"README no longer contains: {template!r}")
+            errors.append(f"neither the README nor the log contains: {template!r}")
             continue
-        m = hits[0]
+        f, m = hits[0]
         want = template.format(*values)
         have = m.group(0)
         norm = lambda s: re.sub(r"\s+", " ", s)  # noqa: E731
         if norm(have) != norm(want):
             if args.sync:
-                # keep the README's own line breaks: rewrite only the numbers, in order
+                # keep the file's own line breaks: rewrite only the numbers, in order
                 new = _rewrite_numbers(have, want)
-                text = text[:m.start()] + new + text[m.end():]
+                texts[f] = texts[f][:m.start()] + new + texts[f][m.end():]
+                dirty.add(f)
                 synced.append(f"{norm(have)}  ->  {norm(want)}")
                 checked += len(values)
                 continue
-            errors.append(f"{template!r}\n      README: {norm(have)}\n      now:    {norm(want)}")
+            errors.append(f"{template!r}\n      {f.name}: {norm(have)}\n      now:    {norm(want)}")
         else:
             checked += len(values)
 
     if args.sync and synced:
-        README.write_text(text, encoding="utf-8")
+        for f in dirty:
+            f.write_text(texts[f], encoding="utf-8")
         for s in synced:
             print(" sync  " + s)
 

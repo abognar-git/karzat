@@ -20,8 +20,9 @@ class ReadmeGate(unittest.TestCase):
         self.assertEqual(rc, 0, "\n" + out.getvalue())
 
     def test_every_registered_fragment_is_unique_and_present(self):
-        from scripts.check_readme import README
-        text = README.read_text(encoding="utf-8")
+        """Across the front page AND the log together: the gate scans both since the split."""
+        from scripts.check_readme import ENGINEERING, README
+        text = README.read_text(encoding="utf-8") + "\n" + ENGINEERING.read_text(encoding="utf-8")
         for template, values in build():
             with self.subTest(template=template):
                 hits = as_regex(template).findall(text)

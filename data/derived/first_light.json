@@ -1,9 +1,9 @@
 {
- "derived_at": "2026-08-19T12:40:34.649620+02:00",
+ "derived_at": "2026-08-25T16:24:36.422949+02:00",
  "window": {
   "from": "2026-05-09",
   "to": "2026-08-11",
-  "list_files": 447
+  "list_files": 2095
  },
  "votes": 259,
  "decisions": 258,
@@ -71,15 +71,15 @@
   }
  },
  "sitting_days": {
-  "count": 23,
+  "count": 25,
   "first": "2026-05-09",
-  "last": "2026-08-11",
+  "last": "2026-08-28",
   "by_session": {
-   "2026. nyári": 15,
+   "2026. nyári": 17,
    "2026. tavaszi": 8
   },
   "by_kind": {
-   "Rendkívüli": 15,
+   "Rendkívüli": 17,
    "Rendes": 8
   }
  }

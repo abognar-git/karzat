@@ -239,6 +239,11 @@ def _run(args: argparse.Namespace) -> int:
     run(py + ["-m", "scripts.build_site"], dry=dry)
 
     # ---- prove it before publishing --------------------------------------------------------------
+    # The README's registered figures move with the record (sitting days, vote counts), and the gate
+    # refuses drift — so the pipeline first syncs the REGISTERED numbers (never prose), and the gate
+    # then holds everything else. The first sitting the hybrid ever synced proved this order matters:
+    # two announced sitting days arrived, the gate caught the stale sentence, and the run stopped short.
+    run(py + ["-m", "scripts.check_readme", "--sync"], dry=dry)
     run(py + ["-m", "unittest", "discover", "-s", "tests", "-t", "."], dry=dry)
     run(py + ["-m", "scripts.check_readme"], dry=dry)
 
