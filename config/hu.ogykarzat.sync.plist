@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- karzat — the local half of the hybrid nightly.
+
+     parlament.hu answers its API on the reader's network and serves its portal page to the datacenter's, so
+     the sync runs HERE, on the machine whose connection the service accepts, and hands the cache to the
+     scheduled CodeBuild run (04:40 CET) through s3://karzat-ops. This job is the cheap half only: a few
+     polite API calls and an upload, minutes, not the build.
+
+     Install:   cp config/hu.ogykarzat.sync.plist ~/Library/LaunchAgents/
+                launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/hu.ogykarzat.sync.plist
+     Remove:    launchctl bootout gui/$(id -u)/hu.ogykarzat.sync
+     Log:       ~/Library/Logs/karzat-sync.log
+
+     A calendar job the Mac sleeps through fires once on the next wake, so a closed laptop shifts the sync
+     rather than losing it; the scheduled build's --max-state-age guard turns a sync that stays missing into
+     a loud failure and an email, never into a quietly stale site. -->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>hu.ogykarzat.sync</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/host/.pyenv/versions/3.11.5/bin/python3</string>
+        <string>-m</string>
+        <string>scripts.nightly</string>
+        <string>--sync-only</string>
+        <string>--profile</string>
+        <string>karzat</string>
+    </array>
+    <key>WorkingDirectory</key>
+    <string>/Users/host/Claude - Projects/karzat</string>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>4</integer>
+        <key>Minute</key>
+        <integer>10</integer>
+    </dict>
+    <key>RunAtLoad</key>
+    <false/>
+    <key>StandardOutPath</key>
+    <string>/Users/host/Library/Logs/karzat-sync.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/host/Library/Logs/karzat-sync.log</string>
+</dict>
+</plist>

@@ -68,6 +68,44 @@ def free_gb() -> float:
     return shutil.disk_usage(ROOT).free / 1e9
 
 
+def publish_age_days() -> float:
+    """Days since the last successful publish, by this pipeline's own receipt; infinity when it never published."""
+    f = ROOT / "data" / "last_publish.json"
+    if not f.exists():
+        return float("inf")
+    try:
+        t = datetime.fromisoformat(json.loads(f.read_text(encoding="utf-8"))["published_at"])
+        return (datetime.now(timezone.utc) - t).total_seconds() / 86400
+    except Exception:
+        return float("inf")
+
+
+def upload_cache(profile: str, bucket: str) -> None:
+    """data/raw → s3://<ops>/cache and the sync state → state/, size-compared like the buildspec's own sync.
+
+    boto3 rather than the aws CLI for the same reason deploy_aws uses it: it is the one AWS client this
+    repository already depends on, and the machine this runs on has no working CLI to promise."""
+    import boto3
+    sess = boto3.Session(profile_name=profile) if profile else boto3.Session()
+    s3 = sess.client("s3")
+    have: dict[str, int] = {}
+    for page in s3.get_paginator("list_objects_v2").paginate(Bucket=bucket, Prefix="cache/"):
+        for o in page.get("Contents") or []:
+            have[o["Key"]] = o["Size"]
+    raw = ROOT / "data" / "raw"
+    todo = [p for p in raw.rglob("*") if p.is_file()
+            and have.get(f"cache/{p.relative_to(raw)}") != p.stat().st_size]
+    log(f"cache upload: {len(todo):,} changed of {sum(1 for p in raw.rglob('*') if p.is_file()):,} files")
+    import concurrent.futures as _cf
+    with _cf.ThreadPoolExecutor(max_workers=16) as ex:
+        list(ex.map(lambda p: s3.upload_file(str(p), bucket, f"cache/{p.relative_to(raw)}"), todo))
+    for name in ("sync_state.json", "last_publish.json"):
+        f = ROOT / "data" / name
+        if f.exists():
+            s3.upload_file(str(f), bucket, f"state/{name}")
+    log(f"handed over to s3://{bucket}/ (cache + state)")
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dry-run", action="store_true", help="print the steps, run none of them")
@@ -76,6 +114,18 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-sync", action="store_true",
                     help="skip every API call and work from the cache — how the pipeline is exercised while a "
                          "long fetch already holds the one polite request stream")
+    ap.add_argument("--sync-only", action="store_true",
+                    help="run the cheap half and hand it over: sync, then upload data/raw and the sync state to "
+                         "the ops bucket for the scheduled build — for the machine whose network the API answers, "
+                         "because parlament.hu serves the API to the reader's network and not to the datacenter's")
+    ap.add_argument("--ops-bucket", default=os.environ.get("KARZAT_OPS_BUCKET", "karzat-ops"),
+                    help="the bucket the scheduled build reads its cache and state from")
+    ap.add_argument("--max-state-age", type=float, default=0, metavar="HOURS",
+                    help="with --no-sync: refuse to run when the sync state is older than this many hours — the "
+                         "guard that turns a silently dead local sync into a loud scheduled failure (0 = off)")
+    ap.add_argument("--refresh-days", type=float, default=0, metavar="DAYS",
+                    help="rebuild and publish even with nothing new once the last publish is older than this many "
+                         "days, so the freshness stamp ages only so far through a recess (0 = off)")
     ap.add_argument("--days", type=int, default=10, help="how far back to re-list votes (default 10)")
     ap.add_argument("--profile", default=os.environ.get("KARZAT_AWS_PROFILE", "karzat"),
                     help='named AWS profile; pass "" in a role-based environment such as the scheduled build')
@@ -91,6 +141,14 @@ def main(argv: list[str] | None = None) -> int:
     # ---- the cheap half: ask the API what is new -------------------------------------------------
     if args.no_sync:
         log("--no-sync: not calling the API at all; working from the cache as it stands")
+        if args.max_state_age and not dry:
+            st = ROOT / "data" / "sync_state.json"
+            last = datetime.fromisoformat(json.loads(st.read_text(encoding="utf-8"))["last_sync_at"])                 if st.exists() else None
+            age_h = (datetime.now(timezone.utc) - last).total_seconds() / 3600 if last else float("inf")
+            if age_h > args.max_state_age:
+                raise SystemExit(f"the sync state is {age_h:.0f} hours old (limit {args.max_state_age:.0f}) — "
+                                 "the local sync that feeds this build has not run; stopping loudly")
+            log(f"sync state is {age_h:.1f} hours old — within the {args.max_state_age:.0f}-hour limit")
     # a window rather than "since yesterday": the listing is re-read for the last few days because a sitting day's
     # rows can be completed after the fact, and re-listing a day that has not changed costs one call
     today = datetime.now(timezone.utc).date()
@@ -106,13 +164,26 @@ def main(argv: list[str] | None = None) -> int:
         # records, which is the right pace for an integrity check running on somebody else's server.
         run(py + ["-m", "scripts.watch_source", "--calls", "120"], dry=dry, allow_fail=True)
 
+    if args.sync_only:
+        if dry:
+            log("--sync-only: would upload data/raw and the sync state to the ops bucket, then stop")
+            return 0
+        upload_cache(args.profile, args.ops_bucket)
+        log("synced and handed over; the scheduled build takes it from here")
+        return 0
+
     # ---- did anything move? ----------------------------------------------------------------------
     run(py + ["-m", "scripts.derive_first_light"], dry=dry)
     after = corpus_state()
     log(f"after:  {after[0]:,} votes listed, last sitting day {after[1] or '—'}")
+    stamp_age = publish_age_days()
     if after == before and not args.force and not dry:
-        log("nothing new — no build, no upload. (--force overrides)")
-        return 0
+        if args.refresh_days and stamp_age > args.refresh_days:
+            log(f"nothing new, but the last publish is {stamp_age:.1f} days old (limit {args.refresh_days:.0f}) — "
+                "rebuilding so the freshness stamp stays honest about being checked")
+        else:
+            log("nothing new — no build, no upload. (--force overrides)")
+            return 0
     log("dry run: every step below would run" if dry else ("the record moved" if after != before else "forced"))
 
     if free_gb() < MIN_FREE_GB and not dry:
@@ -152,6 +223,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.profile:
         deploy += ["--profile", args.profile]
     run(py + deploy, dry=dry)
+    if not dry:
+        (ROOT / "data" / "last_publish.json").write_text(
+            json.dumps({"published_at": datetime.now(timezone.utc).isoformat()}) + "\n", encoding="utf-8")
     log("published")
     return 0
 
