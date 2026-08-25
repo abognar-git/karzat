@@ -63,3 +63,8 @@ site/assets/duckdb/
 # belong in this history. The lock beside it is committed, so a fetch either reproduces those bytes or
 # stops. Same reasoning as site/assets/duckdb/.
 reference/axe/
+
+# The W-API manual is the House's own document, handed to each registrant; the repository points at
+# the source rather than redistributing a copy whose licence nobody has stated.
+reference/parlament-webapi/*.pdf
+reference/parlament-webapi/*.txt

@@ -5,7 +5,8 @@ Auth       access_token=<personal code>  (GET parameter; obtained by registratio
            request is logged by OGYH — keep the token server-side and never commit it)
 Format     XML
 
-Services and parameters are transcribed from reference/parlament-webapi/*.txt. Two things
+Services and parameters are transcribed from the W-API manual v2.5 (the House hands it to each
+registrant; see reference/parlament-webapi/README.md — the document itself is not redistributed). Two things
 the manual does *not* say and this client therefore does not assume: rate limits (none
 stated — we pace ourselves anyway) and response schemas (we cache raw bytes and parse
 generically until real payloads have been inspected).

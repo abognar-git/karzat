@@ -35,7 +35,9 @@ every request logged) with exactly the twelve services a vote tracker needs: MPs
 one MP, votes in a date range, one vote (by faction and by name), bills, one bill
 (with its lifecycle events and the votes taken on it), committees, nationality
 spokespersons, sitting days, and speeches. The manual (v2.5) is transcribed in
-[`reference/parlament-webapi/`](reference/parlament-webapi/webapi_felhasznaloi_kezikonyv_v2.5.txt).
+[`karzat/api.py`](../karzat/api.py); the manual itself is the House's own document and is not
+redistributed here — [`reference/parlament-webapi/README.md`](../reference/parlament-webapi/README.md)
+says how to obtain it and what was taken from it.
 Magyar Közlöny — the official gazette — is *not* needed: the bill payload carries
 the promulgation itself ("Állapot: kihirdetve", "Kihirdetés száma", "MK száma",
 "Kihirdetés dátuma" — verified on T/71), so "what became law" comes from the same
@@ -519,7 +521,7 @@ site/              index.html — the first page, generated, guarded by --check 
 tests/             offline tests: client/XML · normaliser on real payloads · majority arithmetic · freshness sentences · golden fingerprints · README gate; fixtures/ (real W-API captures + one synthetic)
 schema.sql         normalised store (SQLite), v3 (speeches and committee memberships; v2 added the seven roll-call states) — built by karzat/load.py into data/karzat.sqlite (git-ignored)
 config/factions.yml faction ids/colours/order (verified spellings), the six positions, majority rules with their API labels
-reference/         parlament-webapi/ (manual v2.5, PDF + text) · wikidata/ (member snapshot + README) · valasztas/ (constituency annex, postcodes) · parlament/ (the listing cap)
+reference/         parlament-webapi/ (a pointer to the manual, not a copy) · wikidata/ (member snapshot + README) · valasztas/ (constituency annex, postcodes) · parlament/ (the listing cap)
 data/raw/          git-ignored XML cache · data/derived/ committed summaries the README is gated on
 ```
 
@@ -943,6 +945,7 @@ The handful of government members the House does not photograph are taken from W
 Commons instead, under whatever each file's own licence is, with author and licence printed
 on the image and on the page.
 
-The W-API manual in `reference/parlament-webapi/` is the House's own PDF, kept here because
-the repository's claims about the API should be checkable against the document they came
-from. The Wikidata snapshots in `reference/wikidata/` are CC0 from source.
+The W-API manual is the House's own document, handed to each registrant with no redistribution
+licence stated, so this repository points at it rather than carrying a copy: what was transcribed
+from it lives in `karzat/api.py`, and `reference/parlament-webapi/README.md` says how to get the
+original and check the transcription against it. The Wikidata snapshots in `reference/wikidata/` are CC0 from source.
