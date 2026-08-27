@@ -24,8 +24,10 @@ class Build(unittest.TestCase):
     """The site root is the landing page; the current cycle's page sits under ckl43/ like every other cycle's."""
     @classmethod
     def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.n_votes = len(cls.inp["idx"]["votes"])          # the cycle grows every sitting day; the directory must keep up
         cls.page = build()                                                  # the landing (site/index.html)
-        cls.cyc = build_index(load_inputs(), HERO_TS)                       # the current cycle's page (site/ckl43/index.html)
+        cls.cyc = build_index(cls.inp, HERO_TS)                       # the current cycle's page (site/ckl43/index.html)
 
     def test_committed_page_matches_a_fresh_build(self):
         self.assertTrue(SITE.exists(), "site/index.html missing — run python3 -m scripts.build_site")
@@ -64,9 +66,10 @@ class Build(unittest.TestCase):
         inp0 = load_inputs()
         n_sz = len((inp0["szoszolok"] or {}).get("people") or {})
         n_km = len((inp0["kormany"] or {}).get("people") or {})
-        self.assertEqual(self.page.count('class="today"'), 199 + n_sz + n_km)  # every MP by faction, every spokesperson as a ring, every non-MP minister as a disc
+        n_mp = sum(1 for m in inp0["mps"].values() if m.get("current"))   # the roster, not the full house: it moves
+        self.assertEqual(self.page.count('class="today"'), n_mp + n_sz + n_km)  # every MP by faction, every spokesperson as a ring, every non-MP minister as a disc
         self.assertIn("Az ülésterem ma", self.page)
-        self.assertIn(f'aria-label="Az ülésterem ma: 199 képviselő, {n_sz} nemzetiségi szószóló és {n_km} mandátum nélküli kormánytag a helyén', self.page)
+        self.assertIn(f'aria-label="Az ülésterem ma: {n_mp} képviselő, {n_sz} nemzetiségi szószóló és {n_km} mandátum nélküli kormánytag a helyén', self.page)
         self.assertEqual(self.page.count('<a class="cyc'), len(tot["cycles"]))  # one row per cycle, the current one marked
         self.assertIn('<a class="cyc now" href="ckl43/index.html"', self.page)
         self.assertIn('title="TISZA 141"', self.page)                           # the composition at the constituent sitting
@@ -197,8 +200,8 @@ class Build(unittest.TestCase):
     def test_long_tables_paginate_and_stay_complete_without_js(self):
         js = build_assets()["karzat.js"]
         self.assertIn("table[data-page-size]", js)                       # the shared pager
-        self.assertIn('data-page-size="25" data-counter="n"', self.cyc)   # the directory: all 259 rows in the HTML, 25 shown at a time
-        self.assertEqual(self.cyc.count("<tr data-rule="), 259)
+        self.assertIn('data-page-size="25" data-counter="n"', self.cyc)   # the directory: every row in the HTML, 25 shown at a time
+        self.assertEqual(self.cyc.count("<tr data-rule="), self.n_votes)
         vote = build_vote_page(self.__class__.inp if hasattr(self.__class__, "inp") else load_inputs(), HERO_TS)
         self.assertIn('id="roll" data-page-size="25" data-counter="rn"', vote)
         mp = build_mp_page(load_inputs(), "a011")
@@ -242,7 +245,7 @@ class Build(unittest.TestCase):
         self.assertEqual(self.cyc.count('<g class="seat"'), 199)
         self.assertIn("különbség +2", self.cyc)              # T/51: 135 igen, 133 needed
         self.assertIn("133 / 199", self.cyc)
-        self.assertEqual(self.cyc.count("<tr data-rule="), 259)      # the directory is rendered at build time: complete without JS
+        self.assertEqual(self.cyc.count("<tr data-rule="), self.n_votes)   # rendered at build time: complete without JS
         self.assertNotIn('data-year="', self.cyc)                      # one year only → no year filter
         self.assertIn('href="../ckl42/index.html" class="near">42</a>', self.cyc)   # the other cycles, one click away (the top bar)
         self.assertIn('<span class="kicker" data-kz-text>43. ciklus · folyamatban</span><h1>2026. május 9. óta</h1>', self.cyc)
@@ -266,7 +269,7 @@ class VotePages(unittest.TestCase):
     def test_every_vote_builds_with_a_unique_slug(self):
         slugs = [self.inp["by_ts"][ts]["slug"] for ts in self.inp["order"]]
         self.assertEqual(len(slugs), len(set(slugs)))
-        self.assertEqual(len(slugs), 259)
+        self.assertEqual(len(slugs), len(self.inp["idx"]["votes"]))   # every listed vote has a page
         for ts in self.inp["order"][:5] + self.inp["order"][-5:]:
             page = build_vote_page(self.inp, ts)
             self.assertIn('lang="hu"', page)
@@ -301,7 +304,8 @@ class VotePages(unittest.TestCase):
         self.assertEqual(a011[0], "Ágh Péter")
         self.assertEqual(a011[1], "Fidesz")
         self.assertEqual(a011[4], "tartozkodott")
-        self.assertEqual((a011[5], a011[6]), (239, 256))                     # the cycle record, as on the MP page
+        al = self.inp["alignment"]["per_mp"]["a011"]
+        self.assertEqual((a011[5], a011[6]), (al["cast"], al["in_roll"]))    # the cycle record, as on the MP page
         self.assertEqual(len(a011[9]), 20)                                    # the last 20 roll calls up to this vote
         self.assertEqual(a011[9][-1], "a")                                    # …ending in this vote: against
         self.assertEqual(page.count('class="seat"'), 198)
@@ -404,14 +408,17 @@ class MPPages(unittest.TestCase):
         al = self.inp["alignment"]["per_mp"]
         self.assertEqual(len(al), 201)
         a = al["a011"]
-        self.assertEqual(a["in_roll"], 256)                       # every non-secret roll call of the cycle
+        pos = (self.inp["store"] or {}).get("positions") or {}
+        rolls = sum(1 for v in self.inp["idx"]["votes"] if pos.get(v["ts"]))
+        if not self.inp["mps"]["a011"].get("mandate_to"):     # seated the whole cycle → in every roll call
+            self.assertEqual(a["in_roll"], rolls)             # every non-secret roll call of the cycle
         self.assertEqual(a["cast"], a["counts"].get("igen", 0) + a["counts"].get("nem", 0) + a["counts"].get("tartozkodott", 0))
         self.assertLessEqual(a["with"] + a["against"], a["cast"])
         # a former MP only appears while seated
-        self.assertLess(al["b076"]["in_roll"], 256)
+        self.assertLess(al["b076"]["in_roll"], rolls)
         # per-vote pluralities exist for every roll call and every faction that cast a vote
         plur = self.inp["alignment"]["plurality_by_vote"]
-        self.assertEqual(len(plur), 256)
+        self.assertEqual(len(plur), rolls)
         self.assertEqual(plur[HERO_TS]["Fidesz"][0], "nem")
         self.assertEqual(plur[HERO_TS]["TISZA"][0], "igen")
 
@@ -424,7 +431,8 @@ class MPPages(unittest.TestCase):
         self.assertIn("wikidata.org/wiki/Q", page)
         self.assertIn("Szavazatok a frakció többségével szemben", page)
         self.assertIn('id="mine"', page)
-        self.assertEqual(page.count('href="../szavazas/'), 256 + self.inp["alignment"]["per_mp"]["a011"]["against"])
+        _al = self.inp["alignment"]["per_mp"]["a011"]       # one link per roll call, and again for each dissent
+        self.assertEqual(page.count('href="../szavazas/'), _al["in_roll"] + _al["against"])
         self.assertIn('class="portrait hero"', page)                  # the parlament.hu portrait, shown from there (the owner's decision, attributed)
         self.assertNotIn('src="data:', page)                            # never copied into the page
 
@@ -600,11 +608,12 @@ class Exports(unittest.TestCase):
     def test_mp_exports_match_the_page(self):
         j, c = mp_exports(self.inp, "a011")
         obj = json.loads(j)
-        self.assertEqual(obj["summary"], {"in_roll": 256, "cast": 239, "with": 231, "against": 7})   # the quorum check is participation, not "with"
-        self.assertEqual(len(obj["votes"]), 256)
+        _al = self.inp["alignment"]["per_mp"]["a011"]
+        self.assertEqual(obj["summary"], {k: _al[k] for k in ("in_roll", "cast", "with", "against")})   # the quorum check is participation, not "with"
+        self.assertEqual(len(obj["votes"]), _al["in_roll"])
         self.assertEqual(len(obj["motions"]), len(self.inp["mps"]["a011"]["motions"]))   # the list grows between syncs; MPPages pins it against the record
         lines = c.lstrip("\ufeff").splitlines()
-        self.assertEqual(len(lines), 257)
+        self.assertEqual(len(lines), _al["in_roll"] + 1)          # the header, then one row per roll call
         page = build_mp_page(self.inp, "a011")
         self.assertIn('href="a011.csv">CSV</a>', page)
         self.assertIn("@misc{karzat-43-a011,", page)
@@ -2137,6 +2146,14 @@ class Receipt(unittest.TestCase):
         d = ROOT / "data" / "raw" / "ulesnap"
         if not d.is_dir() or not any(d.glob("*.xml")):
             self.skipTest("no cached payloads to fingerprint")
+        # a COPY of the payloads, not the payloads: the claim here is about service_root's behaviour, and
+        # editing the real cache makes this test unsafe to run beside anything that reads data/raw — which is
+        # exactly what parallel workers do. The property is the same on a copy; the shared-state hazard is not.
+        import tempfile, shutil as _sh
+        tmp = Path(tempfile.mkdtemp())
+        for f in sorted(d.glob("*.xml"))[:6]:
+            _sh.copy2(f, tmp / f.name)
+        d = tmp
         before, n, _ = service_root(d)
         p = sorted(d.glob("*.xml"))[0]
         keep = p.read_bytes()
@@ -2154,6 +2171,11 @@ class Receipt(unittest.TestCase):
         d = ROOT / "data" / "raw" / "ulesnap"
         if not d.is_dir():
             self.skipTest("no cached payloads")
+        import tempfile, shutil as _sh                      # see above: never write into the real cache
+        tmp = Path(tempfile.mkdtemp())
+        for f in sorted(d.glob("*.xml"))[:6]:
+            _sh.copy2(f, tmp / f.name)
+        d = tmp
         before, _, _ = service_root(d)
         extra = d / "zzz-receipt-test.xml"
         try:

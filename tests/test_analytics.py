@@ -56,9 +56,14 @@ class Monthly(unittest.TestCase):
         inp = load_inputs()
         co = cohesion(inp)
         ms = monthly(inp, co)["months"]
-        self.assertEqual([d["month"] for d in ms], ["2026-05", "2026-06", "2026-07", "2026-08"])
-        self.assertEqual(sum(d["votes"] for d in ms), 259)
-        self.assertEqual(sum(d["roll_calls"] for d in ms), 256)
+        # Derived, not pinned: the cycle gains a month every month and votes every sitting day, and a literal
+        # here fails the whole gate on the first sitting day it meets — which is exactly what it did.
+        months = sorted({v["on_date"][:7].replace(".", "-") for v in inp["idx"]["votes"]})
+        pos = (inp["store"] or {}).get("positions") or {}
+        self.assertEqual([d["month"] for d in ms], months)
+        self.assertEqual(sum(d["votes"] for d in ms), len(inp["idx"]["votes"]))
+        self.assertEqual(sum(d["roll_calls"] for d in ms),
+                         sum(1 for v in inp["idx"]["votes"] if pos.get(v["ts"])))
         for d in ms:
             for f, x in d["factions"].items():
                 self.assertLessEqual(x["cast"], x["in_roll"])
@@ -121,7 +126,8 @@ class Cycle43(unittest.TestCase):
 
     def test_close_votes_shapes(self):
         cl = self.cl
-        self.assertEqual(len(cl["decisions"]), 258)                                   # 259 votes minus the one quorum check; secret ballots count (threshold from the totals)
+        self.assertEqual(len(cl["decisions"]),
+                         sum(1 for v in self.inp["idx"]["votes"] if v.get("kind") != "jelenlet"))   # every vote but the quorum checks
         self.assertEqual(cl["closest"][0]["margin"], 1)                               # the tightest pass of the cycle
         self.assertTrue(all(abs(cl["closest"][i]["margin"]) <= abs(cl["closest"][i + 1]["margin"]) for i in range(len(cl["closest"]) - 1)))
         for r in cl["sunk_by_threshold"]:

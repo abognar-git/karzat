@@ -1,8 +1,8 @@
 {
- "derived_at": "2026-08-25T17:49:44.232939+02:00",
+ "derived_at": "2026-08-27T22:20:21.344111+02:00",
  "cycle": 43,
  "count": 201,
- "current": 199,
+ "current": 198,
  "with_record": 201,
  "mps": {
   "a011": {
@@ -4864,11 +4864,6 @@
    ],
    "offices": [
     {
-     "office": "a Közbeszerzések Tanácsának tagja",
-     "from": "2026-08-01",
-     "to": "2028-07-31"
-    },
-    {
      "office": "pénzügyminisztériumi államtitkár",
      "from": "2026-05-26",
      "to": null
@@ -8423,7 +8418,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 2,
+     "onallo": 3,
      "nem_onallo": 0
     }
    ],
@@ -8517,6 +8512,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/000E",
    "motions": [
+    {
+     "szam": "I/543",
+     "kind": "I",
+     "number": 543,
+     "title": "Meg tudja-e védeni a magyar Kormány hazánkat?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22f932ebe5-9cbf-46d8-8d4c-1133e9e610c3%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/183",
      "kind": "I",
@@ -8885,7 +8889,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 25,
+     "onallo": 26,
      "nem_onallo": 1
     },
     {
@@ -9040,6 +9044,15 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/d040",
    "motions": [
     {
+     "szam": "A/553",
+     "kind": "A",
+     "number": 553,
+     "title": "Nyugtával dicsérd a napot?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ac47bab6-d9c7-4258-a196-6a55ea15158d%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "S/483",
      "kind": "S",
      "number": 483,
@@ -9062,7 +9075,7 @@
      "kind": "K",
      "number": 474,
      "title": "Hogyan tervezik rendezni az állattartók helyzetét?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%228c10152b-7fda-47ab-9aff-c1aeb53b0a91%22%7D",
      "co_submitters": 0
     },
@@ -9071,7 +9084,7 @@
      "kind": "K",
      "number": 473,
      "title": "Milyen keretek és szabályok mentén fognak a jövőben működni az erdészetek?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2203b8bce9-33cc-4e4d-9305-47a56c579204%22%7D",
      "co_submitters": 0
     },
@@ -9367,7 +9380,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 20,
+     "onallo": 22,
      "nem_onallo": 0
     },
     {
@@ -9394,12 +9407,12 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 22,
+     "speeches": 27,
      "technical": 219
     },
     {
      "ciklus": "2022-2026",
-     "speeches": 124,
+     "speeches": 288,
      "technical": 1579
     },
     {
@@ -9677,6 +9690,24 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/d028",
    "motions": [
+    {
+     "szam": "A/558",
+     "kind": "A",
+     "number": 558,
+     "title": "Mikor lép a kormány?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22855630c3-12fa-4181-875f-ebfc3cb94679%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "A/552",
+     "kind": "A",
+     "number": 552,
+     "title": "Mikor tartják be az ígéretüket?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2214d23334-34f7-4692-9b1a-9c93cc757970%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/496",
      "kind": "K",
@@ -10441,7 +10472,7 @@
      "kind": "K",
      "number": 506,
      "title": "Hídépítés Kelet és Nyugat között: Hogyan lép szintet hazánk és a Türk Államok Szervezetének partnersége a következő években?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22c6c663fd-be57-4035-aa7c-c2f5e3b54269%22%7D",
      "co_submitters": 0
     },
@@ -10518,8 +10549,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 2,
-     "technical": 517
+     "speeches": 10,
+     "technical": 518
     }
    ],
    "committees": [],
@@ -12945,7 +12976,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 1,
+     "speeches": 14,
      "technical": 468
     }
    ],
@@ -13687,7 +13718,7 @@
      "ciklus": "2026-",
      "faction": "KDNP",
      "from": "2026-05-09",
-     "to": null
+     "to": "2026-08-26"
     },
     {
      "ciklus": "2022-2026",
@@ -14886,7 +14917,7 @@
      "kind": "I",
      "number": 501,
      "title": "Hogyan kívánja a Kormány biztosítani, hogy a vidéki Magyarország ne legyen a fejlesztéspolitika vesztese?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2252b60836-75d0-44be-8bf0-0b3258bd9f46%22%7D",
      "co_submitters": 0
     },
@@ -15844,7 +15875,13 @@
      "mandate_to": null
     }
    ],
-   "motion_stats": [],
+   "motion_stats": [
+    {
+     "ciklus": "2026-",
+     "onallo": 1,
+     "nem_onallo": 0
+    }
+   ],
    "speech_stats": [
     {
      "ciklus": "2026-",
@@ -15898,7 +15935,17 @@
    "remuneration": [],
    "local_offices": [],
    "biography_url": null,
-   "motions": [],
+   "motions": [
+    {
+     "szam": "A/562",
+     "kind": "A",
+     "number": 562,
+     "title": "Honnan lesz energiánk és mennyibe fog kerülni?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22e239a520-80ef-4c2e-add3-8cce5bce9e75%22%7D",
+     "co_submitters": 0
+    }
+   ],
    "wikidata_qid": null,
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22006E%22%7D"
@@ -17599,7 +17646,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 14,
+     "onallo": 16,
      "nem_onallo": 0
     },
     {
@@ -17799,6 +17846,24 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/k155",
    "motions": [
+    {
+     "szam": "K/547",
+     "kind": "K",
+     "number": 547,
+     "title": "Hova vándorolnak a magyar zöldforrások? – Kiszámíthatóságot és hazai hozzáadott értéket a széllobbi helyett",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%225013fa38-d379-477a-bbf3-ac8e2dc53b11%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "I/540",
+     "kind": "I",
+     "number": 540,
+     "title": "Számíthatnak a magyar emberek a zöldségek és gyümölcsök áfájának 5%-ra csökkentésére, vagy ez is csak egy hangzatos ígéret volt a kampányban?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2288bda3b4-3264-448a-a8f0-1487251209f4%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "T/500",
      "kind": "T",
@@ -19343,7 +19408,7 @@
      "ciklus": "2026-",
      "faction": "TISZA",
      "from": "2026-05-09",
-     "to": null
+     "to": "2026-08-23"
     }
    ],
    "elections": [
@@ -20334,7 +20399,7 @@
      "kind": "K",
      "number": 462,
      "title": "Tervezi-e a Kormány a bölcsődei térítési díj támogatás és a kisgyermeknevelők ösztönző támogatása programok folytatását, illetve milyen terveik vannak a bölcsődei hálózatfejlesztés folytatására?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22fcfccf1b-6bb5-4878-843e-956359107805%22%7D",
      "co_submitters": 0
     },
@@ -21253,7 +21318,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 18,
      "technical": 404
     }
    ],
@@ -21795,14 +21860,14 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 28,
+     "onallo": 30,
      "nem_onallo": 9
     }
    ],
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 39,
+     "speeches": 60,
      "technical": 262
     },
     {
@@ -21899,11 +21964,29 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/l049",
    "motions": [
     {
+     "szam": "A/559",
+     "kind": "A",
+     "number": 559,
+     "title": "Felrúgott szakmaiság és szokásjog? - Miért nem szavazta meg a Tisza Marti Zoltánt?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22f4e80f80-376c-4d78-8846-70dd42cefe97%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/546",
+     "kind": "K",
+     "number": 546,
+     "title": "Hány orvost és egészségügyi szakdolgozót hozott haza külföldről hivatalba lépése óta, illetve az elmúlt egy hónapban?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22f6b6cffa-8610-419f-a452-1fbc6d12cf08%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "K/509",
      "kind": "K",
      "number": 509,
      "title": "Számíthatnak arra a magyar emberek, hogy a Kormány segít megőrizni a trikolóros rendszámokat, vagy a járműtörténet ezen évei a feledés homályába merülnek?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%225b4b0910-09d2-40ef-82ed-9a15c2b3efd1%22%7D",
      "co_submitters": 0
     },
@@ -21957,7 +22040,7 @@
      "kind": "I",
      "number": 414,
      "title": "Megvédi-e a Kormány a készpénzhasználat alkotmányos jogát?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f018294-b93a-45d3-bbcd-9444c6f502cd%22%7D",
      "co_submitters": 1
     },
@@ -22154,546 +22237,6 @@
    "wikidata_qid": "Q115631482",
    "wikidata_end": null,
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l049%22%7D"
-  },
-  "l016": {
-   "p_azon": "l016",
-   "name": "Lázár János",
-   "faction": "Fidesz",
-   "faction_first": "Fidesz",
-   "current": true,
-   "cycle": 43,
-   "mandate_kind": "lista",
-   "county": "Országos lista",
-   "constituency_no": null,
-   "mandate_from": "2026-05-09",
-   "mandate_to": null,
-   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/l016",
-   "website": "www.lazarjanos.hu",
-   "seat": {
-    "sector": 2,
-    "row": 5,
-    "seat": 1
-   },
-   "has_record": true,
-   "factions": [
-    {
-     "ciklus": "2026-",
-     "faction": "Fidesz",
-     "from": "2026-05-09",
-     "to": null
-    },
-    {
-     "ciklus": "2022-2026",
-     "faction": "Fidesz",
-     "from": "2022-05-02",
-     "to": "2026-05-08"
-    },
-    {
-     "ciklus": "2018-2022",
-     "faction": "Fidesz",
-     "from": "2018-05-08",
-     "to": "2022-05-01"
-    },
-    {
-     "ciklus": "2014-2018",
-     "faction": "Fidesz",
-     "from": "2014-05-06",
-     "to": "2018-05-07"
-    },
-    {
-     "ciklus": "2010-2014",
-     "faction": "Fidesz",
-     "from": "2010-05-14",
-     "to": "2014-05-05"
-    },
-    {
-     "ciklus": "2006-2010",
-     "faction": "Fidesz",
-     "from": "2006-05-16",
-     "to": "2010-05-13"
-    },
-    {
-     "ciklus": "2002-2006",
-     "faction": "Fidesz",
-     "from": "2002-05-15",
-     "to": "2006-05-15"
-    }
-   ],
-   "elections": [
-    {
-     "ciklus": "2026-",
-     "elected_on": "2026-04-12",
-     "constituency": "Országos lista",
-     "mandate_from": "2026-05-09",
-     "mandate_to": null
-    },
-    {
-     "ciklus": "2022-2026",
-     "elected_on": "2022-04-03",
-     "constituency": "Csongrád 4. OEVK",
-     "mandate_from": "2022-05-02",
-     "mandate_to": "2026-05-08"
-    },
-    {
-     "ciklus": "2018-2022",
-     "elected_on": "2018-04-08",
-     "constituency": "Csongrád 4. OEVK",
-     "mandate_from": "2018-05-08",
-     "mandate_to": "2022-05-01"
-    },
-    {
-     "ciklus": "2014-2018",
-     "elected_on": "2014-04-06",
-     "constituency": "Csongrád 4. OEVK",
-     "mandate_from": "2014-05-06",
-     "mandate_to": "2018-05-07"
-    },
-    {
-     "ciklus": "2010-2014",
-     "elected_on": "2010-04-11",
-     "constituency": "Csongrád 6. OEVK",
-     "mandate_from": "2010-05-14",
-     "mandate_to": "2014-05-05"
-    },
-    {
-     "ciklus": "2006-2010",
-     "elected_on": "2006-04-23",
-     "constituency": "Csongrád 6. OEVK",
-     "mandate_from": "2006-05-16",
-     "mandate_to": "2010-05-13"
-    },
-    {
-     "ciklus": "2002-2006",
-     "elected_on": null,
-     "constituency": "Csongrád 6. OEVK",
-     "mandate_from": "2002-05-15",
-     "mandate_to": "2006-05-15"
-    }
-   ],
-   "motion_stats": [
-    {
-     "ciklus": "2026-",
-     "onallo": 1,
-     "nem_onallo": 0
-    },
-    {
-     "ciklus": "2022-2026",
-     "onallo": 6,
-     "nem_onallo": 1
-    },
-    {
-     "ciklus": "2018-2022",
-     "onallo": 2,
-     "nem_onallo": 1
-    },
-    {
-     "ciklus": "2014-2018",
-     "onallo": 27,
-     "nem_onallo": 13
-    },
-    {
-     "ciklus": "2010-2014",
-     "onallo": 75,
-     "nem_onallo": 205
-    },
-    {
-     "ciklus": "2006-2010",
-     "onallo": 120,
-     "nem_onallo": 91
-    },
-    {
-     "ciklus": "2002-2006",
-     "onallo": 74,
-     "nem_onallo": 34
-    }
-   ],
-   "speech_stats": [
-    {
-     "ciklus": "2022-2026",
-     "speeches": 51,
-     "technical": 0
-    },
-    {
-     "ciklus": "2018-2022",
-     "speeches": 3,
-     "technical": 0
-    },
-    {
-     "ciklus": "2014-2018",
-     "speeches": 449,
-     "technical": 1
-    },
-    {
-     "ciklus": "2010-2014",
-     "speeches": 103,
-     "technical": 1
-    },
-    {
-     "ciklus": "2006-2010",
-     "speeches": 57,
-     "technical": 1
-    },
-    {
-     "ciklus": "2002-2006",
-     "speeches": 7,
-     "technical": 31
-    }
-   ],
-   "committees": [
-    {
-     "committee": "Nemzeti Összetartozás Bizottsága",
-     "subcommittee": null,
-     "role": "tag",
-     "from": "2022-05-02",
-     "to": "2022-05-23"
-    },
-    {
-     "committee": "Nemzeti összetartozás bizottsága",
-     "subcommittee": null,
-     "role": "tag",
-     "from": "2020-03-23",
-     "to": "2022-05-01"
-    },
-    {
-     "committee": "Mezőgazdasági bizottság",
-     "subcommittee": "Állattenyésztési albizottság",
-     "role": "tag",
-     "from": "2018-06-26",
-     "to": "2020-03-23"
-    },
-    {
-     "committee": "Mezőgazdasági bizottság",
-     "subcommittee": null,
-     "role": "tag",
-     "from": "2018-06-04",
-     "to": "2020-03-23"
-    },
-    {
-     "committee": "Honvédelmi és rendészeti bizottság",
-     "subcommittee": null,
-     "role": "tag",
-     "from": "2010-05-14",
-     "to": "2010-06-21"
-    },
-    {
-     "committee": "Honvédelmi és rendészeti bizottság",
-     "subcommittee": null,
-     "role": "elnök",
-     "from": "2006-05-30",
-     "to": "2010-05-13"
-    },
-    {
-     "committee": "Kulturális és sajtó bizottság",
-     "subcommittee": null,
-     "role": "tag",
-     "from": "2004-11-29",
-     "to": "2006-05-15"
-    },
-    {
-     "committee": "Szociális és családügyi bizottság",
-     "subcommittee": null,
-     "role": "tag",
-     "from": "2004-10-18",
-     "to": "2004-11-29"
-    }
-   ],
-   "offices": [
-    {
-     "office": "építési és beruházási miniszter",
-     "from": "2022-12-01",
-     "to": "2026-05-12"
-    },
-    {
-     "office": "építési és beruházási miniszter",
-     "from": "2022-05-24",
-     "to": "2022-11-30"
-    },
-    {
-     "office": "Miniszterelnökséget vezető miniszter",
-     "from": "2014-06-06",
-     "to": "2018-05-17"
-    },
-    {
-     "office": "miniszterelnökséget vezető államtitkár",
-     "from": "2012-06-02",
-     "to": "2014-06-05"
-    },
-    {
-     "office": "jegyző",
-     "from": "2002-05-15",
-     "to": "2004-10-05"
-    }
-   ],
-   "highest_degree": "egyetem",
-   "schools": [
-    {
-     "degree": "jogász",
-     "institution": "József Attila Tudományegyetem",
-     "faculty": "Állam- és Jogtudományi Kar",
-     "year": 1999
-    }
-   ],
-   "languages": [
-    {
-     "language": "angol",
-     "level": "társalgási"
-    },
-    {
-     "language": "német",
-     "level": "középfokú"
-    }
-   ],
-   "declarations": [
-    {
-     "title": "Vagyonnyilatkozat 2004",
-     "url": "https://www.parlament.hu/vagynyil/2004/l016.pdf",
-     "as_of": "2004-12-31",
-     "due": "2005-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2005",
-     "url": "https://www.parlament.hu/vagynyil/2005/l016_j0051231k.pdf",
-     "as_of": "2005-12-31",
-     "due": "2006-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2006",
-     "url": "https://www.parlament.hu/vagynyil/2006/l016_j0060516k.pdf",
-     "as_of": "2006-05-16",
-     "due": "2006-06-15",
-     "filed": true
-    },
-    {
-     "title": "Kiegészítése a 2006.06.15. évi vagyonnyilatkozatnak",
-     "url": "https://www.parlament.hu/vagynyil/2006/l016_j0060821k.pdf",
-     "as_of": "2006-08-21",
-     "due": "2006-08-21",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2006",
-     "url": "https://www.parlament.hu/vagynyil/2006/l016_j0061231k.pdf",
-     "as_of": "2006-12-31",
-     "due": "2007-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2007",
-     "url": "https://www.parlament.hu/vagynyil/2007/l016_j0071231k.pdf",
-     "as_of": "2007-12-31",
-     "due": "2008-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2008",
-     "url": "https://www.parlament.hu/vagynyil/2008/l016_j0081231k.pdf",
-     "as_of": "2008-12-31",
-     "due": "2009-02-02",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2009",
-     "url": "https://www.parlament.hu/vagynyil/2009/l016_j0091231k.pdf",
-     "as_of": "2009-12-31",
-     "due": "2010-02-01",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2010",
-     "url": "https://www.parlament.hu/vagynyil/2010/l016_j0100514k.pdf",
-     "as_of": "2010-05-14",
-     "due": "2010-06-14",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2010",
-     "url": "https://www.parlament.hu/vagynyil/2010/l016_j2101231k.pdf",
-     "as_of": "2010-12-31",
-     "due": "2011-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2011",
-     "url": "https://www.parlament.hu/vagynyil/2011/l016_j1111231k.pdf",
-     "as_of": "2011-12-31",
-     "due": "2012-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2012",
-     "url": "https://www.parlament.hu/vagynyil/2012/l016_j0121231k.pdf",
-     "as_of": "2012-12-31",
-     "due": "2013-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2013",
-     "url": "https://www.parlament.hu/vagynyil/2013/l016_j0131231k.pdf",
-     "as_of": "2013-12-31",
-     "due": "2014-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2014",
-     "url": "https://www.parlament.hu/vagynyil/2014/l016_j0140506k.pdf",
-     "as_of": "2014-05-06",
-     "due": "2014-06-05",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2014",
-     "url": "https://www.parlament.hu/vagynyil/2014/l016_j0141231k.pdf",
-     "as_of": "2014-12-31",
-     "due": "2015-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2015",
-     "url": "https://www.parlament.hu/vagynyil/2015/l016_j0151231k.pdf",
-     "as_of": "2015-12-31",
-     "due": "2016-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2016",
-     "url": "https://www.parlament.hu/vagynyil/2016/l016_j0161231k.pdf",
-     "as_of": "2016-12-31",
-     "due": "2017-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2017",
-     "url": "https://www.parlament.hu/vagynyil/2017/0419l016_j0171231k.pdf",
-     "as_of": "2017-12-31",
-     "due": "2018-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2018",
-     "url": "https://www.parlament.hu/vagynyil/2018/0435l016_j0180508k.pdf",
-     "as_of": "2018-05-08",
-     "due": "2018-06-07",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2018",
-     "url": "https://www.parlament.hu/vagynyil/2018/0465l016_j0181231k.pdf",
-     "as_of": "2018-12-31",
-     "due": "2019-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2019",
-     "url": "https://www.parlament.hu/vagynyil/2019/0517l016_j0191231k.pdf",
-     "as_of": "2019-12-31",
-     "due": "2020-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2020",
-     "url": "https://www.parlament.hu/vagynyil/2020/0554l016_j0201231k.pdf",
-     "as_of": "2020-12-31",
-     "due": "2021-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2021",
-     "url": "https://www.parlament.hu/vagynyil/2021/0590l016_j0211231k.pdf",
-     "as_of": "2021-12-31",
-     "due": "2022-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2022",
-     "url": "https://www.parlament.hu/vagynyil/2022/0611l016_j0220502k.pdf",
-     "as_of": "2022-05-02",
-     "due": "2022-06-01",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2022",
-     "url": "https://www.parlament.hu/vagynyil/2022/0660l016_j0221101k.pdf",
-     "as_of": "2022-11-01",
-     "due": "2023-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2023",
-     "url": "https://www.parlament.hu/vagynyil/2023/0700l016_j0231231k.pdf",
-     "as_of": "2023-12-31",
-     "due": "2024-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2024",
-     "url": "https://www.parlament.hu/vagynyil/2024/0748l016_j0241231k.pdf",
-     "as_of": "2024-12-31",
-     "due": "2025-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2025",
-     "url": "https://www.parlament.hu/vagynyil/2025/0830l016_j0251231k.pdf",
-     "as_of": "2025-12-31",
-     "due": "2026-01-31",
-     "filed": true
-    },
-    {
-     "title": "Vagyonnyilatkozat 2026",
-     "url": "https://www.parlament.hu/vagynyil/2026/0837l016_j0260509k.pdf",
-     "as_of": "2026-05-09",
-     "due": "2026-06-08",
-     "filed": true
-    }
-   ],
-   "remuneration": [
-    {
-     "period": "2026. július",
-     "gross": 322800,
-     "constituency_allowance": 0,
-     "housing_allowance": 0
-    }
-   ],
-   "local_offices": [
-    {
-     "body": "Hódmezővásárhely Megyei Jogú Város Önkormányzata",
-     "body_kind": "megyei jogú városok közgyűlése",
-     "office": "polgármester",
-     "from": "2010",
-     "to": "2014"
-    },
-    {
-     "body": "Hódmezővásárhely Megyei Jogú Város Önkormányzata",
-     "body_kind": "megyei jogú városok közgyűlése",
-     "office": "polgármester",
-     "from": "2006",
-     "to": "2010"
-    },
-    {
-     "body": "Hódmezővásárhely Megyei Jogú Város Önkormányzata",
-     "body_kind": "megyei jogú városok közgyűlése",
-     "office": "polgármester",
-     "from": "2002",
-     "to": "2006"
-    }
-   ],
-   "biography_url": null,
-   "motions": [
-    {
-     "szam": "H/179",
-     "kind": "H",
-     "number": 179,
-     "title": "A Migrációs Paktum elutasításáról",
-     "status": "folyamatban",
-     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%225174d651-1755-4019-84fd-7f9a49e1e0ba%22%7D",
-     "co_submitters": 51
-    }
-   ],
-   "wikidata_qid": "Q750646",
-   "wikidata_end": null,
-   "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l016%22%7D"
   },
   "0044": {
    "p_azon": "0044",
@@ -22894,7 +22437,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 1,
+     "onallo": 2,
      "nem_onallo": 0
     }
    ],
@@ -22979,6 +22522,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003A",
    "motions": [
+    {
+     "szam": "I/539",
+     "kind": "I",
+     "number": 539,
+     "title": "A 35 éves MOHU koncesszió felülvizsgálata",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%229b07c14a-f5c4-42ff-8ebd-8a7b14575ab1%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -24530,7 +24082,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 3,
+     "onallo": 4,
      "nem_onallo": 0
     }
    ],
@@ -24590,6 +24142,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/0029",
    "motions": [
+    {
+     "szam": "K/545",
+     "kind": "K",
+     "number": 545,
+     "title": "Szövőgyár utcai óvoda és a lakók helyzete az egészségre veszélyes tetraklór-etilén kapcsán",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ccbf30c9-90c4-4dc5-b46e-c343835b8ba8%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -25982,7 +25543,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 1,
+     "onallo": 2,
      "nem_onallo": 0
     }
    ],
@@ -26061,6 +25622,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003I",
    "motions": [
+    {
+     "szam": "I/538",
+     "kind": "I",
+     "number": 538,
+     "title": "A családok tehermentesítése",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22054fbe77-1619-4afe-a472-2d9fb7a4d1a3%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -27080,7 +26650,7 @@
      "kind": "K",
      "number": 470,
      "title": "Miért nincs munkaügyi minisztérium, sőt még államtitkárság sem?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2206eef0d2-911c-4914-9b4f-4a1c1edadb85%22%7D",
      "co_submitters": 0
     },
@@ -27089,7 +26659,7 @@
      "kind": "K",
      "number": 469,
      "title": "Miért sugallja az Egészségügyi Minisztérium körlevele, hogy az iskolaorvosok figyelmen kívül hagyhatják a gyermekek és a szülők törvényben biztosított jogait?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22240fa11f-2d76-4a48-b00e-80c0716ad20f%22%7D",
      "co_submitters": 0
     },
@@ -27134,7 +26704,7 @@
      "kind": "I",
      "number": 449,
      "title": "A demográfiai vészhelyzetben a Mi Hazánk 15 pontos mentőprogramjának hány elemét támogatja?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%220fc41dea-c8fc-4a93-ba8a-8ba989010bce%22%7D",
      "co_submitters": 0
     },
@@ -27870,13 +27440,39 @@
     }
    ],
    "offices": [],
-   "highest_degree": null,
-   "schools": [],
-   "languages": [],
+   "highest_degree": "egyetem",
+   "schools": [
+    {
+     "degree": "okleveles közgazdász",
+     "institution": "Budapesti Corvinus Egyetem",
+     "faculty": "Közgazdaságtudományi Kar",
+     "year": 2020
+    },
+    {
+     "degree": "politológus",
+     "institution": "Eötvös Loránd Tudományegyetem",
+     "faculty": "Állam- és Jogtudományi Kar",
+     "year": 2015
+    }
+   ],
+   "languages": [
+    {
+     "language": "angol",
+     "level": "felsőfokú"
+    },
+    {
+     "language": "francia",
+     "level": "társalgási"
+    },
+    {
+     "language": "bolgár",
+     "level": "társalgási"
+    }
+   ],
    "declarations": [],
    "remuneration": [],
    "local_offices": [],
-   "biography_url": null,
+   "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/006F",
    "motions": [],
    "wikidata_qid": null,
    "wikidata_end": null,
@@ -28011,7 +27607,7 @@
      "kind": "I",
      "number": 502,
      "title": "A lebénult és tehetetlen közigazgatás",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ad3bbe20-3531-4ff3-a3db-6c24b11b51d8%22%7D",
      "co_submitters": 0
     },
@@ -28499,8 +28095,8 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 2,
-     "nem_onallo": 0
+     "onallo": 3,
+     "nem_onallo": 1
     }
    ],
    "speech_stats": [
@@ -28559,6 +28155,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/0022",
    "motions": [
+    {
+     "szam": "H/544",
+     "kind": "H",
+     "number": 544,
+     "title": "Az egyes házszabályi rendelkezésekről szóló 10/2014. (II. 24.) OGY határozat módosításáról",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f1b80fe-2fff-4466-bce7-7b174d5ad767%22%7D",
+     "co_submitters": 2
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -28674,7 +28279,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 7,
+     "onallo": 8,
      "nem_onallo": 0
     },
     {
@@ -29046,6 +28651,15 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/p041",
    "motions": [
     {
+     "szam": "I/551",
+     "kind": "I",
+     "number": 551,
+     "title": "„Szuperelőlegből” nem lesz őszi vetés – mikor kapnak valódi segítséget az aszálykárosult gazdák?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2265b2df47-021b-4c0f-9335-5f762b28eddb%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "A/488",
      "kind": "A",
      "number": 488,
@@ -29059,7 +28673,7 @@
      "kind": "A",
      "number": 485,
      "title": "Ki kinek a fogságában van a TISZA Pártban?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2298076ec4-6731-4886-bc06-7068ada09d53%22%7D",
      "co_submitters": 0
     },
@@ -29153,7 +28767,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 1,
+     "onallo": 2,
      "nem_onallo": 0
     }
    ],
@@ -29209,6 +28823,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/004D",
    "motions": [
+    {
+     "szam": "H/544",
+     "kind": "H",
+     "number": 544,
+     "title": "Az egyes házszabályi rendelkezésekről szóló 10/2014. (II. 24.) OGY határozat módosításáról",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f1b80fe-2fff-4466-bce7-7b174d5ad767%22%7D",
+     "co_submitters": 2
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -30107,7 +29730,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 7,
      "nem_onallo": 0
     }
    ],
@@ -30211,6 +29834,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/001J",
    "motions": [
+    {
+     "szam": "H/544",
+     "kind": "H",
+     "number": 544,
+     "title": "Az egyes házszabályi rendelkezésekről szóló 10/2014. (II. 24.) OGY határozat módosításáról",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f1b80fe-2fff-4466-bce7-7b174d5ad767%22%7D",
+     "co_submitters": 2
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -30543,7 +30175,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 12,
+     "onallo": 13,
      "nem_onallo": 3
     },
     {
@@ -30853,6 +30485,15 @@
    ],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/r023",
    "motions": [
+    {
+     "szam": "I/541",
+     "kind": "I",
+     "number": 541,
+     "title": "Folytatja-e a Tisza kormány a kábítószer-terjesztők elleni hajtóvadászatot?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%229e606a72-26f6-4fc9-a591-8f98f6d75791%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "T/500",
      "kind": "T",
@@ -31431,7 +31072,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 2,
+     "onallo": 3,
      "nem_onallo": 0
     }
    ],
@@ -31513,6 +31154,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/0024",
    "motions": [
+    {
+     "szam": "A/556",
+     "kind": "A",
+     "number": 556,
+     "title": "A visszaszerzett milliárdok nyomában",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ebb07781-4269-40d6-ba4a-165f36514d8e%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -32607,7 +32257,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 14,
+     "onallo": 15,
      "nem_onallo": 2
     },
     {
@@ -33119,6 +32769,15 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/s011",
    "motions": [
     {
+     "szam": "A/560",
+     "kind": "A",
+     "number": 560,
+     "title": "Folytatódik-e a Honvédelmi Sportközpontok építése?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22d4ed9d87-3474-4c91-a0f6-5a6a047b3c17%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "T/500",
      "kind": "T",
      "number": 500,
@@ -33141,7 +32800,7 @@
      "kind": "I",
      "number": 414,
      "title": "Megvédi-e a Kormány a készpénzhasználat alkotmányos jogát?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f018294-b93a-45d3-bbcd-9444c6f502cd%22%7D",
      "co_submitters": 1
     },
@@ -34437,7 +34096,7 @@
      "kind": "K",
      "number": 457,
      "title": "Biztosítják-e a mentősök erkölcsi és anyagi megbecsülését?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ceb8c82e-3a8d-4a51-a974-9fcf16a37769%22%7D",
      "co_submitters": 0
     },
@@ -34455,7 +34114,7 @@
      "kind": "I",
      "number": 443,
      "title": "Mit tesznek az idősellátás összeomlásának az elkerülése érdekében?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22aaad8893-0310-4b9b-8114-8d165462dd91%22%7D",
      "co_submitters": 0
     },
@@ -35453,7 +35112,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 5,
+     "onallo": 6,
      "nem_onallo": 0
     }
    ],
@@ -35511,6 +35170,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/004T",
    "motions": [
+    {
+     "szam": "I/542",
+     "kind": "I",
+     "number": 542,
+     "title": "Miért tarja komolytalannak a TISZA Párt a nők munkáját?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%220df0bafb-bd61-4252-b638-113193e9b10f%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "A/221",
      "kind": "A",
@@ -36144,7 +35812,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 11,
+     "onallo": 12,
      "nem_onallo": 0
     }
    ],
@@ -36161,7 +35829,7 @@
      "subcommittee": null,
      "role": "alelnök",
      "from": "2026-06-08",
-     "to": null
+     "to": "2026-08-27"
     },
     {
      "committee": "Törvényalkotási Bizottság",
@@ -36218,6 +35886,15 @@
    "local_offices": [],
    "biography_url": null,
    "motions": [
+    {
+     "szam": "A/561",
+     "kind": "A",
+     "number": 561,
+     "title": "Ön elégedett, miniszter asszony?",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22709221fd-5d69-4a01-a95d-4707df60dd05%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/415",
      "kind": "I",
@@ -36362,7 +36039,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 8,
      "nem_onallo": 0
     }
    ],
@@ -36436,6 +36113,24 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/004V",
    "motions": [
+    {
+     "szam": "I/550",
+     "kind": "I",
+     "number": 550,
+     "title": "Mi lesz az M44 sorsa?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22a09e1e0f-a1f7-4655-ad35-8c75b1efdc7e%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "I/549",
+     "kind": "I",
+     "number": 549,
+     "title": "Mikor indulhatnak végre az Otthoni Energiatároló Program beruházásai?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%229a7f389d-edae-4d05-8316-6eeb9abec0ff%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "A/435",
      "kind": "A",
@@ -38233,7 +37928,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 6,
+     "onallo": 7,
      "nem_onallo": 0
     }
    ],
@@ -38296,6 +37991,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003B",
    "motions": [
+    {
+     "szam": "A/557",
+     "kind": "A",
+     "number": 557,
+     "title": "Új korszak az agrártámogatásokban",
+     "status": "lezárt",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22cbb8b350-3286-43a9-af0f-6634d6083955%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -40226,7 +39930,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 9,
+     "onallo": 10,
      "nem_onallo": 0
     }
    ],
@@ -40295,6 +39999,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/002Q",
    "motions": [
+    {
+     "szam": "K/548",
+     "kind": "K",
+     "number": 548,
+     "title": "Magyarok biztonsága Horvátországban",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22d250d88a-24c1-43c8-a4b4-676b390a66fc%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -40654,7 +40367,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 14,
+     "speeches": 28,
      "technical": 387
     },
     {
@@ -43109,6 +42822,13 @@
    ],
    "committees": [
     {
+     "committee": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
+     "subcommittee": null,
+     "role": "alelnök",
+     "from": "2026-08-27",
+     "to": null
+    },
+    {
      "committee": "Szociális Bizottság",
      "subcommittee": null,
      "role": "elnök",
@@ -44089,6 +43809,546 @@
    "wikidata_qid": "Q850818",
    "wikidata_end": "2026-08-03",
    "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22b076%22%7D"
+  },
+  "l016": {
+   "p_azon": "l016",
+   "name": "Lázár János",
+   "faction": "Fidesz",
+   "faction_first": "Fidesz",
+   "current": false,
+   "cycle": 43,
+   "mandate_kind": "lista",
+   "county": null,
+   "constituency_no": null,
+   "mandate_from": "2026-05-09",
+   "mandate_to": null,
+   "photo_url": "https://www.parlament.hu/felicitas/api/query/resource/kepviseloexportok/kepviselo-exported-queries-provider/kepviselo-kepek/l016",
+   "website": "www.lazarjanos.hu",
+   "seat": {
+    "sector": 2,
+    "row": 5,
+    "seat": 1
+   },
+   "has_record": true,
+   "factions": [
+    {
+     "ciklus": "2026-",
+     "faction": "Fidesz",
+     "from": "2026-05-09",
+     "to": null
+    },
+    {
+     "ciklus": "2022-2026",
+     "faction": "Fidesz",
+     "from": "2022-05-02",
+     "to": "2026-05-08"
+    },
+    {
+     "ciklus": "2018-2022",
+     "faction": "Fidesz",
+     "from": "2018-05-08",
+     "to": "2022-05-01"
+    },
+    {
+     "ciklus": "2014-2018",
+     "faction": "Fidesz",
+     "from": "2014-05-06",
+     "to": "2018-05-07"
+    },
+    {
+     "ciklus": "2010-2014",
+     "faction": "Fidesz",
+     "from": "2010-05-14",
+     "to": "2014-05-05"
+    },
+    {
+     "ciklus": "2006-2010",
+     "faction": "Fidesz",
+     "from": "2006-05-16",
+     "to": "2010-05-13"
+    },
+    {
+     "ciklus": "2002-2006",
+     "faction": "Fidesz",
+     "from": "2002-05-15",
+     "to": "2006-05-15"
+    }
+   ],
+   "elections": [
+    {
+     "ciklus": "2026-",
+     "elected_on": "2026-04-12",
+     "constituency": "Országos lista",
+     "mandate_from": "2026-05-09",
+     "mandate_to": null
+    },
+    {
+     "ciklus": "2022-2026",
+     "elected_on": "2022-04-03",
+     "constituency": "Csongrád 4. OEVK",
+     "mandate_from": "2022-05-02",
+     "mandate_to": "2026-05-08"
+    },
+    {
+     "ciklus": "2018-2022",
+     "elected_on": "2018-04-08",
+     "constituency": "Csongrád 4. OEVK",
+     "mandate_from": "2018-05-08",
+     "mandate_to": "2022-05-01"
+    },
+    {
+     "ciklus": "2014-2018",
+     "elected_on": "2014-04-06",
+     "constituency": "Csongrád 4. OEVK",
+     "mandate_from": "2014-05-06",
+     "mandate_to": "2018-05-07"
+    },
+    {
+     "ciklus": "2010-2014",
+     "elected_on": "2010-04-11",
+     "constituency": "Csongrád 6. OEVK",
+     "mandate_from": "2010-05-14",
+     "mandate_to": "2014-05-05"
+    },
+    {
+     "ciklus": "2006-2010",
+     "elected_on": "2006-04-23",
+     "constituency": "Csongrád 6. OEVK",
+     "mandate_from": "2006-05-16",
+     "mandate_to": "2010-05-13"
+    },
+    {
+     "ciklus": "2002-2006",
+     "elected_on": null,
+     "constituency": "Csongrád 6. OEVK",
+     "mandate_from": "2002-05-15",
+     "mandate_to": "2006-05-15"
+    }
+   ],
+   "motion_stats": [
+    {
+     "ciklus": "2026-",
+     "onallo": 1,
+     "nem_onallo": 0
+    },
+    {
+     "ciklus": "2022-2026",
+     "onallo": 6,
+     "nem_onallo": 1
+    },
+    {
+     "ciklus": "2018-2022",
+     "onallo": 2,
+     "nem_onallo": 1
+    },
+    {
+     "ciklus": "2014-2018",
+     "onallo": 27,
+     "nem_onallo": 13
+    },
+    {
+     "ciklus": "2010-2014",
+     "onallo": 75,
+     "nem_onallo": 205
+    },
+    {
+     "ciklus": "2006-2010",
+     "onallo": 120,
+     "nem_onallo": 91
+    },
+    {
+     "ciklus": "2002-2006",
+     "onallo": 74,
+     "nem_onallo": 34
+    }
+   ],
+   "speech_stats": [
+    {
+     "ciklus": "2022-2026",
+     "speeches": 51,
+     "technical": 0
+    },
+    {
+     "ciklus": "2018-2022",
+     "speeches": 3,
+     "technical": 0
+    },
+    {
+     "ciklus": "2014-2018",
+     "speeches": 449,
+     "technical": 1
+    },
+    {
+     "ciklus": "2010-2014",
+     "speeches": 103,
+     "technical": 1
+    },
+    {
+     "ciklus": "2006-2010",
+     "speeches": 57,
+     "technical": 1
+    },
+    {
+     "ciklus": "2002-2006",
+     "speeches": 7,
+     "technical": 31
+    }
+   ],
+   "committees": [
+    {
+     "committee": "Nemzeti Összetartozás Bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2022-05-02",
+     "to": "2022-05-23"
+    },
+    {
+     "committee": "Nemzeti összetartozás bizottsága",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2020-03-23",
+     "to": "2022-05-01"
+    },
+    {
+     "committee": "Mezőgazdasági bizottság",
+     "subcommittee": "Állattenyésztési albizottság",
+     "role": "tag",
+     "from": "2018-06-26",
+     "to": "2020-03-23"
+    },
+    {
+     "committee": "Mezőgazdasági bizottság",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2018-06-04",
+     "to": "2020-03-23"
+    },
+    {
+     "committee": "Honvédelmi és rendészeti bizottság",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2010-05-14",
+     "to": "2010-06-21"
+    },
+    {
+     "committee": "Honvédelmi és rendészeti bizottság",
+     "subcommittee": null,
+     "role": "elnök",
+     "from": "2006-05-30",
+     "to": "2010-05-13"
+    },
+    {
+     "committee": "Kulturális és sajtó bizottság",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2004-11-29",
+     "to": "2006-05-15"
+    },
+    {
+     "committee": "Szociális és családügyi bizottság",
+     "subcommittee": null,
+     "role": "tag",
+     "from": "2004-10-18",
+     "to": "2004-11-29"
+    }
+   ],
+   "offices": [
+    {
+     "office": "építési és beruházási miniszter",
+     "from": "2022-12-01",
+     "to": "2026-05-12"
+    },
+    {
+     "office": "építési és beruházási miniszter",
+     "from": "2022-05-24",
+     "to": "2022-11-30"
+    },
+    {
+     "office": "Miniszterelnökséget vezető miniszter",
+     "from": "2014-06-06",
+     "to": "2018-05-17"
+    },
+    {
+     "office": "miniszterelnökséget vezető államtitkár",
+     "from": "2012-06-02",
+     "to": "2014-06-05"
+    },
+    {
+     "office": "jegyző",
+     "from": "2002-05-15",
+     "to": "2004-10-05"
+    }
+   ],
+   "highest_degree": "egyetem",
+   "schools": [
+    {
+     "degree": "jogász",
+     "institution": "József Attila Tudományegyetem",
+     "faculty": "Állam- és Jogtudományi Kar",
+     "year": 1999
+    }
+   ],
+   "languages": [
+    {
+     "language": "angol",
+     "level": "társalgási"
+    },
+    {
+     "language": "német",
+     "level": "középfokú"
+    }
+   ],
+   "declarations": [
+    {
+     "title": "Vagyonnyilatkozat 2004",
+     "url": "https://www.parlament.hu/vagynyil/2004/l016.pdf",
+     "as_of": "2004-12-31",
+     "due": "2005-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2005",
+     "url": "https://www.parlament.hu/vagynyil/2005/l016_j0051231k.pdf",
+     "as_of": "2005-12-31",
+     "due": "2006-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2006",
+     "url": "https://www.parlament.hu/vagynyil/2006/l016_j0060516k.pdf",
+     "as_of": "2006-05-16",
+     "due": "2006-06-15",
+     "filed": true
+    },
+    {
+     "title": "Kiegészítése a 2006.06.15. évi vagyonnyilatkozatnak",
+     "url": "https://www.parlament.hu/vagynyil/2006/l016_j0060821k.pdf",
+     "as_of": "2006-08-21",
+     "due": "2006-08-21",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2006",
+     "url": "https://www.parlament.hu/vagynyil/2006/l016_j0061231k.pdf",
+     "as_of": "2006-12-31",
+     "due": "2007-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2007",
+     "url": "https://www.parlament.hu/vagynyil/2007/l016_j0071231k.pdf",
+     "as_of": "2007-12-31",
+     "due": "2008-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2008",
+     "url": "https://www.parlament.hu/vagynyil/2008/l016_j0081231k.pdf",
+     "as_of": "2008-12-31",
+     "due": "2009-02-02",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2009",
+     "url": "https://www.parlament.hu/vagynyil/2009/l016_j0091231k.pdf",
+     "as_of": "2009-12-31",
+     "due": "2010-02-01",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2010",
+     "url": "https://www.parlament.hu/vagynyil/2010/l016_j0100514k.pdf",
+     "as_of": "2010-05-14",
+     "due": "2010-06-14",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2010",
+     "url": "https://www.parlament.hu/vagynyil/2010/l016_j2101231k.pdf",
+     "as_of": "2010-12-31",
+     "due": "2011-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2011",
+     "url": "https://www.parlament.hu/vagynyil/2011/l016_j1111231k.pdf",
+     "as_of": "2011-12-31",
+     "due": "2012-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2012",
+     "url": "https://www.parlament.hu/vagynyil/2012/l016_j0121231k.pdf",
+     "as_of": "2012-12-31",
+     "due": "2013-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2013",
+     "url": "https://www.parlament.hu/vagynyil/2013/l016_j0131231k.pdf",
+     "as_of": "2013-12-31",
+     "due": "2014-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2014",
+     "url": "https://www.parlament.hu/vagynyil/2014/l016_j0140506k.pdf",
+     "as_of": "2014-05-06",
+     "due": "2014-06-05",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2014",
+     "url": "https://www.parlament.hu/vagynyil/2014/l016_j0141231k.pdf",
+     "as_of": "2014-12-31",
+     "due": "2015-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2015",
+     "url": "https://www.parlament.hu/vagynyil/2015/l016_j0151231k.pdf",
+     "as_of": "2015-12-31",
+     "due": "2016-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2016",
+     "url": "https://www.parlament.hu/vagynyil/2016/l016_j0161231k.pdf",
+     "as_of": "2016-12-31",
+     "due": "2017-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2017",
+     "url": "https://www.parlament.hu/vagynyil/2017/0419l016_j0171231k.pdf",
+     "as_of": "2017-12-31",
+     "due": "2018-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2018",
+     "url": "https://www.parlament.hu/vagynyil/2018/0435l016_j0180508k.pdf",
+     "as_of": "2018-05-08",
+     "due": "2018-06-07",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2018",
+     "url": "https://www.parlament.hu/vagynyil/2018/0465l016_j0181231k.pdf",
+     "as_of": "2018-12-31",
+     "due": "2019-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2019",
+     "url": "https://www.parlament.hu/vagynyil/2019/0517l016_j0191231k.pdf",
+     "as_of": "2019-12-31",
+     "due": "2020-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2020",
+     "url": "https://www.parlament.hu/vagynyil/2020/0554l016_j0201231k.pdf",
+     "as_of": "2020-12-31",
+     "due": "2021-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2021",
+     "url": "https://www.parlament.hu/vagynyil/2021/0590l016_j0211231k.pdf",
+     "as_of": "2021-12-31",
+     "due": "2022-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2022",
+     "url": "https://www.parlament.hu/vagynyil/2022/0611l016_j0220502k.pdf",
+     "as_of": "2022-05-02",
+     "due": "2022-06-01",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2022",
+     "url": "https://www.parlament.hu/vagynyil/2022/0660l016_j0221101k.pdf",
+     "as_of": "2022-11-01",
+     "due": "2023-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2023",
+     "url": "https://www.parlament.hu/vagynyil/2023/0700l016_j0231231k.pdf",
+     "as_of": "2023-12-31",
+     "due": "2024-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2024",
+     "url": "https://www.parlament.hu/vagynyil/2024/0748l016_j0241231k.pdf",
+     "as_of": "2024-12-31",
+     "due": "2025-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2025",
+     "url": "https://www.parlament.hu/vagynyil/2025/0830l016_j0251231k.pdf",
+     "as_of": "2025-12-31",
+     "due": "2026-01-31",
+     "filed": true
+    },
+    {
+     "title": "Vagyonnyilatkozat 2026",
+     "url": "https://www.parlament.hu/vagynyil/2026/0837l016_j0260509k.pdf",
+     "as_of": "2026-05-09",
+     "due": "2026-06-08",
+     "filed": true
+    }
+   ],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 322800,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
+   "local_offices": [
+    {
+     "body": "Hódmezővásárhely Megyei Jogú Város Önkormányzata",
+     "body_kind": "megyei jogú városok közgyűlése",
+     "office": "polgármester",
+     "from": "2010",
+     "to": "2014"
+    },
+    {
+     "body": "Hódmezővásárhely Megyei Jogú Város Önkormányzata",
+     "body_kind": "megyei jogú városok közgyűlése",
+     "office": "polgármester",
+     "from": "2006",
+     "to": "2010"
+    },
+    {
+     "body": "Hódmezővásárhely Megyei Jogú Város Önkormányzata",
+     "body_kind": "megyei jogú városok közgyűlése",
+     "office": "polgármester",
+     "from": "2002",
+     "to": "2006"
+    }
+   ],
+   "biography_url": null,
+   "motions": [
+    {
+     "szam": "H/179",
+     "kind": "H",
+     "number": 179,
+     "title": "A Migrációs Paktum elutasításáról",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%225174d651-1755-4019-84fd-7f9a49e1e0ba%22%7D",
+     "co_submitters": 51
+    }
+   ],
+   "wikidata_qid": "Q750646",
+   "wikidata_end": null,
+   "parlament_url": "https://www.parlament.hu/web/guest/kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l016%22%7D"
   },
   "s054": {
    "p_azon": "s054",

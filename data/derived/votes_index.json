@@ -1,12 +1,12 @@
 {
- "derived_at": "2026-08-25T17:49:44.232939+02:00",
- "last_sync_at": "2026-08-25T17:49:44.232939+02:00",
+ "derived_at": "2026-08-27T22:20:21.344111+02:00",
+ "last_sync_at": "2026-08-27T22:20:21.344111+02:00",
  "seats": 199,
  "since": "2026-05-01",
  "window": {
   "from": "2026-05-09",
-  "to": "2026-08-11",
-  "list_files": 2095
+  "to": "2026-08-27",
+  "list_files": 2097
  },
  "votes": [
   {
@@ -23059,9 +23059,896 @@
     "agrees_with_source": true,
     "present_basis": "tulajdonsagok: Összes szavazat (no roll call)"
    }
+  },
+  {
+   "ts": "2026.08.27.15:24:58",
+   "slug": "2026-08-27T15-24-58",
+   "on_date": "2026-08-27",
+   "mode": "Listás az összes képviselő felével",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 184,
+   "nem": 0,
+   "tartozkodott": 0,
+   "osszes_szavazat": 184,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "15:24",
+   "motions": [
+    {
+     "iromany": "T/504",
+     "title": "Az általános forgalmi adóról szóló 2007. évi CXXVII. törvény módosításáról",
+     "outcome": "kivételességi javaslat elfogadva",
+     "submitters": [
+      "kormány (pénzügyminiszter)"
+     ],
+     "submitter_kind": "kormany",
+     "kind": "T",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22510704ee-ebf7-4513-b796-18ab80e7e167%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 184,
+    "nem_szavazott": 7,
+    "igazoltan_tavol": 6,
+    "jelen_nem_szavazott": 1
+   },
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 132,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 6,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 39,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 1,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 8,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 5,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 1,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "abszolut",
+    "label_hu": "Abszolút többség",
+    "source": "payload",
+    "base": 199,
+    "needed": 100,
+    "margin": 84,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.15:26:51",
+   "slug": "2026-08-27T15-26-51",
+   "on_date": "2026-08-27",
+   "mode": "Listás a jelenlevők 2/3-ával",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 132,
+   "nem": 52,
+   "tartozkodott": 0,
+   "osszes_szavazat": 184,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "15:26",
+   "motions": [
+    {
+     "iromany": "H/544",
+     "title": "Az egyes házszabályi rendelkezésekről szóló 10/2014. (II. 24.) OGY határozat módosításáról",
+     "outcome": "sürgősségi javaslat elfogadva",
+     "submitters": [
+      "Perticsné Kácsor Andrea (TISZA)",
+      "Polgár György (TISZA)",
+      "Dr. Rák Richárd (TISZA)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "H",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f1b80fe-2fff-4466-bce7-7b174d5ad767%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 132,
+    "nem_szavazott": 7,
+    "igazoltan_tavol": 6,
+    "nem": 52,
+    "jelen_nem_szavazott": 1
+   },
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 132,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 6,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 39,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 1,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 8,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 5,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 1,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "ketharmad_jelenlevo",
+    "label_hu": "Jelenlévők kétharmada",
+    "source": "payload",
+    "base": 184,
+    "needed": 123,
+    "margin": 9,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.15:28:54",
+   "slug": "2026-08-27T15-28-54",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 138,
+   "nem": 1,
+   "tartozkodott": 45,
+   "osszes_szavazat": 184,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "15:28",
+   "motions": [
+    {
+     "iromany": "H/437",
+     "title": "A Médiatanács elnökét és tagjait jelölő eseti bizottság létrehozásáról",
+     "outcome": "önálló indítvány elfogadva",
+     "submitters": [
+      "Művelődési Bizottság"
+     ],
+     "submitter_kind": "bizottsag",
+     "kind": "H",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%229e019836-151a-4ae7-ae87-fb8d0a58ebd2%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 138,
+    "nem_szavazott": 7,
+    "igazoltan_tavol": 6,
+    "tartozkodott": 45,
+    "nem": 1,
+    "jelen_nem_szavazott": 1
+   },
+   "present": 184,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 132,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 6,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 1,
+     "tartozkodott": 38,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 1,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 0,
+     "tartozkodott": 7,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 1,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 6,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 184,
+    "needed": 93,
+    "margin": 45,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.15:30:16",
+   "slug": "2026-08-27T15-30-16",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 158,
+   "nem": 2,
+   "tartozkodott": 15,
+   "osszes_szavazat": 175,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "15:30",
+   "motions": [
+    {
+     "iromany": "S/555",
+     "title": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság tagjainak és tisztségviselőinek megválasztásáról szóló 28/2026. (VI.8.) OGY határozat módosításáról",
+     "outcome": "önálló indítvány elfogadva",
+     "submitters": [
+      "az Országgyűlés elnöke"
+     ],
+     "submitter_kind": "other",
+     "kind": "S",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%226ecb2953-6186-4f68-b462-bae0c6bd3571%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 158,
+    "tartozkodott": 15,
+    "nem_szavazott": 7,
+    "jelen_nem_szavazott": 10,
+    "igazoltan_tavol": 6,
+    "nem": 2
+   },
+   "present": 175,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 105,
+     "nem": 2,
+     "tartozkodott": 15,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 16,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 39,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 1,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 8,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 6,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 175,
+    "needed": 88,
+    "margin": 70,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.15:47:58",
+   "slug": "2026-08-27T15-47-58",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 115,
+   "nem": 51,
+   "tartozkodott": 0,
+   "osszes_szavazat": 166,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "15:47",
+   "motions": [
+    {
+     "iromany": "I/501",
+     "title": "Hogyan kívánja a Kormány biztosítani, hogy a vidéki Magyarország ne legyen a fejlesztéspolitika vesztese?",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "submitters": [
+      "Dr. Hegedűs Barbara (Fidesz)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "I",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2252b60836-75d0-44be-8bf0-0b3258bd9f46%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 115,
+    "jelen_nem_szavazott": 13,
+    "nem_szavazott": 13,
+    "igazoltan_tavol": 6,
+    "nem": 51
+   },
+   "present": 166,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 115,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 23,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 38,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 2,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 8,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 5,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 1,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 166,
+    "needed": 84,
+    "margin": 31,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.15:57:11",
+   "slug": "2026-08-27T15-57-11",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 122,
+   "nem": 49,
+   "tartozkodott": 1,
+   "osszes_szavazat": 172,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "15:57",
+   "motions": [
+    {
+     "iromany": "I/414",
+     "title": "Megvédi-e a Kormány a készpénzhasználat alkotmányos jogát?",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "submitters": [
+      "Dr. Latorcai Csaba (KDNP)",
+      "Dr. Simicskó István (KDNP)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "I",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221f018294-b93a-45d3-bbcd-9444c6f502cd%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 122,
+    "nem_szavazott": 13,
+    "jelen_nem_szavazott": 7,
+    "igazoltan_tavol": 6,
+    "tartozkodott": 1,
+    "nem": 49
+   },
+   "present": 172,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 122,
+     "nem": 0,
+     "tartozkodott": 1,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 15,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 35,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 5,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 8,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 6,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 172,
+    "needed": 87,
+    "margin": 35,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.16:05:36",
+   "slug": "2026-08-27T16-05-36",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 121,
+   "nem": 49,
+   "tartozkodott": 0,
+   "osszes_szavazat": 170,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "16:05",
+   "motions": [
+    {
+     "iromany": "I/449",
+     "title": "A demográfiai vészhelyzetben a Mi Hazánk 15 pontos mentőprogramjának hány elemét támogatja?",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "submitters": [
+      "Novák Előd (Mi Hazánk)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "I",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%220fc41dea-c8fc-4a93-ba8a-8ba989010bce%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 121,
+    "jelen_nem_szavazott": 9,
+    "nem_szavazott": 13,
+    "igazoltan_tavol": 6,
+    "nem": 49
+   },
+   "present": 170,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 121,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 17,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 36,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 4,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 7,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 1,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 6,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 170,
+    "needed": 86,
+    "margin": 35,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.16:20:42",
+   "slug": "2026-08-27T16-20-42",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 119,
+   "nem": 50,
+   "tartozkodott": 1,
+   "osszes_szavazat": 170,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "16:20",
+   "motions": [
+    {
+     "iromany": "I/502",
+     "title": "A lebénult és tehetetlen közigazgatás",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "submitters": [
+      "Dr. Panyi Miklós (Fidesz)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "I",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ad3bbe20-3531-4ff3-a3db-6c24b11b51d8%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 119,
+    "nem_szavazott": 15,
+    "tartozkodott": 1,
+    "jelen_nem_szavazott": 7,
+    "igazoltan_tavol": 6,
+    "nem": 50
+   },
+   "present": 170,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 119,
+     "nem": 1,
+     "tartozkodott": 1,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 17,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 36,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 4,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 8,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 5,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 1,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 170,
+    "needed": 86,
+    "margin": 33,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.16:29:31",
+   "slug": "2026-08-27T16-29-31",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 123,
+   "nem": 52,
+   "tartozkodott": 0,
+   "osszes_szavazat": 175,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "16:29",
+   "motions": [
+    {
+     "iromany": "I/540",
+     "title": "Számíthatnak a magyar emberek a zöldségek és gyümölcsök áfájának 5%-ra csökkentésére, vagy ez is csak egy hangzatos ígéret volt a kampányban?",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "submitters": [
+      "Dr. Juhász Hajnalka (KDNP)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "I",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2288bda3b4-3264-448a-a8f0-1487251209f4%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 123,
+    "nem_szavazott": 15,
+    "jelen_nem_szavazott": 2,
+    "igazoltan_tavol": 6,
+    "nem": 52
+   },
+   "present": 175,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 123,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 15,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 38,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 2,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 8,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 6,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 175,
+    "needed": 88,
+    "margin": 35,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
+  },
+  {
+   "ts": "2026.08.27.16:37:36",
+   "slug": "2026-08-27T16-37-36",
+   "on_date": "2026-08-27",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 120,
+   "nem": 51,
+   "tartozkodott": 2,
+   "osszes_szavazat": 173,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "16:37",
+   "motions": [
+    {
+     "iromany": "I/443",
+     "title": "Mit tesznek az idősellátás összeomlásának az elkerülése érdekében?",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "submitters": [
+      "Szabadi István (Mi Hazánk)"
+     ],
+     "submitter_kind": "kepviselo",
+     "kind": "I",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22aaad8893-0310-4b9b-8114-8d165462dd91%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 120,
+    "jelen_nem_szavazott": 2,
+    "nem_szavazott": 17,
+    "tartozkodott": 2,
+    "igazoltan_tavol": 6,
+    "nem": 51
+   },
+   "present": 173,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 120,
+     "nem": 0,
+     "tartozkodott": 2,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 16,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 0,
+     "nem": 37,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 3,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 0,
+     "nem": 8,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 0,
+     "nem": 6,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 0,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 173,
+    "needed": 87,
+    "margin": 33,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
   }
  ],
- "details_cached": 259,
+ "details_cached": 269,
  "sitting_days": [
   {
    "date": "2026-05-09",

@@ -35,6 +35,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
+def cycle_dir(c: int) -> str:
+    from scripts.build_site import cycle_dir as _cd
+    return _cd(c)
+
 FRESHNESS = ROOT / "data" / "derived" / "first_light.json"
 CURRENT_CYCLE = 43
 MIN_FREE_GB = 3.0                       # a full build writes about 6 GB; two builds died on a full volume
@@ -66,6 +70,62 @@ def corpus_state() -> tuple[int, str]:
 
 def free_gb() -> float:
     return shutil.disk_usage(ROOT).free / 1e9
+
+
+BROWSER_TESTS = "tests/test_a11y.py"          # drives a real Chrome; see test_commands()
+LINK_TESTS = "tests/test_links.py"           # the whole-site walk; the quick path scopes it instead
+
+
+def test_commands(quick: bool = False) -> list[list[str]]:
+    """The proving run's test commands: parallel where this machine can, stdlib where it cannot.
+
+    The gate's meaning must not depend on a third-party runner being installed — a clone with nothing but
+    Python must still be able to prove the site, which is why `unittest discover` stays the documented path
+    and the fallback here. Where pytest-xdist IS present the same tests run across the cores instead of one:
+    42 minutes becomes 15 on eight cores, measured, on the same 428 tests.
+
+    The accessibility file is not in that parallel pass. It launches a full headless Chrome per page kind,
+    and under six busy workers Chrome failed to come up at all ("Chrome never wrote DevToolsActivePort") —
+    a green suite that goes red under load is worse than a slow one, and the honest fix is to give the
+    browser the machine rather than to retry it until it works. It runs on its own afterwards.
+    """
+    try:
+        import pytest, xdist                                                   # noqa: F401
+        import os
+        n = max(2, (os.cpu_count() or 4) - 2)
+        base = ["-m", "pytest", "-q", "-p", "xdist", "-n", str(n), "tests", "--ignore", BROWSER_TESTS]
+        if quick:
+            # The refresh leaves every untouched page byte-identical (proved against a full build), so the
+            # whole-site sweeps are answering a question the refresh cannot have changed: the accessibility
+            # audit reads templates that did not move, and the link walk reads 160,000 documents of which a
+            # few thousand were rewritten. Those few thousand ARE checked — scoped_link_check() runs the same
+            # karzat.linkcheck code over the rewritten prefixes. What is NOT skipped is everything that reads
+            # the new data: the counts, the rules, the roster, the arithmetic.
+            return [base + ["--ignore", LINK_TESTS]]
+        return [base, ["-m", "pytest", "-q", BROWSER_TESTS]]
+    except ImportError:
+        return [["-m", "unittest", "discover", "-s", "tests", "-t", "."]]
+
+
+def scoped_link_check() -> None:
+    """Every reference on the pages the refresh rewrote, against the whole tree's files.
+
+    Same walk as tests/test_links.py — karzat.linkcheck is the one implementation — narrowed to what changed.
+    Fourteen seconds instead of four minutes, and it is the check that would have caught the nine cycles of
+    dead CSV links this project shipped once already.
+    """
+    from karzat.linkcheck import check, file_set, report
+    site = ROOT / "site"
+    prefixes = [cycle_dir(CURRENT_CYCLE).rstrip("/"), "szemely", "kereses", "lefedettseg", "modszer",
+                "arcel", "frakciovaltas", "riport", "index.html", "404.html"]
+    prefixes = [p for p in prefixes if (site / p).exists()]
+    t0 = time.time()
+    checked, broken, missing = check(site, under=prefixes, files=file_set(site))
+    log(f"scoped link check: {checked:,} references under {len(prefixes)} prefixes in {time.time() - t0:.0f}s")
+    if broken:
+        raise SystemExit("internal references that land on nothing:\n" + report(broken))
+    if missing:
+        raise SystemExit(f"{len(missing)} advertised data files do not exist, e.g. {missing[0]}")
 
 
 def publish_age_days() -> float:
@@ -123,6 +183,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-state-age", type=float, default=0, metavar="HOURS",
                     help="with --no-sync: refuse to run when the sync state is older than this many hours — the "
                          "guard that turns a silently dead local sync into a loud scheduled failure (0 = off)")
+    ap.add_argument("--quick", action="store_true",
+                    help="intraday refresh: rebuild only the open cycle and the cross-cycle pages, and prove "
+                         "what that can break — for publishing a sitting day's votes while the House still "
+                         "sits, rather than waiting for the nightly's full sweep")
     ap.add_argument("--handover", action="store_true",
                     help="after the sync, also upload data/raw and the state to the ops bucket on a full run — "
                          "keeps the scheduled build's cache current while the whole chain runs locally")
@@ -183,11 +247,17 @@ def _run(args: argparse.Namespace) -> int:
         run(py + ["-m", "karzat", "sync-speeches", "--ckl", str(CURRENT_CYCLE)], dry=dry)
         run(py + ["-m", "karzat", "sync-speech-texts", "--ckl", str(CURRENT_CYCLE)], dry=dry, allow_fail=True)
         run(py + ["-m", "karzat", "sync-committees"], dry=dry, allow_fail=True)   # they carry the next sitting's invitation
+        # The members' own datasheets, refreshed: a motion submitted today appears in the register's listing
+        # immediately, and in the submitter's record only when the record is refetched. Nothing here asked for
+        # it, so the two sources drifted apart on the first sitting day and the reconciliation test — rightly —
+        # refused the publish. 212 calls, about two minutes at the polite pace.
+        run(py + ["-m", "karzat", "sync-mps", "--refresh"], dry=dry, allow_fail=True)
         run(py + ["-m", "karzat", "sync-bills", "--cached"], dry=dry, allow_fail=True)
         # Ask the source whether it still says what it said. A closed vote's detail is a historical fact, so a
         # change there is news and nobody else is looking; 120 a night is a two-year sweep of the 79,829 cached
         # records, which is the right pace for an integrity check running on somebody else's server.
-        run(py + ["-m", "scripts.watch_source", "--calls", "120"], dry=dry, allow_fail=True)
+        if not args.quick:
+            run(py + ["-m", "scripts.watch_source", "--calls", "120"], dry=dry, allow_fail=True)
 
     if args.sync_only or args.handover:
         if dry:
@@ -236,7 +306,7 @@ def _run(args: argparse.Namespace) -> int:
                  ["-m", "scripts.derive_receipt"]):
         run(py + step, dry=dry, allow_fail=True)
     run(py + ["-m", "karzat", "freshness"], dry=dry, allow_fail=True)
-    run(py + ["-m", "scripts.build_site"], dry=dry)
+    run(py + ["-m", "scripts.build_site"] + (["--refresh"] if args.quick else []), dry=dry)
 
     # ---- prove it before publishing --------------------------------------------------------------
     # The README's registered figures move with the record (sitting days, vote counts), and the gate
@@ -244,7 +314,10 @@ def _run(args: argparse.Namespace) -> int:
     # then holds everything else. The first sitting the hybrid ever synced proved this order matters:
     # two announced sitting days arrived, the gate caught the stale sentence, and the run stopped short.
     run(py + ["-m", "scripts.check_readme", "--sync"], dry=dry)
-    run(py + ["-m", "unittest", "discover", "-s", "tests", "-t", "."], dry=dry)
+    for cmd in test_commands(quick=args.quick):
+        run(py + cmd, dry=dry)
+    if args.quick and not dry:
+        scoped_link_check()
     run(py + ["-m", "scripts.check_readme"], dry=dry)
 
     if args.no_deploy:

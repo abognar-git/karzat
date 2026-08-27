@@ -18,80 +18,36 @@ ones no check was pointed at — so this walks the whole site rather than a samp
 
 from __future__ import annotations
 
-import os
-import re
+import sys
 import unittest
 from pathlib import Path
-from urllib.parse import unquote, urldefrag
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
 SITE = ROOT / "site"
 
-REF = re.compile(r'\b(?:href|src|poster)\s*=\s*"([^"]+)"')
-
-
-def path_of(raw: str) -> str:
-    """The file part of a reference: the fragment and the query both dropped.
-
-    `urldefrag` takes off `#dir` and leaves `index.html?m=2010-05`, which is a file nobody has. The month strip
-    on the Számok pages links to the cycle's vote list narrowed to a month, and this test read 481 of those as
-    dead links — a checker that cannot parse a query string reports the site broken and is itself the bug.
-    A static host ignores the query, so what has to exist is the path before it.
-    """
-    return urldefrag(raw)[0].split("?", 1)[0]
+from karzat.linkcheck import check, file_set, report            # noqa: E402
 
 
 class NoInternalLinkIsBroken(unittest.TestCase):
+    """The whole site, every reference. The scoped variant of this same walk is what the intraday refresh
+    runs — one implementation in karzat/linkcheck.py, so the two can never drift apart."""
+
     @classmethod
     def setUpClass(cls):
         if not (SITE / "index.html").exists():
             raise unittest.SkipTest("site/ is not built")
-        # One pass over the tree, then set membership: resolving 13.8 million references with os.path.exists
-        # would be 13.8 million stat calls. Case matters — the deploy target is case-sensitive even where
-        # this filesystem is not, so a link that works locally and 404s in production is exactly the kind of
-        # thing worth catching here.
-        cls.files = {str(p.relative_to(SITE)) for p in SITE.rglob("*") if p.is_file()}
+        cls.files = file_set(SITE)
+        cls.checked, cls.broken, cls.missing = check(SITE, files=cls.files)
 
     def test_every_href_and_src_resolves(self):
-        broken: dict[str, tuple[int, str]] = {}
-        checked = 0
-        for f in SITE.rglob("*.html"):
-            here = f.parent.relative_to(SITE)
-            html = f.read_text(encoding="utf-8", errors="replace")
-            for raw in REF.findall(html):
-                url = path_of(raw)
-                if not url or url.startswith(("http://", "https://", "mailto:", "data:", "#", "//", "javascript:")):
-                    continue
-                checked += 1
-                target = url.lstrip("/") if url.startswith("/") else os.path.normpath(str(here / url))
-                target = unquote(target).replace(os.sep, "/")
-                if target.startswith(".."):
-                    key = "escapes the site root"
-                elif target in self.files:
-                    continue
-                else:
-                    key = target.split("/")[-1].rsplit(".", 1)[-1] or "no extension"
-                n, ex = broken.get(key, (0, ""))
-                broken[key] = (n + 1, ex or f"{f.relative_to(SITE)} → {raw}")
-        self.assertGreater(checked, 1_000_000, "far fewer references than this site has — did the walk work?")
-        self.assertEqual(broken, {}, "internal references that land on nothing:\n"
-                                     + "\n".join(f"  {k}: {n:,}× e.g. {ex}" for k, (n, ex) in sorted(broken.items())))
+        self.assertGreater(self.checked, 1_000_000,
+                           "far fewer references than this site has — did the walk work?")
+        self.assertEqual(self.broken, {}, "internal references that land on nothing:\n" + report(self.broken))
 
     def test_the_twins_a_page_advertises_are_there(self):
         """A page offering `CSV` beside a table is making a promise about a file, one link at a time."""
-        missing = []
-        for f in SITE.rglob("*.html"):
-            here = f.parent.relative_to(SITE)
-            for raw in REF.findall(f.read_text(encoding="utf-8", errors="replace")):
-                url = path_of(raw)
-                if not url.endswith((".csv", ".json", ".xml", ".parquet", ".csv.gz")):
-                    continue
-                if url.startswith(("http", "//", "data:")):
-                    continue
-                t = url.lstrip("/") if url.startswith("/") else os.path.normpath(str(here / url))
-                if unquote(t).replace(os.sep, "/") not in self.files:
-                    missing.append(f"{f.relative_to(SITE)} → {raw}")
-        self.assertEqual(missing[:8], [], f"{len(missing)} advertised data files do not exist")
+        self.assertEqual(self.missing[:8], [], f"{len(self.missing)} advertised data files do not exist")
 
 
 if __name__ == "__main__":

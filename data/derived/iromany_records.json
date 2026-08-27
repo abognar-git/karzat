@@ -1,7 +1,7 @@
 {
- "derived_at": "2026-08-19",
- "count": 537,
- "listed": 539,
+ "derived_at": "2026-08-27",
+ "count": 562,
+ "listed": 564,
  "note": "Csak a jelenlegi ciklus: az irománylista nem fogad ciklusparamétert, az iromány-adatlap pedig ciklusonként újrakezdődő izon szerint címezhető, így korábbi ciklus irománya nem kérhető le.",
  "records": {
   "B/1": {
@@ -49912,6 +49912,114 @@
    "final_vote_ts": null,
    "days_submission_to_final_vote": null
   },
+  "I/538": {
+   "szam": "I/538",
+   "izon": "538",
+   "title": "A családok tehermentesítése",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-23",
+   "status": "elfogadva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Németh Csilla (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "oktatási és gyermekügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00538/00538.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22003I%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "interpelláció szóban megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "képviselő elfogadta a választ",
+     "related": null,
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 538
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/539": {
+   "szam": "I/539",
+   "izon": "539",
+   "title": "A 35 éves MOHU koncesszió felülvizsgálata",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-24",
+   "status": "elfogadva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Lovkó Csaba (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "élő környezetért felelős miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00539/00539.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22003A%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "interpelláció szóban megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "képviselő elfogadta a választ",
+     "related": null,
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 539
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
   "H/54": {
    "szam": "H/54",
    "izon": "54",
@@ -50061,6 +50169,433 @@
    "days_submission_to_promulgation": 7,
    "final_vote_ts": "2026.05.26.16:18:12",
    "days_submission_to_final_vote": 6
+  },
+  "I/540": {
+   "szam": "I/540",
+   "izon": "540",
+   "title": "Számíthatnak a magyar emberek a zöldségek és gyümölcsök áfájának 5%-ra csökkentésére, vagy ez is csak egy hangzatos ígéret volt a kampányban?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-24",
+   "status": "elfogadva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Juhász Hajnalka (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "pénzügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00540/00540.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k155%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "interpelláció szóban megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "képviselő elutasította a választ",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "Országgyűlés az interpellációs választ elfogadta",
+     "related": null,
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [
+    {
+     "ts": "2026.08.27.16:29:31",
+     "outcome": "Országgyűlés az interpellációs választ elfogadta",
+     "igen": 123,
+     "nem": 52,
+     "tartozkodott": 0,
+     "result_raw": "Elfogadva"
+    }
+   ],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 540
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/541": {
+   "szam": "I/541",
+   "izon": "541",
+   "title": "Folytatja-e a Tisza kormány a kábítószer-terjesztők elleni hajtóvadászatot?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-24",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "belügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00541/00541.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 541
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/542": {
+   "szam": "I/542",
+   "izon": "542",
+   "title": "Miért tarja komolytalannak a TISZA Párt a nők munkáját?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-24",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Szalai Piroska (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "oktatási és gyermekügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00542/00542.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22004T%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 542
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/543": {
+   "szam": "I/543",
+   "izon": "543",
+   "title": "Meg tudja-e védeni a magyar Kormány hazánkat?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-24",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Csuzda Gábor (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "belügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00543/00543.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22000E%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 543
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "H/544": {
+   "szam": "H/544",
+   "izon": "544",
+   "title": "Az egyes házszabályi rendelkezésekről szóló 10/2014. (II. 24.) OGY határozat módosításáról",
+   "type": "határozati javaslat (§)",
+   "main_type": "határozati javaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-08-25",
+   "status": "tárgysorozatban",
+   "procedure_mode": "sürgős tárgyalásban",
+   "procedure_kind": "surgos",
+   "promulgation": null,
+   "submitters": [
+    "Perticsné Kácsor Andrea (TISZA)",
+    "Polgár György (TISZA)",
+    "Dr. Rák Richárd (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00544/00544.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%220022%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "rendkívüli ülésszak/rendkívüli ülés tárgysorozatán",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "sürgősségi javaslat elfogadva",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "bizottság kijelölve részletes vita lefolytatására",
+     "related": "Igazságügyi és Alkotmányügyi Bizottság",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [
+    {
+     "ts": "2026.08.27.15:26:51",
+     "outcome": "sürgősségi javaslat elfogadva",
+     "igen": 132,
+     "nem": 52,
+     "tartozkodott": 0,
+     "result_raw": "Elfogadva"
+    }
+   ],
+   "committees": [
+    {
+     "name": "Igazságügyi és Alkotmányügyi Bizottság",
+     "role": "Kijelölt bizottság",
+     "rule": "32. § (1) bekezdés"
+    }
+   ],
+   "szam_parsed": {
+    "kind": "H",
+    "number": 544
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/545": {
+   "szam": "K/545",
+   "izon": "545",
+   "title": "Szövőgyár utcai óvoda és a lakók helyzete az egészségre veszélyes tetraklór-etilén kapcsán",
+   "type": "kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Müller Anna (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "élő környezetért felelős miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00545/00545.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%220029%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 545
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/546": {
+   "szam": "K/546",
+   "izon": "546",
+   "title": "Hány orvost és egészségügyi szakdolgozót hozott haza külföldről hivatalba lépése óta, illetve az elmúlt egy hónapban?",
+   "type": "írásbeli kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "írásos válaszra vár",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Latorcai Csaba (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "egészségügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00546/00546.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l049%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 546
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/547": {
+   "szam": "K/547",
+   "izon": "547",
+   "title": "Hova vándorolnak a magyar zöldforrások? – Kiszámíthatóságot és hazai hozzáadott értéket a széllobbi helyett",
+   "type": "kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Juhász Hajnalka (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "gazdasági és energetikai miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00547/00547.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22k155%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 547
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/548": {
+   "szam": "K/548",
+   "izon": "548",
+   "title": "Magyarok biztonsága Horvátországban",
+   "type": "kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Veres Ádám (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "Külügyminisztérium államtitkára",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00548/00548.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22002Q%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 548
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/549": {
+   "szam": "I/549",
+   "izon": "549",
+   "title": "Mikor indulhatnak végre az Otthoni Energiatároló Program beruházásai?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Takács Árpád (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "gazdasági és energetikai miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00549/00549.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22004V%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 549
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
   },
   "H/55": {
    "szam": "H/55",
@@ -50212,6 +50747,515 @@
    "final_vote_ts": "2026.05.26.16:19:45",
    "days_submission_to_final_vote": 6
   },
+  "I/550": {
+   "szam": "I/550",
+   "izon": "550",
+   "title": "Mi lesz az M44 sorsa?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Takács Árpád (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "közlekedési és beruházási miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00550/00550.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22004V%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 550
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/551": {
+   "szam": "I/551",
+   "izon": "551",
+   "title": "„Szuperelőlegből” nem lesz őszi vetés – mikor kapnak valódi segítséget az aszálykárosult gazdák?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Pócs János (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "agrár- és élelmiszergazdaságért felelős miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00551/00551.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p041%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 551
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/552": {
+   "szam": "A/552",
+   "izon": "552",
+   "title": "Mikor tartják be az ígéretüket?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "visszavonva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dúró Dóra (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "Szociális és Családügyi Minisztérium államtitkára",
+   "note": "Az Ogytv. 43. § (3) bekezdése alapján visszavontnak tekintendő.",
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d028%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "visszavontnak tekintendő",
+     "related": null,
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 552
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/553": {
+   "szam": "A/553",
+   "izon": "553",
+   "title": "Nyugtával dicsérd a napot?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-26",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dócs Dávid (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "gazdasági és energetikai miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d040%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 553
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "S/554": {
+   "szam": "S/554",
+   "izon": "554",
+   "title": "A Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatal elnökének és elnökhelyettesének megválasztásáról",
+   "type": "az Országgyűlés személyi döntését kezdeményező indítvány",
+   "main_type": "az Országgyűlés személyi döntését kezdeményező indítvány",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "Országgyűlés döntésére vár",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "Igazságügyi és Alkotmányügyi Bizottság"
+   ],
+   "submitter_kind": "bizottsag",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00554/00554.pdf",
+   "submitter_azon": "bizottsag_mobil?bizottsag=%7B%22id%22%3A%22f3f4d2f7-a202-4289-9957-41927bea64b1%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "S",
+    "number": 554
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "S/555": {
+   "szam": "S/555",
+   "izon": "555",
+   "title": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság tagjainak és tisztségviselőinek megválasztásáról szóló 28/2026. (VI.8.) OGY határozat módosításáról",
+   "type": "az Országgyűlés személyi döntését kezdeményező indítvány",
+   "main_type": "az Országgyűlés személyi döntését kezdeményező indítvány",
+   "nature": "módosító",
+   "submitted_on": "2026-08-27",
+   "status": "kihirdetve",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": {
+    "number": "51",
+    "mk_issue": "119",
+    "date": "2026-08-27",
+    "law_ref": null
+   },
+   "submitters": [
+    "az Országgyűlés elnöke"
+   ],
+   "submitter_kind": "other",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00555/00555.pdf",
+   "submitter_azon": null,
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "önálló indítvány elfogadva",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "Országgyűlés elnöke aláírta",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "Magyar Közlönyben kihirdetve",
+     "related": null,
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [
+    {
+     "ts": "2026.08.27.15:30:16",
+     "outcome": "önálló indítvány elfogadva",
+     "igen": 158,
+     "nem": 2,
+     "tartozkodott": 15,
+     "result_raw": "Elfogadva"
+    }
+   ],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "S",
+    "number": 555
+   },
+   "days_submission_to_promulgation": 0,
+   "final_vote_ts": "2026.08.27.15:30:16",
+   "days_submission_to_final_vote": 0
+  },
+  "A/556": {
+   "szam": "A/556",
+   "izon": "556",
+   "title": "A visszaszerzett milliárdok nyomában",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Ruzsa Diána (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "gazdasági és energetikai miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%220024%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 556
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/557": {
+   "szam": "A/557",
+   "izon": "557",
+   "title": "Új korszak az agrártámogatásokban",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Tóth Norbert (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "agrár- és élelmiszergazdaságért felelős miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22003B%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 557
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/558": {
+   "szam": "A/558",
+   "izon": "558",
+   "title": "Mikor lép a kormány?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dúró Dóra (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "Szociális és Családügyi Minisztérium államtitkára",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22d028%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "politikai államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "politikai államtitkár",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 558
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/559": {
+   "szam": "A/559",
+   "izon": "559",
+   "title": "Felrúgott szakmaiság és szokásjog? - Miért nem szavazta meg a Tisza Marti Zoltánt?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Latorcai Csaba (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "Társadalmi Kapcsolatokért és Kultúráért Felelős Minisztérium államtitkára",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22l049%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "államtitkár",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 559
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
   "H/56": {
    "szam": "H/56",
    "izon": "56",
@@ -50361,6 +51405,189 @@
    "days_submission_to_promulgation": 7,
    "final_vote_ts": "2026.05.26.16:21:59",
    "days_submission_to_final_vote": 6
+  },
+  "A/560": {
+   "szam": "A/560",
+   "izon": "560",
+   "title": "Folytatódik-e a Honvédelmi Sportközpontok építése?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Simicskó István (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "honvédelmi miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s011%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 560
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/561": {
+   "szam": "A/561",
+   "izon": "561",
+   "title": "Ön elégedett, miniszter asszony?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Szűcs Gábor (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "oktatási és gyermekügyi miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22004Z%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 561
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/562": {
+   "szam": "A/562",
+   "izon": "562",
+   "title": "Honnan lesz energiánk és mennyibe fog kerülni?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-27",
+   "status": "tárgyalása lezárva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Hortay Olivér (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "gazdasági és energetikai miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22006E%22%7D",
+   "events": [
+    {
+     "date": "2026-08-27",
+     "text": "elhangzik az interpelláció/kérdés/azonnali kérdés",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "kérdés megválaszolva",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott képviselői viszonválasz",
+     "related": null,
+     "remark": null,
+     "speech": null
+    },
+    {
+     "date": "2026-08-27",
+     "text": "azonnali kérdésre adott miniszteri viszonválasz",
+     "related": "miniszter",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 562
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
   },
   "H/57": {
    "szam": "H/57",

@@ -238,8 +238,15 @@ class Digest(unittest.TestCase):
 
     def test_pages_and_exports(self):
         k = build_kepviselom_page(self.inp)
+        # 106 constituencies is fixed by law; the list seats are whoever holds one today, and that moves —
+        # the roster lost a member on 2026-08-27 and this assertion, pinned at 93, refused the publish.
         self.assertEqual(k.count("OEVK</td>"), 106)
-        self.assertEqual(k.count("országos lista</td>"), 93)
+        def _con(m):                      # the seat this cycle, from the member's own dated election rows
+            return next((e.get("constituency") or "" for e in (m.get("elections") or [])
+                         if (e.get("ciklus") or "").startswith("2026")), "")
+        n_list = sum(1 for m in self.inp["mps"].values()
+                     if m.get("current") and "lista" in _con(m).lower())
+        self.assertEqual(k.count("országos lista</td>"), n_list)
         self.assertIn('id="town"', k)                                                        # the town box (the annex is loaded)
         s = build_speeches_page(self.inp)
         self.assertIn("4 651 sor", s)

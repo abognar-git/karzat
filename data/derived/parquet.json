@@ -1,9 +1,9 @@
 {
- "built_at": "2026-08-25T15:55:59Z",
+ "built_at": "2026-08-27T20:24:02Z",
  "tables": {
   "szavazasok": {
-   "rows": 79829,
-   "bytes": 1848901,
+   "rows": 79839,
+   "bytes": 1849065,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -30,8 +30,8 @@
    ]
   },
   "szavazatok": {
-   "rows": 17444402,
-   "bytes": 2696140,
+   "rows": 17446382,
+   "bytes": 2695910,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -47,7 +47,7 @@
   },
   "kepviselok": {
    "rows": 3263,
-   "bytes": 32026,
+   "bytes": 32029,
    "columns": [
     "ciklus",
     "kepviselo_id",
@@ -64,8 +64,8 @@
    ]
   },
   "szavazas_iromany": {
-   "rows": 104319,
-   "bytes": 747429,
+   "rows": 104329,
+   "bytes": 748021,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -104,8 +104,8 @@
    ]
   },
   "iromanyok": {
-   "rows": 537,
-   "bytes": 34421,
+   "rows": 562,
+   "bytes": 35308,
    "columns": [
     "ciklus",
     "iromany",

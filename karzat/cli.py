@@ -144,7 +144,12 @@ def cmd_sync_votes(args: argparse.Namespace) -> int:
     while cur <= d_to:
         nxt = min(d_to, date(cur.year + (cur.month // 12), cur.month % 12 + 1, 1) - timedelta(days=1))
         try:
-            raw = api.fetch("szavazasok", p_datum_tol=fmt_date(cur), p_datum_ig=fmt_date(nxt))
+            # A window that reaches today is not a finished fact: the House may vote again this afternoon, and
+            # a cached "0 votes" answer from this morning would then be served for the rest of the day. The
+            # nightly never noticed because tomorrow's window is a different cache key — but an intraday run
+            # asks the same question twice, and got the morning's answer. Only the open end is refetched.
+            raw = api.fetch("szavazasok", p_datum_tol=fmt_date(cur), p_datum_ig=fmt_date(nxt),
+                            refresh=nxt >= date.today())
         except ApiError as e:
             print(f"list {cur}..{nxt}: {e}", file=sys.stderr)
             return 2
@@ -337,7 +342,12 @@ def cmd_sync_bills(args: argparse.Namespace) -> int:
     from .normalise import parse_iromanyok
     api = WebApi(cache_dir=args.cache)
     try:
-        lst = parse_iromanyok(to_dict_payload(api.fetch("iromanyok", refresh=not args.cached)))
+        # The LIST is always refetched, --cached or not: the register grows every sitting day, and a cached
+        # listing cannot contain a motion submitted after it was cached. That is how three motions voted on
+        # today reached the bill index with no datasheet behind them — the index knew them from the votes,
+        # the register had never been asked. --cached still means "do not refetch datasheets already held",
+        # which is what makes it cheap: one live call instead of five hundred and forty.
+        lst = parse_iromanyok(to_dict_payload(api.fetch("iromanyok", refresh=True)))
     except ApiError as e:
         print(f"iromanyok: {e}", file=sys.stderr)
         return 2

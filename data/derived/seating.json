@@ -1,11 +1,11 @@
 {
- "derived_at": "2026-08-25T15:52:29+00:00",
+ "derived_at": "2026-08-27T20:21:03+00:00",
  "government": "TISZA",
  "government_note": "largest faction unless --government given",
- "mps_listed": 199,
- "records_read": 199,
+ "mps_listed": 198,
+ "records_read": 198,
  "records_missing": [],
- "seated": 199,
+ "seated": 198,
  "unseated": [],
  "analysis": {
   "sectors": {
@@ -47,13 +47,13 @@
     }
    },
    "2": {
-    "count": 35,
+    "count": 34,
     "rows": {
      "1": 5,
      "2": 6,
      "3": 7,
      "4": 8,
-     "5": 9
+     "5": 8
     },
     "max_row": 5,
     "max_seat_by_row": {
@@ -65,7 +65,7 @@
     },
     "widest_row": 9,
     "factions": {
-     "Fidesz": 27,
+     "Fidesz": 26,
      "KDNP": 8
     }
    },
@@ -152,7 +152,7 @@
     }
    }
   },
-  "n_seated": 199,
+  "n_seated": 198,
   "duplicates": []
  },
  "orientation": {
@@ -951,13 +951,6 @@
    "seat": 7,
    "faction": "KDNP",
    "name": "Dr. Latorcai Csaba"
-  },
-  "l016": {
-   "sector": 2,
-   "row": 5,
-   "seat": 1,
-   "faction": "Fidesz",
-   "name": "Lázár János"
   },
   "0044": {
    "sector": 5,
@@ -2050,13 +2043,6 @@
    "sector": 2,
    "row": 4,
    "seat": 8
-  },
-  "l016": {
-   "x": -113.8,
-   "y": -70.85,
-   "sector": 2,
-   "row": 5,
-   "seat": 1
   },
   "004U": {
    "x": -113.11,
@@ -3162,6 +3148,14 @@
    "y": -38.62,
    "sector": 1,
    "row": 6,
+   "seat": 1,
+   "type": null
+  },
+  {
+   "x": -113.8,
+   "y": -70.85,
+   "sector": 2,
+   "row": 5,
    "seat": 1,
    "type": null
   },

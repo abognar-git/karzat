@@ -6745,7 +6745,7 @@ class _Writer:
         self.written.add(path.resolve())
 
 
-def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
+def build_cycle(out_dir: Path, cycle: int, index_only: bool = False, light: bool = False) -> dict:
     """One cycle's tree: index.html, szavazas/<slug>.html (+ .json/.csv), kepviselo/<azon>.html (+ .json/.csv) + index,
     adatok/ (the dump and its dictionary) — under out_dir. Returns per-MP summaries for the career pages."""
     inp = load_inputs(cycle)
@@ -6753,7 +6753,13 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
     (out_dir / "index.html").write_text(build_index(inp, pick_hero(inp)), encoding="utf-8")
     n = k = 0
     w = _Writer()
-    if not index_only:
+    # Computed for every cycle, not only the ones whose pages are being written: the cross-cycle search index
+    # is assembled from all ten cycles' items, so a light pass that skipped this would silently ship a search
+    # index holding one cycle. Cheap — the bills come from the already-loaded index.
+    bs = an.bills(inp)
+    bs = merge_motion_records(bs, inp.get("bill_recs_by_num") or {})
+
+    if not index_only and not light:
         vd = out_dir / "szavazas"
         vd.mkdir(parents=True, exist_ok=True)
         for ts in inp["order"]:
@@ -6801,8 +6807,6 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False) -> dict:
         # one page + JSON per substantive speech, one page per sitting day, the search page with its shards and meta, the channel
         texts_map = (inp["texts"] or {}).get("texts") or {}
         subs = substantive_rows(inp)
-        bs = an.bills(inp)                                         # the cycle's bills: speech pages link the agenda item's bills
-        bs = merge_motion_records(bs, inp.get("bill_recs_by_num") or {})   # …and every motion the registry answers for
         by_day: dict[int, list[dict]] = {}
         for r in (inp["speeches"] or {}).get("speeches") or []:
             by_day.setdefault(r["ulnap"], []).append(r)
@@ -8496,7 +8500,8 @@ def build_landing() -> str:
     return page
 
 
-def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None = None) -> dict:
+def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None = None,
+              pages_for: list[int] | None = None) -> dict:
     """Every cycle with derived inputs under out_dir/ckl<N>/, the landing page at out_dir/index.html, then one
     career page per person under out_dir/szemely/, assembled from every cycle's roster."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -8505,7 +8510,11 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         (out_dir / "assets" / name).write_text(body, encoding="utf-8")
     res = []
     for cycle in (cycles or available_cycles()):
-        res.append(build_cycle(out_dir / cycle_dir(cycle), cycle, index_only=index_only))
+        # pages_for narrows which cycles get their pages rewritten. A closed cycle's pages cannot change when
+        # a vote is cast in the current one, so an intraday refresh writes only the open cycle's tree and
+        # still assembles every cross-cycle page from all ten cycles' data.
+        res.append(build_cycle(out_dir / cycle_dir(cycle), cycle, index_only=index_only,
+                               light=pages_for is not None and cycle not in pages_for))
     people_n = 0
     full = not cycles or sorted(cycles) == sorted(available_cycles())
     if full:
@@ -8588,6 +8597,9 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true", help="compare a fresh build of site/index.html and site/assets/* with the committed files; exit 1 on difference")
     ap.add_argument("--index-only", action="store_true", help="do not (re)generate the per-vote pages")
+    ap.add_argument("--refresh", action="store_true",
+                    help="intraday refresh: rewrite only the current cycle's pages and every cross-cycle page, "
+                         "reading the closed cycles for their data alone — they cannot change until they reopen")
     ap.add_argument("--out", type=Path, default=SITE_DIR)
     ap.add_argument("--cycle", type=int, action="append", help="build only this cycle (repeatable); default: every cycle with derived inputs")
     args = ap.parse_args(argv)
@@ -8604,7 +8616,8 @@ def main(argv: list[str] | None = None) -> int:
             return 1
         print(f"ok: {SITE} and site/assets/* match a fresh build ({len(page):,} bytes index)")
         return 0
-    res = build_all(args.out, index_only=args.index_only, cycles=args.cycle)
+    res = build_all(args.out, index_only=args.index_only, cycles=args.cycle,
+                    pages_for=[CURRENT_CYCLE] if args.refresh else None)
     for r in res["cycles"]:
         print(f"cycle {r['cycle']}: {r['index']} + {r['vote_pages']} vote pages + {r['mp_pages']} MP pages (+ .json/.csv, adatok/)")
     if res.get("people"):
