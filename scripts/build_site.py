@@ -2037,6 +2037,21 @@ JS_SQL = """
   document.querySelectorAll('button.ex').forEach(function(b){
     b.addEventListener('click', function(){ box.value = b.getAttribute('data-q'); box.focus(); });
   });
+
+  // The query travels in the address. A journalist who publishes a number from this console can publish the
+  // link that reproduces it, and the reader arrives at the same query over the same files — which is the
+  // whole argument of the page: do not take the site's word for it. The site already carries state this way
+  // on the search (?q=) and the month strip (?m=).
+  var LINKMAX = 1800;                                   // beyond this the URL stops being one people can paste
+  function shareUrl(){
+    var q = box.value.trim();
+    return location.origin + location.pathname + (q && q.length <= LINKMAX ? '?q=' + encodeURIComponent(q) : '');
+  }
+  function rememberQuery(){
+    if (!history.replaceState) return;
+    var q = box.value.trim();
+    history.replaceState(null, '', q && q.length <= LINKMAX ? '?q=' + encodeURIComponent(q) : location.pathname);
+  }
   function say(t){ if (state) state.textContent = t; }
   // Everything is loaded from this origin: the runtime, the worker and the Parquet files. The page calls
   // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
@@ -2395,8 +2410,21 @@ JS_SQL = """
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(t)));
   });
   if (dpr) dpr.addEventListener('click', function(){ window.print(); });
+  // The share link, made visible. Without a button nobody learns that the address carries the query, and a
+  // reader who publishes a number from this console has nothing to publish beside it. What it copies is the
+  // page's own address with the query in it — the reader who follows it lands on the same question over the
+  // same files, which is the argument of the whole page.
+  var dlink = document.getElementById('dllink');
+  if (dlink) dlink.addEventListener('click', function(){
+    var self = this, url = shareUrl();
+    function done(t){ self.textContent = t; setTimeout(function(){ self.textContent = 'link a lekérdezéshez'; }, 2200); }
+    if (box.value.trim().length > LINKMAX) { done('túl hosszú lekérdezés'); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function(){ done('másolva'); }, function(){ done('nem sikerült'); });
+    } else { done('nem sikerült'); }
+  });
   runBtn.addEventListener('click', async function(){
-    runBtn.disabled = true; took.textContent = '';
+    runBtn.disabled = true; took.textContent = ''; rememberQuery();
     if (stopBtn) stopBtn.hidden = false;
     var mine = gen;
     try {
@@ -2430,6 +2458,19 @@ JS_SQL = """
       say('hiba — a lekérdezés nem futott le');
     } finally { if (!stale(mine)) { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; } }
   });
+
+  // Arriving on a shared link: fill the box and run it, because the point of the link is the answer, not the
+  // query text. Bounded by the same limit that writes it, and the stop button is already there for a query
+  // that turns out to be expensive on the reader's machine.
+  (function(){
+    var m = /[?&]q=([^&]+)/.exec(location.search);
+    if (!m) return;
+    var q = '';
+    try { q = decodeURIComponent(m[1].replace(/\\+/g, ' ')); } catch (e) { return; }
+    if (!q || q.length > LINKMAX) return;
+    box.value = q;
+    if (runBtn) runBtn.click();
+  })();
 })();
 """
 
@@ -3838,6 +3879,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} érdemi · {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor{" · mikrofonnál " + hu_hours((speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds")) if (speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds") else ""}</span></h2>
     <div class="hero-meta prose">Érdemi: a tárgyhoz szólás, kérdés, interpelláció és válaszaik, napirend előtti és utáni, ügyrendi; eljárási: ülésvezetés, bejelentés, eredmény kihirdetése.{(" " + esc(sp_note)) if sp_note else ""}</div>
+    {transcript_note(inp)}
   </section>
 </section>
 <section class="panel deep">{CORNERS}
@@ -4352,7 +4394,7 @@ böngésződben fut, és onnantól SQL-lel kérdezhető. Kiszolgáló nincs mög
   <div class="filters" role="group" aria-label="Példák">{ex}</div>
   <label class="lbl" for="q">Lekérdezés</label>
   <textarea id="q" rows="8" spellcheck="false" data-tables="{esc(",".join(pq))}" data-factions="{esc(json.dumps(chart_colours(inp), ensure_ascii=False, separators=(",", ":")))}" style="width:100%;background:rgba(0,0,0,.45);color:var(--text);border:1px solid var(--border);font-family:var(--mono);font-size:12px;padding:10px">{esc(SQL_EXAMPLES[0][1])}</textarea>
-  <div style="margin-top:8px"><button type="button" id="run">futtatás</button> <button type="button" id="stop" hidden>megszakítás</button> <span class="sub" id="took"></span></div>
+  <div style="margin-top:8px"><button type="button" id="run">futtatás</button> <button type="button" id="stop" hidden>megszakítás</button> <button type="button" id="dllink" title="a lekérdezést a cím hordozza — a link ugyanide, ugyanezzel a kérdéssel nyílik">link a lekérdezéshez</button> <span class="sub" id="took"></span></div>
   <div class="tablewrap" tabindex="0" style="margin-top:12px"><table id="out"><thead></thead><tbody></tbody></table></div>
   <div id="chartwrap" hidden style="margin-top:14px">
     <div class="filters" role="group" aria-label="Ábra">
@@ -4433,6 +4475,7 @@ def build_echo_page(inp: dict) -> str:
                      1 + inp["base_depth"]) + \
         topbar(inp, [("visszhang", None)], 1) + f"""
 <div class="hero-h"><h1>Visszhang</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(len(items))} szövegrész, amely két vagy több képviselő szájából hangzott el szó szerint</small></div>
+{transcript_note(inp)}
 <p class="lede">A ciklus jegyzőkönyvéből minden olyan, legalább {hu_num(ECHO_WORDS)} szavas rész, amely szó szerint
 megismétlődik egy másik képviselő felszólalásában. A hossz nem véletlen: tíz szónál a lista tele volt
 udvariassági fordulattal, harmincnál már nem az.</p>
@@ -5745,6 +5788,7 @@ def speaking_panel(inp: dict) -> str:
                    f'<td class="num mono">{hu_num(e["speeches"])}</td></tr>')
     return (f'<section class="panel">{CORNERS}'
             f'<h2><span data-kz-text>Mennyit beszéltek</span><span class="tag">{esc(hu_hours(sp["total"]))} · ebből érdemi {esc(hu_hours(sp["substantive"]))}</span></h2>'
+            f'{transcript_note(inp)}'
             f'<div class="paybar">{"".join(bar)}</div>'
             f'<div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Frakció</th><th class="num">Idő</th>'
             f'<th class="num">A mikrofonból</th><th class="num">A helyekből</th><th class="num">Felszólalás</th></tr></thead>'
@@ -6165,6 +6209,7 @@ def build_speech_search_page(inp: dict, n_meta: int, n_texts: int) -> str:
     return page_head(f'Keresés a felszólalásokban · {inp["cycle"]}. ciklus · karzat', f'Szókeresés a {inp["cycle"]}. ciklus felszólalásainak jegyzőkönyvi szövegében: előtag szerint, ékezet nélkül is; a találatok szövegrészlettel.', 1 + inp["base_depth"]) + \
         topbar(inp, [("felszólalások", "index.html"), ("keresés", None)], 1) + f"""
 <div class="hero-h"><h1>Keresés a felszólalásokban</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(n_meta)} érdemi felszólalás · {hu_num(n_texts)} szöveg betöltve</small></div>
+{transcript_note(inp)}
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Keresés</span><span class="tag">szó eleje szerint · ékezet nélkül is · relevancia szerint rendezve</span></h2>
   <div class="filters"><input id="spq" type="search" placeholder="pl. oktatás · MÁV · vasút · adó" aria-label="Keresés a szövegekben" autofocus style="min-width:min(100%,420px)"><span class="n" id="spn" aria-live="polite"></span>
@@ -6215,6 +6260,7 @@ def build_speeches_page(inp: dict) -> str:
     return page_head(f'Felszólalások · {inp["cycle"]}. ciklus · karzat', f'A {inp["cycle"]}. ciklus felszólalásai ülésnaponként és fajtánként, a képviselői adatlapokkal egyeztetve.', 1 + inp["base_depth"]) + \
         topbar(inp, [("felszólalások", None)], 1) + f"""
 <div class="hero-h"><h1>Felszólalások</h1><small class="label" data-kz-text>{inp["cycle"]}. ciklus · {hu_num(sp.get("count", 0))} sor · {hu_num(sp.get("substantive", 0))} érdemi felszólalás · {hu_num(len(days))} ülésnap · {hu_num(n_tx)} szöveg</small></div>
+{transcript_note(inp)}
 <p class="lede">Az ülésnapok felszólalás-listái az Országgyűlés Web API-jából (<span class="mono">felszolalasok</span>): ki, melyik napirendi pontnál, milyen fajta felszólalással, mennyi ideig — naponként egy lap, {"érdemi felszólalásonként egy lap a jegyzőkönyvi szöveggel" if not inp["archive"] else "érdemi felszólalásonként egy lap ott, ahol a jegyzőkönyvi szöveg be van töltve (archív ciklus: a sorok a napi lapokon)"}. Érdemi az, ahol valaki a tárgyhoz szól; eljárási az ülésvezetés, a bejelentés, az eredmény kihirdetése — a besorolás a fajta neve szerint, lent. <a href="kereses.html">Keresés a szövegekben</a>.{' <a href="../beszedido/index.html">Mire ment el a Ház ideje</a>.' if has_floor(inp) else ""}</p>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Ülésnaponként</span><span class="tag">a legfrissebb elöl · <a href="../adatok/felszolalasok.csv">CSV, mind</a></span></h2>
@@ -6229,6 +6275,72 @@ def build_speeches_page(inp: dict) -> str:
 </section>
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}felszolalas/index.html', f'Felszólalások — {inp["cycle"]}. ciklus', f'{inp["cycle"]}-felszolalas')}
 """ + page_tail(inp, 1)
+
+
+def transcript_edge(inp: dict) -> tuple[str, list[str]]:
+    """(last sitting day whose transcript is loaded, sitting days after it that have none).
+
+    The two halves of this record do not arrive together. A vote is published the day it is cast; the
+    verbatim record follows days later, and until it does the House's own service answers an empty list for
+    that day. Every page built from speech data is therefore behind every page built from votes, and the
+    sync stamp in the top bar — which is true, and is about the sync — invites the reader to assume
+    otherwise. So the pages say where their own edge is."""
+    if "_tedge" in inp:
+        return inp["_tedge"]
+    sp = (inp.get("speeches") or {}).get("speeches") or []
+    have = sorted({r.get("datum") or r.get("date") or "" for r in sp if (r.get("datum") or r.get("date"))})
+    days = sorted({d.get("date") for d in (inp["idx"].get("sitting_days") or []) if d.get("date")})
+    last = have[-1] if have else ""
+    inp["_tedge"] = (last, [d for d in days if last and d > last])
+    return inp["_tedge"]
+
+
+def transcript_note(inp: dict, year: str = "") -> str:
+    """One sentence, one owner: the sentence every speech-driven page prints about its own edge.
+
+    `year` narrows it to one calendar year. The year pages are built from the same speech data but answer
+    only for their own year, and a cycle running into a second year would otherwise print next year's dates
+    on this year's page — where they are not missing, they are simply not this page's business."""
+    last, missing = transcript_edge(inp)
+    if year:
+        missing = [d for d in missing if d[:4] == str(year)]
+    if not last or not missing:
+        return ""
+    # A closed cycle is never waiting for anything. Every archive cycle is level today, so this changes no
+    # page — but if a sync ever leaves a gap in one, the sentence below would promise a transcript that is
+    # not coming. What the old record does not have is the coverage page's subject, and it is a different
+    # sentence: that one is about what can never be known, this one about what is not here yet.
+    if inp.get("closed"):
+        return ""
+    n = len(missing)
+    # Three rules shape the wording. No suffix glued to a numeral, and no "-ig" glued to a date that already
+    # ends in a full stop, so the edge is named rather than inflected. The count is a word below ten and a
+    # figure above it, which is where Hungarian puts the line — HU_NUMWORD is the site's one list of those
+    # words, and this used to keep a truncated copy that ran out at five. And past five days the parenthetical
+    # becomes a span instead of a wall of dates: the sentence still says how many, so only the list is lost.
+    szo = HU_NUMWORD.get(n, hu_num(n))
+    # "2026. augusztus 27. és 28." — a date that repeats the year and the month its neighbour just said reads
+    # like a form, not like a sentence. The weekly tables already elide it; so does this.
+    def naptar(days: list[str]) -> list[str]:
+        out, prev = [], ""
+        for d in days:
+            out.append(hu_date(d).split()[-1] if prev[:7] == d[:7] else hu_date(d))
+            prev = d
+        return out
+    lista = naptar(missing)
+    napok = (lista[0] if n == 1 else
+             " és ".join(lista) if n == 2 else
+             ", ".join(lista[:-1]) + " és " + lista[-1] if n <= 5 else
+             f"{lista[0]} és {naptar([missing[0], missing[-1]])[-1]} között")
+    # Singular is the commonest case, not the exception — one day published ahead of its transcript is what a
+    # normal sitting week looks like. And the votes are contrasted by stating where they are, not by an "igen"
+    # resuming the previous predicate: that resumption said the opposite of what it meant.
+    birt = "Ennek a napnak a felszólalásai" if n == 1 else "Ezeknek a napoknak a felszólalásai"
+    szav = "A szavazásai" if n == 1 else "A szavazásaik"
+    return (f'<p class="hero-meta prose"><b>A jegyzőkönyv eddig tart: {hu_date(last)}</b> '
+            f'Azóta {szo} ülésnap volt ({napok}), de a Ház a szó szerinti jegyzőkönyvet napokkal az ülés '
+            f'után teszi közzé. {birt} tehát nincsenek benne az itteni számokban. {szav} viszont már fent '
+            f'vannak az oldalon, mert azokat a Ház még aznap közzéteszi.</p>')
 
 
 def has_floor(inp: dict) -> bool:
@@ -6834,6 +6946,7 @@ def build_floor_page(inp: dict, ft: dict) -> str:
                      f'A {cycle}. ciklus érdemi felszólalásainak ideje évenként, vitánként és formánként — a Ház saját napirendjéből számolva.',
                      depth) + topbar(inp, [("beszédidő", None)], 1) + f"""
 <div class="hero-h"><h1>Beszédidő</h1><small class="label" data-kz-text>{cycle}. ciklus · {esc(hu_hours(ft["seconds"]))} · {hu_num(ft["speeches"])} mért idejű érdemi felszólalás · {hu_num(n_deb)} vita</small></div>
+{transcript_note(inp)}
 <p class="lede">Mire ment el a Ház ideje: {esc(hu_hours(ft["seconds"]))} érdemi felszólalás {hu_num(len(years))} naptári évben. Érdemi az, ahol valaki a tárgyhoz szól; az ülésvezetés, a bejelentés és a többi eljárási sor nincs benne.
 Minden felszólalás egy napirendi ponthoz tartozik, és az idő {hu_dec(100 * attributed / total, 0)}%-a irományhoz
 — a Házhoz benyújtott irathoz — is kötődik. A csoportosítás mindenütt a jegyzőkönyv saját címkéit követi;
@@ -6930,7 +7043,8 @@ def build_floor_year_page(inp: dict, ft: dict, y: dict, have: set[int]) -> str:
     return page_head(f'Beszédidő {y["year"]} · {cycle}. ciklus · karzat',
                      f'A Ház {y["year"]}. évi érdemi felszólalásainak ideje vitánként — a {cycle}. ciklus.',
                      depth) + topbar(inp, [("beszédidő", "index.html"), (y["year"], None)], 1) + f"""
-<div class="hero-h"><h1>{y["year"]}</h1><small class="label" data-kz-text>{esc(hu_hours(y["seconds"]))} mért idejű érdemi felszólalás · {hu_num(y["days"])} ülésnap · {hu_num(len(y["debates"]))} vita · {cycle}. ciklus</small></div>
+<div class="hero-h"><h1>{y["year"]}</h1><small class="label" data-kz-text>{esc(hu_hours(y["seconds"]))} mért idejű érdemi felszólalás · {hu_num(y["days"])} ülésnap jegyzőkönyve · {hu_num(len(y["debates"]))} vita · {cycle}. ciklus</small></div>
+{transcript_note(inp, y["year"])}
 <p class="lede">Ennyi időt töltött a Ház tárgyalással ebben az évben, és ezekkel az ügyekkel. A sorrend az
 időé. A <b>{hu_num(min(FLOOR_OPEN, len(y["debates"])))} leghosszabb vita felnyitható</b> — együtt az év
 {hu_dec(100 * top / tot, 0)}%-a —, alattuk mind a {hu_num(len(y["debates"]))} egy táblában.</p>
@@ -8588,6 +8702,7 @@ def build_kormany_page(inp: dict, azon: str, r: dict) -> str:
   </section>
   <section class="panel deep">{CORNERS}
     <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(mine))} tétel · jegyzőkönyvi szöveggel</span></h2>
+    {transcript_note(inp)}
     <div class="tablewrap" tabindex="0"><table data-page-size="25"><thead><tr><th scope="col">Nap</th><th scope="col">Tisztség</th><th scope="col">Fajta</th><th scope="col" class="num">Karakter</th></tr></thead><tbody>{sp_rows or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
   </section>
 </section>

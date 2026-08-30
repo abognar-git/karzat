@@ -910,6 +910,21 @@
   document.querySelectorAll('button.ex').forEach(function(b){
     b.addEventListener('click', function(){ box.value = b.getAttribute('data-q'); box.focus(); });
   });
+
+  // The query travels in the address. A journalist who publishes a number from this console can publish the
+  // link that reproduces it, and the reader arrives at the same query over the same files — which is the
+  // whole argument of the page: do not take the site's word for it. The site already carries state this way
+  // on the search (?q=) and the month strip (?m=).
+  var LINKMAX = 1800;                                   // beyond this the URL stops being one people can paste
+  function shareUrl(){
+    var q = box.value.trim();
+    return location.origin + location.pathname + (q && q.length <= LINKMAX ? '?q=' + encodeURIComponent(q) : '');
+  }
+  function rememberQuery(){
+    if (!history.replaceState) return;
+    var q = box.value.trim();
+    history.replaceState(null, '', q && q.length <= LINKMAX ? '?q=' + encodeURIComponent(q) : location.pathname);
+  }
   function say(t){ if (state) state.textContent = t; }
   // Everything is loaded from this origin: the runtime, the worker and the Parquet files. The page calls
   // no third party, which is the reason the runtime is vendored rather than pulled from a CDN.
@@ -1268,8 +1283,21 @@
     img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(t)));
   });
   if (dpr) dpr.addEventListener('click', function(){ window.print(); });
+  // The share link, made visible. Without a button nobody learns that the address carries the query, and a
+  // reader who publishes a number from this console has nothing to publish beside it. What it copies is the
+  // page's own address with the query in it — the reader who follows it lands on the same question over the
+  // same files, which is the argument of the whole page.
+  var dlink = document.getElementById('dllink');
+  if (dlink) dlink.addEventListener('click', function(){
+    var self = this, url = shareUrl();
+    function done(t){ self.textContent = t; setTimeout(function(){ self.textContent = 'link a lekérdezéshez'; }, 2200); }
+    if (box.value.trim().length > LINKMAX) { done('túl hosszú lekérdezés'); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function(){ done('másolva'); }, function(){ done('nem sikerült'); });
+    } else { done('nem sikerült'); }
+  });
   runBtn.addEventListener('click', async function(){
-    runBtn.disabled = true; took.textContent = '';
+    runBtn.disabled = true; took.textContent = ''; rememberQuery();
     if (stopBtn) stopBtn.hidden = false;
     var mine = gen;
     try {
@@ -1303,6 +1331,19 @@
       say('hiba — a lekérdezés nem futott le');
     } finally { if (!stale(mine)) { runBtn.disabled = false; if (stopBtn) stopBtn.hidden = true; } }
   });
+
+  // Arriving on a shared link: fill the box and run it, because the point of the link is the answer, not the
+  // query text. Bounded by the same limit that writes it, and the stop button is already there for a query
+  // that turns out to be expensive on the reader's machine.
+  (function(){
+    var m = /[?&]q=([^&]+)/.exec(location.search);
+    if (!m) return;
+    var q = '';
+    try { q = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (e) { return; }
+    if (!q || q.length > LINKMAX) return;
+    box.value = q;
+    if (runBtn) runBtn.click();
+  })();
 })();
 
 

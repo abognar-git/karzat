@@ -23,6 +23,7 @@ is what was tested by hand.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import shutil
@@ -138,6 +139,43 @@ def publish_age_days() -> float:
         return (datetime.now(timezone.utc) - t).total_seconds() / 86400
     except Exception:
         return float("inf")
+
+
+def builder_fingerprint() -> str:
+    """A digest of the code and configuration the site's HTML is a function of.
+
+    The freshness test below asks whether the *record* moved. But the site is a function of the builder as
+    well, and that half had no test. A change that rewrites every page reached only the pages some later run
+    happened to touch for another reason, and the rest kept the old markup for as long as the record stood
+    still. The impressum in the footer was one: it shipped, the nightly said "nothing new — no build" on the
+    days that followed, and 155,739 archive pages went on serving a footer with no impressum in it while the
+    3,060 pages of the open cycle had one. Nothing was stale in the sense this project usually means — every
+    number was right — but the site disagreed with itself, and no gate could see it, because every gate runs
+    on the tree the build produced rather than on the tree that is live.
+
+    This is the derive-subset bug one level up, and the same answer: name the whole set, not a useful part of
+    it. Over-inclusion is the safe direction — a needless rebuild costs a quarter of an hour, a missed one is
+    a site that quietly contradicts itself for a week."""
+    h = hashlib.sha256()
+    parts = [ROOT / "scripts" / "build_site.py", ROOT / "config" / "factions.yml"]
+    parts += sorted((ROOT / "karzat").glob("*.py"))
+    for f in sorted(parts):
+        # the path, not the basename: a digest keyed on names alone cannot tell two files apart if one is
+        # ever moved into another directory, and it is the set that is being hashed as much as the contents
+        h.update(str(f.relative_to(ROOT)).encode("utf-8"))
+        h.update(f.read_bytes() if f.exists() else b"")
+    return h.hexdigest()[:16]
+
+
+def published_fingerprint() -> str:
+    """The builder digest of the last successful publish, or "" — which reads as "unknown", and rebuilds."""
+    f = ROOT / "data" / "last_publish.json"
+    if not f.exists():
+        return ""
+    try:
+        return json.loads(f.read_text(encoding="utf-8")).get("builder") or ""
+    except Exception:
+        return ""
 
 
 def upload_cache(profile: str, bucket: str) -> None:
@@ -273,8 +311,13 @@ def _run(args: argparse.Namespace) -> int:
     after = corpus_state()
     log(f"after:  {after[0]:,} votes listed, last sitting day {after[1] or '—'}")
     stamp_age = publish_age_days()
+    fp, fp_was = builder_fingerprint(), published_fingerprint()
+    builder_moved = fp != fp_was
     if after == before and not args.force and not dry:
-        if args.refresh_days and stamp_age > args.refresh_days:
+        if builder_moved:
+            log(f"the record stood still, but the builder moved ({fp_was or 'unknown'} → {fp}) — rebuilding, "
+                "because every page is a function of the code as much as of the data")
+        elif args.refresh_days and stamp_age > args.refresh_days:
             log(f"nothing new, but the last publish is {stamp_age:.1f} days old (limit {args.refresh_days:.0f}) — "
                 "rebuilding so the freshness stamp stays honest about being checked")
         else:
@@ -306,7 +349,9 @@ def _run(args: argparse.Namespace) -> int:
                  ["-m", "scripts.derive_receipt"]):
         run(py + step, dry=dry, allow_fail=True)
     run(py + ["-m", "karzat", "freshness"], dry=dry, allow_fail=True)
-    run(py + ["-m", "scripts.build_site"] + (["--refresh"] if args.quick else []), dry=dry)
+    if args.quick and builder_moved:
+        log("the intraday path rebuilds the open cycle only, and the builder moved — building the whole tree")
+    run(py + ["-m", "scripts.build_site"] + (["--refresh"] if args.quick and not builder_moved else []), dry=dry)
 
     # ---- prove it before publishing --------------------------------------------------------------
     # The README's registered figures move with the record (sitting days, vote counts), and the gate
@@ -329,7 +374,8 @@ def _run(args: argparse.Namespace) -> int:
     run(py + deploy, dry=dry)
     if not dry:
         (ROOT / "data" / "last_publish.json").write_text(
-            json.dumps({"published_at": datetime.now(timezone.utc).isoformat()}) + "\n", encoding="utf-8")
+            json.dumps({"published_at": datetime.now(timezone.utc).isoformat(), "builder": fp}) + "\n",
+            encoding="utf-8")
     log("published")
     return 0
 

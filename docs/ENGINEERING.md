@@ -174,7 +174,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 440 tests
+python3 -m unittest discover -s tests -t .      # offline; 461 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -913,6 +913,114 @@ means the key ignores every parameter it was not told about. No call site varies
 fourteen. The property and its companion — which reads the call sites and compares them against the key — exist
 because that correspondence was held in nobody's head, and the failure it would cause is a payload served for
 the wrong question, from disk, with no request made and nothing to see.
+
+## A guard that cannot fail
+
+The record arrives in two halves that are days apart. A vote is published the day it is cast; the verbatim
+transcript follows later, and until it does the House's own service answers an empty list for that sitting
+day. So every page built from speech data is behind every page built from votes — while the sync stamp in
+the top bar, which is true and is about the sync, invites the reader to assume otherwise. A reader asked
+whether Beszédidő was current. It was two sitting days behind, and nothing on the page said so.
+
+The fix is one sentence, computed once: where the transcript ends, which sitting days come after it, and why.
+I put it on four pages and thought the job was done. An adversarial review of my own change found it needed
+seven, and named the two that mattered. **Beszédidő's year page is one click below the index that carries the
+note** — the link is directly underneath it — and the year page makes the more specific claim: "138 óra 34
+perc · 23 ülésnap", where the cycle index two levels up says 25. The reader learns the edge on one page and
+is misled on the next, which is exactly the failure the note exists to prevent. The other was Számok, which
+carries the cycle's whole floor-time panel — microphone share against seat share, per faction — in the same
+document as vote charts that run to the last sitting day. One page, two epochs, no sentence between them.
+
+The note now belongs to `speaking_panel()` rather than to the Számok page, because the panel is what owns
+those numbers; the page around it is fresher and has every right to be. Three more pages state a speech
+aggregate and got it too — the member's page, the government member's page, and Beszédidő's year page,
+scoped to its own year so a cycle running into a second one does not print next year's dates.
+
+### The test that could not go red
+
+The class guarding all of this passed, and would have passed with the feature deleted. Two of its three tests
+called `skipTest` when nothing was missing; the third degenerated to asserting that the last covered day is a
+day the corpus covers. Every real assertion was gated on the live corpus happening to be behind — so on the
+day the House caught up, which is the feature's own success condition, the class would have quietly stopped
+testing anything.
+
+So the state is fabricated rather than waited for. Both halves are pinned: the note appearing, and the note
+disappearing. The wording is checked at every count it can render, one through twelve, which caught a second
+defect on its own — the sentence kept a private copy of the Hungarian number words that ran out at five and
+fell back to a digit, so from six missing days it would have printed "Azóta 6 ülésnap volt", the exact shape
+its own test banned. The nightly would have refused to publish on a busy sitting stretch. The file already had
+`HU_NUMWORD` covering one to ten, twenty lines away.
+
+And the list of pages is no longer written down. The test reads the builder's call graph, finds every page
+function that reaches speech data, and requires each to reach `transcript_note` — through a helper if that is
+how it gets there, which is how Számok qualifies. It found a page I had missed while I was writing it. One
+builder is exempt, and the exemption is asserted rather than argued: a sitting day's own page is written from
+the speech rows themselves, so a day with no transcript has no page rather than an empty one — and if that
+ever stops being true, a test says so.
+
+### Three more inert guards
+
+The review turned up the same shape three more times, in code that had nothing to do with the note.
+
+**The link allowlist did not know the press page existed.** Two tests assert that a cycle page only climbs out
+of its own directory into the shared trees — assets, people, method, search. The impressum in the footer links
+to `../sajto/index.html`, which is a shared tree of exactly that kind, and the pattern had never been told.
+Both tests had been red since the impressum shipped. No reader was ever harmed — the link resolves, and the
+separate link-walk over every internal reference proves it — but I committed and deployed on a red gate,
+which is the process failing exactly where it is supposed to hold.
+
+**The escape guard was blind on the interpreter it guarded.** The builder holds JavaScript in Python strings,
+and a JS regex is full of sequences Python does not recognise. There is a test for it, and its docstring
+explains that an unattended nightly must not stop on the day Python makes these an error. It catches
+`SyntaxWarning` — which is what Python 3.12 raises. The nightly runs 3.11, where the same fault is a
+`DeprecationWarning`. A `/\+/g` I had written in the share-link loader sat in the file warning on every
+single build, with the suite green. Both classes are errors now.
+
+**A security argument rested on a premise I had just broken.** The Riport page escapes column names because a
+red-team pass found that `SELECT 1 AS "<img src=x onerror=…>"` put a live element in the header. The test's
+reasoning said the reach was the reader's own: they typed the query, and nothing read one from the URL. The
+shareable link ended that. A query now arrives in `?q=` and runs itself, so the guard went from tidiness to
+the thing standing between a pasted link and a script in the reader's page. It still holds — every
+interpolation goes through `esc()`, and the test asserts the shape rather than the symptom — but the sentence
+under it was describing a site that no longer existed. What is left is small and now written down: no cookie,
+no session, static public files, and the query runs in a worker, so the worst a hostile link can do is spend
+the reader's own CPU on their own copy of public data. That is the argument for letting a link run on arrival,
+and it had to be made rather than inherited.
+
+The share link had no test of any kind, incidentally — and it had already shipped one bug: the button was
+first placed inside the chart box, which is hidden whenever a query fails, so the reader lost it exactly when
+they most wanted to send someone the query that broke.
+
+### The site is a function of the builder too
+
+Writing the note found something larger by accident. Rebuilding one archive cycle's member page to see what
+my change did to it produced a diff with two entries: my own blank line, and the entire impressum block in
+the footer.
+
+The impressum had shipped five days earlier. The record then stood still, and every morning the nightly said
+what it is supposed to say — *nothing new — no build, no upload.* So the footer reached the 3,060 pages of the
+open cycle, which the intraday path rebuilds, and none of the other 155,739. Ninety-seven per cent of the site
+was serving a footer with no impressum in it, and the reader who had asked for that link to be visible would
+have found it on the current cycle and nowhere else.
+
+Nothing was stale in the sense this project usually means. Every number was right. But **the freshness test
+asks whether the record moved, and the site is a function of the record and of the code**. The second half had
+no test at all — and no gate could have caught it, because every gate in the chain runs on the tree the build
+just produced, never on the tree that is actually live. A build that never happens is invisible to a test of
+the build.
+
+This is the derive-subset bug one level up, and it takes the same answer: name the whole set. The nightly now
+fingerprints what the HTML is a function of — `build_site.py`, every module under `karzat/`, the faction
+config — and writes that digest into the publish stamp beside the timestamp. A morning where the record has
+not moved but the digest has is a morning that builds, and says which digest changed and why. A test asserts
+the coverage the way it means it: it perturbs each watched file in turn and requires the digest to move, so a
+file dropped from the list turns the suite red rather than going quietly unwatched.
+
+Two smaller consequences fell out. The intraday path rebuilds the open cycle only, which is right for a
+sitting day's votes and wrong for a change of markup — so a moved digest forces the whole tree, or the
+publish would leave the site half in each style. And a publish stamp with no digest in it reads as *unknown*
+rather than *unchanged*, which rebuilds. The safe direction here is the wasteful one: a needless rebuild costs
+a quarter of an hour, a missed one is a site that quietly contradicts itself for a week.
 
 ## Licence
 

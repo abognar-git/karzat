@@ -57,7 +57,7 @@ class Build(unittest.TestCase):
         self.assertIn('href="../assets/karzat.css"', self.cyc)                # site/ckl43/index.html → ../assets
         self.assertIn('<a class="brand" href="../index.html">', self.cyc)     # the brand goes to the landing
         for h in re.findall(r'href="\.\./([^"#]+)', self.cyc):
-            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
+            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|sajto/|index\.html$|ckl\d+/)", h)
 
     def test_landing_is_the_view_from_the_gallery(self):
         tot = site_totals()
@@ -498,7 +498,7 @@ class Cycle42(unittest.TestCase):
         self.assertNotIn("TISZA: 141", page)
         # links leave the cycle root only for the shared trees (assets, people, method, search, other cycles)
         for h in re.findall(r'href="\.\./([^"#]+)', page):
-            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|index\.html$|ckl\d+/)", h)
+            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|sajto/|index\.html$|ckl\d+/)", h)
         self.assertIn('href="../ckl43/index.html" class="near">43</a>', page)  # the cycle switch (43 is the neighbour of 42)
         self.assertIn('<span class="kicker" data-kz-text>42. ciklus</span><h1>2022. május 2. — 2026. május 8.</h1>', page)   # the term is the title
         # Four groups, and each entry under the question it answers. This used to be three, and the odd one
@@ -895,7 +895,12 @@ class SourceIsFutureProof(unittest.TestCase):
     recognise as escapes: /index\\.html$/, /\\d{4}/, /\\s+/. Python has warned about these for years and will
     make them an error; on the day it does, an unattended nightly build stops with a syntax error and nobody is
     watching. Worse is the pair that already means something: \\b is a word boundary in JavaScript and a backspace
-    in Python, so it would corrupt a regex rather than fail loudly. There are none today and this keeps it so."""
+    in Python, so it would corrupt a regex rather than fail loudly. There are none today and this keeps it so.
+
+    Both warning classes are errors here, and that is the point rather than belt-and-braces: Python 3.12 raises
+    SyntaxWarning for an invalid escape, but 3.11 — which is what the nightly runs — raises DeprecationWarning.
+    Catching only the first meant this guard was blind on the one interpreter it was guarding, and a /\\+/g that
+    shipped in the SQL loader sat in the file warning on every build with the suite green."""
 
     def test_the_builder_compiles_with_syntax_warnings_as_errors(self):
         import py_compile
@@ -904,10 +909,11 @@ class SourceIsFutureProof(unittest.TestCase):
         for mod in ("scripts/build_site.py", "scripts/nightly.py", "karzat/normalise.py"):
             with warnings.catch_warnings():
                 warnings.simplefilter("error", SyntaxWarning)
+                warnings.simplefilter("error", DeprecationWarning)
                 with tempfile.NamedTemporaryFile(suffix=".pyc") as tmp:
                     try:
                         py_compile.compile(str(ROOT / mod), doraise=True, cfile=tmp.name)
-                    except (SyntaxWarning, py_compile.PyCompileError) as e:
+                    except (SyntaxWarning, DeprecationWarning, py_compile.PyCompileError) as e:
                         self.fail(f"{mod}: {e}")
 
 
@@ -1375,14 +1381,32 @@ class RecordPanels(unittest.TestCase):
                 self.assertIn(d["url"], html)
 
     def test_a_declaration_recorded_as_due_but_not_published_is_hollow(self):
+        """The rendering for a declaration the record says is due and cannot show.
+
+        This used to look for such a member in the live roster and skip when it found none — which is where
+        it stood today, so the branch shipped untested and the test read as a pass. A state the corpus is
+        only sometimes in has to be built, not waited for; the live search stays as well, because a real
+        member exercises the shape the record actually produces."""
         from scripts.build_site import declarations_html
-        azon = next((a for a, m in self.mps.items()
-                     if any(not d.get("url") for d in m.get("declarations") or [])), None)
-        if not azon:
-            self.skipTest("every declaration in this cycle carries a link")
-        html = declarations_html(self.mps[azon])
+        # the record's own fields: a row is a declaration when it states a date or a title, and it is hollow
+        # when that row carries no url — the first fabrication here used field names the API does not have,
+        # declarations_html dropped the row, and the empty string passed every assertion but one
+        fabricated = {"declarations": [
+            {"title": "2026. évi vagyonnyilatkozat", "as_of": "2026-02-01", "due": "2026-01-31", "url": None},
+            {"title": "2025. évi vagyonnyilatkozat", "as_of": "2025-02-01", "filed": True,
+             "url": "https://www.parlament.hu/x.pdf"}]}
+        html = declarations_html(fabricated)
         self.assertIn('class="due"', html)
         self.assertIn("nincs közzétett dokumentum", html)
+        self.assertEqual(html.count('class="due"'), 1, "only the row with no document is hollow")
+        self.assertEqual(html.count("<a href="), 1, "the published one lost its link")
+        self.assertIn("1 közzétett dokumentum · 1 sornál nincs", html)
+        azon = next((a for a, m in self.mps.items()
+                     if any(not d.get("url") for d in m.get("declarations") or [])), None)
+        if azon:
+            live = declarations_html(self.mps[azon])
+            self.assertIn('class="due"', live)
+            self.assertIn("nincs közzétett dokumentum", live)
 
     def test_remuneration_names_its_one_month_and_never_implies_a_series(self):
         from scripts.build_site import remuneration_html
@@ -1482,6 +1506,317 @@ class GatedControlsAnnounceNothingUntilTheyWork(unittest.TestCase):
         boot = js[:js.index("JS_") if "JS_" in js[:200] else 4000]
         for token in ("aria-pressed", ".filters", "button.on", "classList.contains('on')"):
             self.assertIn(token, boot, f"the boot block no longer mentions {token}")
+
+
+class TheTranscriptSaysWhereItEnds(unittest.TestCase):
+    """The two halves of this record do not arrive together: a vote is published the day it is cast, the
+    verbatim record days later. Until then the House's own service answers an empty list for that sitting
+    day, so every speech-driven page is behind every vote-driven one — while the sync stamp in the top bar,
+    which is true and is about the sync, invites the reader to assume otherwise. A reader asked whether
+    Beszédidő was up to the last sitting day; it was not, and nothing on the page said so.
+
+    The first version of these tests was worthless and green: every real assertion was gated on the live
+    corpus happening to be behind, so two of the three skipped when it caught up and the third degenerated
+    to a tautology. The feature could have been deleted without turning anything red — on the very day it
+    succeeded. So the state is now fabricated, not waited for: both halves are pinned, the note appearing
+    and the note disappearing, and the wording is checked at every count it can be asked to render rather
+    than at whatever count the corpus happens to hold this morning."""
+
+    @staticmethod
+    def _corpus(have, days):
+        """A whole input reduced to the two fields transcript_edge reads — no _tedge, so the edge is
+        actually computed rather than handed in."""
+        return {"speeches": {"speeches": [{"datum": d} for d in have]},
+                "idx": {"sitting_days": [{"date": d} for d in days]}}
+
+    @staticmethod
+    def _edge(last, missing):
+        """The cached hook, for testing the sentence without also testing the edge that feeds it."""
+        return {"_tedge": (last, list(missing))}
+
+    def test_it_finds_the_edge_of_a_corpus_it_is_given(self):
+        from scripts.build_site import transcript_edge
+        inp = self._corpus(["2026-06-02", "2026-06-03", "2026-06-02"],
+                           ["2026-06-02", "2026-06-03", "2026-06-16", "2026-06-17"])
+        self.assertEqual(transcript_edge(inp), ("2026-06-03", ["2026-06-16", "2026-06-17"]))
+
+    def test_a_transcript_level_with_the_house_claims_nothing(self):
+        """The feature's own success condition. This is the assertion the old suite skipped past."""
+        from scripts.build_site import transcript_edge, transcript_note
+        inp = self._corpus(["2026-06-02", "2026-06-03"], ["2026-06-02", "2026-06-03"])
+        self.assertEqual(transcript_edge(inp), ("2026-06-03", []))
+        self.assertEqual(transcript_note(inp), "", "nothing is missing, so nothing should be claimed")
+
+    def test_an_empty_corpus_claims_nothing_either(self):
+        from scripts.build_site import transcript_note
+        self.assertEqual(transcript_note(self._corpus([], ["2026-06-02"])), "")
+
+    def test_the_count_reads_as_hungarian_writes_it_at_every_length(self):
+        """A word below ten, a figure above, and never a suffix glued to either. The shipped code used to
+        keep its own copy of the number words that ran out at five and fell back to a digit — so from six
+        missing days the site would have printed "Azóta 6 ülésnap volt", which this suite bans, and the
+        nightly would have refused to publish on a busy sitting stretch."""
+        from scripts.build_site import transcript_note, HU_NUMWORD
+        for n in range(1, 13):
+            days = [f"2026-09-{d:02d}" for d in range(1, n + 1)]
+            note = transcript_note(self._edge("2026-08-11", days))
+            with self.subTest(n=n):
+                self.assertTrue(note, "a missing day must produce a sentence")
+                if n <= 10:
+                    self.assertIn(f"Azóta {HU_NUMWORD[n]} ülésnap volt", note)
+                    self.assertNotRegex(note, r"\d+ ülésnap volt", "spelled out below ten")
+                else:
+                    self.assertRegex(note, r"Azóta \d+ ülésnap volt")
+                for bad in (".-ig", ".-től", ".-ról", ".-re", "-én", "-án"):
+                    self.assertNotIn(bad, note, "a suffix is glued to something that ends in a full stop")
+
+    def test_one_missing_day_is_written_as_one_day(self):
+        """The commonest case, and the one the first draft had no form for: a single sitting day published
+        ahead of its transcript came out as "Azóta egy ülésnap volt … Ami ezeken a napokon elhangzott …",
+        singular subject with plural anaphora."""
+        from scripts.build_site import transcript_note
+        note = transcript_note(self._edge("2026-08-11", ["2026-08-28"]))
+        self.assertIn("Azóta egy ülésnap volt (2026. augusztus 28.)", note)
+        self.assertIn("Ennek a napnak a felszólalásai", note)
+        self.assertIn("A szavazásai viszont", note)
+        for plural in ("ezeken a napokon", "Ezeknek a napoknak", "szavazásaik", " rájuk"):
+            self.assertNotIn(plural, note, "one day is spoken of in the plural")
+
+    def test_it_names_the_days_while_naming_them_is_useful(self):
+        """Up to five they are listed; past that the parenthetical is a span, because a sentence that
+        announces a count and then recites fourteen dates is no longer a note.
+
+        A date that repeats the year and the month its neighbour just said reads like a form rather than a
+        sentence, so those are printed once — which is what the weekly tables already do."""
+        from scripts.build_site import transcript_note
+        five = [f"2026-09-{d:02d}" for d in range(1, 6)]
+        note = transcript_note(self._edge("2026-08-11", five))
+        self.assertIn("(2026. szeptember 1., 2., 3., 4. és 5.)", note)
+        self.assertEqual(note.count("szeptember"), 1, "the month is repeated inside one list")
+        self.assertNotIn("között", note)
+        many = transcript_note(self._edge("2026-08-11", five + ["2026-09-08"]))
+        self.assertIn("(2026. szeptember 1. és 8. között)", many)
+        self.assertNotIn("szeptember 3.", many, "a span should not also list its interior")
+        # across a month boundary there is nothing to elide, and both ends are named in full
+        across = transcript_note(self._edge("2026-08-11", ["2026-08-31"] + five + ["2026-10-06"]))
+        self.assertIn("(2026. augusztus 31. és 2026. október 6. között)", across)
+
+    def test_the_votes_are_contrasted_by_saying_where_they_are(self):
+        """The first draft ended "…nincs benne az itteni számokban; a szavazásaik viszont igen" — the "igen"
+        resumes "benne van az itteni számokban", so the sentence told the reader that those days' votes ARE
+        inside the Beszédidő figures. They are not; they are elsewhere on the site."""
+        from scripts.build_site import transcript_note
+        note = transcript_note(self._edge("2026-08-11", ["2026-08-27", "2026-08-28"]))
+        self.assertIn("A szavazásaik viszont már fent vannak az oldalon", note)
+        self.assertNotIn("viszont igen", note, "the predicate is elided into its own opposite")
+
+    def test_a_year_page_speaks_only_about_its_own_year(self):
+        """The year pages are built from the same speech data but answer for one year. A cycle running into
+        a second year would otherwise print next year's dates on this year's page, where they are not
+        missing — they are simply not that page's business."""
+        from scripts.build_site import transcript_note
+        edge = self._edge("2026-12-15", ["2026-12-16", "2027-02-03"])
+        self.assertIn("december 16.", transcript_note(edge, "2026"))
+        self.assertNotIn("február", transcript_note(edge, "2026"))
+        self.assertIn("Azóta egy ülésnap volt", transcript_note(edge, "2027"))
+        self.assertEqual(transcript_note(edge, "2025"), "", "a finished year is not behind")
+
+    def test_a_closed_cycle_is_not_waiting_for_anything(self):
+        """A gap in an archive cycle is permanent, not late. Every archive cycle is level today, so this
+        guards a sentence no page prints — but the sentence promises the House will publish it in a few
+        days, and about 1998 that would simply be false. What the old record lacks belongs to the coverage
+        page, which is about what can never be known rather than what has not arrived."""
+        from scripts.build_site import transcript_note
+        edge = dict(self._edge("2001-05-02", ["2001-05-14"]))
+        self.assertIn("Azóta egy ülésnap volt", transcript_note(dict(edge, closed=False)))
+        self.assertEqual(transcript_note(dict(edge, closed=True)), "")
+
+    def test_every_builder_that_states_a_speech_number_carries_the_note(self):
+        """One sentence, one owner — and on every page that needs it, or the reader learns it on one page
+        and is misled on the next. That is what the first version of this test said in its docstring while
+        checking two of the six pages that emit the note; the two it missed were the ones that mattered
+        most. So the list is no longer written down: it is read out of the call graph, and a new page built
+        from speech data turns this red on the day it is written rather than on the day a reader notices.
+
+        Reaching the note through a helper counts — Számok gets it from speaking_panel, which is right,
+        because the panel is what owns those numbers on a page whose vote charts are a fortnight fresher."""
+        import ast
+        src = (ROOT / "scripts" / "build_site.py").read_text(encoding="utf-8")
+        fns = {n.name: n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)}
+        body = {k: (ast.get_source_segment(src, v) or "") for k, v in fns.items()}
+        callmap = {k: {c.func.id for c in ast.walk(v)
+                       if isinstance(c, ast.Call) and isinstance(c.func, ast.Name)} & set(fns)
+                   for k, v in fns.items()}
+
+        def spread(seed):
+            out = set(seed)
+            while True:
+                more = {k for k, cs in callmap.items() if cs & out} - out
+                if not more:
+                    return out
+                out |= more
+
+        # Where speech data enters the builder. Anything reached from here can print a number that is
+        # behind the votes on the same screen.
+        SOURCES = ('inp["speeches"]', 'inp.get("speeches")', 'inp["texts"]',
+                   "speaking_time(", "floor_time(", "speeches_by_mp(")
+        speech = spread(k for k, b in body.items() if any(t in b for t in SOURCES))
+        noted = spread(k for k, b in body.items() if "transcript_note(" in b)
+
+        # Pages that touch speech data only to link to it or to describe a download. They state no speech
+        # number of their own, so the sentence would be about somewhere else.
+        LINKS_ONLY = {"build_index", "build_landing", "build_data_page", "build_bill_page"}
+        # The orchestrators, which are not pages.
+        NOT_A_PAGE = {"build_all", "build_cycle"}
+        # One sitting day's own page is exempt because it cannot be reached for a day with no transcript:
+        # the pages are written from by_day, which is grouped out of the speech rows themselves, so a
+        # missing day has no page rather than an empty one. That premise is asserted below rather than
+        # assumed — it is the whole reason the exemption is allowed.
+        BUILT_ONLY_WHEN_COVERED = {"build_day_page"}
+        want = ({k for k in speech if k.startswith("build_")}
+                - LINKS_ONLY - NOT_A_PAGE - BUILT_ONLY_WHEN_COVERED)
+        self.assertGreaterEqual(len(want), 6, "the discovery found fewer pages than are known to need it")
+        for k in sorted(want):
+            with self.subTest(builder=k):
+                self.assertIn(k, noted, f"{k} is built from speech data and never says where it ends")
+
+    def test_a_sitting_day_with_no_transcript_has_no_page_to_mislead_on(self):
+        """The premise under which build_day_page is exempt from the note. If a day page ever starts being
+        written for a day the transcript has not reached, the page will show a sitting day with no
+        speeches and no explanation — and the exemption above becomes a hole."""
+        from scripts.build_site import transcript_edge
+        inp = load_inputs()
+        last, missing = transcript_edge(inp)
+        by_day = {r.get("ulnap") for r in (inp.get("speeches") or {}).get("speeches") or []}
+        days = {d.get("date"): d.get("ulnap") for d in (inp["idx"].get("sitting_days") or [])}
+        for d in missing:
+            with self.subTest(day=d):
+                self.assertNotIn(days.get(d), by_day, f"{d} has no transcript but has speech rows")
+        site = ROOT / "site"
+        if not (site / f"ckl{inp['cycle']}" / "felszolalas").is_dir():
+            return
+        for d in missing:
+            uln = days.get(d)
+            if uln is not None:
+                self.assertFalse((site / f"ckl{inp['cycle']}" / "felszolalas" / f"nap{uln}.html").exists(),
+                                 f"nap{uln}.html was built for {d}, whose transcript has not arrived")
+
+    def test_the_live_note_names_the_live_edge(self):
+        """The one test that does look at the real corpus — not for the wording, which is pinned above, but
+        to catch an edge computed from the wrong field. It asserts in both states."""
+        from scripts.build_site import transcript_edge, transcript_note
+        inp = load_inputs()
+        last, missing = transcript_edge(inp)
+        have = {r.get("datum") or r.get("date") for r in (inp.get("speeches") or {}).get("speeches") or []}
+        self.assertIn(last, have, "the named edge is not a day the transcript actually covers")
+        note = transcript_note(inp)
+        if not missing:
+            self.assertEqual(note, "")
+            return
+        self.assertIn(hu_date(last), note)
+        for d in missing:
+            self.assertNotIn(d, have, "a day called missing has a transcript after all")
+            self.assertGreater(d, last)
+
+
+class TheQueryTravelsInItsOwnLink(unittest.TestCase):
+    """A journalist's question is worth nothing to a newsroom if it cannot be sent to the desk. The Riport
+    page's query therefore lives in the page's own address, and a link opens on the same question over the
+    same files.
+
+    None of it had a test. The button was first placed inside #chartwrap, which is emptied and hidden the
+    moment a query fails — so the reader lost the share button exactly when they most wanted to send someone
+    the query that broke — and nothing was red. These execute the shipped encoder and the shipped reader
+    rather than restating them, because the version of this that restates them would pass on a deleted
+    feature."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import build_assets
+        cls.js = build_assets()["karzat.js"]
+
+    def _lift(self, needle, end="\n"):
+        i = self.js.index(needle)
+        return self.js[i:self.js.index(end, i)]
+
+    def test_the_button_is_not_inside_a_box_that_hides_itself(self):
+        """#chartwrap ships hidden and is hidden again whenever a query fails or returns nothing chartable.
+        A control that must survive a failed query cannot live inside it."""
+        from scripts.build_site import build_report_page, load_inputs
+        html = build_report_page(load_inputs())
+        i_btn, i_wrap = html.index('id="dllink"'), html.index('id="chartwrap"')
+        self.assertLess(i_btn, i_wrap, "the share button is inside the chart box, which hides itself")
+        self.assertIn('id="run"', html[:i_btn], "the share button should sit with the run button")
+
+    def test_a_query_survives_the_round_trip_through_a_url(self):
+        """The encoder and the reader are lifted out of the shipped bundle and run against each other, so an
+        edit to either turns this red. The plus sign is the case that motivates the reader's replace(): a
+        space encodes as %20 here but arrives as + from anything that form-encodes on the way."""
+        import shutil, subprocess, json as _json
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        decode = self._lift("try { q = decodeURIComponent(m[1]")
+        self.assertIn("replace(", decode, "the reader no longer normalises the query it was sent")
+        prog = ("function read(s){var m=/[?&]q=([^&]+)/.exec(s); var q='';" + decode + "return q;}"
+                "console.log(JSON.stringify(" + _json.dumps([
+                    "SELECT 1", "SELECT * FROM v WHERE nev = 'Kovács Béla'",
+                    "SELECT a+b AS x FROM t", 'SELECT 1 AS "<img src=x>"',
+                    "SELECT 1 -- & ? # % \\ ütközés",
+                ]) + ".map(function(q0){return [q0, read('?q='+encodeURIComponent(q0))];})));")
+        r = subprocess.run([node, "-e", prog], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr[:600])
+        for typed, arrived in _json.loads(r.stdout):
+            with self.subTest(q=typed):
+                self.assertEqual(typed, arrived, "the query did not survive its own link")
+
+    def test_a_plus_in_the_url_becomes_a_space_not_a_plus(self):
+        """The one asymmetry: encodeURIComponent writes %20 for a space, but a link that passes through a
+        form, a mailer or a chat client can come back with +. The reader turns those back into spaces —
+        which is also why a literal plus must arrive as %2B and not be eaten."""
+        import shutil, subprocess, json as _json
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        decode = self._lift("try { q = decodeURIComponent(m[1]")
+        # the lifted line carries the loader's own `return`, so it is run inside a function, as it ships
+        prog = ("function read(s){var m=/[?&]q=([^&]+)/.exec(s); var q='';" + decode + "return q;}"
+                "console.log(JSON.stringify([read('?q=SELECT+1'), read('?q=SELECT%20a%2Bb')]));")
+        r = subprocess.run([node, "-e", prog], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr[:600])
+        plus_as_space, literal_plus = _json.loads(r.stdout)
+        self.assertEqual(plus_as_space, "SELECT 1")
+        self.assertEqual(literal_plus, "SELECT a+b", "an encoded plus was eaten as a space")
+
+    def test_one_limit_bounds_both_ends_of_the_link(self):
+        """A writer that refuses at one length and a reader that accepts at another is a link that copies
+        clean and opens empty. Both read the same constant, and there is only one of it."""
+        import re as _re
+        self.assertEqual(len(_re.findall(r"var LINKMAX\s*=", self.js)), 1, "LINKMAX is defined twice")
+        n = int(_re.search(r"var LINKMAX\s*=\s*(\d+)", self.js).group(1))
+        self.assertGreater(n, 500)
+        writer = self._lift("  function shareUrl(){", "\n  }")
+        self.assertIn("LINKMAX", writer, "the writer does not bound the link it makes")
+        reader = self._lift("    if (!q || q.length >")
+        self.assertIn("LINKMAX", reader, "the reader accepts a query the writer would refuse")
+        button = self._lift("    if (box.value.trim().length >")
+        self.assertIn("LINKMAX", button, "the button reports success on a link it did not make")
+
+    def test_a_malformed_link_is_dropped_rather_than_run(self):
+        """A stray percent sign makes decodeURIComponent throw. The reader must leave the page as it found
+        it, not half-fill the box and run it."""
+        import shutil, subprocess
+        node = shutil.which("node")
+        if not node:
+            self.skipTest("node is not installed")
+        decode = self._lift("try { q = decodeURIComponent(m[1]")
+        self.assertIn("catch", decode, "a malformed link would throw out of the loader")
+        prog = ("var ran=false; function f(){var m=/[?&]q=([^&]+)/.exec('?q=%E0%A4%A'); var q='';"
+                + decode + "ran=true;} f(); console.log(ran ? 'RAN' : 'DROPPED');")
+        # (this one already wraps the lifted `return` in a function, which is the point of the test)
+        r = subprocess.run([node, "-e", prog], capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr[:600])
+        self.assertEqual(r.stdout.strip(), "DROPPED", "a malformed link still reached the query box")
 
 
 class SearchUnderstandsHungarian(unittest.TestCase):
@@ -2201,6 +2536,59 @@ class Echo(unittest.TestCase):
                 body = " ".join(normalise_echo_words(texts[sp["id"]].get("paragraphs")))
                 self.assertIn(f["passage"], body,
                               f'{sp["id"]}: the passage is not in that speech after all')
+
+
+class TheSiteIsAFunctionOfTheBuilderToo(unittest.TestCase):
+    """The nightly asks whether the record moved. For a long time that was the whole question, and it is the
+    wrong one by half: the site is a function of the code as well as of the data.
+
+    The impressum shipped in the footer, the record then stood still for five days, and the nightly answered
+    "nothing new — no build, no upload" each morning. 155,739 archive pages went on serving a footer with no
+    impressum in it while the 3,060 pages of the open cycle had one. Nothing was stale in the sense this
+    project usually means — every number was right — but the site disagreed with itself, and no gate could
+    see it: every gate runs on the tree the build produced, never on the tree that is live."""
+
+    def test_the_fingerprint_covers_everything_the_html_depends_on(self):
+        from scripts.nightly import builder_fingerprint
+        base = builder_fingerprint()
+        self.assertRegex(base, r"^[0-9a-f]{16}$")
+        watched = [ROOT / "scripts" / "build_site.py", ROOT / "config" / "factions.yml"]
+        watched += sorted((ROOT / "karzat").glob("*.py"))
+        self.assertGreater(len(watched), 10)
+        for f in watched:
+            with self.subTest(file=f.name):
+                original = f.read_bytes()
+                try:
+                    f.write_bytes(original + b"\n# \n")
+                    self.assertNotEqual(builder_fingerprint(), base,
+                                        f"{f.name} can change without the fingerprint noticing")
+                finally:
+                    f.write_bytes(original)
+        self.assertEqual(builder_fingerprint(), base, "the fingerprint did not come back")
+
+    def test_the_nightly_will_not_skip_a_build_the_builder_asked_for(self):
+        """The decision itself, read out of the source: the no-build branch must be unreachable while the
+        builder digest differs from the one that was published."""
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        i = src.index("nothing new — no build, no upload")
+        head = src[src.index("stamp_age = publish_age_days()"):i]
+        self.assertIn("builder_fingerprint()", head, "the skip does not consult the builder")
+        self.assertIn("published_fingerprint()", head, "the skip has nothing to compare against")
+        self.assertLess(head.index("if builder_moved:"), head.index("elif args.refresh_days"),
+                        "a builder change is decided after the age limit, so it can be skipped")
+
+    def test_a_builder_change_is_never_answered_with_a_partial_rebuild(self):
+        """--quick rebuilds the open cycle only. That is right for a sitting day's votes and wrong for a
+        change of markup, which lands on every page in the tree."""
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        line = next(l for l in src.splitlines() if 'run(py + ["-m", "scripts.build_site"]' in l)
+        self.assertIn("not builder_moved", line, "the intraday path would publish a half-restyled site")
+
+    def test_the_publish_stamp_records_what_built_it(self):
+        """A fingerprint nobody writes down compares against nothing, and every run rebuilds forever."""
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        stamp = src[src.index('"last_publish.json").write_text'):]
+        self.assertIn('"builder": fp', stamp[:400], "the publish stamp does not record the builder")
 
 
 class NightlyRunsEveryDerivation(unittest.TestCase):
@@ -3024,9 +3412,16 @@ class ReportPage(unittest.TestCase):
         """A red-team pass found this after the page was built and before it shipped.
 
         Values were escaped and column names were not, so `SELECT 1 AS "<img src=x onerror=…>"` put a live
-        element in the header and ran the handler. The reach is the reader's own — they typed the query, the
-        origin holds no cookie and no session, and nothing here reads a query from the URL — but a known
-        injection is not something to serve, and the fix is one call.
+        element in the header and ran the handler. A known injection is not something to serve, and the fix
+        is one call.
+
+        The reach used to be the reader's own — they typed the query, and nothing read one from the URL. The
+        shareable link ended that: a query now arrives in `?q=` and runs itself, so this guard went from
+        tidiness to the thing that stands between a pasted link and a script in the reader's page. What is
+        left is small and stated rather than assumed: the origin holds no cookie and no session, the files
+        are static and public, and the query runs in a worker, so the worst a hostile link can do is spend
+        the reader's own CPU on their own copy of public data. That is why the link is allowed to run on
+        arrival — and why every interpolation below must go through esc() with nothing exempted.
 
         The guard is on the shape rather than the symptom: every interpolation into innerHTML in the SQL loader
         must go through esc()."""
