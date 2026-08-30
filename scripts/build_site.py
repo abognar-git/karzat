@@ -986,6 +986,13 @@ a.seat{text-decoration:none}
 .cyc .leg i{display:inline-block;width:7px;height:7px;margin-right:4px;vertical-align:0}.cyc .leg b{color:var(--text);font-weight:400}
 .cyc .stat{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim2);text-align:right}
 .doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+/* A count that does not divide by three used to leave the last row hanging on the left with two holes
+   beside it. The grid should not decide what gets built — this project once declined to invent a feature
+   to fill exactly such a hole — so an orphan centres itself and a pair sits centred too, whatever the
+   site's next page turns out to be. */
+.doors > :last-child:nth-child(3n+1){grid-column:2}
+.doors > :nth-last-child(2):nth-child(3n+1){grid-column:1/span 2}
+.doors > :nth-last-child(2):nth-child(3n+1) ~ *{grid-column:3}
 .door{display:flex;flex-direction:column;color:inherit;text-decoration:none;min-height:150px}
 .door p{color:var(--dim);font-size:13px;margin:0 0 12px;line-height:1.5}
 .door .row{display:flex;gap:8px;margin-top:auto}.door .row input{flex:1 1 auto;min-width:0;border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:7px 10px;font-family:var(--mono);font-size:12px}
@@ -1133,7 +1140,12 @@ td a{color:var(--text);text-decoration:underline;text-decoration-color:var(--dim
 .kz-terminal{margin:0 auto 40px;width:calc(100% - 32px);max-width:1400px;background:var(--terminal);border:1px solid var(--border);padding:14px 18px;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--dim2);position:relative}
 .kz-terminal .scan{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .kz-terminal .log{color:var(--dim2);line-height:1.7;position:relative}.kz-terminal .log span{display:block}
-.kz-terminal .factline{color:var(--dim)}.kz-terminal .factline a{color:var(--text);border-bottom:1px solid var(--border-hi)}.kz-terminal .factline a:hover{color:var(--white);border-color:var(--white)}.kz-terminal .factline .sub{color:var(--dim3);font-style:normal;margin-left:8px;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.kz-terminal .factline .more{margin-left:10px;border:1px solid var(--border);background:transparent;color:var(--dim2);cursor:pointer;font:inherit;line-height:1;padding:1px 6px}.kz-terminal .factline .more:hover,.kz-terminal .factline .more:focus-visible{color:var(--white);border-color:var(--border-hi)}
+.kz-terminal .factline{color:var(--dim)}.kz-terminal .factline a{color:var(--text);border-bottom:1px solid var(--border-hi)}.kz-terminal .factline a:hover{color:var(--white);border-color:var(--white)}
+/* The footer's prose links looked like prose: the site strips underlines globally, so the impressum and the
+   method page sat in the paragraph with nothing to say they could be clicked. Same idiom the fact line above
+   already uses — an underline the reader can see and a hover that brightens it. */
+.kz-terminal .method a{color:var(--text);border-bottom:1px solid var(--border-hi)}
+.kz-terminal .method a:hover,.kz-terminal .method a:focus-visible{color:var(--white);border-color:var(--white)}.kz-terminal .factline .sub{color:var(--dim3);font-style:normal;margin-left:8px;font-size:9px;letter-spacing:.12em;text-transform:uppercase}.kz-terminal .factline .more{margin-left:10px;border:1px solid var(--border);background:transparent;color:var(--dim2);cursor:pointer;font:inherit;line-height:1;padding:1px 6px}.kz-terminal .factline .more:hover,.kz-terminal .factline .more:focus-visible{color:var(--white);border-color:var(--border-hi)}
 .kz-terminal .cursor{display:inline-block;width:6px;height:11px;background:var(--dim2);vertical-align:-2px;margin-left:2px;animation:kz-blink 1s step-end infinite}
 .kz-terminal .method{margin-top:14px;padding-top:12px;border-top:1px solid var(--line2);font-family:var(--sans);font-size:11.5px;color:var(--dim);letter-spacing:0;line-height:1.6;max-width:110ch;position:relative}
 .kz-terminal .method h3{font-family:var(--mono);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin:8px 0 4px;font-weight:400}
@@ -3216,6 +3228,10 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
   <div class="method">
     <h3>Honnan</h3>
     Az adatok forrása az Országgyűlés nyilvános adatszolgáltatása, a Web API. Onnan jön minden szavazás, és ahol a Ház név szerint rögzítette, a név szerinti lista is. A képviselőket a Wikidata azonosítói kötik össze a ciklusokon át. A szükséges többséget minden szavazásnál maga az Országgyűlés jelöli meg — az oldal csak utánaszámol. Jelenlévőnek azt vesszük, aki igennel, nemmel vagy tartózkodással szavazott: ez a leadott szavazatok száma, így számol az Országgyűlés is.
+    <h3>Ki készíti</h3>
+    A karzatot Bognár Attila készíti, függetlenül; nincs mögötte szerkesztőség, párt vagy hirdető, és az oldal
+    nem gyűjt látogatói adatot. Az <a href="{"../" * (inp.get("_depth", 0) + inp["base_depth"])}sajto/index.html">impresszum és a sajtóoldal</a> megmondja, mit
+    szabad az oldalról átvenni, hogyan kell hivatkozni, és mit nem ad ez az oldal.
     <h3>Mit nem</h3>
     Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek az oldal jelölései, nem a pártokéi. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
   </div>
@@ -8975,7 +8991,6 @@ def build_landing() -> str:
   {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
   {f'<a class="panel door" href="riport/index.html">{CORNERS}<h2><span data-kz-text>Riport</span></h2><p>Kérdezd a teljes rekordot SQL-lel, és rajzold ki — a saját böngésződben, kiszolgáló nélkül.</p><span class="go mono">riport/ →</span></a>' if (inp.get("parquet") or {}).get("tables") else ""}
   <a class="panel door" href="lefedettseg/index.html">{CORNERS}<h2><span data-kz-text>Ameddig a jegyzőkönyv elér</span></h2><p>Hónapról hónapra: hol van név szerinti lista, hol csak összesítés, és mi az, ami már nem pótolható.</p><span class="go mono">lefedettseg/ →</span></a>
-  <a class="panel door" href="sajto/index.html">{CORNERS}<h2><span data-kz-text>Sajtó és impresszum</span></h2><p>Ki készíti az oldalt, mit szabad belőle átvenni és hogyan kell hivatkozni — és a legutóbbi ülésnapos hét számokban, szerkesztőségeknek.</p><span class="go mono">sajto/ →</span></a>
   <a class="panel door" href="modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer és adatok</span></h2><p>Minden szabály és számítás leírva; minden tábla letölthető CSV-ben és JSON-ban, ciklusonként az <span class="mono">adatok/</span> alatt.</p><span class="go mono">modszer/ →</span></a>
 </section>
 </div></main>

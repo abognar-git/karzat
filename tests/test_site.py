@@ -1069,6 +1069,13 @@ class SpeakingTime(unittest.TestCase):
         # the door order tells the story: people first, the floor after, the tools last
         i_j, i_a, i_m = h.find("Javadalmazás</span>"), h.find("A Ház arcéle</span>"), h.find("Módszer és adatok</span>")
         self.assertTrue(0 < i_j < i_a < i_m, (i_j, i_a, i_m))
+        # The grid is three wide, so a count that does not divide by three leaves the last row hanging with
+        # holes beside it — which is how a reader noticed the press tile. The layout now centres an orphan
+        # whatever the count, and the count itself stays honest: nothing is built to fill a cell.
+        import re as _re
+        doors = _re.findall(r'class="panel door"', h)
+        self.assertEqual(len(doors) % 3, 0, f"{len(doors)} doors leaves the last row of a three-wide grid short")
+        self.assertIn("sajto/index.html", h.split("kz-terminal")[1], "the impressum left the footer")
 
     def test_the_widget_and_the_house_page_share_one_anchor(self):
         """The MP widget's band sentence and the House page's x-column come from remuneration_anchor(),
