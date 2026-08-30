@@ -314,7 +314,7 @@ class LooseEnds(unittest.TestCase):
         self.assertEqual(agr["api"]["chair"]["azon"], "0038")
         self.assertTrue(any(m["azon"] == "0038" and m["role"] == "elnök" for m in agr["members"]))   # the record's history agrees
         idx = build_committee_index(inp)
-        self.assertIn("29" if False else "26 bizottság", idx)
+        self.assertIn(f'{inp["committees"]["count"]} bizottság', idx)   # the House founds and dissolves them
         page = build_committee_page(inp, "agrar-es-elelmiszergazdasagi-bizottsag", agr)
         self.assertIn("Mai összetétel", page)
         self.assertIn("Kitűzött ülés az API szerint most nincs.", page)

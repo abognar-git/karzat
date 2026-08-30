@@ -1,12 +1,12 @@
 {
- "derived_at": "2026-08-27T22:20:21.344111+02:00",
- "last_sync_at": "2026-08-27T22:20:21.344111+02:00",
+ "derived_at": "2026-08-30T07:23:54.694412+02:00",
+ "last_sync_at": "2026-08-30T07:23:54.694412+02:00",
  "seats": 199,
  "since": "2026-05-01",
  "window": {
   "from": "2026-05-09",
-  "to": "2026-08-27",
-  "list_files": 2097
+  "to": "2026-08-28",
+  "list_files": 2100
  },
  "votes": [
   {
@@ -23946,9 +23946,236 @@
     "agrees_with_source": true,
     "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
    }
+  },
+  {
+   "ts": "2026.08.28.11:34:00",
+   "slug": "2026-08-28T11-34-00",
+   "on_date": "2026-08-28",
+   "mode": "Titkos",
+   "secret": true,
+   "kind": "dontes",
+   "igen": 137,
+   "nem": 7,
+   "tartozkodott": 1,
+   "osszes_szavazat": 145,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": "Unger Anna Róza a Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatal elnöke",
+   "time": "11:34",
+   "motions": [],
+   "detail": true,
+   "position_counts": {},
+   "present": 145,
+   "present_basis": "tulajdonsagok: Összes szavazat (no roll call)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    },
+    {
+     "faction": "Fidesz",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    },
+    {
+     "faction": "KDNP",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 145,
+    "needed": 73,
+    "margin": 64,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "tulajdonsagok: Összes szavazat (no roll call)"
+   }
+  },
+  {
+   "ts": "2026.08.28.11:35:00",
+   "slug": "2026-08-28T11-35-00",
+   "on_date": "2026-08-28",
+   "mode": "Titkos",
+   "secret": true,
+   "kind": "dontes",
+   "igen": 139,
+   "nem": 6,
+   "tartozkodott": 0,
+   "osszes_szavazat": 145,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": "Dr. Tasnády Katalin a Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatal nyomozati elnökhelyettese",
+   "time": "11:35",
+   "motions": [],
+   "detail": true,
+   "position_counts": {},
+   "present": 145,
+   "present_basis": "tulajdonsagok: Összes szavazat (no roll call)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    },
+    {
+     "faction": "Fidesz",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    },
+    {
+     "faction": "KDNP",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": null,
+     "nem": null,
+     "tartozkodott": null,
+     "igazoltan_tavol": null,
+     "nem_szavazott": null,
+     "osszesen": null
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 145,
+    "needed": 73,
+    "margin": 66,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "tulajdonsagok: Összes szavazat (no roll call)"
+   }
+  },
+  {
+   "ts": "2026.08.28.14:39:12",
+   "slug": "2026-08-28T14-39-12",
+   "on_date": "2026-08-28",
+   "mode": "Listás",
+   "secret": false,
+   "kind": "dontes",
+   "igen": 163,
+   "nem": 0,
+   "tartozkodott": 0,
+   "osszes_szavazat": 163,
+   "result_raw": "Elfogadva",
+   "passed": true,
+   "remark": null,
+   "time": "14:39",
+   "motions": [
+    {
+     "iromany": "T/504",
+     "title": "Az általános forgalmi adóról szóló 2007. évi CXXVII. törvény módosításáról",
+     "outcome": "önálló indítvány elfogadva",
+     "submitters": [
+      "kormány (pénzügyminiszter)"
+     ],
+     "submitter_kind": "kormany",
+     "kind": "T",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22510704ee-ebf7-4513-b796-18ab80e7e167%22%7D"
+    }
+   ],
+   "detail": true,
+   "position_counts": {
+    "igen": 163,
+    "nem_szavazott": 26,
+    "igazoltan_tavol": 7,
+    "jelen_nem_szavazott": 2
+   },
+   "present": 163,
+   "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
+   "faction_tallies": [
+    {
+     "faction": "TISZA",
+     "igen": 121,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 3,
+     "nem_szavazott": 17,
+     "osszesen": 141
+    },
+    {
+     "faction": "Fidesz",
+     "igen": 33,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 2,
+     "nem_szavazott": 8,
+     "osszesen": 43
+    },
+    {
+     "faction": "KDNP",
+     "igen": 5,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 2,
+     "nem_szavazott": 1,
+     "osszesen": 8
+    },
+    {
+     "faction": "Mi Hazánk",
+     "igen": 4,
+     "nem": 0,
+     "tartozkodott": 0,
+     "igazoltan_tavol": 0,
+     "nem_szavazott": 2,
+     "osszesen": 6
+    }
+   ],
+   "majority": {
+    "rule": "egyszeru",
+    "label_hu": "Egyszerű többség",
+    "source": "payload",
+    "base": 163,
+    "needed": 82,
+    "margin": 81,
+    "passed_by_rule": true,
+    "agrees_with_source": true,
+    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)"
+   }
   }
  ],
- "details_cached": 269,
+ "details_cached": 272,
  "sitting_days": [
   {
    "date": "2026-05-09",

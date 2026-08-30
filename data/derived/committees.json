@@ -1,6 +1,6 @@
 {
- "as_of": "2026-08-05",
- "count": 26,
+ "as_of": "2026-08-28",
+ "count": 27,
  "list": [
   {
    "id": "002J",
@@ -15,6 +15,11 @@
   {
    "id": "0032",
    "title": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
+   "subcommittees": []
+  },
+  {
+   "id": "003C",
+   "title": "A Médiatanács elnökét és tagjait jelölő eseti bizottság",
    "subcommittees": []
   },
   {
@@ -717,7 +722,7 @@
     }
    ],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22825de136-9e8b-4bf0-841d-9897c89847bb%22%7D"
   },
   "002M": {
    "name": "Digitalizációs és Technológiai Bizottság",
@@ -1552,7 +1557,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%225de76454-f56b-49e0-a38c-2d6df1eb99d9%22%7D"
   },
   "002Y": {
    "name": "Közlekedési és Beruházási Bizottság",
@@ -1732,7 +1737,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%2285e3881c-b9a5-459f-a393-8d4ecd9b1711%22%7D"
   },
   "0032": {
    "name": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
@@ -2118,6 +2123,24 @@
      "faction": "TISZA"
     }
    ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "003C": {
+   "name": "A Médiatanács elnökét és tagjait jelölő eseti bizottság",
+   "type": "eseti",
+   "created": "2026-08-28",
+   "parent": null,
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": null,
+    "name": null,
+    "faction": null
+   },
+   "vice_chairs": [],
+   "members": [],
    "subcommittees": [],
    "next_meeting": null,
    "next_meeting_url": null

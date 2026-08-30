@@ -3,7 +3,24 @@
 // screen reader announced a state that could never change and a reader without JavaScript was offered
 // affordances that did nothing. The stylesheet hides them until this line runs, which is the only honest
 // signal that they will work.
-(function(){ document.documentElement.classList.add('js'); })();
+(function(){
+  document.documentElement.classList.add('js');
+  // …and the gated controls get their toggle state here rather than from the builder. The stylesheet hides
+  // them until the line above runs, but markup outlives a stylesheet: reader mode and text browsers drop the
+  // CSS and keep the HTML, and a <button> there is once again a control announced to a
+  // screen reader that nobody can operate. The builder ships the class ("on") that says which one is current;
+  // the ARIA state is this script's to make, because this script is what makes it true.
+  // Only groups that actually toggle. `.filters` is the site's generic control row and also holds pure
+  // action buttons — the Riport page's nine SQL examples fill a textarea and are not states — so a group
+  // earns aria-pressed by containing a current choice (the builder's `on` class), and one that has none
+  // gets nothing. Announcing "not pressed" on a button that runs an example is the same fault one level up.
+  var groups = document.querySelectorAll('.filters');
+  for (var g = 0; g < groups.length; g++) {
+    if (!groups[g].querySelector('button.on')) continue;
+    var f = groups[g].querySelectorAll('button');
+    for (var i = 0; i < f.length; i++) f[i].setAttribute('aria-pressed', f[i].classList.contains('on') ? 'true' : 'false');
+  }
+})();
 
 
 (function(){
@@ -808,8 +825,42 @@
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
   var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló', kormany: 'kormánytag'};
+  // Two things a substring search over legal titles gets wrong in Hungarian, both measured against this
+  // index before they were fixed rather than guessed at.
+  //
+  // The abbreviations a journalist types are not what a statute is called. "btk" returned nothing while 49
+  // motions concern the büntető törvénykönyv; "ptk" nothing against 28; "gdpr" nothing against 44. Only the
+  // shorthands that actually pay are here: the noisy ones (tb, kata, nav, eho) match inside unrelated words
+  // as substrings and were left out on the evidence, not on taste.
+  //
+  // And the vowel that disappears when a Hungarian -alom/-elem word is inflected: "védelem" is not a
+  // substring of "védelmi", so the dictionary form a reader types missed 597 of the 773 items about
+  // védelem, "gyermekvédelem" 28 of 34, "hatalom" 99 of 110. Dropping the final "em"/"om" gives the stem
+  // both forms share. Checked for noise on a sample of the 597: every one was about védelem.
+  var SHORT = {btk: 'bunteto torvenykonyv', ptk: 'polgari torvenykonyv', szja: 'szemelyi jovedelemado',
+               tao: 'tarsasagi ado', gdpr: 'adatvedelmi', mnb: 'magyar nemzeti bank',
+               hhsz: 'hazszabaly', afa: 'altalanos forgalmi ado'};
+  function variants(t){
+    var v = [t];
+    if (SHORT[t]) v.push(SHORT[t]);
+    // stem + m, not the bare stem: every inflected form of an -alom/-elem word continues with m
+    // (védelmi, védelméről, hatalmi), while the bare stem "hatal" also matches "hatálybalépés" — accent
+    // folding makes hatály into hatal — and that phrase is everywhere in legislation. Measured: the bare
+    // stem gave "hatalom" 110 hits of which 55 were about hatály; stem+m gives 45 and costs "védelem"
+    // nothing (773 either way). Those 45 are NOT all about hatalom — 23 are felhatalmazás, meghatalmazás
+    // and hatalmas, which share the root but not the subject, and an earlier version of this comment
+    // claimed otherwise on a glance at the word forms without reading what they meant. They are kept
+    // rather than excluded because Hungarian writes its compounds closed: anchoring the stem to a word
+    // start would also throw away környezetvédelmi and rendvédelmi, which are exactly what a reader
+    // searching "védelem" wants. The ranking above is what separates them — the typed word first.
+    if (t.length >= 6 && (t.slice(-4) === 'elem' || t.slice(-4) === 'alom')) v.push(t.slice(0, -2) + 'm');
+    return v;
+  }
+
   function render(){
-    var terms = fold(q.value).split(/\s+/).filter(Boolean);
+    var terms = fold(q.value).split(/\s+/).filter(Boolean).map(function(t){
+      return {raw: t, v: variants(t)};
+    });
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
     if (failed) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">A keresőindex (index.json) nem tölthető be — a listák külön oldalakon: irományok, képviselők, személyek.</td></tr>'; n.textContent = ''; return; }
     var hits = [];
@@ -818,7 +869,22 @@
       if (kind !== 'all' && it.k !== kind) continue;
       if (cyc !== 'all' && String(it.c) !== cyc && it.k !== 'szemely') continue;
       var ok = true, score = 0;
-      for (var j = 0; j < terms.length; j++) { var t = terms[j]; if (it.f.indexOf(t) < 0) { ok = false; break; } if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1; }
+      for (var j = 0; j < terms.length; j++) {
+        // every term must still match (AND across terms); a term matches on any of its variants (OR within)
+        var vs = terms[j].v, hit = false;
+        for (var k = 0; k < vs.length; k++) if (it.f.indexOf(vs[k]) >= 0) { hit = true; break; }
+        if (!hit) { ok = false; break; }
+        // Ranking, and the reason it had to change with the expansion. `ft` is the item's SHORT field —
+        // a person's name, but for the 12,713 motions only the number ("T/342"), never the title. So every
+        // topical query scored zero on every motion, the sort fell back to date, and once "védelem" grew
+        // past the 200-row cap the exact matches were pushed off the page by newer stem-only ones: 176 hits
+        // all shown became 773 of which the newest 200 held 39 typed matches. More recall, fewer answers.
+        // The typed word now scores wherever it appears, so an item that literally says what was asked
+        // outranks one reached through an abbreviation or a stem, and the cap cuts the weaker tail.
+        var t = terms[j].raw;
+        if (it.f.indexOf(t) >= 0) score += 4;
+        if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1;
+      }
       if (ok) hits.push([score, it]);
     }
     hits.sort(function(a, b){ return b[0] - a[0] || (b[1].d || '').localeCompare(a[1].d || ''); });
@@ -1154,9 +1220,14 @@
   });
   function svgText(){
     var el = document.querySelector('#fig svg'); if (!el) return null;
+    // The same light treatment every other chart on the site exports with: a reader who saves one picture
+    // from the console and one from a cycle page should get two pictures that look like they came from the
+    // same place. The class is added for the read and removed immediately — see JS_FIGSAVE.
+    var root = document.documentElement, added = !root.classList.contains('kz-export');
+    if (added) { root.classList.add('kz-export'); void root.offsetWidth; }
     var c = el.cloneNode(true);
     c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    c.setAttribute('style', 'background:#0a0a0a');
+    c.setAttribute('style', 'background:#ffffff');
     // Read the computed style from the ORIGINAL node and write it onto the clone. Computing it on the clone
     // returns nothing, because the clone is detached from the document and CSS variables resolve against the
     // tree — the first version did that and produced a file with var(--c) in it, invisible outside this page.
@@ -1173,6 +1244,7 @@
       }
       n.removeAttribute('class'); n.removeAttribute('style');
     }
+    if (added) root.classList.remove('kz-export');
     return '<?xml version="1.0" encoding="UTF-8"?>' + new XMLSerializer().serializeToString(c);
   }
   function save(blob, name){
@@ -1189,7 +1261,7 @@
       var cv = document.createElement('canvas');
       cv.width = 1800; cv.height = Math.round(1800 * img.height / img.width) || 900;
       var g = cv.getContext('2d');
-      g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, cv.width, cv.height);
+      g.fillStyle = '#ffffff'; g.fillRect(0, 0, cv.width, cv.height);
       g.drawImage(img, 0, 0, cv.width, cv.height);
       cv.toBlob(function(b){ save(b, 'karzat-riport.png'); }, 'image/png');
     };
@@ -1244,6 +1316,208 @@
   var here = strip && (strip.querySelector('[aria-current]') || strip.querySelector('a.near'));
   if (!strip || !here || strip.scrollWidth <= strip.clientWidth) return;
   strip.scrollLeft = Math.max(0, here.offsetLeft - (strip.clientWidth - here.offsetWidth) / 2);
+})();
+
+
+(function(){
+  // Any chart on this site can leave it as a picture. Two things make that useful rather than merely possible:
+  // the picture is rendered on a light ground (a studio cannot use the dark theme), and the source line is
+  // burnt into the file itself — an attribution that lives in the page does not travel with the image, and an
+  // image without one gets redrawn by the programme's own graphics desk, which is how a citation disappears.
+  //
+  // The controls are injected here rather than shipped in the markup, so a reader without a script is never
+  // offered a button that cannot work, and a save button never pretends to be a toggle.
+  if (!document.querySelector || !window.URL || !URL.createObjectURL) return;
+
+  var PROPS = ['fill','fill-opacity','fill-rule','stroke','stroke-width','stroke-opacity','stroke-dasharray',
+               'stroke-linecap','stroke-linejoin','opacity','font-family','font-size','font-weight',
+               'font-style','letter-spacing','text-anchor','dominant-baseline','paint-order','vector-effect'];
+
+  function figures(){
+    return Array.prototype.slice.call(document.querySelectorAll('svg[viewBox]')).filter(function(s){
+      if (s.closest('.legend') || s.closest('.kz-topbar') || s.closest('.figsave')) return false;
+      var r = s.getBoundingClientRect();
+      return r.width >= 240 && r.height >= 80;
+    });
+  }
+
+  function titleOf(svg){
+    var box = svg.closest('section, figure, .panel') || svg.parentNode;
+    var h = box.querySelector('h2 span[data-kz-text], figcaption .label, h3');
+    // Only a colon ends the label: Hungarian ordinals carry a full stop ("43. ciklus") and splitting on it
+    // cut the caption at the number.
+    var t = h ? h.textContent : (svg.getAttribute('aria-label') || '').split(':')[0];
+    t = (t || 'ábra').replace(/\s+/g, ' ').trim();
+    if (t.length > 78) {                              // cut on a word, never mid-word, and say it was cut
+      var cut = t.slice(0, 78);
+      t = cut.slice(0, Math.max(cut.lastIndexOf(' '), 40)).replace(/[,;:—-]$/, '') + '…';
+    }
+    return t;
+  }
+
+  function slug(t){
+    return t.toLowerCase().replace(/[áàâ]/g,'a').replace(/[éè]/g,'e').replace(/[íì]/g,'i')
+            .replace(/[óòöő]/g,'o').replace(/[úùüű]/g,'u').replace(/[^a-z0-9]+/g,'-')
+            .replace(/^-|-$/g,'').slice(0, 48) || 'abra';
+  }
+
+  // The clone is detached, so computed style must be read from the ORIGINAL node: CSS variables resolve
+  // against the tree, and reading the clone yields var(--c) — a file that is invisible anywhere but here.
+  function inlined(svg){
+    var c = svg.cloneNode(true);
+    c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    c.removeAttribute('class'); c.removeAttribute('style'); c.removeAttribute('tabindex');
+    var src = svg.querySelectorAll('*'), dst = c.querySelectorAll('*'), drop = [];
+    for (var i = 0; i < src.length; i++) {
+      var cs = getComputedStyle(src[i]), n = dst[i];
+      if (cs.display === 'none' || cs.visibility === 'hidden') { drop.push(n); continue; }
+      // Transient opacity is state, not content. JS_BOOT fades every seat in on a staircase and the seat
+      // inspector dims the unpinned ones; both write it inline, and copying the computed value burnt a
+      // half-finished animation or one reader's click into a file meant to travel. The stylesheet's own
+      // opacity (a dimmed series, a lighter mark) has no inline style and is copied as before.
+      var skipOpacity = src[i].style && src[i].style.opacity !== '';
+      for (var j = 0; j < PROPS.length; j++) {
+        if (PROPS[j] === 'opacity' && skipOpacity) continue;
+        var v = cs.getPropertyValue(PROPS[j]);
+        // `none` is kept: for fill and stroke it is a value, not an absence. Dropping it let a line chart
+        // inherit the default black fill and render as a solid blob, and the dissent ring the same.
+        if (v && v !== 'normal' && v !== 'auto') n.setAttribute(PROPS[j], v);
+      }
+      n.removeAttribute('class'); n.removeAttribute('style');
+      n.removeAttribute('tabindex'); n.removeAttribute('role');
+    }
+    for (var k = 0; k < drop.length; k++) if (drop[k].parentNode) drop[k].parentNode.removeChild(drop[k]);
+    return c;
+  }
+
+  function stamp(){
+    var b = document.querySelector('.kz-topbar .sync b');
+    return b ? b.textContent.trim() : '';
+  }
+
+  // The caption band is added to the viewBox rather than around it, so the picture stays one SVG and one
+  // aspect ratio whatever the host does with it.
+  function framed(c, title, box){
+    var vb = (c.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+    if (vb.length !== 4 || !vb[2] || !vb[3]) return c;
+    var x = vb[0], y = vb[1], w = vb[2], h = vb[3];
+    // Crop to what is actually drawn. A chart's declared viewBox carries whatever margin suited the page it
+    // sits on — for the chamber that is a fifth of the area — and in a picture headed for a studio those
+    // pixels are better spent on the room. The measurement comes from the LIVE node, because a detached
+    // clone has no layout and getBBox() on it returns zeros.
+    if (box && box.width > 0 && box.height > 0) {
+      var m = Math.max(box.width, box.height) * 0.02;
+      x = box.x - m; y = box.y - m; w = box.width + m * 2; h = box.height + m * 2;
+    }
+    var pad = Math.max(w * 0.012, h * 0.012), band = Math.max(h * 0.085, w * 0.030), fs = band * 0.34;
+    var NS = 'http://www.w3.org/2000/svg';
+    var bg = document.createElementNS(NS, 'rect');
+    bg.setAttribute('x', x - pad); bg.setAttribute('y', y - pad);
+    bg.setAttribute('width', w + pad * 2); bg.setAttribute('height', h + band + pad * 2);
+    bg.setAttribute('fill', '#ffffff');
+    c.insertBefore(bg, c.firstChild);
+    function line(t, dy, size, fill){
+      var e = document.createElementNS(NS, 'text');
+      e.setAttribute('x', x); e.setAttribute('y', y + h + dy);
+      e.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace');
+      e.setAttribute('font-size', size); e.setAttribute('fill', fill);
+      e.textContent = t; c.appendChild(e);
+    }
+    line(title, band * 0.42, fs * 1.05, '#111111');
+    line('karzat · ogykarzat.hu · forrás: az Országgyűlés adatai' + (stamp() ? ' · szinkron ' + stamp() : ''),
+         band * 0.82, fs * 0.8, '#52525b');
+    c.setAttribute('viewBox', [x - pad, y - pad, w + pad * 2, h + band + pad * 2].join(' '));
+    c.removeAttribute('width'); c.removeAttribute('height');
+    return c;
+  }
+
+  function build(svg, frozenTitle){
+    var root = document.documentElement, title = frozenTitle || titleOf(svg);
+    // A pinned seat dims every other seat in the room. That is a reading aid for one reader at one moment,
+    // not something a published picture should carry, so the pin is lifted for the read and put back.
+    var pinned = svg.closest('.pinned');
+    if (pinned) pinned.classList.remove('pinned');
+    var box = null;
+    try { box = svg.getBBox(); } catch (e) { box = null; }
+    root.classList.add('kz-export');
+    void root.offsetWidth;                       // let the light palette resolve before anything is read
+    var c;
+    try { c = inlined(svg); } finally {
+      root.classList.remove('kz-export');
+      if (pinned) pinned.classList.add('pinned');
+    }
+    c = framed(c, title, box);
+    // The aspect must come from the FRAMED clone: framed() padded all four sides and added a caption band,
+    // so the original viewBox describes a picture that no longer exists and every PNG came out stretched.
+    var fb = (c.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+    return {xml: '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(c),
+            name: 'karzat-' + slug(title),
+            w: fb.length === 4 ? fb[2] : 0, h: fb.length === 4 ? fb[3] : 0};
+  }
+
+  function save(blob, name){
+    var u = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = u; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ a.remove(); URL.revokeObjectURL(u); }, 2000);
+  }
+
+  function png(svg, btn, frozenTitle){
+    var out = build(svg, frozenTitle), img = new Image();
+    img.onload = function(){
+      var W = 1920, H = Math.round(W * (img.height || 1) / (img.width || 1)) || 1080;
+      var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      var g = cv.getContext('2d');
+      g.fillStyle = '#ffffff'; g.fillRect(0, 0, W, H);
+      g.drawImage(img, 0, 0, W, H);
+      cv.toBlob(function(b){ if (b) save(b, out.name + '.png'); btn.textContent = btn.getAttribute('data-lbl'); }, 'image/png');
+    };
+    img.onerror = function(){ btn.textContent = 'nem sikerült'; };
+    img.width = 1920; img.height = out.w ? Math.round(1920 * out.h / out.w) : 1080;
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(out.xml)));
+  }
+
+  // One row per CONTAINER, not per chart, and the click picks whichever chart is visible inside it. The
+  // Számok page renders a finished chart per faction and shows one at a time; a row bound to the chart that
+  // happened to be visible at load would save the wrong picture the moment a reader filters.
+  function visibleIn(host){
+    return Array.prototype.slice.call(host.querySelectorAll('svg[viewBox]')).filter(function(s){
+      var r = s.getBoundingClientRect();
+      return r.width >= 240 && r.height >= 80;
+    })[0];
+  }
+  // Hosts are collected from EVERY chart svg, not only the ones laid out right now: the Számok page ships a
+  // finished chart per faction and hides all but one, so a size gate here left the hidden hosts without a
+  // control that a reader would need the moment they filtered. The size check stays where it belongs — at
+  // click time, choosing which chart inside the host is the visible one.
+  var hosts = [];
+  Array.prototype.slice.call(document.querySelectorAll('svg[viewBox]')).forEach(function(svg){
+    if (svg.closest('.legend') || svg.closest('.kz-topbar')) return;
+    var h = svg.closest('figure, .chart, .chartbox, .tswrap, .covwrap, .turnwrap, .stripwrap, .chamber-today');
+    if (h && hosts.indexOf(h) < 0) hosts.push(h);
+  });
+  hosts.forEach(function(host){
+    if (host.querySelector(':scope > .figsave')) return;
+    // Captured now, before JS_BOOT starts scrambling every [data-kz-text] label: this block runs earlier in
+    // the bundle, so the heading still reads what the builder wrote. A click during the animation would
+    // otherwise burn "SZ4V9Z…" into the file.
+    var frozen = titleOf(visibleIn(host) || host.querySelector('svg[viewBox]') || host);
+    var row = document.createElement('div');
+    row.className = 'figsave';
+    row.innerHTML = '<button type="button" data-lbl="kép mentése">kép mentése</button>' +
+                    '<button type="button" data-lbl="SVG">SVG</button>' +
+                    '<span class="fs-note">világos háttérrel, a forrással a képen</span>';
+    var bs = row.querySelectorAll('button');
+    bs[0].addEventListener('click', function(){
+      var svg = visibleIn(host); if (!svg) return;
+      this.textContent = 'mentés…'; png(svg, this, frozen);
+    });
+    bs[1].addEventListener('click', function(){
+      var svg = visibleIn(host); if (!svg) return;
+      var out = build(svg, frozen);
+      save(new Blob([out.xml], {type: 'image/svg+xml;charset=utf-8'}), out.name + '.svg');
+    });
+    host.appendChild(row);
+  });
 })();
 
 

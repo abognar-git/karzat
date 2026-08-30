@@ -1,9 +1,9 @@
 {
- "built_at": "2026-08-27T20:24:02Z",
+ "built_at": "2026-08-28T16:33:41Z",
  "tables": {
   "szavazasok": {
-   "rows": 79839,
-   "bytes": 1849065,
+   "rows": 79842,
+   "bytes": 1849218,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -30,8 +30,8 @@
    ]
   },
   "szavazatok": {
-   "rows": 17446382,
-   "bytes": 2695910,
+   "rows": 17446580,
+   "bytes": 2699718,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -64,8 +64,8 @@
    ]
   },
   "szavazas_iromany": {
-   "rows": 104329,
-   "bytes": 748021,
+   "rows": 104330,
+   "bytes": 748024,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -104,8 +104,8 @@
    ]
   },
   "iromanyok": {
-   "rows": 562,
-   "bytes": 35308,
+   "rows": 564,
+   "bytes": 35371,
    "columns": [
     "ciklus",
     "iromany",
@@ -145,8 +145,8 @@
    "cycles": null
   },
   "bizottsagi_tagsag": {
-   "rows": 276,
-   "bytes": 6061,
+   "rows": 277,
+   "bytes": 6108,
    "columns": [
     "bizottsag",
     "bizottsag_fajta",

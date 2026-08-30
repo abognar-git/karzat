@@ -1419,6 +1419,218 @@ class MonthlyCsv(unittest.TestCase):
         self.assertIn(",3,2,1,0,", bare)                      # the month's own numbers survive without a faction
 
 
+class TheBundleParses(unittest.TestCase):
+    """One syntax error anywhere in karzat.js takes every interactive feature on the site down at once —
+    filters, the inspector, the search, the charts' readouts — and the page still renders, so nothing looks
+    wrong. It happened while the chart exporter was being written: a backslash escaped twice turned into a
+    real newline inside a JavaScript string, and the whole bundle stopped parsing. Nothing caught it; the
+    a11y suite would have, eventually, in the one gate that is excluded from the intraday path.
+
+    So the bundle is parsed here, cheaply, on every run."""
+
+    def test_the_javascript_bundle_parses(self):
+        import shutil, subprocess, tempfile
+        from scripts.build_site import build_assets
+        js = build_assets()["karzat.js"]
+        node = shutil.which("node")
+        if node:
+            with tempfile.NamedTemporaryFile("w", suffix=".js", encoding="utf-8", delete=False) as f:
+                f.write(js)
+            r = subprocess.run([node, "--check", f.name], capture_output=True, text=True)
+            Path(f.name).unlink(missing_ok=True)
+            self.assertEqual(r.returncode, 0, f"karzat.js does not parse:\n{r.stderr[:900]}")
+            return
+        # No node here. The first version of this fallback counted apostrophes per line and failed on the
+        # correct bundle, because three dozen English comments contain one ("the script's", "the charts'") —
+        # a guaranteed red on any machine without node, which is worse than no fallback at all. What is
+        # checked instead is the fault that actually happened: a Python-level escape collapsing into a real
+        # newline inside a JS string literal.
+        for i, line in enumerate(js.split("\n"), 1):
+            for m in re.finditer(r"""(['"])(?:[^'"\\\n]|\\.)*$""", line):
+                if not line[:m.start()].rstrip().endswith(("//", "/*")):
+                    self.fail(f"karzat.js:{i} opens a string that never closes on its line: {line[:90]}")
+
+class GatedControlsAnnounceNothingUntilTheyWork(unittest.TestCase):
+    """A control only a script can operate must not describe itself as a control in the markup.
+
+    The stylesheet hides the filter buttons until `html.js`, which is honest while the stylesheet is there —
+    but reader mode and text browsers keep the HTML and drop the CSS, and a `<button aria-pressed="false">`
+    is then announced to a screen reader as a toggle nobody can move. The class the builder ships says which
+    button is current; the ARIA state is the boot script's to set, and this holds the line."""
+
+    def test_no_page_ships_a_toggle_state_the_builder_cannot_honour(self):
+        from scripts.build_site import build_index, build_landing, load_inputs, HERO_TS
+        inp = load_inputs()
+        for name, html in (("landing", build_landing()), ("cycle", build_index(inp, HERO_TS))):
+            with self.subTest(page=name):
+                self.assertNotIn("aria-pressed", html, f"{name} ships a toggle state in static markup")
+
+    def test_the_boot_script_sets_it_instead(self):
+        """Pinned to the rule, not to the selector that happens to express it: the first version of this
+        test asserted the literal string '.filters button' and failed the moment the rule was tightened to
+        skip groups with no current choice — a test that guards the wording of an implementation guards
+        nothing worth guarding."""
+        from scripts.build_site import build_assets
+        js = build_assets()["karzat.js"]
+        boot = js[:js.index("JS_") if "JS_" in js[:200] else 4000]
+        for token in ("aria-pressed", ".filters", "button.on", "classList.contains('on')"):
+            self.assertIn(token, boot, f"the boot block no longer mentions {token}")
+
+
+class SearchUnderstandsHungarian(unittest.TestCase):
+    """Two things a substring search over legal titles gets wrong in Hungarian, both measured against the
+    real index before anything was written: a journalist types an abbreviation ("btk") that no statute title
+    contains, and the dictionary form ("védelem") that the language elides when it inflects ("védelmi").
+
+    These tests EXECUTE the shipped rule rather than restating it. The first version re-implemented the
+    expansion in Python from needles typed by hand, so it would have passed with the feature deleted — an
+    adversarial review said so and was right. `variants()` is now lifted out of the built bundle and run
+    under node, and the index is queried with whatever that function returns."""
+
+    @classmethod
+    def setUpClass(cls):
+        import shutil, subprocess, tempfile, unicodedata
+        idx_file = ROOT / "site" / "kereses" / "index.json"
+        if not idx_file.exists():
+            raise unittest.SkipTest("site/ is not built")
+        node = shutil.which("node")
+        if not node:
+            raise unittest.SkipTest("node is needed to run the shipped search rule")
+        from scripts.build_site import build_assets
+        cls.js = build_assets()["karzat.js"]
+        m = re.search(r"var SHORT = \{.*?\n  \}\n", cls.js, re.S) or re.search(r"var SHORT = \{[^;]*;", cls.js, re.S)
+        v = re.search(r"function variants\(t\)\s*\{.*?\n  \}", cls.js, re.S)
+        if not (m and v):
+            raise AssertionError("the search rule is no longer where the test can lift it out of the bundle")
+        harness = (m.group(0).rstrip().rstrip(";") + ";\n" + v.group(0) + "\n"
+                   + "const out = {}; for (const t of process.argv.slice(1)) out[t] = variants(t);"
+                   + "console.log(JSON.stringify(out));")
+        with tempfile.NamedTemporaryFile("w", suffix=".js", encoding="utf-8", delete=False) as f:
+            f.write(harness)
+        terms = ["btk", "ptk", "gdpr", "hhsz", "szja", "vedelem", "gyermekvedelem", "hatalom", "elem", "alom", "orban"]
+        r = subprocess.run([node, f.name] + terms, capture_output=True, text=True)
+        Path(f.name).unlink(missing_ok=True)
+        if r.returncode:
+            raise AssertionError(f"the lifted search rule does not run:\n{r.stderr[:600]}")
+        cls.var = json.loads(r.stdout)
+
+        items = json.loads(idx_file.read_text(encoding="utf-8"))
+        items = items if isinstance(items, list) else items.get("items", [])
+        def fold(x):
+            return "".join(c for c in unicodedata.normalize("NFD", str(x or "").lower())
+                           if unicodedata.category(c) != "Mn")
+        cls.f = [fold((i.get("t") or "") + " " + (i.get("s") or "")) for i in items]
+
+    def found(self, term):
+        """What the search would return for one term: the shipped variants, matched the shipped way."""
+        vs = self.var[term]
+        return sum(1 for f in self.f if any(v in f for v in vs))
+
+    def plain(self, term):
+        return sum(1 for f in self.f if term in f)
+
+    def test_the_abbreviations_reach_what_the_statutes_are_called(self):
+        """Each mapping must find items the bare abbreviation cannot — otherwise it is a promise on the
+        search page with nothing behind it."""
+        for short in ("btk", "ptk", "gdpr", "hhsz"):
+            with self.subTest(short=short):
+                self.assertGreater(len(self.var[short]), 1, f"{short} is promised on the page but expands to nothing")
+                self.assertGreater(self.found(short), self.plain(short) + 5,
+                                   f"{short} finds nothing the plain term does not already find")
+
+    def test_the_dictionary_form_reaches_the_inflected_titles(self):
+        """védelem → védelmi, védelméről. Without the stem the dictionary form found 176 of 773."""
+        for word in ("vedelem", "gyermekvedelem"):
+            with self.subTest(word=word):
+                self.assertIn(word[:-2] + "m", self.var[word], "the elision stem is gone from the rule")
+                self.assertGreater(self.found(word), self.plain(word) * 3)
+
+    def test_the_stem_is_the_one_that_keeps_hataly_out(self):
+        """The bare stem "hatal" also matches hatálybalépés, because folding turns hatály into hatal, and
+        that phrase is everywhere in legislation. stem+m is the rule precisely for that."""
+        self.assertIn("hatalm", self.var["hatalom"])
+        self.assertNotIn("hatal", self.var["hatalom"])
+        bare = sum(1 for f in self.f if "hatal" in f)
+        self.assertLess(self.found("hatalom"), bare, "the rule lets hatálybalépés back in")
+
+    def test_a_short_word_gets_no_stem_and_a_plain_word_gets_no_variants(self):
+        """The rule is bounded: "elem" and "alom" are words in their own right, and a five-letter stem
+        would match half the corpus."""
+        self.assertEqual(self.var["elem"], ["elem"])
+        self.assertEqual(self.var["alom"], ["alom"])
+        self.assertEqual(self.var["orban"], ["orban"])
+
+    def test_a_typed_word_outranks_a_word_reached_through_the_expansion(self):
+        """The expansion must not cost the reader the exact answers, and once it did: "védelem" grew from
+        176 hits to 773, crossed the page's 200-row cap, and because motions score nothing on the short
+        field the sort fell back to date — 39 of the 200 rows shown contained the word typed. Recall bought
+        by losing 137 precise results is not a gain."""
+        typed = self.plain("vedelem")
+        total = self.found("vedelem")
+        self.assertGreater(typed, 100)
+        self.assertGreater(total, 200, "no longer crosses the display cap, so the ranking is untested here")
+        self.assertIn("if (it.f.indexOf(t) >= 0) score += 4;", self.js,
+                      "the typed word no longer outscores a match reached through a variant")
+
+
+class PressPage(unittest.TestCase):
+    """The page a newsroom reads before deciding whether to cite the site. Its promises are checkable, so
+    they are checked: the licence it grants, the boundary it draws, and a week summary that agrees with the
+    pages it links to — a press page that disagreed with the site would be worse than none."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.inp = load_inputs()
+        cls.inp["base_depth"] = 0
+        from scripts.build_site import build_press_page, press_week
+        cls.html = build_press_page(cls.inp)
+        cls.pw = press_week(cls.inp)
+
+    def test_it_says_who_made_it_and_what_may_be_reused(self):
+        self.assertIn("Bognár Attila", self.html)
+        self.assertIn("github.com/abognar-git/karzat", self.html)
+        self.assertIn("CC BY 4.0", self.html)                     # the derived data's licence, stated plainly
+        self.assertIn("forrás: karzat", self.html)                # the credit line an outlet can copy
+        self.assertIn("nem gyűjt", self.html)                     # no cookies, no analytics — said, not implied
+
+    def test_it_draws_the_editorial_boundary_before_a_segment_is_built_on_it(self):
+        self.assertIn("számol, nem ítél", self.html)
+        for promise in ("leglustább", "Nem tulajdonít szándékot"):
+            self.assertIn(promise, self.html)
+
+    def test_the_week_summary_agrees_with_the_record_it_links_to(self):
+        """Every figure on the press page comes from the same functions the linked pages use; this asserts
+        the page actually shows that week's votes and not the cycle's."""
+        if not self.pw:
+            self.skipTest("no sitting week yet")
+        days = set(self.pw["week"]["days"])
+        self.assertTrue(all(v["on_date"] in days for v in self.pw["votes"]))
+        self.assertTrue(all(e["vote"]["on_date"] in days for e in self.pw["dissents"]))
+        self.assertEqual(self.pw["n_dissenters"], sum(len(e["dissents"]) for e in self.pw["dissents"]))
+        # the qualified count is close_votes' own verdict, not a second reading of the rule: the first draft
+        # asked for a field that does not exist and printed a permanent zero
+        import karzat.analytics as _an
+        cl = _an.close_votes(self.inp, _an.cohesion(self.inp)["plurality"])
+        self.assertEqual([d["ts"] for d in self.pw["qualified"]],
+                         [d["ts"] for d in cl["decisions"] if d["date"] in days and d.get("qualified")])
+        self.assertTrue(all((d.get("rule") or "") not in ("egyszeru", "relativ", "") for d in self.pw["qualified"]))
+        from scripts.build_site import hu_num as _hu
+        self.assertIn(f'{_hu(len(self.pw["votes"]))} szavazás', self.html)
+
+    def test_every_link_it_offers_resolves(self):
+        """A press page whose links 404 is worse than no press page: the reader is a journalist on a deadline."""
+        import re as _re
+        site = ROOT / "site"
+        if not (site / "sajto" / "index.html").exists():
+            self.skipTest("site/ is not built")
+        page = (site / "sajto" / "index.html").read_text(encoding="utf-8")
+        for href in sorted(set(_re.findall(r'href="([^"#?]+)"', page))):
+            if href.startswith(("http", "mailto:", "data:")):
+                continue
+            t = (site / "sajto" / href).resolve()
+            self.assertTrue(t.exists(), f"sajto/index.html → {href} does not exist")
+
+
 class Coverage(unittest.TestCase):
     """The page that draws the data's own edge. Its numbers must be the same ones every cycle page is built from."""
 

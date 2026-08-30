@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-08-27T22:20:21.344111+02:00",
+ "derived_at": "2026-08-28T18:30:08.593540+02:00",
  "cycle": 43,
  "count": 201,
  "current": 198,
@@ -9408,7 +9408,7 @@
     {
      "ciklus": "2026-",
      "speeches": 27,
-     "technical": 219
+     "technical": 245
     },
     {
      "ciklus": "2022-2026",
@@ -12977,7 +12977,7 @@
     {
      "ciklus": "2026-",
      "speeches": 14,
-     "technical": 468
+     "technical": 493
     }
    ],
    "committees": [
@@ -21868,7 +21868,7 @@
     {
      "ciklus": "2026-",
      "speeches": 60,
-     "technical": 262
+     "technical": 284
     },
     {
      "ciklus": "2022-2026",
@@ -27518,7 +27518,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 12,
+     "onallo": 13,
      "nem_onallo": 0
     }
    ],
@@ -27602,6 +27602,15 @@
    "local_offices": [],
    "biography_url": null,
    "motions": [
+    {
+     "szam": "K/563",
+     "kind": "K",
+     "number": 563,
+     "title": "Osztrák tárgyalás az energia-veszélyhelyzet árnyékában",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%226e4ed69f-0b4a-40a0-9453-74590e262cef%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/502",
      "kind": "I",
@@ -33919,7 +33928,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 49,
+     "onallo": 50,
      "nem_onallo": 1
     },
     {
@@ -34055,6 +34064,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/s184",
    "motions": [
+    {
+     "szam": "K/564",
+     "kind": "K",
+     "number": 564,
+     "title": "Számíthat-e a TISZA-kormányra Kazincbarcika a víziközmű-hálózat felújításában?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%225cc3f4dd-71a5-4e0e-b541-42d26af80293%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/495",
      "kind": "K",
@@ -37391,7 +37409,14 @@
      "filed": true
     }
    ],
-   "remuneration": [],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 1309493,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/002G",
    "motions": [
@@ -38949,7 +38974,14 @@
      "filed": true
     }
    ],
-   "remuneration": [],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 2880885,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003U",
    "motions": [
@@ -40368,7 +40400,7 @@
     {
      "ciklus": "2026-",
      "speeches": 28,
-     "technical": 387
+     "technical": 461
     },
     {
      "ciklus": "2022-2026",

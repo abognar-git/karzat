@@ -1,7 +1,7 @@
 {
  "derived_at": "2026-08-27",
- "count": 562,
- "listed": 564,
+ "count": 564,
+ "listed": 566,
  "note": "Csak a jelenlegi ciklus: az irománylista nem fogad ciklusparamétert, az iromány-adatlap pedig ciklusonként újrakezdődő izon szerint címezhető, így korábbi ciklus irománya nem kérhető le.",
  "records": {
   "B/1": {
@@ -51584,6 +51584,70 @@
    "szam_parsed": {
     "kind": "A",
     "number": 562
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/563": {
+   "szam": "K/563",
+   "izon": "563",
+   "title": "Osztrák tárgyalás az energia-veszélyhelyzet árnyékában",
+   "type": "írásbeli kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-28",
+   "status": "írásos válaszra vár",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Panyi Miklós (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "élő környezetért felelős miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00563/00563.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p067%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 563
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/564": {
+   "szam": "K/564",
+   "izon": "564",
+   "title": "Számíthat-e a TISZA-kormányra Kazincbarcika a víziközmű-hálózat felújításában?",
+   "type": "írásbeli kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-08-28",
+   "status": "írásos válaszra vár",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Szabadi István (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "élő környezetért felelős miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00564/00564.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s184%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 564
    },
    "days_submission_to_promulgation": null,
    "final_vote_ts": null,

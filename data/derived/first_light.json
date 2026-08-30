@@ -1,27 +1,27 @@
 {
- "derived_at": "2026-08-27T22:20:21.344111+02:00",
+ "derived_at": "2026-08-30T07:23:54.694412+02:00",
  "window": {
   "from": "2026-05-09",
-  "to": "2026-08-27",
-  "list_files": 2097
+  "to": "2026-08-28",
+  "list_files": 2100
  },
- "votes": 269,
- "decisions": 268,
+ "votes": 272,
+ "decisions": 271,
  "quorum_checks": 1,
- "secret_ballots": 3,
+ "secret_ballots": 5,
  "qualified_majority_votes": 69,
  "by_mode": {
-  "Listás": 198,
+  "Listás": 199,
   "Listás a jelenlevők 2/3-ával": 48,
   "Listás az összes képviselő felével": 7,
   "Listás az összes képviselő 2/3-ával": 7,
   "Listás a jelenlevők 4/5-ével": 5,
+  "Titkos": 3,
   "Titkos az összes képviselő 2/3-ával": 2,
-  "Jelenlét megállapítás": 1,
-  "Titkos": 1
+  "Jelenlét megállapítás": 1
  },
  "by_result": {
-  "Elfogadva": 246,
+  "Elfogadva": 249,
   "Elutasítva": 22,
   "Határozatképes": 1
  },
@@ -29,10 +29,10 @@
   "2026-05": 57,
   "2026-06": 90,
   "2026-07": 75,
-  "2026-08": 47
+  "2026-08": 50
  },
  "motion_outcomes_top": {
-  "önálló indítvány elfogadva": 72,
+  "önálló indítvány elfogadva": 73,
   "Országgyűlés az interpellációs választ elfogadta": 59,
   "összegző módosító javaslat elfogadva": 20,
   "önálló indítvány minősített többséget igénylő része elfogadva": 18,
@@ -48,8 +48,8 @@
  "motion_prefixes": {
   "amendment": 104,
   "I": 59,
+  "T": 40,
   "S": 39,
-  "T": 39,
   "H": 21,
   "B": 2
  },

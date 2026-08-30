@@ -9,6 +9,14 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .label{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2)}
 [id]{scroll-margin-top:64px}
+/* the save row the exporter injects: it exists only when a script runs, so it needs no gate — and it is
+   not a toggle, so it carries no pressed state */
+.figsave{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 2px}
+.figsave button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:5px 9px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
+.figsave button:hover,.figsave button:focus-visible{color:var(--white);border-color:var(--border-hi)}
+.figsave .fs-note{font-family:var(--mono);font-size:9px;color:var(--dim3);letter-spacing:.05em}
+@media print{.figsave{display:none}}
 /* top bar */
 .kz-topbar{position:sticky;top:0;z-index:20;height:48px;border-bottom:1px solid var(--border);background:var(--topbar);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 16px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
 .kz-topbar .l{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 auto}.kz-topbar .r{display:flex;align-items:center;gap:14px;flex:0 0 auto;white-space:nowrap}
@@ -436,3 +444,44 @@ tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}
 tbody tr.hl td,tr:target td{background:#f6f6f6!important}tr.grp td{background:#fafafa!important}
 tbody tr:hover td{background:transparent!important}
 #run,#stop{display:none!important}#q{border-color:#ccc!important;background:#fafafa!important;color:#111!important}.panel,.kz-terminal{break-inside:avoid;border-color:#bbb}a{color:#000;text-decoration:underline}.chart svg .seat{opacity:1!important}}
+
+/* The export layer lives LAST on purpose. `html.kz-export .against` and `.chart svg .against` have
+   the same specificity, so whichever is written later wins — and written earlier, the export palette
+   lost the dissent ring silently: sixteen members who voted against their own faction kept a white
+   ring on a white ground. Specificity ties are decided by position, so the overrides sit at the end. */
+/* Broadcast export. The site is dark by design; television is not, and a programme that has to redraw a
+   chart in its own graphics loses the attribution with it. This palette exists for the instant the exporter
+   reads computed styles off the live tree — it is added to <html>, read, and removed in the same tick, so a
+   reader never sees it. Labels grow a little too: at 1920 pixels wide a 5-unit label is legible on a monitor
+   and not on a screen across a studio. */
+html.kz-export{--bg:#fff;--panel:#fff;--panel-deep:#fff;--terminal:#fff;--text:#111;--white:#000;
+  --dim:#3f3f46;--dim2:#52525b;--dim3:#52525b;--dim4:#52525b;--line2:#e4e4e7;--grid:rgba(0,0,0,.10);
+  --border:#c7c7cc;--border-hi:#8e8e93;--corner:#8e8e93;--ok:#047857;--bad:#b91c1c;--sz:#8a6d1f}
+html.kz-export .seclabel{font-size:6.2px}html.kz-export .seclabel.s{font-size:4.4px}
+html.kz-export .chart svg text,html.kz-export .covwrap svg text,html.kz-export .tswrap svg text{font-weight:400}
+/* These are painted with white-alpha literals rather than variables, because the room is drawn for a dark
+   page — on a white ground the chamber's floor, its empty seats and the ring around a member who voted
+   against their own faction all vanish. The ring especially: it is the one mark on a vote chart that names
+   a person's choice, and an export that silently drops it would be a picture that says something else. */
+html.kz-export .floor{fill:rgba(0,0,0,.035)}
+html.kz-export .rowline{stroke:rgba(0,0,0,.10)}
+/* The seat cells are furniture, not data. On the dark page they recede on their own; on white the first
+   attempt made them grey blocks that competed with the members and left the room looking moth-eaten, so
+   they are pulled back until they read as a plan under the people rather than beside them. */
+html.kz-export .seatshape{fill:rgba(0,0,0,.028);stroke:rgba(0,0,0,.085)}
+html.kz-export .seatshape.occ,html.kz-export .occ{fill:rgba(0,0,0,.045)}
+html.kz-export .seat-empty{stroke:rgba(0,0,0,.16)}
+html.kz-export .aisle{stroke:rgba(0,0,0,.14)}
+html.kz-export .fbarc{stroke:rgba(0,0,0,.16)}
+html.kz-export .hit{fill:transparent}
+html.kz-export .against{stroke:#111}
+html.kz-export .rostrum{fill:rgba(0,0,0,.05);stroke:rgba(0,0,0,.18)}
+/* Two more data marks painted with light literals rather than tokens, found by an adversarial review after
+   the chamber's were fixed: the coverage chart's named share and the profile chart's first-term share. Both
+   keep the light-means-X relationship their own key states — the named part stays the lighter of the two —
+   but shifted into a range that exists on white. Left alone, the coverage export said no vote was ever
+   recorded by name, and the profile export swapped its two legends. */
+html.kz-export .cov .all{fill:#3f3f46}
+html.kz-export .cov .named{fill:#a1a1aa}
+html.kz-export .turn .first{fill:#a1a1aa}
+html.kz-export .turn .back{fill:#3f3f46}

@@ -43,7 +43,12 @@ CSP = "; ".join([
     "style-src 'self' 'unsafe-inline'",
     # the portraits are local; the remote original stays allowed because portrait_html() falls back to it for a
     # member the render manifest does not know yet, and a blocked image would look like a missing person
-    "img-src 'self' https://www.parlament.hu",
+    # data: is here for one reason: rasterising a chart to PNG in the browser has exactly one route, an
+    # <img> whose src is the serialised SVG, and img-src governs it. Without this the export button fails
+    # silently on the live site and works in local preview, where no CSP header is served — which is how it
+    # shipped unnoticed once already (the Riport page's own PNG button has never worked in production).
+    # It admits no network origin and no script; an <img> cannot execute a data: SVG.
+    "img-src 'self' data: https://www.parlament.hu",
     "connect-src 'self'",
     "font-src 'self'",
     "form-action 'self'",

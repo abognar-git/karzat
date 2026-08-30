@@ -727,6 +727,14 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .label{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2)}
 [id]{scroll-margin-top:64px}
+/* the save row the exporter injects: it exists only when a script runs, so it needs no gate — and it is
+   not a toggle, so it carries no pressed state */
+.figsave{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 2px}
+.figsave button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:5px 9px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
+.figsave button:hover,.figsave button:focus-visible{color:var(--white);border-color:var(--border-hi)}
+.figsave .fs-note{font-family:var(--mono);font-size:9px;color:var(--dim3);letter-spacing:.05em}
+@media print{.figsave{display:none}}
 /* top bar */
 .kz-topbar{position:sticky;top:0;z-index:20;height:48px;border-bottom:1px solid var(--border);background:var(--topbar);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 16px;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase}
 .kz-topbar .l{display:flex;align-items:center;gap:14px;min-width:0;flex:1 1 auto}.kz-topbar .r{display:flex;align-items:center;gap:14px;flex:0 0 auto;white-space:nowrap}
@@ -1154,6 +1162,47 @@ tr[hidden]{display:table-row!important}[style*="opacity:0"]{opacity:1!important}
 tbody tr.hl td,tr:target td{background:#f6f6f6!important}tr.grp td{background:#fafafa!important}
 tbody tr:hover td{background:transparent!important}
 #run,#stop{display:none!important}#q{border-color:#ccc!important;background:#fafafa!important;color:#111!important}.panel,.kz-terminal{break-inside:avoid;border-color:#bbb}a{color:#000;text-decoration:underline}.chart svg .seat{opacity:1!important}}
+
+/* The export layer lives LAST on purpose. `html.kz-export .against` and `.chart svg .against` have
+   the same specificity, so whichever is written later wins — and written earlier, the export palette
+   lost the dissent ring silently: sixteen members who voted against their own faction kept a white
+   ring on a white ground. Specificity ties are decided by position, so the overrides sit at the end. */
+/* Broadcast export. The site is dark by design; television is not, and a programme that has to redraw a
+   chart in its own graphics loses the attribution with it. This palette exists for the instant the exporter
+   reads computed styles off the live tree — it is added to <html>, read, and removed in the same tick, so a
+   reader never sees it. Labels grow a little too: at 1920 pixels wide a 5-unit label is legible on a monitor
+   and not on a screen across a studio. */
+html.kz-export{--bg:#fff;--panel:#fff;--panel-deep:#fff;--terminal:#fff;--text:#111;--white:#000;
+  --dim:#3f3f46;--dim2:#52525b;--dim3:#52525b;--dim4:#52525b;--line2:#e4e4e7;--grid:rgba(0,0,0,.10);
+  --border:#c7c7cc;--border-hi:#8e8e93;--corner:#8e8e93;--ok:#047857;--bad:#b91c1c;--sz:#8a6d1f}
+html.kz-export .seclabel{font-size:6.2px}html.kz-export .seclabel.s{font-size:4.4px}
+html.kz-export .chart svg text,html.kz-export .covwrap svg text,html.kz-export .tswrap svg text{font-weight:400}
+/* These are painted with white-alpha literals rather than variables, because the room is drawn for a dark
+   page — on a white ground the chamber's floor, its empty seats and the ring around a member who voted
+   against their own faction all vanish. The ring especially: it is the one mark on a vote chart that names
+   a person's choice, and an export that silently drops it would be a picture that says something else. */
+html.kz-export .floor{fill:rgba(0,0,0,.035)}
+html.kz-export .rowline{stroke:rgba(0,0,0,.10)}
+/* The seat cells are furniture, not data. On the dark page they recede on their own; on white the first
+   attempt made them grey blocks that competed with the members and left the room looking moth-eaten, so
+   they are pulled back until they read as a plan under the people rather than beside them. */
+html.kz-export .seatshape{fill:rgba(0,0,0,.028);stroke:rgba(0,0,0,.085)}
+html.kz-export .seatshape.occ,html.kz-export .occ{fill:rgba(0,0,0,.045)}
+html.kz-export .seat-empty{stroke:rgba(0,0,0,.16)}
+html.kz-export .aisle{stroke:rgba(0,0,0,.14)}
+html.kz-export .fbarc{stroke:rgba(0,0,0,.16)}
+html.kz-export .hit{fill:transparent}
+html.kz-export .against{stroke:#111}
+html.kz-export .rostrum{fill:rgba(0,0,0,.05);stroke:rgba(0,0,0,.18)}
+/* Two more data marks painted with light literals rather than tokens, found by an adversarial review after
+   the chamber's were fixed: the coverage chart's named share and the profile chart's first-term share. Both
+   keep the light-means-X relationship their own key states — the named part stays the lighter of the two —
+   but shifted into a range that exists on white. Left alone, the coverage export said no vote was ever
+   recorded by name, and the profile export swapped its two legends. */
+html.kz-export .cov .all{fill:#3f3f46}
+html.kz-export .cov .named{fill:#a1a1aa}
+html.kz-export .turn .first{fill:#a1a1aa}
+html.kz-export .turn .back{fill:#3f3f46}
 """
 
 JS_HASJS = """
@@ -1162,7 +1211,24 @@ JS_HASJS = """
 // screen reader announced a state that could never change and a reader without JavaScript was offered
 // affordances that did nothing. The stylesheet hides them until this line runs, which is the only honest
 // signal that they will work.
-(function(){ document.documentElement.classList.add('js'); })();
+(function(){
+  document.documentElement.classList.add('js');
+  // …and the gated controls get their toggle state here rather than from the builder. The stylesheet hides
+  // them until the line above runs, but markup outlives a stylesheet: reader mode and text browsers drop the
+  // CSS and keep the HTML, and a <button> there is once again a control announced to a
+  // screen reader that nobody can operate. The builder ships the class ("on") that says which one is current;
+  // the ARIA state is this script's to make, because this script is what makes it true.
+  // Only groups that actually toggle. `.filters` is the site's generic control row and also holds pure
+  // action buttons — the Riport page's nine SQL examples fill a textarea and are not states — so a group
+  // earns aria-pressed by containing a current choice (the builder's `on` class), and one that has none
+  // gets nothing. Announcing "not pressed" on a button that runs an example is the same fault one level up.
+  var groups = document.querySelectorAll('.filters');
+  for (var g = 0; g < groups.length; g++) {
+    if (!groups[g].querySelector('button.on')) continue;
+    var f = groups[g].querySelectorAll('button');
+    for (var i = 0; i < f.length; i++) f[i].setAttribute('aria-pressed', f[i].classList.contains('on') ? 'true' : 'false');
+  }
+})();
 """
 
 JS_TSTIP = """
@@ -1336,7 +1402,7 @@ JS_INDEX = """
   // banner says which month is showing and offers the way back out, because a filtered list that does not
   // say it is filtered is a list that lies about how much the House did.
   var month = (new URLSearchParams(location.search).get('m') || 'all');
-  if (!/^\d{4}-\d{2}$/.test(month)) month = 'all';
+  if (!/^\\d{4}-\\d{2}$/.test(month)) month = 'all';
   var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   var table = tbody.closest('table');
@@ -1873,8 +1939,42 @@ JS_SEARCH = """
   var urlTimer = null;
   function syncUrl(){ clearTimeout(urlTimer); urlTimer = setTimeout(function(){ if (!history.replaceState) return; var v = q.value.trim(); history.replaceState(null, '', v ? '?q=' + encodeURIComponent(v) : location.pathname); }, 300); }
   var KIND = {iromany: 'iromány', kepviselo: 'képviselő', szemely: 'pályakép', szoszolo: 'szószóló', kormany: 'kormánytag'};
+  // Two things a substring search over legal titles gets wrong in Hungarian, both measured against this
+  // index before they were fixed rather than guessed at.
+  //
+  // The abbreviations a journalist types are not what a statute is called. "btk" returned nothing while 49
+  // motions concern the büntető törvénykönyv; "ptk" nothing against 28; "gdpr" nothing against 44. Only the
+  // shorthands that actually pay are here: the noisy ones (tb, kata, nav, eho) match inside unrelated words
+  // as substrings and were left out on the evidence, not on taste.
+  //
+  // And the vowel that disappears when a Hungarian -alom/-elem word is inflected: "védelem" is not a
+  // substring of "védelmi", so the dictionary form a reader types missed 597 of the 773 items about
+  // védelem, "gyermekvédelem" 28 of 34, "hatalom" 99 of 110. Dropping the final "em"/"om" gives the stem
+  // both forms share. Checked for noise on a sample of the 597: every one was about védelem.
+  var SHORT = {btk: 'bunteto torvenykonyv', ptk: 'polgari torvenykonyv', szja: 'szemelyi jovedelemado',
+               tao: 'tarsasagi ado', gdpr: 'adatvedelmi', mnb: 'magyar nemzeti bank',
+               hhsz: 'hazszabaly', afa: 'altalanos forgalmi ado'};
+  function variants(t){
+    var v = [t];
+    if (SHORT[t]) v.push(SHORT[t]);
+    // stem + m, not the bare stem: every inflected form of an -alom/-elem word continues with m
+    // (védelmi, védelméről, hatalmi), while the bare stem "hatal" also matches "hatálybalépés" — accent
+    // folding makes hatály into hatal — and that phrase is everywhere in legislation. Measured: the bare
+    // stem gave "hatalom" 110 hits of which 55 were about hatály; stem+m gives 45 and costs "védelem"
+    // nothing (773 either way). Those 45 are NOT all about hatalom — 23 are felhatalmazás, meghatalmazás
+    // and hatalmas, which share the root but not the subject, and an earlier version of this comment
+    // claimed otherwise on a glance at the word forms without reading what they meant. They are kept
+    // rather than excluded because Hungarian writes its compounds closed: anchoring the stem to a word
+    // start would also throw away környezetvédelmi and rendvédelmi, which are exactly what a reader
+    // searching "védelem" wants. The ranking above is what separates them — the typed word first.
+    if (t.length >= 6 && (t.slice(-4) === 'elem' || t.slice(-4) === 'alom')) v.push(t.slice(0, -2) + 'm');
+    return v;
+  }
+
   function render(){
-    var terms = fold(q.value).split(/\\s+/).filter(Boolean);
+    var terms = fold(q.value).split(/\\s+/).filter(Boolean).map(function(t){
+      return {raw: t, v: variants(t)};
+    });
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
     if (failed) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">A keresőindex (index.json) nem tölthető be — a listák külön oldalakon: irományok, képviselők, személyek.</td></tr>'; n.textContent = ''; return; }
     var hits = [];
@@ -1883,7 +1983,22 @@ JS_SEARCH = """
       if (kind !== 'all' && it.k !== kind) continue;
       if (cyc !== 'all' && String(it.c) !== cyc && it.k !== 'szemely') continue;
       var ok = true, score = 0;
-      for (var j = 0; j < terms.length; j++) { var t = terms[j]; if (it.f.indexOf(t) < 0) { ok = false; break; } if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1; }
+      for (var j = 0; j < terms.length; j++) {
+        // every term must still match (AND across terms); a term matches on any of its variants (OR within)
+        var vs = terms[j].v, hit = false;
+        for (var k = 0; k < vs.length; k++) if (it.f.indexOf(vs[k]) >= 0) { hit = true; break; }
+        if (!hit) { ok = false; break; }
+        // Ranking, and the reason it had to change with the expansion. `ft` is the item's SHORT field —
+        // a person's name, but for the 12,713 motions only the number ("T/342"), never the title. So every
+        // topical query scored zero on every motion, the sort fell back to date, and once "védelem" grew
+        // past the 200-row cap the exact matches were pushed off the page by newer stem-only ones: 176 hits
+        // all shown became 773 of which the newest 200 held 39 typed matches. More recall, fewer answers.
+        // The typed word now scores wherever it appears, so an item that literally says what was asked
+        // outranks one reached through an abbreviation or a stem, and the cap cuts the weaker tail.
+        var t = terms[j].raw;
+        if (it.f.indexOf(t) >= 0) score += 4;
+        if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1;
+      }
       if (ok) hits.push([score, it]);
     }
     hits.sort(function(a, b){ return b[0] - a[0] || (b[1].d || '').localeCompare(a[1].d || ''); });
@@ -2220,9 +2335,14 @@ JS_SQL = """
   });
   function svgText(){
     var el = document.querySelector('#fig svg'); if (!el) return null;
+    // The same light treatment every other chart on the site exports with: a reader who saves one picture
+    // from the console and one from a cycle page should get two pictures that look like they came from the
+    // same place. The class is added for the read and removed immediately — see JS_FIGSAVE.
+    var root = document.documentElement, added = !root.classList.contains('kz-export');
+    if (added) { root.classList.add('kz-export'); void root.offsetWidth; }
     var c = el.cloneNode(true);
     c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    c.setAttribute('style', 'background:#0a0a0a');
+    c.setAttribute('style', 'background:#ffffff');
     // Read the computed style from the ORIGINAL node and write it onto the clone. Computing it on the clone
     // returns nothing, because the clone is detached from the document and CSS variables resolve against the
     // tree — the first version did that and produced a file with var(--c) in it, invisible outside this page.
@@ -2239,6 +2359,7 @@ JS_SQL = """
       }
       n.removeAttribute('class'); n.removeAttribute('style');
     }
+    if (added) root.classList.remove('kz-export');
     return '<?xml version="1.0" encoding="UTF-8"?>' + new XMLSerializer().serializeToString(c);
   }
   function save(blob, name){
@@ -2255,7 +2376,7 @@ JS_SQL = """
       var cv = document.createElement('canvas');
       cv.width = 1800; cv.height = Math.round(1800 * img.height / img.width) || 900;
       var g = cv.getContext('2d');
-      g.fillStyle = '#0a0a0a'; g.fillRect(0, 0, cv.width, cv.height);
+      g.fillStyle = '#ffffff'; g.fillRect(0, 0, cv.width, cv.height);
       g.drawImage(img, 0, 0, cv.width, cv.height);
       cv.toBlob(function(b){ save(b, 'karzat-riport.png'); }, 'image/png');
     };
@@ -2425,6 +2546,209 @@ JS_MONTHS = """
 """
 
 
+JS_FIGSAVE = r"""
+(function(){
+  // Any chart on this site can leave it as a picture. Two things make that useful rather than merely possible:
+  // the picture is rendered on a light ground (a studio cannot use the dark theme), and the source line is
+  // burnt into the file itself — an attribution that lives in the page does not travel with the image, and an
+  // image without one gets redrawn by the programme's own graphics desk, which is how a citation disappears.
+  //
+  // The controls are injected here rather than shipped in the markup, so a reader without a script is never
+  // offered a button that cannot work, and a save button never pretends to be a toggle.
+  if (!document.querySelector || !window.URL || !URL.createObjectURL) return;
+
+  var PROPS = ['fill','fill-opacity','fill-rule','stroke','stroke-width','stroke-opacity','stroke-dasharray',
+               'stroke-linecap','stroke-linejoin','opacity','font-family','font-size','font-weight',
+               'font-style','letter-spacing','text-anchor','dominant-baseline','paint-order','vector-effect'];
+
+  function figures(){
+    return Array.prototype.slice.call(document.querySelectorAll('svg[viewBox]')).filter(function(s){
+      if (s.closest('.legend') || s.closest('.kz-topbar') || s.closest('.figsave')) return false;
+      var r = s.getBoundingClientRect();
+      return r.width >= 240 && r.height >= 80;
+    });
+  }
+
+  function titleOf(svg){
+    var box = svg.closest('section, figure, .panel') || svg.parentNode;
+    var h = box.querySelector('h2 span[data-kz-text], figcaption .label, h3');
+    // Only a colon ends the label: Hungarian ordinals carry a full stop ("43. ciklus") and splitting on it
+    // cut the caption at the number.
+    var t = h ? h.textContent : (svg.getAttribute('aria-label') || '').split(':')[0];
+    t = (t || 'ábra').replace(/\s+/g, ' ').trim();
+    if (t.length > 78) {                              // cut on a word, never mid-word, and say it was cut
+      var cut = t.slice(0, 78);
+      t = cut.slice(0, Math.max(cut.lastIndexOf(' '), 40)).replace(/[,;:—-]$/, '') + '…';
+    }
+    return t;
+  }
+
+  function slug(t){
+    return t.toLowerCase().replace(/[áàâ]/g,'a').replace(/[éè]/g,'e').replace(/[íì]/g,'i')
+            .replace(/[óòöő]/g,'o').replace(/[úùüű]/g,'u').replace(/[^a-z0-9]+/g,'-')
+            .replace(/^-|-$/g,'').slice(0, 48) || 'abra';
+  }
+
+  // The clone is detached, so computed style must be read from the ORIGINAL node: CSS variables resolve
+  // against the tree, and reading the clone yields var(--c) — a file that is invisible anywhere but here.
+  function inlined(svg){
+    var c = svg.cloneNode(true);
+    c.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    c.removeAttribute('class'); c.removeAttribute('style'); c.removeAttribute('tabindex');
+    var src = svg.querySelectorAll('*'), dst = c.querySelectorAll('*'), drop = [];
+    for (var i = 0; i < src.length; i++) {
+      var cs = getComputedStyle(src[i]), n = dst[i];
+      if (cs.display === 'none' || cs.visibility === 'hidden') { drop.push(n); continue; }
+      // Transient opacity is state, not content. JS_BOOT fades every seat in on a staircase and the seat
+      // inspector dims the unpinned ones; both write it inline, and copying the computed value burnt a
+      // half-finished animation or one reader's click into a file meant to travel. The stylesheet's own
+      // opacity (a dimmed series, a lighter mark) has no inline style and is copied as before.
+      var skipOpacity = src[i].style && src[i].style.opacity !== '';
+      for (var j = 0; j < PROPS.length; j++) {
+        if (PROPS[j] === 'opacity' && skipOpacity) continue;
+        var v = cs.getPropertyValue(PROPS[j]);
+        // `none` is kept: for fill and stroke it is a value, not an absence. Dropping it let a line chart
+        // inherit the default black fill and render as a solid blob, and the dissent ring the same.
+        if (v && v !== 'normal' && v !== 'auto') n.setAttribute(PROPS[j], v);
+      }
+      n.removeAttribute('class'); n.removeAttribute('style');
+      n.removeAttribute('tabindex'); n.removeAttribute('role');
+    }
+    for (var k = 0; k < drop.length; k++) if (drop[k].parentNode) drop[k].parentNode.removeChild(drop[k]);
+    return c;
+  }
+
+  function stamp(){
+    var b = document.querySelector('.kz-topbar .sync b');
+    return b ? b.textContent.trim() : '';
+  }
+
+  // The caption band is added to the viewBox rather than around it, so the picture stays one SVG and one
+  // aspect ratio whatever the host does with it.
+  function framed(c, title, box){
+    var vb = (c.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+    if (vb.length !== 4 || !vb[2] || !vb[3]) return c;
+    var x = vb[0], y = vb[1], w = vb[2], h = vb[3];
+    // Crop to what is actually drawn. A chart's declared viewBox carries whatever margin suited the page it
+    // sits on — for the chamber that is a fifth of the area — and in a picture headed for a studio those
+    // pixels are better spent on the room. The measurement comes from the LIVE node, because a detached
+    // clone has no layout and getBBox() on it returns zeros.
+    if (box && box.width > 0 && box.height > 0) {
+      var m = Math.max(box.width, box.height) * 0.02;
+      x = box.x - m; y = box.y - m; w = box.width + m * 2; h = box.height + m * 2;
+    }
+    var pad = Math.max(w * 0.012, h * 0.012), band = Math.max(h * 0.085, w * 0.030), fs = band * 0.34;
+    var NS = 'http://www.w3.org/2000/svg';
+    var bg = document.createElementNS(NS, 'rect');
+    bg.setAttribute('x', x - pad); bg.setAttribute('y', y - pad);
+    bg.setAttribute('width', w + pad * 2); bg.setAttribute('height', h + band + pad * 2);
+    bg.setAttribute('fill', '#ffffff');
+    c.insertBefore(bg, c.firstChild);
+    function line(t, dy, size, fill){
+      var e = document.createElementNS(NS, 'text');
+      e.setAttribute('x', x); e.setAttribute('y', y + h + dy);
+      e.setAttribute('font-family', 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace');
+      e.setAttribute('font-size', size); e.setAttribute('fill', fill);
+      e.textContent = t; c.appendChild(e);
+    }
+    line(title, band * 0.42, fs * 1.05, '#111111');
+    line('karzat · ogykarzat.hu · forrás: az Országgyűlés adatai' + (stamp() ? ' · szinkron ' + stamp() : ''),
+         band * 0.82, fs * 0.8, '#52525b');
+    c.setAttribute('viewBox', [x - pad, y - pad, w + pad * 2, h + band + pad * 2].join(' '));
+    c.removeAttribute('width'); c.removeAttribute('height');
+    return c;
+  }
+
+  function build(svg, frozenTitle){
+    var root = document.documentElement, title = frozenTitle || titleOf(svg);
+    // A pinned seat dims every other seat in the room. That is a reading aid for one reader at one moment,
+    // not something a published picture should carry, so the pin is lifted for the read and put back.
+    var pinned = svg.closest('.pinned');
+    if (pinned) pinned.classList.remove('pinned');
+    var box = null;
+    try { box = svg.getBBox(); } catch (e) { box = null; }
+    root.classList.add('kz-export');
+    void root.offsetWidth;                       // let the light palette resolve before anything is read
+    var c;
+    try { c = inlined(svg); } finally {
+      root.classList.remove('kz-export');
+      if (pinned) pinned.classList.add('pinned');
+    }
+    c = framed(c, title, box);
+    // The aspect must come from the FRAMED clone: framed() padded all four sides and added a caption band,
+    // so the original viewBox describes a picture that no longer exists and every PNG came out stretched.
+    var fb = (c.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+    return {xml: '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(c),
+            name: 'karzat-' + slug(title),
+            w: fb.length === 4 ? fb[2] : 0, h: fb.length === 4 ? fb[3] : 0};
+  }
+
+  function save(blob, name){
+    var u = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = u; a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ a.remove(); URL.revokeObjectURL(u); }, 2000);
+  }
+
+  function png(svg, btn, frozenTitle){
+    var out = build(svg, frozenTitle), img = new Image();
+    img.onload = function(){
+      var W = 1920, H = Math.round(W * (img.height || 1) / (img.width || 1)) || 1080;
+      var cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+      var g = cv.getContext('2d');
+      g.fillStyle = '#ffffff'; g.fillRect(0, 0, W, H);
+      g.drawImage(img, 0, 0, W, H);
+      cv.toBlob(function(b){ if (b) save(b, out.name + '.png'); btn.textContent = btn.getAttribute('data-lbl'); }, 'image/png');
+    };
+    img.onerror = function(){ btn.textContent = 'nem sikerült'; };
+    img.width = 1920; img.height = out.w ? Math.round(1920 * out.h / out.w) : 1080;
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(out.xml)));
+  }
+
+  // One row per CONTAINER, not per chart, and the click picks whichever chart is visible inside it. The
+  // Számok page renders a finished chart per faction and shows one at a time; a row bound to the chart that
+  // happened to be visible at load would save the wrong picture the moment a reader filters.
+  function visibleIn(host){
+    return Array.prototype.slice.call(host.querySelectorAll('svg[viewBox]')).filter(function(s){
+      var r = s.getBoundingClientRect();
+      return r.width >= 240 && r.height >= 80;
+    })[0];
+  }
+  // Hosts are collected from EVERY chart svg, not only the ones laid out right now: the Számok page ships a
+  // finished chart per faction and hides all but one, so a size gate here left the hidden hosts without a
+  // control that a reader would need the moment they filtered. The size check stays where it belongs — at
+  // click time, choosing which chart inside the host is the visible one.
+  var hosts = [];
+  Array.prototype.slice.call(document.querySelectorAll('svg[viewBox]')).forEach(function(svg){
+    if (svg.closest('.legend') || svg.closest('.kz-topbar')) return;
+    var h = svg.closest('figure, .chart, .chartbox, .tswrap, .covwrap, .turnwrap, .stripwrap, .chamber-today');
+    if (h && hosts.indexOf(h) < 0) hosts.push(h);
+  });
+  hosts.forEach(function(host){
+    if (host.querySelector(':scope > .figsave')) return;
+    // Captured now, before JS_BOOT starts scrambling every [data-kz-text] label: this block runs earlier in
+    // the bundle, so the heading still reads what the builder wrote. A click during the animation would
+    // otherwise burn "SZ4V9Z…" into the file.
+    var frozen = titleOf(visibleIn(host) || host.querySelector('svg[viewBox]') || host);
+    var row = document.createElement('div');
+    row.className = 'figsave';
+    row.innerHTML = '<button type="button" data-lbl="kép mentése">kép mentése</button>' +
+                    '<button type="button" data-lbl="SVG">SVG</button>' +
+                    '<span class="fs-note">világos háttérrel, a forrással a képen</span>';
+    var bs = row.querySelectorAll('button');
+    bs[0].addEventListener('click', function(){
+      var svg = visibleIn(host); if (!svg) return;
+      this.textContent = 'mentés…'; png(svg, this, frozen);
+    });
+    bs[1].addEventListener('click', function(){
+      var svg = visibleIn(host); if (!svg) return;
+      var out = build(svg, frozen);
+      save(new Blob([out.xml], {type: 'image/svg+xml;charset=utf-8'}), out.name + '.svg');
+    });
+    host.appendChild(row);
+  });
+})();
+"""
+
 JS_BOOT = """
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -2556,7 +2880,7 @@ def sitemap(out_dir: Path) -> str:
 
     urls: list[tuple[str, str, str]] = []                    # (path, lastmod, priority)
     for rel, pri in (("index.html", "1.0"), ("kereses/index.html", "0.7"), ("szemely/index.html", "0.7"),
-                     ("modszer/index.html", "0.6"), ("arcel/index.html", "0.6"),
+                     ("modszer/index.html", "0.6"), ("sajto/index.html", "0.6"), ("arcel/index.html", "0.6"),
                      ("lefedettseg/index.html", "0.6"), ("frakciovaltas/index.html", "0.5"),
                      ("riport/index.html", "0.6")):
         f = out_dir / rel
@@ -2825,8 +3149,8 @@ def roll_call_table(view: dict, inp: dict) -> str:
         trs.append(f'<tr data-f="{esc(p["faction"])}" data-p="{esc(p["position"])}" data-posrank="{pos_rank.get(p["position"], 9)}" data-name="{esc(name_key(p["name"]))}"' + (f' data-seat="{seatkey}"' if plan else "") + (f' data-az="{esc(p["mp_azon"])}"' if p.get("mp_azon") else "") + '>'
                    f'<td>{name_html}</td><td><span class="pos"><i class="d" style="--c:{c}"></i>{esc(p["faction"])}</span></td>'
                    f'<td><span class="pos">{_glyph(p["position"], c)}{esc(POSITION_LABEL.get(p["position"], p["position"]))}</span></td>' + (f'<td class="mono">{esc(seat_full)}</td>' if plan else '') + '</tr>')
-    fac_buttons = '<button type="button" data-fac="all" class="on" aria-pressed="true">minden frakció</button>' + "".join(f'<button type="button" data-fac="{esc(t["faction"])}" aria-pressed="false">{esc(t["faction"])}</button>' for t in view.get("faction_tallies") or [])
-    pos_buttons = '<button type="button" data-posf="all" class="on" aria-pressed="true">minden szavazat</button>' + "".join(f'<button type="button" data-posf="{p}" aria-pressed="false" title="{esc(POSITION_DEFS.get(POSITION_LABEL[p]) or "")}">{esc(POSITION_LABEL[p])}</button>' for p in POSITION_ORDER if (view.get("position_counts") or {}).get(p))
+    fac_buttons = '<button type="button" data-fac="all" class="on">minden frakció</button>' + "".join(f'<button type="button" data-fac="{esc(t["faction"])}">{esc(t["faction"])}</button>' for t in view.get("faction_tallies") or [])
+    pos_buttons = '<button type="button" data-posf="all" class="on">minden szavazat</button>' + "".join(f'<button type="button" data-posf="{p}" title="{esc(POSITION_DEFS.get(POSITION_LABEL[p]) or "")}">{esc(POSITION_LABEL[p])}</button>' for p in POSITION_ORDER if (view.get("position_counts") or {}).get(p))
     dl = f' · <a href="{esc(view["slug"])}.csv">CSV</a> · <a href="{esc(view["slug"])}.json">JSON</a>'
     return (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Név szerinti lista</span><span class="tag">{len(rows)} képviselő{dl}</span></h2>'
             f'<div class="filters" role="group" aria-label="Szűrés frakció szerint">{fac_buttons}</div><div class="filters" role="group" aria-label="Szűrés szavazat szerint">{pos_buttons}<input type="search" data-filter-table="roll" placeholder="név" aria-label="Szűrés névre" style="min-width:140px"><span class="n" id="rn" aria-live="polite"></span></div>'
@@ -2981,11 +3305,11 @@ def build_index(inp: dict, hero_ts: str) -> str:
         counts_html += f'<div class="c" style="grid-column:1/-1;padding:8px 16px"><span class="sub">{esc(roster["note"])}</span></div>'
     mode_rows = "".join(f'<tr><td>{esc(k)}</td><td class="num mono">{hu_num(v)}</td></tr>' for k, v in fl["by_mode"].items())
     rules_present = sorted({(v["majority"] or {}).get("rule") for v in idx["votes"] if v.get("majority")}, key=lambda r: list(Rule).index(Rule(r)) if r else 99)
-    rule_buttons = '<button type="button" data-rule="all" class="on" aria-pressed="true">mind</button>' + "".join(f'<button type="button" data-rule="{r}" aria-pressed="false" title="{esc(RULE_DEFS.get((RULES[r].label_hu if r in RULES else "")) or "")}">{esc(rule_short(r))}</button>' for r in rules_present) + '<button type="button" data-rule="jelenlet" aria-pressed="false">jelenlét</button>'
-    result_buttons = '<button type="button" data-result="all" class="on" aria-pressed="true">minden eredmény</button><button type="button" data-result="Elfogadva" aria-pressed="false">elfogadva</button><button type="button" data-result="Elutasítva" aria-pressed="false">elutasítva</button>'
+    rule_buttons = '<button type="button" data-rule="all" class="on">mind</button>' + "".join(f'<button type="button" data-rule="{r}" title="{esc(RULE_DEFS.get((RULES[r].label_hu if r in RULES else "")) or "")}">{esc(rule_short(r))}</button>' for r in rules_present) + '<button type="button" data-rule="jelenlet">jelenlét</button>'
+    result_buttons = '<button type="button" data-result="all" class="on">minden eredmény</button><button type="button" data-result="Elfogadva">elfogadva</button><button type="button" data-result="Elutasítva">elutasítva</button>'
     years = sorted({v["on_date"][:4] for v in idx["votes"]}, reverse=True)
-    year_buttons = ('<div class="filters" role="group" aria-label="Szűrés év szerint"><button type="button" data-year="all" class="on" aria-pressed="true">minden év</button>'
-                    + "".join(f'<button type="button" data-year="{y}" aria-pressed="false">{y}</button>' for y in years) + '</div>') if len(years) > 1 else ""
+    year_buttons = ('<div class="filters" role="group" aria-label="Szűrés év szerint"><button type="button" data-year="all" class="on">minden év</button>'
+                    + "".join(f'<button type="button" data-year="{y}">{y}</button>' for y in years) + '</div>') if len(years) > 1 else ""
     dir_rows = "".join(directory_row(row) for row in reversed(idx["votes"]))          # newest first, complete without JS
     hero_date = hu_date(hero["on_date"])
     if inp["closed"]:
@@ -3342,8 +3666,8 @@ def build_mp_page(inp: dict, azon: str) -> str:
     all_rows = "".join(vote_row(v) for v in reversed(al["votes"])) if not inp["archive"] else ""     # an archive MP's votes: in the cycle's data files, not on the page
     all_votes_panel = ""      # filled below once the year buttons exist
     mp_years = sorted({inp["by_ts"][v["ts"]]["on_date"][:4] for v in al["votes"]}, reverse=True)
-    mp_year_buttons = ('<div class="filters" role="group" aria-label="Szűrés év szerint"><button type="button" data-yf="all" class="on" aria-pressed="true">minden év</button>'
-                       + "".join(f'<button type="button" data-yf="{y}" aria-pressed="false">{y}</button>' for y in mp_years) + '</div>') if len(mp_years) > 1 else ""
+    mp_year_buttons = ('<div class="filters" role="group" aria-label="Szűrés év szerint"><button type="button" data-yf="all" class="on">minden év</button>'
+                       + "".join(f'<button type="button" data-yf="{y}">{y}</button>' for y in mp_years) + '</div>') if len(mp_years) > 1 else ""
     fac_hist = "".join(f'<tr><td class="mono">{esc(f["ciklus"])}</td><td>{esc(f["faction"])}</td><td class="mono">{esc(f["from"] or "")} – {esc(f["to"] or "")}</td></tr>' for f in mp.get("factions") or [])
     elections = "".join(f'<tr><td class="mono">{esc(e["ciklus"])}</td><td>{esc(e["constituency"] or "—")}</td><td class="mono">{esc(e["elected_on"] or "")}</td><td class="mono">{esc(e["mandate_from"] or "")} – {esc(e["mandate_to"] or "")}</td></tr>' for e in mp.get("elections") or [])
     motions = "".join(f'<tr><td class="mono">{esc(m["ciklus"])}</td><td class="num mono">{esc(m["onallo"])}</td><td class="num mono">{esc(m["nem_onallo"])}</td></tr>' for m in mp.get("motion_stats") or [])
@@ -3444,7 +3768,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
     all_votes_panel = ("" if inp["archive"] else f'''<section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel · a legfrissebb elöl{twin_links}</span></h2>
   {mp_year_buttons}
-  <div class="filters" role="group" aria-label="Szűrés egyezés szerint"><button type="button" data-alf="all" class="on" aria-pressed="true">mind</button><button type="button" data-alf="with" aria-pressed="false">frakcióval</button><button type="button" data-alf="against" aria-pressed="false">frakció ellen</button><button type="button" data-alf="none" aria-pressed="false">nem adott le szavazatot</button><input type="search" data-filter-table="mine" placeholder="tárgy, szám" aria-label="Szűrés tárgyra" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
+  <div class="filters" role="group" aria-label="Szűrés egyezés szerint"><button type="button" data-alf="all" class="on">mind</button><button type="button" data-alf="with">frakcióval</button><button type="button" data-alf="against">frakció ellen</button><button type="button" data-alf="none">nem adott le szavazatot</button><input type="search" data-filter-table="mine" placeholder="tárgy, szám" aria-label="Szűrés tárgyra" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
   <div class="tablewrap" tabindex="0"><table id="mine" data-page-size="25" data-counter="rn"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th><span class="vh">A szavazás lapja</span></th></tr></thead><tbody>{all_rows}</tbody></table></div>
 </section>''')
     if inp["archive"]:
@@ -3533,7 +3857,7 @@ def build_mp_index(inp: dict) -> str:
                    f'<td><span class="pos"><i class="d" style="--c:{c}"></i>{esc(mp.get("faction") or "—")}</span></td>'
                    f'<td>{mandate_html(mp)}</td>' + ('' if inp["closed"] else f'<td class="mono">{esc(seat_text(mp))}</td>') +
                    f'<td class="num mono">{al["cast"]} / {al["in_roll"]}</td><td class="num mono">{part}</td><td class="num mono">{al["against"]}</td></tr>')
-    fac_buttons = '<button type="button" data-fac="all" class="on" aria-pressed="true">minden frakció</button>' + "".join(f'<button type="button" data-fac="{esc(f["id"])}" aria-pressed="false">{esc(f["id"])}</button>' for f in facs if any(m.get("faction") == f["id"] for m in mps))
+    fac_buttons = '<button type="button" data-fac="all" class="on">minden frakció</button>' + "".join(f'<button type="button" data-fac="{esc(f["id"])}">{esc(f["id"])}</button>' for f in facs if any(m.get("faction") == f["id"] for m in mps))
     n_cur = sum(1 for m in mps if m["current"]); n_former = len(mps) - n_cur
     return page_head(f'Képviselők{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f"Az Országgyűlés képviselői a {inp['cycle']}. ciklusban: mandátum, {'ülőhely, ' if not inp['closed'] else ''}szavazási részvétel és a frakcióval való egyezés.", 1 + inp["base_depth"]) + \
         topbar(inp, [("képviselők", None)], 1) + f"""
@@ -3590,7 +3914,7 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" rol
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet, script and favicon (committed, checked, never hand-edited)."""
-    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_HASJS + "\n" + JS_MONTHS + "\n" + JS_TSTIP + "\n" + JS_FLOORF + "\n" + JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_BOOT).strip() + "\n"}
+    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_HASJS + "\n" + JS_MONTHS + "\n" + JS_TSTIP + "\n" + JS_FLOORF + "\n" + JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_FIGSAVE + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -3849,8 +4173,8 @@ megcímkézik. A kettőt senki nem veti össze. Ez az oldal összeveti.</p>
     <p>Az utolsó két csoport nem hiba az oldalon: a két forrás mond mást. Név szerint ki vannak írva.</p>
   </div>
   <div class="filters" role="group" aria-label="Szűrés az ítélet szerint">
-    <button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>
-    {"".join(f'<button type="button" data-posf="{esc(k)}" aria-pressed="false">{esc(k)} {hu_num(v[k])}</button>' for k in VERDICT_ORDER if v.get(k))}
+    <button type="button" data-posf="all" class="on">mind</button>
+    {"".join(f'<button type="button" data-posf="{esc(k)}">{esc(k)} {hu_num(v[k])}</button>' for k in VERDICT_ORDER if v.get(k))}
     <input type="search" data-filter-table="sw" placeholder="név vagy frakció" aria-label="Szűrés" style="min-width:150px"><span class="n" id="swn" aria-live="polite"></span>
   </div>
   <div class="tablewrap" tabindex="0"><table id="sw" data-page-size="30" data-counter="swn"><thead><tr>
@@ -4016,10 +4340,10 @@ böngésződben fut, és onnantól SQL-lel kérdezhető. Kiszolgáló nincs mög
   <div class="tablewrap" tabindex="0" style="margin-top:12px"><table id="out"><thead></thead><tbody></tbody></table></div>
   <div id="chartwrap" hidden style="margin-top:14px">
     <div class="filters" role="group" aria-label="Ábra">
-      <button type="button" data-chart="oszlop" class="on" aria-pressed="true">oszlop</button>
-      <button type="button" data-chart="vonal" aria-pressed="false">vonal</button>
-      <button type="button" data-chart="pont" aria-pressed="false">pont</button>
-      <button type="button" data-chart="nincs" aria-pressed="false">csak tábla</button>
+      <button type="button" data-chart="oszlop" class="on">oszlop</button>
+      <button type="button" data-chart="vonal">vonal</button>
+      <button type="button" data-chart="pont">pont</button>
+      <button type="button" data-chart="nincs">csak tábla</button>
       <span class="sep"></span>
       <button type="button" id="dlsvg">SVG</button>
       <button type="button" id="dlpng">PNG</button>
@@ -4114,13 +4438,13 @@ udvariassági fordulattal, harmincnál már nem az.</p>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>A szövegrészek</span><span class="tag">{hu_num(n_same)} egy ülésnapon · {hu_num(n_later)} később · {hu_num(n_one)} egy frakción belül és később · {hu_num(n_across)} frakciók között</span></h2>
   <div class="filters" role="group" aria-label="Szűrés">
-    <button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>
-    <button type="button" data-posf="egy" aria-pressed="false">egy frakción belül</button>
-    <button type="button" data-posf="tobb" aria-pressed="false">több frakció</button>
+    <button type="button" data-posf="all" class="on">mind</button>
+    <button type="button" data-posf="egy">egy frakción belül</button>
+    <button type="button" data-posf="tobb">több frakció</button>
     <span class="sep"></span>
-    <button type="button" data-fac="all" class="on" aria-pressed="true">bármikor</button>
-    <button type="button" data-fac="aznap" aria-pressed="false">egy ülésnapon</button>
-    <button type="button" data-fac="kesobb" aria-pressed="false">később</button>
+    <button type="button" data-fac="all" class="on">bármikor</button>
+    <button type="button" data-fac="aznap">egy ülésnapon</button>
+    <button type="button" data-fac="kesobb">később</button>
     <input type="search" data-filter-table="echo" placeholder="szó a szövegrészben" aria-label="Szűrés a szövegrészre" style="min-width:160px"><span class="n" id="en" aria-live="polite"></span>
   </div>
   <div class="tablewrap" tabindex="0"><table id="echo" data-page-size="25" data-counter="en"><thead><tr>
@@ -4592,7 +4916,7 @@ def build_bill_index(inp: dict, bs: dict) -> str:
                        f'<td>{esc(cut(b["final_outcome"] or "", 60))}</td><td>{badge}</td></tr>')
     prefixes = sorted({(byn.get(n, {}).get("szam_parsed", {}) or {}).get("kind") or b["prefix"] for n, b in bs.items()
                        if ((byn.get(n, {}).get("szam_parsed", {}) or {}).get("kind") or b["prefix"])})
-    pbuttons = '<button type="button" data-posf="all" class="on" aria-pressed="true">mind</button>' + "".join(f'<button type="button" data-posf="{p}" aria-pressed="false" title="{esc(prefix_defs().get(p) or "")}">{p}/</button>' for p in prefixes)
+    pbuttons = '<button type="button" data-posf="all" class="on">mind</button>' + "".join(f'<button type="button" data-posf="{p}" title="{esc(prefix_defs().get(p) or "")}">{p}/</button>' for p in prefixes)
     # the letters in words, visible without hover or script — the register's own names
     pfx_line = " · ".join(f'{p}/ {prefix_defs()[p]}' for p in prefixes if p in prefix_defs())
     pfx_html = f'<div class="hero-meta" style="margin:4px 0 8px">{esc(pfx_line)}</div>' if pfx_line else ""
@@ -4609,8 +4933,8 @@ def build_bill_index(inp: dict, bs: dict) -> str:
         wr = any("írásban megválaszolva" in (e.get("text") or "") for e in rec.get("events") or [])
         part["szoveg" if sp else ("iras" if wr else ("szavazas" if b["votes"] else "adatlap"))] += 1
     fbuttons = ("" if not byn else
-                '<button type="button" data-fac="all" class="on" aria-pressed="true">mind</button>'
-                + "".join(f'<button type="button" data-fac="{k}" aria-pressed="false">{lbl} {hu_num(part[k])}</button>'
+                '<button type="button" data-fac="all" class="on">mind</button>'
+                + "".join(f'<button type="button" data-fac="{k}">{lbl} {hu_num(part[k])}</button>'
                           for k, lbl in (("szoveg", "szó szerinti szöveg"), ("iras", "írásbeli válasz"),
                                          ("szavazas", "csak szavazási sor"), ("adatlap", "csak adatlap"))))
     n_voted = sum(1 for b in bs.values() if b["votes"])
@@ -5789,7 +6113,7 @@ def build_day_page(inp: dict, ulnap: int, day_rows: list[dict], texts: dict) -> 
 <div class="hero-h"><h1>{ulnap}. ülésnap</h1><small class="label" data-kz-text>{esc(hu_date(date)) if date else "—"} · {hu_num(len(day_rows))} sor · {hu_num(n_sub)} érdemi felszólalás</small></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>A nap sorban</span><span class="tag">napirendi pontonként · az eljárási sorok halványan</span></h2>
-  <div class="filters" role="group" aria-label="Szűrés"><button type="button" data-rowf="all" data-table="day" class="on" aria-pressed="true">minden sor</button><button type="button" data-rowf="data-sub:1" data-table="day" aria-pressed="false">csak érdemi</button><input type="search" data-filter-table="day" placeholder="név, tárgy, fajta" aria-label="Szűrés" style="min-width:160px"></div>
+  <div class="filters" role="group" aria-label="Szűrés"><button type="button" data-rowf="all" data-table="day" class="on">minden sor</button><button type="button" data-rowf="data-sub:1" data-table="day">csak érdemi</button><input type="search" data-filter-table="day" placeholder="név, tárgy, fajta" aria-label="Szűrés" style="min-width:160px"></div>
   <div class="tablewrap" tabindex="0"><table id="day"><thead><tr><th scope="col" class="num">Sorszám</th><th scope="col">Felszólaló</th><th scope="col">Fajta</th><th scope="col" class="num">Hossz</th><th scope="col">Lap</th></tr></thead><tbody>{"".join(trs)}</tbody></table></div>
   {def_glossary(sorted((k, DAY_KIND_DEFS.get(k)) for k in {r.get("kind") for r in day_rows if r.get("kind")}), "Mit jelentenek a jogcímek és a bejelentések?")}
 </section>
@@ -6398,8 +6722,8 @@ def speakers_panel(inp: dict) -> str:
         f = e.get("faction")
         if f and f not in fac_order:
             fac_order.append(f)
-    fbtn = ('<button type="button" data-rowf="all" data-table="szonokok" class="on" aria-pressed="true">minden frakció</button>'
-            + "".join(f'<button type="button" data-rowf="data-f:{esc(f)}" data-table="szonokok" aria-pressed="false">{esc(f)}</button>'
+    fbtn = ('<button type="button" data-rowf="all" data-table="szonokok" class="on">minden frakció</button>'
+            + "".join(f'<button type="button" data-rowf="data-f:{esc(f)}" data-table="szonokok">{esc(f)}</button>'
                       for f in fac_order))
     return f"""<section class="panel">{CORNERS}
   <h2><span data-kz-text>Szónokok</span><span class="tag">{hu_num(len(rows))} felszólaló · <a href="szonokok.csv">CSV, jogcímenként</a></span></h2>
@@ -6469,8 +6793,8 @@ def build_floor_page(inp: dict, ft: dict) -> str:
                 f'<th scope="col" class="num">Hányad</th><th scope="col"><span class="vh">Ábra</span></th></tr></thead>'
                 f'<tbody>{rws}</tbody></table></div>')
     glossary_html = kind_glossary(forms)
-    fft_buttons = ('<button type="button" data-fft="" class="on" aria-pressed="true">minden frakció</button>'
-                   + "".join(f'<button type="button" data-fft="{esc(f)}" aria-pressed="false">{esc(f)}</button>' for f in fbf))
+    fft_buttons = ('<button type="button" data-fft="" class="on">minden frakció</button>'
+                   + "".join(f'<button type="button" data-fft="{esc(f)}">{esc(f)}</button>' for f in fbf))
     fft_variants = "".join(
         f'<div class="ffv" data-ffv="{esc(f)}" hidden>'
         f'<div class="hero-meta" style="margin:2px 0 6px">{esc(f)}: a hányad a frakció saját idejéből értendő, nem az egész Házéból.</div>'
@@ -6984,14 +7308,21 @@ def coverage_rows(inp: dict) -> list[dict]:
 def build_search_page(inp: dict, n_items: int) -> str:
     """kereses/index.html — one search box over every loaded cycle's bills, MPs and people; the index is a static
     JSON beside the page, loaded on the first keystroke; accent-insensitive."""
-    cyc_buttons = '<button type="button" data-sc="all" class="on" aria-pressed="true">minden ciklus</button>' + "".join(f'<button type="button" data-sc="{c}" aria-pressed="false">{c}</button>' for c in inp["cycles"])
+    cyc_buttons = '<button type="button" data-sc="all" class="on">minden ciklus</button>' + "".join(f'<button type="button" data-sc="{c}">{c}</button>' for c in inp["cycles"])
     return page_head("Keresés · karzat", "Keresés az összes betöltött ciklus irományai, képviselői és személyei között; ékezetek nélkül is.", 1) + \
         topbar(inp, [("keresés", None)], 1) + f"""
 <div class="hero-h"><h1>Keresés</h1><small class="label" data-kz-text>{hu_num(n_items)} tétel · irományok, képviselők, pályaképek · minden betöltött ciklus</small></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Keresés</span><span class="tag">ékezet nélkül is · szám, cím, név</span></h2>
+  <p class="prose">A kereső a szó darabjaira illeszt, minden beírt szónak szerepelnie kell. Két dolgot ért
+  meg magától, mert a törvények címe nem úgy beszél, ahogy az ember kérdez: a <b>rövidítéseket</b>
+  (<span class="mono">btk · ptk · szja · tao · gdpr · mnb · hhsz · áfa</span>) a törvény teljes nevére
+  fordítja, és a <b>szótári alakot</b> megtalálja a ragozott címekben is — a „védelem” a „védelmi” és a
+  „védelméről” szavakat is előhozza. A cím szava szerint keres, nem téma szerint: ami a jegyzőkönyvben nem
+  szerepel a címben, azt itt nem lehet megtalálni. A felszólalások <i>szövegében</i> a
+  <a href="../{cycle_dir(CURRENT_CYCLE)}felszolalas/kereses.html">szavak keresője</a> keres.</p>
   <div class="filters"><input id="sq" type="search" placeholder="pl. T/51 · alaptörvény · Ágh" aria-label="Keresés" autofocus style="min-width:min(100%,420px)"><span class="n" id="sn" aria-live="polite"></span></div>
-  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on" aria-pressed="true">mind</button><button type="button" data-sk="iromany" aria-pressed="false">irományok</button><button type="button" data-sk="kepviselo" aria-pressed="false">képviselők</button><button type="button" data-sk="szemely" aria-pressed="false">pályaképek</button><button type="button" data-sk="szoszolo" aria-pressed="false">szószólók</button><button type="button" data-sk="kormany" aria-pressed="false">kormánytagok</button></div>
+  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on">mind</button><button type="button" data-sk="iromany">irományok</button><button type="button" data-sk="kepviselo">képviselők</button><button type="button" data-sk="szemely">pályaképek</button><button type="button" data-sk="szoszolo">szószólók</button><button type="button" data-sk="kormany">kormánytagok</button></div>
   <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
   <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">A kereső JavaScriptet használ, és a böngésződben nem fut. Nélküle: a ciklusok <a href="../index.html">a főoldalról</a> nyílnak, a képviselők a ciklus <span class="mono">kepviselo/</span> lapjáról, az irományok az <span class="mono">iromany/</span> lapjáról — és a teljes rekord letölthető az <span class="mono">adatok/</span> tábláiból.</td></tr></tbody></table></div>
   <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../{cycle_dir(inp["cycle"])}iromany/index.html">irományok</a> · <a href="../{cycle_dir(inp["cycle"])}kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
@@ -7255,6 +7586,160 @@ def build_profile_page(inp: dict, rows: list[dict]) -> str:
   </section>
 </section>
 {cite_html(inp, 'arcel/index.html', 'A Ház arcéle', 'arcel')}
+""" + page_tail(inp, 1)
+
+
+def press_week(inp: dict) -> dict:
+    """The latest sitting week, as a newsroom would ask for it: what moved, and where to check it.
+
+    Everything here is read from the machinery the rest of the site is built on — the alignment record for
+    dissents, close_votes for the margins, floor_time for the speaking. Nothing is computed twice, so the
+    press page cannot disagree with the page a journalist clicks through to.
+    """
+    weeks = sitting_weeks(inp)
+    if not weeks:
+        return {}
+    w = weeks[0]                                        # sitting_weeks is newest first
+    days = set(w["days"])
+    # Counted the way the channels this page links to count it: a member with no faction cannot vote against
+    # one, and the Atom feeds leave independents out for that reason (the CSV keeps them, and the feed page
+    # says so). Cycle 43 has no independents today, so the two agree — but in cycle 42 they are 920 of 2,285,
+    # and a press page reporting a number its own links contradict is the failure this whole site is against.
+    dis = []
+    for e in dissent_events(inp):
+        if e["vote"]["on_date"] not in days:
+            continue
+        keep = [d for d in e["dissents"] if (d.get("faction") or "").lower() not in ("", "független")]
+        if keep:
+            dis.append({"vote": e["vote"], "dissents": keep})
+    co = an.cohesion(inp)
+    cl = an.close_votes(inp, co["plurality"])
+    closest = [d for d in cl["closest"] if d["date"] in days][:5]
+    absence = [d for d in (cl.get("absence_decisive") or []) if d["date"] in days]
+    votes = [inp["by_ts"][ts] for ts in inp["order"] if inp["by_ts"][ts]["on_date"] in days]
+    # close_votes already decided what "qualified" means (a rule other than the simple and relative ones) and
+    # which votes are decisions at all; asking it beats re-deriving the rule here, where a second definition
+    # would drift from the one the vote pages print. The first draft of this line invented a `qualified` field
+    # that does not exist and would have shipped a permanent zero onto a page written for newsrooms.
+    qualified = [d for d in cl["decisions"] if d["date"] in days and d.get("qualified")]
+    return {"week": w, "votes": votes, "dissents": dis, "closest": closest,
+            "absence": absence, "qualified": qualified,
+            "n_dissenters": sum(len(e["dissents"]) for e in dis)}
+
+
+def build_press_page(inp: dict) -> str:
+    """sajto/index.html — who stands behind the numbers, what may be reused, and the latest week in brief.
+
+    A newsroom will not cite a site that does not say who made it. This page answers that first, then the
+    two questions that follow: may we reuse this (yes, with a name), and what happened this week. The
+    editorial boundary is stated here rather than implied — an outlet that needs a superlative about a
+    person will not get one, and it is fairer to say so before they build a segment on it than after.
+    """
+    pw = press_week(inp)
+    src = f'{cycle_dir(inp["cycle"])}'
+    rows = ""
+    if pw:
+        w = pw["week"]
+        span = hu_date(w["from"]) + (f' – {hu_date(w["to"])}' if w["to"] != w["from"] else "")
+        top = sorted(pw["dissents"], key=lambda e: -len(e["dissents"]))[:5]
+        dis_rows = "".join(
+            f'<tr><td class="mono"><a href="../{src}szavazas/{esc(e["vote"]["slug"])}.html">{esc(hu_date(e["vote"]["on_date"]))}</a></td>'
+            f'<td>{esc((e["vote"].get("iromany") or "") + " " + (e["vote"].get("title") or ""))[:96]}</td>'
+            f'<td class="num mono">{hu_num(len(e["dissents"]))}</td>'
+            f'<td>{esc(", ".join(sorted({d["faction"] for d in e["dissents"] if d.get("faction")})) or "—")}</td></tr>'
+            for e in top) or '<tr><td colspan="4">Ezen a héten senki nem szavazott a frakciója többségével szemben.</td></tr>'
+        close_rows = "".join(
+            f'<tr><td class="mono"><a href="../{src}szavazas/{esc(d["slug"])}.html">{esc(hu_date(d["date"]))}</a></td>'
+            f'<td>{esc((d.get("iromany") or "") + " " + (d.get("title") or ""))[:96]}</td>'
+            f'<td class="num mono">{hu_num(d["igen"])}–{hu_num(d["nem"])}</td>'
+            f'<td class="num mono">{"+" if d["margin"] >= 0 else ""}{hu_num(d["margin"])}</td></tr>'
+            for d in pw["closest"]) or '<tr><td colspan="4">Ezen a héten nem volt szoros döntés.</td></tr>'
+        rows = f"""
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>A legutóbbi ülésnapos hét</span><span class="tag">{esc(span)} · {hu_num(len(pw["votes"]))} szavazás · {hu_num(len(pw["qualified"]))} minősített többséget igénylő</span></h2>
+  <p class="prose">Ez a hét számokban, ugyanabból a rekordból, amelyből az oldal minden más lapja épül. Minden sor
+  a saját szavazásoldalára vezet, ahol a teljes névsor és a hivatkozási blokk is ott van.</p>
+  <h3 class="mono">Ki szavazott a frakciója többségével szemben</h3>
+  <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Nap</th><th scope="col">Szavazás</th><th scope="col">Hányan</th><th scope="col">Mely frakciókból</th></tr></thead>
+  <tbody>{dis_rows}</tbody></table></div>
+  <p class="hero-meta">A héten összesen {hu_num(pw["n_dissenters"])} ilyen szavazat esett {hu_num(len(pw["dissents"]))} szavazáson.
+  A különvélemény azt jelenti, hogy a képviselő leadott szavazata eltért a frakciója leadott szavazatainak többségétől — szám, nem minősítés.</p>
+  <h3 class="mono">A legszorosabb döntések</h3>
+  <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Nap</th><th scope="col">Szavazás</th><th scope="col">Igen–nem</th><th scope="col">Különbség a küszöbhöz</th></tr></thead>
+  <tbody>{close_rows}</tbody></table></div>
+  {(f'<p class="hero-meta"><b>Ezen a héten {hu_num(len(pw["absence"]))} olyan döntés volt, ahol a hiányzók mozdíthatták volna az eredményt.</b> '
+    f'Ez feltevés, nem tény: azt számolja, mi lett volna, ha a névsorban szereplő, de nem szavazó képviselők mind a frakciójuk többségével szavaznak. '
+    f'A teljes lista a <a href="../{src}szoros/index.html">szoros szavazások</a> lapon.</p>') if pw["absence"] else ""}
+</section>"""
+    return page_head("Sajtó és impresszum · karzat",
+                     "Ki készíti a karzatot, mit szabad belőle átvenni, hogyan kell hivatkozni — és a legutóbbi "
+                     "ülésnapos hét számokban, szerkesztőségeknek.", 1) + \
+        topbar(inp, [("sajtó", None)], 1) + f"""
+<div class="hero-h"><h1>Sajtó és impresszum</h1><small class="label" data-kz-text>ki áll a számok mögött · mit szabad átvenni · a hét</small>
+<p class="lede">Ez az oldal a szerkesztőségeknek szól. Megmondja, ki készíti a karzatot, honnan jön minden adat,
+mit szabad belőle átvenni és hogyan kell hivatkozni — és mit nem ad az oldal, mert azt jobb előre tudni, mint
+egy adás közben.</p></div>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Ki készíti</span></h2>
+  <p class="prose">A karzatot <b>Bognár Attila</b> készíti, független, nem üzleti projektként. Nincs mögötte
+  szerkesztőség, párt, alapítvány vagy hirdető, és az oldal nem gyűjt látogatói adatot: nincs süti, nincs
+  mérőkód, nincs harmadik féltől betöltött tartalom.</p>
+  <p class="prose"><b>Kapcsolat:</b> a projekt nyilvános a GitHubon —
+  <a href="https://github.com/abognar-git/karzat">github.com/abognar-git/karzat</a> —, kérdés, hibajelzés és
+  adatkérés ott nyitható. Ha egy szerkesztőségnek olyan bontás kell, ami az oldalon nincs meg, érdemes szólni:
+  az adat megvan, csak a lap nincs megírva hozzá.</p>
+</section>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Honnan jön az adat</span></h2>
+  <p class="prose">Egyetlen forrásból: az <b>Országgyűlés nyilvános adatszolgáltatásából</b> (Web API). Az oldal
+  nem gyűjt máshonnan, nem egészít ki sajtóhírrel, és nem javítja a forrást. Ahol a forrás két helyen mást mond,
+  az oldal ezt jelöli, nem eldönti. Ahol a rekord hiányos, arról külön lap szól:
+  <a href="../lefedettseg/index.html">ameddig a jegyzőkönyv elér</a>.</p>
+  <p class="prose">Minden szám újraszámolható: az oldal minden táblája letölthető CSV-ben és JSON-ban, a teljes
+  korpusz pedig Parquet-ben, és a böngészőben SQL-lel is lekérdezhető (<a href="../riport/index.html">Riport</a>) —
+  kiszolgáló nélkül, a te gépeden. Aki ellenőrizni akar egy állítást, nem az oldal szavát kell elhinnie.</p>
+</section>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Mit szabad átvenni</span></h2>
+  <p class="prose"><b>Az oldal számításai és táblái szabadon átvehetők</b> — a származtatott adat licence
+  <b>CC BY 4.0</b>: annyi a feltétel, hogy a forrás legyen megnevezve. Adásban, cikkben, grafikán elég ennyi:</p>
+  <p class="prose"><span class="mono">forrás: karzat (ogykarzat.hu), az Országgyűlés adataiból</span></p>
+  <p class="prose">Maga a parlamenti rekord az Országgyűlésé; az oldal ahhoz nem ad jogot. A képviselői
+  fényképek jogi státusza tisztázatlan, ezért azok átvételét az oldal nem ajánlja. A kód MIT-licencű.</p>
+  <p class="prose">Minden szavazásnak, képviselőnek és vitának <b>állandó címe</b> van, és minden lap alján ott
+  a kész hivatkozási blokk (sima szöveg és BibTeX). Egy adásban idézett szám így visszakereshető marad akkor is,
+  ha a Ház azóta újabb ezer alkalommal szavazott.</p>
+</section>
+
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Mit nem ad ez az oldal</span></h2>
+  <p class="prose">Az oldal <b>számol, nem ítél</b>, és ez nem szerénység, hanem a használhatóság feltétele.
+  Konkrétan:</p>
+  <p class="prose">Nem mond olyat, hogy ki a „legszorgalmasabb" vagy „leglustább" képviselő. A beszédidőt és a
+  szavazati mérleget kiadja, de nem rangsorol jellemvonás szerint, mert egy vezérszónoki felszólalás és egy
+  hátsó padsoros hozzászólás nem ugyanaz a szerep. Nem tulajdonít szándékot: egy hiányzás oka nem szerepel a
+  rekordban, tehát az oldalon sem. Nem összegez politikai tartalmat, és nem címkéz szavazásokat témává —
+  ami a jegyzőkönyvben áll, azt adja, szó szerint.</p>
+  <p class="prose">Amit viszont ad, azt teljesen: minden szavazás mind a hét rögzített állapotát, a szükséges
+  többséget szavazásonként, és az újraszámolt eredményt a forrás szerinti mellett — ha a kettő eltér, az az
+  oldalon jelölve van.</p>
+</section>
+{rows}
+<section class="panel">{CORNERS}
+  <h2><span data-kz-text>Értesítés új adatról</span></h2>
+  <p class="prose">Az oldal minden ülésnap után frissül. Aki nem akar visszajárni, hírolvasóval követheti —
+  a csatornák Atom-formátumúak, tehát bármelyik hírolvasó (Feedly, NetNewsWire, Thunderbird, Inoreader) viszi:</p>
+  <p class="prose"><a href="../{src}feed/kulonvelemeny.xml">különvélemények</a> — minden szavazás, ahol valaki a
+  frakciója többségével szemben szavazott · <a href="../{src}feed/heti.xml">a hét számokban</a> ·
+  <a href="../{src}feed/felszolalasok.xml">felszólalások szövege</a> ·
+  <a href="../{src}feed/index.html">az összes csatorna</a>, köztük frakciónként és képviselőnként külön is.</p>
+  <p class="prose">A képviselőnkénti csatorna a leghasznosabb egy szerkesztőségnek: egyetlen politikus minden
+  frakciója elleni szavazata, ahogy megtörténik.</p>
+</section>
+{cite_html(inp, 'sajto/index.html', 'Sajtó és impresszum', 'sajto')}
 """ + page_tail(inp, 1)
 
 
@@ -7830,8 +8315,8 @@ def build_remuneration_page(inp: dict) -> str:
             f'<td class="num mono">{ratio}</td>'
             f'<td><span class="stack" aria-hidden="true" style="display:flex;height:6px;background:var(--line2);min-width:90px">'
             f'<i style="display:block;height:100%;width:{100 * r["gross"] / mx:.1f}%;background:var(--dim3)"></i></span></td></tr>')
-    fbtn = ('<button type="button" data-rowf="all" data-table="jav" class="on" aria-pressed="true">minden frakció</button>'
-            + "".join(f'<button type="button" data-rowf="data-f:{esc(f)}" data-table="jav" aria-pressed="false">{esc(f)}</button>'
+    fbtn = ('<button type="button" data-rowf="all" data-table="jav" class="on">minden frakció</button>'
+            + "".join(f'<button type="button" data-rowf="data-f:{esc(f)}" data-table="jav">{esc(f)}</button>'
                       for f in fac_order))
     schedule = ogytv_schedule_html()
     return page_head(f'Javadalmazás · {cycle}. ciklus · karzat',
@@ -8490,6 +8975,7 @@ def build_landing() -> str:
   {f'<a class="panel door" href="{cdir}visszhang/index.html">{CORNERS}<h2><span data-kz-text>Visszhang</span></h2><p>Szövegrészek, amelyek szó szerint két képviselő szájából is elhangzottak: hány szó, kik, mennyi idővel később.</p><span class="go mono">{cdir}visszhang/ →</span></a>' if (inp.get("echo") or {}).get("items") else ""}
   {f'<a class="panel door" href="riport/index.html">{CORNERS}<h2><span data-kz-text>Riport</span></h2><p>Kérdezd a teljes rekordot SQL-lel, és rajzold ki — a saját böngésződben, kiszolgáló nélkül.</p><span class="go mono">riport/ →</span></a>' if (inp.get("parquet") or {}).get("tables") else ""}
   <a class="panel door" href="lefedettseg/index.html">{CORNERS}<h2><span data-kz-text>Ameddig a jegyzőkönyv elér</span></h2><p>Hónapról hónapra: hol van név szerinti lista, hol csak összesítés, és mi az, ami már nem pótolható.</p><span class="go mono">lefedettseg/ →</span></a>
+  <a class="panel door" href="sajto/index.html">{CORNERS}<h2><span data-kz-text>Sajtó és impresszum</span></h2><p>Ki készíti az oldalt, mit szabad belőle átvenni és hogyan kell hivatkozni — és a legutóbbi ülésnapos hét számokban, szerkesztőségeknek.</p><span class="go mono">sajto/ →</span></a>
   <a class="panel door" href="modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer és adatok</span></h2><p>Minden szabály és számítás leírva; minden tábla letölthető CSV-ben és JSON-ban, ciklusonként az <span class="mono">adatok/</span> alatt.</p><span class="go mono">modszer/ →</span></a>
 </section>
 </div></main>
@@ -8540,6 +9026,8 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
         (md_ / "index.html").write_text(build_method_page(wide_inp), encoding="utf-8")
         cd_ = out_dir / "lefedettseg"; cd_.mkdir(parents=True, exist_ok=True)     # where the record reaches, and where it stops
         (cd_ / "index.html").write_text(build_coverage_page(wide_inp, {r["cycle"]: r["coverage"] for r in res}), encoding="utf-8")
+        pr_ = out_dir / "sajto"; pr_.mkdir(parents=True, exist_ok=True)           # who stands behind the numbers
+        (pr_ / "index.html").write_text(build_press_page(wide_inp), encoding="utf-8")
         ad_ = out_dir / "arcel"; ad_.mkdir(parents=True, exist_ok=True)           # who sits there, across the ten cycles
         (ad_ / "index.html").write_text(build_profile_page(wide_inp, landing_inputs()["rows"]), encoding="utf-8")
         if (inp.get("parquet") or {}).get("tables"):                             # the corpus, queryable in a browser
