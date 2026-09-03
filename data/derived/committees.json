@@ -19,7 +19,7 @@
   },
   {
    "id": "003C",
-   "title": "A Médiatanács elnökét és tagjait jelölő eseti bizottság",
+   "title": "a Médiatanács elnökét és tagjait jelölő eseti bizottság",
    "subcommittees": []
   },
   {
@@ -297,7 +297,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%2299b40688-dce0-47e2-a1f6-b712bdbce88e%22%7D"
   },
   "002F": {
    "name": "Külügyi Bizottság",
@@ -467,7 +467,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%223e9ae10b-7d10-4a55-9a44-104ca4acece8%22%7D"
   },
   "002I": {
    "name": "Művelődési Bizottság",
@@ -722,7 +722,7 @@
     }
    ],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22825de136-9e8b-4bf0-841d-9897c89847bb%22%7D"
+   "next_meeting_url": null
   },
   "002M": {
    "name": "Digitalizációs és Technológiai Bizottság",
@@ -1557,7 +1557,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%225de76454-f56b-49e0-a38c-2d6df1eb99d9%22%7D"
+   "next_meeting_url": null
   },
   "002Y": {
    "name": "Közlekedési és Beruházási Bizottság",
@@ -1737,7 +1737,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%2285e3881c-b9a5-459f-a393-8d4ecd9b1711%22%7D"
+   "next_meeting_url": null
   },
   "0032": {
    "name": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
@@ -1782,7 +1782,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22f7eb628d-0682-4475-abf8-6130e2ab7da7%22%7D"
+   "next_meeting_url": null
   },
   "0033": {
    "name": "A Spontán Privatizációt és a Közvagyon Elvesztését Feltáró Vizsgálóbizottság",
@@ -1917,7 +1917,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%220a365464-7984-4aad-afa8-aabd1c07242f%22%7D"
   },
   "0036": {
    "name": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság",
@@ -2128,11 +2128,11 @@
    "next_meeting_url": null
   },
   "003C": {
-   "name": "A Médiatanács elnökét és tagjait jelölő eseti bizottság",
+   "name": "a Médiatanács elnökét és tagjait jelölő eseti bizottság",
    "type": "eseti",
    "created": "2026-08-28",
    "parent": null,
-   "email": null,
+   "email": "mte@parlament.hu",
    "phone": null,
    "chair": {
     "azon": null,

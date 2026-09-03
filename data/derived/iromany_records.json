@@ -1,7 +1,7 @@
 {
- "derived_at": "2026-08-27",
- "count": 564,
- "listed": 566,
+ "derived_at": "2026-09-02",
+ "count": 586,
+ "listed": 588,
  "note": "Csak a jelenlegi ciklus: az irománylista nem fogad ciklusparamétert, az iromány-adatlap pedig ciklusonként újrakezdődő izon szerint címezhető, így korábbi ciklus irománya nem kérhető le.",
  "records": {
   "B/1": {
@@ -51653,6 +51653,166 @@
    "final_vote_ts": null,
    "days_submission_to_final_vote": null
   },
+  "H/565": {
+   "szam": "H/565",
+   "izon": "565",
+   "title": "A Hazatérés Napjáról",
+   "type": "határozati javaslat",
+   "main_type": "határozati javaslat",
+   "nature": "új",
+   "submitted_on": "2026-08-30",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Novák Előd (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00565/00565.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n036%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "H",
+    "number": 565
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "T/566": {
+   "szam": "T/566",
+   "izon": "566",
+   "title": "A Magyarország 2026. évi központi költségvetéséről szóló 2025. évi LXIX. törvény módosításáról",
+   "type": "költségvetési törvény módosítása",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-08-31",
+   "status": "tárgysorozatban",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "kormány (pénzügyminiszter)"
+   ],
+   "submitter_kind": "kormany",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00566/00566.pdf",
+   "submitter_azon": null,
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 566
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/567": {
+   "szam": "I/567",
+   "izon": "567",
+   "title": "Mikor állnak ki végre az ingatlanátverések áldozatai mellett?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-01",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Szabadi István (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "igazságügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00567/00567.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s184%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 567
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "T/568": {
+   "szam": "T/568",
+   "izon": "568",
+   "title": "Büntetőjogi tárgyú és ehhez kapcsolódóan egyéb törvények módosításáról",
+   "type": "törvényjavaslat",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-09-01",
+   "status": "tárgysorozatban",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "kormány (igazságügyi miniszter)"
+   ],
+   "submitter_kind": "kormany",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00568/00568.pdf",
+   "submitter_azon": null,
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 568
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "T/569": {
+   "szam": "T/569",
+   "izon": "569",
+   "title": "Az Ukrajna területén fennálló fegyveres konfliktusra tekintettel kihirdetett veszélyhelyzeti rendeletek törvényi szintre emeléséről szóló 2026. évi XIV. törvény módosításáról",
+   "type": "törvényjavaslat",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-09-01",
+   "status": "tárgysorozatban",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "kormány (agrár- és élelmiszergazdaságért felelős miniszter)"
+   ],
+   "submitter_kind": "kormany",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00569/00569.pdf",
+   "submitter_azon": null,
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 569
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
   "H/57": {
    "szam": "H/57",
    "izon": "57",
@@ -51802,6 +51962,340 @@
    "final_vote_ts": "2026.05.26.16:23:24",
    "days_submission_to_final_vote": 6
   },
+  "T/570": {
+   "szam": "T/570",
+   "izon": "570",
+   "title": "Az élelmiszerláncról és hatósági felügyeletéről szóló 2008. évi XLVI. törvénynek, valamint a szőlészetről és borászatról szóló 2020. évi CLXIII. törvénynek a szőlő aranyszínű sárgaság növénybetegséggel kapcsolatos módosításáról",
+   "type": "törvényjavaslat",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-09-01",
+   "status": "tárgysorozatban",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "kormány (agrár- és élelmiszergazdaságért felelős miniszter)"
+   ],
+   "submitter_kind": "kormany",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00570/00570.pdf",
+   "submitter_azon": null,
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 570
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "T/571": {
+   "szam": "T/571",
+   "izon": "571",
+   "title": "Egyes budapesti ingatlanok fejlesztésével és vagyonkezelésével, valamint közúti közlekedéssel összefüggő törvények módosításáról",
+   "type": "törvényjavaslat",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-09-01",
+   "status": "tárgysorozatban",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "kormány (közlekedési és beruházási miniszter)"
+   ],
+   "submitter_kind": "kormany",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00571/00571.pdf",
+   "submitter_azon": null,
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 571
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "T/572": {
+   "szam": "T/572",
+   "izon": "572",
+   "title": "A magyar építészetről szóló 2023. évi C. törvény módosításáról",
+   "type": "törvényjavaslat",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-09-01",
+   "status": "tárgysorozatban",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "kormány (közlekedési és beruházási miniszter)"
+   ],
+   "submitter_kind": "kormany",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00572/00572.pdf",
+   "submitter_azon": null,
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 572
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "T/573": {
+   "szam": "T/573",
+   "izon": "573",
+   "title": "A pedofil bűnelkövetők kémia kasztrációjának külföldi példákra történő bevezetése érdekében egyes büntetőjogi jogszabályok megalkotásáról és módosításáról",
+   "type": "törvényjavaslat",
+   "main_type": "törvényjavaslat",
+   "nature": "módosító",
+   "submitted_on": "2026-09-02",
+   "status": "tárgysorozatba vételre vár",
+   "procedure_mode": "normál",
+   "procedure_kind": "normal",
+   "promulgation": null,
+   "submitters": [
+    "Novák Előd (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": null,
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00573/00573.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n036%22%7D",
+   "events": [
+    {
+     "date": "2026-09-02",
+     "text": "bizottság kijelölve tárgysorozatba vételre",
+     "related": "Igazságügyi és Alkotmányügyi Bizottság",
+     "remark": null,
+     "speech": null
+    }
+   ],
+   "votes": [],
+   "committees": [
+    {
+     "name": "Igazságügyi és Alkotmányügyi Bizottság",
+     "role": "Kijelölt bizottság (tárgysorozatba vételre)",
+     "rule": "58. § (1) bekezdés"
+    }
+   ],
+   "szam_parsed": {
+    "kind": "T",
+    "number": 573
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/574": {
+   "szam": "I/574",
+   "izon": "574",
+   "title": "\"Magyarország új tudományos és innovációs stratégiájáról\"",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Szűcs Dóra (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "tudományos és technológiai miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00574/00574.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%220013%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 574
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/575": {
+   "szam": "I/575",
+   "izon": "575",
+   "title": "Veszélyben a bűnmegelőzés?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "belügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00575/00575.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 575
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/576": {
+   "szam": "I/576",
+   "izon": "576",
+   "title": "Elárulja-e végre, mire számíthatnak a rendőrök, vagy jöhet a leszerelési hullám?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Novák Előd (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "belügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00576/00576.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22n036%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 576
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/577": {
+   "szam": "K/577",
+   "izon": "577",
+   "title": "Veszélyben a bűnmegelőzés?",
+   "type": "kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "belügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00577/00577.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 577
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/578": {
+   "szam": "I/578",
+   "izon": "578",
+   "title": "Hogyan teheti versenyképesebbé Magyarországot a mesterséges intelligencia?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Gyömbér Dávid (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "tudományos és technológiai miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00578/00578.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22003O%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 578
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/579": {
+   "szam": "K/579",
+   "izon": "579",
+   "title": "Mikor távolítják el az engedély nélkül kihelyezett gyűlöletkeltő táblát?",
+   "type": "írásbeli kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "írásos válaszra vár",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "Szociális és Családügyi Minisztérium államtitkára",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00579/00579.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 579
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
   "H/58": {
    "szam": "H/58",
    "izon": "58",
@@ -51950,6 +52444,230 @@
    "days_submission_to_promulgation": 7,
    "final_vote_ts": "2026.05.26.16:24:52",
    "days_submission_to_final_vote": 6
+  },
+  "I/580": {
+   "szam": "I/580",
+   "izon": "580",
+   "title": "Megkezdődött a Mátészalkai Kórház tönkretétele?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Apáti István (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "egészségügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00580/00580.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22a018%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 580
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/581": {
+   "szam": "I/581",
+   "izon": "581",
+   "title": "Mi lesz az M44 sorsa?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Dr. Takács Árpád (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "közlekedési és beruházási miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00581/00581.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22004V%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 581
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/582": {
+   "szam": "I/582",
+   "izon": "582",
+   "title": "„Szuperelőlegből” nem lesz őszi vetés – mikor kapnak valódi segítséget az aszálykárosult gazdák?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Pócs János (Fidesz)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "agrár- és élelmiszergazdaságért felelős miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00582/00582.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22p041%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 582
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "I/583": {
+   "szam": "I/583",
+   "izon": "583",
+   "title": "Megmarad a fegyverpénz, vagy szétporlasztják?",
+   "type": "interpelláció",
+   "main_type": "interpelláció",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "belügyminiszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00583/00583.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "I",
+    "number": 583
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/584": {
+   "szam": "K/584",
+   "izon": "584",
+   "title": "Lemond?",
+   "type": "írásbeli kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "írásos válaszra vár",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "oktatási és gyermekügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00584/00584.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 584
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/585": {
+   "szam": "K/585",
+   "izon": "585",
+   "title": "Mi a szakmai véleménye?",
+   "type": "írásbeli kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "írásos válaszra vár",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Rétvári Bence (KDNP)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "oktatási és gyermekügyi miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00585/00585.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22r023%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 585
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "K/586": {
+   "szam": "K/586",
+   "izon": "586",
+   "title": "Miért hozták nehéz helyzetbe a „Minden vállalkozásnak legyen saját honlapja\" programban részt vevő vállalkozókat?",
+   "type": "kérdés",
+   "main_type": "kérdés",
+   "nature": "új",
+   "submitted_on": "2026-09-02",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Szabadi István (Mi Hazánk)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "tudományos és technológiai miniszter",
+   "note": null,
+   "text_url": "szöveges PDF",
+   "text_pdf_url": "https://www.parlament.hu/irom43/00586/00586.pdf",
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22s184%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "K",
+    "number": 586
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
   },
   "T/59": {
    "szam": "T/59",

@@ -29,6 +29,7 @@ import unittest
 from pathlib import Path
 
 from scripts import audit_a11y as A
+from tests import node_bin
 
 ROOT = Path(__file__).resolve().parent.parent
 BUILDER = ROOT / "scripts" / "build_site.py"
@@ -130,7 +131,7 @@ class TheReaderIsNotSentAnywhereElse(unittest.TestCase):
 class NobodyIsExcluded(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if not shutil.which("node"):
+        if not node_bin():
             raise unittest.SkipTest("node is not available; the audit driver needs it")
         cls.chrome = A.chrome_path()
         if not cls.chrome:

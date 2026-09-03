@@ -271,6 +271,17 @@ def cmd_sync_speeches(args: argparse.Namespace) -> int:
             print(f"  day {d['ulnap']} ({d['date']}): {e}", file=sys.stderr)
             continue
         k = raw.count(b"<felszolalas>")
+        # An empty list for a day that has already sat is not an answer, it is "not yet". Refreshing only the
+        # newest day is not enough: day 24 was asked for on 25 August, two days BEFORE its sitting, cached the
+        # empty reply, and the moment day 25 appeared it stopped being newest and was never asked again — so
+        # 27 August was permanently absent from the record while the site said the transcript ended on the
+        # 11th. Ask again while the day is recent and still empty; a day that has real speeches is never
+        # re-fetched, and past the window we accept that a sitting genuinely produced none.
+        if ask_again_for_an_empty_day(d.get("date"), k, already_refreshed=refresh):
+            raw = api.fetch("felszolalasok", p_ckl=args.ckl, p_nap=d["ulnap"], refresh=True)
+            k = raw.count(b"<felszolalas>")
+            if k:
+                print(f"  day {d['ulnap']:>4} {d['date']}: {k} speeches (arrived — the cache held an empty reply)")
         n_speech += k
         if args.verbose or refresh:
             print(f"  day {d['ulnap']:>4} {d['date']}: {k} speeches{' (refreshed)' if refresh else ''}")
@@ -430,6 +441,31 @@ def cmd_inspect(args: argparse.Namespace) -> int:
     root = parse_xml(raw)
     print(json.dumps({root.tag: to_dict(root)}, ensure_ascii=False, indent=2))
     return 0
+
+
+EMPTY_RETRY_DAYS = 45          # past this a sitting that shows no speeches is taken at its word
+
+
+def ask_again_for_an_empty_day(date_iso: str | None, speeches: int, *, already_refreshed: bool,
+                               today: str | None = None) -> bool:
+    """Should a sitting day whose cached speech list is empty be asked for again?
+
+    Yes while the day has already sat and is recent. An empty list for a day that has not happened yet is
+    correct and will be superseded; an empty list for a day that has is "not yet", and the cache turns it
+    into "never" unless something asks again. That is how 27 August went missing: it was fetched on the
+    25th, two days early, and the moment a newer day existed it left the refresh window for good.
+
+    No once the day has real speeches — a day with content is never re-fetched — and no past the window,
+    where a sitting that shows nothing is taken at its word rather than re-asked every night forever."""
+    if speeches or already_refreshed or not date_iso:
+        return False
+    from datetime import date
+    now = date.fromisoformat(today) if today else date.today()
+    try:
+        then = date.fromisoformat(date_iso)
+    except ValueError:
+        return False
+    return 0 <= (now - then).days <= EMPTY_RETRY_DAYS
 
 
 def cmd_load(args: argparse.Namespace) -> int:

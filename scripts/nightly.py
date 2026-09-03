@@ -335,20 +335,39 @@ def _run(args: argparse.Namespace) -> int:
     # A stale number under a fresh timestamp is the one failure this project is built to prevent, and the pipeline
     # was quietly producing it. tests/test_site.py::NightlyRunsEveryDerivation now fails if a new derive script is
     # added without being wired in here.
-    for step in (["-m", "scripts.derive_mps"], ["-m", "scripts.derive_seating"], ["-m", "scripts.derive_speeches"],
+    derive_failed: list[str] = []
+    for step in (["-m", "scripts.derive_mps"], ["-m", "scripts.derive_seating"],
+                 ["-m", "scripts.derive_speeches", "--cycle", str(CURRENT_CYCLE)],
                  ["-m", "scripts.derive_speech_texts", "--cycle", str(CURRENT_CYCLE)],
                  ["-m", "scripts.derive_committees"], ["-m", "scripts.derive_szoszolok"],
                  ["-m", "scripts.derive_kormany"], ["-m", "scripts.derive_bills"],
                  ["-m", "scripts.derive_echo", "--cycle", str(CURRENT_CYCLE)],
                  ["-m", "scripts.derive_faction_switches"],
+                 # derive_facts is the only step that reads the SQLite corpus, and nothing else in the
+                 # chain builds it. So it failed every night — silently at first ("no database", exit 1),
+                 # then loudly-but-still-swallowed once a stray zero-byte file made `DB.exists()` true and
+                 # the query hit `no such table: vote`. Either way the footer's rotating facts stopped
+                 # moving on 20 August while the page went on stamping today's date. An input a step needs
+                 # is the chain's job to produce, not the step's job to do without.
+                 ["-m", "karzat", "load", "--since", "1990-01-01"],
                  ["-m", "scripts.derive_facts"], ["-m", "scripts.derive_parquet"],
                  # after the parquet, which it reads; and only the open cycle, because a closed parliament's
                  # votes are finished and refitting all eight takes a quarter of an hour every night
                  ["-m", "scripts.derive_idealpoints", "--cycle", str(CURRENT_CYCLE)],
                  # last of all: the receipt hashes what everything above just wrote
                  ["-m", "scripts.derive_receipt"]):
-        run(py + step, dry=dry, allow_fail=True)
+        # allow_fail keeps a single bad step from taking the whole chain down — but a swallowed failure is
+        # how the speech list stopped updating on 18 August and nobody noticed for a fortnight: the call was
+        # missing --cycle, argparse exited 2 in zero seconds, and the run carried on and built the site from
+        # a fresh speech-text file and a stale speech list. The two disagreed, the echo pointed at a page
+        # that was never written, and the gate went red — three weeks downstream of the actual fault.
+        # So the failures are collected, named, and they stop the publish.
+        if run(py + step, dry=dry, allow_fail=True):
+            derive_failed.append(" ".join(step))
     run(py + ["-m", "karzat", "freshness"], dry=dry, allow_fail=True)
+    if derive_failed:
+        raise SystemExit("derivations failed, so the site would be built from a mix of fresh and stale "
+                         "inputs — refusing to build:\n  " + "\n  ".join(derive_failed))
     if args.quick and builder_moved:
         log("the intraday path rebuilds the open cycle only, and the builder moved — building the whole tree")
     run(py + ["-m", "scripts.build_site"] + (["--refresh"] if args.quick and not builder_moved else []), dry=dry)

@@ -11,6 +11,7 @@ import unittest
 from pathlib import Path
 
 from scripts.build_site import CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
+from tests import node_bin
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -1450,6 +1451,39 @@ class MonthlyCsv(unittest.TestCase):
         self.assertIn(",3,2,1,0,", bare)                      # the month's own numbers survive without a faction
 
 
+def _opens_a_string_it_never_closes(line: str) -> bool:
+    """Does this line of JavaScript open a \' or " string and reach the end of the line still inside it?
+
+    The one fault this has to catch is a Python-level escape collapsing into a real newline inside a string
+    literal, which is what killed the whole bundle once. It walks the line rather than matching a pattern,
+    because the fault is a state (inside a string at EOL), not a shape. Backticks are ignored: a template
+    literal is allowed to span lines, so an odd one is not evidence of anything. A line whose remainder is a
+    comment stops the walk, and a regex literal is skipped, since both may hold unbalanced quotes legally.
+    """
+    i, n = 0, len(line)
+    while i < n:
+        c = line[i]
+        if c == "\\":
+            i += 2
+        elif c in "'\"":
+            q, i = c, i + 1
+            while i < n and line[i] != q:
+                i += 2 if line[i] == "\\" else 1
+            if i >= n:
+                return True
+            i += 1
+        elif c == "/" and i + 1 < n and line[i + 1] in "/*":
+            return False
+        elif c == "/" and i + 1 < n and line[i + 1] not in " =":
+            j = i + 1                                    # a regex literal: run to its unescaped closing /
+            while j < n and line[j] != "/":
+                j += 2 if line[j] == "\\" else 1
+            i = j + 1 if j < n else i + 1
+        else:
+            i += 1
+    return False
+
+
 class TheBundleParses(unittest.TestCase):
     """One syntax error anywhere in karzat.js takes every interactive feature on the site down at once —
     filters, the inspector, the search, the charts' readouts — and the page still renders, so nothing looks
@@ -1463,7 +1497,7 @@ class TheBundleParses(unittest.TestCase):
         import shutil, subprocess, tempfile
         from scripts.build_site import build_assets
         js = build_assets()["karzat.js"]
-        node = shutil.which("node")
+        node = node_bin()
         if node:
             with tempfile.NamedTemporaryFile("w", suffix=".js", encoding="utf-8", delete=False) as f:
                 f.write(js)
@@ -1471,15 +1505,36 @@ class TheBundleParses(unittest.TestCase):
             Path(f.name).unlink(missing_ok=True)
             self.assertEqual(r.returncode, 0, f"karzat.js does not parse:\n{r.stderr[:900]}")
             return
-        # No node here. The first version of this fallback counted apostrophes per line and failed on the
-        # correct bundle, because three dozen English comments contain one ("the script's", "the charts'") —
-        # a guaranteed red on any machine without node, which is worse than no fallback at all. What is
-        # checked instead is the fault that actually happened: a Python-level escape collapsing into a real
-        # newline inside a JS string literal.
+        # No node here. This fallback has cried wolf twice: the first version counted apostrophes per line
+        # and failed on the correct bundle because three dozen English comments contain one ("the script's");
+        # the second used a regex for "a quote with no quote after it", which matched the CLOSING quote of
+        # every ordinary call — `classList.add('js');` reported itself as an unterminated string, and the
+        # nightly went red for four days on a bundle that was fine. So it is a scanner now, not a pattern,
+        # and it is proved against a deliberately broken bundle in the test below rather than trusted.
         for i, line in enumerate(js.split("\n"), 1):
-            for m in re.finditer(r"""(['"])(?:[^'"\\\n]|\\.)*$""", line):
-                if not line[:m.start()].rstrip().endswith(("//", "/*")):
-                    self.fail(f"karzat.js:{i} opens a string that never closes on its line: {line[:90]}")
+            if _opens_a_string_it_never_closes(line):
+                self.fail(f"karzat.js:{i} opens a string that never closes on its line: {line[:90]}")
+
+    def test_the_node_less_fallback_is_worth_having(self):
+        """The fallback has been wrong twice, so it is exercised rather than believed: it must stay silent on
+        every line of the real bundle and speak on the fault it exists for."""
+        from scripts.build_site import build_assets
+        js = build_assets()["karzat.js"]
+        noisy = [(i, l) for i, l in enumerate(js.split("\n"), 1) if _opens_a_string_it_never_closes(l)]
+        self.assertEqual(noisy, [], f"the fallback fails on the correct bundle: {noisy[:3]}")
+        for good in ("document.documentElement.classList.add('js');",
+                     "  // the script's own comment, with an apostrophe",
+                     'var re = /["\']/g;',
+                     "say('kész — a lekérdezés a te gépeden fut');",
+                     'q = decodeURIComponent(m[1].replace(/\\+/g, \' \'));'):
+            with self.subTest(line=good[:40]):
+                self.assertFalse(_opens_a_string_it_never_closes(good), good)
+        for bad in ("say('kész — a lekérdezés",
+                    'out.innerHTML = "<tr><td>',
+                    "var s = 'this line ends mid-string"):
+            with self.subTest(line=bad[:40]):
+                self.assertTrue(_opens_a_string_it_never_closes(bad), bad)
+
 
 class GatedControlsAnnounceNothingUntilTheyWork(unittest.TestCase):
     """A control only a script can operate must not describe itself as a control in the markup.
@@ -1753,7 +1808,7 @@ class TheQueryTravelsInItsOwnLink(unittest.TestCase):
         edit to either turns this red. The plus sign is the case that motivates the reader's replace(): a
         space encodes as %20 here but arrives as + from anything that form-encodes on the way."""
         import shutil, subprocess, json as _json
-        node = shutil.which("node")
+        node = node_bin()
         if not node:
             self.skipTest("node is not installed")
         decode = self._lift("try { q = decodeURIComponent(m[1]")
@@ -1775,7 +1830,7 @@ class TheQueryTravelsInItsOwnLink(unittest.TestCase):
         form, a mailer or a chat client can come back with +. The reader turns those back into spaces —
         which is also why a literal plus must arrive as %2B and not be eaten."""
         import shutil, subprocess, json as _json
-        node = shutil.which("node")
+        node = node_bin()
         if not node:
             self.skipTest("node is not installed")
         decode = self._lift("try { q = decodeURIComponent(m[1]")
@@ -1806,7 +1861,7 @@ class TheQueryTravelsInItsOwnLink(unittest.TestCase):
         """A stray percent sign makes decodeURIComponent throw. The reader must leave the page as it found
         it, not half-fill the box and run it."""
         import shutil, subprocess
-        node = shutil.which("node")
+        node = node_bin()
         if not node:
             self.skipTest("node is not installed")
         decode = self._lift("try { q = decodeURIComponent(m[1]")
@@ -1835,7 +1890,7 @@ class SearchUnderstandsHungarian(unittest.TestCase):
         idx_file = ROOT / "site" / "kereses" / "index.json"
         if not idx_file.exists():
             raise unittest.SkipTest("site/ is not built")
-        node = shutil.which("node")
+        node = node_bin()
         if not node:
             raise unittest.SkipTest("node is needed to run the shipped search rule")
         from scripts.build_site import build_assets
@@ -2536,6 +2591,155 @@ class Echo(unittest.TestCase):
                 body = " ".join(normalise_echo_words(texts[sp["id"]].get("paragraphs")))
                 self.assertIn(f["passage"], body,
                               f'{sp["id"]}: the passage is not in that speech after all')
+
+
+class AnEmptyAnswerForADayThatSatIsNotAnAnswer(unittest.TestCase):
+    """The speech list for one sitting day is fetched once and cached forever, and only the newest day is
+    re-fetched. That is right until a day is asked for before it sits.
+
+    27 August 2026 was fetched on the 25th — two days early — and the House had nothing to give. The reply
+    was cached. When the 28th appeared, the 27th stopped being the newest day and left the refresh window,
+    so a sitting with 288 speeches on it was permanently absent from the record. Nothing was broken: every
+    component did what it was told. The site simply said the transcript ended on 11 August and went on
+    saying it, and the day would never have come back on its own."""
+
+    def test_a_day_that_has_sat_and_shows_nothing_is_asked_again(self):
+        from karzat.cli import ask_again_for_an_empty_day as ask
+        self.assertTrue(ask("2026-08-27", 0, already_refreshed=False, today="2026-09-03"))
+
+    def test_a_day_that_has_not_sat_yet_is_left_alone(self):
+        """An empty list for a future day is correct, and the newest-day refresh will supersede it."""
+        from karzat.cli import ask_again_for_an_empty_day as ask
+        self.assertFalse(ask("2026-09-10", 0, already_refreshed=False, today="2026-09-03"))
+
+    def test_a_day_with_speeches_is_never_fetched_twice(self):
+        """The rule has to converge, or every night re-fetches the whole cycle."""
+        from karzat.cli import ask_again_for_an_empty_day as ask
+        self.assertFalse(ask("2026-08-27", 288, already_refreshed=False, today="2026-09-03"))
+        self.assertFalse(ask("2026-08-27", 1, already_refreshed=False, today="2026-09-03"))
+
+    def test_the_day_already_being_refreshed_is_not_fetched_twice_in_one_run(self):
+        from karzat.cli import ask_again_for_an_empty_day as ask
+        self.assertFalse(ask("2026-08-27", 0, already_refreshed=True, today="2026-09-03"))
+
+    def test_an_old_sitting_that_shows_nothing_is_taken_at_its_word(self):
+        """Some sittings really do produce no speeches. Past the window we believe them, rather than asking
+        the House the same question every night for the rest of the cycle."""
+        from karzat.cli import ask_again_for_an_empty_day as ask, EMPTY_RETRY_DAYS
+        self.assertGreater(EMPTY_RETRY_DAYS, 14, "the window is shorter than the House's own publication lag")
+        self.assertFalse(ask("2026-01-05", 0, already_refreshed=False, today="2026-09-03"))
+
+    def test_the_sync_actually_consults_the_rule(self):
+        """A rule nothing calls is a comment. This is the assertion the extraction is for."""
+        src = (ROOT / "karzat" / "cli.py").read_text(encoding="utf-8")
+        loop = src[src.index('api.fetch("felszolalasok"'):]
+        self.assertIn("ask_again_for_an_empty_day(", loop[:1200], "the sync no longer asks the rule")
+
+    def test_no_sitting_day_in_the_open_cycle_is_silently_empty(self):
+        """The live check the whole thing exists for: a day in the index with no speeches and no explanation
+        is either a genuine speechless sitting or a day we forgot to ask about again."""
+        from scripts.build_site import load_inputs
+        from karzat.cli import ask_again_for_an_empty_day as ask
+        inp = load_inputs()
+        if inp.get("closed"):
+            self.skipTest("the open cycle is what this is about")
+        have = {}
+        for r in (inp.get("speeches") or {}).get("speeches") or []:
+            have[r.get("ulnap")] = have.get(r.get("ulnap"), 0) + 1
+        stale = [d for d in (inp["idx"].get("sitting_days") or [])
+                 if ask(d.get("date"), have.get(d.get("ulnap"), 0), already_refreshed=False)]
+        self.assertEqual(stale, [], f"{len(stale)} recent sitting days hold no speeches and were never re-asked")
+
+
+class TheNightlyCallsCommandsThatExist(unittest.TestCase):
+    """Every command the unattended run builds must be one its target script will accept.
+
+    On 18 August the derive loop began calling `python3 -m scripts.derive_speeches` with no `--cycle`. The
+    script requires it, argparse exited 2 in zero seconds, and `allow_fail=True` swallowed it — every night
+    for a fortnight. Nothing looked wrong: the log said "exit 2 in 0s" among ninety other lines, and the
+    speech texts kept updating beside a speech list frozen on 18 August. The two disagreed, the echo index
+    pointed at a speech page that was never written, and the gate went red — three weeks and one layer
+    downstream of the fault, on a symptom that reads like a data problem rather than a typo in an argv.
+
+    A step that cannot start is not a step that failed; it is a step that was never written correctly, and
+    that is a thing a test can know without running anything."""
+
+    @staticmethod
+    def _steps() -> list[list[str]]:
+        """Every argv the nightly hands to `python3 -m …`, read out of its source."""
+        import ast
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        out = []
+        for node in ast.walk(ast.parse(src)):
+            if not isinstance(node, (ast.List, ast.Tuple)):
+                continue
+            parts = [e.value for e in node.elts
+                     if isinstance(e, ast.Constant) and isinstance(e.value, str)]
+            if parts[:1] == ["-m"] and len(parts) >= 2:
+                out.append(parts)
+        return out
+
+    def test_every_module_it_names_can_be_imported(self):
+        import importlib
+        seen = {s[1] for s in self._steps()}
+        self.assertGreater(len(seen), 8, "the step list was not found in the source")
+        for mod in sorted(seen):
+            with self.subTest(module=mod):
+                importlib.import_module(mod)
+
+    def test_every_required_argument_is_actually_passed(self):
+        """The one that was missing. Read each script's own required flags and check the argv carries them."""
+        import ast, importlib
+        for step in self._steps():
+            mod = step[1]
+            path = ROOT / (mod.replace(".", "/") + ".py")
+            if not path.exists():
+                continue
+            required = set()
+            for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+                if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                        and node.func.attr == "add_argument"):
+                    flags = [a.value for a in node.args
+                             if isinstance(a, ast.Constant) and str(a.value).startswith("--")]
+                    if flags and any(k.arg == "required" and getattr(k.value, "value", False)
+                                     for k in node.keywords):
+                        required.add(flags[0])
+            missing = sorted(f for f in required if f not in step)
+            with self.subTest(step=" ".join(step)):
+                self.assertEqual(missing, [], f"{mod} requires {missing} and the nightly does not pass it")
+
+    def test_a_step_that_reads_the_corpus_database_has_it_built_first(self):
+        """derive_facts is the only step that reads data/karzat.sqlite, and for a fortnight nothing in the
+        chain built it — so the footer's rotating facts froze on 20 August while the page kept stamping
+        today's date. That is the exact harm the derive loop's own comment says the loop exists to prevent."""
+        import ast
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        steps = [" ".join(s) for s in self._steps()]
+        readers = [p.stem for p in (ROOT / "scripts").glob("derive_*.py")
+                   if "karzat.sqlite" in p.read_text(encoding="utf-8")]
+        self.assertIn("derive_facts", readers, "the reader set was found by name, not by reading")
+        load_at = next((i for i, s in enumerate(steps) if s.startswith("-m karzat load")), None)
+        self.assertIsNotNone(load_at, "nothing in the chain builds the corpus database")
+        for r in readers:
+            with self.subTest(step=r):
+                at = next((i for i, s in enumerate(steps) if s.endswith(r)), None)
+                self.assertIsNotNone(at, f"{r} is not in the chain at all")
+                self.assertLess(load_at, at, f"{r} reads the database before anything builds it")
+
+    def test_a_derivation_that_fails_stops_the_publish(self):
+        """allow_fail lets the chain finish gathering; it must not let the chain publish. A build over a mix
+        of fresh and stale derived inputs is the one failure this pipeline exists to prevent."""
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        # anchored on the run() call that builds the site, not on the module name — that also appears in an
+        # import at the top of the file, and slicing to it produced an empty window that asserted nothing
+        build_at = src.index('run(py + ["-m", "scripts.build_site"]')
+        loop_at = src.index("for step in (")
+        self.assertLess(loop_at, build_at)
+        loop = src[loop_at:src.index('"karzat", "freshness"')]
+        self.assertIn("derive_failed.append", loop, "a failed derivation is swallowed and forgotten")
+        after = src[src.index('"karzat", "freshness"'):build_at]
+        self.assertIn("derive_failed", after, "nothing checks the failures before the build")
+        self.assertIn("raise SystemExit", after, "a failed derivation does not stop the run")
 
 
 class TheSiteIsAFunctionOfTheBuilderToo(unittest.TestCase):
@@ -3498,7 +3702,7 @@ class ReportPage(unittest.TestCase):
         words left the source looking right, and the export test passed on a file that carried var(--c). These
         two functions decide what the reader is shown, so they are executed against fabricated rows."""
         import shutil
-        if not shutil.which("node"):
+        if not node_bin():
             self.skipTest("node not available")
         js = self._sql_block()
         return (js[js.index("  function num(v){"):js.index("  function svgEl(")]
@@ -3700,7 +3904,7 @@ class ReportPage(unittest.TestCase):
         message — so `FROM szavazatokk` announced "a táblák visszaállítása…" and rebuilt all eight views to fix
         a spelling mistake. Only the name the engine says is missing counts."""
         import json, shutil, subprocess
-        if not shutil.which("node"):
+        if not node_bin():
             self.skipTest("node not available")
         js = self._sql_block()
         fn = js[js.index("  function droppedOne("):js.index("  // Everything that reaches innerHTML")]

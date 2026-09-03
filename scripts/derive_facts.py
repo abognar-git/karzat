@@ -45,10 +45,17 @@ def hu_date(iso: str) -> str:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.parse_args(argv)
-    if not DB.exists():
+    # A file is not a database. A stray zero-byte data/karzat.sqlite — one `sqlite3 <path>` with no
+    # statement leaves one behind — passed this check for a fortnight and turned a clear "no database"
+    # message into `OperationalError: no such table: vote` from inside a query, which reads like a schema
+    # bug rather than a missing input. Ask the file whether it holds the table this script needs.
+    if not DB.exists() or DB.stat().st_size == 0:
         print("no database — run: python3 -m karzat load --since 1990-01-01", file=sys.stderr)
         return 1
     db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True)
+    if not db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='vote'").fetchone():
+        print(f"{DB} has no `vote` table — run: python3 -m karzat load --since 1990-01-01", file=sys.stderr)
+        return 1
     db.row_factory = sqlite3.Row
     capped = set(json.loads(CAP.read_text(encoding="utf-8")).get("months_originally_truncated") or []) if CAP.exists() else set()
     # months the listing cap never touched: only these may carry a ranking or a total

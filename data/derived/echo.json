@@ -1,15 +1,15 @@
 {
- "generated_at": "2026-08-28",
+ "generated_at": "2026-09-03",
  "words": 30,
  "cycles": {
   "43": {
-   "speeches": 1957,
-   "echoes": 17,
-   "same_day": 3,
+   "speeches": 2129,
+   "echoes": 18,
+   "same_day": 4,
    "later_day": 14,
-   "one_kind_of_speech": 10,
+   "one_kind_of_speech": 11,
    "one_faction_later_day": 12,
-   "across_factions": 5,
+   "across_factions": 6,
    "items": [
     {
      "words": 74,
@@ -208,6 +208,40 @@
       "TISZA"
      ],
      "one_faction": true
+    },
+    {
+     "words": 44,
+     "passage": "el olyan központi költségvetésről szóló törvényt amelynek eredményeképpen az államadósság meghaladná a teljes hazai össztermék felét mindaddig amíg az államadósság a teljes hazai össztermék felét meghaladja az országgyűlés csak olyan központi költségvetésről szóló törvényt fogadhat el amely az államadósság teljes hazai össztermékhez viszonyított arányának",
+     "speeches": [
+      {
+       "id": "25-103",
+       "speaker": "Novák Előd",
+       "date": "2026-08-28",
+       "kind": "vezérszónoki felszólalás",
+       "position": null,
+       "faction": "Mi Hazánk"
+      },
+      {
+       "id": "25-99",
+       "speaker": "Bencsik János",
+       "date": "2026-08-28",
+       "kind": "vezérszónoki felszólalás",
+       "position": null,
+       "faction": "Fidesz"
+      }
+     ],
+     "speakers": 2,
+     "days": 1,
+     "first_day": "2026-08-28",
+     "last_day": "2026-08-28",
+     "lag_days": 0,
+     "same_day": true,
+     "same_kind": true,
+     "factions": [
+      "Fidesz",
+      "Mi Hazánk"
+     ],
+     "one_faction": false
     },
     {
      "words": 42,

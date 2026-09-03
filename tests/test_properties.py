@@ -51,6 +51,7 @@ from karzat.majority import Rule, Tally, base_of, evaluate, needed, needed_for_b
 # `cut(t, n)` would pass the TestCase as the first argument. It cost one run to remember.
 from scripts.build_site import cut, esc, file_size, hu_dec, hu_num
 from scripts.derive_parquet import first_bill
+from tests import node_bin
 
 # Deterministic and quick enough to sit in the ordinary suite; a seed means a failure found on CI can be
 # reproduced here rather than described.
@@ -181,7 +182,7 @@ class TheThresholdIsNeverImpossible(unittest.TestCase):
     and nothing complains.
     """
 
-    _saw = {"empty": 0, "full": 0}
+    _saw = {"empty": 0, "full": 0}      # csak leltár; a vacuitást a lenti teszt dönti el
 
     @given(st.sampled_from(list(Rule)), tallies())
     @SETTINGS
@@ -227,11 +228,23 @@ class TheThresholdIsNeverImpossible(unittest.TestCase):
         if got is not None:
             self.assertEqual(got, n, f"{rule.name}: the verdict says {got}, the threshold says {n}")
 
-    @classmethod
-    def tearDownClass(cls):
-        # A property that never meets the interesting case is a green test that proves nothing.
-        if cls._saw["full"] == 0:
-            raise AssertionError("no tally with a real base was ever generated — the property is vacuous")
+    def test_the_strategy_reaches_a_tally_with_a_real_base(self):
+        """A property that never meets the interesting case is a green test that proves nothing — so the
+        strategy is asked directly whether it can produce the interesting case.
+
+        This used to be a tearDownClass reading a counter that only one test in the class fills. Under
+        pytest-xdist the class's tests are spread over workers, and any worker that did not draw that test
+        still ran the teardown, saw a zero, and failed the run — intermittently, depending on how the tests
+        happened to be distributed. The check was right; the place was not. `find` is deterministic and
+        answers the question the counter was standing in for."""
+        from hypothesis import find
+        # the plurality rule names no threshold and has no base — that is its definition, not a gap
+        for rule in (r for r in Rule if r is not Rule.RELATIV):
+            with self.subTest(rule=rule.name):
+                t = find(tallies(), lambda t, r=rule: (base_of(r, t) or 0) > 0)
+                self.assertGreater(base_of(rule, t), 0)
+        self.assertIsNone(base_of(Rule.RELATIV, find(tallies(), lambda t: t.present > 0)),
+                          "the plurality rule grew a base")
 
 
 class AnIndexStaysInsideItsOwnRange(unittest.TestCase):
@@ -371,7 +384,7 @@ class TheChartReadsAResultTheSameWayWhicheverRowIsFirst(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         import shutil
-        if not shutil.which("node"):
+        if not node_bin():
             raise unittest.SkipTest("node is not available")
         from scripts.build_site import build_assets
         js = build_assets()["karzat.js"]

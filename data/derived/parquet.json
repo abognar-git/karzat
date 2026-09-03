@@ -1,5 +1,5 @@
 {
- "built_at": "2026-08-28T16:33:41Z",
+ "built_at": "2026-09-03T05:36:22Z",
  "tables": {
   "szavazasok": {
    "rows": 79842,
@@ -79,8 +79,8 @@
    ]
   },
   "felszolalasok": {
-   "rows": 495191,
-   "bytes": 2445266,
+   "rows": 495305,
+   "bytes": 2442439,
    "columns": [
     "ciklus",
     "ulesnap",
@@ -104,8 +104,8 @@
    ]
   },
   "iromanyok": {
-   "rows": 564,
-   "bytes": 35371,
+   "rows": 586,
+   "bytes": 35993,
    "columns": [
     "ciklus",
     "iromany",

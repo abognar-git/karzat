@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-08-28T18:30:08.593540+02:00",
+ "derived_at": "2026-09-03T06:13:09.938447+02:00",
  "cycle": 43,
  "count": 201,
  "current": 198,
@@ -739,7 +739,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 16,
+     "onallo": 17,
      "nem_onallo": 2
     },
     {
@@ -766,7 +766,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 45,
+     "speeches": 48,
      "technical": 0
     },
     {
@@ -1081,6 +1081,15 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/a018",
    "motions": [
     {
+     "szam": "I/580",
+     "kind": "I",
+     "number": 580,
+     "title": "Megkezdődött a Mátészalkai Kórház tönkretétele?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%228017279a-ee29-4765-b7ea-023988f45fd0%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "S/483",
      "kind": "S",
      "number": 483,
@@ -1276,7 +1285,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 19,
+     "speeches": 21,
      "technical": 1
     }
    ],
@@ -1698,7 +1707,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 2,
+     "speeches": 3,
      "technical": 0
     }
    ],
@@ -1940,7 +1949,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 9,
+     "speeches": 10,
      "technical": 5
     },
     {
@@ -3059,7 +3068,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 4,
+     "speeches": 5,
      "technical": 1
     }
    ],
@@ -3305,7 +3314,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 8,
+     "speeches": 12,
      "technical": 0
     }
    ],
@@ -3546,7 +3555,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 23,
+     "speeches": 24,
      "technical": 0
     },
     {
@@ -4716,7 +4725,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 8,
      "technical": 0
     }
    ],
@@ -4849,7 +4858,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 17,
+     "speeches": 20,
      "technical": 0
     }
    ],
@@ -5168,7 +5177,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 24,
+     "speeches": 27,
      "technical": 0
     }
    ],
@@ -5459,7 +5468,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 20,
+     "speeches": 22,
      "technical": 1
     },
     {
@@ -6061,7 +6070,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 7,
      "technical": 0
     }
    ],
@@ -6232,7 +6241,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 1,
+     "speeches": 4,
      "technical": 0
     }
    ],
@@ -6355,7 +6364,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 31,
+     "speeches": 32,
      "technical": 0
     }
    ],
@@ -8425,8 +8434,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
-     "technical": 0
+     "speeches": 6,
+     "technical": 1
     },
     {
      "ciklus": "2022-2026",
@@ -8901,7 +8910,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 23,
+     "speeches": 25,
      "technical": 0
     },
     {
@@ -9407,8 +9416,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 27,
-     "technical": 245
+     "speeches": 30,
+     "technical": 256
     },
     {
      "ciklus": "2022-2026",
@@ -9713,7 +9722,7 @@
      "kind": "K",
      "number": 496,
      "title": "Hogyan támogatja a kormány Döbrököz települési hidroglóbuszának cseréjét?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%226b6a918d-6bdb-4feb-9221-17e46d85b0a2%22%7D",
      "co_submitters": 0
     },
@@ -10252,7 +10261,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 2,
+     "speeches": 3,
      "technical": 0
     },
     {
@@ -10967,7 +10976,14 @@
      "filed": true
     }
    ],
-   "remuneration": [],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 2357087,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/0041",
    "motions": [
@@ -11076,7 +11092,14 @@
      "filed": true
     }
    ],
-   "remuneration": [],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 2357087,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003E",
    "motions": [
@@ -12356,11 +12379,17 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 1,
+     "onallo": 2,
      "nem_onallo": 0
     }
    ],
-   "speech_stats": [],
+   "speech_stats": [
+    {
+     "ciklus": "2026-",
+     "speeches": 1,
+     "technical": 0
+    }
+   ],
    "committees": [
     {
      "committee": "Digitalizációs és Technológiai Bizottság",
@@ -12430,6 +12459,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003O",
    "motions": [
+    {
+     "szam": "I/578",
+     "kind": "I",
+     "number": 578,
+     "title": "Hogyan teheti versenyképesebbé Magyarországot a mesterséges intelligencia?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%229e8d17b3-af44-4f21-b9eb-7315be6823ac%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -12618,7 +12656,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 6,
      "technical": 0
     }
    ],
@@ -12977,7 +13015,7 @@
     {
      "ciklus": "2026-",
      "speeches": 14,
-     "technical": 493
+     "technical": 514
     }
    ],
    "committees": [
@@ -13345,13 +13383,13 @@
     {
      "ciklus": "2026-",
      "onallo": 2,
-     "nem_onallo": 2
+     "nem_onallo": 3
     }
    ],
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 7,
      "technical": 2
     },
     {
@@ -13866,7 +13904,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 31,
+     "speeches": 33,
      "technical": 0
     },
     {
@@ -14788,7 +14826,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 22,
+     "speeches": 24,
      "technical": 2
     },
     {
@@ -15885,7 +15923,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 0,
+     "speeches": 2,
      "technical": 1
     }
    ],
@@ -16773,7 +16811,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 6,
      "technical": 0
     }
    ],
@@ -17663,7 +17701,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 21,
+     "speeches": 24,
      "technical": 0
     },
     {
@@ -18167,7 +18205,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 3,
+     "speeches": 4,
      "technical": 0
     }
    ],
@@ -18368,7 +18406,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 23,
+     "speeches": 28,
      "technical": 0
     }
    ],
@@ -18481,7 +18519,13 @@
      "nem_onallo": 0
     }
    ],
-   "speech_stats": [],
+   "speech_stats": [
+    {
+     "ciklus": "2026-",
+     "speeches": 2,
+     "technical": 0
+    }
+   ],
    "committees": [
     {
      "committee": "Élő Környezetért Felelős Bizottság",
@@ -18646,7 +18690,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 20,
+     "speeches": 21,
      "technical": 0
     }
    ],
@@ -18783,7 +18827,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 25,
+     "speeches": 28,
      "technical": 0
     },
     {
@@ -19057,7 +19101,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 17,
+     "speeches": 19,
      "technical": 1
     }
    ],
@@ -19301,7 +19345,7 @@
     {
      "ciklus": "2026-",
      "speeches": 1,
-     "technical": 0
+     "technical": 1
     }
    ],
    "committees": [
@@ -20197,7 +20241,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 10,
+     "speeches": 13,
      "technical": 0
     },
     {
@@ -21318,8 +21362,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 18,
-     "technical": 404
+     "speeches": 20,
+     "technical": 428
     }
    ],
    "committees": [
@@ -21861,13 +21905,13 @@
     {
      "ciklus": "2026-",
      "onallo": 30,
-     "nem_onallo": 9
+     "nem_onallo": 11
     }
    ],
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 60,
+     "speeches": 65,
      "technical": 284
     },
     {
@@ -22444,7 +22488,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 3,
+     "speeches": 5,
      "technical": 1
     }
    ],
@@ -22592,7 +22636,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 20,
+     "speeches": 21,
      "technical": 0
     }
    ],
@@ -22825,8 +22869,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 113,
-     "technical": 7
+     "speeches": 121,
+     "technical": 8
     }
    ],
    "committees": [],
@@ -23169,13 +23213,13 @@
     {
      "ciklus": "2026-",
      "onallo": 13,
-     "nem_onallo": 6
+     "nem_onallo": 7
     }
    ],
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 25,
+     "speeches": 26,
      "technical": 0
     }
    ],
@@ -24089,7 +24133,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 6,
+     "speeches": 7,
      "technical": 0
     }
    ],
@@ -24250,7 +24294,7 @@
     {
      "ciklus": "2026-",
      "onallo": 17,
-     "nem_onallo": 17
+     "nem_onallo": 19
     },
     {
      "ciklus": "2022-2026",
@@ -24266,7 +24310,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 58,
+     "speeches": 62,
      "technical": 0
     },
     {
@@ -25385,7 +25429,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 35,
+     "speeches": 37,
      "technical": 2
     }
    ],
@@ -25550,7 +25594,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 1,
+     "speeches": 3,
      "technical": 0
     }
    ],
@@ -25618,7 +25662,14 @@
      "filed": true
     }
    ],
-   "remuneration": [],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 2880885,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/003I",
    "motions": [
@@ -26337,7 +26388,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 48,
+     "onallo": 51,
      "nem_onallo": 4
     },
     {
@@ -26359,8 +26410,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 50,
-     "technical": 1
+     "speeches": 55,
+     "technical": 2
     },
     {
      "ciklus": "2022-2026",
@@ -26592,11 +26643,38 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/n036",
    "motions": [
     {
+     "szam": "I/576",
+     "kind": "I",
+     "number": 576,
+     "title": "Elárulja-e végre, mire számíthatnak a rendőrök, vagy jöhet a leszerelési hullám?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22186640cb-5283-45a9-858f-bd621f4a80e9%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "T/573",
+     "kind": "T",
+     "number": 573,
+     "title": "A pedofil bűnelkövetők kémia kasztrációjának külföldi példákra történő bevezetése érdekében egyes büntetőjogi jogszabályok megalkotásáról és módosításáról",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22610e9658-c7b7-415b-b4d6-0e67c114d0a1%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "H/565",
+     "kind": "H",
+     "number": 565,
+     "title": "A Hazatérés Napjáról",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%229505a1c1-261a-4be2-ad0f-cba420f4f424%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "K/499",
      "kind": "K",
      "number": 499,
      "title": "Mi a fogvatartottak nemzetiségi megoszlása, a 13 hivatalos hazai nemzetiség tekintetében?",
-     "status": "folyamatban",
+     "status": "lezárt",
      "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22a14b4ec3-7cba-4431-a0b6-93a27b68b8b5%22%7D",
      "co_submitters": 0
     },
@@ -27426,7 +27504,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 2,
+     "speeches": 5,
      "technical": 0
     }
    ],
@@ -27525,7 +27603,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 33,
+     "speeches": 36,
      "technical": 1
     },
     {
@@ -28105,13 +28183,13 @@
     {
      "ciklus": "2026-",
      "onallo": 3,
-     "nem_onallo": 1
+     "nem_onallo": 2
     }
    ],
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 7,
      "technical": 0
     }
    ],
@@ -28288,7 +28366,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 8,
+     "onallo": 9,
      "nem_onallo": 0
     },
     {
@@ -28315,8 +28393,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 13,
-     "technical": 5
+     "speeches": 15,
+     "technical": 6
     },
     {
      "ciklus": "2022-2026",
@@ -28660,6 +28738,15 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/p041",
    "motions": [
     {
+     "szam": "I/582",
+     "kind": "I",
+     "number": 582,
+     "title": "„Szuperelőlegből” nem lesz őszi vetés – mikor kapnak valódi segítséget az aszálykárosult gazdák?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%222d50c36b-1868-4108-8fe4-4814e239aeac%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "I/551",
      "kind": "I",
      "number": 551,
@@ -28783,7 +28870,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 8,
+     "speeches": 11,
      "technical": 0
     }
    ],
@@ -28902,7 +28989,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 22,
+     "speeches": 24,
      "technical": 0
     }
    ],
@@ -29075,7 +29162,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 6,
      "technical": 0
     }
    ],
@@ -30184,7 +30271,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 13,
+     "onallo": 19,
      "nem_onallo": 3
     },
     {
@@ -30216,7 +30303,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 54,
+     "speeches": 61,
      "technical": 1
     },
     {
@@ -30495,6 +30582,60 @@
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/r023",
    "motions": [
     {
+     "szam": "K/585",
+     "kind": "K",
+     "number": 585,
+     "title": "Mi a szakmai véleménye?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%227a22cd7c-d3b8-4c36-af3b-03094010b5ff%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/584",
+     "kind": "K",
+     "number": 584,
+     "title": "Lemond?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22bbf73def-7deb-47d4-b8fb-b54df44c9d5d%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "I/583",
+     "kind": "I",
+     "number": 583,
+     "title": "Megmarad a fegyverpénz, vagy szétporlasztják?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22879342ca-b1ba-4e9f-912e-4c27c12de787%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/579",
+     "kind": "K",
+     "number": 579,
+     "title": "Mikor távolítják el az engedély nélkül kihelyezett gyűlöletkeltő táblát?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22fe400168-3dfa-405c-9409-82d73004c3ec%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "K/577",
+     "kind": "K",
+     "number": 577,
+     "title": "Veszélyben a bűnmegelőzés?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2235e9312f-7d29-4280-a6c7-76b365e9f22e%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "I/575",
+     "kind": "I",
+     "number": 575,
+     "title": "Veszélyben a bűnmegelőzés?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%224a860e2f-db81-450d-8f18-28b46e4776a4%22%7D",
+     "co_submitters": 0
+    },
+    {
      "szam": "I/541",
      "kind": "I",
      "number": 541,
@@ -30664,7 +30805,7 @@
     {
      "ciklus": "2026-",
      "speeches": 6,
-     "technical": 0
+     "technical": 1
     }
    ],
    "committees": [
@@ -30964,7 +31105,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 8,
+     "speeches": 12,
      "technical": 0
     }
    ],
@@ -31088,7 +31229,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 7,
      "technical": 0
     }
    ],
@@ -31372,7 +31513,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 9,
+     "speeches": 10,
      "technical": 0
     }
    ],
@@ -31590,7 +31731,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 9,
+     "speeches": 10,
      "technical": 0
     }
    ],
@@ -32308,7 +32449,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 18,
+     "speeches": 21,
      "technical": 4
     },
     {
@@ -32964,7 +33105,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 6,
+     "speeches": 7,
      "technical": 0
     }
    ],
@@ -33370,7 +33511,14 @@
      "filed": true
     }
    ],
-   "remuneration": [],
+   "remuneration": [
+    {
+     "period": "2026. július",
+     "gross": 3142783,
+     "constituency_allowance": 0,
+     "housing_allowance": 0
+    }
+   ],
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/0025",
    "motions": [
@@ -33781,7 +33929,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 17,
+     "speeches": 19,
      "technical": 0
     }
    ],
@@ -33928,7 +34076,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 50,
+     "onallo": 52,
      "nem_onallo": 1
     },
     {
@@ -33940,7 +34088,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 53,
+     "speeches": 56,
      "technical": 0
     },
     {
@@ -34064,6 +34212,24 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/s184",
    "motions": [
+    {
+     "szam": "K/586",
+     "kind": "K",
+     "number": 586,
+     "title": "Miért hozták nehéz helyzetbe a „Minden vállalkozásnak legyen saját honlapja\" programban részt vevő vállalkozókat?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%224b029b48-fc7a-4eb5-9f27-bbd21a7651ec%22%7D",
+     "co_submitters": 0
+    },
+    {
+     "szam": "I/567",
+     "kind": "I",
+     "number": 567,
+     "title": "Mikor állnak ki végre az ingatlanátverések áldozatai mellett?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22ec449ddc-1228-48fa-b338-4a53ca4fa816%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "K/564",
      "kind": "K",
@@ -35137,7 +35303,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 16,
+     "speeches": 17,
      "technical": 1
     }
    ],
@@ -35650,8 +35816,8 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 7,
-     "nem_onallo": 0
+     "onallo": 8,
+     "nem_onallo": 1
     }
    ],
    "speech_stats": [
@@ -35722,6 +35888,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/0013",
    "motions": [
+    {
+     "szam": "I/574",
+     "kind": "I",
+     "number": 574,
+     "title": "\"Magyarország új tudományos és innovációs stratégiájáról\"",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%221ecaaa29-36f3-438a-9570-b97ee4e04d75%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "S/482",
      "kind": "S",
@@ -35837,8 +36012,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 30,
-     "technical": 3
+     "speeches": 33,
+     "technical": 4
     }
    ],
    "committees": [
@@ -36057,7 +36232,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 8,
+     "onallo": 9,
      "nem_onallo": 0
     }
    ],
@@ -36131,6 +36306,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/004V",
    "motions": [
+    {
+     "szam": "I/581",
+     "kind": "I",
+     "number": 581,
+     "title": "Mi lesz az M44 sorsa?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%223f1fe707-682f-40a6-830b-929364caf337%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/550",
      "kind": "I",
@@ -36256,7 +36440,7 @@
     {
      "ciklus": "2026-",
      "speeches": 10,
-     "technical": 3
+     "technical": 4
     },
     {
      "ciklus": "2022-2026",
@@ -36433,7 +36617,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 15,
+     "speeches": 17,
      "technical": 0
     }
    ],
@@ -36675,7 +36859,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 17,
+     "speeches": 19,
      "technical": 0
     }
    ],
@@ -37333,7 +37517,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 20,
+     "speeches": 22,
      "technical": 0
     }
    ],
@@ -37553,8 +37737,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 45,
-     "technical": 3
+     "speeches": 48,
+     "technical": 4
     },
     {
      "ciklus": "2022-2026",
@@ -37960,7 +38144,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 5,
+     "speeches": 8,
      "technical": 0
     }
    ],
@@ -38576,7 +38760,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 17,
+     "speeches": 20,
      "technical": 0
     },
     {
@@ -38921,7 +39105,7 @@
     {
      "ciklus": "2026-",
      "speeches": 4,
-     "technical": 2
+     "technical": 3
     }
    ],
    "committees": [
@@ -39292,7 +39476,7 @@
     {
      "ciklus": "2026-",
      "speeches": 0,
-     "technical": 1
+     "technical": 2
     },
     {
      "ciklus": "2022-2026",
@@ -39700,7 +39884,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 6,
+     "speeches": 7,
      "technical": 0
     }
    ],
@@ -39827,8 +40011,8 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 11,
-     "technical": 0
+     "speeches": 12,
+     "technical": 1
     }
    ],
    "committees": [
@@ -40399,7 +40583,7 @@
    "speech_stats": [
     {
      "ciklus": "2026-",
-     "speeches": 28,
+     "speeches": 29,
      "technical": 461
     },
     {
