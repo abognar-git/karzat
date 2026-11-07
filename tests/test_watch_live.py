@@ -137,6 +137,70 @@ class WhatItDoesAboutIt(unittest.TestCase):
             w.fetch_heartbeat = keep
 
 
+class ItReachesAPersonNotASetting(unittest.TestCase):
+    """The first test alert reached nobody. The issue was opened by github-actions[bot], and a bot's issue
+    reaches a repository owner only if they watch that repository at "All activity" — the owner had email on
+    for watched repositories and was simply not watching their own repository at that level. An alarm that depends on a
+    notification preference fails the day somebody tidies their preferences. A mention and an assignment
+    notify the person whatever their watch setting."""
+
+    def _run(self, problems, open_issue=None, test=False):
+        import scripts.watch_live as w
+        calls = []
+
+        def fake(method, path, token, body=None):
+            calls.append((method, path, body))
+            if method == "GET":
+                return 200, [open_issue] if open_issue else []
+            if method == "POST" and path.endswith("/issues"):
+                return 201, {"number": 7}
+            return 200, {}
+        keep = w._gh
+        w._gh = fake
+        try:
+            w.act_on_github(problems, {"checked_at": "x"}, NOW, "abognar-git/karzat", "t", test=test)
+        finally:
+            w._gh = keep
+        return calls
+
+    def _created(self, calls):
+        return next(b for m, p, b in calls if m == "POST" and p.endswith("/issues"))
+
+    def test_a_real_alert_mentions_and_assigns_the_owner(self):
+        body = self._created(self._run(["the nightly has stopped"]))
+        self.assertEqual(body["assignees"], ["abognar-git"])
+        self.assertTrue(body["body"].startswith("@abognar-git "), body["body"][:60])
+
+    def test_the_test_alert_takes_the_same_path_as_a_real_one(self):
+        """A test that does not travel the real path proves only itself."""
+        body = self._created(self._run([], test=True))
+        self.assertEqual(body["assignees"], ["abognar-git"])
+        self.assertIn("@abognar-git", body["body"])
+
+    def test_the_owner_comes_from_the_runner_not_from_a_name_typed_here(self):
+        import os
+        keep = os.environ.get("GITHUB_REPOSITORY_OWNER")
+        os.environ["GITHUB_REPOSITORY_OWNER"] = "someone-else"
+        try:
+            body = self._created(self._run(["x"]))
+        finally:
+            if keep is None:
+                os.environ.pop("GITHUB_REPOSITORY_OWNER", None)
+            else:
+                os.environ["GITHUB_REPOSITORY_OWNER"] = keep
+        self.assertEqual(body["assignees"], ["someone-else"])
+
+    def test_a_standing_alert_is_rewritten_without_a_new_notification(self):
+        calls = self._run(["still stale"], open_issue={"number": 3})
+        self.assertFalse(any(p.endswith("/comments") for m, p, b in calls), "a daily comment is a daily email")
+        self.assertFalse(any(m == "POST" and p.endswith("/issues") for m, p, b in calls))
+
+    def test_recovery_is_announced_once_and_closes_it(self):
+        calls = self._run([], open_issue={"number": 3})
+        self.assertTrue(any(p.endswith("/issues/3/comments") for m, p, b in calls))
+        self.assertTrue(any(m == "PATCH" and b == {"state": "closed"} for m, p, b in calls))
+
+
 class WhatItIsNotAllowedToNeed(unittest.TestCase):
     """The whole point is independence. Everything below is a way it could quietly lose it."""
 

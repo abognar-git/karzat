@@ -143,8 +143,18 @@ def _gh(method: str, path: str, token: str, body: dict | None = None) -> tuple[i
             return e.code, raw.decode("utf-8", "replace")
 
 
-def _body(problems: list[str], hb: dict | None, now: datetime) -> str:
-    lines = ["The external watchdog could not confirm that ogykarzat.hu is as fresh as it promises.", ""]
+def _owner(repo: str) -> str:
+    return os.environ.get("GITHUB_REPOSITORY_OWNER") or repo.split("/")[0]
+
+
+def _body(problems: list[str], hb: dict | None, now: datetime, owner: str = "") -> str:
+    # The mention is the alert. An issue opened by github-actions[bot] reaches a repository owner only if
+    # they watch the repository at "All activity" — and the first test issue reached nobody, because the
+    # owner's own repository was not watched at that level and a bot's issue is not "participating". A
+    # mention and an assignment notify the person whatever their watch setting, so the alarm no longer
+    # depends on a preference that can be changed without anybody thinking of the watchdog.
+    lead = f"@{owner} " if owner else ""
+    lines = [f"{lead}The external watchdog could not confirm that ogykarzat.hu is as fresh as it promises.", ""]
     lines += [f"- {p}" for p in problems]
     lines += ["", f"Checked {now.isoformat(timespec='seconds')} from GitHub Actions, outside the machine "
               "that runs the nightly.", "",
@@ -160,11 +170,14 @@ def act_on_github(problems: list[str], hb: dict | None, now: datetime, repo: str
                   test: bool = False) -> str:
     _gh("POST", f"/repos/{repo}/labels", token,
         {"name": LABEL, "color": "b60205", "description": "the live site is not as fresh as it promises"})
+    owner = _owner(repo)
     if test:
         st, issue = _gh("POST", f"/repos/{repo}/issues", token, {
             "title": "Freshness watchdog: test alert (closes itself)", "labels": [LABEL],
-            "body": "A deliberate test of the alert path. If this reached your inbox, so will a real one.\n\n"
-                    + _body(problems or ["(nothing is actually wrong — this is a test)"], hb, now)})
+            "assignees": [owner],
+            "body": f"@{owner} A deliberate test of the alert path. If this reached your inbox, so will a "
+                    "real one.\n\n" + _body(problems or ["(nothing is actually wrong — this is a test)"],
+                                             hb, now)})
         if st == 201 and isinstance(issue, dict):
             _gh("PATCH", f"/repos/{repo}/issues/{issue['number']}", token, {"state": "closed"})
             return f"test issue #{issue['number']} opened and closed"
@@ -175,13 +188,13 @@ def act_on_github(problems: list[str], hb: dict | None, now: datetime, repo: str
     if action == "open":
         st, issue = _gh("POST", f"/repos/{repo}/issues", token, {
             "title": "ogykarzat.hu is stale — the nightly is not finishing or not publishing",
-            "labels": [LABEL], "body": _body(problems, hb, now)})
+            "labels": [LABEL], "assignees": [owner], "body": _body(problems, hb, now, owner)})
         if st != 201:
             raise SystemExit(f"could not open the issue: {st} {issue}")
         return f"opened #{issue['number']}"
     if action == "update":
         # The body is rewritten, not commented on: one email when it opens, not one a day while it stays.
-        _gh("PATCH", f"/repos/{repo}/issues/{open_issue['number']}", token, {"body": _body(problems, hb, now)})
+        _gh("PATCH", f"/repos/{repo}/issues/{open_issue['number']}", token, {"body": _body(problems, hb, now, owner)})
         return f"updated #{open_issue['number']}"
     if action == "close":
         _gh("POST", f"/repos/{repo}/issues/{open_issue['number']}/comments", token,
