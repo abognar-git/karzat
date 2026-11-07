@@ -1,0 +1,48 @@
+# The watchdog that does not live on the laptop.
+#
+# From September to November 2026 ogykarzat.hu stood still for two months and nobody knew: every alarm the
+# project had started on the machine that runs the nightly, and the one routed through AWS used the very
+# credentials whose failure it was meant to report. This job reads only what any reader can read — the live
+# site's heartbeat.json — from GitHub's machines, and speaks through an issue (which emails the owner) and a
+# red run (which GitHub mails separately). See scripts/watch_live.py for what it checks and why.
+
+name: freshness-watch
+
+on:
+  schedule:
+    # 08:17 UTC, daily. The nightly starts 04:10 Budapest time and on a bad night has taken seven hours;
+    # the thresholds allow for a missed night, so the hour is chosen only to stay off the top of the hour,
+    # when GitHub's scheduler is most congested and runs are most often delayed or dropped.
+    - cron: "17 8 * * *"
+  workflow_dispatch:
+    inputs:
+      test:
+        description: "Open and immediately close a test issue, to confirm the alert reaches your inbox"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read   # the one script below
+  issues: write    # the alert itself
+  actions: write   # re-enabling this workflow, so 60 quiet days cannot switch the watchdog off
+
+concurrency:
+  group: freshness-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Pinned to a commit, not a tag: a tag can be moved under a workflow that holds a write token.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          sparse-checkout: scripts/watch_live.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Check the live heartbeat
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WATCH_WORKFLOW: freshness-watch.yml
+        run: python3 scripts/watch_live.py --github ${{ inputs.test && '--test' || '' }}

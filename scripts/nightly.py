@@ -295,6 +295,58 @@ def clear_local_warning() -> None:
         pass
 
 
+def beat(args: argparse.Namespace, outcome: str, state: tuple[int, str], builder: str) -> None:
+    """Leave a heartbeat on the live site: this run reached a healthy end.
+
+    The live page's own date cannot be the signal, because a healthy pipeline legitimately leaves it alone:
+    when the House does not sit, nothing is rebuilt for up to --refresh-days. So a watchdog reading the page
+    must either wait a week before it may worry or cry wolf every recess. The heartbeat is written on both
+    healthy exits — "published" and "nothing new" — and on no other, so its age is the time since the
+    pipeline last finished properly, whatever the record did.
+
+    It is read from OUTSIDE (.github/workflows/freshness-watch.yml), on purpose: every alarm this project
+    had originated on this laptop, so a laptop that is asleep, offline, or never starts the job had nothing
+    left that could say so. A file that stops changing is something a third party can notice.
+
+    The watchdog's thresholds come from here rather than from a copy: refresh_days is the producer's own
+    promise about how long a healthy site may go unpublished.
+
+    When the build moves to the scheduled CodeBuild run (see the plist), this must move with it — a
+    --sync-only run has not published anything and must not claim to have."""
+    if args.dry_run:
+        log(f"would write the heartbeat ({outcome})")
+        return
+    pub = ""
+    try:
+        pub = json.loads((ROOT / "data" / "last_publish.json").read_text(encoding="utf-8")).get("published_at", "")
+    except Exception:
+        pass
+    body = json.dumps({
+        "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "outcome": outcome,
+        "published_at": pub,
+        "newest_sitting_day_listed": state[1],     # the index lists sittings already scheduled
+        "votes_listed": state[0],
+        "refresh_days": args.refresh_days,
+        "builder": builder,
+    }, ensure_ascii=False, indent=1) + "\n"
+    from scripts.deploy_aws import HEARTBEAT, HEARTBEAT_CACHE
+    (ROOT / "site").mkdir(exist_ok=True)
+    (ROOT / "site" / HEARTBEAT).write_text(body, encoding="utf-8")
+    try:
+        import boto3
+        sess = boto3.Session(profile_name=args.profile) if args.profile else boto3.Session()
+        sess.client("s3").put_object(Bucket=args.bucket, Key=HEARTBEAT, Body=body.encode("utf-8"),
+                                     ContentType="application/json; charset=utf-8",
+                                     CacheControl=HEARTBEAT_CACHE)
+        log(f"heartbeat: {outcome}, published {pub or 'never'}")
+    except Exception as e:
+        # Not raised. A heartbeat that cannot be written is exactly what the watchdog exists to notice, and
+        # it will — but the local channel is told too, so this machine does not keep it a secret.
+        log(f"the heartbeat could not be written: {e}")
+        warn_locally("a szívverés nem ment ki", str(e))
+
+
 def _run(args: argparse.Namespace) -> int:
     dry = args.dry_run
     py = [sys.executable]
@@ -369,6 +421,8 @@ def _run(args: argparse.Namespace) -> int:
                 "rebuilding so the freshness stamp stays honest about being checked")
         else:
             log("nothing new — no build, no upload. (--force overrides)")
+            clear_local_warning()
+            beat(args, "nothing new", after, fp)
             return 0
     log("dry run: every step below would run" if dry else ("the record moved" if after != before else "forced"))
 
@@ -444,6 +498,7 @@ def _run(args: argparse.Namespace) -> int:
             encoding="utf-8")
     clear_local_warning()
     log("published")
+    beat(args, "published", after, fp)
     return 0
 
 

@@ -131,7 +131,7 @@ it has would be quietly claiming the rest does not exist.
 | People who ever held a mandate | **1,604** |
 | Floor speeches indexed | **495,191** |
 | Sitting days | **1,858** |
-| Offline tests guarding all of it | **481** |
+| Offline tests guarding all of it | **509** |
 
 Every number in this table — and every number in this repository's prose — is recomputed
 by `scripts/check_readme.py` and the test suite fails when the text and the data disagree.
@@ -147,6 +147,11 @@ Nothing numeric in this file is typed by hand.
   reference included), this README's number gate, and an axe-core accessibility audit run
   between build and deploy. A failure leaves the old site live: a stale site is a smaller
   harm than a wrong one.
+- **Watched from outside.** A stale site is only the smaller harm if somebody finds out. Every
+  healthy nightly leaves a `heartbeat.json` on the live site, and a scheduled GitHub Actions job —
+  sharing nothing with the build machine or AWS — reads it each morning and opens an issue when
+  the pipeline has stopped finishing or stopped publishing. It exists because the site once stood
+  still for two months while every alarm it had was routed through the thing that had failed.
 - **The site counts, it does not judge.** Seven distinct recorded positions are never
   collapsed. A tie is no plurality. What the record does not say, the page does not say.
 

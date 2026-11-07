@@ -79,6 +79,14 @@ CACHE = {".html": "public, max-age=300", ".css": "public, max-age=300", ".js": "
          ".jpg": "public, max-age=2592000", ".ico": "public, max-age=2592000"}
 CACHE_DEFAULT = "public, max-age=86400"
 
+# The one file whose whole job is to be fresh. scripts/nightly.py writes it at the end of every run that ended
+# well and the external watchdog (.github/workflows/freshness-watch.yml) reads it from the live site. Under
+# CACHE_DEFAULT a .json is held at the edge for a day, which would let a dead pipeline look alive for 24
+# hours to the one reader whose only question is whether it is alive. The distribution's managed
+# CachingOptimized policy honours origin headers down to a 1-second floor, so no-cache here is no-cache there.
+HEARTBEAT = "heartbeat.json"
+HEARTBEAT_CACHE = "no-cache, max-age=0"
+
 
 def md5(path: Path) -> str:
     h = hashlib.md5()
@@ -236,7 +244,7 @@ def main(argv: list[str] | None = None) -> int:
         p, key = job
         ext = p.suffix.lower()
         extra = {"ContentType": CONTENT_TYPE.get(ext, mimetypes.guess_type(p.name)[0] or "application/octet-stream"),
-                 "CacheControl": CACHE.get(ext, CACHE_DEFAULT)}
+                 "CacheControl": HEARTBEAT_CACHE if key == HEARTBEAT else CACHE.get(ext, CACHE_DEFAULT)}
         if ext == ".gz":
             extra.update({"ContentEncoding": "gzip", "ContentType": "text/csv; charset=utf-8"})
         if ext == ".wasm" and size_of(p) > CF_COMPRESS_MAX:

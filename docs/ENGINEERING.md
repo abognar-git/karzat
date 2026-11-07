@@ -174,7 +174,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 481 tests
+python3 -m unittest discover -s tests -t .      # offline; 509 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -1154,6 +1154,36 @@ test asks when we last asked, not what we hold.
 
 All four of the original failures were being reported the whole time — exit 2, exit 1, thirty-six skip
 lines, a red test. A pipeline that is loud where nobody listens is a pipeline that is silent.
+
+## A watchdog that lives somewhere else
+
+The fix above left one hole, and it was the original one in a different coat. The local marker and the
+desktop notification both need the build machine awake to write them, and SNS needs it awake to send. A
+laptop that sleeps, loses its network or never starts the job is silent on every channel at once.
+
+So the last alarm runs on somebody else's computer. `.github/workflows/freshness-watch.yml` runs each morning
+on GitHub's runners and reads only what any reader could read: the live site. It opens an issue — which mails
+the owner — when the pipeline has stopped finishing or stopped publishing, rewrites that issue in place while
+the problem stands (one email, not one a day), and closes it on the first healthy check. The run also goes
+red, which GitHub mails separately: two channels, neither of which touches the laptop, AWS or the nightly.
+
+**The page's own date is the wrong thing to watch.** When the House does not sit, a healthy pipeline rightly
+rebuilds nothing for up to `--refresh-days`, so the stamp can be a week old with nothing wrong, and a watchdog
+reading it must either wait a week before it may worry or cry wolf every recess. Instead the nightly writes a
+`heartbeat.json` on both of its healthy exits — "published" and "nothing new" — and on no other, so its age is
+the time since the pipeline last finished properly. It carries the producer's own `refresh_days`, and the
+watchdog derives its publish threshold from that rather than from a second constant that would drift.
+
+Three details decided whether it is worth anything. The default cache header holds a `.json` at the edge for
+a day, which would let a dead pipeline look alive for 24 hours to the one reader whose only question is
+whether it is alive — the heartbeat is served `no-cache`, and a second write was confirmed visible from
+outside within seconds. One missed night is a closed laptop and does not mail anybody; two do. And GitHub
+switches off a public repository's scheduled workflows after 60 days without activity, while the nightly
+never pushes — so two quiet months, the exact failure this exists for, would have disabled the watchdog
+too. It re-enables itself through the API on every run.
+
+The script imports nothing outside the standard library and nothing from this repository, and a test holds
+it to that: independence that is not enforced is a dependency waiting to be added.
 
 ## Licence
 
