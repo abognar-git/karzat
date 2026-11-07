@@ -328,6 +328,51 @@ class Resolver(unittest.TestCase):
     HIST = {"003N": {"name": "Kiss János", "factions": [("2026-", "TISZA")]},
             "k166": {"name": "Dr. Kiss János", "factions": [("2022-2026", "Fidesz")]}}
 
+    def test_the_house_disagreeing_with_itself_about_a_given_name(self):
+        """The roll call said "Kardosné Gyurkó Katalin (Fidesz)"; her own kepviselo.cgi record says
+        "Kardosné Gyurkó Kata". Both are parlament.hu, and Wikidata — which has her as Katalin — carries no
+        P4966 for her yet, so neither the exact match, the record spelling nor the alias spine could bridge
+        it. She arrived in the alignment as a name where an id belongs: the cycle's first unresolved voting
+        identity, and the thing that turned the gate red on 7 November.
+
+        The rule widens who can be FOUND, never who can be guessed at — the faction check still refuses."""
+        cur = [{"name": "Kardosné Gyurkó Kata", "faction": "Fidesz", "p_azon": "0072"},
+               {"name": "Ágh Péter", "faction": "Fidesz", "p_azon": "a011"}]
+        hist = {"0072": {"name": "Kardosné Gyurkó Kata", "factions": [("2026-", "Fidesz")]},
+                "a011": {"name": "Ágh Péter", "factions": [("2026-", "Fidesz")]}}
+        r = NameResolver(cur, None, hist)
+        self.assertEqual(r.resolve("Kardosné Gyurkó Katalin (Fidesz)", "2026-11-05"), "0072")
+        self.assertEqual(r.resolve("Kardosné Gyurkó Kata (Fidesz)", "2026-11-05"), "0072")
+        self.assertEqual(r.resolve("Ágh Péter (Fidesz)", "2026-11-05"), "a011")
+        # the faction is still the arbiter: a short form is not a licence to cross the aisle
+        self.assertIsNone(r.resolve("Kardosné Gyurkó Katalin (TISZA)", "2026-11-05"))
+
+    def test_a_short_given_name_does_not_merge_two_people(self):
+        """Two members whose names relate that way leave two candidates, and two candidates is unresolved.
+        That is the right answer: the rule may not invent a choice it has no grounds for."""
+        cur = [{"name": "Nagy Anna", "faction": "Fidesz", "p_azon": "n001"},
+               {"name": "Nagy Annamária", "faction": "Fidesz", "p_azon": "n002"}]
+        hist = {"n001": {"name": "Nagy Anna", "factions": [("2026-", "Fidesz")]},
+                "n002": {"name": "Nagy Annamária", "factions": [("2026-", "Fidesz")]}}
+        r = NameResolver(cur, None, hist)
+        self.assertEqual(r.resolve("Nagy Anna (Fidesz)", "2026-11-05"), "n001")      # exact still wins
+        # Anna IS a prefix of Annabella, and they are two people. Writing this test is what found that the
+        # rule needed a bound: a short form drops a syllable (Kata/Katalin, Zsuzsa/Zsuzsanna — three
+        # characters), it does not grow a new name. Five characters apart is not the same person.
+        self.assertIsNone(r.resolve("Nagy Annabella (Fidesz)", "2026-11-05"))
+        # and where two candidates DO both relate this way, neither is chosen
+        r2 = NameResolver(cur + [{"name": "Nagy Annamária", "faction": "Fidesz", "p_azon": "n003"}],
+                          None, dict(hist, n003={"name": "Nagy Annamária",
+                                                 "factions": [("2026-", "Fidesz")]}))
+        self.assertIsNone(r2.resolve("Nagy Annamár (Fidesz)", "2026-11-05"))
+
+    def test_a_short_form_needs_more_than_a_letter_in_common(self):
+        """"Kis Ede" and "Kis Elemér" share one letter and are two people. The rule asks for four."""
+        cur = [{"name": "Kis Elemér", "faction": "Fidesz", "p_azon": "k001"}]
+        hist = {"k001": {"name": "Kis Elemér", "factions": [("2026-", "Fidesz")]}}
+        r = NameResolver(cur, None, hist)
+        self.assertIsNone(r.resolve("Kis Ede (Fidesz)", "2026-11-05"))
+
     def test_exact_label_then_record_spelling_then_faction_history(self):
         r = NameResolver(self.CUR, aliases={"Kiss János": "k166"}, histories=self.HIST)
         self.assertEqual(r.resolve("Kiss János (TISZA)", "2026-06-15"), "003N")          # exact current label

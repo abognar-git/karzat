@@ -1,11 +1,11 @@
 {
- "derived_at": "2026-09-03T05:33:28+00:00",
+ "derived_at": "2026-11-07T10:31:29+00:00",
  "government": "TISZA",
  "government_note": "largest faction unless --government given",
- "mps_listed": 198,
- "records_read": 198,
+ "mps_listed": 199,
+ "records_read": 199,
  "records_missing": [],
- "seated": 198,
+ "seated": 199,
  "unseated": [],
  "analysis": {
   "sectors": {
@@ -47,25 +47,27 @@
     }
    },
    "2": {
-    "count": 34,
+    "count": 35,
     "rows": {
      "1": 5,
      "2": 6,
      "3": 7,
      "4": 8,
-     "5": 8
+     "5": 8,
+     "6": 1
     },
-    "max_row": 5,
+    "max_row": 6,
     "max_seat_by_row": {
      "1": 5,
      "2": 6,
      "3": 7,
      "4": 8,
-     "5": 9
+     "5": 9,
+     "6": 2
     },
     "widest_row": 9,
     "factions": {
-     "Fidesz": 26,
+     "Fidesz": 27,
      "KDNP": 8
     }
    },
@@ -92,11 +94,11 @@
     }
    },
    "4": {
-    "count": 44,
+    "count": 43,
     "rows": {
      "1": 5,
      "2": 7,
-     "3": 9,
+     "3": 8,
      "4": 11,
      "5": 12
     },
@@ -110,7 +112,7 @@
     },
     "widest_row": 12,
     "factions": {
-     "TISZA": 44
+     "TISZA": 43
     }
    },
    "5": {
@@ -136,23 +138,25 @@
     }
    },
    "6": {
-    "count": 11,
+    "count": 12,
     "rows": {
      "1": 5,
-     "2": 6
+     "2": 6,
+     "3": 1
     },
-    "max_row": 2,
+    "max_row": 3,
     "max_seat_by_row": {
      "1": 5,
-     "2": 6
+     "2": 6,
+     "3": 1
     },
     "widest_row": 6,
     "factions": {
-     "TISZA": 11
+     "TISZA": 12
     }
    }
   },
-  "n_seated": 198,
+  "n_seated": 199,
   "duplicates": []
  },
  "orientation": {
@@ -165,8 +169,8 @@
    6
   ],
   "flipped": false,
-  "gov_centroid": 4.06,
-  "note": "TISZA centroid at sector 4.06 of 1–6; kept sector order so the government sits to the Speaker's right"
+  "gov_centroid": 4.08,
+  "note": "TISZA centroid at sector 4.08 of 1–6; kept sector order so the government sits to the Speaker's right"
  },
  "geometry": {
   "source": "parlament.hu patko-queries/kepviselo-helye-apatkoban",
@@ -214,7 +218,7 @@
    "orientation: as parlament.hu draws it — the platform at the bottom centre, sector 1 to the left; government to the Speaker's right (parlament.hu's description) matches",
    "the only drawing choices: the scale, and the platform placed 40 source units below the last seats"
   ],
-  "orientation_check": "TISZA centroid at sector 4.06 of 1–6; kept sector order so the government sits to the Speaker's right"
+  "orientation_check": "TISZA centroid at sector 4.08 of 1–6; kept sector order so the government sits to the Speaker's right"
  },
  "seats": {
   "a011": {
@@ -764,9 +768,9 @@
    "name": "Járosi Péter"
   },
   "002C": {
-   "sector": 4,
+   "sector": 6,
    "row": 3,
-   "seat": 5,
+   "seat": 1,
    "faction": "TISZA",
    "name": "Jelencsik József"
   },
@@ -832,6 +836,13 @@
    "seat": 1,
    "faction": "TISZA",
    "name": "Kapronczai Balázs"
+  },
+  "0072": {
+   "sector": 2,
+   "row": 4,
+   "seat": 5,
+   "faction": "Fidesz",
+   "name": "Kardosné Gyurkó Kata"
   },
   "k122": {
    "sector": 0,
@@ -1113,13 +1124,6 @@
    "faction": "TISZA",
    "name": "Dr. Orbán Anita"
   },
-  "o015": {
-   "sector": 2,
-   "row": 4,
-   "seat": 5,
-   "faction": "Fidesz",
-   "name": "Dr. Orbán Balázs"
-  },
   "006F": {
    "sector": 2,
    "row": 4,
@@ -1379,6 +1383,13 @@
    "faction": "Fidesz",
    "name": "Szalai Piroska"
   },
+  "s195": {
+   "sector": 2,
+   "row": 6,
+   "seat": 2,
+   "faction": "Fidesz",
+   "name": "Szekeres Pál"
+  },
   "004Y": {
    "sector": 1,
    "row": 1,
@@ -1417,7 +1428,7 @@
   "004V": {
    "sector": 2,
    "row": 5,
-   "seat": 3,
+   "seat": 1,
    "faction": "Fidesz",
    "name": "Dr. Takács Árpád"
   },
@@ -2016,7 +2027,7 @@
    "row": 4,
    "seat": 4
   },
-  "o015": {
+  "0072": {
    "x": -92.33,
    "y": -103.0,
    "sector": 2,
@@ -2044,19 +2055,19 @@
    "row": 4,
    "seat": 8
   },
+  "004V": {
+   "x": -113.8,
+   "y": -70.85,
+   "sector": 2,
+   "row": 5,
+   "seat": 1
+  },
   "004U": {
    "x": -113.11,
    "y": -79.3,
    "sector": 2,
    "row": 5,
    "seat": 2
-  },
-  "004V": {
-   "x": -111.79,
-   "y": -87.69,
-   "sector": 2,
-   "row": 5,
-   "seat": 3
   },
   "t023": {
    "x": -109.85,
@@ -2099,6 +2110,13 @@
    "sector": 2,
    "row": 5,
    "seat": 9
+  },
+  "s195": {
+   "x": -115.15,
+   "y": -122.22,
+   "sector": 2,
+   "row": 6,
+   "seat": 2
   },
   "001Y": {
    "x": -36.46,
@@ -2519,13 +2537,6 @@
    "sector": 4,
    "row": 3,
    "seat": 4
-  },
-  "002C": {
-   "x": 35.13,
-   "y": -143.05,
-   "sector": 4,
-   "row": 3,
-   "seat": 5
   },
   "002D": {
    "x": 41.59,
@@ -3002,6 +3013,13 @@
    "sector": 6,
    "row": 2,
    "seat": 6
+  },
+  "002C": {
+   "x": 84.89,
+   "y": -54.7,
+   "sector": 6,
+   "row": 3,
+   "seat": 1
   }
  },
  "empty_seats": [
@@ -3152,19 +3170,11 @@
    "type": null
   },
   {
-   "x": -113.8,
-   "y": -70.85,
+   "x": -111.79,
+   "y": -87.69,
    "sector": 2,
    "row": 5,
-   "seat": 1,
-   "type": null
-  },
-  {
-   "x": -115.15,
-   "y": -122.22,
-   "sector": 2,
-   "row": 6,
-   "seat": 2,
+   "seat": 3,
    "type": null
   },
   {
@@ -3293,6 +3303,14 @@
    "sector": 3,
    "row": 6,
    "seat": 14,
+   "type": null
+  },
+  {
+   "x": 35.13,
+   "y": -143.05,
+   "sector": 4,
+   "row": 3,
+   "seat": 5,
    "type": null
   },
   {
@@ -3470,14 +3488,6 @@
    "row": 6,
    "seat": 2,
    "type": null
-  },
-  {
-   "x": 84.89,
-   "y": -54.7,
-   "sector": 6,
-   "row": 3,
-   "seat": 1,
-   "type": "p"
   },
   {
    "x": 84.88,

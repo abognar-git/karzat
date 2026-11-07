@@ -1,17 +1,18 @@
 {
- "generated_at": "2026-09-03",
- "switches": 298,
+ "generated_at": "2026-11-07",
+ "switches": 299,
  "people": 255,
- "person_cycles": 261,
+ "person_cycles": 262,
  "testable": 135,
  "verdicts": {
-  "nincs név szerinti lista": 163,
+  "nincs név szerinti lista": 164,
   "egyezik": 106,
   "tovább tartja a régit": 9,
   "a váltás napján még a régi": 14,
   "más frakciót nevez meg": 6
  },
  "by_cycle": {
+  "1990-1994": 1,
   "1990-94": 97,
   "1994-98": 65,
   "1998-2002": 31,
@@ -688,6 +689,20 @@
    "from": "FKGP",
    "to": "EKgP",
    "since": "1990-05-02",
+   "on": "1992-03-02",
+   "until": null,
+   "verdict": "nincs név szerinti lista",
+   "lag_days": null,
+   "listed_before": [],
+   "listed_after": []
+  },
+  {
+   "azon": "h366",
+   "name": "Horváth László",
+   "ciklus": "1990-1994",
+   "from": "SZDSZ",
+   "to": "Fidesz",
+   "since": "1990-11-27",
    "on": "1992-03-02",
    "until": null,
    "verdict": "nincs név szerinti lista",

@@ -128,10 +128,10 @@ it has would be quietly claiming the rest does not exist.
 | Roll calls naming every member | **49,771** |
 | Individual voting positions | **17,444,402** |
 | Unresolved names among them | **0** |
-| People who ever held a mandate | **1,602** |
+| People who ever held a mandate | **1,604** |
 | Floor speeches indexed | **495,191** |
 | Sitting days | **1,858** |
-| Offline tests guarding all of it | **474** |
+| Offline tests guarding all of it | **481** |
 
 Every number in this table — and every number in this repository's prose — is recomputed
 by `scripts/check_readme.py` and the test suite fails when the text and the data disagree.

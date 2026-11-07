@@ -51,7 +51,7 @@ from karzat.majority import Rule, Tally, base_of, evaluate, needed, needed_for_b
 # `cut(t, n)` would pass the TestCase as the first argument. It cost one run to remember.
 from scripts.build_site import cut, esc, file_size, hu_dec, hu_num
 from scripts.derive_parquet import first_bill
-from tests import node_bin
+from tests import node_bin, require_node
 
 # Deterministic and quick enough to sit in the ordinary suite; a seed means a failure found on CI can be
 # reproduced here rather than described.
@@ -399,7 +399,7 @@ class TheChartReadsAResultTheSameWayWhicheverRowIsFirst(unittest.TestCase):
                 "const s = shape(R, Object.keys(R[0]));\n"
                 "console.log(JSON.stringify(s ? {label: s.labelCol, value: s.valueCol,"
                 " ordered: s.ordered, also: s.also} : null));")
-        out = subprocess.run(["node", "-e", prog], capture_output=True, text=True, check=True).stdout
+        out = subprocess.run([require_node(self), "-e", prog], capture_output=True, text=True, check=True).stdout
         return json.loads(out)
 
     @given(st.lists(st.tuples(st.text(alphabet="abcdefgáéíó ", min_size=1, max_size=8),

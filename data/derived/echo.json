@@ -1,15 +1,15 @@
 {
- "generated_at": "2026-09-03",
+ "generated_at": "2026-11-07",
  "words": 30,
  "cycles": {
   "43": {
-   "speeches": 2129,
-   "echoes": 18,
-   "same_day": 4,
-   "later_day": 14,
-   "one_kind_of_speech": 11,
-   "one_faction_later_day": 12,
-   "across_factions": 6,
+   "speeches": 3559,
+   "echoes": 28,
+   "same_day": 5,
+   "later_day": 23,
+   "one_kind_of_speech": 13,
+   "one_faction_later_day": 13,
+   "across_factions": 14,
    "items": [
     {
      "words": 74,
@@ -311,6 +311,40 @@
      "one_faction": false
     },
     {
+     "words": 42,
+     "passage": "tisztelt országgyűlés szűcs gábor a fidesz képviselője azonnali kérdést kíván feltenni a miniszterelnöknek a magyar emberek inkább piaci árat fizetnének címmel tájékoztatom a tisztelt országgyűlést hogy a fidesz frakcióvezetője előzetesen úgy nyilatkozott hogy személyes válaszadást kér így a miniszterelnöknek távolléte miatt a",
+     "speeches": [
+      {
+       "id": "28-130",
+       "speaker": "Vitályos Eszter",
+       "date": "2026-09-14",
+       "kind": "ülésvezetés",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "Fidesz"
+      },
+      {
+       "id": "30-99",
+       "speaker": "Dr. Latorcai Csaba",
+       "date": "2026-09-21",
+       "kind": "bejelentés helyettes válaszadó elutasításáról",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "KDNP"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-09-14",
+     "last_day": "2026-09-21",
+     "lag_days": 7,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "Fidesz",
+      "KDNP"
+     ],
+     "one_faction": false
+    },
+    {
      "words": 40,
      "passage": "a módosítások elsődlegesen jogtechnikai és terminológiai jellegűek a javaslat nem irányul az érintett szervek feladat és hatásköreinek érdemi átalakítására nem változtatja meg a közigazgatási hatósági vagy önkormányzati jogviszonyok tartalmát és nem érinti az egyes eljárások anyagi jogi vagy eljárásjogi feltételrendszerét",
      "speeches": [
@@ -337,6 +371,40 @@
      "last_day": "2026-07-28",
      "lag_days": 0,
      "same_day": true,
+     "same_kind": false,
+     "factions": [
+      "Fidesz",
+      "TISZA"
+     ],
+     "one_faction": false
+    },
+    {
+     "words": 38,
+     "passage": "és a kapcsolódó állami önkormányzati hatósági igazgatási közszolgáltatási nyilvántartási és egyéb jogintézményi szabályozási területeken mindezek érdekében az egyes törvényekben előforduló vármegye illetve vármegyei kifejezéseket a megye illetve megyei elnevezésre a főispán megjelölést pedig a kormánymegbízott elnevezésre vezeti át",
+     "speeches": [
+      {
+       "id": "21-65",
+       "speaker": "Dr. Csuzda Gábor",
+       "date": "2026-07-28",
+       "kind": "vezérszónoki felszólalás",
+       "position": "jegyző",
+       "faction": "Fidesz"
+      },
+      {
+       "id": "26-232",
+       "speaker": "Dr. Bóka Zsolt",
+       "date": "2026-09-07",
+       "kind": "Ismerteti a bizottság véleményét",
+       "position": null,
+       "faction": "TISZA"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-07-28",
+     "last_day": "2026-09-07",
+     "lag_days": 41,
+     "same_day": false,
      "same_kind": false,
      "factions": [
       "Fidesz",
@@ -444,6 +512,40 @@
      "one_faction": true
     },
     {
+     "words": 34,
+     "passage": "minisztérium a tempus közalapítvány és az európai bizottság is azon dolgozik hogy az érintett egyetemek erasmus programba történő visszatérése valamint az uniós források felhasználása a szükséges uniós döntést követően a lehető leggyorsabban elinduljon és",
+     "speeches": [
+      {
+       "id": "26-225",
+       "speaker": "Kapronczai Balázs",
+       "date": "2026-09-07",
+       "kind": "kérdés megválaszolva",
+       "position": "Oktatási és Gyermekügyi Minisztérium államtitkára",
+       "faction": "TISZA"
+      },
+      {
+       "id": "27-173",
+       "speaker": "Vitályos Eszter",
+       "date": "2026-09-08",
+       "kind": "kétperces felszólalás",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "Fidesz"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-09-07",
+     "last_day": "2026-09-08",
+     "lag_days": 1,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "Fidesz",
+      "TISZA"
+     ],
+     "one_faction": false
+    },
+    {
      "words": 33,
      "passage": "számú törvényjavaslat részletes vitájának lefolytatására feladatköri illetékességére tekintettel a házszabály 32 bekezdése szerint a gazdasági és energetikai bizottság került kijelölésre a bizottság az egyes házszabályi rendelkezésekről szóló országgyűlési határozat 44 45 a alapján",
      "speeches": [
@@ -543,6 +645,74 @@
      "one_faction": true
     },
     {
+     "words": 32,
+     "passage": "szűcs gábor a fidesz képviselője azonnali kérdést kíván feltenni a miniszterelnöknek a magyarok válaszokat várnak ön szerint a visszamutogatás és a személyeskedés elég lesz címmel tájékoztatom a tisztelt országgyűlést hogy a fidesz",
+     "speeches": [
+      {
+       "id": "37-146",
+       "speaker": "Dr. Latorcai Csaba",
+       "date": "2026-10-19",
+       "kind": "ülésvezetés",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "KDNP"
+      },
+      {
+       "id": "38-143",
+       "speaker": "Dr. Hallerné Dr. Nagy Anikó",
+       "date": "2026-11-02",
+       "kind": "bejelentés helyettes válaszadó elutasításáról",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "TISZA"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-10-19",
+     "last_day": "2026-11-02",
+     "lag_days": 14,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "KDNP",
+      "TISZA"
+     ],
+     "one_faction": false
+    },
+    {
+     "words": 31,
+     "passage": "az orbáni gyűlöletgyár évekig azt sulykolta hogy az uniós forrásoknál a vita ukrajnáról a migrációról az óvodások átoperálásáról szól az unió és magyarország között ebből természetesen egy szó sem volt igaz",
+     "speeches": [
+      {
+       "id": "5-2",
+       "speaker": "Magyar Péter",
+       "date": "2026-06-01",
+       "kind": "napirend előtti felszólalás",
+       "position": "miniszterelnök",
+       "faction": "TISZA"
+      },
+      {
+       "id": "31-31",
+       "speaker": "Dr. Hegedűs Barbara",
+       "date": "2026-09-22",
+       "kind": "vezérszónoki felszólalás",
+       "position": null,
+       "faction": "Fidesz"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-06-01",
+     "last_day": "2026-09-22",
+     "lag_days": 113,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "Fidesz",
+      "TISZA"
+     ],
+     "one_faction": false
+    },
+    {
      "words": 31,
      "passage": "ön szerint hol van jobb helyen egy család nélkül felnövő vagy éppen egy alkoholista családból származó gyerek válaszoljon egyenesen hol van jobb helyen hollandiában emberkereskedőknél szexuális bűnözőknél drogkartelleknél vagy magyarországon egy",
      "speeches": [
@@ -611,6 +781,107 @@
      "one_faction": false
     },
     {
+     "words": 31,
+     "passage": "előzetesen úgy nyilatkozott hogy személyes válaszadást kér így a miniszterelnöknek távolléte miatt a harmadik soron következő azonnali kérdések órájában kell válaszolnia most a fidesz frakció soron következő kérdést feltenni kívánó képviselője",
+     "speeches": [
+      {
+       "id": "18-109",
+       "speaker": "Vitályos Eszter",
+       "date": "2026-07-20",
+       "kind": "ülésvezetés",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "Fidesz"
+      },
+      {
+       "id": "37-146",
+       "speaker": "Dr. Latorcai Csaba",
+       "date": "2026-10-19",
+       "kind": "ülésvezetés",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "KDNP"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-07-20",
+     "last_day": "2026-10-19",
+     "lag_days": 91,
+     "same_day": false,
+     "same_kind": true,
+     "factions": [
+      "Fidesz",
+      "KDNP"
+     ],
+     "one_faction": false
+    },
+    {
+     "words": 31,
+     "passage": "tájékoztatom a tisztelt országgyűlést hogy a fidesz frakcióvezetője előzetesen úgy nyilatkozott hogy személyes válaszadást kér így a miniszterelnöknek távolléte miatt a harmadik soron következő azonnali kérdések órájában kell majd válaszolnia most",
+     "speeches": [
+      {
+       "id": "26-106",
+       "speaker": "Dr. Hallerné Dr. Nagy Anikó",
+       "date": "2026-09-07",
+       "kind": "bejelentés helyettes válaszadó elutasításáról",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "TISZA"
+      },
+      {
+       "id": "28-130",
+       "speaker": "Vitályos Eszter",
+       "date": "2026-09-14",
+       "kind": "ülésvezetés",
+       "position": "az Országgyűlés alelnöke",
+       "faction": "Fidesz"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-09-07",
+     "last_day": "2026-09-14",
+     "lag_days": 7,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "Fidesz",
+      "TISZA"
+     ],
+     "one_faction": false
+    },
+    {
+     "words": 31,
+     "passage": "tájékoztatom a tisztelt országgyűlést hogy az összegző jelentést és az összegző módosító javaslatot a törvényalkotási bizottság a házszabály 46 és bekezdése alapján 13 igen szavazattal 6 nem szavazat ellenében tartózkodás nélkül",
+     "speeches": [
+      {
+       "id": "30-211",
+       "speaker": "Tóth Norbert",
+       "date": "2026-09-21",
+       "kind": "Ismerteti a bizottság véleményét",
+       "position": null,
+       "faction": "TISZA"
+      },
+      {
+       "id": "30-237",
+       "speaker": "Varga Lőrinc Mihály",
+       "date": "2026-09-21",
+       "kind": "Ismerteti a bizottság véleményét",
+       "position": null,
+       "faction": "TISZA"
+      }
+     ],
+     "speakers": 2,
+     "days": 1,
+     "first_day": "2026-09-21",
+     "last_day": "2026-09-21",
+     "lag_days": 0,
+     "same_day": true,
+     "same_kind": true,
+     "factions": [
+      "TISZA"
+     ],
+     "one_faction": true
+    },
+    {
      "words": 30,
      "passage": "az intézményi autonómia megerősítése körében a nevelőtestületek visszakapják a tőlük korábban elvont döntési véleményezési egyetértési jogokat mégpedig két fő területen az intézményi belső dokumentumok elfogadásánál valamint az igazgató megbízásával kapcsolatosan",
      "speeches": [
@@ -642,6 +913,73 @@
       "TISZA"
      ],
      "one_faction": true
+    },
+    {
+     "words": 30,
+     "passage": "a költségvetés teherbíró képességével arányosan kerüljön megállapításra annak az elvnek a messzemenőkig történő szem előtt tartásával hogy az állami vezető elsődleges kötelezettsége és felelőssége a köz szolgálata erre tekintettel a",
+     "speeches": [
+      {
+       "id": "21-63",
+       "speaker": "László Endre Márton",
+       "date": "2026-07-28",
+       "kind": "vezérszónoki felszólalás",
+       "position": null,
+       "faction": "TISZA"
+      },
+      {
+       "id": "26-232",
+       "speaker": "Dr. Bóka Zsolt",
+       "date": "2026-09-07",
+       "kind": "Ismerteti a bizottság véleményét",
+       "position": null,
+       "faction": "TISZA"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-07-28",
+     "last_day": "2026-09-07",
+     "lag_days": 41,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "TISZA"
+     ],
+     "one_faction": true
+    },
+    {
+     "words": 30,
+     "passage": "a cégnyilvánosságról a bírósági cégeljárásról és a végelszámolásról szóló 2006 évi v törvény és a civil szervezetek bírósági nyilvántartásáról és az ezzel összefüggő eljárási szabályokról szóló 2011 évi clxxxi törvény",
+     "speeches": [
+      {
+       "id": "36-118",
+       "speaker": "Dr. Csuzda Gábor",
+       "date": "2026-10-14",
+       "kind": "vezérszónoki felszólalás",
+       "position": "jegyző",
+       "faction": "Fidesz"
+      },
+      {
+       "id": "38-282",
+       "speaker": "Dr. Simon Krisztián Márk",
+       "date": "2026-11-02",
+       "kind": "Ismerteti a bizottság véleményét",
+       "position": null,
+       "faction": "TISZA"
+      }
+     ],
+     "speakers": 2,
+     "days": 2,
+     "first_day": "2026-10-14",
+     "last_day": "2026-11-02",
+     "lag_days": 19,
+     "same_day": false,
+     "same_kind": false,
+     "factions": [
+      "Fidesz",
+      "TISZA"
+     ],
+     "one_faction": false
     }
    ]
   },

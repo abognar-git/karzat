@@ -1,9 +1,9 @@
 {
- "built_at": "2026-09-03T05:36:22Z",
+ "built_at": "2026-11-07T10:44:34Z",
  "tables": {
   "szavazasok": {
-   "rows": 79842,
-   "bytes": 1849218,
+   "rows": 80038,
+   "bytes": 1855016,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -30,8 +30,8 @@
    ]
   },
   "szavazatok": {
-   "rows": 17446580,
-   "bytes": 2699718,
+   "rows": 17483486,
+   "bytes": 2699771,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -46,8 +46,8 @@
    ]
   },
   "kepviselok": {
-   "rows": 3263,
-   "bytes": 32029,
+   "rows": 3265,
+   "bytes": 31927,
    "columns": [
     "ciklus",
     "kepviselo_id",
@@ -64,8 +64,8 @@
    ]
   },
   "szavazas_iromany": {
-   "rows": 104330,
-   "bytes": 748024,
+   "rows": 104523,
+   "bytes": 756820,
    "columns": [
     "ciklus",
     "szavazas_id",
@@ -79,8 +79,8 @@
    ]
   },
   "felszolalasok": {
-   "rows": 495305,
-   "bytes": 2442439,
+   "rows": 498983,
+   "bytes": 2464083,
    "columns": [
     "ciklus",
     "ulesnap",
@@ -104,8 +104,8 @@
    ]
   },
   "iromanyok": {
-   "rows": 586,
-   "bytes": 35993,
+   "rows": 1004,
+   "bytes": 51145,
    "columns": [
     "ciklus",
     "iromany",
@@ -128,8 +128,8 @@
    ]
   },
   "frakciovaltasok": {
-   "rows": 298,
-   "bytes": 8446,
+   "rows": 299,
+   "bytes": 8462,
    "columns": [
     "kepviselo_id",
     "nev",
@@ -145,8 +145,8 @@
    "cycles": null
   },
   "bizottsagi_tagsag": {
-   "rows": 277,
-   "bytes": 6108,
+   "rows": 290,
+   "bytes": 6078,
    "columns": [
     "bizottsag",
     "bizottsag_fajta",

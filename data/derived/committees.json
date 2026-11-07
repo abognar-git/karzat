@@ -1,11 +1,16 @@
 {
- "as_of": "2026-08-28",
- "count": 27,
+ "as_of": "2026-11-04",
+ "count": 28,
  "list": [
   {
    "id": "002J",
    "title": "Agrár- és Élelmiszergazdasági Bizottság",
-   "subcommittees": []
+   "subcommittees": [
+    {
+     "id": "003E",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
   },
   {
    "id": "0031",
@@ -43,7 +48,7 @@
    "subcommittees": [
     {
      "id": "0036",
-     "title": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság"
+     "title": "Ellenőrző Albizottság"
     }
    ]
   },
@@ -60,11 +65,21 @@
   {
    "id": "002Q",
    "title": "Élő Környezetért Felelős Bizottság",
-   "subcommittees": []
+   "subcommittees": [
+    {
+     "id": "003D",
+     "title": "Ellenőrző Albizottság"
+    }
+   ]
   },
   {
    "id": "002S",
    "title": "Európai Ügyek Bizottsága",
+   "subcommittees": []
+  },
+  {
+   "id": "003F",
+   "title": "Felzárkóztatási Források Visszaéléseit Feltáró Vizsgálóbizottság",
    "subcommittees": []
   },
   {
@@ -297,7 +312,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%2299b40688-dce0-47e2-a1f6-b712bdbce88e%22%7D"
+   "next_meeting_url": null
   },
   "002F": {
    "name": "Külügyi Bizottság",
@@ -357,7 +372,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%227bc76fa9-4e1b-4d34-8501-15e7c0cea214%22%7D"
   },
   "002G": {
    "name": "Magyarságpolitikai Bizottság",
@@ -390,6 +405,11 @@
      "faction": "TISZA"
     },
     {
+     "azon": "001C",
+     "name": "Borsós Gabriella",
+     "faction": "TISZA"
+    },
+    {
      "azon": "0005",
      "name": "Dr. Csibi Krisztina",
      "faction": "Fidesz"
@@ -408,11 +428,6 @@
      "azon": "004R",
      "name": "Molnárné Dr. Lezsák Anna",
      "faction": "Fidesz"
-    },
-    {
-     "azon": "000N",
-     "name": "Rost Andrea",
-     "faction": "TISZA"
     }
    ],
    "subcommittees": [
@@ -467,7 +482,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%223e9ae10b-7d10-4a55-9a44-104ca4acece8%22%7D"
+   "next_meeting_url": null
   },
   "002I": {
    "name": "Művelődési Bizottság",
@@ -475,7 +490,7 @@
    "created": "2026-05-09",
    "parent": null,
    "email": "mvb@parlament.hu",
-   "phone": "36(1)441-4849,36(1)441-5073",
+   "phone": "36(1)441-4848,36(1)441-4849,36(1)441-5073",
    "chair": {
     "azon": "004Y",
     "name": "Szentkirályi Alexandra",
@@ -537,7 +552,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%224c6a5cf9-02ed-4843-b912-f5ddce0fd377%22%7D"
   },
   "002J": {
    "name": "Agrár- és Élelmiszergazdasági Bizottság",
@@ -595,9 +610,14 @@
      "faction": "TISZA"
     }
    ],
-   "subcommittees": [],
+   "subcommittees": [
+    {
+     "id": "003E",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%223bc36caa-43a5-4697-ab04-4eb2c58827c8%22%7D"
   },
   "002K": {
    "name": "Nemzetbiztonsági Bizottság",
@@ -657,7 +677,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%229faada3e-421b-49ce-89dd-f741da481e12%22%7D"
   },
   "002L": {
    "name": "Oktatási Bizottság",
@@ -665,7 +685,7 @@
    "created": "2026-05-09",
    "parent": null,
    "email": "otb@parlament.hu",
-   "phone": "36(1)441-5061,36(1)441-5062,36(1)441-5072,36(1)441-5860",
+   "phone": "36(1)441-5061,36(1)441-5062,36(1)441-5071,36(1)441-5072,36(1)441-5860",
    "chair": {
     "azon": "0013",
     "name": "Szűcs Dóra",
@@ -722,7 +742,7 @@
     }
    ],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22ab222e93-5c81-4130-ac8d-72b5e53bdc5a%22%7D"
   },
   "002M": {
    "name": "Digitalizációs és Technológiai Bizottság",
@@ -732,20 +752,20 @@
    "email": "dtb@parlament.hu",
    "phone": "36(1)441-4477",
    "chair": {
-    "azon": "0033",
-    "name": "Varga Balázs",
+    "azon": "003D",
+    "name": "Járosi Péter",
     "faction": "TISZA"
    },
    "vice_chairs": [
     {
-     "azon": "003D",
-     "name": "Járosi Péter",
-     "faction": "TISZA"
-    },
-    {
      "azon": "004Q",
      "name": "Dr. Máthé Zsuzsa",
      "faction": "KDNP"
+    },
+    {
+     "azon": "0033",
+     "name": "Varga Balázs",
+     "faction": "TISZA"
     }
    ],
    "members": [
@@ -778,7 +798,7 @@
    "subcommittees": [
     {
      "id": "0036",
-     "title": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság"
+     "title": "Ellenőrző Albizottság"
     }
    ],
    "next_meeting": null,
@@ -790,7 +810,7 @@
    "created": "2026-05-09",
    "parent": null,
    "email": "pkb@parlament.hu",
-   "phone": "36(1)441-4582,36(1)441-4846,36(1)441-4848",
+   "phone": "36(1)441-4582,36(1)441-4846",
    "chair": {
     "azon": "b034",
     "name": "Bencsik János",
@@ -867,7 +887,7 @@
     }
    ],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%226c31c777-6c01-4abe-8ddb-d37b5b62b215%22%7D"
   },
   "002O": {
    "name": "Egészségügyi Bizottság",
@@ -875,7 +895,7 @@
    "created": "2026-05-09",
    "parent": null,
    "email": "egb@parlament.hu",
-   "phone": "36(1)441-5037",
+   "phone": "36(1)441-5036,36(1)441-5037",
    "chair": {
     "azon": "0024",
     "name": "Dr. Ruzsa Diána",
@@ -900,11 +920,6 @@
      "faction": "TISZA"
     },
     {
-     "azon": "h366",
-     "name": "Horváth László",
-     "faction": "Fidesz"
-    },
-    {
      "azon": "0018",
      "name": "Jójárt Erika",
      "faction": "TISZA"
@@ -918,6 +933,11 @@
      "azon": "0035",
      "name": "Dr. Simon Zsuzsánna",
      "faction": "TISZA"
+    },
+    {
+     "azon": "s195",
+     "name": "Szekeres Pál",
+     "faction": "Fidesz"
     },
     {
      "azon": "v008",
@@ -980,8 +1000,8 @@
      "faction": "KDNP"
     },
     {
-     "azon": "o015",
-     "name": "Dr. Orbán Balázs",
+     "azon": "s195",
+     "name": "Szekeres Pál",
      "faction": "Fidesz"
     },
     {
@@ -992,7 +1012,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%221b7373b8-f591-42e9-bbf4-a898b877e5c7%22%7D"
   },
   "002Q": {
    "name": "Élő Környezetért Felelős Bizottság",
@@ -1013,8 +1033,8 @@
      "faction": "TISZA"
     },
     {
-     "azon": "001X",
-     "name": "Kaprinyák Tibor",
+     "azon": "0044",
+     "name": "Lontay László",
      "faction": "TISZA"
     }
    ],
@@ -1027,11 +1047,6 @@
     {
      "azon": "003J",
      "name": "Dr. Kovács Gyula",
-     "faction": "TISZA"
-    },
-    {
-     "azon": "0044",
-     "name": "Lontay László",
      "faction": "TISZA"
     },
     {
@@ -1050,7 +1065,12 @@
      "faction": "Fidesz"
     }
    ],
-   "subcommittees": [],
+   "subcommittees": [
+    {
+     "id": "003D",
+     "title": "Ellenőrző Albizottság"
+    }
+   ],
    "next_meeting": null,
    "next_meeting_url": null
   },
@@ -1068,8 +1088,8 @@
    },
    "vice_chairs": [
     {
-     "azon": "h074",
-     "name": "Hidvéghi Balázs",
+     "azon": "0072",
+     "name": "Kardosné Gyurkó Kata",
      "faction": "Fidesz"
     },
     {
@@ -1112,7 +1132,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22cffec2e0-2361-42a2-95d1-fda9ced44fc3%22%7D"
   },
   "002S": {
    "name": "Európai Ügyek Bizottsága",
@@ -1128,8 +1148,8 @@
    },
    "vice_chairs": [
     {
-     "azon": "b130",
-     "name": "Dr. Bóka János",
+     "azon": "h074",
+     "name": "Hidvéghi Balázs",
      "faction": "Fidesz"
     },
     {
@@ -1172,7 +1192,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%220800c32c-70e5-4c0f-89f3-ed068a8a6006%22%7D"
   },
   "002T": {
    "name": "Vidék- és Településfejlesztési Bizottság",
@@ -1182,9 +1202,9 @@
    "email": "vtb@parlament.hu",
    "phone": null,
    "chair": {
-    "azon": "002R",
-    "name": "Szabó Tibor",
-    "faction": "TISZA"
+    "azon": null,
+    "name": null,
+    "faction": null
    },
    "vice_chairs": [
     {
@@ -1245,7 +1265,7 @@
    "created": "2026-05-09",
    "parent": null,
    "email": "geb@parlament.hu",
-   "phone": "36(1)441-4566,36(1)441-4567,36(1)441-4571,36(1)441-4574,36(1)441-4847",
+   "phone": "36(1)441-4566,36(1)441-4567,36(1)441-4570,36(1)441-4571,36(1)441-4574,36(1)441-4847",
    "chair": {
     "azon": "002P",
     "name": "Csőszi Attila",
@@ -1342,12 +1362,12 @@
     }
    ],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%228eb432ad-3afc-4301-a9fd-cc8f6cd0893b%22%7D"
   },
   "002V": {
    "name": "Magyarországi Nemzetiségek Bizottsága",
    "type": "nemzetiségi",
-   "created": "2026-05-09",
+   "created": "2026-05-11",
    "parent": null,
    "email": "neb@parlament.hu",
    "phone": "36(1)441-5262,36(1)441-5263,36(1)441-5265",
@@ -1482,7 +1502,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22b1827572-f1b7-4ecc-a1de-b6f7bc071ab0%22%7D"
   },
   "002X": {
    "name": "Igazságügyi és Alkotmányügyi Bizottság",
@@ -1490,7 +1510,7 @@
    "created": "2026-05-09",
    "parent": null,
    "email": "iab@parlament.hu",
-   "phone": "36(1)441-4484,36(1)441-4586,36(1)441-4876,36(1)441-4878",
+   "phone": "36(1)441-4484,36(1)441-4493,36(1)441-4586,36(1)441-4876,36(1)441-4878",
    "chair": {
     "azon": "001M",
     "name": "Dr. Hantosi István",
@@ -1557,7 +1577,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%226826077e-57d9-456a-81e7-2899e11993cd%22%7D"
   },
   "002Y": {
    "name": "Közlekedési és Beruházási Bizottság",
@@ -1617,7 +1637,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22939c967d-1781-4d03-b182-913d8de9596c%22%7D"
   },
   "002Z": {
    "name": "Ellenőrző Albizottság",
@@ -1737,7 +1757,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%226660aa65-7f3d-4a10-8560-1ec410de8d7d%22%7D"
   },
   "0032": {
    "name": "A Kegyelmi Botrány Felelőseit Feltáró Vizsgálóbizottság",
@@ -1792,8 +1812,8 @@
    "email": "spvb@parlament.hu",
    "phone": null,
    "chair": {
-    "azon": "002K",
-    "name": "Dr. Sárosi József",
+    "azon": "003A",
+    "name": "Lovkó Csaba",
     "faction": "TISZA"
    },
    "vice_chairs": [
@@ -1815,14 +1835,14 @@
      "faction": "TISZA"
     },
     {
-     "azon": "003A",
-     "name": "Lovkó Csaba",
-     "faction": "TISZA"
-    },
-    {
      "azon": "s011",
      "name": "Dr. Simicskó István",
      "faction": "KDNP"
+    },
+    {
+     "azon": "002Q",
+     "name": "Veres Ádám",
+     "faction": "TISZA"
     }
    ],
    "subcommittees": [],
@@ -1872,7 +1892,7 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%2277253ee5-de85-4e44-8a5b-98255d2994ef%22%7D"
   },
   "0035": {
    "name": "Az MNB Működésével Kapcsolatos Visszaéléseit Feltáró Vizsgálóbizottság",
@@ -1917,10 +1937,10 @@
    ],
    "subcommittees": [],
    "next_meeting": null,
-   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%220a365464-7984-4aad-afa8-aabd1c07242f%22%7D"
+   "next_meeting_url": null
   },
   "0036": {
-   "name": "A bizottság feladatkörébe tartozó törvények végrehajtását, társadalmi és gazdasági hatását, valamint a deregulációs folyamatokat figyelemmel kísérő albizottság",
+   "name": "Ellenőrző Albizottság",
    "type": "Albizottság",
    "created": "2026-06-02",
    "parent": {
@@ -1930,12 +1950,23 @@
    "email": null,
    "phone": null,
    "chair": {
-    "azon": null,
-    "name": null,
-    "faction": null
+    "azon": "003O",
+    "name": "Gyömbér Dávid",
+    "faction": "TISZA"
    },
    "vice_chairs": [],
-   "members": [],
+   "members": [
+    {
+     "azon": "006E",
+     "name": "Hortay Olivér",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "0048",
+     "name": "Rózsahegyi Áron",
+     "faction": "TISZA"
+    }
+   ],
    "subcommittees": [],
    "next_meeting": null,
    "next_meeting_url": null
@@ -2065,6 +2096,11 @@
    "vice_chairs": [],
    "members": [
     {
+     "azon": "0028",
+     "name": "Bodóczi István",
+     "faction": "TISZA"
+    },
+    {
      "azon": "002P",
      "name": "Csőszi Attila",
      "faction": "TISZA"
@@ -2091,8 +2127,8 @@
     }
    ],
    "subcommittees": [],
-   "next_meeting": null,
-   "next_meeting_url": null
+   "next_meeting": "2026-11-10",
+   "next_meeting_url": "/web/guest/egy_bizottsagi_meghivo_mobil?meghivo=%7B%22meghivoId%22%3A%22f51c071d-dbd4-4657-b2de-0a0bc3394ac2%22%7D"
   },
   "003B": {
    "name": "Ellenőrző Albizottság",
@@ -2133,6 +2169,110 @@
    "created": "2026-08-28",
    "parent": null,
    "email": "mte@parlament.hu",
+   "phone": null,
+   "chair": {
+    "azon": "001M",
+    "name": "Dr. Hantosi István",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [
+    {
+     "azon": "004S",
+     "name": "Németh Balázs Lajos",
+     "faction": "Fidesz"
+    }
+   ],
+   "members": [
+    {
+     "azon": "000T",
+     "name": "Bujdosó Andrea Anna",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "001G",
+     "name": "Schummer Orsolya",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "s184",
+     "name": "Szabadi István",
+     "faction": "Mi Hazánk"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "003D": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-09-16",
+   "parent": {
+    "id": "002Q",
+    "name": "Élő Környezetért Felelős Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "v048",
+    "name": "Varga Gábor",
+    "faction": "Fidesz"
+   },
+   "vice_chairs": [],
+   "members": [
+    {
+     "azon": "0040",
+     "name": "Dr. Nagy Márta",
+     "faction": "TISZA"
+    },
+    {
+     "azon": "002Y",
+     "name": "Szimon Renáta",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "003E": {
+   "name": "Ellenőrző Albizottság",
+   "type": "Albizottság",
+   "created": "2026-09-16",
+   "parent": {
+    "id": "002J",
+    "name": "Agrár- és Élelmiszergazdasági Bizottság"
+   },
+   "email": null,
+   "phone": null,
+   "chair": {
+    "azon": "003U",
+    "name": "Ujvári Szilvia",
+    "faction": "TISZA"
+   },
+   "vice_chairs": [],
+   "members": [
+    {
+     "azon": "004W",
+     "name": "Papp Zsolt",
+     "faction": "Fidesz"
+    },
+    {
+     "azon": "001H",
+     "name": "Varga Lőrinc Mihály",
+     "faction": "TISZA"
+    }
+   ],
+   "subcommittees": [],
+   "next_meeting": null,
+   "next_meeting_url": null
+  },
+  "003F": {
+   "name": "Felzárkóztatási Források Visszaéléseit Feltáró Vizsgálóbizottság",
+   "type": "vizsgáló",
+   "created": "2026-11-04",
+   "parent": null,
+   "email": "ffvb@parlament.hu",
    "phone": null,
    "chair": {
     "azon": null,

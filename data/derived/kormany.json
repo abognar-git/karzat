@@ -4,13 +4,18 @@
  "front_bench": 5,
  "with_photo": 3,
  "seen_without_seat": [
+  "Banai Péter Benő",
   "Dr. Baka András",
+  "Dr. Deutsch Tamás",
   "Dr. Gerzsenyi Gabriella",
   "Dr. Kövesdy Attila Zoltán",
+  "Dr. Lajtár István",
   "Dr. Nagy Attila Mihály",
   "Dr. Sasvári Róbert László",
   "Dr. Sulyok Tamás",
   "Dr. Svéd Tamás",
+  "Horváth Gábor",
+  "Kürtös László Antal",
   "Szemerey Samu"
  ],
  "seat_not_on_the_bench": [
@@ -35,8 +40,8 @@
    "photo_licence": null,
    "photo_licence_url": null,
    "parlament_url": null,
-   "speeches": 15,
-   "last_spoke": "2026-07-27",
+   "speeches": 22,
+   "last_spoke": "2026-10-19",
    "front_bench": true
   },
   "0051": {
@@ -57,8 +62,8 @@
    "photo_licence": null,
    "photo_licence_url": null,
    "parlament_url": null,
-   "speeches": 7,
-   "last_spoke": "2026-08-10",
+   "speeches": 26,
+   "last_spoke": "2026-10-19",
    "front_bench": true
   },
   "v076": {
@@ -79,8 +84,8 @@
    "photo_licence": "CC BY-SA 4.0",
    "photo_licence_url": "https://creativecommons.org/licenses/by-sa/4.0",
    "parlament_url": null,
-   "speeches": 32,
-   "last_spoke": "2026-07-27",
+   "speeches": 41,
+   "last_spoke": "2026-09-14",
    "front_bench": true
   },
   "0053": {
@@ -123,8 +128,8 @@
    "photo_licence": "CC BY 4.0",
    "photo_licence_url": "https://creativecommons.org/licenses/by/4.0",
    "parlament_url": null,
-   "speeches": 27,
-   "last_spoke": "2026-07-28",
+   "speeches": 41,
+   "last_spoke": "2026-10-12",
    "front_bench": true
   }
  }

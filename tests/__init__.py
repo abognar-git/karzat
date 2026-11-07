@@ -30,3 +30,17 @@ def node_bin() -> str | None:
         if p.is_file() and p.stat().st_mode & 0o111:
             return str(p)
     return None
+
+
+def require_node(case) -> str:
+    """The node executable, or skip this test.
+
+    Two separate bugs came out of doing this by hand. First `shutil.which("node")` answered None under
+    launchd and thirty-six tests skipped themselves nightly; then the lookup was fixed but four call sites
+    still spawned the literal string "node", so they stopped skipping and started dying with
+    FileNotFoundError instead — a worse failure, introduced by half a fix. One function now both finds it
+    and decides what to do when it is absent, so a call site cannot get one half without the other."""
+    found = node_bin()
+    if not found:
+        case.skipTest("node is not installed")
+    return found

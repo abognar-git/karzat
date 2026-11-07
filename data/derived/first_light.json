@@ -1,86 +1,90 @@
 {
- "derived_at": "2026-09-03T06:13:09.938447+02:00",
+ "derived_at": "2026-11-07T11:29:00.884692+01:00",
  "window": {
   "from": "2026-05-09",
-  "to": "2026-08-28",
-  "list_files": 2107
+  "to": "2026-11-03",
+  "list_files": 2192
  },
- "votes": 272,
- "decisions": 271,
+ "votes": 468,
+ "decisions": 467,
  "quorum_checks": 1,
- "secret_ballots": 5,
- "qualified_majority_votes": 69,
+ "secret_ballots": 15,
+ "qualified_majority_votes": 140,
  "by_mode": {
-  "Listás": 199,
-  "Listás a jelenlevők 2/3-ával": 48,
-  "Listás az összes képviselő felével": 7,
+  "Listás": 324,
+  "Listás a jelenlevők 2/3-ával": 103,
+  "Listás az összes képviselő felével": 12,
+  "Titkos az összes képviselő 2/3-ával": 12,
   "Listás az összes képviselő 2/3-ával": 7,
-  "Listás a jelenlevők 4/5-ével": 5,
+  "Listás a jelenlevők 4/5-ével": 6,
   "Titkos": 3,
-  "Titkos az összes képviselő 2/3-ával": 2,
   "Jelenlét megállapítás": 1
  },
  "by_result": {
-  "Elfogadva": 249,
-  "Elutasítva": 22,
+  "Elfogadva": 420,
+  "Elutasítva": 47,
   "Határozatképes": 1
  },
  "by_month": {
   "2026-05": 57,
   "2026-06": 90,
   "2026-07": 75,
-  "2026-08": 50
+  "2026-08": 50,
+  "2026-09": 98,
+  "2026-10": 56,
+  "2026-11": 42
  },
  "motion_outcomes_top": {
-  "önálló indítvány elfogadva": 73,
-  "Országgyűlés az interpellációs választ elfogadta": 59,
-  "összegző módosító javaslat elfogadva": 20,
-  "önálló indítvány minősített többséget igénylő része elfogadva": 18,
-  "módosító javaslat fenntartása elutasítva": 15,
-  "önálló indítvány egyszerű többséget igénylő része elfogadva": 14,
-  "összegző módosító javaslat minősített többséget igénylő része elfogadva": 12,
-  "sürgősségi javaslat elfogadva": 11,
-  "összegző módosító javaslat egyszerű többséget igénylő része elfogadva": 8,
-  "módosító javaslat(ok) elfogadva": 6,
-  "kivételességi javaslat elfogadva": 6,
-  "határozati házszabályi rendelkezésektől való eltéréshez hozzájárulás elfogadva": 5
+  "önálló indítvány elfogadva": 128,
+  "Országgyűlés az interpellációs választ elfogadta": 91,
+  "összegző módosító javaslat elfogadva": 40,
+  "módosító javaslat fenntartása elutasítva": 29,
+  "önálló indítvány minősített többséget igénylő része elfogadva": 26,
+  "önálló indítvány egyszerű többséget igénylő része elfogadva": 22,
+  "összegző módosító javaslat minősített többséget igénylő része elfogadva": 19,
+  "sürgősségi javaslat elfogadva": 15,
+  "összegző módosító javaslat egyszerű többséget igénylő része elfogadva": 14,
+  "kivételességi javaslat elfogadva": 11,
+  "mentelmi jog fenntartva": 11,
+  "módosító javaslat(ok) elfogadva": 8
  },
  "motion_prefixes": {
-  "amendment": 104,
-  "I": 59,
-  "T": 40,
-  "S": 39,
-  "H": 21,
+  "amendment": 197,
+  "I": 91,
+  "S": 74,
+  "T": 57,
+  "H": 37,
   "B": 2
  },
- "kiveteles_votes": 6,
- "surgos_votes": 11,
- "interpellation_answers": 59,
- "hazszabalytol_elteres_votes": 5,
+ "kiveteles_votes": 11,
+ "surgos_votes": 15,
+ "interpellation_answers": 91,
+ "hazszabalytol_elteres_votes": 6,
  "mps": {
-  "total": 198,
+  "total": 199,
   "by_faction": {
    "TISZA": 141,
-   "Fidesz": 43,
+   "Fidesz": 44,
    "KDNP": 8,
    "Mi Hazánk": 6
   },
   "by_mandate": {
    "egyeni": 106,
-   "lista": 92
+   "lista": 93
   }
  },
  "sitting_days": {
-  "count": 25,
+  "count": 42,
   "first": "2026-05-09",
-  "last": "2026-08-28",
+  "last": "2026-11-09",
   "by_session": {
    "2026. nyári": 17,
+   "2026. őszi": 17,
    "2026. tavaszi": 8
   },
   "by_kind": {
-   "Rendkívüli": 17,
-   "Rendes": 8
+   "Rendes": 24,
+   "Rendkívüli": 18
   }
  }
 }

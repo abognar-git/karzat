@@ -11,7 +11,7 @@ import unittest
 from pathlib import Path
 
 from scripts.build_site import CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
-from tests import node_bin
+from tests import node_bin, require_node
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -19,6 +19,53 @@ ROOT = Path(__file__).resolve().parent.parent
 def visible_text(page: str) -> str:
     """What a reader sees: markup and attributes stripped (aria-live is not the word 'live')."""
     return re.sub(r"<[^>]+>", " ", page).casefold()
+
+
+def _record_tokens(inp: dict) -> set[str]:
+    """Every word the record hands us for this cycle's votes — titles, remarks, modes, nested and all."""
+    out: set[str] = set()
+
+    def walk(x):
+        if isinstance(x, str):
+            out.update(re.findall(r"[0-9a-záéíóöőúüű]+", x.casefold()))
+        elif isinstance(x, dict):
+            for v in x.values():
+                walk(v)
+        elif isinstance(x, (list, tuple)):
+            for v in x:
+                walk(v)
+    walk((inp.get("idx") or {}).get("votes") or [])
+    return out
+
+
+def freshness_word_hits(page: str, inp: dict, words=("live", "élő", "real-time")) -> list[str]:
+    """Places where the SITE claims to be live — not places where the House happened to use the letters.
+
+    The contract is about our own copy, and the check for it was a plain substring sweep over everything a
+    reader sees. On 2026-11-07 that turned the gate red, and the pipeline stopped publishing, because an
+    interpellation had been titled "…a közbiztonság helyreállítására, vagy az ottélők…" and the letters of
+    "élő" sit inside "ottélők". Removing the record's strings wholesale does not work either: the directory
+    truncates a long title, so what the page shows is a prefix and never matches the string it came from.
+
+    So the unit is the word. A hit inside a token the record itself uses — ottélők, túlélők, felélő — is the
+    House talking, not us. A hit that IS the bare word still counts, even if the record also uses it,
+    because that is the shape our own claim would take.
+
+    What this still cannot tell apart: a motion actually titled "élő állatok szállításáról". The Ház has not
+    written one in this cycle; the day it does, the honest fix is to scope the sweep to the page's own
+    chrome rather than to widen this exception."""
+    WORD = r"[0-9a-záéíóöőúüű-]*"
+    text = visible_text(page)
+    quoted = _record_tokens(inp)
+    hits = []
+    for w in words:
+        for m in re.finditer(re.escape(w), text):
+            whole = (re.search(WORD + r"$", text[:m.start()]).group(0) + w
+                     + re.match(WORD, text[m.end():]).group(0))
+            if whole != w and whole in quoted:
+                continue                                   # the record's own word, not our claim
+            hits.append(whole)
+    return hits
 
 
 class Build(unittest.TestCase):
@@ -86,7 +133,7 @@ class Build(unittest.TestCase):
         self.assertIn('action="ckl43/felszolalas/kereses.html" method="get"', self.page)
         self.assertIn('<link rel="alternate" type="application/atom+xml" href="ckl43/feed/kulonvelemeny.xml"', self.page)
         for word in ("live", "élő", "real-time"):
-            self.assertNotIn(word, visible_text(self.page))
+            self.assertEqual(freshness_word_hits(self.page, self.inp), [])
         self.assertLess(self.page.index("</main>"), self.page.index("<footer"))
 
     def test_the_chamber_on_the_landing_is_interactive_and_carries_its_own_data(self):
@@ -238,7 +285,7 @@ class Build(unittest.TestCase):
             else:
                 self.assertIn(f"Frissítve: {hu_date(stamp[:10])} {stamp[11:]} (budapesti idő).", page)
             for word in ("live", "élő", "real-time"):
-                self.assertNotIn(word, visible_text(page))
+                self.assertEqual(freshness_word_hits(page, self.inp), [])
             # the footer is a landmark of its own, outside <main>
             self.assertLess(page.index("</main>"), page.index("<footer"))
 
@@ -253,7 +300,7 @@ class Build(unittest.TestCase):
         self.assertIn('<span class="more" title="', self.cyc)          # long titles keep their tail for the search
         self.assertIn('lang="hu"', self.cyc)
         for word in ("live", "élő", "real-time"):
-            self.assertNotIn(word, visible_text(self.cyc))               # freshness contract holds on the page
+            self.assertEqual(freshness_word_hits(self.cyc, self.inp), [])               # freshness contract holds on the page
 
     def test_freshness_sentence_is_the_contract_sentence(self):
         for page in (self.page, self.cyc):                                    # the landing and the cycle page carry the same sentence
@@ -407,7 +454,14 @@ class MPPages(unittest.TestCase):
 
     def test_alignment_definitions_hold(self):
         al = self.inp["alignment"]["per_mp"]
-        self.assertEqual(len(al), 201)
+        # Not a count — a rule. Every key in the alignment must be a member the roster knows, because the
+        # site's whole claim is that no voting identity is left unresolved. Comparing lengths looked like
+        # the same thing and is not: on 7 November the two differed by one, and the one was
+        # "Kardosné Gyurkó Katalin" — a name where an id should be, a member sworn in after the last
+        # datasheet sync whom the resolver could not place. A length check would also have passed if one
+        # unresolved name had arrived on the same day one member left.
+        unresolved = sorted(k for k in al if k not in self.inp["mps"])
+        self.assertEqual(unresolved, [], f"voting identities with no record: {unresolved}")
         a = al["a011"]
         pos = (self.inp["store"] or {}).get("positions") or {}
         rolls = sum(1 for v in self.inp["idx"]["votes"] if pos.get(v["ts"]))
@@ -461,7 +515,7 @@ class MPPages(unittest.TestCase):
 
     def test_mp_index(self):
         page = build_mp_index(self.inp)
-        self.assertEqual(page.count("<tr data-f="), 201)
+        self.assertEqual(page.count("<tr data-f="), len(self.inp["mps"]))   # one row per person on the roster
         self.assertIn("volt képviselő", page)
         self.assertIn('href="a011.html"', page)
 
@@ -2635,20 +2689,103 @@ class AnEmptyAnswerForADayThatSatIsNotAnAnswer(unittest.TestCase):
         loop = src[src.index('api.fetch("felszolalasok"'):]
         self.assertIn("ask_again_for_an_empty_day(", loop[:1200], "the sync no longer asks the rule")
 
-    def test_no_sitting_day_in_the_open_cycle_is_silently_empty(self):
-        """The live check the whole thing exists for: a day in the index with no speeches and no explanation
-        is either a genuine speechless sitting or a day we forgot to ask about again."""
+    def test_no_empty_sitting_day_was_only_ever_asked_about_too_early(self):
+        """The signature of the bug, not the symptom.
+
+        The first version of this asserted that no recent sitting day is empty — and that is simply false
+        as a rule: the House publishes a transcript days after the sitting, so an empty day two days old is
+        the normal state of the world, not a defect. It went red on 7 November over 5 November, which had
+        sat and whose transcript had not arrived, and because the gate blocks publishing it would have
+        frozen the site for exactly the reason the site exists to explain.
+
+        What went wrong with 27 August was narrower and has a signature a test can see: the list was
+        fetched on the 25th, two days BEFORE the sitting, and the empty reply was cached and never asked
+        again. So the rule is about when we last asked, not about what we have: an empty day must have been
+        asked about after it sat."""
+        import datetime
         from scripts.build_site import load_inputs
-        from karzat.cli import ask_again_for_an_empty_day as ask
         inp = load_inputs()
         if inp.get("closed"):
             self.skipTest("the open cycle is what this is about")
-        have = {}
+        have: dict = {}
         for r in (inp.get("speeches") or {}).get("speeches") or []:
             have[r.get("ulnap")] = have.get(r.get("ulnap"), 0) + 1
-        stale = [d for d in (inp["idx"].get("sitting_days") or [])
-                 if ask(d.get("date"), have.get(d.get("ulnap"), 0), already_refreshed=False)]
-        self.assertEqual(stale, [], f"{len(stale)} recent sitting days hold no speeches and were never re-asked")
+        cache = ROOT / "data" / "raw" / "felszolalasok"
+        asked_too_early = []
+        for d in inp["idx"].get("sitting_days") or []:
+            uln, date = d.get("ulnap"), d.get("date")
+            if not uln or not date or have.get(uln):
+                continue                                   # it has speeches; nothing to ask about
+            if date > datetime.date.today().isoformat():
+                continue                                   # the index carries sittings already scheduled;
+                                                           # an empty list for one of those is just the future
+            f = cache / f"ckl{inp['cycle']}_nap{int(uln):04d}.xml"
+            if not f.exists():
+                continue                                   # never fetched at all is a different fault
+            asked = datetime.date.fromtimestamp(f.stat().st_mtime)
+            if asked <= datetime.date.fromisoformat(date):
+                asked_too_early.append((date, uln, asked.isoformat()))
+        self.assertEqual(asked_too_early, [],
+                         "an empty sitting day whose list was last fetched before the sitting happened — "
+                         f"the cache is holding a reply the House could not yet have given: {asked_too_early}")
+
+
+class TheAlarmDoesNotRunThroughTheThingItWatches(unittest.TestCase):
+    """The failure alert was published to SNS with the same AWS credentials the run had been using. So the
+    one failure it could not report was the one where those credentials stopped working — which is exactly
+    what happened: from late October every run died in the S3 handover with InvalidAccessKeyId, tried to
+    publish the alert, got InvalidClientTokenId, and wrote both facts into a 46,000-line append-only log.
+    Two months of a stale site, no email, and the owner found out by looking at the page."""
+
+    def test_the_local_warning_needs_no_credentials_and_no_network(self):
+        """It is allowed to use nothing that could be the thing that broke."""
+        import ast
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        fn = next(n for n in ast.walk(ast.parse(src))
+                  if isinstance(n, ast.FunctionDef) and n.name == "warn_locally")
+        body = ast.get_source_segment(src, fn) or ""
+        for forbidden in ("boto3", "sns", "Session(", "urllib", "requests", "profile"):
+            self.assertNotIn(forbidden, body, f"warn_locally reaches for {forbidden}")
+
+    def test_a_failure_leaves_a_marker_a_person_can_find(self):
+        import importlib, json as _json, tempfile, pathlib as _p
+        n = importlib.import_module("scripts.nightly")
+        mark = ROOT / "data" / "last_failure.json"
+        existed = mark.exists()
+        keep = mark.read_bytes() if existed else None
+        try:
+            n.warn_locally("próba", "InvalidAccessKeyId a kézbesítésnél")
+            self.assertTrue(mark.exists(), "no marker was written")
+            d = _json.loads(mark.read_text(encoding="utf-8"))
+            self.assertIn("InvalidAccessKeyId", d["body"])
+            self.assertRegex(d["at"], r"^\d{4}-\d{2}-\d{2}T")
+            n.clear_local_warning()
+            self.assertFalse(mark.exists(), "a success does not clear the marker")
+        finally:
+            if existed and keep is not None:
+                mark.write_bytes(keep)
+            elif mark.exists():
+                mark.unlink()
+
+    def test_the_run_is_always_warned_even_with_no_sns_topic(self):
+        """The first version only fired inside the `if args.sns_topic` branch, so a run with no topic
+        configured stayed as silent as one whose topic it could not reach."""
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        tail = src[src.index("the failure alert itself failed"):src.index("def warn_locally")]
+        self.assertIn("warn_locally(", tail, "nothing warns locally on the way out")
+        # and it must sit OUTSIDE the sns branch: at the same indentation as the `if args.sns_topic`
+        line = next(l for l in tail.splitlines() if "warn_locally(" in l)
+        sns_line = next(l for l in src.splitlines() if "if args.sns_topic" in l)
+        self.assertLessEqual(len(line) - len(line.lstrip()), len(sns_line) - len(sns_line.lstrip()) + 4,
+                             "the local warning is nested inside the SNS branch it exists to survive")
+
+    def test_the_next_run_says_the_last_one_died(self):
+        """A log that only records the failure where it happened buries it. The head of the next run is
+        where a person actually looks."""
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        head = src[src.index('log(f"karzat nightly'):src.index('log(f"before:')]
+        self.assertIn("last_failure.json", head, "the run start does not consult the marker")
+        self.assertIn("the previous run failed", head)
 
 
 class TheNightlyCallsCommandsThatExist(unittest.TestCase):
@@ -3774,7 +3911,7 @@ class ReportPage(unittest.TestCase):
         prog = self._chart_fns() + "\nconst C = " + json.dumps(cases, ensure_ascii=False) + ";\n" + \
             "const o = {}; for (const k in C) o[k] = shape(C[k], Object.keys(C[k][0])).ordered;\n" + \
             "console.log(JSON.stringify(o));"
-        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True,
+        got = json.loads(subprocess.run([require_node(self), "-e", prog], capture_output=True, text=True,
                                         check=True).stdout)
         self.assertEqual(got, {"faction names": False, "years ascending": True,
                                "dates out of order": False, "dates descending": True,
@@ -3786,7 +3923,7 @@ class ReportPage(unittest.TestCase):
         Every value on it is correct and none of them is a number anybody reads off a chart."""
         import json, subprocess
         prog = self._chart_fns() + "\nconsole.log(JSON.stringify([1, 37, 6113, 7882237, 0.42].map(step)));"
-        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True,
+        got = json.loads(subprocess.run([require_node(self), "-e", prog], capture_output=True, text=True,
                                         check=True).stdout)
         for r, st in zip([1, 37, 6113, 7882237, 0.42], got):
             mant = st / 10 ** math.floor(math.log10(st))
@@ -3841,7 +3978,7 @@ class ReportPage(unittest.TestCase):
         prog = self._chart_fns() + "\nconst C = " + json.dumps(cases) + ";\n" + \
             "const o = {}; for (const k in C) { const s = shape(C[k], Object.keys(C[k][0]));\n" + \
             "  o[k] = s && s.valueCol; }\nconsole.log(JSON.stringify(o));"
-        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True,
+        got = json.loads(subprocess.run([require_node(self), "-e", prog], capture_output=True, text=True,
                                         check=True).stdout)
         self.assertEqual(got["null in the first row"], "n", "a NULL in row zero still hides the chart")
         self.assertIsNone(got["all values null"], "a column of nothing was charted as numbers")
@@ -3913,7 +4050,7 @@ class ReportPage(unittest.TestCase):
                 "typo: droppedOne('Catalog Error: Table with name szavazatokk does not exist! Did you mean \"szavazatok\"?')," +
                 "dropped: droppedOne('Catalog Error: Table with name szavazatok does not exist!')," +
                 "unrelated: droppedOne('Binder Error: Referenced column \"x\" not found')}));")
-        got = json.loads(subprocess.run(["node", "-e", prog], capture_output=True, text=True, check=True).stdout)
+        got = json.loads(subprocess.run([require_node(self), "-e", prog], capture_output=True, text=True, check=True).stdout)
         self.assertEqual(got, {"typo": False, "dropped": True, "unrelated": False})
 
     def test_the_page_lists_only_tables_that_are_actually_there(self):

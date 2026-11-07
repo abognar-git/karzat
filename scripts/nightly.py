@@ -254,7 +254,45 @@ def main(argv: list[str] | None = None) -> int:
                 log("failure alert published")
             except Exception as pub:
                 log(f"the failure alert itself failed: {pub}")
+        # Always, and whether or not SNS was even configured: the one channel that cannot share the failure.
+        if code not in (0, None) and not args.dry_run:
+            warn_locally("az éjszakai futás elbukott", str(e))
         raise
+
+
+def warn_locally(subject: str, body: str) -> None:
+    """Say it where nothing it depends on can also be broken.
+
+    The SNS alert is published with the same AWS credentials the run was using when it failed, so the one
+    failure it cannot report is the one where those credentials stop working. That happened: every run from
+    late October onward died in the S3 handover with InvalidAccessKeyId, tried to publish the alert, got
+    InvalidClientTokenId, and wrote both facts into a log nobody reads. Two months of a stale site and not
+    one email. An alarm wired through the thing it is watching is not an alarm.
+
+    So the local channel shares nothing with AWS: a marker file whose mtime is the time of the failure, and
+    a desktop notification. Neither needs a network, a key or a region."""
+    f = ROOT / "data" / "last_failure.json"
+    try:
+        f.write_text(json.dumps({"at": datetime.now(timezone.utc).isoformat(),
+                                 "subject": subject, "body": body[:2000]}, ensure_ascii=False) + "\n",
+                     encoding="utf-8")
+    except Exception:
+        pass
+    try:
+        esc = body[:180].replace("\\", " ").replace('"', "'").replace("\n", " ")
+        subprocess.run(["osascript", "-e",
+                        f'display notification "{esc}" with title "karzat" subtitle "{subject}"'],
+                       capture_output=True, timeout=20)
+    except Exception:
+        pass
+
+
+def clear_local_warning() -> None:
+    """A marker nobody clears is a marker nobody believes."""
+    try:
+        (ROOT / "data" / "last_failure.json").unlink(missing_ok=True)
+    except Exception:
+        pass
 
 
 def _run(args: argparse.Namespace) -> int:
@@ -262,6 +300,15 @@ def _run(args: argparse.Namespace) -> int:
     py = [sys.executable]
 
     log(f"karzat nightly · {free_gb():.1f} GB free · cycle {CURRENT_CYCLE}")
+    # If the last run died, say so in the first three lines rather than leaving it forty thousand lines
+    # down. The log is append-only and nobody reads the middle of it.
+    _mark = ROOT / "data" / "last_failure.json"
+    if _mark.exists():
+        try:
+            _m = json.loads(_mark.read_text(encoding="utf-8"))
+            log(f"!! the previous run failed at {_m.get('at', '?')}: {str(_m.get('body'))[:200]}")
+        except Exception:
+            log("!! the previous run left a failure marker that cannot be read")
     before = corpus_state()
     log(f"before: {before[0]:,} votes listed, last sitting day {before[1] or '—'}")
 
@@ -395,6 +442,7 @@ def _run(args: argparse.Namespace) -> int:
         (ROOT / "data" / "last_publish.json").write_text(
             json.dumps({"published_at": datetime.now(timezone.utc).isoformat(), "builder": fp}) + "\n",
             encoding="utf-8")
+    clear_local_warning()
     log("published")
     return 0
 

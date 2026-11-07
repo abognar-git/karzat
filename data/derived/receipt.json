@@ -1,48 +1,48 @@
 {
- "built_at": "2026-09-03T05:45:34Z",
- "corpus_root": "5be424badcb2006932b50a59255b57be81984f03a3ba89df2b37087056677c3f",
- "payloads": 148555,
- "bytes": 2749268318,
+ "built_at": "2026-11-07T10:46:09Z",
+ "corpus_root": "c28875bc37823d4b28a98d3c717f44c852848250687d9a72b2efe8f0c7598163",
+ "payloads": 150706,
+ "bytes": 2766114122,
  "services": {
   "bizottsag": {
-   "root": "2e9a6aea6862d77538cb3d9deb011d868c5f198659b15078fba56a6c1ed09bcd",
-   "payloads": 35,
-   "bytes": 60633
+   "root": "5748b0250bbdb808ff98d2b39f21366d251d457cbb026494612f393cb17fb9c4",
+   "payloads": 38,
+   "bytes": 65723
   },
   "bizottsagok": {
-   "root": "404a4916924cfb9cfe7a5246aac9882adceaa50b9617e0d11e6b3571e91bb08b",
+   "root": "04e3192402dcd23366d21180c6041150d1c5769beb70e09632007c0eec59561e",
    "payloads": 1,
-   "bytes": 6826
+   "bytes": 7279
   },
   "felszolalas": {
-   "root": "3c267f5fff22a96316cbb48f9c75bff5681cd1f32e73cf1052939d636b27d59d",
-   "payloads": 60881,
-   "bytes": 314423137
+   "root": "b97ff034ecdf32710769aa46559fd729e23bafea39bc3d4b48c4186be0f30345",
+   "payloads": 62311,
+   "bytes": 321899266
   },
   "felszolalasok": {
-   "root": "d613bafd7aaa1d918b7034c7c72178ce9488168fe6bcb464aaf49f308391c136",
-   "payloads": 1860,
-   "bytes": 242339564
+   "root": "14a6f6bd3081d529b91a682889171e2479c7a4702faf00a9b7303de1de898e00",
+   "payloads": 1877,
+   "bytes": 244005834
   },
   "iromany": {
-   "root": "0c7562adf9c9b6cbc04a49fba74b187c3d04e5d65b93478611c815b46f15c488",
-   "payloads": 586,
-   "bytes": 2669043
+   "root": "4a1d8045175a127dc3a3fc710de38b78e33d53c1be70354b0921afa8839106c5",
+   "payloads": 1004,
+   "bytes": 3434943
   },
   "iromanyok": {
-   "root": "6b68de741292063d2dc3366baf99a22a268e588a5264d2dfc456583d1343ecf0",
+   "root": "892396bda97f72c35eb2fd7829eaac80e2eb02d753ca7999232f96b831d00641",
    "payloads": 1,
-   "bytes": 467094
+   "bytes": 732410
   },
   "kepviselo": {
-   "root": "41fba057659cc7879e05059a035e48ec80c1a9cd97834568d847a6b0cc2f5e61",
-   "payloads": 1636,
-   "bytes": 10784846
+   "root": "1d3374cf4ac6207cd0e04c6d0b67ddebcffdace7695953f3d0d2a3e8b1dbe7bf",
+   "payloads": 1638,
+   "bytes": 10923267
   },
   "kepviselok": {
-   "root": "477902cf8c3e0122ba38cf2fabf0e832a2c14721e15eb7b8c32794c4a64a43b3",
+   "root": "d92367a07b2b2e9c4769a9eacad6874e21510e55f3cd3dbdf6b680c788308054",
    "payloads": 1,
-   "bytes": 79845
+   "bytes": 80222
   },
   "portre": {
    "root": "b104771a99e384748de44d1f742f691c5de8cfca431b37b336372a473f9cceae",
@@ -50,14 +50,14 @@
    "bytes": 57159403
   },
   "szavazas": {
-   "root": "ee611161f89469c79c98ed83bd0dba873ce6f41dd70a1b6a0c4f6668d9ba0784",
-   "payloads": 79842,
-   "bytes": 1947861426
+   "root": "ea8ab18a255d588d1531f52ada131a8ffb9db2fed285cd5fa0541bab41536a5c",
+   "payloads": 80038,
+   "bytes": 1951856593
   },
   "szavazasok": {
-   "root": "f5cb505e50eabfbe84ba3980d4bd943fc6cfefeda7d4bb7a5b8af135af72ef36",
-   "payloads": 2107,
-   "bytes": 172857085
+   "root": "e75c98449fd87ecb7f5dbcee1700a9db125c87ecd2b31b6c71dd1267f360f8b0",
+   "payloads": 2192,
+   "bytes": 175384808
   },
   "szoszolok": {
    "root": "4528e8d1f9ab70d430fed16625265cd10226fc1ed1a1230255c137465b377ed3",
@@ -65,24 +65,24 @@
    "bytes": 4375
   },
   "ulesnap": {
-   "root": "5384e5b423c37726933e99370391c30e0888cca676cf54ee91805ccc4fef0205",
+   "root": "020432bca86b91f629f071658f5aafeb3a5b2e4fd16cecb67bbedadadbe4eef8",
    "payloads": 8,
-   "bytes": 555041
+   "bytes": 559999
   }
  },
  "code": {
-  "commit": "372cd54dfd998d2223470ed997c9685c09833fee",
-  "described": "372cd54-dirty",
+  "commit": "4f932a3a0513b67fc4b2adf31aa9536ae928ae16",
+  "described": "4f932a3-dirty",
   "clean": false,
-  "uncommitted_files": 11
+  "uncommitted_files": 16
  },
  "derived": {
   "a11y.json": "0d7e7c907fa9bb2892580245e3c6c02796c8319a40d1f68965def40c54a65946",
-  "committees.json": "b1a34e9d29bd450dfb11289293c3518f6aa0e922036ccf0634ab1ef2f3738d97",
+  "committees.json": "49fdfaa06f274024e9afcbf4e65beab1721e66741139700e85928023bce7b10a",
   "db_summary.json": "034203d161857c69484779b12a4ec5719be6e8b06dc8d3513963d4d1d2751e67",
-  "echo.json": "68d20791aa145f0a98bd3b7d91c7980bf48a1e21c9d2cd9635ae60b2bc4deaee",
-  "faction_switches.json": "a45cdc07e0a96c616f1265dc0de6130adc29f492917f050e358d96ce16e36623",
-  "first_light.json": "3693d78bd2fc7a2b1e127199dec1c9f8f66d59ab2c99dbcaae5e229e3e2228a8",
+  "echo.json": "61578198258ea156a46d4391b7d9c9d177ff94e36df84993522d0e934d528943",
+  "faction_switches.json": "6bb2cba4154e4677ff35def91271fc294d9b57b72b98a279e64cf365f7519142",
+  "first_light.json": "0d2c82182c5ffe8f89d2eea97439cbe56ebef40d84187e53defe837d9786e952",
   "first_light_ckl34.json": "265105540f6e33ec61003f818f9963b9cc37af3efe28f3a099cc79c024173e47",
   "first_light_ckl35.json": "0c0b9f1202dcb90e0b64370d4805386bf2d1b7a072bf7d33fa1c75062e2deb08",
   "first_light_ckl36.json": "cc6cb25a19bad905b15c99ad8555399cc2c04d5a0ab883cea98e970a1cbbfa12",
@@ -92,7 +92,7 @@
   "first_light_ckl40.json": "024029f00debb457c80df95a6278f34a25fdb1e3aa96618d9a91845741f9fc70",
   "first_light_ckl41.json": "893e409be9b71b9fe72b600a42d6a32f2e81076714eccb7a902024e5324dcbe2",
   "first_light_ckl42.json": "5fba57d17d631801425c5e37f115d476448f99f51b2ddece4f247b46b45422e2",
-  "hero_vote.json": "b8f8f85c89507231cf474b1f19c67a7e4fb2e8942084979c360c6983db2b9761",
+  "hero_vote.json": "0f8e00a95acd7212896818cd99197e2f123f9f94852782e23222513a0b0aa754",
   "hero_vote_ckl34.json": "6e1043e9a8910b7780d8495d611c8290d429c63793bad4c44cb918a05e42ec36",
   "hero_vote_ckl35.json": "a8273fa7047c26d9f5fdf2bb39b23f8ad7e986e2aae3c151de927cdb1c5ad2e7",
   "hero_vote_ckl36.json": "22855982997d6c966d3e5e445a501cd180ba8cba152e4e33338287bffe3b9d06",
@@ -102,10 +102,10 @@
   "hero_vote_ckl40.json": "a585f85b0a397273b4e7f849b7a7206df5b9fb328aa6386397dd6807f9f2c2bc",
   "hero_vote_ckl41.json": "7891f4c107b8f58505172ab0dafdffce6120264ef07254d4a7add4137dcf786d",
   "hero_vote_ckl42.json": "a2d0bec231b8d16cf0420d078a03131e6c64819dc4947b2dd429c6f433a6dc7f",
-  "idealpoints.json": "7ee8f6005cc004727859dfd5644b61723187d139d674fc6bb98d991517c5fac2",
-  "iromany_records.json": "0f468adbb9f3506e51fcf37bb5c2aad5d4018dfb5f44a84f90f8ac51fd2f2351",
-  "kormany.json": "090902fe1ba88b12987dca6a8c4246b1ebb518b9e346eb525b522f2b0c7aeb85",
-  "mps.json": "b62ed7cd517d6e6674a0f352b2b73a62665bfedcf9d9fb93426f7ea32fac5282",
+  "idealpoints.json": "f35817c2203d5e65605945b3a2e6caa4dbaa22b852d4aab824a2f4fa0c77fe61",
+  "iromany_records.json": "6a3ed28fa9eedc226eb86201270bac5693967d8c6e5ddd79c19d807a3d099ef6",
+  "kormany.json": "d1240765fc5fcb8896c2d6d6c014ed21fa465ae2b2afc53488a23ac994190b3c",
+  "mps.json": "df23a4b2de644be6715ab0c507759c7f3791353b79fcee593f90bef8d9f23b85",
   "mps_ckl34.json": "8bd3a47d72a234edcde7846c99939db280eb71b0b4684a7ef073ae5df478df0c",
   "mps_ckl35.json": "c0710ce3712900935c5eca40ece91473a47396b65add54bad6ae9baf02e93105",
   "mps_ckl36.json": "dfa236d0f8c4dc33123112ac1e1ccf2a31c5f19ab4ab3e9d59a2a55fb039476d",
@@ -115,16 +115,16 @@
   "mps_ckl40.json": "394cb3a1ed14a33d6a18cc8018650a88aca61527dcfdc1a4cac520622449a332",
   "mps_ckl41.json": "78290caf169e0f50c76b4d9a57d09f1fb812ca901268ae4a4b2a9d439d29ad13",
   "mps_ckl42.json": "5e0c9086f8e62d99c01855835b1c238416230ed7725e615bcb178ec7c3f5afd8",
-  "parquet.json": "8a16ee782e304a3d8c5e05bc4c2d76411819d0b9d02c781e55b315817fb64480",
+  "parquet.json": "3006f17476f5d8b4cbf6c69f71c9835f39641b801e2cf4d090dbcd682be12578",
   "portre.json": "9734e0da48223c432695ade4dc59e2ed40dfb96b0a7ab14a62d9f60806bae4d1",
-  "remuneration_history.json": "dbf1c3c706294107134f97424236ff56b28b391f86f43ae1618421f21e294e19",
+  "remuneration_history.json": "8897b54314a314807dd1b7c6045c1c46589c4a1a28b7dbea3959264830648eef",
   "search_bench.json": "9cfdb434a4c202dbdb3b201560ac52c61c4cc3071238e9f83d24bb83c606746f",
-  "seating.json": "a25b042c9234ecf68f95fb214c1555453a0f03bbfcdf82d6fc54caa1a9c1ebf2",
-  "speech_texts.json.gz": "8443a7c15e86208678d71fec42495c024a3a60d903f7e636338070ac947e56db",
+  "seating.json": "24d19647be305f4fd20177333231de66172ec44c257831acc32cd0f8c5e1f019",
+  "speech_texts.json.gz": "22427cb376752d58449efb84b0ff99aba961685a67f8f23c13a44dafc9f3d39a",
   "speech_texts_ckl40.json.gz": "d28e217a0fd557f455385e69b4d02581e3a9fd10af3cf18aaf567f356a70c7d5",
   "speech_texts_ckl41.json.gz": "72e2051f3dc2722f806fddeba5531312b6c667e9c9cbdf6796d9edbc93a1a188",
   "speech_texts_ckl42.json.gz": "0c7cabe3cf4017b53854d25d43acde9012b5904368904ced963051fbb152057d",
-  "speeches.json.gz": "0a8d6bcfd918d98af0ab2b253173170ea674412d2b42dd9070770665aa42dbea",
+  "speeches.json.gz": "865b5c4da1e3a357b0b1b146d43cbdf1aa02172361581b37ac77a60f546e7680",
   "speeches_ckl36.json.gz": "69096d70c47534e61e6cf57737f6c42b48f1b29410fbb62552c3e1e233d07605",
   "speeches_ckl37.json.gz": "9ecff524a16b85f6d69d19f41e79112090eb5e6b62507a90d00aed7301c01cf2",
   "speeches_ckl38.json.gz": "db8b05e38c48014d36a487d49e42be12448efb16cab62df61980be21357a303b",
@@ -132,10 +132,10 @@
   "speeches_ckl40.json.gz": "8ccd0aef104995f199fa5ab4245eb3fb5fb5b4597412f8c058f3059c46f71bc1",
   "speeches_ckl41.json.gz": "df9a18c4948b403ffc29ccaaefc6bcd1eb1e6a68212470ff207c80ea606d1518",
   "speeches_ckl42.json.gz": "50b158ea57c3a1ffd3d2d12abd146747443c0d28f5a1b94f2e996657f93ed5fb",
-  "szoszolok.json": "01e06a841dcc2ab3a5f797648284d99d485dd7e8aad093bd2e2f968cc19445b0",
-  "tenyek.json": "ac6d192d17ae5a581238eb1776b881ec7ca9d1bf5d41a36cbd9ecbba60d2cb27",
+  "szoszolok.json": "acaef896e7cfefb7afdf326c585a31cf1e8d98ae0349a6386266513f97765fee",
+  "tenyek.json": "3dd27161883239591da6e36a6c973c93673348c29729837b55de0b79c1fb916e",
   "traffic.json": "ba087ac26820bd74c32291dcb39f1bb44d7e4c5e35ba8f09d6792be915dd422c",
-  "votes_index.json": "f1df812dc14ff78e8820a0b8663f636f988567fcf317373c4a99bfe969411c52",
+  "votes_index.json": "b8b9644765ddd4b8f9ee2bfb44c56fc55f069054f8be7e9681be7e7dc2014f42",
   "votes_index_ckl34.json.gz": "147009639e36a8e21f1c3697b1f34d22bf74360e55d31c2fe31f522146c8541e",
   "votes_index_ckl35.json.gz": "fe8fa6100aec1cafc69d9aeb899081402b69f296eb68c762c185037bdd75826c",
   "votes_index_ckl36.json.gz": "d2ead66a155a12068eb5e00285cdb83626bd23f3eae00db5ee7cd5eabe2359f0",
@@ -145,7 +145,7 @@
   "votes_index_ckl40.json.gz": "0e6bedb8f25a3c5c6edc892a31a6c6536e87c7f30b7b0c386d3fa115df73babb",
   "votes_index_ckl41.json.gz": "6b6b13f01abe9749fac2a2efa24afd9cf4b4b7553cf068ec183d9ad3dde98dca",
   "votes_index_ckl42.json.gz": "67847fb85d23d6808e6e9a3b56f5e045d377b32f8cafc4724584b8c3d94cb7c2",
-  "votes_positions.json": "f78046b6eff87e433b85384a2fcdad47c1880a445d328375946a634a9d107813",
+  "votes_positions.json": "0495e86c1cb442155c651da08f0d1646ea1775a68b791d5070b74d4c37131b57",
   "votes_positions_ckl34.json.gz": "8404dbb366ffb6e02659df2ec540e77a54e41138ec968fd5aa856f14daca421a",
   "votes_positions_ckl35.json.gz": "d3e4878fdf375f9c786eeae047cd4682e77ffa004aa841d9ef307d5859fef13a",
   "votes_positions_ckl36.json.gz": "e83650d0fd2a604fc04e1e3bb22d96ed2d1b14695bb800ad573404eba06a89bb",

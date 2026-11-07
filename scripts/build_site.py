@@ -6250,7 +6250,18 @@ def build_speeches_page(inp: dict) -> str:
     """felszolalas/index.html — the cycle's speech lists day by day, the kinds, the classification and its check."""
     sp = inp["speeches"] or {}
     days = sp.get("days") or []
-    trs = "".join(f'<tr><td class="ts mono"><a href="nap{d["ulnap"]}.html">{esc(d["date"] or "")}</a></td><td class="num mono">{d["ulnap"]}</td><td class="num mono">{hu_num(d["speeches"])}</td><td class="num mono">{hu_num(d["substantive"])}</td></tr>' for d in reversed(days))
+    # A sitting day with no speech list yet gets a row but no link and no counts. The day pages are written
+    # from the speech rows, so a day the transcript has not reached has no page — and this table was linking
+    # one anyway, which is how ckl43/felszolalas/index.html came to point at nap42.html and the link check
+    # turned the gate red. Nor are its counts zero: nobody said nothing, we have not been told yet, and this
+    # site writes "—" for what it does not know.
+    def _dayrow(d: dict) -> str:
+        day = esc(d["date"] or "")
+        cell = f'<a href="nap{d["ulnap"]}.html">{day}</a>' if d.get("speeches") else day
+        n = (hu_num(d["speeches"]), hu_num(d["substantive"])) if d.get("speeches") else ("—", "—")
+        return (f'<tr><td class="ts mono">{cell}</td><td class="num mono">{d["ulnap"]}</td>'
+                f'<td class="num mono">{n[0]}</td><td class="num mono">{n[1]}</td></tr>')
+    trs = "".join(_dayrow(d) for d in reversed(days))
     tx = inp["texts"] or {}
     n_tx = len(tx.get("texts") or {})
     from karzat.normalise import SUBSTANTIVE_KINDS

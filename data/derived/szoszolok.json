@@ -146,7 +146,7 @@
      "to": null
     }
    ],
-   "speeches": 3,
+   "speeches": 4,
    "speeches_technical": 0,
    "cycles": [
     {
@@ -160,7 +160,7 @@
        "to": null
       }
      ],
-     "speeches": 3,
+     "speeches": 4,
      "speeches_technical": 0
     }
    ],
@@ -666,8 +666,8 @@
      "to": null
     }
    ],
-   "speeches": null,
-   "speeches_technical": null,
+   "speeches": 1,
+   "speeches_technical": 0,
    "cycles": [
     {
      "cycle": 43,
@@ -687,8 +687,8 @@
        "to": null
       }
      ],
-     "speeches": null,
-     "speeches_technical": null
+     "speeches": 1,
+     "speeches_technical": 0
     },
     {
      "cycle": 42,

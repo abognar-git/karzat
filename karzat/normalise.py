@@ -146,6 +146,12 @@ def _hu_date(s: Any) -> str | None:
     return f"{m.group(1)}-{m.group(2)}-{m.group(3)}" if m else None
 
 
+def fold_name(s: str) -> str:
+    """Accents off, case down — so Júlia and Julia are the same given name for comparison purposes only."""
+    import unicodedata
+    return unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode("ascii").casefold()
+
+
 def strip_honorific(name: str) -> str:
     return HONORIFICS.sub("", name.strip()).strip()
 
@@ -339,7 +345,46 @@ class NameResolver:
             return hit
         if not faction and self.histories:
             return None                                       # a faction-less label (not an MP's line) is taken only for a record spelled exactly so
-        return self._pick(self.by_bare.get(strip_honorific(name)) or set(), faction, on_date)
+        hit = self._pick(self.by_bare.get(strip_honorific(name)) or set(), faction, on_date)
+        if hit:
+            return hit
+        return self._by_short_given_name(strip_honorific(name), faction, on_date)
+
+    def _by_short_given_name(self, bare: str, faction: str | None, on_date: str | None) -> str | None:
+        """The House disagreeing with itself about a given name.
+
+        The roll call named "Kardosné Gyurkó Katalin (Fidesz)"; her own kepviselo.cgi record says
+        "Kardosné Gyurkó Kata". Both are parlament.hu. Wikidata has her — as Katalin — but her item carries
+        no P4966 yet, so the alias spine cannot bridge it either, and she arrived in the alignment as a name
+        where an id belongs: the first unresolved voting identity this cycle.
+
+        Hungarian registers short and full forms of the same given name freely (Kata/Katalin,
+        Zsuzsa/Zsuzsanna, Juli/Júlia), and the two services pick differently. So: every name token but the
+        last must match exactly, the last two must share at least four folded characters with one a prefix
+        of the other, and the usual faction check must leave exactly one candidate. Two people whose names
+        relate this way in one faction leave two candidates and stay unresolved, which is the right answer —
+        this widens who can be found, never who can be guessed at."""
+        parts = bare.split()
+        if len(parts) < 2:
+            return None
+        head, given = " ".join(parts[:-1]), fold_name(parts[-1])
+        if len(given) < 4:
+            return None
+        cands: set[str] = set()
+        for other, ids in self.by_bare.items():
+            op = other.split()
+            if len(op) < 2 or " ".join(op[:-1]) != head:
+                continue
+            og = fold_name(op[-1])
+            if og == given or len(og) < 4:
+                continue
+            short, long = sorted((og, given), key=len)
+            # A short form drops a syllable, not a name. Without a bound the rule merges Anna into
+            # Annabella — which the test caught before this shipped, and which would have been a worse
+            # fault than the one it fixes: a wrong identity reads exactly like a right one.
+            if long.startswith(short) and len(long) - len(short) <= 3:
+                cands |= ids
+        return self._pick(cands, faction, on_date)
 
 
 def record_histories(cache: "Path") -> dict[str, dict[str, Any]]:

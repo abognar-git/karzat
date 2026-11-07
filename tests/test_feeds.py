@@ -99,8 +99,13 @@ class Cycle43(unittest.TestCase):
                 self.assertIn(d["position"], ("igen", "nem", "tartozkodott"))
                 self.assertNotEqual(d["position"], d["plurality"])
                 self.assertIsNotNone(d["plurality"])
-        # a011 (Ágh Péter): 7 on his page, 7 in the events
-        self.assertEqual(sum(1 for e in self.events for d in e["dissents"] if d["azon"] == "a011"), 7)
+        # One member, counted twice from two directions: his own page and the feed must say the same number.
+        # This used to pin the number itself ("7"), which was true in August and is 11 now — so a growing
+        # cycle turned it red and, because the gate blocks publishing, froze the site. A count that moves
+        # with the record has to be read from the record.
+        a011 = self.inp["alignment"]["per_mp"]["a011"]["against"]
+        self.assertGreater(a011, 0, "the member picked for this check never broke with his faction")
+        self.assertEqual(sum(1 for e in self.events for d in e["dissents"] if d["azon"] == "a011"), a011)
 
     def test_feeds_and_page_agree_and_links_resolve(self):
         inp = self.inp
@@ -133,7 +138,8 @@ class Cycle43(unittest.TestCase):
         # the per-MP feed has as many entries as the page has dissents, and the page announces it
         mp_events = [{"vote": e["vote"], "dissents": [d]} for e in events for d in e["dissents"] if d["azon"] == "a011"]
         mp_xml = fd.dissent_feed(43, mp_events, updated, "../", "", "kepviselo/a011.xml", "kepviselo/a011.html", mp={"azon": "a011", "name": "Ágh Péter"})
-        self.assertEqual(len(parse(mp_xml).findall("a:entry", NS)), 7)
+        self.assertEqual(len(parse(mp_xml).findall("a:entry", NS)),
+                         inp["alignment"]["per_mp"]["a011"]["against"])
         page = build_mp_page(inp, "a011")
         self.assertIn('<link rel="alternate" type="application/atom+xml" href="a011.xml"', page)
         self.assertIn('href="a011.xml" type="application/atom+xml"', page)

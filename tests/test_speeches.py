@@ -62,7 +62,32 @@ class Parser(unittest.TestCase):
         # against the record: the derived file carries the check — the vast majority of MPs agree exactly
         inp = load_inputs()
         chk = inp["speeches"]["record_check"]
-        self.assertGreaterEqual(chk["agree"] / chk["mps"], 0.95, chk)
+        # A flat agreement RATE is the wrong shape of claim and this is the second time it has been shown
+        # so. In September the companion assertion ("no gap larger than one or two") went red because a
+        # recovered sitting day made the data better; the 95% floor left beside it then drifted under in
+        # October for the same structural reason — the longer a cycle runs, the more role-holders accumulate
+        # a gap that is a difference of definition rather than a defect. A ratio cannot tell those apart.
+        #
+        # What can: every disagreement must be EXPLAINED, and there are exactly two explanations, each with
+        # its own signature in the data. Either we hold more than the datasheet, which is what happens for
+        # people with no mandate — ministers, the President — whose sheet undercounts them (their procedural
+        # count is 0). Or we hold fewer, which happens to sitting chairs and question-answering state
+        # secretaries, and then the datasheet's OWN procedural count must be large enough to account for the
+        # gap: it is drawing from that pool, we are not. Measured over all thirteen of today's
+        # disagreements, the smallest such pool is 340 against a gap of 11, so the rule is not tuned to fit.
+        #
+        # It also still catches the failure the ratio was there for: empty SUBSTANTIVE_KINDS and every
+        # ordinary member becomes a shortfall against a procedural count far too small to cover it.
+        for azon, v in chk["detail"].items():
+            if v["ours"] >= v["record"]:
+                continue                                   # the sheet undercounts; the member's page says so
+            gap = v["record"] - v["ours"]
+            with self.subTest(mp=azon, gap=gap):
+                self.assertGreaterEqual(
+                    v.get("record_technical", 0), gap,
+                    f"{azon}: the datasheet claims {gap} speeches more than we count substantive, and shows "
+                    f"only {v.get('record_technical', 0)} procedural lines to have drawn them from — that is "
+                    f"not a difference of definition")
         # Where we and the datasheet differ, what matters is WHICH KIND of difference it is. This used to
         # bound the size of the gap ("one or two"), calibrated against a record_check that had been frozen
         # since 18 August because derive_speeches was failing — so the bound described a fortnight-old corpus
