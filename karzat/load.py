@@ -113,6 +113,11 @@ class Loader:
         self.conn = conn
         self.conn.execute("PRAGMA foreign_keys = OFF")   # loading order is ours; integrity checked at the end
         self.stats: Counter = Counter()
+        # Ids already given an INSERT OR IGNORE. The statement keeps the first row and drops every later one,
+        # so asking again can never change the result — and the vote loader was asking 18 million times, once
+        # per name on every roll call since 1990, for about 1,600 members and 18 factions.
+        self._seen_faction: set[str] = set()
+        self._seen_mp: set[str] = set()
 
     # -- schema -----------------------------------------------------------------------------
     def create_schema(self) -> None:
@@ -127,8 +132,9 @@ class Loader:
             self.conn.execute("INSERT OR IGNORE INTO ciklus(ckl, label, seats) VALUES (?,?,?)", (ckl, label or str(ckl), 199 if ckl >= 40 else 386))
 
     def _faction(self, fid: str | None, name: str | None = None) -> None:
-        if fid:
+        if fid and fid not in self._seen_faction:
             self.conn.execute("INSERT OR IGNORE INTO faction(id, name) VALUES (?, ?)", (fid, name or fid))
+            self._seen_faction.add(fid)
 
     # -- MPs --------------------------------------------------------------------------------
     def load_kepviselok(self, payload: dict[str, Any]) -> int:
@@ -297,13 +303,18 @@ class Loader:
         self.conn.execute("DELETE FROM vote_position WHERE vote_ts = ?", (ts,))
         self.conn.execute("DELETE FROM vote_faction_tally WHERE vote_ts = ?", (ts,))
         self.conn.execute("DELETE FROM vote_faction_majority WHERE vote_ts = ?", (ts,))
+        rows = []
         for p in v["positions"]:
-            if p.get("mp_azon"):
+            azon = p.get("mp_azon")
+            if azon and azon not in self._seen_mp:
                 # a resolved id we have no record for (a former MP): the roll call is evidence enough for a stub row
-                self.conn.execute("INSERT OR IGNORE INTO mp(azon, name) VALUES (?, ?)", (p["mp_azon"], p["name"]))
-            self.conn.execute("INSERT OR REPLACE INTO vote_position(vote_ts, mp_azon, mp_name, faction_id, position) VALUES (?,?,?,?,?)",
-                              (ts, p.get("mp_azon"), p["name_raw"], p["faction"], p["position"]))
+                self.conn.execute("INSERT OR IGNORE INTO mp(azon, name) VALUES (?, ?)", (azon, p["name"]))
+                self._seen_mp.add(azon)
+            rows.append((ts, azon, p["name_raw"], p["faction"], p["position"]))
             self._faction(p["faction"])
+        # one statement per roll call, not one per name: same rows, same order, same OR REPLACE semantics
+        self.conn.executemany("INSERT OR REPLACE INTO vote_position(vote_ts, mp_azon, mp_name, faction_id, position) VALUES (?,?,?,?,?)",
+                              rows)
         for t in v["faction_tallies"]:
             self._faction(t["faction"])
             self.conn.execute("INSERT OR REPLACE INTO vote_faction_tally(vote_ts, faction_id, igen, nem, tartozkodott, nem_szavazott, igazoltan_tavol, osszesen) VALUES (?,?,?,?,?,?,?,?)",

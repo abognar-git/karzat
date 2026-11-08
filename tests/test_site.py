@@ -2919,11 +2919,15 @@ class TheSiteIsAFunctionOfTheBuilderToo(unittest.TestCase):
                         "a builder change is decided after the age limit, so it can be skipped")
 
     def test_a_builder_change_is_never_answered_with_a_partial_rebuild(self):
-        """--quick rebuilds the open cycle only. That is right for a sitting day's votes and wrong for a
-        change of markup, which lands on every page in the tree."""
+        """An open-cycle build is right for a sitting day's votes and wrong for a change of markup, which
+        lands on every page in the tree — so a moved builder must force the whole tree, whatever else the
+        closed-cycle digest says."""
         src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
         line = next(l for l in src.splitlines() if 'run(py + ["-m", "scripts.build_site"]' in l)
-        self.assertIn("not builder_moved", line, "the intraday path would publish a half-restyled site")
+        self.assertIn('[] if full else ["--refresh"]', line)
+        decide = next(l for l in src.splitlines() if l.strip().startswith("full = "))
+        self.assertIn("builder_moved", decide, "the intraday path would publish a half-restyled site")
+        self.assertIn("closed_tree_present()", decide, "a cleared site/ would publish without nine cycles")
 
     def test_the_publish_stamp_records_what_built_it(self):
         """A fingerprint nobody writes down compares against nothing, and every run rebuilds forever."""

@@ -54,7 +54,11 @@ from karzat import export as ex  # noqa: E402
 from karzat import analytics as an  # noqa: E402
 from karzat import feeds as fd  # noqa: E402
 
-DERIVED = ROOT / "data" / "derived"
+# KARZAT_DERIVED points the whole build at another copy of data/derived. It exists for one test: the proof
+# that a closed cycle's pages do not depend on the open cycle's volatile files swaps those files for an
+# older real state and rebuilds, and doing that to the real directory would pull the ground from under every
+# other test running beside it.
+DERIVED = Path(os.environ["KARZAT_DERIVED"]) if os.environ.get("KARZAT_DERIVED") else ROOT / "data" / "derived"
 SEATING = DERIVED / "seating.json"
 SITE_DIR = ROOT / "site"
 SITE = SITE_DIR / "index.html"
@@ -3237,11 +3241,54 @@ def facts() -> list[dict]:
     return _FACTS
 
 
-def fact_for(page_path: str, depth: int) -> str:
+def closed_facts() -> list[dict]:
+    """The facts a closed cycle's pages may carry: records currently held by a closed cycle.
+
+    Every fact is a corpus-wide record, so even these can move — "the busiest sitting day" is cycle 38's
+    until the open cycle has a busier one. What they do not do is move every night. The facts that total the
+    whole corpus did, and since a page picks its fact by its own address from the whole pool, one new vote
+    by one member rewrote roughly a twelfth of the site: about 13,000 pages of closed cycles per changed
+    fact, re-built and re-uploaded nightly for a counter that ticked in 2026. On the 7 November deploy that
+    was most of 49,522 objects. The night one of these does change, the closed cycles' input digest changes
+    and the nightly builds the whole tree (scripts/nightly.py: closed_inputs_digest)."""
+    return closed_facts_from(facts())
+
+
+def closed_facts_from(pool: list[dict]) -> list[dict]:
+    """The one definition of which facts a closed cycle's pages may show — the builder and the nightly's
+    digest of what those pages depend on must never disagree about it."""
+    return [f for f in pool if f.get("holder_cycle") and f["holder_cycle"] != CURRENT_CYCLE]
+
+
+# What a closed cycle's pages are built from, measured rather than assumed. On 7 November a build of cycles 35
+# and 42 was traced for every file it opened, and then rebuilt with each open-cycle input swapped for its real
+# state of 3 September: not one of 53,339 output files changed. So those inputs are read and not used, and the
+# closed tree depends on exactly the builder's code, these files, the open roster's ids (cross-links to the
+# other cycles a member sat in) and closed_facts(). tests/test_site.py traces a closed build and fails if it
+# ever opens a file this list does not account for.
+CLOSED_PAGE_INPUTS = ("reference/parlament/listakorlat.json", "reference/valasztas/iranyitoszam.json",
+                      "reference/valasztas/oevk_telepules.json")
+CLOSED_PAGE_SEMANTIC = {"data/derived/mps.json": "the open roster's ids, for cross-cycle links",
+                        "data/derived/tenyek.json": "closed_facts() only"}
+CLOSED_PAGE_UNUSED = ("data/derived/echo.json", "data/derived/faction_switches.json", "data/derived/idealpoints.json",
+                      "data/derived/iromany_records.json", "data/derived/parquet.json", "data/derived/receipt.json",
+                      "data/derived/search_bench.json", "data/derived/portre.json")
+
+
+def closed_cycle_files() -> list[Path]:
+    """Every derived file that belongs to a closed cycle — its own data, which nothing should rewrite."""
+    out = []
+    for c in available_cycles():
+        if c != CURRENT_CYCLE:
+            out += sorted(DERIVED.glob(f"*_ckl{c}.*"))
+    return out
+
+
+def fact_for(page_path: str, depth: int, closed: bool = False) -> str:
     """One fact per page, chosen by the page's own address so the build stays reproducible and a reader who walks
     the site meets a different one each time. The link points at the page that proves it; the script rotates the
-    line on a click, drawing from the same pool."""
-    pool = facts()
+    line on a click, drawing from the whole pool. A closed cycle's pages draw only from closed_facts()."""
+    pool = closed_facts() if closed else facts()
     if not pool:
         return ""
     f = pool[int(hashlib.sha1(page_path.encode("utf-8")).hexdigest(), 16) % len(pool)]
@@ -3261,7 +3308,8 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
 
     `lines` is accepted and ignored: the 404 page used to pass its own, and the signature stays so that a caller
     which has something to say can be given a home for it deliberately rather than by accident."""
-    fact = fact_for(inp.get("_page_path") or f'c{inp["cycle"]}d{inp.get("_depth", 0)}', inp.get("_depth", 0) + inp["base_depth"])
+    fact = fact_for(inp.get("_page_path") or f'c{inp["cycle"]}d{inp.get("_depth", 0)}', inp.get("_depth", 0) + inp["base_depth"],
+                    closed=bool(inp.get("closed")) and not inp.get("site_wide"))
     log = (f'<span class="factline">&gt; {fact}<button type="button" class="more" data-fact-next title="másik tény">↻</button></span>'
            if fact else "")
     return f"""<footer class="kz-terminal"><div class="scan"></div>{CORNERS}

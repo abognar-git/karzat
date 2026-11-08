@@ -337,6 +337,18 @@ class NameResolver:
         return None
 
     def resolve(self, label: str, on_date: str | None = None) -> str | None:
+        """Memoised on (label, cycle). The date reaches the decision only through cycle_of_date — in
+        _consistent and _by_faction — so two dates in one cycle can never resolve a label differently, and
+        nothing writes to the resolver after __init__. Building the corpus database called this 17,982,469
+        times for about 1,600 distinct names: most of three minutes of a nine-minute load, answering the same
+        question again for every name on every roll call since 1990."""
+        key = (label, cycle_of_date(on_date) if on_date else None)
+        memo = self.__dict__.setdefault("_memo", {})
+        if key not in memo:
+            memo[key] = self._resolve(label, on_date)
+        return memo[key]
+
+    def _resolve(self, label: str, on_date: str | None = None) -> str | None:
         if label in self.exact:
             return self.exact[label]
         name, faction = self.split(label)

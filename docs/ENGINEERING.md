@@ -174,7 +174,7 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 514 tests
+python3 -m unittest discover -s tests -t .      # offline; 531 tests
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token
@@ -1184,6 +1184,42 @@ too. It re-enables itself through the API on every run.
 
 The script imports nothing outside the standard library and nothing from this repository, and a test holds
 it to that: independence that is not enforced is a dependency waiting to be added.
+
+## A nightly that took seven hours to do seventy-nine minutes of work
+
+The chain needs 79 minutes on an awake machine. On real nights it took three and a half to seven hours,
+and the reason was not in the code: on 7 November the Mac fell asleep 226 times between 03:00 and 09:00,
+woke for a few seconds every quarter of an hour, and the nightly advanced only in those slivers. A request
+that takes 0.2 s awake took 100 to 200 s. The launchd job now runs under `caffeinate -ims`, which holds a
+sleep assertion for exactly as long as the nightly lives and releases it when it exits. It only works on
+mains power, and a shut lid without an external display sleeps anyway — the watchdog is what notices that.
+
+The other half was rebuilding things that cannot have changed. The two closed cycles' pages were rebuilt
+and re-uploaded every night although no closed cycle ever gains a vote. **Skipping them is safe only if
+"cannot have changed" is proved, not assumed**, and the first attempt at the proof found two reasons it was
+false: a closed page carries a footer fact drawn from the whole corpus, and links to the same person in the
+other cycle. So each fact now records the cycle that holds it, a closed page draws only from facts held by
+closed cycles, and the nightly hashes everything a closed page is built from — the builder, the identity
+list, those facts, the reference files and the 55 per-cycle files — and rebuilds the closed tree only when
+that digest moves. `tests/test_closed_cycles.py` traces every file a closed-cycle build actually reads,
+proves each file declared unused really is unused by swapping in an old version and comparing the output
+byte for byte, and checks the digest moves when any input does.
+
+The corpus database is likewise rebuilt only when a content hash of its raw inputs changes, and when it is
+rebuilt the resolver remembers each (name, cycle) answer and votes go in by the batch rather than the row.
+
+Measured on two awake runs with votes to publish, before and after:
+
+| step | before | after |
+|---|---|---|
+| database | 9.0 min | 7.1 min (skipped when its inputs have not moved) |
+| build | 12.2 min | 1.2 min |
+| deploy | 22.4 min, 49,522 objects | 8.1 min, 7,415 objects |
+| tests | 23.2 min | 19.4 min (unchanged; the difference is noise) |
+| **total** | **79.4 min** | **48.1 min** |
+
+The first run after the change paid once for it: 110 minutes, because the closed tree had to be built and
+uploaded under its new footer facts. The tests are now the longest step, and they stay.
 
 ## Licence
 

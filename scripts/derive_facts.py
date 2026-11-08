@@ -63,8 +63,13 @@ def main(argv: list[str] | None = None) -> int:
     args = tuple(sorted(capped))
     facts: list[dict] = []
 
-    def add(hu_text: str, scope: str, href: str = "", **nums):
-        facts.append({"hu": hu_text, "scope": scope, "href": href, "numbers": nums})
+    def add(hu_text: str, scope: str, href: str = "", holder: int | None = None, **nums):
+        # holder_cycle: the cycle of the one row that currently holds the record, for the facts that are a
+        # record held by a single vote, day, speech or motion; None for the facts that total the whole
+        # corpus. It is NOT a promise that the fact cannot change — "the busiest sitting day" belongs to
+        # cycle 38 only until the open cycle has a busier one — but it is what lets a closed cycle's pages
+        # carry a fact that does not move every night, and the builder detects the night one does.
+        facts.append({"hu": hu_text, "scope": scope, "href": href, "holder_cycle": holder, "numbers": nums})
 
     def q(sql, params=()):
         return db.execute(sql, params).fetchall()
@@ -77,7 +82,7 @@ def main(argv: list[str] | None = None) -> int:
                    ORDER BY v.osszes_szavazat DESC LIMIT 1""", args):
         how = "igennel" if r["igen"] == r["osszes_szavazat"] else "nemmel"
         add(f'{hu_date(r["on_date"])}: mind a {hu(r["osszes_szavazat"])} szavazó képviselő {how} szavazott — a Ház egyhangúlag döntött.',
-            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', votes=r["osszes_szavazat"])
+            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', holder=r["ckl"], votes=r["osszes_szavazat"])
 
     # 2 — the narrowest decision
     # margin >= 0 matters: a handful of votes the record calls Elfogadva compute to a negative margin (the site's own
@@ -93,7 +98,7 @@ def main(argv: list[str] | None = None) -> int:
             gap = "egyetlen szavazaton" if r["margin"] == 1 else f'{hu(r["margin"])} szavazaton'
             text = (f'{hu_date(r["on_date"])}: {hu(r["igen"])} igen a szükséges {hu(r["needed"])} ellenében — '
                     f'{gap} múlt, hogy a javaslat átment.')
-        add(text, f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', margin=r["margin"])
+        add(text, f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', holder=r["ckl"], margin=r["margin"])
 
     # 3 — more yes than no, and still rejected: the qualified threshold at work
     rows = q(f"""SELECT COUNT(*) n FROM vote v WHERE v.kind='dontes' AND v.passed=0 AND v.igen > v.nem
@@ -106,7 +111,7 @@ def main(argv: list[str] | None = None) -> int:
     for r in q(f"""SELECT v.on_date, v.ckl, COUNT(*) n FROM vote v WHERE {safe}
                    GROUP BY v.on_date ORDER BY n DESC LIMIT 1""", args):
         add(f'{hu_date(r["on_date"])}: {hu(r["n"])} szavazás egyetlen ülésnapon.',
-            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/index.html', n=r["n"])
+            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/index.html', holder=r["ckl"], n=r["n"])
 
     # 5 — the longest service: most cycles held
     for r in q("""SELECT m.azon, m.name, COUNT(DISTINCT d.ckl) c FROM mp m JOIN mp_mandate d ON d.mp_azon=m.azon
@@ -128,7 +133,7 @@ def main(argv: list[str] | None = None) -> int:
                   ORDER BY t.chars DESC LIMIT 1"""):
         when = f', {hu_date(r["date"])}' if r["date"] else "."          # hu_date already ends in a full stop
         add(f'A leghosszabb betöltött felszólalás {hu(r["chars"])} karakter: {r["speaker"]}{when}',
-            f'{r["ckl"]}. ciklus (a szövegek 2022 óta)', f'ckl{r["ckl"]}/felszolalas/{r["ulnap"]}-{r["seq"]}.html', chars=r["chars"])
+            f'{r["ckl"]}. ciklus (a szövegek 2022 óta)', f'ckl{r["ckl"]}/felszolalas/{r["ulnap"]}-{r["seq"]}.html', holder=r["ckl"], chars=r["chars"])
 
     # 8 — how much of the record is the chair speaking
     for r in q("""SELECT COUNT(*) tot, SUM(kind='ülésvezetés') ulv FROM speech"""):
@@ -141,7 +146,7 @@ def main(argv: list[str] | None = None) -> int:
     for r in q("""SELECT committee, COUNT(DISTINCT mp_azon) n FROM mp_committee
                   WHERE to_date IS NULL AND (subcommittee IS NULL OR subcommittee = '')
                   GROUP BY committee ORDER BY n DESC LIMIT 1"""):
-        add(f'A legnépesebb bizottság most a {r["committee"]}: {hu(r["n"])} tag.', "43. ciklus", "ckl43/bizottsag/index.html", n=r["n"])
+        add(f'A legnépesebb bizottság most a {r["committee"]}: {hu(r["n"])} tag.', "43. ciklus", "ckl43/bizottsag/index.html", holder=43, n=r["n"])
 
     # 10 — the vote that split the House's own sides most: dissenters against their faction's plurality
     for r in q(f"""SELECT v.slug, v.ckl, v.on_date, COUNT(*) n FROM vote_position p
@@ -151,7 +156,7 @@ def main(argv: list[str] | None = None) -> int:
                    GROUP BY v.ts ORDER BY n DESC LIMIT 1""", args):
         add(f'{hu_date(r["on_date"])}: {hu(r["n"])} képviselő szavazott a saját frakciója többségétől eltérően — '
             f'ennél többen egyetlen név szerinti szavazáson sem.',
-            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', n=r["n"])
+            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/szavazas/{r["slug"]}.html', holder=r["ckl"], n=r["n"])
 
     # 11 — the House at night
     for r in q(f"""SELECT COUNT(*) n FROM vote v WHERE CAST(substr(v.ts,12,2) AS INTEGER) >= 22 AND {safe}""", args):
@@ -163,7 +168,7 @@ def main(argv: list[str] | None = None) -> int:
                    WHERE m.iromany IS NOT NULL AND {safe} GROUP BY m.iromany ORDER BY n DESC LIMIT 1""", args):
         num = "".join(ch for ch in (r["iromany"] or "").split("/")[-1] if ch.isdigit())
         add(f'A {r["iromany"]} jelű irományról {hu(r["n"])} alkalommal szavazott a Ház — több szavazás egyetlen irományról sem szólt.',
-            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/iromany/{num}.html' if num else "", n=r["n"])
+            f'{r["ckl"]}. ciklus', f'ckl{r["ckl"]}/iromany/{num}.html' if num else "", holder=r["ckl"], n=r["n"])
 
     db.close()
     out = {"count": len(facts), "note": "Minden állítás a korpuszból számolt; a rangsorok csak azokra a hónapokra "

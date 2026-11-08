@@ -1,12 +1,12 @@
 {
- "derived_at": "2026-11-07T11:29:00.884692+01:00",
- "last_sync_at": "2026-11-07T11:29:00.884692+01:00",
+ "derived_at": "2026-11-08T04:13:34.373016+01:00",
+ "last_sync_at": "2026-11-08T04:13:34.373016+01:00",
  "seats": 199,
  "since": "2026-05-01",
  "window": {
   "from": "2026-05-09",
   "to": "2026-11-03",
-  "list_files": 2192
+  "list_files": 2194
  },
  "votes": [
   {
@@ -25787,7 +25787,7 @@
    "position_counts": {
     "igen": 140,
     "nem_szavazott": 2,
-    "igazoltan_tavol": 10,
+    "bejelentett_hianyzo": 10,
     "nem": 45,
     "tartozkodott": 1
    },
@@ -29187,7 +29187,7 @@
     "igen": 180,
     "jelen_nem_szavazott": 5,
     "nem_szavazott": 6,
-    "igazoltan_tavol": 7
+    "bejelentett_hianyzo": 7
    },
    "present": 180,
    "present_basis": "nev_szerint: igen+nem+tart (a leadott szavazatok, az API „Összes szavazat” mezője)",
@@ -35863,7 +35863,7 @@
     "jelen_nem_szavazott": 1,
     "nem_szavazott": 2,
     "nem": 45,
-    "igazoltan_tavol": 6,
+    "bejelentett_hianyzo": 6,
     "tartozkodott": 6
    },
    "present": 189,

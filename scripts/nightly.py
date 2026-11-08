@@ -178,6 +178,123 @@ def published_fingerprint() -> str:
         return ""
 
 
+def closed_inputs_digest() -> str:
+    """A digest of everything a closed cycle's pages are built from (build_site.CLOSED_PAGE_INPUTS).
+
+    The nightly used to rebuild all ten cycles whenever the record moved, which is nine cycles of pages that
+    cannot change when a vote is cast in the tenth: about 155,000 of 162,000 pages, twelve minutes a night.
+    They are rebuilt now only when this digest differs from the one the live closed tree was built with.
+
+    It covers the builder's own code; each closed cycle's derived files; the reference files those pages read;
+    the open cycle's roster ids — the only part of mps.json a closed page uses, for its links to the other
+    cycles a member sat in; and the facts a closed page may carry, which are records held by a closed cycle and
+    move only on the night one is broken. Reading tenyek.json directly rather than through the builder's
+    cache keeps the digest honest about the file the build is about to read."""
+    import scripts.build_site as b
+    h = hashlib.sha256()
+    h.update(builder_fingerprint().encode("utf-8"))
+    roster = sorted((json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8")).get("mps") or {}))
+    h.update(json.dumps(roster).encode("utf-8"))
+    pool = json.loads((ROOT / "data" / "derived" / "tenyek.json").read_text(encoding="utf-8")).get("facts") or []
+    h.update(json.dumps(b.closed_facts_from(pool), sort_keys=True, ensure_ascii=False).encode("utf-8"))
+    for f in [ROOT / r for r in b.CLOSED_PAGE_INPUTS] + b.closed_cycle_files():
+        h.update(str(f.relative_to(ROOT)).encode("utf-8"))
+        h.update(f.read_bytes() if f.exists() else b"")
+    return h.hexdigest()[:16]
+
+
+def published_closed_digest() -> str:
+    try:
+        return json.loads((ROOT / "data" / "last_publish.json").read_text(encoding="utf-8")).get("closed_inputs") or ""
+    except Exception:
+        return ""
+
+
+def closed_tree_present() -> bool:
+    """A refresh writes only the open cycle and trusts the closed trees on disk to be the ones that are live.
+    If they are not there at all — site/ cleared to make room, a fresh clone — trusting them would publish a
+    site with nine cycles missing, so a missing tree means a full build."""
+    import scripts.build_site as b
+    for c in b.available_cycles():
+        if c == b.CURRENT_CYCLE:
+            continue
+        d = ROOT / "site" / b.cycle_dir(c)
+        if not (d / "index.html").exists() or not any((d / "szavazas").glob("*.html")):
+            return False
+    return True
+
+
+LOAD_SIDECAR = "karzat.sqlite.inputs.json"     # beside data/karzat.sqlite; ignored by data/*.json
+LOAD_RAW_DIRS = ("kepviselok", "kepviselo", "ulesnap", "szavazasok", "szavazas", "felszolalasok", "felszolalas",
+                 "iromanyok", "iromany")
+
+
+def load_inputs_digest(root: Path | None = None) -> tuple[str, dict]:
+    """A digest of everything `karzat load` builds the corpus database from, by CONTENT.
+
+    By content, because by date it would never match: every night sync-mps re-fetches all 1,638 member
+    records and watch_source re-asks 120 old roll calls, so their files are rewritten with the same bytes and
+    a fresh mtime. A file is re-hashed only when its size or mtime moved since the cached hash; the rest are
+    trusted from the cache, so a night costs a stat of each file and a hash of the few hundred rewritten.
+
+    The inputs: the raw payloads build_from_cache reads, the Wikidata snapshots that seed the resolver's
+    aliases, the schema, and every module under karzat/ — the loader's own code is as much an input as the
+    data it loads. Returns (digest, per-file cache)."""
+    root = root or ROOT
+    side = root / "data" / LOAD_SIDECAR
+    try:
+        cached = json.loads(side.read_text(encoding="utf-8")).get("files") or {}
+    except Exception:
+        cached = {}
+    paths = []
+    for d in LOAD_RAW_DIRS:
+        base = root / "data" / "raw" / d
+        if base.is_dir():
+            paths += [p for p in base.rglob("*") if p.is_file()]
+    paths += sorted((root / "reference" / "wikidata").glob("members_*.json"))
+    paths += sorted((root / "karzat").glob("*.py"))
+    paths += [root / "schema.sql"]
+    files: dict[str, list] = {}
+    h = hashlib.sha256()
+    for p in sorted(paths):
+        if not p.exists():
+            continue
+        st = p.stat()
+        rel = str(p.relative_to(root))
+        c = cached.get(rel)
+        sha = c[2] if c and c[0] == st.st_size and c[1] == st.st_mtime_ns else hashlib.sha256(p.read_bytes()).hexdigest()
+        files[rel] = [st.st_size, st.st_mtime_ns, sha]
+        h.update(rel.encode("utf-8")); h.update(sha.encode("ascii"))
+    return h.hexdigest()[:16], files
+
+
+def corpus_db_is_current(digest: str, root: Path | None = None) -> bool:
+    """The database was built from exactly these inputs — and is a database: a zero-byte file once stood in
+    for one for a fortnight, and a file with no `vote` table is not something derive_facts can use."""
+    import sqlite3
+    root = root or ROOT
+    db = root / "data" / "karzat.sqlite"
+    try:
+        built = json.loads((root / "data" / LOAD_SIDECAR).read_text(encoding="utf-8")).get("built_from")
+    except Exception:
+        return False
+    if built != digest or not db.exists() or db.stat().st_size == 0:
+        return False
+    try:
+        con = sqlite3.connect(f"file:{db}?mode=ro", uri=True)
+        ok = con.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='vote'").fetchone() is not None
+        con.close()
+        return ok
+    except Exception:
+        return False
+
+
+def save_load_sidecar(digest: str, files: dict, root: Path | None = None) -> None:
+    root = root or ROOT
+    (root / "data" / LOAD_SIDECAR).write_text(json.dumps({"built_from": digest, "files": files}) + "\n",
+                                              encoding="utf-8")
+
+
 def upload_cache(profile: str, bucket: str) -> None:
     """data/raw → s3://<ops>/cache and the sync state → state/, size-compared like the buildspec's own sync.
 
@@ -463,15 +580,34 @@ def _run(args: argparse.Namespace) -> int:
         # a fresh speech-text file and a stale speech list. The two disagreed, the echo pointed at a page
         # that was never written, and the gate went red — three weeks downstream of the actual fault.
         # So the failures are collected, named, and they stop the publish.
+        if step[:3] == ["-m", "karzat", "load"]:
+            # The database feeds one step, derive_facts, and is a pure function of its inputs: rebuilt only
+            # when they changed. On a night that builds for another reason — the builder moved, the weekly
+            # refresh — that is nine minutes saved; on a night with new votes it is rebuilt, as it must be.
+            digest, files = load_inputs_digest()
+            if not dry and corpus_db_is_current(digest):
+                log(f"corpus database: built from these exact inputs already ({digest}), not rebuilt")
+                continue
+            if run(py + step, dry=dry, allow_fail=True):
+                derive_failed.append(" ".join(step))
+            elif not dry:
+                save_load_sidecar(digest, files)
+            continue
         if run(py + step, dry=dry, allow_fail=True):
             derive_failed.append(" ".join(step))
     run(py + ["-m", "karzat", "freshness"], dry=dry, allow_fail=True)
     if derive_failed:
         raise SystemExit("derivations failed, so the site would be built from a mix of fresh and stale "
                          "inputs — refusing to build:\n  " + "\n  ".join(derive_failed))
-    if args.quick and builder_moved:
-        log("the intraday path rebuilds the open cycle only, and the builder moved — building the whole tree")
-    run(py + ["-m", "scripts.build_site"] + (["--refresh"] if args.quick and not builder_moved else []), dry=dry)
+    closed_digest = closed_inputs_digest()
+    full = builder_moved or closed_digest != published_closed_digest() or not closed_tree_present()
+    if full:
+        why = ("the builder moved" if builder_moved else "the closed cycles' trees are not on disk"
+               if not closed_tree_present() else "something a closed cycle's pages are built from changed")
+        log(f"full build: {why} ({published_closed_digest() or 'unknown'} → {closed_digest})")
+    else:
+        log("open-cycle build: nothing a closed cycle's pages are built from has changed")
+    run(py + ["-m", "scripts.build_site"] + ([] if full else ["--refresh"]), dry=dry)
 
     # ---- prove it before publishing --------------------------------------------------------------
     # The README's registered figures move with the record (sitting days, vote counts), and the gate
@@ -494,7 +630,10 @@ def _run(args: argparse.Namespace) -> int:
     run(py + deploy, dry=dry)
     if not dry:
         (ROOT / "data" / "last_publish.json").write_text(
-            json.dumps({"published_at": datetime.now(timezone.utc).isoformat(), "builder": fp}) + "\n",
+            json.dumps({"published_at": datetime.now(timezone.utc).isoformat(), "builder": fp,
+                        # the digest the LIVE closed trees were built with: refreshed only by a full build,
+                        # carried forward by an open-cycle one, so it always describes what is actually up
+                        "closed_inputs": closed_digest if full else published_closed_digest()}) + "\n",
             encoding="utf-8")
     clear_local_warning()
     log("published")

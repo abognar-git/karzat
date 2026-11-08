@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!-- karzat — the local half of the hybrid nightly.
+<!-- karzat: the local half of the hybrid nightly.
 
-     parlament.hu answers its API on the reader's network and serves its portal page to the datacenter's, so
-     the sync runs HERE, on the machine whose connection the service accepts. While the AWS account's silent
-     45-minute build cap stands (a new-account limit; a support case lifts it), this job runs the WHOLE
-     chain — sync, handover to s3://karzat-ops, build, tests, README gate, deploy — and alerts the same SNS
-     topic on failure. Once the cap is lifted: re-enable the karzat-nightly schedule (EventBridge Scheduler,
-     eu-central-1) and put --sync-only back in place of --refresh-days/--handover/--sns-topic below.
+     parlament.hu answered its API on the reader's network and served its portal page to the datacenter's
+     (August 2026; a probe on 7 November got the API's own 401 from a datacenter, so this may no longer hold),
+     so the sync runs HERE, on the machine whose connection the service accepts. While the AWS account's silent
+     45-minute build cap stands (a new-account limit; a support case lifts it), this job runs the WHOLE chain:
+     sync, handover to s3://karzat-ops, build, tests, README gate, deploy. It alerts the same SNS topic on
+     failure, leaves a local marker, and writes a heartbeat the GitHub watchdog reads. Once the cap is lifted:
+     re-enable the karzat-nightly schedule (EventBridge Scheduler, eu-central-1) and run the sync-only mode
+     here instead of the refresh-days, handover and sns-topic arguments below.
+
+     caffeinate. The Mac does not stay awake for a job started at 04:10: on 7 November it fell asleep 226
+     times between 03:00 and 09:00, waking for a few seconds every quarter of an hour, and the nightly
+     advanced only in those slivers. A request that takes 0.2 s awake took 100 to 200 s, and a chain that
+     needs 79 minutes awake took between three and a half and seven hours. caffeinate holds a sleep
+     assertion for exactly as long as its child runs and releases it when the child exits: -i idle sleep,
+     -m disk sleep, -s system sleep, the last only on mains power. On battery, or with the lid shut and no
+     external display, the Mac sleeps anyway, and the watchdog is what notices.
 
      Install:   cp config/hu.ogykarzat.sync.plist ~/Library/LaunchAgents/
                 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/hu.ogykarzat.sync.plist
@@ -15,14 +25,16 @@
      Log:       ~/Library/Logs/karzat-sync.log
 
      A calendar job the Mac sleeps through fires once on the next wake, so a closed laptop shifts the sync
-     rather than losing it; the scheduled build's --max-state-age guard turns a sync that stays missing into
-     a loud failure and an email, never into a quietly stale site. -->
+     rather than losing it; the watchdog turns a sync that stays missing into an email, never into a quietly
+     stale site. -->
 <plist version="1.0">
 <dict>
     <key>Label</key>
     <string>hu.ogykarzat.sync</string>
     <key>ProgramArguments</key>
     <array>
+        <string>/usr/bin/caffeinate</string>
+        <string>-ims</string>
         <string>/Users/host/.pyenv/versions/3.11.5/bin/python3</string>
         <string>-m</string>
         <string>scripts.nightly</string>

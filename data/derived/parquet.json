@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-07T10:44:34Z",
+ "built_at": "2026-11-07T18:16:54Z",
  "tables": {
   "szavazasok": {
    "rows": 80038,
@@ -31,7 +31,7 @@
   },
   "szavazatok": {
    "rows": 17483486,
-   "bytes": 2699771,
+   "bytes": 2699783,
    "columns": [
     "ciklus",
     "szavazas_id",
