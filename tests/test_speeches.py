@@ -222,8 +222,22 @@ class Digest(unittest.TestCase):
         cls.weeks = sitting_weeks(cls.inp)
         cls.dg = week_digests(cls.inp)
 
+    def test_an_announced_sitting_day_is_not_a_week_yet(self):
+        # The API lists the days the House has announced beside the days it sat. A week made of an announced day
+        # led every MP's page as "the most recent sitting week", "0 / 0" under it: a sitting reported missed
+        # before it had happened.
+        from copy import deepcopy
+        inp = deepcopy({k: self.inp[k] for k in ("idx", "by_ts", "order")})
+        today = inp["idx"]["derived_at"][:10]
+        inp["idx"]["sitting_days"] = [d for d in inp["idx"]["sitting_days"] if d.get("date", "") <= today] + \
+            [{"date": "2099-01-05", "ulnap": 9999}]
+        weeks = sitting_weeks(inp)
+        self.assertNotIn("2099-01-05", [d for w in weeks for d in w["days"]])
+        self.assertTrue(all(w["to"] <= today for w in weeks))
+
     def test_weeks_cover_every_sitting_day_and_add_up(self):
-        days = {d["date"] for d in self.inp["idx"]["sitting_days"]}
+        held = self.inp["idx"]["derived_at"][:10]
+        days = {d["date"] for d in self.inp["idx"]["sitting_days"] if d["date"] <= held}
         self.assertEqual(sum(len(w["days"]) for w in self.weeks), len(days))
         self.assertEqual([w["key"] for w in self.weeks], sorted((w["key"] for w in self.weeks), reverse=True))    # newest first
         self.assertEqual(hu_span("2026-08-10", "2026-08-11"), "2026. augusztus 10–11.")

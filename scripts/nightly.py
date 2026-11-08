@@ -141,6 +141,39 @@ def publish_age_days() -> float:
         return float("inf")
 
 
+FULL_PROOF_DAYS = 7
+
+
+def full_proof_age_days() -> float:
+    """Days since a publish that ran the whole proof — the browser audit and the whole-site link walk included —
+    by the receipt; infinity when none is recorded (every receipt before this field existed counts as none)."""
+    try:
+        t = json.loads((ROOT / "data" / "last_publish.json").read_text(encoding="utf-8")).get("full_proof_at")
+        return (datetime.now(timezone.utc) - datetime.fromisoformat(t)).total_seconds() / 86400 if t else float("inf")
+    except Exception:
+        return float("inf")
+
+
+def previous_full_proof_at() -> str | None:
+    try:
+        return json.loads((ROOT / "data" / "last_publish.json").read_text(encoding="utf-8")).get("full_proof_at")
+    except Exception:
+        return None
+
+
+def proves_quickly(quick_flag: bool, full_build: bool, proof_age: float) -> bool:
+    """Whether this run may skip the whole-site sweeps (the browser audit and the 160,000-document link walk).
+
+    A run that rebuilds only the open cycle may, for the reason --quick always could: the builder has not moved
+    and the closed trees are byte-identical, so the templates the browser audit reads did not change, and the
+    pages that did are link-checked by scoped_link_check(). Those sweeps were 6.6 of the nightly's 19 minutes
+    of tests. But the audit also weighs pages, and a page grows with the record, not with the code — the bill
+    index crossed its budget on a night no template moved. So the whole proof still runs at least weekly."""
+    if quick_flag:
+        return True
+    return not full_build and proof_age < FULL_PROOF_DAYS
+
+
 def builder_fingerprint() -> str:
     """A digest of the code and configuration the site's HTML is a function of.
 
@@ -615,9 +648,12 @@ def _run(args: argparse.Namespace) -> int:
     # then holds everything else. The first sitting the hybrid ever synced proved this order matters:
     # two announced sitting days arrived, the gate caught the stale sentence, and the run stopped short.
     run(py + ["-m", "scripts.check_readme", "--sync"], dry=dry)
-    for cmd in test_commands(quick=args.quick):
+    quick_proof = proves_quickly(args.quick, full, full_proof_age_days())
+    if quick_proof and not args.quick:
+        log("open-cycle build: the whole-site sweeps last ran within the week, so only what changed is proved")
+    for cmd in test_commands(quick=quick_proof):
         run(py + cmd, dry=dry)
-    if args.quick and not dry:
+    if quick_proof and not dry:
         scoped_link_check()
     run(py + ["-m", "scripts.check_readme"], dry=dry)
 
@@ -633,7 +669,10 @@ def _run(args: argparse.Namespace) -> int:
             json.dumps({"published_at": datetime.now(timezone.utc).isoformat(), "builder": fp,
                         # the digest the LIVE closed trees were built with: refreshed only by a full build,
                         # carried forward by an open-cycle one, so it always describes what is actually up
-                        "closed_inputs": closed_digest if full else published_closed_digest()}) + "\n",
+                        "closed_inputs": closed_digest if full else published_closed_digest(),
+                        # when the whole proof last ran on a publish: carried forward by a quick one
+                        "full_proof_at": (datetime.now(timezone.utc).isoformat() if not quick_proof
+                                          else previous_full_proof_at())}) + "\n",
             encoding="utf-8")
     clear_local_warning()
     log("published")

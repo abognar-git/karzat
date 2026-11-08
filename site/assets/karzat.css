@@ -497,3 +497,13 @@ html.kz-export .cov .all{fill:#3f3f46}
 html.kz-export .cov .named{fill:#a1a1aa}
 html.kz-export .turn .first{fill:#a1a1aa}
 html.kz-export .turn .back{fill:#3f3f46}
+/* On a phone the small mono controls were 12-18px tall — a month chip, a panel's link tag, the copy button,
+   the export buttons — under the 24px WCAG 2.2 sets as the floor for a target. A finger gets them taller;
+   a mouse keeps the dense desktop layout. */
+@media (pointer:coarse){
+  h2 .tag a,.kz-terminal .method a{display:inline-block;padding-block:6px}
+  .kz-topbar .brand{padding-block:6px}
+  .mostrip .mo{padding:7px 9px;line-height:1.2}
+  .cite-row .copy,button[data-lbl]{min-height:32px;padding-inline:10px}
+  .cite details summary{padding-block:8px}
+}

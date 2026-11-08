@@ -186,7 +186,11 @@ BUDGETS: dict[str, tuple[int, int]] = {
     "person index": (300_000, 27_000),               # every human the record has ever named
     "echo": (260_000, 12_000),
     "cycle index": (260_000, 9_000),
-    "bill index": (200_000, 9_000),
+    # The bill index lists every bill of the cycle and grows with it: 1,007 bills six months in and 218 kB,
+    # past the first budget on a night no template moved. A four-year cycle is about eight times that, more
+    # than one page should carry. This ceiling holds to roughly 2,700 bills — about a year from now — and
+    # when it trips again the answer is to paginate the index, not to raise this number a second time.
+    "bill index": (600_000, 9_000),
     "mp": (220_000, 8_000),
     "mp index": (420_000, 6_000),                    # 50 portraits, and they are 3 kB each
     "kepviselom": (480_000, 6_000),

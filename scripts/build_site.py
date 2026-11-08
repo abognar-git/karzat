@@ -1219,6 +1219,16 @@ html.kz-export .cov .all{fill:#3f3f46}
 html.kz-export .cov .named{fill:#a1a1aa}
 html.kz-export .turn .first{fill:#a1a1aa}
 html.kz-export .turn .back{fill:#3f3f46}
+/* On a phone the small mono controls were 12-18px tall — a month chip, a panel's link tag, the copy button,
+   the export buttons — under the 24px WCAG 2.2 sets as the floor for a target. A finger gets them taller;
+   a mouse keeps the dense desktop layout. */
+@media (pointer:coarse){
+  h2 .tag a,.kz-terminal .method a{display:inline-block;padding-block:6px}
+  .kz-topbar .brand{padding-block:6px}
+  .mostrip .mo{padding:7px 9px;line-height:1.2}
+  .cite-row .copy,button[data-lbl]{min-height:32px;padding-inline:10px}
+  .cite details summary{padding-block:8px}
+}
 """
 
 JS_HASJS = """
@@ -1365,13 +1375,22 @@ JS_PAGER = """
     wrap.parentNode.insertBefore(nav, wrap.nextSibling);
     function render(reset){
       if (reset) page = 1;
-      var rows = Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty') && !(r.cells.length === 1 && r.cells[0].colSpan > 1); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
+      // A table whose rows live outside the page (table.__virtual: the long closed-cycle directories) keeps
+      // only the shown page in the DOM; every other table hides and shows the rows it already has.
+      var V = table.__virtual;
+      var rows = V ? V.rows() : Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty') && !(r.cells.length === 1 && r.cells[0].colSpan > 1); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
       var total = vis.length, pages = Math.max(1, Math.ceil(total / per));
       if (page > pages) page = pages;
-      rows.forEach(function(r){ r.hidden = true; });
       var from = (page - 1) * per, to = Math.min(total, from + per);
-      vis.slice(from, to).forEach(function(r){ r.hidden = false; });
-      if (counter) counter.textContent = (total ? (from + 1) + '–' + to : '0') + ' / ' + total + (total !== rows.length ? ' (' + rows.length + ')' : '');
+      if (V) {
+        Array.prototype.slice.call(tbody.rows).forEach(function(r){ if (!r.classList.contains('empty')) tbody.removeChild(r); });
+        vis.slice(from, to).forEach(function(r){ r.hidden = false; tbody.appendChild(r); });
+      } else {
+        rows.forEach(function(r){ r.hidden = true; });
+        vis.slice(from, to).forEach(function(r){ r.hidden = false; });
+      }
+      var pending = tbody.hasAttribute('data-rest') && !V;
+      if (counter) counter.textContent = (total ? (from + 1) + '–' + to : '0') + ' / ' + total + (total !== rows.length ? ' (' + rows.length + ')' : '') + (pending ? ' · a többi ' + ((+tbody.getAttribute('data-total') || 0) - rows.length) + ' töltődik…' : '');
       if (pages <= 1 && per === per0 && total <= per0) { nav.innerHTML = ''; nav.hidden = true; return; }
       nav.hidden = false;
       var nums = [], seen = {};
@@ -1419,7 +1438,8 @@ JS_INDEX = """
   // say it is filtered is a list that lies about how much the House did.
   var month = (new URLSearchParams(location.search).get('m') || 'all');
   if (!/^\\d{4}-\\d{2}$/.test(month)) month = 'all';
-  var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
+  function hayOf(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); }
+  var hay = rows.map(hayOf), total = +tbody.getAttribute('data-total') || rows.length;
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   var table = tbody.closest('table');
   function render(){
@@ -1442,11 +1462,29 @@ JS_INDEX = """
     var mi = +month.slice(5, 7);
     var mnev = (mi >= 1 && mi <= 12) ? month.slice(0, 4) + '. ' + honap[mi - 1] : month;
     note.innerHTML = 'Ez a lista most csak egy hónapot mutat: <b>' + mnev + '</b> szavazásait. ' +
-      '<a href="' + location.pathname + '#dir">a teljes lista: mind a ' + rows.length + ' szavazás</a>';
+      '<a href="' + location.pathname + '#dir">a teljes lista: mind a ' + total + ' szavazás</a>';
     host.insertBefore(note, host.firstChild);
   }
   document.getElementById('q').addEventListener('input', function(e){ q = e.target.value.trim().toLowerCase(); render(); });
   render();
+  // The long directories bring the newest hundred rows in the page and the rest in one file: parsed once,
+  // kept out of the document, and handed to the pager, which puts only the shown page back in.
+  var rest = tbody.getAttribute('data-rest');
+  if (rest && window.fetch) {
+    fetch(rest).then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); }).then(function(list){
+      var t = document.createElement('tbody'); t.innerHTML = list.join('');
+      var more = Array.prototype.slice.call(t.rows);
+      rows = rows.concat(more); hay = hay.concat(more.map(hayOf));
+      table.__virtual = {rows: function(){ return rows; }};
+      render();
+    }).catch(function(){
+      tbody.removeAttribute('data-rest');
+      var p = document.createElement('p'); p.className = 'hero-meta prose';
+      p.innerHTML = 'A lista többi része most nem töltődött be. Mind a ' + total + ' szavazás megvan a <a href="adatok/szavazasok.csv">CSV-ben</a>.';
+      var w = tbody.closest('.tablewrap'); w.parentNode.insertBefore(p, w);
+      render();
+    });
+  }
 })();
 """
 
@@ -1984,12 +2022,58 @@ JS_SEARCH = """
     // start would also throw away környezetvédelmi and rendvédelmi, which are exactly what a reader
     // searching "védelem" wants. The ranking above is what separates them — the typed word first.
     if (t.length >= 6 && (t.slice(-4) === 'elem' || t.slice(-4) === 'alom')) v.push(t.slice(0, -2) + 'm');
+    // A bill number typed the way people type it: "t961" for T/961, "h12" for H/12.
+    var num = /^([a-z]{1,2})(\\d+)$/.exec(t);
+    if (num) v.push(num[1] + '/' + num[2]);
     return v;
+  }
+  // A typo found nothing at all, which said only "Nincs találat" and left the reader to guess why. When a
+  // word of the query matches no item, the nearest word the index actually holds is offered instead: one
+  // letter off for short words, two for long ones (swapped neighbours count as one), the commoner word on a tie.
+  var vocab = null;
+  function words(){
+    if (vocab) return vocab;
+    // keyed by the folded word, shown the way the titles write it: "alaptörvény", not "alaptorveny"
+    var seen = {}, shown = {};
+    items.forEach(function(it){ String((it.t || '') + ' ' + (it.s || '')).toLowerCase().split(/[^a-zà-ÿőű]+/).forEach(function(w){
+      if (w.length < 4) return; var f = fold(w); seen[f] = (seen[f] || 0) + 1; if (!shown[f]) shown[f] = w; }); });
+    vocab = Object.keys(seen).map(function(w){ return [w, seen[w], shown[w]]; });
+    return vocab;
+  }
+  function near(a, b, max){
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++) { d[i] = [i]; }
+    for (j = 1; j <= b.length; j++) d[0][j] = j;
+    for (i = 1; i <= a.length; i++) {
+      var low = max + 1;
+      for (j = 1; j <= b.length; j++) {
+        var c = a[i - 1] === b[j - 1] ? 0 : 1;
+        var x = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + c);
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) x = Math.min(x, d[i - 2][j - 2] + 1);
+        d[i][j] = x; if (x < low) low = x;
+      }
+      if (low > max) return max + 1;
+    }
+    return d[a.length][b.length];
+  }
+  function anywhere(vs){ for (var i = 0; i < items.length; i++) for (var k = 0; k < vs.length; k++) if (items[i].f.indexOf(vs[k]) >= 0) return true; return false; }
+  function suggestion(terms){
+    var changed = false;
+    var fixed = terms.map(function(t){
+      if (t.raw.length < 4 || /\\d/.test(t.raw) || anywhere(t.v)) return t.raw;
+      var max = t.raw.length >= 8 ? 2 : 1, best = null;
+      words().forEach(function(w){ var dd = near(t.raw, w[0], max); if (dd <= max && (!best || dd < best[1] || (dd === best[1] && w[1] > best[2]))) best = [w[2], dd, w[1]]; });
+      if (!best) return t.raw;
+      changed = true; return best[0];
+    });
+    return changed ? fixed.join(' ') : null;
   }
 
   function render(){
     var terms = fold(q.value).split(/\\s+/).filter(Boolean).map(function(t){
-      return {raw: t, v: variants(t)};
+      var v = variants(t);
+      return {raw: t, v: v, key: /^[a-z]{1,2}\\d+$/.test(t) ? v[v.length - 1] : t};
     });
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
     if (failed) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">A keresőindex (index.json) nem tölthető be — a listák külön oldalakon: irományok, képviselők, személyek.</td></tr>'; n.textContent = ''; return; }
@@ -2011,7 +2095,7 @@ JS_SEARCH = """
         // all shown became 773 of which the newest 200 held 39 typed matches. More recall, fewer answers.
         // The typed word now scores wherever it appears, so an item that literally says what was asked
         // outranks one reached through an abbreviation or a stem, and the cap cuts the weaker tail.
-        var t = terms[j].raw;
+        var t = terms[j].key;
         if (it.f.indexOf(t) >= 0) score += 4;
         if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1;
       }
@@ -2020,6 +2104,13 @@ JS_SEARCH = """
     hits.sort(function(a, b){ return b[0] - a[0] || (b[1].d || '').localeCompare(a[1].d || ''); });
     var shown = hits.slice(0, 200);
     out.innerHTML = shown.map(function(h){ var it = h[1]; return '<tr><td><a href="../' + esc(it.u) + '">' + esc(it.t) + '</a><span class="sub">' + esc(it.s) + '</span></td><td class="mono">' + esc(KIND[it.k] || it.k) + (it.n ? ' · ' + it.n + ' szavazás' : '') + '</td><td class="mono">' + (it.c ? it.c + '.' : '—') + '</td></tr>'; }).join('') || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
+    if (!hits.length) {
+      var fix = suggestion(terms);
+      if (fix) {
+        out.innerHTML = '<tr><td colspan="3" class="hero-meta">Nincs találat. Erre gondoltál: <a href="?q=' + encodeURIComponent(fix) + '" id="sfix">' + esc(fix) + '</a>?</td></tr>';
+        document.getElementById('sfix').addEventListener('click', function(e){ e.preventDefault(); q.value = fix; syncUrl(); render(); q.focus(); });
+      }
+    }
     n.textContent = hits.length + ' találat' + (hits.length > 200 ? ' (az első 200)' : '');
   }
   q.addEventListener('input', function(){ syncUrl(); load(render); });
@@ -3322,7 +3413,7 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     nem gyűjt látogatói adatot. Az <a href="{"../" * (inp.get("_depth", 0) + inp["base_depth"])}sajto/index.html">impresszum és a sajtóoldal</a> megmondja, mit
     szabad az oldalról átvenni, hogyan kell hivatkozni, és mit nem ad ez az oldal.
     <h3>Mit nem</h3>
-    Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek az oldal jelölései, nem a pártokéi. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
+    Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek a pártok saját színeit követik, ahogy a Wikipédia nyilvántartja őket. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
   </div>
 </footer>"""
 
@@ -3374,6 +3465,23 @@ def directory_row(v: dict) -> str:
             f'<td class="num mono">{v["igen"]} – {v["nem"]} – {v["tartozkodott"]}</td><td class="num mono">{margin}</td><td>{res}{flag}</td></tr>')
 
 
+# A closed cycle's directory was every vote of four years in one page: 21,674 rows and 785 kB gzipped for the
+# 34th, 8.7 MB for a browser to parse before the first filter answered. Past this many rows the page carries
+# the newest hundred and the rest arrive as one file the pager reads; the CSV beside it stays the complete,
+# script-free copy. The open cycle (hundreds of rows) is untouched and stays whole in its page.
+LAZY_ROWS_AFTER = 1000
+LAZY_ROWS_INLINE = 100
+LAZY_ROWS_FILE = "szavazasok-sorai.json"
+
+
+def directory_rows(inp: dict) -> tuple[list[str], list[str]]:
+    """(rows in the page, rows in LAZY_ROWS_FILE), newest first; the second is empty for a short directory."""
+    if "_dir_rows" not in inp:
+        rows = [directory_row(r) for r in reversed(inp["idx"]["votes"])]
+        inp["_dir_rows"] = (rows, []) if len(rows) <= LAZY_ROWS_AFTER else (rows[:LAZY_ROWS_INLINE], rows[LAZY_ROWS_INLINE:])
+    return inp["_dir_rows"]
+
+
 def cycle_title(cycle: int) -> str:
     """'2014. május 6. — 2018. május 7.' for a closed cycle; '2026. május 9. óta' for the open one."""
     span = CYCLE_SPAN.get(cycle, "")
@@ -3415,7 +3523,11 @@ def build_index(inp: dict, hero_ts: str) -> str:
     years = sorted({v["on_date"][:4] for v in idx["votes"]}, reverse=True)
     year_buttons = ('<div class="filters" role="group" aria-label="Szűrés év szerint"><button type="button" data-year="all" class="on">minden év</button>'
                     + "".join(f'<button type="button" data-year="{y}">{y}</button>' for y in years) + '</div>') if len(years) > 1 else ""
-    dir_rows = "".join(directory_row(row) for row in reversed(idx["votes"]))          # newest first, complete without JS
+    inline_rows, rest_rows = directory_rows(inp)                                      # newest first
+    dir_rows = "".join(inline_rows)
+    lazy_attr = f' data-rest="{LAZY_ROWS_FILE}" data-total="{len(inline_rows) + len(rest_rows)}"' if rest_rows else ""
+    lazy_note = (f'<noscript><p class="hero-meta prose">Itt a legfrissebb {LAZY_ROWS_INLINE} szavazás látszik. A többi {hu_num(len(rest_rows))} a lapozóval töltődik be; '
+                 f'script nélkül mind megvan a <a href="adatok/szavazasok.csv">CSV-ben</a>.</p></noscript>') if rest_rows else ""
     hero_date = hu_date(hero["on_date"])
     if inp["closed"]:
         result_rows = "".join(f'<tr><td>{esc(k)}</td><td class="num mono">{hu_num(v)}</td></tr>' for k, v in fl["by_result"].items())
@@ -3479,7 +3591,8 @@ def build_index(inp: dict, hero_ts: str) -> str:
   {year_buttons}
   <div class="filters" role="group" aria-label="Szűrés szükséges többség szerint">{rule_buttons}</div>
   <div class="filters" role="group" aria-label="Szűrés eredmény szerint">{result_buttons}<input id="q" type="search" placeholder="keresés --tárgy" aria-label="Keresés a tárgyban"><span class="n" id="n" aria-live="polite"></span></div>
-  <div class="tablewrap" tabindex="0"><table data-page-size="25" data-counter="n"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows">{dir_rows}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table data-page-size="25" data-counter="n"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows"{lazy_attr}>{dir_rows}</tbody></table></div>
+  {lazy_note}
 </section>
 """ + page_tail(inp, 0)
 
@@ -5870,7 +5983,14 @@ def sitting_weeks(inp: dict) -> list[dict]:
     {key: '2026-W33', from, to (the first and last sitting day of the week), days: [...], label}."""
     if "_weeks" in inp:
         return inp["_weeks"]
-    numbered = [d for d in inp["idx"].get("sitting_days") or [] if d.get("date")]
+    # Only sittings that have happened. The API's list also carries the days the House has announced, and a
+    # week made of an announced day was published as "the most recent sitting week" on every MP's page, with
+    # "0 / 0" under it — a sitting that had not taken place, reported as one everybody had missed. The cut is
+    # the derive's own date, the same "now" the freshness sentence uses to call those days announced.
+    today = datetime.fromisoformat(inp["idx"]["derived_at"]).astimezone(BUDAPEST).date().isoformat() \
+        if inp["idx"].get("derived_at") else None
+    numbered = [d for d in inp["idx"].get("sitting_days") or []
+                if d.get("date") and (today is None or d["date"] <= today)]
     days = sorted({d["date"] for d in numbered})
     if not days:                                                                # no ulesnap for the cycle: weeks from the votes' dates
         days = sorted({inp["by_ts"][t]["on_date"] for t in inp["order"]})
@@ -7264,6 +7384,11 @@ def build_cycle(out_dir: Path, cycle: int, index_only: bool = False, light: bool
     inp = load_inputs(cycle)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(build_index(inp, pick_hero(inp)), encoding="utf-8")
+    rest_rows = directory_rows(inp)[1]
+    if rest_rows:
+        (out_dir / LAZY_ROWS_FILE).write_text(json.dumps(rest_rows, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    elif (out_dir / LAZY_ROWS_FILE).exists():
+        (out_dir / LAZY_ROWS_FILE).unlink()                    # a directory that shrank back under the line
     n = k = 0
     w = _Writer()
     # Computed for every cycle, not only the ones whose pages are being written: the cross-cycle search index
@@ -7503,17 +7628,17 @@ def build_search_page(inp: dict, n_items: int) -> str:
 <div class="hero-h"><h1>Keresés</h1><small class="label" data-kz-text>{hu_num(n_items)} tétel · irományok, képviselők, pályaképek · minden betöltött ciklus</small></div>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Keresés</span><span class="tag">ékezet nélkül is · szám, cím, név</span></h2>
-  <p class="prose">A kereső a szó darabjaira illeszt, minden beírt szónak szerepelnie kell. Két dolgot ért
+  <div class="filters"><input id="sq" type="search" placeholder="pl. T/51 · alaptörvény · Ágh" aria-label="Keresés" autofocus style="min-width:min(100%,420px)"><span class="n" id="sn" aria-live="polite"></span></div>
+  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on">mind</button><button type="button" data-sk="iromany">irományok</button><button type="button" data-sk="kepviselo">képviselők</button><button type="button" data-sk="szemely">pályaképek</button><button type="button" data-sk="szoszolo">szószólók</button><button type="button" data-sk="kormany">kormánytagok</button></div>
+  <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
+  <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">A kereső JavaScriptet használ, és a böngésződben nem fut. Nélküle: a ciklusok <a href="../index.html">a főoldalról</a> nyílnak, a képviselők a ciklus <span class="mono">kepviselo/</span> lapjáról, az irományok az <span class="mono">iromany/</span> lapjáról — és a teljes rekord letölthető az <span class="mono">adatok/</span> tábláiból.</td></tr></tbody></table></div>
+  <p class="prose" style="margin-top:12px">A kereső a szó darabjaira illeszt, minden beírt szónak szerepelnie kell. Két dolgot ért
   meg magától, mert a törvények címe nem úgy beszél, ahogy az ember kérdez: a <b>rövidítéseket</b>
   (<span class="mono">btk · ptk · szja · tao · gdpr · mnb · hhsz · áfa</span>) a törvény teljes nevére
   fordítja, és a <b>szótári alakot</b> megtalálja a ragozott címekben is — a „védelem” a „védelmi” és a
   „védelméről” szavakat is előhozza. A cím szava szerint keres, nem téma szerint: ami a jegyzőkönyvben nem
   szerepel a címben, azt itt nem lehet megtalálni. A felszólalások <i>szövegében</i> a
   <a href="../{cycle_dir(CURRENT_CYCLE)}felszolalas/kereses.html">szavak keresője</a> keres.</p>
-  <div class="filters"><input id="sq" type="search" placeholder="pl. T/51 · alaptörvény · Ágh" aria-label="Keresés" autofocus style="min-width:min(100%,420px)"><span class="n" id="sn" aria-live="polite"></span></div>
-  <div class="filters" role="group" aria-label="Szűrés fajta szerint"><button type="button" data-sk="all" class="on">mind</button><button type="button" data-sk="iromany">irományok</button><button type="button" data-sk="kepviselo">képviselők</button><button type="button" data-sk="szemely">pályaképek</button><button type="button" data-sk="szoszolo">szószólók</button><button type="button" data-sk="kormany">kormánytagok</button></div>
-  <div class="filters" role="group" aria-label="Szűrés ciklus szerint">{cyc_buttons}</div>
-  <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Találat</th><th scope="col">Mi</th><th scope="col">Ciklus</th></tr></thead><tbody id="sres"><tr><td colspan="3" class="hero-meta">A kereső JavaScriptet használ, és a böngésződben nem fut. Nélküle: a ciklusok <a href="../index.html">a főoldalról</a> nyílnak, a képviselők a ciklus <span class="mono">kepviselo/</span> lapjáról, az irományok az <span class="mono">iromany/</span> lapjáról — és a teljes rekord letölthető az <span class="mono">adatok/</span> tábláiból.</td></tr></tbody></table></div>
   <noscript><div class="hero-meta prose" style="margin-top:8px">A kereső JavaScriptet használ. Nélküle a listák: <a href="../{cycle_dir(inp["cycle"])}iromany/index.html">irományok</a> · <a href="../{cycle_dir(inp["cycle"])}kepviselo/index.html">képviselők</a> · <a href="../szemely/index.html">személyek</a>.</div></noscript>
   <div class="hero-meta prose" style="margin-top:8px">A találatok listája a gépeléskor töltődik be (<span class="mono">kereses/index.json</span>); szavazások közvetlenül a ciklus címlapján kereshetők, tárgy szerint; a felszólalások szövegében a {inp["cycle"]}. ciklus <a href="../{cycle_dir(inp["cycle"])}felszolalas/kereses.html">felszólalás-keresője</a>.</div>
 </section>

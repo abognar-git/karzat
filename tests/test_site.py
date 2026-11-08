@@ -10,7 +10,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
+from scripts.build_site import LAZY_ROWS_FILE, LAZY_ROWS_INLINE, directory_row, directory_rows, CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
 from tests import node_bin, require_node
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -77,10 +77,27 @@ class Build(unittest.TestCase):
         cls.page = build()                                                  # the landing (site/index.html)
         cls.cyc = build_index(cls.inp, HERO_TS)                       # the current cycle's page (site/ckl43/index.html)
 
+    @staticmethod
+    def _clock_free(html: str) -> str:
+        # The two places the landing states WHEN: the top bar's sync stamp and the freshness sentence. A quiet
+        # night syncs, finds nothing new and rightly publishes nothing, yet moves both inputs — so the committed
+        # page differed from a fresh build after every quiet night, and this test failed for the pipeline doing
+        # its job. Both are proved elsewhere (sync_stamp, and karzat/freshness.py's own tests); what this test
+        # holds is everything else on the page, byte for byte.
+        html = re.sub(r'(<span class="kv sync">.*?<b>)[^<]*(</b>)', r"\1\2", html, count=1)
+        return re.sub(r'(<div class="fresh">.*?<span class="hu">)[^<]*(</span>)', r"\1\2", html)
+
     def test_committed_page_matches_a_fresh_build(self):
         self.assertTrue(SITE.exists(), "site/index.html missing — run python3 -m scripts.build_site")
-        self.assertEqual(SITE.read_text(encoding="utf-8"), self.page,
+        self.assertEqual(self._clock_free(SITE.read_text(encoding="utf-8")), self._clock_free(self.page),
                          "site/index.html is stale — rebuild with python3 -m scripts.build_site")
+
+    def test_the_mask_hides_only_the_clock(self):
+        masked = self._clock_free(self.page)
+        self.assertLess(len(self.page) - len(masked), 600, "the mask must take two sentences, not the page")
+        self.assertIn('<span class="kv sync">', masked)
+        self.assertNotEqual(self._clock_free(self.page.replace("karzat", "karzaT", 1)), masked,
+                            "a change outside the clock must still show")
 
     def test_only_the_index_and_assets_are_tracked(self):
         # everything else under site/ is generated and git-ignored; a tracked page would silently go stale
@@ -294,6 +311,7 @@ class Build(unittest.TestCase):
         self.assertIn("különbség +2", self.cyc)              # T/51: 135 igen, 133 needed
         self.assertIn("133 / 199", self.cyc)
         self.assertEqual(self.cyc.count("<tr data-rule="), self.n_votes)   # rendered at build time: complete without JS
+        self.assertNotIn("data-rest=", self.cyc)                         # the open cycle is short enough to stay whole
         self.assertNotIn('data-year="', self.cyc)                      # one year only → no year filter
         self.assertIn('href="../ckl42/index.html" class="near">42</a>', self.cyc)   # the other cycles, one click away (the top bar)
         self.assertIn('<span class="kicker" data-kz-text>43. ciklus · folyamatban</span><h1>2026. május 9. óta</h1>', self.cyc)
@@ -544,7 +562,14 @@ class Cycle42(unittest.TestCase):
 
     def test_index_is_complete_closed_and_one_level_down(self):
         page = build_index(self.inp, HERO_BY_CYCLE[42])
-        self.assertEqual(page.count("<tr data-rule="), 2599)
+        inline, rest = directory_rows(self.inp)
+        # past LAZY_ROWS_AFTER the page carries the newest hundred and the rest ride in one file — together, all of them
+        self.assertEqual(page.count("<tr data-rule="), LAZY_ROWS_INLINE)
+        self.assertEqual(page.count("<tr data-rule=") + len(rest), 2599)
+        self.assertIn(f'<tbody id="rows" data-rest="{LAZY_ROWS_FILE}" data-total="2599">', page)
+        self.assertEqual("".join(inline + rest), "".join(directory_row(v) for v in reversed(self.inp["idx"]["votes"])))
+        self.assertIn('<noscript><p class="hero-meta prose">Itt a legfrissebb 100 szavazás látszik.', page)
+        self.assertTrue(rest[-1].startswith("<tr data-rule="))                  # the oldest vote is the file's last row
         self.assertIn('href="../assets/karzat.css"', page)                   # site/ckl42/index.html → ../assets
         self.assertIn("Lezárt ciklus, 2022-05-02 – 2026-05-08: mind a 2\u00a0599 szavazás itt van.", page)
         self.assertNotIn("Frissítve 1", page)                                 # no relative age anywhere
@@ -571,7 +596,7 @@ class Cycle42(unittest.TestCase):
             self.assertIn(f">{entry}</a>", groups[label], f"{entry} is not under {label}")
         self.assertNotIn("ciklusok: ", page)                                      # the cycle list lives in the top bar, once
         self.assertEqual(page.count('data-year="'), 5 + 1)                     # 2022…2026 + 'minden év'
-        self.assertEqual(page.count('data-y="2023"'), 719)
+        self.assertEqual((page + "".join(directory_rows(self.inp)[1])).count('data-y="2023"'), 719)   # the page and its rest file
         self.assertIn("Egy szavazás, frakciónként", page)                     # not "az ülésteremben": no chamber for a closed cycle
         self.assertIn("2 599 szavazás", page.replace("\u00a0", " "))               # the lede counts the whole closed term
         self.assertIn("név szerint, frakciónként rendezve kirajzolva", page)  # the meta description
@@ -731,7 +756,7 @@ class AllCycles(unittest.TestCase):
                         self.assertIn((label, m["faction"]), rows, f"cycle {c}: {azon} {m['name']} roster faction {m['faction']} not in record")
                 # the index and the hero page build, and the directory is complete
                 page = build_index(inp, pick_hero(inp))
-                self.assertEqual(page.count("<tr data-rule="), len(inp["order"]))
+                self.assertEqual(page.count("<tr data-rule=") + len(directory_rows(inp)[1]), len(inp["order"]))
                 self.assertIn(f"{c}. ciklus" if c != 43 else "karzat", page)
                 hero = build_vote_page(inp, pick_hero(inp))
                 if inp["archive"]:

@@ -368,5 +368,24 @@ class TheResolverRemembersPerCycle(unittest.TestCase):
         self.assertEqual(len(calls), 2, "another cycle must be resolved on its own")
 
 
+class TheProofShrinksOnlyWithTheBuild(unittest.TestCase):
+    """An open-cycle build skips the whole-site sweeps; a full build, or a week without them, does not."""
+
+    def test_the_rule(self):
+        from scripts.nightly import FULL_PROOF_DAYS, proves_quickly
+        self.assertTrue(proves_quickly(False, full_build=False, proof_age=1))
+        self.assertFalse(proves_quickly(False, full_build=True, proof_age=1), "a moved builder changes templates")
+        self.assertFalse(proves_quickly(False, full_build=False, proof_age=FULL_PROOF_DAYS),
+                         "page weight grows with the record, so the audit still runs weekly")
+        self.assertFalse(proves_quickly(False, full_build=False, proof_age=float("inf")))
+        self.assertTrue(proves_quickly(True, full_build=True, proof_age=float("inf")), "--quick is the operator's call")
+
+    def test_the_nightly_uses_it_for_both_the_tests_and_the_scoped_walk(self):
+        src = (ROOT / "scripts" / "nightly.py").read_text(encoding="utf-8")
+        self.assertIn("test_commands(quick=quick_proof)", src)
+        self.assertIn("if quick_proof and not dry:\n        scoped_link_check()", src)
+        self.assertIn('"full_proof_at"', src)
+
+
 if __name__ == "__main__":
     unittest.main()

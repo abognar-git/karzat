@@ -174,7 +174,8 @@ and each index links the other cycle in words, not just in the top bar's switch.
 Python 3.11 or newer (`zoneinfo`, `str | None`), `requests`; on Windows also `tzdata` (see `requirements.txt`).
 
 ```bash
-python3 -m unittest discover -s tests -t .      # offline; 531 tests
+python3 -m unittest discover -s tests -t .      # offline; 535 tests
+python3 -m scripts.run_tests                     # the same tests across the cores, as the nightly runs them
 python3 -m scripts.check_readme                  # every registered number in this file, recomputed (--sync rewrites)
 python3 -m karzat dry-run                        # request URLs, no network
 cp .env.example .env                             # then paste the token

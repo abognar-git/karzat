@@ -246,13 +246,22 @@
     wrap.parentNode.insertBefore(nav, wrap.nextSibling);
     function render(reset){
       if (reset) page = 1;
-      var rows = Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty') && !(r.cells.length === 1 && r.cells[0].colSpan > 1); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
+      // A table whose rows live outside the page (table.__virtual: the long closed-cycle directories) keeps
+      // only the shown page in the DOM; every other table hides and shows the rows it already has.
+      var V = table.__virtual;
+      var rows = V ? V.rows() : Array.prototype.slice.call(tbody.rows).filter(function(r){ return !r.classList.contains('empty') && !(r.cells.length === 1 && r.cells[0].colSpan > 1); }), vis = rows.filter(function(r){ return !r.hasAttribute('data-x'); });
       var total = vis.length, pages = Math.max(1, Math.ceil(total / per));
       if (page > pages) page = pages;
-      rows.forEach(function(r){ r.hidden = true; });
       var from = (page - 1) * per, to = Math.min(total, from + per);
-      vis.slice(from, to).forEach(function(r){ r.hidden = false; });
-      if (counter) counter.textContent = (total ? (from + 1) + '–' + to : '0') + ' / ' + total + (total !== rows.length ? ' (' + rows.length + ')' : '');
+      if (V) {
+        Array.prototype.slice.call(tbody.rows).forEach(function(r){ if (!r.classList.contains('empty')) tbody.removeChild(r); });
+        vis.slice(from, to).forEach(function(r){ r.hidden = false; tbody.appendChild(r); });
+      } else {
+        rows.forEach(function(r){ r.hidden = true; });
+        vis.slice(from, to).forEach(function(r){ r.hidden = false; });
+      }
+      var pending = tbody.hasAttribute('data-rest') && !V;
+      if (counter) counter.textContent = (total ? (from + 1) + '–' + to : '0') + ' / ' + total + (total !== rows.length ? ' (' + rows.length + ')' : '') + (pending ? ' · a többi ' + ((+tbody.getAttribute('data-total') || 0) - rows.length) + ' töltődik…' : '');
       if (pages <= 1 && per === per0 && total <= per0) { nav.innerHTML = ''; nav.hidden = true; return; }
       nav.hidden = false;
       var nums = [], seen = {};
@@ -608,7 +617,8 @@
   // say it is filtered is a list that lies about how much the House did.
   var month = (new URLSearchParams(location.search).get('m') || 'all');
   if (!/^\d{4}-\d{2}$/.test(month)) month = 'all';
-  var hay = rows.map(function(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); });
+  function hayOf(r){ var more = r.querySelector('.more'); return ((r.textContent || '') + ' ' + (more ? more.getAttribute('title') : '')).toLowerCase(); }
+  var hay = rows.map(hayOf), total = +tbody.getAttribute('data-total') || rows.length;
   function press(sel, on){ document.querySelectorAll(sel).forEach(function(x){ var isOn = x === on; x.classList.toggle('on', isOn); x.setAttribute('aria-pressed', isOn ? 'true' : 'false'); }); }
   var table = tbody.closest('table');
   function render(){
@@ -631,11 +641,29 @@
     var mi = +month.slice(5, 7);
     var mnev = (mi >= 1 && mi <= 12) ? month.slice(0, 4) + '. ' + honap[mi - 1] : month;
     note.innerHTML = 'Ez a lista most csak egy hónapot mutat: <b>' + mnev + '</b> szavazásait. ' +
-      '<a href="' + location.pathname + '#dir">a teljes lista: mind a ' + rows.length + ' szavazás</a>';
+      '<a href="' + location.pathname + '#dir">a teljes lista: mind a ' + total + ' szavazás</a>';
     host.insertBefore(note, host.firstChild);
   }
   document.getElementById('q').addEventListener('input', function(e){ q = e.target.value.trim().toLowerCase(); render(); });
   render();
+  // The long directories bring the newest hundred rows in the page and the rest in one file: parsed once,
+  // kept out of the document, and handed to the pager, which puts only the shown page back in.
+  var rest = tbody.getAttribute('data-rest');
+  if (rest && window.fetch) {
+    fetch(rest).then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); }).then(function(list){
+      var t = document.createElement('tbody'); t.innerHTML = list.join('');
+      var more = Array.prototype.slice.call(t.rows);
+      rows = rows.concat(more); hay = hay.concat(more.map(hayOf));
+      table.__virtual = {rows: function(){ return rows; }};
+      render();
+    }).catch(function(){
+      tbody.removeAttribute('data-rest');
+      var p = document.createElement('p'); p.className = 'hero-meta prose';
+      p.innerHTML = 'A lista többi része most nem töltődött be. Mind a ' + total + ' szavazás megvan a <a href="adatok/szavazasok.csv">CSV-ben</a>.';
+      var w = tbody.closest('.tablewrap'); w.parentNode.insertBefore(p, w);
+      render();
+    });
+  }
 })();
 
 
@@ -854,12 +882,58 @@
     // start would also throw away környezetvédelmi and rendvédelmi, which are exactly what a reader
     // searching "védelem" wants. The ranking above is what separates them — the typed word first.
     if (t.length >= 6 && (t.slice(-4) === 'elem' || t.slice(-4) === 'alom')) v.push(t.slice(0, -2) + 'm');
+    // A bill number typed the way people type it: "t961" for T/961, "h12" for H/12.
+    var num = /^([a-z]{1,2})(\d+)$/.exec(t);
+    if (num) v.push(num[1] + '/' + num[2]);
     return v;
+  }
+  // A typo found nothing at all, which said only "Nincs találat" and left the reader to guess why. When a
+  // word of the query matches no item, the nearest word the index actually holds is offered instead: one
+  // letter off for short words, two for long ones (swapped neighbours count as one), the commoner word on a tie.
+  var vocab = null;
+  function words(){
+    if (vocab) return vocab;
+    // keyed by the folded word, shown the way the titles write it: "alaptörvény", not "alaptorveny"
+    var seen = {}, shown = {};
+    items.forEach(function(it){ String((it.t || '') + ' ' + (it.s || '')).toLowerCase().split(/[^a-zà-ÿőű]+/).forEach(function(w){
+      if (w.length < 4) return; var f = fold(w); seen[f] = (seen[f] || 0) + 1; if (!shown[f]) shown[f] = w; }); });
+    vocab = Object.keys(seen).map(function(w){ return [w, seen[w], shown[w]]; });
+    return vocab;
+  }
+  function near(a, b, max){
+    if (Math.abs(a.length - b.length) > max) return max + 1;
+    var d = [], i, j;
+    for (i = 0; i <= a.length; i++) { d[i] = [i]; }
+    for (j = 1; j <= b.length; j++) d[0][j] = j;
+    for (i = 1; i <= a.length; i++) {
+      var low = max + 1;
+      for (j = 1; j <= b.length; j++) {
+        var c = a[i - 1] === b[j - 1] ? 0 : 1;
+        var x = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + c);
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) x = Math.min(x, d[i - 2][j - 2] + 1);
+        d[i][j] = x; if (x < low) low = x;
+      }
+      if (low > max) return max + 1;
+    }
+    return d[a.length][b.length];
+  }
+  function anywhere(vs){ for (var i = 0; i < items.length; i++) for (var k = 0; k < vs.length; k++) if (items[i].f.indexOf(vs[k]) >= 0) return true; return false; }
+  function suggestion(terms){
+    var changed = false;
+    var fixed = terms.map(function(t){
+      if (t.raw.length < 4 || /\d/.test(t.raw) || anywhere(t.v)) return t.raw;
+      var max = t.raw.length >= 8 ? 2 : 1, best = null;
+      words().forEach(function(w){ var dd = near(t.raw, w[0], max); if (dd <= max && (!best || dd < best[1] || (dd === best[1] && w[1] > best[2]))) best = [w[2], dd, w[1]]; });
+      if (!best) return t.raw;
+      changed = true; return best[0];
+    });
+    return changed ? fixed.join(' ') : null;
   }
 
   function render(){
     var terms = fold(q.value).split(/\s+/).filter(Boolean).map(function(t){
-      return {raw: t, v: variants(t)};
+      var v = variants(t);
+      return {raw: t, v: v, key: /^[a-z]{1,2}\d+$/.test(t) ? v[v.length - 1] : t};
     });
     if (!terms.length) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">Kezdj el gépelni.</td></tr>'; n.textContent = ''; return; }
     if (failed) { out.innerHTML = '<tr><td colspan="3" class="hero-meta">A keresőindex (index.json) nem tölthető be — a listák külön oldalakon: irományok, képviselők, személyek.</td></tr>'; n.textContent = ''; return; }
@@ -881,7 +955,7 @@
         // all shown became 773 of which the newest 200 held 39 typed matches. More recall, fewer answers.
         // The typed word now scores wherever it appears, so an item that literally says what was asked
         // outranks one reached through an abbreviation or a stem, and the cap cuts the weaker tail.
-        var t = terms[j].raw;
+        var t = terms[j].key;
         if (it.f.indexOf(t) >= 0) score += 4;
         if (it.ft === t) score += 3; else if (it.ft.indexOf(t) === 0) score += 2; else if (it.ft.indexOf(t) >= 0) score += 1;
       }
@@ -890,6 +964,13 @@
     hits.sort(function(a, b){ return b[0] - a[0] || (b[1].d || '').localeCompare(a[1].d || ''); });
     var shown = hits.slice(0, 200);
     out.innerHTML = shown.map(function(h){ var it = h[1]; return '<tr><td><a href="../' + esc(it.u) + '">' + esc(it.t) + '</a><span class="sub">' + esc(it.s) + '</span></td><td class="mono">' + esc(KIND[it.k] || it.k) + (it.n ? ' · ' + it.n + ' szavazás' : '') + '</td><td class="mono">' + (it.c ? it.c + '.' : '—') + '</td></tr>'; }).join('') || '<tr><td colspan="3" class="hero-meta">Nincs találat.</td></tr>';
+    if (!hits.length) {
+      var fix = suggestion(terms);
+      if (fix) {
+        out.innerHTML = '<tr><td colspan="3" class="hero-meta">Nincs találat. Erre gondoltál: <a href="?q=' + encodeURIComponent(fix) + '" id="sfix">' + esc(fix) + '</a>?</td></tr>';
+        document.getElementById('sfix').addEventListener('click', function(e){ e.preventDefault(); q.value = fix; syncUrl(); render(); q.focus(); });
+      }
+    }
     n.textContent = hits.length + ' találat' + (hits.length > 200 ? ' (az első 200)' : '');
   }
   q.addEventListener('input', function(){ syncUrl(); load(render); });

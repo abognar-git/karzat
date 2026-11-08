@@ -8,8 +8,12 @@
 # kepviselok.cgi / <kepvcsop-tagsagok> before publishing, and match `id` to the API's spelling.
 # tests/test_wikidata.py asserts the seat counts below equal the snapshot's summary.
 #
-# Colours are this project's presentation colours, not the parties' brands (Fidesz orange is
-# the one conventional pick); TISZA is teal so it sits far from orange, blue and green. sort_order: left→right as the chamber is
+# Colours follow each party's own, as Wikipedia's party data (Module:Political party) records them, so a
+# reader recognises the chamber without the legend: Fidesz orange (#FF6A00 there), TISZA blue, Mi Hazánk
+# olive (#688D1B exactly), KDNP khaki (#938862 exactly). TISZA's recorded light blue (#88E8FF) vanishes on
+# the white of an exported picture (1.4:1), so it is drawn a deeper blue that holds 3:1 on both grounds.
+# KDNP was blue until November 2026 and gave it up because two blues cannot share a chamber; one colour per
+# party across every cycle, so the change runs through the blocks below too. sort_order: left→right as the chamber is
 # drawn — the reconstructed floor plan (reference/parlament/patko_seats.json) puts the opposition in sectors 1–2 on the left and
 # the government (TISZA) in sectors 3–6 on the right, i.e. the government benches to the Speaker's right; the same
 # opposition-left, government-right order is what every earlier cycle's block below uses.
@@ -19,7 +23,7 @@ seats: 199
 factions:
   - id: TISZA
     name: Tisztelet és Szabadság Párt
-    colour: "#1f8a70"
+    colour: "#1e96d2"
     sort_order: 90
     wikidata_group: Tisztelet és Szabadság Párt
     wikidata_group_qid: Q125418097
@@ -33,14 +37,14 @@ factions:
     wikidata_seats_2026_08_18: 44
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 70
     wikidata_group: Kereszténydemokrata Néppárt
     wikidata_group_qid: Q277879
     wikidata_seats_2026_08_18: 8
   - id: "Mi Hazánk"
     name: Mi Hazánk Mozgalom
-    colour: "#4f8a3a"
+    colour: "#688d1b"
     sort_order: 80
     wikidata_group: Mi Hazánk Mozgalom
     wikidata_group_qid: Q55443054
@@ -84,7 +88,7 @@ factions_ckl42:
     sort_order: 40
   - id: "Mi Hazánk"
     name: Mi Hazánk Mozgalom
-    colour: "#4f8a3a"
+    colour: "#688d1b"
     sort_order: 45
   - id: független
     name: Független képviselők
@@ -96,7 +100,7 @@ factions_ckl42:
     sort_order: 55
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 60
   - id: Fidesz
     name: Fidesz – Magyar Polgári Szövetség
@@ -162,7 +166,7 @@ factions_ckl41:
     sort_order: 70
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 80
   - id: Fidesz
     name: Fidesz – Magyar Polgári Szövetség
@@ -193,7 +197,7 @@ factions_ckl40:
     sort_order: 50
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 60
   - id: Fidesz
     name: Fidesz – Magyar Polgári Szövetség
@@ -220,7 +224,7 @@ factions_ckl39:
     sort_order: 40
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 50
   - id: Fidesz
     name: Fidesz – Magyar Polgári Szövetség
@@ -235,7 +239,7 @@ factions_ckl38:
     sort_order: 10
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 20
   - id: MDF
     name: Magyar Demokrata Fórum
@@ -316,7 +320,7 @@ factions_ckl35:
     sort_order: 10
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 20
   - id: FKGP
     name: Független Kisgazda-, Földmunkás- és Polgári Párt
@@ -363,7 +367,7 @@ factions_ckl34:
     sort_order: 40
   - id: KDNP
     name: Kereszténydemokrata Néppárt
-    colour: "#2c6db2"
+    colour: "#938862"
     sort_order: 50
   - id: EKgP
     name: Egyesült Kisgazdapárt
