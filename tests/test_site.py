@@ -10,7 +10,7 @@ import re
 import unittest
 from pathlib import Path
 
-from scripts.build_site import LAZY_ROWS_FILE, LAZY_ROWS_INLINE, directory_row, directory_rows, CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
+from scripts.build_site import SITE_URL, LAZY_ROWS_FILE, LAZY_ROWS_INLINE, directory_row, directory_rows, CURRENT_CYCLE, HERO_BY_CYCLE, HERO_TS, SITE, available_cycles, build, build_assets, build_index, build_landing, composition_on, cycle_dir, site_totals, build_mp_index, build_mp_page, build_person_index, build_person_page, build_vote_page, factions, hemicycle_layout, hu_date, load_inputs, mp_exports, sync_stamp, vote_exports, vote_view
 from tests import node_bin, require_node
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -84,7 +84,8 @@ class Build(unittest.TestCase):
         # page differed from a fresh build after every quiet night, and this test failed for the pipeline doing
         # its job. Both are proved elsewhere (sync_stamp, and karzat/freshness.py's own tests); what this test
         # holds is everything else on the page, byte for byte.
-        html = re.sub(r'(<span class="kv sync">.*?<b>)[^<]*(</b>)', r"\1\2", html, count=1)
+        html = re.sub(r'(<span class="kv sync">.*?<b>).*?(</b>)', r"\1\2", html, count=1)
+        html = re.sub(r'"dateModified":"[^"]*"', '"dateModified":""', html, count=1)
         return re.sub(r'(<div class="fresh">.*?<span class="hu">)[^<]*(</span>)', r"\1\2", html)
 
     def test_committed_page_matches_a_fresh_build(self):
@@ -98,6 +99,28 @@ class Build(unittest.TestCase):
         self.assertIn('<span class="kv sync">', masked)
         self.assertNotEqual(self._clock_free(self.page.replace("karzat", "karzaT", 1)), masked,
                             "a change outside the clock must still show")
+
+    def test_the_date_is_named_for_a_reader_and_readable_by_a_machine(self):
+        # a blog cited a pályakép and wrote "no publication date": the date was labelled "Szinkron"
+        import json as _json
+        m = re.search(r'<span class="hide-xs">Frissítve</span><b><time datetime="([^"]+)">([^<]+)</time></b>', self.page)
+        self.assertIsNotNone(m)
+        ld = _json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', self.page).group(1))
+        self.assertEqual(ld["dateModified"], m.group(1))
+        self.assertEqual(m.group(1)[:16].replace("T", " "), m.group(2))     # the machine's instant is the one shown
+        self.assertNotIn("Szinkron", self.page)
+
+    def test_a_shared_link_has_a_picture_and_the_picture_exists(self):
+        # every page names one; a vote of the current cycle names its own card, drawn by make_share_images
+        self.assertIn(f'<meta property="og:image" content="{SITE_URL}/assets/megosztas.png">', self.page)
+        built = ROOT / "site" / "assets" / "megosztas.png"
+        if not built.exists():
+            self.skipTest("share cards not drawn — python3 -m scripts.make_share_images")
+        from PIL import Image
+        self.assertEqual(Image.open(built).size, (1200, 630))
+        votes = ROOT / "site" / cycle_dir(CURRENT_CYCLE) / "szavazas"
+        pages = {p.stem for p in votes.glob("*.html")}
+        self.assertEqual(pages - {p.stem for p in votes.glob("*.png")}, set(), "a current vote whose card was never drawn")
 
     def test_only_the_index_and_assets_are_tracked(self):
         # everything else under site/ is generated and git-ignored; a tracked page would silently go stale

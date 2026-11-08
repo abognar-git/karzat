@@ -25,7 +25,7 @@ venv/
 # generated run state (rebuilt by sync/freshness commands)
 data/*.json
 
-# Everything the build writes under site/ is generated; only these seven files are the committed, --check-ed
+# Everything the build writes under site/ is generated; only the files named below are the committed, --check-ed
 # output. Listing directories to ignore meant a new page was tracked by default, and three of them were —
 # frakciovaltas/, visszhang/ and sql/ each slipped in before the suite caught it. Inverted, a new page is
 # ignored by default and has to be named to be kept, which is the safer way round.
@@ -39,6 +39,7 @@ site/assets/*
 !site/assets/karzat.css
 !site/assets/karzat.js
 !site/assets/favicon.svg
+!site/assets/olvaso.txt
 !site/assets/favicon.ico
 !site/assets/apple-touch-icon.png
 
@@ -70,3 +71,9 @@ reference/axe/
 # the source rather than redistributing a copy whose licence nobody has stated.
 reference/parlament-webapi/*.pdf
 reference/parlament-webapi/*.txt
+
+# visitor reports: the owner's aggregates and the list of our own addresses, not the repository's
+data/traffic/
+
+# the share cards are drawn from the record and change with it (scripts/make_share_images.py), like the pages
+site/assets/megosztas.png

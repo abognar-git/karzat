@@ -2897,6 +2897,29 @@ JS_FIGSAVE = r"""
 })();
 """
 
+JS_COUNT = """
+(function(){
+  // The reader count (scripts/traffic_report.py). The access log alone could not tell a reader from a program:
+  // on the first two logged days 97% of requests were crawlers, and the "browsers" left over were 8% mobile,
+  // which no Hungarian audience is. Most programs download a page and never run it, so one request per page
+  // a person actually opens is made here: for an empty file on this origin, so CloudFront's own log records
+  // it. No cookie, nothing stored on the device, no third party; the path and, when the reader came from
+  // another site, that site's name. First in the bundle, so no later script's failure can silence it.
+  if (!window.fetch || !/^https?:$/.test(location.protocol)) return;
+  var sent = false;
+  function send(){
+    if (sent || document.visibilityState !== 'visible') return;       // a tab opened in the background counts when it is looked at
+    sent = true;
+    var r = '';
+    try { var h = new URL(document.referrer).hostname; if (h && h !== location.hostname) r = h; } catch (e) {}
+    fetch('/assets/olvaso.txt?p=' + encodeURIComponent(location.pathname) + (r ? '&r=' + encodeURIComponent(r) : '') + '&n=' + Date.now().toString(36),
+          {cache: 'no-store', credentials: 'omit', keepalive: true}).catch(function(){});
+  }
+  send();
+  document.addEventListener('visibilitychange', send);
+})();
+"""
+
 JS_BOOT = """
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -2945,17 +2968,29 @@ JS_BOOT = """
 
 # -- shared fragments -------------------------------------------------------------------------
 
-def page_head(title: str, description: str, depth: int = 0, feeds: list[tuple[str, str]] = ()) -> str:
-    """`feeds`: (href, title) pairs announced for feed-reader autodiscovery."""
+SHARE_CARD = "assets/megosztas.png"     # drawn by scripts/make_share_images.py, like every vote card
+
+
+def page_head(title: str, description: str, depth: int = 0, feeds: list[tuple[str, str]] = (), image: str = SHARE_CARD) -> str:
+    """`feeds`: (href, title) pairs announced for feed-reader autodiscovery. `image`: the share picture, a path
+    from the site root — a vote of the current cycle passes its own card, every other page gets the site's.
+
+    A link shared on Facebook arrived as a bare address: no picture, no title. The Open Graph tags give it both;
+    og:image has to be absolute, which is why it is the one place here that names SITE_URL."""
     rel = "../" * depth
     alt = "".join(f'\n<link rel="alternate" type="application/atom+xml" href="{esc(h)}" title="{esc(t)}">' for h, t in feeds)
+    og = (f'\n<meta property="og:type" content="website">\n<meta property="og:site_name" content="karzat">'
+          f'\n<meta property="og:locale" content="hu_HU">\n<meta property="og:title" content="{esc(title)}">'
+          f'\n<meta property="og:description" content="{esc(description)}">'
+          f'\n<meta property="og:image" content="{SITE_URL}/{esc(image)}">\n<meta property="og:image:width" content="1200">'
+          f'\n<meta property="og:image:height" content="630">\n<meta name="twitter:card" content="summary_large_image">')
     return f"""<!doctype html>
 <html lang="hu">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)}</title>
-<meta name="description" content="{esc(description)}">
+<meta name="description" content="{esc(description)}">{og}
 <link rel="icon" href="{rel}assets/favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="{rel}assets/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="{rel}assets/apple-touch-icon.png">
@@ -2969,7 +3004,6 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
     rel = "../" * depth
     depth = depth + inp["base_depth"]
     rel = "../" * depth
-    sync_txt = sync_stamp(inp)
     parts = []
     # Six pages — riport, arcél, lefedettség, frakcióváltás, módszer, keresés — answer over all ten cycles, and
     # were built with the cycle pages' machinery, so they inherited its identity: the breadcrumb read
@@ -2994,7 +3028,7 @@ def topbar(inp: dict, crumbs: list[tuple[str, str | None]], depth: int = 0) -> s
     return (f'<header class="kz-topbar"><div class="l"><a class="brand" href="{rel}index.html"><i></i>karzat</a>'
             + (f'<span class="sep"></span><nav aria-label="Útvonal">{"".join(parts)}</nav>' if crumbs else "")
             + f'</div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">{"Ugrás a ciklusra " if wide else "Ciklus "}</span>{switch}</nav><span class="sep hide-sm"></span>'
-            f'<span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_txt)}</b></span></div></header>\n<main class="kz-main"><div class="wrap">')
+            f'{updated_html(inp)}</div></header>\n<main class="kz-main"><div class="wrap">')
 
 
 ROBOTS = """# karzat — az Országgyűlés szavazásai. A tartalom közadat, a másolás szabad; a gépi olvasáshoz viszont
@@ -3090,6 +3124,26 @@ def sync_stamp(inp: dict) -> str:
     """The last sync as a Budapest timestamp, or an honest dash: the derive time is not a sync."""
     ls = inp["idx"].get("last_sync_at")
     return datetime.fromisoformat(ls).astimezone(BUDAPEST).strftime("%Y-%m-%d %H:%M") if ls else "—"
+
+
+def updated_html(inp: dict) -> str:
+    """The top bar's date: when this page's record was last refreshed from the House.
+
+    It used to say "Szinkron 2026-11-08 04:20", and a blog citing a pályakép as its source wrote "publication
+    date not shown" — the date was there, labelled in the pipeline's word rather than the reader's. Now it is
+    "Frissítve" over a <time>, and the same instant is in a schema.org dateModified for citation managers and
+    search engines. The JSON-LD sits in the body because the head is shared by pages that know no record;
+    a data block is not a script, so the CSP's script-src does not touch it."""
+    ls = inp["idx"].get("last_sync_at")
+    if not ls:
+        return '<span class="kv sync"><span class="dot"></span><span class="hide-xs">Frissítve</span><b>—</b></span>'
+    at = datetime.fromisoformat(ls).astimezone(BUDAPEST)
+    ld = json.dumps({"@context": "https://schema.org", "@type": "WebPage", "dateModified": at.isoformat(timespec="seconds"),
+                     "inLanguage": "hu", "isPartOf": {"@type": "WebSite", "name": "karzat", "url": "https://ogykarzat.hu/"},
+                     "author": {"@type": "Person", "name": "Bognár Attila"}}, ensure_ascii=False, separators=(",", ":"))
+    return (f'<span class="kv sync"><span class="dot"></span><span class="hide-xs">Frissítve</span>'
+            f'<b><time datetime="{at.isoformat(timespec="seconds")}">{esc(sync_stamp(inp))}</time></b></span>'
+            f'<script type="application/ld+json">{ld}</script>')
 
 
 def page_tail(inp: dict, depth: int = 0, extra_script: str = "", page: str = "") -> str:
@@ -3410,7 +3464,7 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     Az adatok forrása az Országgyűlés nyilvános adatszolgáltatása, a Web API. Onnan jön minden szavazás, és ahol a Ház név szerint rögzítette, a név szerinti lista is. A képviselőket a Wikidata azonosítói kötik össze a ciklusokon át. A szükséges többséget minden szavazásnál maga az Országgyűlés jelöli meg — az oldal csak utánaszámol. Jelenlévőnek azt vesszük, aki igennel, nemmel vagy tartózkodással szavazott: ez a leadott szavazatok száma, így számol az Országgyűlés is.
     <h3>Ki készíti</h3>
     A karzatot Bognár Attila készíti, függetlenül; nincs mögötte szerkesztőség, párt vagy hirdető, és az oldal
-    nem gyűjt látogatói adatot. Az <a href="{"../" * (inp.get("_depth", 0) + inp["base_depth"])}sajto/index.html">impresszum és a sajtóoldal</a> megmondja, mit
+    nem használ sütit vagy külső mérőkódot: a látogatókat csak összesítve számolja. Az <a href="{"../" * (inp.get("_depth", 0) + inp["base_depth"])}sajto/index.html">impresszum és a sajtóoldal</a> megmondja, mit
     szabad az oldalról átvenni, hogyan kell hivatkozni, és mit nem ad ez az oldal.
     <h3>Mit nem</h3>
     Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek a pártok saját színeit követik, ahogy a Wikipédia nyilvántartja őket. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
@@ -3700,7 +3754,8 @@ def build_vote_page(inp: dict, ts: str) -> str:
         txt = f'{vv["on_date"]} {vv["time"]} · {(m0.get("iromany") or "")} {cut(m0.get("title") or vv.get("remark") or "", 60)}'
         return f'<a href="{esc(vv["slug"])}.html">{"← " if arrow_left else ""}{esc(txt)}{"" if arrow_left else " →"}</a>'
 
-    return page_head(f'{when} — {label}{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f'Az Országgyűlés {when} szavazása név szerint{", székenként" if inp["plan"] else ""}, a szükséges többséggel: {label}', 1 + inp["base_depth"]) + \
+    return page_head(f'{when} — {label}{" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat', f'Az Országgyűlés {when} szavazása név szerint{", székenként" if inp["plan"] else ""}, a szükséges többséggel: {label}', 1 + inp["base_depth"],
+                     image=f'{cycle_dir(inp["cycle"])}szavazas/{view["slug"]}.png' if inp["cycle"] == CURRENT_CYCLE else SHARE_CARD) + \
         topbar(inp, [("szavazások", "../index.html#dir"), (f'{view["on_date"]} {view["ts"][11:16]}', None)], 1) + f"""
 <div class="hero-h"><h1>{esc(when)}</h1><small class="label" data-kz-text>{esc(view["mode"])}</small></div>
 <section class="grid">
@@ -4133,7 +4188,7 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" rol
 
 def build_assets() -> dict[str, str]:
     """The shared stylesheet, script and favicon (committed, checked, never hand-edited)."""
-    return {"favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_HASJS + "\n" + JS_MONTHS + "\n" + JS_TSTIP + "\n" + JS_FLOORF + "\n" + JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_FIGSAVE + "\n" + JS_BOOT).strip() + "\n"}
+    return {"olvaso.txt": "", "favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_COUNT + "\n" + JS_HASJS + "\n" + JS_MONTHS + "\n" + JS_TSTIP + "\n" + JS_FLOORF + "\n" + JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_FIGSAVE + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:
@@ -7997,8 +8052,13 @@ egy adás közben.</p></div>
 <section class="panel">{CORNERS}
   <h2><span data-kz-text>Ki készíti</span></h2>
   <p class="prose">A karzatot <b>Bognár Attila</b> készíti, független, nem üzleti projektként. Nincs mögötte
-  szerkesztőség, párt, alapítvány vagy hirdető, és az oldal nem gyűjt látogatói adatot: nincs süti, nincs
-  mérőkód, nincs harmadik féltől betöltött tartalom.</p>
+  szerkesztőség, párt, alapítvány vagy hirdető. Nincs süti, nincs külső mérőkód, nincs harmadik féltől
+  betöltött tartalom.</p>
+  <p class="prose" id="latogatok"><b>Látogatottság:</b> az oldal maga számolja, hányan olvassák. Minden megnyitott
+  oldalnál a böngésző lekér egy üres fájlt az oldal saját címéről, és ezt a tárhely naplója rögzíti, ahogy minden
+  más lekérést is: az IP-címet, a böngésző típusát, a megnyitott oldalt, és ha másik oldalról érkezett, annak a
+  nevét. A naplót 30 nap után a rendszer törli. Belőle csak összesített szám marad — hányan olvastak, mit, honnan
+  jöttek —, személyhez köthető adat nem. Semmi nem kerül a böngésződbe, és semmi nem megy harmadik félhez.</p>
   <p class="prose"><b>Kapcsolat:</b> a projekt nyilvános a GitHubon —
   <a href="https://github.com/abognar-git/karzat">github.com/abognar-git/karzat</a> —, kérdés, hibajelzés és
   adatkérés ott nyitható. Ha egy szerkesztőségnek olyan bontás kell, ami az oldalon nincs meg, érdemes szólni:
@@ -9237,7 +9297,7 @@ def build_landing() -> str:
                      f"Az Országgyűlés szavazásai, név szerinti listái és felszólalásai {hu_date(tot['from'])[:4]} óta, ciklusonként: ki hogyan szavazott, mennyi kellett a döntéshez, ki mit mondott. Forrás: parlament.hu Web API.", 0,
                      feeds=[(f"{cdir}feed/kulonvelemeny.xml", f'karzat · különvélemények · {CURRENT_CYCLE}. ciklus'), (f"{cdir}feed/heti.xml", f'karzat · a hét számokban · {CURRENT_CYCLE}. ciklus'),
                             (f"{cdir}feed/felszolalasok.xml", f'karzat · felszólalások szövege · {CURRENT_CYCLE}. ciklus')]) + f"""
-<header class="kz-topbar"><div class="l"><a class="brand" href="index.html" aria-current="page"><i></i>karzat</a></div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{' <span class="sl">·</span> '.join(f'<a href="{cycle_dir(c)}index.html"{" class=near" if c == CURRENT_CYCLE else ""}>{c}</a>' for c in tot["cycles"])}</nav><span class="sep hide-sm"></span><span class="kv sync"><span class="dot"></span><span class="hide-xs">Szinkron</span><b>{esc(sync_stamp(inp))}</b></span></div></header>
+<header class="kz-topbar"><div class="l"><a class="brand" href="index.html" aria-current="page"><i></i>karzat</a></div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{' <span class="sl">·</span> '.join(f'<a href="{cycle_dir(c)}index.html"{" class=near" if c == CURRENT_CYCLE else ""}>{c}</a>' for c in tot["cycles"])}</nav><span class="sep hide-sm"></span>{updated_html(inp)}</div></header>
 <main class="kz-main"><div class="wrap landing">
 <section class="masthead">{CORNERS}
   <div class="mast-h"><h1>karzat</h1><p class="mast-lede">A magyar Országgyűlés munkája {hu_date(tot['from'])[:4]} óta, adatban — a karzatról nézve.</p></div>

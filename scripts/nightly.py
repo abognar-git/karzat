@@ -410,6 +410,21 @@ def main(argv: list[str] | None = None) -> int:
         raise
 
 
+def weekly_traffic(args) -> None:
+    """On a Monday, the week's readers from the CloudFront logs (scripts/traffic_report.py), sent to the same
+    SNS topic as the failure alerts. Once a week, and never at the cost of the run: a report that cannot be
+    made is logged and forgotten, because the site is the job and the report is about the site."""
+    if args.dry_run or not args.sns_topic or datetime.now(timezone.utc).weekday() != 0:
+        return
+    iso = datetime.now(timezone.utc).isocalendar()
+    if (ROOT / "data" / "traffic" / f"{iso[0]}-W{iso[1]:02d}.md").exists():
+        return
+    cmd = ["-m", "scripts.traffic_report", "--days", "7", "--sns-topic", args.sns_topic]
+    if args.profile:
+        cmd += ["--profile", args.profile]
+    run([sys.executable] + cmd, dry=False, allow_fail=True)
+
+
 def warn_locally(subject: str, body: str) -> None:
     """Say it where nothing it depends on can also be broken.
 
@@ -573,6 +588,7 @@ def _run(args: argparse.Namespace) -> int:
             log("nothing new — no build, no upload. (--force overrides)")
             clear_local_warning()
             beat(args, "nothing new", after, fp)
+            weekly_traffic(args)
             return 0
     log("dry run: every step below would run" if dry else ("the record moved" if after != before else "forced"))
 
@@ -641,6 +657,7 @@ def _run(args: argparse.Namespace) -> int:
     else:
         log("open-cycle build: nothing a closed cycle's pages are built from has changed")
     run(py + ["-m", "scripts.build_site"] + ([] if full else ["--refresh"]), dry=dry)
+    run(py + ["-m", "scripts.make_share_images"], dry=dry)          # the pictures a shared link shows; only changed ones are redrawn
 
     # ---- prove it before publishing --------------------------------------------------------------
     # The README's registered figures move with the record (sitting days, vote counts), and the gate
@@ -677,6 +694,7 @@ def _run(args: argparse.Namespace) -> int:
     clear_local_warning()
     log("published")
     beat(args, "published", after, fp)
+    weekly_traffic(args)
     return 0
 
 

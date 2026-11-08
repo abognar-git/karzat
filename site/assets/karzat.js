@@ -1,3 +1,25 @@
+(function(){
+  // The reader count (scripts/traffic_report.py). The access log alone could not tell a reader from a program:
+  // on the first two logged days 97% of requests were crawlers, and the "browsers" left over were 8% mobile,
+  // which no Hungarian audience is. Most programs download a page and never run it, so one request per page
+  // a person actually opens is made here: for an empty file on this origin, so CloudFront's own log records
+  // it. No cookie, nothing stored on the device, no third party; the path and, when the reader came from
+  // another site, that site's name. First in the bundle, so no later script's failure can silence it.
+  if (!window.fetch || !/^https?:$/.test(location.protocol)) return;
+  var sent = false;
+  function send(){
+    if (sent || document.visibilityState !== 'visible') return;       // a tab opened in the background counts when it is looked at
+    sent = true;
+    var r = '';
+    try { var h = new URL(document.referrer).hostname; if (h && h !== location.hostname) r = h; } catch (e) {}
+    fetch('/assets/olvaso.txt?p=' + encodeURIComponent(location.pathname) + (r ? '&r=' + encodeURIComponent(r) : '') + '&n=' + Date.now().toString(36),
+          {cache: 'no-store', credentials: 'omit', keepalive: true}).catch(function(){});
+  }
+  send();
+  document.addEventListener('visibilitychange', send);
+})();
+
+
 // First statement in the bundle, before anything can throw. Controls that only a script can operate were
 // shipped as static markup on 5,146 pages — filter and sort buttons, complete with `aria-pressed`, so a
 // screen reader announced a state that could never change and a reader without JavaScript was offered
