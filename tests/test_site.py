@@ -132,6 +132,7 @@ class Build(unittest.TestCase):
         # the site root's own files are committed (they are generated, checked, and small); everything else is ignored
         expected = {"site/404.html", "site/assets/apple-touch-icon.png", "site/assets/favicon.ico",
                     "site/assets/favicon.svg", "site/assets/karzat.css", "site/assets/karzat.js",
+                    "site/assets/olvaso.txt",                       # the reader counter's empty file (JS_COUNT)
                     "site/index.html", "site/robots.txt"}
         self.assertEqual(set(out) - {"site/tenyek.json"}, expected)
 
@@ -746,6 +747,12 @@ class CareerPages(unittest.TestCase):
         self.assertIn('href="../ckl42/kepviselo/a011.html">42. ciklus</a>', page)
         self.assertIn("2\u00a0835 névsorban · leadott 2\u00a0734 · frakciójával 2\u00a0718 · ellene 15", page)   # the two stints above, added up
         self.assertIn("@misc{karzat-szemely-a011,", page)
+        # the adatlap's motion counts: the current cycle's lead to its list, an earlier cycle's stay a number
+        stints[0]["motion_stats"] = [{"ciklus": "2026-", "onallo": 2, "nem_onallo": 0}, {"ciklus": "2022-2026", "onallo": 5, "nem_onallo": 1}]
+        page = build_person_page(inp, "a011", stints)
+        self.assertIn('<td class="num mono"><a href="../kepviselo/a011.html#inditvanyok">2</a></td><td class="num mono">0</td>', page)
+        self.assertIn('<td class="num mono">5</td><td class="num mono">1</td>', page)
+        self.assertIn('<a href="../kepviselo/a011.html#inditvanyok">a 43. ciklus indítványai</a>', page)
         idx = build_person_index(inp, {"a011": stints})
         self.assertIn('href="a011.html">Ágh Péter</a>', idx)
         self.assertIn("<td class=\"mono\">42 · 43</td>", idx)
