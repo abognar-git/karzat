@@ -4197,3 +4197,22 @@ class WhatComesNext(unittest.TestCase):
     def test_three_doors_lead_to_it(self):
         self.assertIn('href="mijon/index.html"', build_landing())
         self.assertIn('href="../mijon/index.html">mi jön</a>', build_index(self.inp, HERO_TS))
+
+
+class TypeScale(unittest.TestCase):
+    """Eight sizes, not nineteen: every HTML font size in the stylesheet is a step of the scale. Text inside the
+    charts' SVGs is in viewBox units and scales with the drawing, so it is not held to it."""
+
+    SCALE = {11, 13, 15, 17, 22, 30, 40, 52}
+    SVG = re.compile(r"svg|\.(axl|cl|cl2|cl3|dl|end|pc|seclabel|yl|v|s)\b")
+
+    def test_every_html_size_is_on_the_scale(self):
+        css = re.sub(r"/\*.*?\*/", "", build_assets()["karzat.css"], flags=re.S)
+        off = []
+        for m in re.finditer(r"([^{}]+)\{([^{}]*)\}", css):
+            if self.SVG.search(m.group(1)):
+                continue
+            for v in re.findall(r"font-size:\s*([\d.]+)px", m.group(2)) + re.findall(r"font:[^;]*?\b([\d.]+)px", m.group(2)):
+                if float(v) not in self.SCALE:
+                    off.append(f"{m.group(1).strip()[:60]}: {v}px")
+        self.assertEqual(off, [], "a size off the scale — pick the nearest step")

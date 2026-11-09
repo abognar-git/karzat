@@ -723,7 +723,10 @@ CSS = """
 /* Readability (2026-11): body text was 14px at weight 300, grey on near-black, and the labels and sub-lines
    9-10px. Pretty, and tiring on a phone in daylight. Body is now 15px at 400, every HTML size under 12px moved
    up a step (9→10.5, 10→11), the three secondary greys one shade lighter. Text drawn inside the charts' SVGs
-   is in viewBox units and was left alone. */
+   is in viewBox units and was left alone.
+   Type scale (2026-11): those steps left nineteen sizes, most of them half a pixel apart. Every HTML size is now
+   one of eight — 11 labels · 13 secondary and tables · 15 body and running prose · 17 ledes · 22 titles ·
+   30 big numbers · 40 headings · 52 the landing's name. A new rule picks from these; a test holds the list. */
 :root{--sz:#b9a06a;--bg:#050505;--panel:rgba(10,10,10,.9);--panel-deep:rgba(5,5,5,.95);--topbar:rgba(5,5,5,.9);--terminal:#000;
 --border:#27272a;--border-hi:#3f3f46;--corner:#777;--text:#e4e4e7;--dim:#a1a1aa;--dim2:#9b9ba4;--dim3:#8d8d96;--dim4:#82828b;--line2:#18181b;--grid:rgba(255,255,255,.05);
 --ok:#34d399;--okbg:rgba(16,185,129,.1);--okbd:rgba(16,185,129,.4);--bad:#f87171;--badbg:rgba(239,68,68,.1);--badbd:rgba(239,68,68,.4);--white:#fff;
@@ -741,7 +744,7 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .figsave button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:5px 9px;
   font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
 .figsave button:hover,.figsave button:focus-visible{color:var(--white);border-color:var(--border-hi)}
-.figsave .fs-note{font-family:var(--mono);font-size:10.5px;color:var(--dim3);letter-spacing:.05em}
+.figsave .fs-note{font-family:var(--mono);font-size:11px;color:var(--dim3);letter-spacing:.05em}
 @media print{.figsave{display:none}}
 /* top bar */
 .kz-topbar{position:sticky;top:0;z-index:20;height:48px;border-bottom:1px solid var(--border);background:var(--topbar);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 16px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
@@ -791,10 +794,10 @@ a{color:inherit;text-decoration:none}a:hover{color:var(--white)}
 .cyc-head{display:grid;grid-template-columns:1fr;gap:16px 40px;align-items:start;padding:6px 0 18px;border-bottom:1px solid var(--border);margin-bottom:16px}
 .cyc-title{max-width:78ch}
 .cyc-title .kicker{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin-bottom:8px}
-.cyc-title h1{font-size:34px;line-height:1.1;letter-spacing:-.02em}.cyc-title .lede{margin-top:10px;max-width:58ch}
+.cyc-title h1{font-size:30px;line-height:1.1;letter-spacing:-.02em}.cyc-title .lede{margin-top:10px;max-width:58ch}
 .cyc-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px 28px;padding-top:2px}
-.cyc-nav .grp{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:12px;letter-spacing:.04em}
-.cyc-nav .lbl{font-size:10.5px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim3);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+.cyc-nav .grp{display:flex;flex-direction:column;gap:3px;font-family:var(--mono);font-size:13px;letter-spacing:.04em}
+.cyc-nav .lbl{font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim3);margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)}
 .cyc-nav a{color:var(--dim);padding:2px 0;border-bottom:1px solid transparent}.cyc-nav a:hover,.cyc-nav a:focus-visible{color:var(--white)}
 @media(max-width:900px){.cyc-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.cyc-nav{grid-template-columns:1fr 1fr}}
 a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
@@ -803,10 +806,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,[tabindex]:focus-visibl
 .portrait.hero{width:72px;height:96px}.portrait.thumb{width:27px;height:36px;vertical-align:middle;margin-right:8px;display:inline-block}.portrait.insp{width:48px;height:64px;float:left;margin:2px 12px 4px 0}
 .hero-h.withpic{align-items:flex-start;gap:14px}.hero-h.withpic>div{min-width:0}.hero-h.withpic h1{margin-top:2px}.hero-h.withpic .hero-meta{margin-top:6px}
 td.withthumb{white-space:nowrap}td.withthumb a{vertical-align:middle}
-.townhit{font-family:var(--sans);font-size:13.5px;color:var(--text);margin:8px 0;padding:8px 10px;border:1px solid var(--border);background:rgba(0,0,0,.3)}.townhit ul{margin:4px 0 0 18px;padding:0}.townhit .sub{color:var(--dim2);font-size:12px}
+.townhit{font-family:var(--sans);font-size:13px;color:var(--text);margin:8px 0;padding:8px 10px;border:1px solid var(--border);background:rgba(0,0,0,.3)}.townhit ul{margin:4px 0 0 18px;padding:0}.townhit .sub{color:var(--dim2);font-size:13px}
 @media print{.portrait{filter:grayscale(1)}}
-h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--white);line-height:1.05}
-.lede{margin:6px 0 0;color:var(--dim);max-width:78ch;font-size:13px}
+h1{margin:0;font-size:40px;font-weight:300;letter-spacing:-.03em;color:var(--white);line-height:1.05}
+.lede{margin:6px 0 0;color:var(--dim);max-width:78ch;font-size:15px}
 /* panels */
 .panel{position:relative;background:var(--panel);border:1px solid var(--border);padding:16px 18px;margin-top:16px}
 .panel.deep{background:var(--panel-deep)}
@@ -815,20 +818,26 @@ h1{margin:0;font-size:38px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .kz-corner.bl{bottom:-1px;left:-1px;border-bottom-width:1px;border-left-width:1px}.kz-corner.br{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
 .panel > h2{margin:0 0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);font-weight:400;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .panel > h2 .tag{color:var(--dim2);letter-spacing:.15em}
+/* a panel that folds: the whole heading is the handle, a triangle says which way it is */
+.fold>summary{list-style:none;cursor:pointer}.fold>summary::-webkit-details-marker{display:none}
+.fold>summary>h2{margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);font-weight:400;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.fold>summary>h2 .tag{color:var(--dim2);letter-spacing:.15em}.fold[open]>summary>h2{margin-bottom:10px}
+.fold>summary>h2>span:first-child::before{content:"▸";display:inline-block;width:1.4em;letter-spacing:0}.fold[open]>summary>h2>span:first-child::before{content:"▾"}
+.fold>summary:hover>h2>span:first-child,.fold>summary:focus-visible>h2>span:first-child{color:var(--white)}
 .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
-.fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.02em;position:relative}
+.fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.02em;position:relative}
 .fresh:before{content:">";color:var(--dim3);margin-right:8px}
 /* text */
 .hero-title{font-size:22px;font-weight:300;letter-spacing:-.01em;line-height:1.3;margin:2px 0 8px;color:var(--white)}
 .hero-title a{color:var(--white);border-bottom:1px solid var(--dim3)}.hero-title a:hover{border-bottom-color:var(--white)}
-.hero-meta{color:var(--dim2);font-size:12px;font-family:var(--mono);letter-spacing:.02em}
-.hero-meta.prose{font-family:var(--sans);font-size:12.5px;color:var(--dim);letter-spacing:0}
+.hero-meta{color:var(--dim2);font-size:13px;font-family:var(--mono);letter-spacing:.02em}
+.hero-meta.prose{font-family:var(--sans);font-size:13px;color:var(--dim);letter-spacing:0}
 .prose .mono{overflow-wrap:anywhere}
 
 .speech{font-family:var(--sans);font-size:15px;line-height:1.55;color:var(--text);max-width:72ch}.speech p{margin:0 0 .9em}.speech mark,.snip mark{background:rgba(255,255,255,.18);color:var(--white);padding:0 2px}
-.snip{font-family:var(--sans);font-size:12.5px;color:var(--dim);display:block;margin-top:3px;letter-spacing:0;text-transform:none}
-tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sans);font-size:12.5px;padding-top:10px}tr.dim td{color:var(--dim3)}tr.dim a{color:var(--dim2)}
+.snip{font-family:var(--sans);font-size:13px;color:var(--dim);display:block;margin-top:3px;letter-spacing:0;text-transform:none}
+tr.grp td{background:rgba(255,255,255,.03);color:var(--dim);font-family:var(--sans);font-size:13px;padding-top:10px}tr.dim td{color:var(--dim3)}tr.dim a{color:var(--dim2)}
 /* chart */
 .chart svg{width:100%;height:auto;display:block;margin-top:6px}
 .seat circle,.seat path{transition:opacity .15s,filter .2s;cursor:crosshair}
@@ -858,7 +867,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 @media print{.chartbox{border-color:#999;background:#fff;overflow:visible}.chartbox text{fill:#333}
 .chartbox .ln{stroke:#333}.chartbox .ax{stroke:#999}.chartbox .grid{stroke:#ddd}
 .chartbox svg{min-width:0;break-inside:avoid}}
-.inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:12px;letter-spacing:.02em;color:var(--dim);position:relative}
+.inspector{display:flow-root;margin-top:10px;min-height:66px;border:1px solid var(--border);background:var(--panel-deep);padding:9px 12px;font-family:var(--mono);font-size:13px;letter-spacing:.02em;color:var(--dim);position:relative}
 .inspector .insp-hint{color:var(--dim2);font-size:11px;letter-spacing:.08em;padding-top:14px}
 .inspector .row1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
 .inspector .name{font-family:var(--sans);font-size:15px;font-weight:400;color:var(--white)}.inspector .name a{color:var(--white);border-bottom:1px solid var(--dim3)}.inspector .name a:hover{border-bottom-color:var(--white)}
@@ -869,9 +878,9 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .inspector .streak{display:inline-flex;gap:2px;align-items:center}.inspector .streak i{width:7px;height:10px;display:inline-block;background:var(--line2);border:1px solid var(--border)}
 .inspector .streak i.w{background:var(--c);border-color:var(--c)}.inspector .streak i.a{background:#fff;border-color:#fff}.inspector .streak i.c{background:var(--dim3);border-color:var(--dim3)}.inspector .streak i.n{background:transparent}.inspector .streak i.x{visibility:hidden}
 .inspector .streak i.now{outline:1px solid var(--white);outline-offset:1px}
-.inspector .lbl{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);margin-right:4px}
-.inspector .pin{position:absolute;top:6px;right:8px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim3)}
-.inspector .pin button{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;cursor:pointer;margin-left:6px}
+.inspector .lbl{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);margin-right:4px}
+.inspector .pin{position:absolute;top:6px;right:8px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim3)}
+.inspector .pin button{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:2px 6px;cursor:pointer;margin-left:6px}
 .inspector .pin button:hover{color:var(--white);border-color:var(--border-hi)}
 @media(max-width:600px){.inspector .row1 .meta{flex-basis:100%}}
 .rostrum{fill:var(--border)}.rostrum.hi{fill:var(--border-hi)}.rostrum.edge{fill:var(--panel-deep);fill-opacity:.55}.floor{fill:rgba(255,255,255,.028)}.rowline{fill:none;stroke:rgba(255,255,255,.07);stroke-width:.5}
@@ -904,7 +913,7 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
   white-space:nowrap;z-index:5}
 .term{text-decoration:underline dotted;text-decoration-color:var(--dim3);text-underline-offset:3px;cursor:help}
 .gloss{margin:6px 0 0}
-.gloss dt{color:var(--text);font-family:var(--mono);font-size:12px;margin-top:8px}
+.gloss dt{color:var(--text);font-family:var(--mono);font-size:13px;margin-top:8px}
 .gloss dd{margin:2px 0 0;color:var(--dim)}
 .ppos{position:relative;height:8px;background:var(--line2);margin-top:8px}
 .ppos i{position:absolute;top:-2px;width:2px;height:12px;display:block}
@@ -916,32 +925,32 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .how summary:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
 .how .prose{color:var(--dim);margin-top:6px;max-width:70ch;font-size:.9em}
 .how .prose a{color:var(--dim)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .legend .f{display:inline-flex;align-items:center;gap:6px}.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}.legend svg{width:12px;height:12px;flex:none;color:var(--dim)}
 /* numbers */
 .tally{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin:8px 0 12px}
 .tally div{background:var(--panel-deep);padding:10px 12px}
-.tally b{display:block;font-size:44px;font-weight:300;letter-spacing:-.03em;line-height:1;color:var(--white);font-family:var(--sans);font-variant-numeric:tabular-nums}
-.tally span{display:block;margin-top:6px;font-family:var(--mono);font-size:10.5px;color:var(--dim2);text-transform:uppercase;letter-spacing:.2em}
+.tally b{display:block;font-size:40px;font-weight:300;letter-spacing:-.03em;line-height:1;color:var(--white);font-family:var(--sans);font-variant-numeric:tabular-nums}
+.tally span{display:block;margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--dim2);text-transform:uppercase;letter-spacing:.2em}
 .tally{grid-template-columns:repeat(3,minmax(0,1fr))}.tally.six{grid-template-columns:repeat(3,minmax(0,1fr))}.tally.six b{font-size:30px}.tally.seven{grid-template-columns:repeat(4,minmax(0,1fr))}.tally.seven b{font-size:30px}
-.verdict{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:12px;margin-top:8px;font-family:var(--mono)}
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:13px;margin-top:8px;font-family:var(--mono)}
 .verdict dt{color:var(--dim2);text-transform:uppercase;letter-spacing:.15em;font-size:11px;padding-top:2px}.verdict dd{margin:0;color:var(--text)}
 .verdict dd .hero-meta{display:block;color:var(--dim2);font-size:11px}
 /* mi jön: a sitting day in a sentence or two — prose in the sans, the day label stays the terminal mono */
-.verdict.days{grid-template-columns:96px 1fr;gap:12px 16px}.verdict.days dt{line-height:1.5}.verdict.days dd{font-family:var(--sans);font-size:14px;line-height:1.55}.verdict.days a{text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px}.verdict.days a:hover{text-decoration-color:var(--white)}.verdict.days .sub{color:var(--dim2)}
+.verdict.days{grid-template-columns:96px 1fr;gap:12px 16px}.verdict.days dt{line-height:1.5}.verdict.days dd{font-family:var(--sans);font-size:15px;line-height:1.55}.verdict.days a{text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px}.verdict.days a:hover{text-decoration-color:var(--white)}.verdict.days .sub{color:var(--dim2)}
 .badge{display:inline-block;padding:2px 8px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
 .badge.hi{border-color:var(--dim3);color:var(--white)}.badge.ok{border-color:var(--okbd);background:var(--okbg);color:var(--ok)}.badge.no{border-color:var(--badbd);background:var(--badbg);color:var(--bad)}.badge.mid{color:var(--dim2);background:rgba(24,24,27,.6)}
 .bar{height:6px;background:var(--line2);position:relative;margin:8px 0 4px}
 .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--white);opacity:.9}
 .bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--dim)}
-.fbars{margin-top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}.fbars .row.hdr{color:var(--dim2);font-size:10.5px;margin-bottom:2px}.fbars .row{display:grid;grid-template-columns:78px 1fr 106px;gap:8px;align-items:center;margin:5px 0;color:var(--dim)}.fbars .row.hdr span{white-space:nowrap}
+.fbars{margin-top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}.fbars .row.hdr{color:var(--dim2);font-size:11px;margin-bottom:2px}.fbars .row{display:grid;grid-template-columns:78px 1fr 106px;gap:8px;align-items:center;margin:5px 0;color:var(--dim)}.fbars .row.hdr span{white-space:nowrap}
 .fbars .stack{display:flex;height:6px;overflow:hidden;background:var(--line2)}.fbars .stack i{display:block;height:100%}
-.fbars .row .sub{display:block;color:var(--dim2);font-size:10.5px;letter-spacing:.06em;text-transform:none;line-height:1.3}.fbars .row.hdr .sub{white-space:normal}
+.fbars .row .sub{display:block;color:var(--dim2);font-size:11px;letter-spacing:.06em;text-transform:none;line-height:1.3}.fbars .row.hdr .sub{white-space:normal}
 .counts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));margin-top:16px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
 @media(max-width:1100px){.counts{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:560px){.counts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .counts .c{background:var(--panel-deep);padding:14px 16px;position:relative;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
-.counts b{display:block;font-size:34px;font-weight:300;letter-spacing:-.03em;color:var(--white);font-family:var(--sans);font-variant-numeric:tabular-nums;line-height:1}
-.counts span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--dim2);text-transform:uppercase;letter-spacing:.2em;margin-top:8px}
+.counts b{display:block;font-size:30px;font-weight:300;letter-spacing:-.03em;color:var(--white);font-family:var(--sans);font-variant-numeric:tabular-nums;line-height:1}
+.counts span{display:block;font-family:var(--mono);font-size:11px;color:var(--dim2);text-transform:uppercase;letter-spacing:.2em;margin-top:8px}
 .counts span.sub{color:var(--dim2);text-transform:none;letter-spacing:.05em;margin-top:3px}
 /* directory / tables */
 .filters{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;align-items:center}
@@ -958,14 +967,14 @@ html.js .cite .copy{display:inline-block}html.js [data-fact-next]{display:inline
 .hover-hint{display:none}@media (hover:hover){html.js .hover-hint{display:inline}}
 .filters button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:6px 10px;min-height:26px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:color .15s,border-color .15s}
 .filters button:hover{color:var(--white);border-color:var(--border-hi)}.filters button.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}
-.filters input{border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:5px 9px;font-family:var(--mono);font-size:12px;min-width:220px}
+.filters input{border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:5px 9px;font-family:var(--mono);font-size:13px;min-width:220px}
 .filters input::placeholder{color:var(--dim2)}
 .filters .n{color:var(--dim2);font-family:var(--mono);font-size:11px;letter-spacing:.15em;margin-left:auto}
 /* the landing page */
 .landing .masthead{position:relative;border:1px solid var(--border);background:var(--panel-deep);padding:24px 26px 16px;display:grid;grid-template-columns:minmax(240px,.85fr) 1.7fr;gap:18px 32px;align-items:center}
 .landing .mast-h h1{font-size:52px;margin:0 0 12px}
-.landing .mast-lede{color:var(--dim);font-size:14px;max-width:40ch;margin:0;line-height:1.55}
-.landing .mast-next{margin:14px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em}.landing .mast-next a{color:var(--text);border-bottom:1px solid var(--border-hi);padding-bottom:1px}.landing .mast-next a:hover,.landing .mast-next a:focus-visible{color:var(--white);border-color:var(--white)}
+.landing .mast-lede{color:var(--dim);font-size:15px;max-width:40ch;margin:0;line-height:1.55}
+.landing .mast-next{margin:14px 0 0;font-family:var(--mono);font-size:13px;letter-spacing:.04em}.landing .mast-next a{color:var(--text);border-bottom:1px solid var(--border-hi);padding-bottom:1px}.landing .mast-next a:hover,.landing .mast-next a:focus-visible{color:var(--white);border-color:var(--white)}
 .landing .chamber-today{margin:0;min-width:0}.landing .chamber-today svg{width:100%;height:auto;display:block;outline:none}
 .landing .chamber-today figcaption{margin-top:4px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .landing .chamber-today figcaption .sub{text-transform:none;letter-spacing:.05em;margin-left:6px}.landing .chamber-today .legend{margin-top:6px}
@@ -989,13 +998,13 @@ a.seat{text-decoration:none}
 .cyc{display:grid;grid-template-columns:44px minmax(0,1fr);gap:2px 14px;align-items:start;padding:9px 10px;border:1px solid transparent;color:inherit;text-decoration:none}
 .cyc .top{display:flex;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;align-items:baseline}
 .cyc:hover,.cyc:focus-visible{border-color:var(--border-hi);background:rgba(255,255,255,.025)}.cyc.now{border-color:var(--border)}
-.cyc .num{font-size:18px;color:var(--white);letter-spacing:-.02em;line-height:1.2}
+.cyc .num{font-size:17px;color:var(--white);letter-spacing:-.02em;line-height:1.2}
 .cyc .body{display:block;min-width:0}
 .cyc .span{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2)}
 .cyc .compbar{display:flex;height:12px;margin:6px 0 5px;overflow:hidden;background:var(--line2)}.cyc .compbar i{display:block;height:100%;position:static}
-.cyc .leg{display:block;font-size:10.5px;letter-spacing:.05em;color:var(--dim2);line-height:1.8}
+.cyc .leg{display:block;font-size:11px;letter-spacing:.05em;color:var(--dim2);line-height:1.8}
 .cyc .leg i{display:inline-block;width:7px;height:7px;margin-right:4px;vertical-align:0}.cyc .leg b{color:var(--text);font-weight:400}
-.cyc .stat{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim2);text-align:right}
+.cyc .stat{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim2);text-align:right}
 .doors{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
 /* A count that does not divide by three used to leave the last row hanging on the left with two holes
    beside it. The grid should not decide what gets built — this project once declined to invent a feature
@@ -1006,7 +1015,7 @@ a.seat{text-decoration:none}
 .doors > :nth-last-child(2):nth-child(3n+1) ~ *{grid-column:3}
 .door{display:flex;flex-direction:column;color:inherit;text-decoration:none;min-height:150px}
 .door p{color:var(--dim);font-size:13px;margin:0 0 12px;line-height:1.5}
-.door .row{display:flex;gap:8px;margin-top:auto}.door .row input{flex:1 1 auto;min-width:0;border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:7px 10px;font-family:var(--mono);font-size:12px}
+.door .row{display:flex;gap:8px;margin-top:auto}.door .row input{flex:1 1 auto;min-width:0;border:1px solid var(--dim3);background:rgba(0,0,0,.4);color:var(--text);padding:7px 10px;font-family:var(--mono);font-size:13px}
 .door .row input::placeholder{color:var(--dim2)}
 .door .row button{border:1px solid var(--border);background:transparent;color:var(--dim2);padding:6px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;cursor:pointer}
 .door .row button:hover,.door .row button:focus-visible{color:var(--white);border-color:var(--border-hi)}
@@ -1027,19 +1036,19 @@ a.door:hover,a.door:focus-visible{border-color:var(--border-hi)}a.door:hover .go
    SVG, so the type is the page's own size and every span can carry its name instead of hiding it in a tooltip. */
 .lifewrap{margin-top:8px;display:flex;flex-direction:column;gap:6px}
 .life .lane{display:flex;align-items:center;gap:12px;min-height:26px}
-.life .ln{flex:0 0 92px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2);text-align:right}
+.life .ln{flex:0 0 92px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim2);text-align:right}
 .life .track{position:relative;flex:1 1 auto;height:calc(var(--rows,1) * 20px + 2px);background:linear-gradient(var(--line2),var(--line2)) 0 50%/100% 1px no-repeat}
 .life .sp{position:absolute;left:var(--x);width:var(--w);top:calc(var(--r,0) * 20px + 3px);height:16px;background:var(--c);display:flex;align-items:center;padding:0 6px;overflow:hidden;transition:filter .12s}
 .life .sp.hollow{background:transparent;box-shadow:inset 0 0 0 1px var(--c)}
 .life .sp:hover{filter:brightness(1.25)}
-.life .sp b{font:400 11.5px/1 var(--sans);color:#0b0b0b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.life .sp b{font:400 11px/1 var(--sans);color:#0b0b0b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .life .sp.hollow b{color:var(--dim)}
 .life .sch{position:absolute;left:var(--x);top:7px;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--dim2)}
-.life .sch b{position:absolute;left:50%;transform:translateX(-50%);top:10px;font-family:var(--mono);font-size:10.5px;color:var(--dim3);font-weight:400}
+.life .sch b{position:absolute;left:50%;transform:translateX(-50%);top:10px;font-family:var(--mono);font-size:11px;color:var(--dim3);font-weight:400}
 .life .lane.axis{min-height:16px}
 .life .lane.axis .track{height:12px;background:none}
-.life .lane.axis i{position:absolute;left:var(--x);transform:translateX(-50%);font-family:var(--mono);font-size:10.5px;color:var(--dim3);font-style:normal}
-@media (max-width:640px){.viewsw{position:static;margin:0 0 10px}.life .ln{flex-basis:56px;font-size:9.5px}.life .sp b{font-size:11px}}
+.life .lane.axis i{position:absolute;left:var(--x);transform:translateX(-50%);font-family:var(--mono);font-size:11px;color:var(--dim3);font-style:normal}
+@media (max-width:640px){.viewsw{position:static;margin:0 0 10px}.life .ln{flex-basis:56px;font-size:11px}.life .sp b{font-size:11px}}
 /* the asset declarations: one square per document, grouped by the year the record states */
 .vny{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
 .vny .yr{display:flex;flex-direction:column;align-items:center;gap:4px}
@@ -1086,7 +1095,7 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog{margin-top:12px}
 .evlog summary{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);cursor:pointer;padding:6px 0}
 .evlog summary:hover{color:var(--white)}
-.profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13.5px;line-height:1.65}
+.profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13px;line-height:1.65}
 .profile b{color:var(--text);font-weight:400}
 /* Visually hidden, and hidden without escaping its container. The usual recipe adds position:absolute, and
    an absolutely positioned element inside a horizontally scrolling table is laid out against whatever
@@ -1110,7 +1119,7 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .floorbody .fbars .row .k{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
 .floorbody .fbars .row .v{white-space:nowrap}
 @media(max-width:640px){.floorbody{padding-left:12px}.floorbody .fbars .row{grid-template-columns:minmax(0,104px) 1fr 84px}}
-.stagelist{list-style:none;margin:0 0 10px;padding:0;font-size:12px;color:var(--dim)}
+.stagelist{list-style:none;margin:0 0 10px;padding:0;font-size:13px;color:var(--dim)}
 .stagelist li{display:flex;justify-content:space-between;gap:12px;max-width:56ch;padding:2px 0;border-bottom:1px dotted var(--line2)}
 @media(max-width:640px){.floorrow>summary{grid-template-columns:52px minmax(0,1fr);row-gap:2px}
 .floorrow>summary .t,.floorrow>summary .dim{grid-column:1/-1}}
@@ -1120,7 +1129,7 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 @media print{.floorrow::details-content{content-visibility:visible!important;block-size:auto!important}
 .floorrow>summary::before{content:""}.floorrow>summary{padding-left:2px}}
 .tablewrap{overflow-x:auto;border:1px solid var(--border);background:rgba(0,0,0,.35)}tr[hidden]{display:none}tr[id]{scroll-margin-top:72px}tr:target td{background:rgba(255,255,255,.07);box-shadow:inset 2px 0 0 var(--white)}
-.cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:12px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
+.cite pre{margin:0;white-space:pre-wrap;word-break:break-word;font-size:13px;color:var(--dim);background:rgba(0,0,0,.35);border:1px solid var(--border);padding:8px 10px;flex:1 1 auto}
 .cite .cite-row{display:flex;gap:8px;align-items:flex-start;margin-top:6px}.cite details summary{cursor:pointer;color:var(--dim2);font-size:11px;letter-spacing:.2em;text-transform:uppercase;margin-top:8px}
 .cite .copy{border:1px solid var(--border);background:transparent;color:var(--dim2);font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;padding:4px 8px;cursor:pointer;white-space:nowrap}
 .cite .copy:hover{color:var(--white);border-color:var(--border-hi)}.cite .copy.done{color:var(--ok);border-color:var(--okbd)}
@@ -1128,13 +1137,13 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .pgr button{border:1px solid var(--border);background:transparent;color:var(--dim2);min-width:28px;min-height:26px;padding:4px 8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;cursor:pointer}
 .pgr button:hover{color:var(--white);border-color:var(--border-hi)}.pgr button.on{border-color:var(--dim3);color:var(--white);background:rgba(24,24,27,.6)}.pgr button:disabled{opacity:.35;cursor:default}
 .pgr .gap{color:var(--dim3);padding:0 2px}.pgr .all{margin-left:8px;text-transform:uppercase}
-table{border-collapse:collapse;width:100%;font-size:12px}
+table{border-collapse:collapse;width:100%;font-size:13px}
 th,td{padding:7px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line2)}
-th{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.2em;color:var(--dim2);font-weight:400;background:rgba(5,5,5,.95)}
+th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--dim2);font-weight:400;background:rgba(5,5,5,.95)}
 th.sortable{cursor:pointer}th.sortable:hover{color:var(--white)}th.sortable .sortbtn{all:unset;cursor:pointer;font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit}th.sortable .sortbtn:focus-visible{outline:1px solid var(--dim);outline-offset:2px}th.sortable[aria-sort="ascending"]:after{content:" ↑"}th.sortable[aria-sort="descending"]:after{content:" ↓"}th.num{text-align:right}
 tr:last-child td{border-bottom:0}tbody tr:hover td{background:rgba(24,24,27,.5)}
-td.num{text-align:right;white-space:nowrap;font-family:var(--mono)}td.ts{white-space:nowrap;color:var(--dim2);font-family:var(--mono);font-size:12px}td.ts a:hover{color:var(--white)}
-td .sub{color:var(--dim2);font-size:12px;display:block;font-family:var(--mono);letter-spacing:.02em}
+td.num{text-align:right;white-space:nowrap;font-family:var(--mono)}td.ts{white-space:nowrap;color:var(--dim2);font-family:var(--mono);font-size:13px}td.ts a:hover{color:var(--white)}
+td .sub{color:var(--dim2);font-size:13px;display:block;font-family:var(--mono);letter-spacing:.02em}
 td a{color:var(--text);text-decoration:underline;text-decoration-color:var(--dim3);text-underline-offset:2px}td a:hover{color:var(--white);text-decoration-color:var(--white)}
 .pos{display:inline-flex;align-items:center;gap:6px}.pos svg{width:12px;height:12px;flex:none}
 .d{width:9px;height:9px;border-radius:50%;background:var(--c);display:inline-block;flex:none}
@@ -1156,10 +1165,12 @@ td a{color:var(--text);text-decoration:underline;text-decoration-color:var(--dim
    method page sat in the paragraph with nothing to say they could be clicked. Same idiom the fact line above
    already uses — an underline the reader can see and a hover that brightens it. */
 .kz-terminal .method a{color:var(--text);border-bottom:1px solid var(--border-hi)}
-.kz-terminal .method a:hover,.kz-terminal .method a:focus-visible{color:var(--white);border-color:var(--white)}.kz-terminal .factline .sub{color:var(--dim3);font-style:normal;margin-left:8px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}.kz-terminal .factline .more{margin-left:10px;border:1px solid var(--border);background:transparent;color:var(--dim2);cursor:pointer;font:inherit;line-height:1;padding:1px 6px}.kz-terminal .factline .more:hover,.kz-terminal .factline .more:focus-visible{color:var(--white);border-color:var(--border-hi)}
+.kz-terminal .method a:hover,.kz-terminal .method a:focus-visible{color:var(--white);border-color:var(--white)}.kz-terminal .factline .sub{color:var(--dim3);font-style:normal;margin-left:8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase}.kz-terminal .factline .more{margin-left:10px;border:1px solid var(--border);background:transparent;color:var(--dim2);cursor:pointer;font:inherit;line-height:1;padding:1px 6px}.kz-terminal .factline .more:hover,.kz-terminal .factline .more:focus-visible{color:var(--white);border-color:var(--border-hi)}
 .kz-terminal .cursor{display:inline-block;width:6px;height:11px;background:var(--dim2);vertical-align:-2px;margin-left:2px;animation:kz-blink 1s step-end infinite}
-.kz-terminal .method{margin-top:14px;padding-top:12px;border-top:1px solid var(--line2);font-family:var(--sans);font-size:11.5px;color:var(--dim);letter-spacing:0;line-height:1.6;max-width:110ch;position:relative}
-.kz-terminal .method h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin:8px 0 4px;font-weight:400}
+.kz-terminal .method{margin-top:14px;padding-top:12px;border-top:1px solid var(--line2);font-family:var(--sans);font-size:11px;color:var(--dim);letter-spacing:0;line-height:1.6;max-width:110ch;position:relative}
+.kz-terminal .method>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2)}.kz-terminal .method>summary::-webkit-details-marker{display:none}
+.kz-terminal .method>summary::before{content:"▸";display:inline-block;width:1.4em;letter-spacing:0}.kz-terminal .method[open]>summary::before{content:"▾"}.kz-terminal .method>summary:hover,.kz-terminal .method>summary:focus-visible{color:var(--white)}.kz-terminal .method[open]>summary{margin-bottom:4px}
+.kz-terminal .method h3{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin:8px 0 4px;font-weight:400}
 @keyframes kz-blink{0%,100%{opacity:1}50%{opacity:0}}
 .kz-terminal .scan:after{content:"";position:absolute;top:-10%;left:0;width:100%;height:2px;background:rgba(255,255,255,.08);animation:kz-scan 6s linear infinite}
 @keyframes kz-scan{0%{top:-10%}100%{top:110%}}
@@ -1239,7 +1250,7 @@ html.kz-export .turn .back{fill:#3f3f46}
 @media(max-width:1100px){.kz-topbar .cyc .hide-xs{display:none}}
 .kz-topbar .tsearch{display:flex;align-items:center;margin:0}
 .kz-topbar .tsearch input{width:200px;height:28px;background:transparent;border:1px solid var(--border-hi);color:var(--text);
-  font:12px var(--sans);letter-spacing:0;text-transform:none;padding:0 9px}
+  font:13px var(--sans);letter-spacing:0;text-transform:none;padding:0 9px}
 .kz-topbar .tsearch input::placeholder{color:var(--dim3)}
 .kz-topbar .tsearch input:focus{outline:none;border-color:var(--dim2);width:260px}
 .kz-topbar .tsearch-link{display:none;color:var(--dim2);padding:6px 4px}
@@ -3142,9 +3153,16 @@ def cite_html(inp: dict, path: str, title: str, key: str, json_href: str | None 
     bib = ("@misc{karzat-" + key + ",\n  title = {" + title.replace("{", "").replace("}", "") + "},\n  howpublished = {\\url{" + url + "}},\n"
            "  note = {karzat — az Országgyűlés szavazásai; az Országgyűlés Web API-jának adataiból, frissítve " + stamp + "},\n  year = {" + year + "}\n}")
     links = " · ".join(x for x in [f'<a href="{esc(json_href)}">JSON</a>' if json_href else "", f'<a href="{esc(csv_href)}">CSV</a>' if csv_href else ""] if x)
-    return (f'<section class="panel cite" data-path="{esc(url)}">{CORNERS}<h2><span data-kz-text>Hivatkozás</span><span class="tag">{links}</span></h2>'
-            f'<div class="cite-row"><pre class="mono">{esc(plain)}</pre><button type="button" class="copy" data-copy>másolás</button></div>'
-            f'<details><summary class="mono">BibTeX</summary><div class="cite-row"><pre class="mono">{esc(bib)}</pre><button type="button" class="copy" data-copy>másolás</button></div></details></section>')
+    # Folded by default: it is on every page, and open it was the longest thing under most of them. A <details>
+    # needs no script, so a reader without one can still open it.
+    kinds = " · ".join(n for n, h in (("JSON", json_href), ("CSV", csv_href)) if h)
+    fmt_tag = f'<span class="tag">{kinds}</span>' if kinds else ""
+    # The JSON/CSV links stay out of the <summary>: a link inside the control that opens the box is a control
+    # inside a control, and a screen reader announces neither properly (axe: nested-interactive).
+    return (f'<details class="panel cite fold" data-path="{esc(url)}">{CORNERS}<summary><h2><span data-kz-text>Hivatkozás</span>{fmt_tag}</h2></summary>'
+            + (f'<p class="hero-meta" style="margin:0 0 4px">Adatként: {links}</p>' if links else "")
+            + f'<div class="cite-row"><pre class="mono">{esc(plain)}</pre><button type="button" class="copy" data-copy>másolás</button></div>'
+            f'<details><summary class="mono">BibTeX</summary><div class="cite-row"><pre class="mono">{esc(bib)}</pre><button type="button" class="copy" data-copy>másolás</button></div></details></details>')
 
 
 def sync_stamp(inp: dict) -> str:
@@ -3538,7 +3556,7 @@ def fact_for(page_path: str, depth: int, closed: bool = False) -> str:
     return f'<span class="fact" data-fact>{text} <i class="sub">{esc(f.get("scope") or "")}</i></span>'
 
 
-def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
+def terminal_html(inp: dict, lines: list[str] | None = None, open_method: bool = False) -> str:
     """The footer as a terminal, and one line in it. It used to print a boot log — the corpus totals, this page's
     cycle, the rule-versus-record check, the sync stamp — four lines of true numbers that every page repeated and
     nobody read twice. All four are on the pages that own them: the totals on the landing page, the freshness
@@ -3553,7 +3571,7 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
            if fact else "")
     return f"""<footer class="kz-terminal"><div class="scan"></div>{CORNERS}
   <div class="log">{log}</div>
-  <div class="method">
+  <details class="method"{" open" if open_method else ""}><summary>Honnan · ki készíti · mit nem</summary>
     <h3>Honnan</h3>
     Az adatok forrása az Országgyűlés nyilvános adatszolgáltatása, a Web API. Onnan jön minden szavazás, és ahol a Ház név szerint rögzítette, a név szerinti lista is. A képviselőket a Wikidata azonosítói kötik össze a ciklusokon át. A szükséges többséget minden szavazásnál maga az Országgyűlés jelöli meg — az oldal csak utánaszámol. Jelenlévőnek azt vesszük, aki igennel, nemmel vagy tartózkodással szavazott: ez a leadott szavazatok száma, így számol az Országgyűlés is.
     <h3>Ki készíti</h3>
@@ -3562,7 +3580,7 @@ def terminal_html(inp: dict, lines: list[str] | None = None) -> str:
     szabad az oldalról átvenni, hogyan kell hivatkozni, és mit nem ad ez az oldal.
     <h3>Mit nem</h3>
     Az oldal számol, nem ítél: ki hogyan szavazott, hányszor, a frakciójával vagy ellene. Hogy miért, azt nem tudja. A színek a pártok saját színeit követik, ahogy a Wikipédia nyilvántartja őket. Minden számítás leírása: <a href="{rel_root_for_footer(inp)}modszer/index.html">módszer</a>.
-  </div>
+  </details>
 </footer>"""
 
 
@@ -3687,7 +3705,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
                         f'<div class="hero-meta" style="margin-top:10px"><span class="lbl">szavazás havonta</span></div><div class="fbars" tabindex="0" style="max-height:260px;overflow:auto;margin-top:4px">{months}</div></section>')
     else:
         second_panel = (f'<section class="panel">{CORNERS}<h2><span data-kz-text>Egy törvény útja</span><span class="tag">T/71</span></h2>'
-                        '<div class="hero-title" style="font-size:16px">A Nemzetközi Büntetőbíróság Statútumából való kilépés visszavonása — 2026. évi XV. törvény</div>'
+                        '<div class="hero-title" style="font-size:17px">A Nemzetközi Büntetőbíróság Statútumából való kilépés visszavonása — 2026. évi XV. törvény</div>'
                         '<div class="timeline"><div><b>máj. 25.</b>benyújtva (kormány)</div><div><b>máj. 26.</b>kivételes eljárás elrendelve</div><div><b>máj. 27.</b>zárószavazás</div><div><b>máj. 28.</b>kihirdetve, Magyar Közlöny 60</div></div>'
                         '<div class="hero-meta prose" style="margin-top:8px">3 nap a benyújtástól a kihirdetésig.</div></section>')
     cyc = f'{inp["cycle"]}. ciklus ({CYCLE_SPAN.get(inp["cycle"], "")})'
@@ -4449,7 +4467,7 @@ def build_cohesion_page(inp: dict, co: dict) -> str:
             continue
         prs = "".join(f'<tr><td><a href="../kepviselo/{esc(r["a"])}.html">{esc(names.get(r["a"], r["a"]))}</a> – <a href="../kepviselo/{esc(r["b"])}.html">{esc(names.get(r["b"], r["b"]))}</a></td>'
                       f'<td class="num mono">{r["same"]} / {r["shared"]}</td><td class="num mono">{_pct(r["share"])}</td></tr>' for r in pairs)
-        pair_blocks.append(f'<h3 class="mono" style="font-size:10px;letter-spacing:.2em;color:var(--dim2);margin:12px 0 4px">{esc(f)} — a legkevésbé egyező párok</h3>'
+        pair_blocks.append(f'<h3 class="mono" style="font-size:11px;letter-spacing:.2em;color:var(--dim2);margin:12px 0 4px">{esc(f)} — a legkevésbé egyező párok</h3>'
                            f'<div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th scope="col">Pár</th><th scope="col" class="num">Egyező / közös</th><th scope="col" class="num">Egyezés</th></tr></thead><tbody>{prs}</tbody></table></div>')
     return page_head(f'Kohézió · {inp["cycle"]}. ciklus · karzat', f'Frakciók összetartása a {inp["cycle"]}. ciklusban: Rice-index, egyetértési index, frakciók közti egyezés, képviselőpárok.', 1 + inp["base_depth"]) + \
         topbar(inp, [("kohézió", None)], 1) + f"""
@@ -4706,7 +4724,7 @@ böngésződben fut, és onnantól SQL-lel kérdezhető. Kiszolgáló nincs mög
   <h2><span data-kz-text>Kérdezz</span><span class="tag" id="sqlstate">a futtatókörnyezet betöltése {runtime_mb}, első használatkor</span></h2>
   <div class="filters" role="group" aria-label="Példák">{ex}</div>
   <label class="lbl" for="q">Lekérdezés</label>
-  <textarea id="q" rows="8" spellcheck="false" data-tables="{esc(",".join(pq))}" data-factions="{esc(json.dumps(chart_colours(inp), ensure_ascii=False, separators=(",", ":")))}" style="width:100%;background:rgba(0,0,0,.45);color:var(--text);border:1px solid var(--border);font-family:var(--mono);font-size:12px;padding:10px">{esc(SQL_EXAMPLES[0][1])}</textarea>
+  <textarea id="q" rows="8" spellcheck="false" data-tables="{esc(",".join(pq))}" data-factions="{esc(json.dumps(chart_colours(inp), ensure_ascii=False, separators=(",", ":")))}" style="width:100%;background:rgba(0,0,0,.45);color:var(--text);border:1px solid var(--border);font-family:var(--mono);font-size:13px;padding:10px">{esc(SQL_EXAMPLES[0][1])}</textarea>
   <div style="margin-top:8px"><button type="button" id="run">futtatás</button> <button type="button" id="stop" hidden>megszakítás</button> <button type="button" id="dllink" title="a lekérdezést a cím hordozza — a link ugyanide, ugyanezzel a kérdéssel nyílik">link a lekérdezéshez</button> <span class="sub" id="took"></span></div>
   <div class="tablewrap" tabindex="0" style="margin-top:12px"><table id="out"><thead></thead><tbody></tbody></table></div>
   <div id="chartwrap" hidden style="margin-top:14px">
@@ -9398,7 +9416,7 @@ def speech_stage(event: str, irom: str) -> str:
     return head[:1].lower() + head[1:] if head else ""
 
 
-def build_today(inp: dict) -> str:
+def today_of(inp: dict) -> str:
     """The build's own date, in Budapest: the day the data was derived. Not the wall clock, so a rebuild of the
     same data says the same thing."""
     return datetime.fromisoformat(inp["idx"]["derived_at"]).astimezone(BUDAPEST).date().isoformat()
@@ -9452,7 +9470,7 @@ def _bill_link(rec_title: str, code: str, rel: str, limit: int = 60) -> str:
 def day_summaries(inp: dict, rel: str, n_days: int = 5) -> str:
     """The last few sitting days, newest first, each said in a sentence or two from the speech lists and votes.
     `rel` reaches the cycle directory from the page."""
-    today = build_today(inp)
+    today = today_of(inp)
     days = [d for d in inp["idx"]["sitting_days"] if d.get("date")]
     sp_rows = [r for r in ((inp.get("speeches") or {}).get("speeches") or []) if not r.get("technical")]
     by_day: dict[str, list[dict]] = {}
@@ -9538,7 +9556,7 @@ def day_summaries(inp: dict, rel: str, n_days: int = 5) -> str:
 def last_week(inp: dict, rel: str) -> dict:
     """The calendar week before the build's own: its votes, the closest one, the bills it passed, and who voted
     differently from their own faction's majority."""
-    t = _date.fromisoformat(build_today(inp))
+    t = _date.fromisoformat(today_of(inp))
     mon = t.fromordinal(t.toordinal() - t.weekday() - 7)
     sun = mon.fromordinal(mon.toordinal() + 6)
     lo, hi = mon.isoformat(), sun.isoformat()
@@ -9759,7 +9777,7 @@ def build_landing() -> str:
   <a class="panel door" href="modszer/index.html">{CORNERS}<h2><span data-kz-text>Módszer és adatok</span></h2><p>Minden szabály és számítás leírva; minden tábla letölthető CSV-ben és JSON-ban, ciklusonként az <span class="mono">adatok/</span> alatt.</p><span class="go mono">modszer/ →</span></a>
 </section>
 </div></main>
-{terminal_html(inp, lines)}<script src="assets/karzat.js"></script>
+{terminal_html(inp, lines, open_method=True)}<script src="assets/karzat.js"></script>
 </body>
 </html>
 """

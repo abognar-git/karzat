@@ -110,6 +110,7 @@ PAGE_KINDS: dict[str, object] = {
     "spokesperson": "szemely/004O.html",
     "government member": "szemely/v076.html",
     "switches": "frakciovaltas/index.html",
+    "upcoming": "mijon/index.html",
     # The builders branch on inp["closed"] and inp["archive"], and 14 of them render differently on the far
     # side of that branch — which no cycle-43 page ever reaches. Two serious violations lived there: the
     # fallback chamber kept the role="img" that the current-cycle chart had already had fixed, and a
@@ -149,6 +150,7 @@ COVERS: dict[str, str] = {
     "person": "build_person_page", "person index": "build_person_index",
     "spokesperson": "build_spokesperson_page", "government member": "build_kormany_page",
     "switches": "build_switch_page",
+    "upcoming": "build_upcoming_page",
     "cycle index (closed)": "build_index", "cycle index (archive)": "build_index",
     "cycle index (biggest)": "build_index",
     "speech search (used)": "build_speech_search_page", "search (used)": "build_search_page",
