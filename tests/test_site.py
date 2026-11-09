@@ -146,7 +146,7 @@ class Build(unittest.TestCase):
         self.assertIn('href="../assets/karzat.css"', self.cyc)                # site/ckl43/index.html → ../assets
         self.assertIn('<a class="brand" href="../index.html">', self.cyc)     # the brand goes to the landing
         for h in re.findall(r'href="\.\./([^"#]+)', self.cyc):
-            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|sajto/|index\.html$|ckl\d+/)", h)
+            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|sajto/|mijon/|index\.html$|ckl\d+/)", h)
 
     def test_landing_is_the_view_from_the_gallery(self):
         tot = site_totals()
@@ -602,7 +602,7 @@ class Cycle42(unittest.TestCase):
         self.assertNotIn("TISZA: 141", page)
         # links leave the cycle root only for the shared trees (assets, people, method, search, other cycles)
         for h in re.findall(r'href="\.\./([^"#]+)', page):
-            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|sajto/|index\.html$|ckl\d+/)", h)
+            self.assertRegex(h, r"^(assets/|szemely/|modszer/|kereses/|sajto/|mijon/|index\.html$|ckl\d+/)", h)
         self.assertIn('href="../ckl43/index.html" class="near">43</a>', page)  # the cycle switch (43 is the neighbour of 42)
         self.assertIn('<span class="kicker" data-kz-text>42. ciklus</span><h1>2022. május 2. — 2026. május 8.</h1>', page)   # the term is the title
         # Four groups, and each entry under the question it answers. This used to be three, and the odd one
@@ -4144,3 +4144,56 @@ class ReportPage(unittest.TestCase):
                          "the tag names no download size before the reader waits for one")
         self.assertIn("első használatkor", tag.group(1))
         self.assertIn("Kiszolgáló nincs mögötte", self.html)
+
+
+class WhatComesNext(unittest.TestCase):
+    """mijon/: the bills still ahead of the House and the recent sitting days in a sentence each. The page must not
+    promise what the record does not hold: no day's agenda, no bill the House already voted through."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import build_upcoming_page, upcoming_bills
+        cls.inp = load_inputs()
+        if not cls.inp.get("bill_recs"):
+            raise unittest.SkipTest("no motion records cached — run: python3 -m karzat sync-bills")
+        cls.bills = upcoming_bills(cls.inp)
+        cls.page = build_upcoming_page(dict(cls.inp, site_wide=True, base_depth=0, facs_all={}))
+
+    def test_a_bill_with_a_closing_vote_is_not_waiting_for_one(self):
+        # the register's status trails the floor by weeks: T/961 still read "összevont vitára vár" the day after
+        # the House passed it. The votes are the authority on whether a closing vote happened.
+        from karzat import analytics as an
+        closed = {an.bill_key(mo.get("iromany"))[0] for v in self.inp["idx"]["votes"] for mo in v.get("motions") or []
+                  if (mo.get("outcome") or "").casefold().startswith("önálló indítvány")}
+        self.assertEqual({b["num"] for b in self.bills} & closed, set())
+
+    def test_a_number_reused_from_an_earlier_cycle_is_not_this_houses_bill(self):
+        start = self.inp["fl"]["window"]["from"]
+        self.assertTrue(all(b["on"] >= start for b in self.bills))
+
+    def test_every_listed_bill_links_to_a_page_that_is_built(self):
+        for n in re.findall(rf'href="\.\./{cycle_dir(CURRENT_CYCLE)}iromany/(\d+)\.html"', self.page):
+            self.assertIn(int(n), self.inp["bill_recs_by_num"], f"iromany/{n}.html has no record behind it")
+
+    def test_the_stage_is_read_off_the_speech_list(self):
+        from scripts.build_site import speech_stage
+        self.assertEqual(speech_stage("Általános vita lefolytatása T/930 A vagyonadóról", "T/930"), "általános vita")
+        self.assertEqual(speech_stage("Általános vita folytatása és lezárása T/937 A kereskedelemről", "T/937"), "általános vita")
+        self.assertEqual(speech_stage("Bizottsági jelentések és az összegző módosító javaslat vitája T/797 A közvagyon", "T/797"), "részletes vita")
+        self.assertEqual(speech_stage("Összevont vita T/961 Az államhoz", "T/961"), "összevont vita")
+
+    def test_it_never_claims_to_know_a_days_agenda(self):
+        text = visible_text(self.page)
+        self.assertIn("nem írja ki", text)
+        self.assertNotRegex(text, r"(holnap|ma) (szavaznak|döntenek)")
+
+    def test_no_inline_script_the_policy_would_block(self):
+        # script-src 'self': an inline <script> is dead on the live site, so the filters ride the bundle's data-posf
+        for m in re.finditer(r"<script(?![^>]*\bsrc=)(?![^>]*application/ld\+json)[^>]*>", self.page):
+            self.fail(f"inline script: {m.group(0)}")
+        self.assertIn('data-posf="kormany"', self.page)
+        self.assertIn('id="roll"', self.page)
+
+    def test_three_doors_lead_to_it(self):
+        self.assertIn('href="mijon/index.html"', build_landing())
+        self.assertIn('href="../mijon/index.html">mi jön</a>', build_index(self.inp, HERO_TS))

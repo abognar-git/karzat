@@ -1,7 +1,7 @@
 {
  "derived_at": "2026-11-03",
- "count": 1004,
- "listed": 1006,
+ "count": 1006,
+ "listed": 1008,
  "note": "Csak a jelenlegi ciklus: az irománylista nem fogad ciklusparamétert, az iromány-adatlap pedig ciklusonként újrakezdődő izon szerint címezhető, így korábbi ciklus irománya nem kérhető le.",
  "records": {
   "B/1": {
@@ -808,6 +808,70 @@
    "szam_parsed": {
     "kind": "K",
     "number": 1004
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/1005": {
+   "szam": "A/1005",
+   "izon": "1005",
+   "title": "Milyen fókuszerületekre számíthatunk?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-11-08",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Pásztor Anett (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "gazdasági és energetikai miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22001L%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 1005
+   },
+   "days_submission_to_promulgation": null,
+   "final_vote_ts": null,
+   "days_submission_to_final_vote": null
+  },
+  "A/1006": {
+   "szam": "A/1006",
+   "izon": "1006",
+   "title": "Hogyan lehet az emberek életminőségét javítani?",
+   "type": "azonnali kérdés",
+   "main_type": "azonnali kérdés",
+   "nature": "új",
+   "submitted_on": "2026-11-08",
+   "status": "benyújtva",
+   "procedure_mode": null,
+   "procedure_kind": null,
+   "promulgation": null,
+   "submitters": [
+    "Balajti István (TISZA)"
+   ],
+   "submitter_kind": "kepviselo",
+   "addressee": "közlekedési és beruházási miniszter",
+   "note": null,
+   "text_url": null,
+   "text_pdf_url": null,
+   "submitter_azon": "kepviselok_mobil?kepviselo=%7B%22id%22%3A%22002T%22%7D",
+   "events": [],
+   "votes": [],
+   "committees": [],
+   "szam_parsed": {
+    "kind": "A",
+    "number": 1006
    },
    "days_submission_to_promulgation": null,
    "final_vote_ts": null,

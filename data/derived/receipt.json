@@ -1,8 +1,8 @@
 {
- "built_at": "2026-11-08T10:47:09Z",
- "corpus_root": "f3847fe34cb03ebc394b999cc6f84ba2e554c0aa6cc3abfddc737bfe699489f2",
- "payloads": 150708,
- "bytes": 2766184598,
+ "built_at": "2026-11-09T03:31:26Z",
+ "corpus_root": "46889fd2be7c5dd5a1b03fa565e09cd00c3a312da0d4a285ba193dc00f0d10c0",
+ "payloads": 150712,
+ "bytes": 2766258991,
  "services": {
   "bizottsag": {
    "root": "5748b0250bbdb808ff98d2b39f21366d251d457cbb026494612f393cb17fb9c4",
@@ -25,17 +25,17 @@
    "bytes": 244005834
   },
   "iromany": {
-   "root": "4a1d8045175a127dc3a3fc710de38b78e33d53c1be70354b0921afa8839106c5",
-   "payloads": 1004,
-   "bytes": 3434943
+   "root": "61ae195658be6347af40502b31df66ea44369c3373a2af492de08cbcec8c65de",
+   "payloads": 1006,
+   "bytes": 3437885
   },
   "iromanyok": {
-   "root": "36f83cb26316edffe9e728d2ca864779a5c45eef510cf3d17c4a53923ad4b2a1",
+   "root": "d4a174e35c548c33ea629b5d82989a41ad9dfdeb215799f6e49227616f5a444f",
    "payloads": 1,
-   "bytes": 732410
+   "bytes": 733518
   },
   "kepviselo": {
-   "root": "1d3374cf4ac6207cd0e04c6d0b67ddebcffdace7695953f3d0d2a3e8b1dbe7bf",
+   "root": "b98e8aa8d94dc6be15029e809c9272acad1f0d4132a2c0a4c19c4b6ee2625892",
    "payloads": 1638,
    "bytes": 10923267
   },
@@ -50,14 +50,14 @@
    "bytes": 57159403
   },
   "szavazas": {
-   "root": "700aa90bb8e43667a885181ef56b26ae5d33955e109d35dcc351a3f707a29f19",
+   "root": "a56adb31af0d06acbe0d95633fe8e5f790cf6f6d6c829cb234086ed4c3e3d121",
    "payloads": 80038,
-   "bytes": 1951857030
+   "bytes": 1951857334
   },
   "szavazasok": {
-   "root": "34cdf1307d09fcebdcd23e60ecb2899abe5ed76e772a9b93363be16e2936f294",
-   "payloads": 2194,
-   "bytes": 175454847
+   "root": "1219d1d7058d30cd9746597a689891812264ca251b2cdb9d06a164752194a359",
+   "payloads": 2196,
+   "bytes": 175524886
   },
   "szoszolok": {
    "root": "4528e8d1f9ab70d430fed16625265cd10226fc1ed1a1230255c137465b377ed3",
@@ -71,18 +71,18 @@
   }
  },
  "code": {
-  "commit": "5358e8cacf57ddfbcc369c7264f35c589ac166d4",
-  "described": "5358e8c-dirty",
-  "clean": false,
-  "uncommitted_files": 9
+  "commit": "230c8352917fb6aec5cefd1726ae243758e55280",
+  "described": "230c835-dirty",
+  "clean": true,
+  "uncommitted_files": 0
  },
  "derived": {
   "a11y.json": "0d7e7c907fa9bb2892580245e3c6c02796c8319a40d1f68965def40c54a65946",
   "committees.json": "49fdfaa06f274024e9afcbf4e65beab1721e66741139700e85928023bce7b10a",
   "db_summary.json": "034203d161857c69484779b12a4ec5719be6e8b06dc8d3513963d4d1d2751e67",
-  "echo.json": "4bb7e2b44af9f2ff94706226109d42867185a718dccdc1e78e89a7e2e5214c11",
-  "faction_switches.json": "3e0bb3cd4d4b9443e9b2460d757702f57c9a03ad0ca564bca4845a34aed76ff6",
-  "first_light.json": "8cbd240cee3bbfa8897f066ea402e3ac45673617f6f3702a212811963bf4d80f",
+  "echo.json": "8a42f1643a67b247508878d200e1fa6ede4b4f205446496ad2ea7560e02d2cf1",
+  "faction_switches.json": "570afd4b75820569828d06990cceba8a15dd0a2cb4af2f57b7cf1443971f5871",
+  "first_light.json": "22acf3d267e9dfe60ea9de2e518398173825d336d19a71a6b31c4fe12ce5144d",
   "first_light_ckl34.json": "265105540f6e33ec61003f818f9963b9cc37af3efe28f3a099cc79c024173e47",
   "first_light_ckl35.json": "0c0b9f1202dcb90e0b64370d4805386bf2d1b7a072bf7d33fa1c75062e2deb08",
   "first_light_ckl36.json": "cc6cb25a19bad905b15c99ad8555399cc2c04d5a0ab883cea98e970a1cbbfa12",
@@ -92,7 +92,7 @@
   "first_light_ckl40.json": "024029f00debb457c80df95a6278f34a25fdb1e3aa96618d9a91845741f9fc70",
   "first_light_ckl41.json": "893e409be9b71b9fe72b600a42d6a32f2e81076714eccb7a902024e5324dcbe2",
   "first_light_ckl42.json": "5fba57d17d631801425c5e37f115d476448f99f51b2ddece4f247b46b45422e2",
-  "hero_vote.json": "8da129522bf83a21060b6ebd9b63463617bac5404f546363c222fcbff3fb2050",
+  "hero_vote.json": "b94e26e5e60557ad0f0a381d6ca825cfd27f6b12ae8df680fed1644d3efe5f74",
   "hero_vote_ckl34.json": "6e1043e9a8910b7780d8495d611c8290d429c63793bad4c44cb918a05e42ec36",
   "hero_vote_ckl35.json": "a8273fa7047c26d9f5fdf2bb39b23f8ad7e986e2aae3c151de927cdb1c5ad2e7",
   "hero_vote_ckl36.json": "22855982997d6c966d3e5e445a501cd180ba8cba152e4e33338287bffe3b9d06",
@@ -102,10 +102,10 @@
   "hero_vote_ckl40.json": "a585f85b0a397273b4e7f849b7a7206df5b9fb328aa6386397dd6807f9f2c2bc",
   "hero_vote_ckl41.json": "7891f4c107b8f58505172ab0dafdffce6120264ef07254d4a7add4137dcf786d",
   "hero_vote_ckl42.json": "a2d0bec231b8d16cf0420d078a03131e6c64819dc4947b2dd429c6f433a6dc7f",
-  "idealpoints.json": "c9f36d8575996c030ab6521a0a68183e690bc18311b033ef3adc1409fb4e4b8f",
-  "iromany_records.json": "6a3ed28fa9eedc226eb86201270bac5693967d8c6e5ddd79c19d807a3d099ef6",
+  "idealpoints.json": "cd61a57d6485cf5b566531a3b0e35dc6d6d804d8928dc126f66c8e093d499661",
+  "iromany_records.json": "a3f9cce184dc2eecd56e49ed78b2a19bfcb5a8b295ac60f021489052eee32058",
   "kormany.json": "d1240765fc5fcb8896c2d6d6c014ed21fa465ae2b2afc53488a23ac994190b3c",
-  "mps.json": "53fe4438503e2e78b444aeddcb9523a852940357f3cf8007346a4a40f26f6b09",
+  "mps.json": "39b48579df6db5dea5d2e68e1784e736ade7af5b783982f72f153e04d77e778b",
   "mps_ckl34.json": "8bd3a47d72a234edcde7846c99939db280eb71b0b4684a7ef073ae5df478df0c",
   "mps_ckl35.json": "c0710ce3712900935c5eca40ece91473a47396b65add54bad6ae9baf02e93105",
   "mps_ckl36.json": "dfa236d0f8c4dc33123112ac1e1ccf2a31c5f19ab4ab3e9d59a2a55fb039476d",
@@ -115,11 +115,11 @@
   "mps_ckl40.json": "394cb3a1ed14a33d6a18cc8018650a88aca61527dcfdc1a4cac520622449a332",
   "mps_ckl41.json": "78290caf169e0f50c76b4d9a57d09f1fb812ca901268ae4a4b2a9d439d29ad13",
   "mps_ckl42.json": "5e0c9086f8e62d99c01855835b1c238416230ed7725e615bcb178ec7c3f5afd8",
-  "parquet.json": "77acaea45bb06f3bceb402b0787614a326935421d29de481a71edf983771fb87",
+  "parquet.json": "f3db50678e7ec85acfef9574bc0c9fb09d526b79f8f98e6b2c7d3cdbd3b718cf",
   "portre.json": "9734e0da48223c432695ade4dc59e2ed40dfb96b0a7ab14a62d9f60806bae4d1",
   "remuneration_history.json": "8897b54314a314807dd1b7c6045c1c46589c4a1a28b7dbea3959264830648eef",
   "search_bench.json": "9cfdb434a4c202dbdb3b201560ac52c61c4cc3071238e9f83d24bb83c606746f",
-  "seating.json": "dfb848ad7942dff1f8940ff719f623c3fefa12c63e588e5fde346e8eaa97980c",
+  "seating.json": "bba94b7fe14e86ad1c94b4b4001232e62bf70032238b73e6e1c3bfa838f152eb",
   "speech_texts.json.gz": "22427cb376752d58449efb84b0ff99aba961685a67f8f23c13a44dafc9f3d39a",
   "speech_texts_ckl40.json.gz": "d28e217a0fd557f455385e69b4d02581e3a9fd10af3cf18aaf567f356a70c7d5",
   "speech_texts_ckl41.json.gz": "72e2051f3dc2722f806fddeba5531312b6c667e9c9cbdf6796d9edbc93a1a188",
@@ -135,7 +135,7 @@
   "szoszolok.json": "acaef896e7cfefb7afdf326c585a31cf1e8d98ae0349a6386266513f97765fee",
   "tenyek.json": "b375d4bfc7663d572d34a4d8cd2aacf5bd301375c949589ba9541ca41df388a3",
   "traffic.json": "ba087ac26820bd74c32291dcb39f1bb44d7e4c5e35ba8f09d6792be915dd422c",
-  "votes_index.json": "94ddf1ef7c9b2ce39628219ecd103364f9c25d5576b839bf6420d267fab7ddfb",
+  "votes_index.json": "2d41f9f1e838c35eb22114bbfb9a887978138f8180a94b1c0924fafbb8005378",
   "votes_index_ckl34.json.gz": "147009639e36a8e21f1c3697b1f34d22bf74360e55d31c2fe31f522146c8541e",
   "votes_index_ckl35.json.gz": "fe8fa6100aec1cafc69d9aeb899081402b69f296eb68c762c185037bdd75826c",
   "votes_index_ckl36.json.gz": "d2ead66a155a12068eb5e00285cdb83626bd23f3eae00db5ee7cd5eabe2359f0",
@@ -145,7 +145,7 @@
   "votes_index_ckl40.json.gz": "0e6bedb8f25a3c5c6edc892a31a6c6536e87c7f30b7b0c386d3fa115df73babb",
   "votes_index_ckl41.json.gz": "6b6b13f01abe9749fac2a2efa24afd9cf4b4b7553cf068ec183d9ad3dde98dca",
   "votes_index_ckl42.json.gz": "67847fb85d23d6808e6e9a3b56f5e045d377b32f8cafc4724584b8c3d94cb7c2",
-  "votes_positions.json": "5a486117c00d0e120306a5aeb2728c5296a06228ca0813a59260d089c30822ff",
+  "votes_positions.json": "97088f863d268b4082a281ddbd781b857a5144825805d26d4dbe022ab92ab802",
   "votes_positions_ckl34.json.gz": "8404dbb366ffb6e02659df2ec540e77a54e41138ec968fd5aa856f14daca421a",
   "votes_positions_ckl35.json.gz": "d3e4878fdf375f9c786eeae047cd4682e77ffa004aa841d9ef307d5859fef13a",
   "votes_positions_ckl36.json.gz": "e83650d0fd2a604fc04e1e3bb22d96ed2d1b14695bb800ad573404eba06a89bb",

@@ -927,6 +927,8 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .verdict{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:12px;margin-top:8px;font-family:var(--mono)}
 .verdict dt{color:var(--dim2);text-transform:uppercase;letter-spacing:.15em;font-size:11px;padding-top:2px}.verdict dd{margin:0;color:var(--text)}
 .verdict dd .hero-meta{display:block;color:var(--dim2);font-size:11px}
+/* mi jön: a sitting day in a sentence or two — prose in the sans, the day label stays the terminal mono */
+.verdict.days{grid-template-columns:96px 1fr;gap:12px 16px}.verdict.days dt{line-height:1.5}.verdict.days dd{font-family:var(--sans);font-size:14px;line-height:1.55}.verdict.days a{text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px}.verdict.days a:hover{text-decoration-color:var(--white)}.verdict.days .sub{color:var(--dim2)}
 .badge{display:inline-block;padding:2px 8px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
 .badge.hi{border-color:var(--dim3);color:var(--white)}.badge.ok{border-color:var(--okbd);background:var(--okbg);color:var(--ok)}.badge.no{border-color:var(--badbd);background:var(--badbg);color:var(--bad)}.badge.mid{color:var(--dim2);background:rgba(24,24,27,.6)}
 .bar{height:6px;background:var(--line2);position:relative;margin:8px 0 4px}
@@ -963,6 +965,7 @@ html.js .cite .copy{display:inline-block}html.js [data-fact-next]{display:inline
 .landing .masthead{position:relative;border:1px solid var(--border);background:var(--panel-deep);padding:24px 26px 16px;display:grid;grid-template-columns:minmax(240px,.85fr) 1.7fr;gap:18px 32px;align-items:center}
 .landing .mast-h h1{font-size:52px;margin:0 0 12px}
 .landing .mast-lede{color:var(--dim);font-size:14px;max-width:40ch;margin:0;line-height:1.55}
+.landing .mast-next{margin:14px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em}.landing .mast-next a{color:var(--text);border-bottom:1px solid var(--border-hi);padding-bottom:1px}.landing .mast-next a:hover,.landing .mast-next a:focus-visible{color:var(--white);border-color:var(--white)}
 .landing .chamber-today{margin:0;min-width:0}.landing .chamber-today svg{width:100%;height:auto;display:block;outline:none}
 .landing .chamber-today figcaption{margin-top:4px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .landing .chamber-today figcaption .sub{text-transform:none;letter-spacing:.05em;margin-left:6px}.landing .chamber-today .legend{margin-top:6px}
@@ -3705,7 +3708,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
   <div class="cyc-title"><span class="kicker" data-kz-text>{inp["cycle"]}. ciklus{"" if inp["closed"] else " · folyamatban"}</span><h1>{esc(cycle_title(inp["cycle"]))}</h1>
     <p class="lede">{hu_num(fl["votes"])} szavazás{" az első " + hu_num(sd["count"]) + " ülésnapról" if not inp["closed"] else ""}, mindegyik a saját oldalán: {"ki hogyan szavazott, és mennyi kellett hozzá" if not inp["archive"] else ("az arányok frakciónként és a szükséges többség; a név szerinti listák az adatállományban" if n_rolls > len(inp["order"]) // 10 else "az arányok frakciónként és a szükséges többség — név szerinti listát és tárgyat az API 1998 előtt nem ad")}.</p></div>
   <nav class="cyc-nav" aria-label="A ciklus oldalai">
-    <div class="grp"><span class="lbl">szavazások</span><a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a></div>
+    <div class="grp"><span class="lbl">szavazások</span>{f'<a href="{"../" * inp["base_depth"]}mijon/index.html">mi jön</a>' if not inp["closed"] and inp.get("bill_recs") else ""}<a href="#dir">lista</a><a href="szoros/index.html">szoros szavazások</a><a href="kohezio/index.html">kohézió</a><a href="szamok/index.html">számok</a></div>
     <div class="grp"><span class="lbl">viták</span><a href="iromany/index.html">irományok</a>{'<a href="beszedido/index.html">beszédidő</a>' if has_floor(inp) else ""}<a href="felszolalas/index.html">felszólalások</a>{'<a href="visszhang/index.html">visszhang</a>' if (inp.get("echo") or {}).get("items") else ""}</div>
     <div class="grp"><span class="lbl">emberek</span><a href="kepviselo/index.html">képviselők</a><a href="{"../" * inp["base_depth"]}szemely/index.html">pályaképek</a><a href="bizottsag/index.html">bizottságok</a><a href="kepviselom/index.html">képviselőm</a></div>
     <div class="grp"><span class="lbl">eszközök</span><a href="feed/index.html">értesítések</a><a href="adatok/index.html">adatok</a><a href="{"../" * inp["base_depth"]}kereses/index.html">keresés</a><a href="{"../" * inp["base_depth"]}modszer/index.html">módszer</a></div>
@@ -9356,6 +9359,302 @@ felszólalásnak saját, állandó címe van.</p>
 """
 
 
+# -- mi jön: what is still ahead of the House ------------------------------------------------------
+#
+# The House publishes no machine-readable agenda the build can read, so this page never says what will be voted
+# on which day. What it can say from the record: which bills were submitted and have had no closing vote, how far
+# each got (the speech lists name the stage it was debated at, which the register's own status often trails by
+# weeks), and what each recent sitting day was spent on. Where a day's data has not arrived it says so.
+
+UPCOMING_DONE = {"kihirdetve", "visszavonva", "elutasítva", "elfogadva", "Országgyűlés nem tárgyalja",
+                 "Országgyűlés elnökének aláírására vár", "kihirdetés előtt"}
+UPCOMING_STATUS = {"tárgysorozatban": "tárgyalják", "tárgysorozatba vételre vár": "bizottság dönt, tárgyalják-e",
+                   "Törvényalkotási Bizottság eljárására vár": "Törvényalkotási Bizottságnál",
+                   "részletesvita-szakaszban": "részletes vita", "összevont vitára vár": "összevont vitára vár"}
+HU_MON_SHORT = ["jan.", "febr.", "márc.", "ápr.", "máj.", "jún.", "júl.", "aug.", "szept.", "okt.", "nov.", "dec."]
+WEEKDAY_ADJ = {"hétfő": "hétfői", "kedd": "keddi", "szerda": "szerdai", "csütörtök": "csütörtöki", "péntek": "pénteki",
+               "szombat": "szombati", "vasárnap": "vasárnapi"}
+WEEKDAY_HU = ["hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat", "vasárnap"]
+_BILL_PREFIX = re.compile(r"^[THB]/\d+$")
+
+
+def hu_short(iso: str) -> str:
+    """'2026-11-04' → 'nov. 4.'"""
+    _, m, d = iso.split("-")
+    return f"{HU_MON_SHORT[int(m) - 1]} {int(d)}."
+
+
+def speech_stage(event: str, irom: str) -> str:
+    """The stage a speech list prints before the iromány number: 'Általános vita lefolytatása T/930 A vagyonadóról'
+    → 'általános vita'. Only the stage noun is kept; 'megkezdése / folytatása / lezárása' is one debate."""
+    head = (event or "").split(irom.split(" · ")[0])[0].strip()
+    low = head.casefold()
+    if low.startswith("általános vita"):
+        return "általános vita"
+    if low.startswith("bizottsági jelentések") or "összegző" in low or low.startswith("részletes vita"):
+        return "részletes vita"
+    if low.startswith("összevont vita"):
+        return "összevont vita"
+    return head[:1].lower() + head[1:] if head else ""
+
+
+def build_today(inp: dict) -> str:
+    """The build's own date, in Budapest: the day the data was derived. Not the wall clock, so a rebuild of the
+    same data says the same thing."""
+    return datetime.fromisoformat(inp["idx"]["derived_at"]).astimezone(BUDAPEST).date().isoformat()
+
+
+def upcoming_bills(inp: dict) -> list[dict]:
+    """Bills of the current cycle with no closing vote yet, newest first, each with how far it got."""
+    recs = inp.get("bill_recs") or {}
+    start = inp["fl"]["window"]["from"]
+    voted: set[int] = set()
+    for v in inp["idx"]["votes"]:
+        for mo in v.get("motions") or []:
+            if (mo.get("outcome") or "").casefold().startswith("önálló indítvány"):
+                n, _ = an.bill_key(mo.get("iromany"))
+                if n is not None:
+                    voted.add(n)
+    stage: dict[int, tuple[str, str]] = {}                   # the last debate the speech lists put it in
+    for r in ((inp.get("speeches") or {}).get("speeches") or []):
+        if r.get("technical") or not r.get("iromany"):
+            continue
+        for code in r["iromany"].split(" · "):
+            n, p = an.bill_key(code)
+            if n is not None and p == "T":
+                st = speech_stage(r.get("event") or "", r["iromany"])
+                if st:
+                    stage[n] = (r["date"], st)
+    out = []
+    for rec in recs.values():
+        num = (rec.get("szam_parsed") or {}).get("number")
+        if rec.get("main_type") != "törvényjavaslat" or not isinstance(num, int):
+            continue
+        # the record API answers an iromány number for any cycle, so a number reused from an earlier cycle
+        # comes back with that cycle's bill: submitted before this one began, it is not this House's business
+        if (rec.get("submitted_on") or "") < start or rec.get("status") in UPCOMING_DONE or num in voted:
+            continue
+        kind = {"kormany": "kormany", "kepviselo": "kepviselo"}.get(rec.get("submitter_kind"), "mas")
+        where = (f'{stage[num][1]}: {hu_short(stage[num][0])}' if num in stage
+                 else UPCOMING_STATUS.get(rec.get("status"), rec.get("status") or "—"))
+        out.append({"num": num, "szam": rec["szam"], "title": rec.get("title") or "", "subs": rec.get("submitters") or [],
+                    "kind": kind, "on": rec.get("submitted_on") or "", "where": where, "debated": num in stage})
+    out.sort(key=lambda b: (b["on"], b["num"]), reverse=True)
+    return out
+
+
+def _bill_link(rec_title: str, code: str, rel: str, limit: int = 60) -> str:
+    n, _ = an.bill_key(code)
+    t = rec_title if len(rec_title) <= limit else rec_title[:limit].rsplit(" ", 1)[0] + "…"
+    return f'<a href="{rel}iromany/{n}.html" title="{esc(rec_title)}">{esc(code)}</a> {esc(t)}'
+
+
+def day_summaries(inp: dict, rel: str, n_days: int = 5) -> str:
+    """The last few sitting days, newest first, each said in a sentence or two from the speech lists and votes.
+    `rel` reaches the cycle directory from the page."""
+    today = build_today(inp)
+    days = [d for d in inp["idx"]["sitting_days"] if d.get("date")]
+    sp_rows = [r for r in ((inp.get("speeches") or {}).get("speeches") or []) if not r.get("technical")]
+    by_day: dict[str, list[dict]] = {}
+    for r in sp_rows:
+        by_day.setdefault(r["date"], []).append(r)
+    votes_by_day: Counter = Counter(v["on_date"] for v in inp["idx"]["votes"])
+    newest_vote = max(votes_by_day, default="")
+    newest_speech = max(by_day, default="")
+    by_num = inp.get("bill_recs_by_num") or {}
+
+    def kinds(rows: list[dict]) -> dict[str, int]:
+        ev = lambda r: (r.get("event") or "")
+        return {"elo": sum(1 for r in rows if ev(r).startswith("Napirend előtti")),
+                "interp": len({r["iromany"] for r in rows if ev(r).startswith("Interpelláció") and r.get("iromany")}),
+                "kerdes": len({r["iromany"] for r in rows if "kérdés" in ev(r).casefold() and r.get("iromany")
+                               and not ev(r).startswith("Interpelláció")})}
+
+    def pattern(weekday: str) -> str:
+        same = [d["date"] for d in days if d.get("weekday") == weekday and d["date"] in by_day]
+        if len(same) < 3:
+            return ""
+        k = [kinds(by_day[d]) for d in same]
+        voted = [d for d in same if d <= newest_vote]
+        parts = [(sum(1 for x in k if x["elo"]), "napirend előtti felszólalás"), (sum(1 for x in k if x["kerdes"]), "kérdés"),
+                 (sum(1 for x in k if x["interp"]), "interpelláció")]
+        if voted:
+            parts.append((sum(1 for d in voted if votes_by_day[d]), "szavazás"))
+        txt = ", ".join(f"{label} {hu_num(n)}" for n, label in parts if n)
+        return f'Az eddigi {hu_num(len(same))} {WEEKDAY_ADJ.get(weekday, weekday)} ülésnapból ennyin volt: {txt}.'
+
+    def debates(rows: list[dict]) -> str:
+        groups: dict[str, list[str]] = {}
+        seen: set[str] = set()
+        for r in rows:
+            irom = r.get("iromany") or ""
+            codes = [c for c in irom.split(" · ") if _BILL_PREFIX.match(c)]
+            if not codes or irom in seen:
+                continue
+            seen.add(irom)
+            st = speech_stage(r.get("event") or "", irom) or "vita"
+            for c in codes:
+                n, _ = an.bill_key(c)
+                title = (by_num.get(n) or {}).get("title") or ""
+                groups.setdefault(st, []).append(_bill_link(title, c, rel, 38) if title else esc(c))
+        out = []
+        for st, items in groups.items():
+            more = f' és még {hu_num(len(items) - 3)}' if len(items) > 3 else ""
+            out.append(f'{esc(st[:1].upper() + st[1:])}: {"; ".join(items[:3])}{more}.')
+        return " ".join(out)
+
+    rows_html = []
+    for d in sorted(days, key=lambda x: x["date"], reverse=True)[:n_days]:
+        day, wd = d["date"], d.get("weekday") or WEEKDAY_HU[_date.fromisoformat(d["date"]).weekday()]
+        label = (("ma · " if day == today else "") + f'{esc(wd)}<br>{esc(hu_short(day))}')
+        bits = []
+        if day > today or (day == today and day not in by_day):
+            bits.append("Bejelentett ülésnap." if day > today else "Ma ülésnap van.")
+            p = pattern(wd)
+            if p:
+                bits.append(p)
+        else:
+            if day <= newest_vote:
+                bits.append(f'<b>{hu_num(votes_by_day[day])} szavazás</b>.' if votes_by_day[day] else "Szavazás nem volt.")
+            rows = by_day.get(day) or []
+            if rows:
+                k = kinds(rows)
+                said = [f"{hu_num(k['elo'])} napirend előtti felszólalás" if k["elo"] else "",
+                        f"{hu_num(k['interp'])} interpelláció" if k["interp"] else "",
+                        f"{hu_num(k['kerdes'])} kérdés" if k["kerdes"] else ""]
+                said = [s for s in said if s]
+                if said:
+                    bits.append(", ".join(said) + ".")
+                db = debates(rows)
+                if db:
+                    bits.append(db)
+            missing = [w for w, gone in (("a felszólalások", day > newest_speech), ("a szavazások", day > newest_vote)) if gone]
+            if missing:
+                bits.append(f'<span class="sub">{" és ".join(missing).capitalize()} még nincsenek az adatban.</span>')
+        rows_html.append(f'<dt>{label}</dt><dd>{" ".join(bits)}</dd>')
+    return f'<dl class="verdict days">{"".join(rows_html)}</dl>'
+
+
+def last_week(inp: dict, rel: str) -> dict:
+    """The calendar week before the build's own: its votes, the closest one, the bills it passed, and who voted
+    differently from their own faction's majority."""
+    t = _date.fromisoformat(build_today(inp))
+    mon = t.fromordinal(t.toordinal() - t.weekday() - 7)
+    sun = mon.fromordinal(mon.toordinal() + 6)
+    lo, hi = mon.isoformat(), sun.isoformat()
+    votes = [v for v in inp["idx"]["votes"] if lo <= v["on_date"] <= hi]
+    newest_vote = max((v["on_date"] for v in inp["idx"]["votes"]), default="")
+    missing = [d["date"] for d in inp["idx"]["sitting_days"] if lo <= (d.get("date") or "") <= hi and d["date"] > newest_vote]
+    close = None
+    for v in votes:
+        m = v.get("majority") or {}
+        if v.get("kind") == "dontes" and m.get("margin") is not None and v.get("passed") is not None:
+            if close is None or abs(m["margin"]) < abs(close["majority"]["margin"]):
+                close = v
+    passed = []
+    for v in votes:
+        for mo in v.get("motions") or []:
+            if ((mo.get("outcome") or "").casefold().startswith("önálló indítvány") and v.get("passed") and mo.get("iromany")
+                    and (((inp.get("bill_recs_by_num") or {}).get(an.bill_key(mo["iromany"])[0]) or {}).get("main_type") == "törvényjavaslat")):
+                if not any(p["iromany"] == mo["iromany"] for p in passed):
+                    passed.append(mo)
+    st = inp["store"]
+    code = st["codes"]
+    members = st["members"]
+    dissent: Counter = Counter()
+    for v in votes:
+        maj = {}
+        for ft in v.get("faction_tallies") or []:
+            best = max(("igen", "nem", "tartozkodott"), key=lambda k: ft.get(k) or 0)
+            if (ft.get(best) or 0) > 0:
+                maj[ft["faction"]] = best
+        for azon, _, c in (st["positions"].get(v["ts"]) or []):
+            pos = code.get(c)
+            f = (members.get(azon) or {}).get("faction")
+            if pos in ("igen", "nem", "tartozkodott") and f in maj and pos != maj[f]:
+                dissent[azon] += 1
+    return {"from": lo, "to": hi, "votes": votes, "missing": missing, "close": close, "passed": passed,
+            "dissent": [(members[a]["name"], members[a].get("faction") or "", n) for a, n in dissent.most_common()]}
+
+
+def build_upcoming_page(inp: dict) -> str:
+    """mijon/index.html — what is still ahead: the bills awaiting a closing vote, the recent sitting days in a
+    sentence each, and the week before. One address for every cycle: it always speaks of the current one."""
+    cdir = cycle_dir(CURRENT_CYCLE)
+    rel = "../" + cdir                                     # from mijon/ into the cycle's tree
+    bills = upcoming_bills(inp)
+    n_k = sum(1 for b in bills if b["kind"] == "kormany")
+    n_m = sum(1 for b in bills if b["kind"] == "kepviselo")
+    n_o = len(bills) - n_k - n_m
+    budget = next((b for b in bills if b["kind"] == "kormany" and "központi költségvetés" in b["title"]), None)
+    lede = (f'{hu_num(len(bills))} törvényjavaslat vár szavazásra: benyújtották, de zárószavazás még nem volt róla. '
+            f'{hu_num(n_k)} a kormányé' + (f', köztük a költségvetés: <a href="{rel}iromany/{budget["num"]}.html">{esc(budget["szam"])}</a> {esc(budget["title"])}' if budget else "") + '.')
+    rows = []
+    for b in bills:
+        t = b["title"]
+        title = esc(t[:110]) + (f'<span class="more" title="{esc(t)}">…</span>' if len(t) > 110 else "")
+        subs = b["subs"][0] + (f' és {hu_num(len(b["subs"]) - 1)} társa' if len(b["subs"]) > 1 else "") if b["subs"] else "—"
+        rows.append(f'<tr data-p="{b["kind"]}" data-num="{b["num"]}" data-d="{b["on"].replace("-", "")}">'
+                    f'<td class="mono"><a href="{rel}iromany/{b["num"]}.html">{esc(b["szam"])}</a></td><td>{title}</td>'
+                    f'<td>{esc(subs)}</td><td class="ts mono">{esc(hu_short(b["on"])) if b["on"] else "—"}</td>'
+                    f'<td><span class="badge{" ok" if b["debated"] else ""}">{esc(b["where"])}</span></td></tr>')
+    wk = last_week(inp, rel)
+    vs = wk["votes"]
+    n_yes = sum(1 for v in vs if v.get("passed") is True)
+    n_no = sum(1 for v in vs if v.get("passed") is False)
+    gap = (f' · {", ".join(hu_short(d) for d in wk["missing"])} szavazásai még hiányoznak' if wk["missing"] else "")
+    facts = []
+    c = wk["close"]
+    if c:
+        m = c["majority"]
+        mo = (c.get("motions") or [{}])[0]
+        what = mo.get("title") or c.get("remark") or "szavazás"
+        facts.append(f'<dt>Legszorosabb</dt><dd><a href="{rel}szavazas/{c["slug"]}.html">{esc(what[:90])}{"…" if len(what) > 90 else ""}</a>'
+                     f' <span class="hero-meta mono">{hu_num(c["igen"])} igen · szükséges {m["needed"]} / {m["base"]} · különbség {"+" if m["margin"] >= 0 else ""}{m["margin"]}</span></dd>')
+    if wk["passed"]:
+        by_num = inp.get("bill_recs_by_num") or {}
+        # a closing vote is often printed on the amendment-shaped number ("797/8"); the bill's own is "T/797"
+        own = lambda code: (by_num.get(an.bill_key(code)[0]) or {}).get("szam") or code
+        items = [_bill_link(p.get("title") or "", own(p["iromany"]), rel, 40) for p in wk["passed"][:3]]
+        more = f' és még {hu_num(len(wk["passed"]) - 3)}' if len(wk["passed"]) > 3 else ""
+        facts.append(f'<dt>Elfogadott törvények</dt><dd>{hu_num(len(wk["passed"]))} · {"; ".join(items)}{more}</dd>')
+    if vs:
+        ds = wk["dissent"]
+        if ds:
+            names = ", ".join(f'{esc(n)} ({esc(f)})' for n, f, _ in ds[:3]) + (f' és még {hu_num(len(ds) - 3)}' if len(ds) > 3 else "")
+            facts.append(f'<dt>Frakciójától eltérően</dt><dd>{hu_num(len(ds))} képviselő, legalább egyszer: {names}</dd>')
+        else:
+            facts.append('<dt>Frakciójától eltérően</dt><dd>Senki nem szavazott másként, mint a frakciója többsége.</dd>')
+    week_panel = (f'<div class="tally"><div><b class="mono">{hu_num(len(vs))}</b><span>szavazás</span></div>'
+                  f'<div><b class="mono">{hu_num(n_yes)}</b><span>elfogadva</span></div><div><b class="mono">{hu_num(n_no)}</b><span>elutasítva</span></div></div>'
+                  f'<dl class="verdict">{"".join(facts)}</dl>') if vs else '<div class="hero-meta prose">Ezen a héten nem volt szavazás, vagy még nincs az adatban.</div>'
+    return page_head("Mi jön a parlamentben · karzat",
+                     f'{hu_num(len(bills))} törvényjavaslat vár szavazásra az Országgyűlésben, és mi történt az utóbbi ülésnapokon — az Országgyűlés adataiból, naponta frissítve.', 1) + \
+        topbar(inp, [("mi jön", None)], 1) + f"""
+<div class="cyc-head"><div class="cyc-title"><span class="kicker" data-kz-text>{CURRENT_CYCLE}. ciklus · előre</span><h1>Mi jön a parlamentben</h1>
+<p class="lede">{lede}</p></div></div>
+<div class="fresh">{CORNERS}<span class="hu">Hogy melyik nap miről szavaznak, azt az oldal nem írja ki: a parlament napi napirendjét nem tölti be. Ami itt áll, az a benyújtott javaslatokból, a felszólalások listájából és a szavazásokból jön.</span></div>
+<section class="grid">
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Ülésnapok</span><span class="tag">az Országgyűlés adatai szerint</span></h2>
+    {day_summaries(inp, rel)}
+    <div class="hero-meta prose" style="margin-top:10px">A napok tartalma a felszólalások listájából jön: melyik napirendi pontnál szóltak fel. A következő ülésnapot az adatforrás csak néhány nappal előtte, vagy aznap mutatja meg.</div>
+    {transcript_note(inp)}
+  </section>
+  <section class="panel">{CORNERS}
+    <h2><span data-kz-text>Az előző hét</span><span class="tag">{esc(hu_short(wk["from"]))} – {esc(hu_short(wk["to"]))}{esc(gap)}</span></h2>
+    {week_panel}
+  </section>
+</section>
+<section class="panel deep" id="var">{CORNERS}
+  <h2><span data-kz-text>Szavazásra vár</span><span class="tag">{hu_num(len(bills))} törvényjavaslat · a legfrissebb elöl</span></h2>
+  <div class="filters" role="group" aria-label="Szűrés benyújtó szerint"><button type="button" data-posf="all" class="on">mind {hu_num(len(bills))}</button><button type="button" data-posf="kormany">kormány {hu_num(n_k)}</button><button type="button" data-posf="kepviselo">képviselő {hu_num(n_m)}</button>{f'<button type="button" data-posf="mas">más {hu_num(n_o)}</button>' if n_o else ""}<span class="n" id="rn" aria-live="polite"></span></div>
+  <div class="hero-meta prose" style="margin:4px 0 10px">A javaslatok a parlament irománylistájából jönnek. Ott az állapot gyakran hetekkel később frissül, ezért amiről már volt zárószavazás, azt az oldal a szavazásokból kiveszi, és ahol a felszólalások listája már vitát mutat, azt írja ki. A képviselői javaslatokról először egy bizottság dönt, hogy tárgyalja-e a Ház; sok közülük nem jut el szavazásig.</div>
+  <div class="tablewrap" tabindex="0"><table id="roll" data-page-size="50" data-counter="rn"><thead><tr><th scope="col" class="sortable" data-key="num">Szám</th><th scope="col">Cím</th><th scope="col">Benyújtó</th><th scope="col" class="sortable" data-key="d">Benyújtva</th><th scope="col">Hol tart</th></tr></thead><tbody>{"".join(rows) or '<tr><td colspan="5">Most nincs szavazásra váró törvényjavaslat.</td></tr>'}</tbody></table></div>
+</section>
+""" + page_tail(inp, 1, page="mijon/index.html")
+
+
 def build_landing() -> str:
     li = landing_inputs()
     cur, tot = li["cur"], li["totals"]
@@ -9397,6 +9696,9 @@ def build_landing() -> str:
         (f"ülésrend: az Országház alaprajza, {hu_num(n_seats)} hely — csak a jelenlegi ciklusból ismert" if n_seats else "ülésrend: csak a jelenlegi ciklusból ismert"),
         (f"frissítve {hu_date(sync_stamp(inp)[:10])} {sync_stamp(inp)[11:]}" if sync_stamp(inp) != "—" else "frissítve —"),
     ]
+    n_next = len(upcoming_bills(cur)) if cur.get("bill_recs") else 0
+    next_line = (f'<p class="mast-next"><a href="mijon/index.html">Mi jön: {hu_num(n_next)} törvényjavaslat vár szavazásra →</a></p>'
+                 if n_next else "")
     page = page_head("karzat — az Országgyűlés szavazásai 1990 óta",
                      f"Az Országgyűlés szavazásai, név szerinti listái és felszólalásai {hu_date(tot['from'])[:4]} óta, ciklusonként: ki hogyan szavazott, mennyi kellett a döntéshez, ki mit mondott. Forrás: parlament.hu Web API.", 0,
                      feeds=[(f"{cdir}feed/kulonvelemeny.xml", f'karzat · különvélemények · {CURRENT_CYCLE}. ciklus'), (f"{cdir}feed/heti.xml", f'karzat · a hét számokban · {CURRENT_CYCLE}. ciklus'),
@@ -9404,7 +9706,7 @@ def build_landing() -> str:
 <header class="kz-topbar"><div class="l"><a class="brand" href="index.html" aria-current="page"><i></i>karzat</a></div><div class="r"><nav class="kv cyc" aria-label="Ciklus"><span class="hide-xs">Ciklus </span>{' <span class="sl">·</span> '.join(f'<a href="{cycle_dir(c)}index.html"{" class=near" if c == CURRENT_CYCLE else ""}>{c}</a>' for c in tot["cycles"])}</nav><span class="sep hide-sm"></span>{topbar_search("")}{updated_html(inp)}</div></header>
 <main class="kz-main"><div class="wrap landing">
 <section class="masthead">{CORNERS}
-  <div class="mast-h"><h1>karzat</h1><p class="mast-lede">A magyar Országgyűlés munkája {hu_date(tot['from'])[:4]} óta, adatban — a karzatról nézve.</p></div>
+  <div class="mast-h"><h1>karzat</h1><p class="mast-lede">A magyar Országgyűlés munkája {hu_date(tot['from'])[:4]} óta, adatban — a karzatról nézve.</p>{next_line}</div>
   <figure class="chamber-today">{chamber}
     <figcaption><span class="label" data-kz-text>Az ülésterem ma</span> <span class="sub">{esc(hero_note)}</span><div class="legend">{legend_html}</div></figcaption>
     <div class="inspector" id="hall" aria-live="polite"><span class="insp-hint">Egy helyre mutatva: ki ül ott, és mit tett eddig a ciklusban. Kattintásra rögzül; a névre kattintva a képviselő oldala. Nyilakkal is járható.</span></div>
@@ -9519,6 +9821,9 @@ def build_all(out_dir: Path, index_only: bool = False, cycles: list[int] | None 
             sq_ = out_dir / "sql"; sq_.mkdir(parents=True, exist_ok=True)
             (sq_ / "index.html").write_text(build_moved_page(wide_inp, "../riport/index.html", "Riport"),
                                             encoding="utf-8")
+        if inp.get("bill_recs"):                                                 # what is still ahead of the House
+            mj_ = out_dir / "mijon"; mj_.mkdir(parents=True, exist_ok=True)
+            (mj_ / "index.html").write_text(build_upcoming_page(wide_inp), encoding="utf-8")
         if (inp.get("switches") or {}).get("items"):                             # every mid-term change of faction
             fd_ = out_dir / "frakciovaltas"; fd_.mkdir(parents=True, exist_ok=True)
             (fd_ / "index.html").write_text(build_switch_page(wide_inp), encoding="utf-8")

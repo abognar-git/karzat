@@ -205,6 +205,8 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .verdict{display:grid;grid-template-columns:auto 1fr;gap:5px 16px;font-size:12px;margin-top:8px;font-family:var(--mono)}
 .verdict dt{color:var(--dim2);text-transform:uppercase;letter-spacing:.15em;font-size:11px;padding-top:2px}.verdict dd{margin:0;color:var(--text)}
 .verdict dd .hero-meta{display:block;color:var(--dim2);font-size:11px}
+/* mi jön: a sitting day in a sentence or two — prose in the sans, the day label stays the terminal mono */
+.verdict.days{grid-template-columns:96px 1fr;gap:12px 16px}.verdict.days dt{line-height:1.5}.verdict.days dd{font-family:var(--sans);font-size:14px;line-height:1.55}.verdict.days a{text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px}.verdict.days a:hover{text-decoration-color:var(--white)}.verdict.days .sub{color:var(--dim2)}
 .badge{display:inline-block;padding:2px 8px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
 .badge.hi{border-color:var(--dim3);color:var(--white)}.badge.ok{border-color:var(--okbd);background:var(--okbg);color:var(--ok)}.badge.no{border-color:var(--badbd);background:var(--badbg);color:var(--bad)}.badge.mid{color:var(--dim2);background:rgba(24,24,27,.6)}
 .bar{height:6px;background:var(--line2);position:relative;margin:8px 0 4px}
@@ -241,6 +243,7 @@ html.js .cite .copy{display:inline-block}html.js [data-fact-next]{display:inline
 .landing .masthead{position:relative;border:1px solid var(--border);background:var(--panel-deep);padding:24px 26px 16px;display:grid;grid-template-columns:minmax(240px,.85fr) 1.7fr;gap:18px 32px;align-items:center}
 .landing .mast-h h1{font-size:52px;margin:0 0 12px}
 .landing .mast-lede{color:var(--dim);font-size:14px;max-width:40ch;margin:0;line-height:1.55}
+.landing .mast-next{margin:14px 0 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em}.landing .mast-next a{color:var(--text);border-bottom:1px solid var(--border-hi);padding-bottom:1px}.landing .mast-next a:hover,.landing .mast-next a:focus-visible{color:var(--white);border-color:var(--white)}
 .landing .chamber-today{margin:0;min-width:0}.landing .chamber-today svg{width:100%;height:auto;display:block;outline:none}
 .landing .chamber-today figcaption{margin-top:4px;font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim2)}
 .landing .chamber-today figcaption .sub{text-transform:none;letter-spacing:.05em;margin-left:6px}.landing .chamber-today .legend{margin-top:6px}

@@ -1,5 +1,5 @@
 {
- "derived_at": "2026-11-08T11:32:01.057422+01:00",
+ "derived_at": "2026-11-09T04:13:33.545498+01:00",
  "cycle": 43,
  "count": 203,
  "current": 199,
@@ -1712,7 +1712,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 3,
+     "onallo": 4,
      "nem_onallo": 0
     }
    ],
@@ -1781,6 +1781,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/002T",
    "motions": [
+    {
+     "szam": "A/1006",
+     "kind": "A",
+     "number": 1006,
+     "title": "Hogyan lehet az emberek életminőségét javítani?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%2293b4c805-6beb-44c5-9985-fc2a97d80f6c%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "H/926",
      "kind": "H",
@@ -33174,7 +33183,7 @@
    "motion_stats": [
     {
      "ciklus": "2026-",
-     "onallo": 10,
+     "onallo": 11,
      "nem_onallo": 0
     }
    ],
@@ -33269,6 +33278,15 @@
    "local_offices": [],
    "biography_url": "https://www.parlament.hu/felicitas/api/query/resource/registry/kepviselo-unsecured-query-provider/kepviselo-eletrajz-query/001L",
    "motions": [
+    {
+     "szam": "A/1005",
+     "kind": "A",
+     "number": 1005,
+     "title": "Milyen fókuszerületekre számíthatunk?",
+     "status": "folyamatban",
+     "href": "https://www.parlament.hu/web/guest/iromanyok_mobil?iromany=%7B%22id%22%3A%22cecadc06-133b-474c-a9f8-3bf9a891b9f8%22%7D",
+     "co_submitters": 0
+    },
     {
      "szam": "I/939",
      "kind": "I",
