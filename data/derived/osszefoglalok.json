@@ -264,14 +264,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 10,
-  "problems": [
-   "A masodik valtozik tetel (1. melleklet 1. cikk) oldalszama 2, holott az 1. melleklet es benne az 1. cikk a 4. oldalon kezdodik.",
-   "A harmadik valtozik tetel (1. melleklet 3. cikk (1)) oldalszama 2, holott a 3. cikk a 4. oldalon kezdodik.",
-   "A negyedik valtozik tetel (1. melleklet 3. cikk (2)) oldalszama 2, holott a 3. cikk a 4. oldalon kezdodik es a (2) bekezdes az 5. oldalon talalhato."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00171/00171.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -292,17 +288,17 @@
      "szoveg": "Az Országgyűlés felhatalmazást ad a Jegyzőkönyv kötelező hatályának elismerésére, és a Jegyzőkönyvet törvénnyel kihirdeti."
     },
     {
-     "oldal": 2,
+     "oldal": 4,
      "paragrafus": "1. melléklet 1. cikk",
      "szoveg": "A 2011-es megállapodás II. fejezetének 8. cikk (1) bekezdése kiegészül egy új c) ponttal, amely rögzíti a Százhalombatta–Ipolyság szénhidrogéntermék-vezeték pontos ETRS89 koordinátáit és a magyar, illetve szlovák területen érintett szakaszokat a határjelzők megjelölésével."
     },
     {
-     "oldal": 2,
+     "oldal": 4,
      "paragrafus": "1. melléklet 3. cikk (1)",
      "szoveg": "A Felek megállapodtak, hogy a Jegyzőkönyv rendelkezéseit az aláírás napjától – belső jogszabályaikkal összhangban – ideiglenesen alkalmazzák. Az aláírás dátuma 2026. március 16."
     },
     {
-     "oldal": 2,
+     "oldal": 4,
      "paragrafus": "1. melléklet 3. cikk (2)",
      "szoveg": "A Jegyzőkönyv az alkotmányos követelmények teljesítéséről szóló utolsó értesítés (jegyzék) kézhezvételét követő 30. napon lép hatályba."
     },
@@ -320,12 +316,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 10,
-  "problems": [
-   "A \"valtozik\" 3. tételében (ideiglenes alkalmazás) az oldalszám hibás: az \"1. melléklet 3. cikk (1) bekezdés\" a 4-5. oldalon található (a 3. cikk címe a 4. oldal alján kezdődik), nem a 2. oldalon. A 2. oldalon csak a törvényszöveg zárójelben lévő megjegyzése utal az ideiglenes alkalmazásra, de az nem azonos a hivatkozott paragrafussal."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00172/00172.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -351,7 +345,7 @@
      "szoveg": "A 2011-es megállapodás kiegészül egy új, Százhalombatta-Ipolyság szénhidrogéntermék-vezetékkel (elnevezése: Dízel- és Nafta-összekötővezeték). A vezeték pontos ETRS89 koordinátáit és a magyar, illetve szlovák oldalon érintett határjelzőket (V.2/8-V.2/10, illetve V.2/9-V.2/11) a Jegyzőkönyv 1. cikke rögzíti."
     },
     {
-     "oldal": 2,
+     "oldal": 4,
      "paragrafus": "1. melléklet 3. cikk (1) bekezdés",
      "szoveg": "A Jegyzőkönyv rendelkezéseit az aláírás napjától, azaz 2026. március 16-tól a felek ideiglenesen alkalmazzák, belső jogszabályaikkal összhangban."
     },
@@ -374,13 +368,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 27,
-  "problems": [
-   "valtozik[4]: Az oldal 8-ként van megadva, de a 15. § (az első hivatkozott paragrafus) a 7. oldalon kezdődik; a 8. oldalon csak a 16. § indul.",
-   "valtozik[5]: Az oldal 13-ként van megadva, de a 25. § (az első hivatkozott paragrafus) a 12. oldalon kezdődik; a 13. oldalon csak a folytatás és a 26. § található."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00173/00173.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -451,13 +442,13 @@
    "kiket_erint": "Közvetlenül érinti a vagyonnyilatkozat-tételre kötelezett köztisztviselőket (köztársasági elnök, országgyűlési képviselők, bírák, ügyészek, önkormányzati képviselők, politikai felsővezetők stb.), a közfeladatot ellátó közérdekű vagyonkezelő alapítványokat és az általuk fenntartott intézményeket, a közbeszerzési eljárások résztvevőit, valamint a pénzügyi szolgáltatókat és a zártkörű befektetési alapokat.",
    "lede": "A javaslat az EU-s források felszabadításához szükséges jogszabály-módosításokat tartalmaz. Kiterjeszti és megszigorítja a vagyonnyilatkozat-tételi kötelezettséget, az Integritás Hatóságot felruházza a vagyonnyilatkozatok ellenőrzésének jogával, megszünteti a közfeladatot ellátó közérdekű vagyonkezelő alapítványokat (amelyek nem felsőoktatási tevékenységet végeznek), valamint módosítja a közbeszerzési, büntetőeljárási és pénzmosás elleni szabályokat.",
    "mikortol": {
-    "oldal": 66,
+    "oldal": 67,
     "paragrafus": "159. §",
     "szoveg": "A törvény főszabály szerint a kihirdetését követő harmadik napon lép hatályba. Kivétel: a bírák jogállásáról szóló (13. alcím), az ügyészi jogállásról szóló (14. alcím), a büntetőeljárási (26. alcím), a kormányzati igazgatási (27. alcím) és az Integritás Hatóságról szóló (41. alcím) módosítások a kihirdetést követő 61. napon lépnek hatályba."
    },
    "valtozik": [
     {
-     "oldal": 59,
+     "oldal": 60,
      "paragrafus": "140–141. §",
      "szoveg": "Az Integritás Hatóság új hatáskört kap: ellenőrizheti a köztársasági elnöktől az önkormányzati képviselőkig mintegy húsz kategóriába sorolt közjogi tisztségviselő vagyonnyilatkozatát. Ha szándékos valótlan adatközlést állapít meg, kezdeményezheti az érintett személy megbízatásának megszüntetését. Kisebb, adminisztratív hiányosság esetén százezer–ötmillió forintig terjedő bírságot szabhat ki."
     },
@@ -472,7 +463,7 @@
      "szoveg": "Új bűncselekmény jön létre: a vagyonnyilatkozat-tételi kötelezettség megsértése. Aki önhibájából elmulasztja a nyilatkozattételt, egy évig terjedő szabadságvesztéssel büntethető; aki vagyoni helyzetét lényeges tényben valótlanul közli vagy elhallgatja, két évig terjedő szabadságvesztéssel büntethető."
     },
     {
-     "oldal": 41,
+     "oldal": 42,
      "paragrafus": "119. § és 121. §",
      "szoveg": "A felsőoktatási tevékenységet nem végző közfeladatot ellátó közérdekű vagyonkezelő alapítványokat (például Mathias Corvinus Collegium Alapítvány, Magyar Kultúráért Alapítvány – összesen 15 alapítványt sorol fel a melléklet) 2026. augusztus 31-ig meg kell szüntetni. Ha az alapítványban nem állami alapító is érdekelt, az kérheti a továbbműködtetést, de az állami vagyon visszaszáll az államra."
     },
@@ -528,7 +519,7 @@
      "szoveg": "Az ilyen sértettek sérelmére elkövetett bűncselekmények nyomozására a rendőrség külön jogszabályban meghatározott szervezeti egysége kap országos illetékességű hatáskört a helyi rendőrkapitányságok helyett."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "3. §",
      "szoveg": "A gyermekvédelmi szakellátásban nevelkedő sértett külön döntés nélkül különleges bánásmódot igénylő személynek minősül a büntetőeljárásban, akkor is, ha a 18. életévét már betöltötte."
     }
@@ -559,7 +550,7 @@
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "3. §",
      "szoveg": "A Btk. értelmező rendelkezései kiegészülnek a gyermekvédelmi szakellátásban nevelkedő személy fogalmával: ide tartozik a javítóintézetben, gyermekotthont működtető intézményben, gyermekotthonban és nevelőszülői hálózatban nevelkedő személy, fenntartótól függetlenül, akkor is, ha betöltötte a 18. életévét."
     },
@@ -615,22 +606,22 @@
      "szoveg": "Az MTVA beolvad a Duna Médiaszolgáltató Nonprofit Zrt.-be, amely Magyar Rádió és Televízió Nonprofit Zrt. néven működik tovább. Az összevonással egyetlen szervezetben egyesül a műsorkészítés, a médiaszolgáltatás és a vagyonkezelés."
     },
     {
-     "oldal": 15,
+     "oldal": 16,
      "paragrafus": "13. §",
      "szoveg": "Újjáalakul az önálló MTI Nonprofit Zrt. mint közszolgálati hírügynökség, amelyet a 2014-es törvénymódosítás korábban a Duna Médiaszolgáltató Nonprofit Zrt.-be olvasztott. A tulajdonosi jogokat a Független Közmédia Testület gyakorolja."
     },
     {
-     "oldal": 28,
+     "oldal": 29,
      "paragrafus": "29. §",
      "szoveg": "A Médiatanács 5 tagú marad: 2-2 tagot a kormánypárti és ellenzéki oldal jelöl 4 évre, az elnök nyílt pályázattal kerül kiválasztásra 5 évre. Az elnökjelöltről az eseti bizottság csak akkor szavazhat, ha a civil szakmai tagok legalább fele támogatja. A megválasztott Médiatanács-elnök lesz egyben az NMHH elnöke is. Nem választható, aki a jelölést megelőző 5 évben pártpolitikai tevékenységet folytatott."
     },
     {
-     "oldal": 21,
+     "oldal": 22,
      "paragrafus": "21. §",
      "szoveg": "A közszolgálati médiaszolgáltató és médiatartalom-szolgáltató költségvetését az Országgyűlés hároméves ciklusban, önálló törvényben fogadja el. Első alkalommal a 2028-as évtől állapítják meg."
     },
     {
-     "oldal": 34,
+     "oldal": 35,
      "paragrafus": "34–35. §",
      "szoveg": "Az MTVA médiatámogatási feladatait a Médiatanács kezelésében működő Sajtóalap (elkülönített pénzalap) veszi át. A Sajtóalap pályázat útján támogatja a közösségi médiaszolgáltatásokat, a közszolgálati célú műsorszámokat és az etikus újságírás normái szerint működő sajtótermékeket."
     },
@@ -666,7 +657,7 @@
    },
    "valtozik": [
     {
-     "oldal": 5,
+     "oldal": 2,
      "paragrafus": "1. §",
      "szoveg": "A törvény értelmezési szabályai kiegészülnek: a Hszt. (a rendvédelmi szervek szolgálati jogviszonyáról szóló 2015. évi XLII. törvény) rendelkezéseit Magyarország és az Európai Unió jogrendjével összhangban kell értelmezni, és a jogról lemondó nyilatkozatot nem lehet kiterjesztően értelmezni."
     },
@@ -814,7 +805,7 @@
      "szoveg": "A főpolgármester illetményszabályából kikerül a havi költségtérítési jogosultság; az illetményre és a jogszabály alapján járó egyéb juttatásokra vonatkozó szabály változatlan marad."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "4. §",
      "szoveg": "Hatályát veszti az Mötv. 71. § (6) bekezdése és a 80. § (3) bekezdése, amelyek a főállású és társadalmi megbízatású polgármester, a vármegyei közgyűlési elnök, valamint helyetteseik havi költségtérítési jogosultságát tartalmazzák."
     }
@@ -937,12 +928,12 @@
      "szoveg": "Létrejön a Minősített Iratok Felülvizsgálatát Segítő Tanácsadó Bizottság, amely a nemzetbiztonsági szolgálatoknál őrzött, minősítésükben fenntartott iratok felülvizsgálatát támogatja. A Bizottság kizárólag akkor jár el, ha a nemzetbiztonsági szolgálat a felülvizsgálatot követően is az irat minősítésének fenntartásáról döntött."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (1)",
      "szoveg": "A Bizottság 11 tagból áll; az elnökre és 4 tagra a nemzetbiztonsági szolgálatokat irányító miniszterek közösen, 6 szakértői tagra a kultúráért felelős miniszter tesz javaslatot. A Kormány határozatban nevezi ki őket határozatlan időtartamra."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (1)",
      "szoveg": "A Bizottság tagjai a minősített adatokat személyi biztonsági tanúsítvány nélkül, titoktartási nyilatkozat kitöltését követően ismerhetik meg, de kötelesek a minősített adat védelmére vonatkozó követelményeket megtartani."
     },
@@ -993,7 +984,7 @@
      "szoveg": "Az MFB Zrt. csak átlátható szervezetnek nyújthat hitelt vagy kölcsönt, és csak olyannak vállalhat kezességet, amelynek tényleges tulajdonosa beazonosítható. Kivételt képeznek a természetes személyek (beleértve a mezőgazdasági őstermelőket) és a társasházak."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "3. §",
      "szoveg": "Az állam csak akkor vállalhat készfizető kezességet az MFB Zrt. javára a központi költségvetés terhére, ha az ügylet nemzetgazdasági szempontból indokolt fejlesztési vagy beruházási célt valósít meg, és az más módon nem érhető el. Az erről szóló kormányhatározatok nyilvánosak."
     },
@@ -1223,12 +1214,12 @@
      "szoveg": "A Szabályozott Tevékenységek Felügyeleti Hatóságáról szóló törvényből törlik a kriptoeszköz-átváltási szolgáltatás validálására vonatkozó hatásköri hivatkozásokat és rendelkezéseket."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "4. §",
      "szoveg": "A hatálybalépéskor a validáláshoz kapcsolódóan folyamatban lévő engedélyezési és felügyeleti eljárásokat a Szabályozott Tevékenységek Felügyeleti Hatósága megszünteti. A validáló szolgáltatási tevékenységre vonatkozó engedélyek a hatálybalépés napján hatályukat vesztik."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "4. §",
      "szoveg": "A kriptoeszköz-átváltást validáló szolgáltató és a Szabályozott Tevékenységek Felügyeleti Hatósága a birtokába került adatokat a hatálybalépést követő 3 munkanapon belül vissza nem állítható módon törli."
     },
@@ -1326,12 +1317,12 @@
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "A várandósgondozást végző orvos és a várandóst ellátó más kezelőorvos megismerheti a szifiliszre és a veleszületett szifiliszre vonatkozó szűrési adatokat az EESZT-n keresztül, függetlenül attól, hogy melyik egészségügyi szolgáltató végezte a szűrést."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "Az EESZT működtetője a szifiliszre és veleszületett szifiliszre vonatkozó adatokat a várandósgondozást végző orvos, védőnő és a várandóst ellátó más kezelőorvos számára hozzáférhetővé teszi akkor is, ha az érintett az önrendelkezési nyilatkozatában korlátozta az adataihoz való hozzáférést. Az érintettet az adatok megismerésének tényéről tájékoztatni kell."
     },
@@ -1501,7 +1492,7 @@
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. § és 1. melléklet",
      "szoveg": "A hatóság által forgalomba hozatalra engedélyezett humán gyógyszerek, az importengedéllyel behozott gyógyszerek és a humán gyógyászati célú magisztrális készítmények (egyedileg, gyógyszertárban készített gyógyszerek) áfája 0 százalékra csökken."
     },
@@ -1536,13 +1527,13 @@
    "kiket_erint": "Közvetlenül érinti az állami és önkormányzati szerveket, a közvagyonnal gazdálkodó szervezeteket, a közbeszerzésben és támogatási jogviszonyban részt vevő gazdasági szereplőket, a közpénzből gazdálkodó intézményeket, valamint a közhatalom gyakorlásával vagy közvagyon kezelésével összefüggő bűncselekmények miatt büntetőeljárás alá vonható személyeket.",
    "lede": "A javaslat létrehozza a Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatalt (NVVH), egy független, az Országgyűlésnek felelős új intézményt. A Hivatal feladata a közvagyonból jogellenesen kikerült vagyon felkutatása, azonosítása és visszaszerzése, valamint a közvagyonnal való gazdálkodás vizsgálata. Az NVVH ehhez közvagyonvédelmi vizsgálatot folytathat, gazdálkodó szervezeteket felügyelet alá vonhat, és meghatározott bűncselekmények esetén nyomozhat, vádat emelhet és képviselhet.",
    "mikortol": {
-    "oldal": 24,
+    "oldal": 25,
     "paragrafus": "63–64. §",
     "szoveg": "A törvény főszabály szerint a kihirdetését követő napon lép hatályba. Kivételek: az igazságszolgáltatást érintő egyes rendelkezések a kihirdetés utáni 61. napon; a 18. § (az Integritás Hatóság vizsgálati jogköre) 2026. augusztus 26-án; egyes rendelkezések 2026. október 1-jén, illetve 2027. január 1-jén lépnek hatályba. Az Országgyűlés a Hivatal elnökét és elnökhelyetteseit a hatálybalépéstől számított 30 napon belül választja meg."
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1–10. §",
      "szoveg": "Létrejön a Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatal, amely önálló költségvetési fejezetet kap. Költségvetését az elnök állítja össze, a Kormány változtatás nélkül terjeszti az Országgyűlés elé, és az előző évi összegnél kevesebb nem lehet."
     },
@@ -1557,12 +1548,12 @@
      "szoveg": "A Hivatal közvagyonvédelmi vizsgálatot folytathat, amelynek határideje hat hónap, indokolt esetben kétszer hat hónappal meghosszabbítható. A vizsgálat során adatot, iratot kérhet, helyszíni vizsgálatot tarthat, elektronikus adatot menthet. Ha az együttműködésre kötelezett szándékosan megsérti kötelezettségét, természetes személyre 50 ezer – 50 millió, jogi személyre 500 ezer – 5 milliárd forint bírság szabható ki."
     },
     {
-     "oldal": 19,
+     "oldal": 20,
      "paragrafus": "50–52. §",
      "szoveg": "A Hivatal közigazgatási hatósági eljárásban gazdálkodó szervezetet közvagyonvédelmi felügyelet alá vonhat, ha büntetőeljárás megindításának és vagyont érintő kényszerintézkedésnek lehet helye, de ehhez további adattisztázás szükséges, és a közvagyon védelme más módon nem biztosítható. A felügyelő ellenjegyezheti a szervezet vagyoni kötelezettségvállalásait; az ellenjegyzés nélküli kötelezettségvállalás semmis. A felügyeletet hathavonta felül kell vizsgálni."
     },
     {
-     "oldal": 92,
+     "oldal": 93,
      "paragrafus": "278–296. § (a Be. módosítása)",
      "szoveg": "A Hivatal a büntetőeljárásban – a büntetőeljárásról szóló törvény új IV/A. fejezete szerint – meghatározott, közhatalom gyakorlásával vagy közvagyon kezelésével kapcsolatos kiemelt bűncselekmények esetén határozattal saját hatáskörbe vonhatja az ügyet. Ilyenkor nyomozhat, vádat emelhet és képviselhet. Fiatalkorú elleni büntetőeljárásban nem járhat el."
     },
@@ -1572,7 +1563,7 @@
      "szoveg": "Az elnököt és elnökhelyetteseket az Országgyűlés az alkotmányügyi bizottság javaslatára választja meg titkos szavazással; nem választhatók újra. Mentelmi joguk az országgyűlési képviselőével azonos. A Hivatal elnöke minden év május 31-ig nyilvános éves beszámolót nyújt be az Országgyűlésnek."
     },
     {
-     "oldal": 25,
+     "oldal": 26,
      "paragrafus": "68–348. §",
      "szoveg": "A javaslat mintegy 180 hatályos törvényt módosít: az ügyészség mellett – ahol szükséges – megjelenteti az NVVH-t a nyilvántartásokhoz való hozzáférés, az adatszolgáltatás, a büntetőeljárási együttműködés és a közbeszerzési eljárás szabályaiban."
     }
@@ -1716,7 +1707,7 @@
      "szoveg": "Nem viselhet agrárkamarai tisztséget az, aki párlistán szerepel, pártban tisztséget tölt be, politikai felsővezető, vagy az agrárium finanszírozásában ügydöntő jelleggel részt vevő kormánytisztviselő. A megválasztást megelőző tíz éven belül fennálló ilyen ok szintén összeférhetetlenséget jelent, de ez utóbbi szabályt csak a törvény hatálybalépése után megválasztott tisztségviselőkre kell alkalmazni."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. § (4) bekezdés",
      "szoveg": "Egyes kamarai tisztségviselők (elnök, alelnök, elnökségi tagok, területi szervezet elnöke és alelnöke) csak számlával igazolt költségtérítésre jogosultak, más személyi juttatást nem kaphatnak."
     },
@@ -1829,17 +1820,17 @@
      "szoveg": "A HET keretében 2026-ban lehívott hitelből 688 338 565 eurónak megfelelő forintösszegű tőkeemelésre kerül sor az MFB Zrt.-ben; ezt a tőkét az Európai Beruházási Bankkal együttműködve kell felhasználni."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. § és 1. melléklet",
      "szoveg": "Az önkormányzatok TFA-ba való befizetése a korábbi két ütem (május és november) helyett egy ütemre módosul: a fizetési kötelezettséget a november havi nettó finanszírozás keretében kell teljesíteni. A márciusi elszámolás változatlan marad."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. § és 1. melléklet",
      "szoveg": "Az önkormányzatot akkor is szolidaritási hozzájárulást teljesítőnek kell tekinteni, ha a hozzájárulás számított összege nem haladja meg az 50,0 millió forintot."
     },
     {
-     "oldal": 4,
+     "oldal": 2,
      "paragrafus": "2. § és 1. melléklet",
      "szoveg": "Ha az önkormányzat a tárgyhónapot követő hónap 20-áig nem rögzíti az iparűzési adóbevételi adatot, a tárgyévi bevétel értéke az előző évi adat 1,15-szörösének 0 tizedesre kerekített összege lesz."
     },
@@ -1905,7 +1896,7 @@
      "szoveg": "A Magyar Államkincstár és a családtámogatási kifizetőhely kezelheti a jogosultság megállapításához szükséges személyes adatokat (pl. tanulói jogviszony, sajátos nevelési igény, rendszeres gyermekvédelmi kedvezmény), a folyósítást követő öt évig."
     },
     {
-     "oldal": 4,
+     "oldal": 3,
      "paragrafus": "6–7. §",
      "szoveg": "Az oktatási nyilvántartásban szereplő adatok álnevesített formában átadhatók a központi családtámogatási szerv részére szakpolitikai döntés-előkészítés céljából. A tanulói nyilvántartás adatköre kibővül a rendszeres gyermekvédelmi kedvezményre jogosultság tényével és hatályával."
     }
@@ -2043,6 +2034,7 @@
   "model": "opus",
   "pages": 212,
   "problems": [],
+  "refined": true,
   "source": "https://www.parlament.hu/irom43/00405/00405.pdf",
   "status": "ok",
   "summary": {
@@ -2061,7 +2053,7 @@
    "valtozik": [
     {
      "oldal": 3,
-     "paragrafus": "1-75. alcím, 77-178. alcím",
+     "paragrafus": "1–75. §, 78–180. §",
      "szoveg": "A hatályos törvényekben a vármegye és vármegyei kifejezések helyébe a megye és megyei, a főispán helyébe a kormánymegbízott lép. Ez közel 180 törvényt érint."
     },
     {
@@ -2081,7 +2073,7 @@
     },
     {
      "oldal": 35,
-     "paragrafus": "103-104. §",
+     "paragrafus": "103–104. §",
      "szoveg": "Az országgyűlési egyéni választókerületek leírásában a vármegye szó megyére változik és az 1. melléklet címe is módosul."
     }
    ]
@@ -2301,12 +2293,12 @@
      "szoveg": "A kizárólag orvosi rendelvényhez (vényhez) kötött gyógyszerek áfája 5%-ról 0%-ra csökken."
     },
     {
-     "oldal": 4,
+     "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "A humán gyógyászati célú magisztrális készítmények (gyógyszertárban egyedileg előállított gyógyszerek) szintén 0%-os áfa alá kerülnek."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. §",
      "szoveg": "A hatóság által engedélyezett humán gyógyszerek – a vényköteles gyógyszerek kivételével – továbbra is 5%-os áfával adóznak. A törvényszöveg pontosítja, hogy a vényköteles gyógyszerek kikerülnek az 5%-os kategóriából."
     },
@@ -2444,16 +2436,6 @@
      "oldal": 2,
      "paragrafus": "1. §",
      "szoveg": "Három minősített eset bűntettnek számítana, három évig terjedő szabadságvesztéssel: a) ha a cselekményt nagy nyilvánosság előtt, b) ha tizennyolcadik életévét be nem töltött személy sérelmére, vagy c) ha választás, népszavazás vagy európai polgári kezdeményezés rendjének befolyásolása céljából követik el."
-    },
-    {
-     "oldal": 4,
-     "paragrafus": "Részletes indokolás az 1. §-hoz",
-     "szoveg": "A hozzáférhetővé tétel meghatározatlan, nagyobb számú ember számára történő elérhetővé tételt jelent (pl. feltöltés közösségi médiára). Magáncélú közlések – például zárt, néhány fős baráti csoportban megosztott tartalom – nem valósítják meg a bűncselekményt."
-    },
-    {
-     "oldal": 4,
-     "paragrafus": "Részletes indokolás az 1. §-hoz",
-     "szoveg": "A tényálláshoz két feltételnek együtt kell teljesülnie: a tartalomnak egy valós személyre kell hasonlítania, és alkalmasnak kell lennie arra, hogy egy átlagos személyt a valószerűség látszatával tévedésbe ejtsen."
     }
    ]
   },
@@ -2464,19 +2446,17 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 8,
-  "problems": [
-   "A „valtozik\" ötödik elemében (az 1–2. § indokolásáról szóló pont) az oldal 2-nek van megadva, holott a Részletes indokolás 1–2. §-hoz tartozó szövege a 6. oldalon található. A helyes oldalszám 6 lenne."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00493/00493.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
     "oldal": 6,
     "szoveg": "Éppen ezért a választópolgároknak legitim érdeke fűződik ahhoz, hogy az ezzel kapcsolatos információt megismerhessék."
    },
-   "kiket_erint": "Országgyűlési képviselőket, helyi önkormányzati képviselőket és polgármestereket, európai parlamenti képviselőket, a velük közös háztartásban élő házas- vagy élettársat és gyermeket, valamint az egyéni és listás jelölteket érinti.",
+   "kiket_erint": "Országgyűlési képviselőket, helyi önkormányzati képviselőket és polgármestereket, európai parlamenti képviselőket, valamint az egyéni és listás jelölteket érinti.",
    "lede": "A javaslat előírja, hogy az országgyűlési, helyi önkormányzati és európai parlamenti képviselők, valamint a polgármesterek nyilvánosan közöljék az állampolgárságaikat. Ennek érdekében az állampolgárságra vonatkozó nyilatkozatot a vagyonnyilatkozat részévé teszi, és a jelöltállításkor is kötelezővé teszi az állampolgárságról szóló nyilatkozattételt.",
    "mikortol": {
     "oldal": 2,
@@ -2486,12 +2466,12 @@
    "valtozik": [
     {
      "oldal": 2,
-     "paragrafus": "1. § és 1. melléklet (4. oldal)",
+     "paragrafus": "1. § és 1. melléklet",
      "szoveg": "A helyi önkormányzati képviselők és polgármesterek vagyonnyilatkozatába új pont kerül: fel kell tüntetni a nyilatkozatot adó állampolgárságait."
     },
     {
      "oldal": 2,
-     "paragrafus": "2. § és 2. melléklet (5. oldal)",
+     "paragrafus": "2. § és 2. melléklet",
      "szoveg": "Az országgyűlési képviselők vagyonnyilatkozatában a név mellett fel kell tüntetni az állampolgárságokat is. Mivel az európai parlamenti képviselőkre az országgyűlési képviselők vagyonnyilatkozati szabályai vonatkoznak, külön módosítás nélkül rájuk is kiterjed a kötelezettség."
     },
     {
@@ -2503,11 +2483,6 @@
      "oldal": 2,
      "paragrafus": "4. §",
      "szoveg": "Listás jelöltek bejelentésének tartalmaznia kell a listán szereplő valamennyi jelölt állampolgárságait is."
-    },
-    {
-     "oldal": 2,
-     "paragrafus": "1–2. § indokolása",
-     "szoveg": "A jelenleg hivatalban lévő országgyűlési képviselők, helyi önkormányzati képviselők és polgármesterek, valamint az európai parlamenti képviselők az állampolgársággal kapcsolatos bejelentést a soron következő éves vagyonnyilatkozatban kötelesek teljesíteni, ha a törvény eltérően nem rendelkezik."
     }
    ]
   },
@@ -2556,7 +2531,7 @@
      "szoveg": "Az önhatalom csak lakás, illetve nem lakás céljára szolgáló helyiség esetén alkalmazható, más ingatlanoknál nem."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "Közös tulajdon esetén a tulajdonostársak egymással szemben nem élhetnek az önhatalom lehetőségével, mert a szabály csak a tulajdonosnak nem minősülő jogalap nélküli birtokosra vonatkozik."
     }
@@ -2690,12 +2665,12 @@
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § és 1. melléklet",
      "szoveg": "A tűzifa (hasáb, tuskó, rőzse, köteg vagy hasonló forma) áfája 27%-ról 5%-ra csökken. Az Áfa tv. 3. számú mellékletének I. része egy új, 61. sorral egészül ki."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § és 1. melléklet",
      "szoveg": "A fűtési célú fűrészpor, fahulladék és -maradék, valamint pellet és brikett (vagy hasonló alakra tömörített termék) áfája szintén 27%-ról 5%-ra csökken. Az Áfa tv. 3. számú mellékletének I. része egy új, 62. sorral egészül ki."
     }
@@ -2736,7 +2711,7 @@
      "szoveg": "Hatályát veszti a köztársasági elnök jogállásáról szóló törvény 5/A. §-a, amely a köztársasági elnök akadályoztatására vonatkozó szabályokat tartalmazta, mivel azokat az Alaptörvény rendezi."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "5. §",
      "szoveg": "Az Alkotmánybíróság költségvetését úgy kell megállapítani, hogy az ne legyen kevesebb az előző évi központi költségvetésben megállapított összegnél. A költségvetési javaslatot a testület maga állítja össze, a Kormány azt változtatás nélkül terjeszti az Országgyűlés elé."
     },
@@ -2812,24 +2787,16 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 7,
-  "problems": [
-   "a 5. § nem a 4. oldal környékén áll",
-   "A 3. § (2) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon, ahogy az összefoglaló jelzi.",
-   "A 3. § (3) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon.",
-   "A 3. § (4) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon.",
-   "A 3. § (5)–(6) bekezdések a 3. oldalon kezdődnek, nem az 5. oldalon.",
-   "A 3. § (8) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon.",
-   "A 4. § a 4. oldalon kezdődik, nem a 6. oldalon, ahogy az összefoglaló jelzi."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00052/00052.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": null,
    "kiket_erint": "A devizahiteles törvények (2014. évi XXXVIII., 2014. évi LXXVII. és 2015. évi CXLV. törvény) hatálya alá tartozó fogyasztói kölcsönszerződések adósait, hitelezőit, az érintett perek feleit, a végrehajtókat, az ingatlanárverések vevőit, valamint a zálogszerződésben vagy kezesi kötelezettségvállalásban érintetteket és ezek jogutódjait érinti.",
    "lede": "A javaslat az úgynevezett devizahiteles törvények hatálya alá tartozó fogyasztói szerződésekkel kapcsolatos, még folyamatban lévő perek és végrehajtási eljárások felfüggesztéséről szól. A cél az, hogy amíg a jogalkotó felülvizsgálja ezeket a törvényeket, addig ne lehessen végrehajtási cselekményeket foganatosítani és a bírósági pereket is szüneteltessék.",
    "mikortol": {
-    "oldal": 4,
+    "oldal": null,
     "paragrafus": "5. §",
     "szoveg": "A törvény a kihirdetését követő napon lép hatályba."
    },
@@ -2840,32 +2807,32 @@
      "szoveg": "A bíróság hivatalból, soron kívül felfüggeszti az érintett devizahiteles szerződésekhez kapcsolódó polgári pereket egy külön törvényben meghatározott intézkedésig. A felfüggesztő végzés ellen fellebbezhető, de a fellebbezésnek nincs halasztó hatálya."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "3. § (2)",
      "szoveg": "Az e törvény hatálya alá tartozó végrehajtási eljárásokban külön törvényben meghatározott intézkedésig eljárási cselekmény és intézkedés nem foganatosítható, a felek nyilatkozatai hatálytalanok, és minden határidő megszakad. A végrehajtónak szünetelő ügyként kell nyilvántartania az ügyet."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "3. § (3)",
      "szoveg": "Ha az ingatlan árverési vevője még nem fizette meg a teljes vételárat, azt csak az eljárás folytatása esetén, a végrehajtó felhívására 15 napon belül kell megfizetnie. Ha elmulasztja, az előleget elveszíti és az árverés sikertelen."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "3. § (4)",
      "szoveg": "Ha az árverési vevő a teljes vételárat már megfizette, de az ingatlant még nem adták át, az előlegen felüli összeget visszaigényelheti a végrehajtótól, aki 15 napon belül köteles teljesíteni. Az eljárás folytatásakor a vételárat újra meg kell fizetni 15 napon belül."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "3. § (5)–(6)",
      "szoveg": "Ha a devizahiteles követelés mellett más követelés behajtására is indult végrehajtás, a fedezetként meghatározott vagyontárgy vonatkozásában szintén nem foganatosíthatók eljárási cselekmények. A szabályok kiterjednek a zálogszerződésből, kezesi kötelezettségvállalásból eredő és jogutódlással érintett ügyekre is."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "3. § (8)",
      "szoveg": "Az adós továbbra is megfizetheti önként a követelést, és a követelés megszűnésével, csökkenésével kapcsolatos eljárási cselekmények megtételére is sor kerülhet. A fogyasztói szerződések esetén a végrehajtás elrendelésére és az ahhoz tartozó eljárási cselekmények megtételére szintén sor kerülhet."
     },
     {
-     "oldal": 6,
+     "oldal": null,
      "paragrafus": "4. §",
      "szoveg": "A végrehajtási eljárások felfüggesztésének ideje alatt a végrehajtási jog elévülése nyugszik (azaz nem telik)."
     }
@@ -2878,13 +2845,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 9,
-  "problems": [
-   "a 3. § nem a 5. oldal környékén áll",
-   "a 4. § nem a 5. oldal környékén áll"
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00053/00053.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Részletes indokolás",
@@ -2925,12 +2889,12 @@
      "szoveg": "Nem hallgatható meg a vizsgálóbizottság előtt többek között a védő a védői tevékenysége során szerzett információról, az egyházi személy a hivatásából eredő titokról, valamint a minősített adatról az, aki nem kapott felmentést. Az önvádra kötelezés tilalma érvényesül: aki magát vagy hozzátartozóját bűncselekménnyel vádolná, megtagadhatja a nyilatkozatot. A médiatartalom-szolgáltató megtagadhatja a nyilatkozatot, ha azzal az információforrás kilétét fedné fel."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "3. §",
      "szoveg": "A vizsgálóbizottságokra vonatkozó új szabályokat az állandó bizottságok vizsgálati tevékenységére is alkalmazni kell, ha törvény eltérően nem rendelkezik."
     },
     {
-     "oldal": 5,
+     "oldal": null,
      "paragrafus": "4. §",
      "szoveg": "Új bűncselekményi tényállás jön létre: aki a vizsgálóbizottság előtti együttműködési kötelezettségét szándékosan, alapos indok nélkül nem teljesíti és ezzel a bizottság munkáját akadályozza, vagy szándékosan valótlan nyilatkozatot tesz, vétséget követ el, és két évig terjedő szabadságvesztéssel büntetendő. Ha a cselekmény valamely bűncselekmény elkövetését szolgálja, vagy annak leplezésére irányul, a büntetés három évig terjedő szabadságvesztés. Országgyűlési képviselő e szakasz alapján nem büntethető."
     }
@@ -2940,12 +2904,69 @@
   "text_hash": "8ee533c344d07665"
  },
  "T/566": {
-  "chars": 453107,
-  "made": "2026-11-09",
+  "made": "2026-11-10",
   "model": "opus",
   "pages": 126,
+  "partial": {
+   "annex_pages": [
+    14,
+    106
+   ]
+  },
+  "problems": [],
   "source": "https://www.parlament.hu/irom43/00566/00566.pdf",
-  "status": "too_long",
+  "status": "ok",
+  "summary": {
+   "idezet": {
+    "hely": "Részletes indokolás, 5. §-hoz",
+    "oldal": 107,
+    "szoveg": "A 2026. évi új hiánycél elérése, a tartós megtakarítások feltárása érdekében befizetési kötelezettség előírása a Kormány irányítása vagy felügyelete alá tartozó költségvetési fejezetek részére."
+   },
+   "kiket_erint": "A módosítás érinti a Kormány irányítása vagy felügyelete alá tartozó valamennyi költségvetési fejezetet (minisztériumokat és háttérintézményeiket), az önkormányzatokat, valamint a társadalombiztosítási alapokat.",
+   "lede": "A javaslat Magyarország 2026. évi központi költségvetési törvényét módosítja. A központi alrendszer hiányát az eredeti 4 218 534,6 millió forintról 7 110 123,1 millió forintra emeli, ami GDP-arányosan 7,5 százalékos ESA-hiánynak felel meg. A módosítás új preambulumot ad a költségvetési törvénynek, létrehozza az 500 milliárd forintos Havária Alapot, befizetési kötelezettségeket ír elő a minisztériumoknak, és átvezeti a kormányváltás utáni minisztériumi névváltozásokat.",
+   "mikortol": {
+    "oldal": 13,
+    "paragrafus": "12. §",
+    "szoveg": "A törvény a kihirdetését követő napon lép hatályba."
+   },
+   "valtozik": [
+    {
+     "oldal": 6,
+     "paragrafus": "2. §",
+     "szoveg": "A központi alrendszer kiadási főösszege 49 025 644,9 millió forint, bevételi főösszege 41 915 521,8 millió forint, hiánya 7 110 123,1 millió forint lesz."
+    },
+    {
+     "oldal": 6,
+     "paragrafus": "3. §",
+     "szoveg": "A 2026. december 31-ére tervezett államadósság-mutató 77,5%-ra emelkedik a 2025 végi 74,6%-ról."
+    },
+    {
+     "oldal": 6,
+     "paragrafus": "4. §",
+     "szoveg": "Létrejön a Havária Alap, amely a rendkívüli időjárási viszonyok, az energiakrízis vagy egyéb előre nem látható ok miatti kiadási többletekre biztosít fedezetet. Az alapról a Kormány nyilvános határozatban csoportosíthat át."
+    },
+    {
+     "oldal": 6,
+     "paragrafus": "5. §",
+     "szoveg": "A Kormány irányítása vagy felügyelete alá tartozó költségvetési fejezetek összesen 300 000 millió forintot kötelesek befizetni a központi költségvetésbe 2026. október 31-ig; a fejezetenkénti felosztásról a Kormány 2026. október 15-ig dönt."
+    },
+    {
+     "oldal": 6,
+     "paragrafus": "5. §",
+     "szoveg": "Több minisztérium is egyedi befizetésre köteles: a Honvédelmi Minisztérium 1414,7 millió forintot, a Külügyminisztérium 4200 millió forintot, a Gazdasági és Energetikai Minisztérium 1000 millió forintot, a Tudományos és Technológiai Minisztérium igazgatása 115 millió forintot, az Élő Környezetért Felelős Minisztérium 4769,6 millió forintot – mindegyik legkésőbb 2026. november 30. vagy december 10–15. között."
+    },
+    {
+     "oldal": 9,
+     "paragrafus": "10. §",
+     "szoveg": "A törvény átvezeti a kormányváltás utáni minisztériumi névváltozásokat (például Építési és Közlekedési Minisztérium helyett Közlekedési és Beruházási Minisztérium, Energiaügyi Minisztérium helyett Gazdasági és Energetikai Minisztérium, Szuverenitásvédelmi Hivatal helyett Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatal stb.) és az ezzel járó szerkezeti változásokat a költségvetési törvényen."
+    },
+    {
+     "oldal": 12,
+     "paragrafus": "11. §",
+     "szoveg": "Három önkormányzati fejlesztési támogatási jogcím hatályát veszti, mert a támogatói okirat kiadásának feltételei nem teljesültek, és a beruházások a rendelkezésre álló határidőn belül nem valósíthatók meg."
+    }
+   ]
+  },
   "szam": "T/566",
   "text_hash": "759cd2bce297c263"
  },
@@ -2971,7 +2992,7 @@
    },
    "valtozik": [
     {
-     "oldal": 11,
+     "oldal": 10,
      "paragrafus": "19. §",
      "szoveg": "A Btk. környezetkárosítás tényállása kibővül: a szándékos elkövetés büntetési tétele az alapesettől (3 évig) a halált okozó esetig (5-10 év) terjed. Új elem, hogy a maradandó fogyatékosság, súlyos egészségromlás vagy halál okozása is minősítő körülmény. A gondatlan elkövetés is büntetendő, a halált okozó gondatlan környezetkárosítás 1-5 évig terjedő szabadságvesztéssel járhat."
     },
@@ -2991,7 +3012,7 @@
      "szoveg": "A vagyonelkobzás új formája: bűnszervezetben részt vevő személytől vagyont szerző más személy vagyonára is el kell rendelni a vagyonelkobzást, ha a vagyon az eljárás megindítását megelőző 5 évben szerzett, és az érintett személy életviteléhez képest különösen aránytalan. Az érintett mentesülhet, ha bizonyítja, hogy a vagyon nem bűncselekményből származik."
     },
     {
-     "oldal": 5,
+     "oldal": 4,
      "paragrafus": "9. § és 13. §",
      "szoveg": "Az elektronikus hírközlési és elektronikus kereskedelmi szolgáltatók kötelesek telephelyet vagy jogi képviselőt kijelölni az elektronikus bizonyítékok beszerzésére irányuló határozatok fogadására, és ezt az NMHH-nak bejelenteni. A bejelentési határidő a hatálybalépéstől vagy a szolgáltatás megkezdésétől számított 6 hónap. A kötelezettség súlyos vagy ismételt megszegése esetén a bírság legfeljebb a nettó árbevétel 0,1 százaléka, árbevétel hiányában legfeljebb 10 millió forint."
     },
@@ -3042,17 +3063,17 @@
      "szoveg": "A NAV valamennyi károsultnál hatósági ellenőrzés keretében utólagosan vizsgálja, hogy a károsult bejelentette-e követelését hitelezői igényként a felszámolási eljárásban, illetve hogy a kárrendezés igénylésekor tett nyilatkozatai valósak voltak-e."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (19/A. § (4)–(5) bekezdés)",
      "szoveg": "Ha a NAV megállapítja, hogy a kifizetés jogosulatlan személynek járt, magasabb volt a jogszerűnél, vagy a károsult nem jelentette be hitelezői igényét határidőben, a károsult köteles a jogosulatlanul kapott összeget késedelmi kamattal együtt 15 napon belül visszafizetni."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (19/A. § (6) bekezdés)",
      "szoveg": "Ha a károsult önként nem fizet, a NAV adók módjára hajtja be a jogosulatlanul igénybe vett kárrendezés késedelmi kamattal növelt összegét."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (19/B. § (1)–(2) bekezdés)",
      "szoveg": "A BÁSZNA Gabona Zrt. felszámolója köteles a NAV megkeresésére adatot szolgáltatni a hitelezői igényt érvényesítő személyekről és a kielégítés módjáról, valamint a Magyar Államkincstárnak a hitelezői igény kielégítését követő 8 napon belül."
     }
@@ -3212,12 +3233,12 @@
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "Ha kiemelt beruházásnál a környezetvédelmi vagy természetvédelmi hatóság eljárást indít szabálysértés miatt, haladéktalanul értesítenie kell az építésügyi hatóságot. Az építésügyi hatóság az értesítés alapján felfüggeszti az engedélyezési eljárást a hatósági döntés véglegessé válásáig."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "A Kormány a kiemelt beruházássá nyilvánító rendeletben előírhatja, hogy környezetvédelmi vagy természetvédelmi jogsértés esetén építési vagy létesítési engedély nem adható ki a jogsértő állapot megszüntetéséig, de legalább a döntés véglegessé válásától számított hat hónapig."
     },
@@ -3345,12 +3366,12 @@
      "szoveg": "A tilalom nem vonatkozik az átszállításra (tranzitra): ha a szállítmány a behozatal napjától számított 15. nap végéig elhagyja Magyarországot. Az átszállított árut az állami adó- és vámhatóság hatósági zárral látja el, amelyet csak roncsolással lehet eltávolítani; a fuvarozó felel a zár sértetlenségéért és a határidőben történő továbbításért."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (18/B. § (5) bekezdés)",
      "szoveg": "A hatósági zár felhelyezésekor nyilvántartásba kell venni többek között a szállítmány megnevezését, mennyiségét, a fuvarozó adatait, a szállítóeszköz rendszámát, valamint a kilépés tervezett helyét, idejét és a tervezett magyarországi útvonalat."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. § (18/C. §)",
      "szoveg": "Az érzékeny termékek egy részére (a melléklet 9–12., 17. és 18. sorában szereplő termékek, vetőmag kivételével – köztük búza, rozs, árpa, kukorica, olajrepce, napraforgómag) EKAER-bejelentési (Elektronikus Közúti Áruforgalom Ellenőrző Rendszer) kötelezettség áll fenn; biztosítékot kell nyújtani akkor is, ha a kötelezett megbízható adózó."
     },
@@ -3406,12 +3427,12 @@
      "szoveg": "A hatósági ár csak magyar rendszámú jármű tankjába közvetlen töltéssel értékesített üzemanyagra vonatkozik. Külföldi rendszámú járműre akkor érvényes, ha annak országa viszonossági alapon szintén biztosítja a hatósági árat magyar rendszámú járműveknek."
     },
     {
-     "oldal": 4,
+     "oldal": 3,
      "paragrafus": "3. §",
      "szoveg": "A kizárólag automata kútból álló töltőállomások, ahol a jogosultság ellenőrzése nem biztosított, nem tartoznak a hatósági ár hatálya alá."
     },
     {
-     "oldal": 4,
+     "oldal": 3,
      "paragrafus": "3. §",
      "szoveg": "Az üzemanyagtöltő állomás köteles hatósági áron forgalmazni a terméket, ha azt a törvény kihirdetését megelőző három hónapban is forgalmazta, illetve ha az engedélyét ezen időszakon belül szerezte meg."
     },
@@ -3480,12 +3501,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 11,
-  "problems": [
-   "az idézet nem szó szerint áll a szövegben: A javítóintézeti nevelés, mint büntetőjogi intézkedés ugyan szabadságelvonással "
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00666/00666.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -3508,7 +3527,7 @@
     {
      "oldal": 2,
      "paragrafus": "1. §",
-     "szoveg": "A javítóintézetben új szakmai testület jön létre: a javítóintézeti tanács, amelynek elnöke az igazgató, tagjai az igazgatóhelyettesek, otthonvezetők, nevelők, pszichológus és további szakemberek. A tanács legalább öt fő részvétele esetén határozatképes."
+     "szoveg": "A Gyvt.-be bekerülnek a javítóintézeti tanács összetételére, határozatképességére és működésére vonatkozó részletszabályok. A tanács elnöke az igazgató, tagjai az igazgatóhelyettesek, otthonvezetők, nevelők, pszichológus és további szakemberek; a tanács legalább öt fő részvétele esetén határozatképes."
     },
     {
      "oldal": 3,
@@ -3518,7 +3537,7 @@
     {
      "oldal": 4,
      "paragrafus": "11. §",
-     "szoveg": "Testi kényszert a fiatalkorúval szemben háromszintű döntési rend szerint lehet elrendelni: az igazgató, távollétében az ügyeletes vezető, ezek távollétében a biztonsági vagy rendészeti részleg vezetőjének rendelkezése alapján – sürgős szükség esetén pedig e rendelkezés nélkül is, haladéktalan intézkedésként. Testi kényszert csak kiegészítő képzésben részesült vagy megfelelő szakirányú képesítéssel rendelkező javítóintézeti rendész alkalmazhat."
+     "szoveg": "Testi kényszert a fiatalkorúval szemben az igazgató, távollétében az ügyeletes vezető, ezek távollétében a biztonsági vagy rendészeti részleg vezetőjének rendelkezése alapján lehet alkalmazni; sürgős szükség esetén ilyen rendelkezés hiányában is alkalmazható haladéktalan intézkedésként. Testi kényszert csak kiegészítő képzésben részesült vagy megfelelő szakirányú képesítéssel rendelkező javítóintézeti rendész alkalmazhat."
     },
     {
      "oldal": 4,
@@ -3675,7 +3694,7 @@
      "szoveg": "A közúti közlekedési nyilvántartási szerv a törvény hatálybalépését követő 5 munkanapon belül adatot szolgáltat az állami adó- és vámhatóságnak a járműnyilvántartásból, hogy meghatározható legyen a támogatásra jogosultak köre."
     },
     {
-     "oldal": 4,
+     "oldal": 2,
      "paragrafus": "5. § és 1. melléklet",
      "szoveg": "A dízeltámogatás személyi jövedelemadó-mentes lesz: a személyi jövedelemadóról szóló törvény adómentes jogcímei kiegészülnek a dízeltámogatással."
     },
@@ -3769,19 +3788,16 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 5,
-  "problems": [
-   "A 3. § (6)–(7) tételhez megadott oldalszám 2, holott a 3. § (6) bekezdése a 3. oldalon kezdődik.",
-   "A mikortol blokkban az 5. §-hoz megadott oldalszám 4, holott az 5. § a 3. oldalon kezdődik."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00007/00007.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": null,
    "kiket_erint": "A javaslat közvetlenül a felsorolt minisztériumokat, az azokat vezető minisztereket, valamint a megszűnő, átalakuló vagy kiváló minisztériumok szervezeteit és alkalmazottait érinti.",
    "lede": "A javaslat újraszabályozza Magyarország minisztériumainak felsorolását a 2026-os országgyűlési választások utáni kormányalakításhoz. Tizenhat minisztériumot nevez meg; öt kiválással jön létre, kettő korábbi minisztérium beolvadással megszűnik, hét pedig új nevet kap. A hatályos 2022. évi II. törvényt hatályon kívül helyezi.",
    "mikortol": {
-    "oldal": 4,
+    "oldal": 3,
     "paragrafus": "5. §",
     "szoveg": "A törvény az országgyűlési képviselők 2026. évi általános választását követően megalakult Országgyűlés alakuló ülésén megválasztott miniszterelnök által vezetett Kormány megalakulásának napján lép hatályba. A feltétel bekövetkezéséről a pénzügyminiszter határozatot tesz közzé a Magyar Közlönyben."
    },
@@ -4091,12 +4107,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 8,
-  "problems": [
-   "az idézet nem szó szerint áll a szövegben: tehát nem változtat a nyilvántartások közbizalmi, tanúsító erején, hanem azt szo"
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00790/00790.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás, 5–6. oldal",
@@ -4199,10 +4213,11 @@
   "text_hash": "ffa9df9811fd49ca"
  },
  "T/795": {
-  "made": "2026-11-09",
+  "made": "2026-11-10",
   "model": "opus",
   "pages": 5,
   "problems": [],
+  "refined": true,
   "source": "https://www.parlament.hu/irom43/00795/00795.pdf",
   "status": "ok",
   "summary": {
@@ -4233,11 +4248,6 @@
      "oldal": 2,
      "paragrafus": "2. §",
      "szoveg": "Az új határidőszabályt a törvény hatálybalépésekor már folyamatban lévő eljárásokban is alkalmazni kell."
-    },
-    {
-     "oldal": 3,
-     "paragrafus": "1. § (indokolás)",
-     "szoveg": "A részletes indokolás szerint a különös ügyintézési határidő csak az elsőfokú eljárásra vonatkozik; másodfokú (fellebbezési) eljárásban nemzetközi hatásvizsgálat nem zajlik, így ott ez a szabály nem alkalmazható."
     }
    ]
   },
@@ -4248,13 +4258,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 8,
-  "problems": [
-   "A negyedik valtozas (felugyelobizottsagi tagok megvalasztasa) oldalszama hibas: a 2. § (3) bekezdes a 3. oldalon kezdodik, nem a 2. oldalon.",
-   "Az otodik valtozas (megbizatas idotartama) oldalszama hibas: a 2. § (4) bekezdes a 4. oldalon kezdodik, nem a 2. oldalon."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00796/00796.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -4292,12 +4299,12 @@
     {
      "oldal": 2,
      "paragrafus": "2. § (4)",
-     "szoveg": "A felügyelőbizottsági tagok megbízatása négy évre szól, egyszer további négy évvel meghosszabbítható – a korábbi szabály szerint a megbízatás az MNB elnökének megbízatásához igazodott."
+     "szoveg": "A felügyelőbizottsági tagok megbízatása négy évre szól, és egyszer további négy évvel meghosszabbítható."
     },
     {
      "oldal": 4,
      "paragrafus": "3. §",
-     "szoveg": "A felügyelőbizottság elnökének tiszteletdíja az MNB elnöke havi alapbérének 35%-ára, a további tagok tiszteletdíja 30%-ára csökken (a korábbi 70%, illetve 60% helyett)."
+     "szoveg": "A felügyelőbizottság elnökének tiszteletdíja az MNB elnöke havi alapbérének 35%-a, a további tagok tiszteletdíja 30%-a."
     },
     {
      "oldal": 4,
@@ -4374,14 +4381,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 80,
-  "problems": [
-   "A 4. változás-elem (élelmiszer- és drogériai árréskorlátozás) oldalszáma 25, de a hivatkozott 49. § a 24. oldalon kezdődik.",
-   "Az 5. változás-elem (rezsikedvezmény, 69–71. §) oldalszáma 23, de a 69. § a 38. oldalon kezdődik.",
-   "A 6. változás-elem (energiaellátók különadója, 97–99. §) oldalszáma 52, de a 97. § az 51. oldalon kezdődik."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00008/00008.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -4417,7 +4420,7 @@
      "szoveg": "Az 1 milliárd forint feletti 2023-as nettó árbevételű élelmiszer-kiskereskedők esetében a meghatározott termékkategóriáknál (pl. csirkemell, tej, liszt, cukor, tojás) az árrés nem haladhatja meg a 2025. januári átlagos árrést, és legfeljebb 10% lehet. A saját márkás termékek aránya sem nőhet a 2025. január–februári arányhoz képest. Drogériai termékeknél (pl. mosószer, sampon, pelenka) az árrés-felső határ 15%."
     },
     {
-     "oldal": 23,
+     "oldal": 38,
      "paragrafus": "69–71. §",
      "szoveg": "A gázzal, árammal vagy távhővel fűtő háztartások a 2026. januári fogyasztásuk után 30%-os mennyiségi kedvezményt kapnak. Aki 2025-ben a kedvezményes rezsisávon belül fogyasztott gázt, annál a januári többletfogyasztás nem eredményezheti a sávhatár átlépését."
     },
@@ -4468,7 +4471,7 @@
      "szoveg": "A nemzeti kockázatértékelés fogalma kibővül: a pénzmosás és a terrorizmusfinanszírozás mellett ki kell térnie a proliferáció (tömegpusztító fegyverek elterjedésének) finanszírozási kockázataira is. Emellett a tényleges tulajdonosi kör meghatározása kiterjed a vagyonkezelő alapítványok által működtetett tartós vagyonkezelési jogviszonyokra is: tényleges tulajdonosnak minősül többek közt az alapító, a kuratórium tagja és a kedvezményezett."
     },
     {
-     "oldal": 4,
+     "oldal": 3,
      "paragrafus": "4. §",
      "szoveg": "Ha ügyfél-átvilágítás során pénzmosásgyanú merül fel, a szolgáltató – a bejelentés megtétele mellett – alacsonyabb kockázati szintű ügyfél-átvilágítást végezhet, feltéve hogy megítélése szerint a magasabb szintű átvilágítás felfedné a gyanút az ügyfél előtt (megsértené az úgynevezett felfedés tilalmát)."
     },
@@ -4519,7 +4522,7 @@
    },
    "valtozik": [
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "2. § és 1. melléklet",
      "szoveg": "Tizennégy új termékcsoport kerül az 5%-os áfakulcs alá: burgonya, paradicsom, hagyma, káposzta, saláta, sárgarépa és hasonló gyökérzöldségek, uborka, hüvelyes zöldség, más zöldség, dióféle, szőlő, dinnye, alma-körte-birs, valamint csonthéjas gyümölcsök (kajszibarack, cseresznye, meggy, őszibarack, szilva) – mindegyik kizárólag frissen."
     },
@@ -4828,12 +4831,12 @@
      "szoveg": "Hatályát veszti a közművelődési törvény VIII/A. fejezete, amely a könyvek árkötöttségére vonatkozó rendelkezéseket tartalmazza."
     },
     {
-     "oldal": 3,
+     "oldal": 2,
      "paragrafus": "1. §",
      "szoveg": "Az indokolás szerint ezzel megszűnik az a korlátozás, amely a könyvek megjelenésétől számított 365 napon belül legfeljebb 10%-os kedvezményt engedett a fogyasztói árból. A 10%-os keretbe minden kedvezmény beleszámít: online alapkedvezmény, előrendelői akció, kuponkód, hűségpont és a könyvhöz kapcsolódó szolgáltatások (pl. ingyenes szállítás) értéke is."
     },
     {
-     "oldal": 4,
+     "oldal": 2,
      "paragrafus": "1. §",
      "szoveg": "Az indokolás szerint a hatályon kívül helyezés a papíralapú könyvek mellett az e-könyvekre és hangoskönyvekre vonatkozó árkötöttséget is érinti, mivel a szabályozás ezekre is kiterjedt."
     },
@@ -4879,7 +4882,7 @@
      "szoveg": "Bevezetésre kerül az ún. exit tax: ha egy legalább 5 éve belföldi illetőségű magánszemély külföldre helyezi adóügyi illetőségét, és illetőségváltási eszközeinek (értékpapírok, vagyoni részesedések, kriptoeszközök stb.) értéke meghaladja az 500 millió Ft-ot (vagy 20%-os részesedésnél a 250 millió Ft-ot), szja-t kell fizetnie a nem realizált értéknövekmény után. EU/EGT-államba költözés esetén kamatmentes fizetési halasztás jár a tényleges eladásig."
     },
     {
-     "oldal": 25,
+     "oldal": 26,
      "paragrafus": "55–56. §",
      "szoveg": "A cégautóadóban a 120 kW feletti személygépkocsikra sávos adómérték lép életbe (121–140, 141–180, 181–250, 250 kW feletti sávok), környezetvédelmi osztályjelzés szerinti differenciálással. A megfizetett gépjárműadó levonása a cégautóadóból a továbbiakban adóalanyonként egy személygépkocsira korlátozódik."
     },
@@ -4899,7 +4902,7 @@
      "szoveg": "A rehabilitációs hozzájárulás mértéke a 250 főnél többet foglalkoztató munkáltatóknál sávosan emelkedik: 250–499 fő esetén a minimálbér 11-szerese, 500–999 főnél 13-szorosa, 1000 fő felett 15-szöröse személyenként évente. A 250 fő alatti munkáltatóknál marad a jelenlegi 9-szeres mérték."
     },
     {
-     "oldal": 11,
+     "oldal": 10,
      "paragrafus": "8. § c)–d) pont és 122. §",
      "szoveg": "Az éttermi, cukrászdai reprezentációs juttatás utáni adómentesség bevételi értékhatára 100 millió Ft-ról 50 millió Ft-ra csökken. Nem lép hatályba az átalányadózó egyéni vállalkozók költséghányadának 50%-ra emelése sem."
     }
@@ -5337,12 +5340,59 @@
   "text_hash": "8b8724ca25065fde"
  },
  "T/935": {
-  "chars": 2655546,
-  "made": "2026-11-09",
+  "made": "2026-11-10",
   "model": "opus",
   "pages": 1046,
+  "partial": {
+   "annex_pages": [
+    4,
+    1038
+   ]
+  },
+  "problems": [],
   "source": "https://www.parlament.hu/irom43/00935/00935.pdf",
-  "status": "too_long",
+  "status": "ok",
+  "summary": {
+   "idezet": {
+    "hely": "Általános indokolás",
+    "oldal": 1039,
+    "szoveg": "A törvény célja az egyrészről az Európai Unió és annak tagállamai, másrészről a Mexikói Egyesült Államok közötti politikai, gazdasági és együttműködési stratégiai partnerségi megállapodás (a továbbiakban: Megállapodás) kihirdetése."
+   },
+   "kiket_erint": "Az EU tagállamai és Mexikó közötti kereskedelemben érintett gazdasági szereplőket, különösen a magyar agrár- és élelmiszeripari exportőröket érinti közvetlenül.",
+   "lede": "A javaslat az Európai Unió és tagállamai, valamint a Mexikói Egyesült Államok közötti politikai, gazdasági és együttműködési stratégiai partnerségi megállapodás magyar kihirdetéséről szól. A megállapodás a korábbi, 2000 óta hatályos ún. Globális Megállapodást váltja fel. Az Országgyűlés felhatalmazást ad a megállapodás kötelező hatályának elismerésére, kihirdeti azt, és jóváhagyja annak ideiglenes alkalmazását.",
+   "mikortol": {
+    "oldal": 2,
+    "paragrafus": "5. §",
+    "szoveg": "A törvény – a 2. §, a 3. §, a 7. § és az 1–6. melléklet kivételével – a kihirdetését követő napon lép hatályba. A 2. §, a 3. §, a 7. § és az 1–6. melléklet a Megállapodás IV. rész 2.5. cikk 2. bekezdésében meghatározott időpontban lép hatályba; ennek naptári napját a külpolitikáért felelős miniszter a Magyar Közlönyben közzétett közleménnyel állapítja meg."
+   },
+   "valtozik": [
+    {
+     "oldal": 2,
+     "paragrafus": "1–3. §",
+     "szoveg": "Az Országgyűlés felhatalmazást ad a Megállapodás kötelező hatályának elismerésére, és e törvénnyel kihirdeti azt. A megállapodás hiteles magyar nyelvű szövegét az 1–6. melléklet tartalmazza."
+    },
+    {
+     "oldal": 2,
+     "paragrafus": "4. §",
+     "szoveg": "Az Országgyűlés jóváhagyja a Megállapodás ideiglenes alkalmazását a Megállapodás IV. rész 2.5. cikk 4. bekezdésében meghatározott időponttól."
+    },
+    {
+     "oldal": 2,
+     "paragrafus": "5. §",
+     "szoveg": "A törvény – a 2. §, a 3. §, a 7. § és az 1–6. melléklet kivételével – a kihirdetését követő napon lép hatályba. A kivételként felsorolt rendelkezések a Megállapodás IV. rész 2.5. cikk 2. bekezdésében meghatározott időpontban lépnek hatályba; ennek naptári napját a külpolitikáért felelős miniszter a Magyar Közlönyben közzétett közleménnyel állapítja meg."
+    },
+    {
+     "oldal": 3,
+     "paragrafus": "6. §",
+     "szoveg": "A törvény végrehajtásához szükséges intézkedésekről a külpolitikáért felelős miniszter gondoskodik."
+    },
+    {
+     "oldal": 3,
+     "paragrafus": "7. §",
+     "szoveg": "Hatályát veszti a korábbi EU–Mexikó Globális Megállapodást kihirdető 2011. évi IX. törvény, valamint az ahhoz kapcsolódó, a Horvát Köztársaság csatlakozása miatti harmadik kiegészítő jegyzőkönyvet kihirdető 2019. évi LXXXVI. törvény."
+    }
+   ]
+  },
   "szam": "T/935",
   "text_hash": "3382a4c21d7b999c"
  },
@@ -5350,17 +5400,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 26,
-  "problems": [
-   "A valtozik 2. elemeben (1. melleklet, 5. CIKK 1-4. bekezdes) az oldal 2-kent van megadva, de az 5. CIKK a 9. oldalon kezdodik.",
-   "A valtozik 3. elemeben (1. melleklet, 6. CIKK 1-2. bekezdes) az oldal 2-kent van megadva, de a 6. CIKK a 10. oldalon kezdodik.",
-   "A valtozik 4. elemeben (1. melleklet, 4. CIKK) az oldal 2-kent van megadva, de a 4. CIKK a 9. oldalon kezdodik.",
-   "A valtozik 5. elemeben (1. melleklet, 7. CIKK) az oldal 2-kent van megadva, de a 7. CIKK a 11. oldalon kezdodik.",
-   "A valtozik 6. elemeben (1. melleklet, 8. CIKK) az oldal 2-kent van megadva, de a 8. CIKK a 12. oldalon kezdodik.",
-   "A valtozik 7. elemeben (1. melleklet, 9. CIKK 3. bekezdes es 12. CIKK 4. bekezdes) az oldal 2-kent van megadva, de az elso hivatkozott cikk (9. CIKK) a 12. oldalon kezdodik."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00936/00936.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -5381,32 +5424,32 @@
      "szoveg": "Az Országgyűlés felhatalmazást ad a megállapodás kötelező hatályának elismerésére és kihirdeti azt. A megállapodás hiteles magyar és angol szövegét az 1. és 2. melléklet tartalmazza."
     },
     {
-     "oldal": 2,
+     "oldal": 9,
      "paragrafus": "1. melléklet, 5. CIKK 1–4. bekezdés",
      "szoveg": "A felek Irányítóbizottságot hoznak létre magas rangú képviselőikből, amely konszenzussal dönt, és évente legalább két munkamegbeszélést tart, kivéve ha közös döntéssel ettől eltérően határoz. Az Irányítóbizottság kétoldalú munkacsoportokat is létrehozhat."
     },
     {
-     "oldal": 2,
+     "oldal": 10,
      "paragrafus": "1. melléklet, 6. CIKK 1–2. bekezdés",
      "szoveg": "A hatálybalépéstől számított 30 napon belül közös programvégrehajtási bizottságot hoznak létre, amelynek feladata egy technológiai értékelő jelentés elkészítése 12 hónapon belül. A jelentés várhatóan tartalmazza az SMR-technológiák piaci elemzését, kockázati értékelését, helyszínválasztási elemzését és a lehetséges finanszírozási forrásokat."
     },
     {
-     "oldal": 2,
+     "oldal": 9,
      "paragrafus": "1. melléklet, 4. CIKK",
      "szoveg": "Magyarország arra ösztönzi a Projekttársaságot, hogy amerikai atomreaktor-tervet válasszon, amerikai vállalkozást bízzon meg fő Technológiai Beszállítóként, és fontolja meg amerikai vállalkozás kiválasztását fő EPC-vállalkozóként (mérnöki, beszerzési és építési szolgáltatást nyújtó szervezet). Az Egyesült Államok és képviselői nem vehetnek részt a beszállítók kiválasztásában."
     },
     {
-     "oldal": 2,
+     "oldal": 11,
      "paragrafus": "1. melléklet, 7. CIKK",
      "szoveg": "Magyarország törekszik arra, hogy az Európai Bizottságtól mentességet szerezzen a nyílt piaci közbeszerzési eljárás alól az Új Építési Projektek finanszírozása, valamint a Technológiai Beszállító és az EPC-vállalkozó kiválasztása során. A mentesség megadása az Európai Bizottság független döntési jogkörébe tartozik."
     },
     {
-     "oldal": 2,
+     "oldal": 12,
      "paragrafus": "1. melléklet, 8. CIKK",
      "szoveg": "Az Egyesült Államoknak érdeke, hogy az Export-Import Bankja és más amerikai pénzügyi intézmények támogassák a Projektek finanszírozását, de ez ezen intézmények saját átvilágításának és független döntéshozatalának függvénye."
     },
     {
-     "oldal": 2,
+     "oldal": 12,
      "paragrafus": "1. melléklet, 9. CIKK 3. bekezdés és 12. CIKK 4. bekezdés",
      "szoveg": "Ha egy együttműködési tevékenység szellemi tulajdon létrehozásához vezet, a felek egyeztetnek a jogok megosztásáról. Ha 12 hónapon belül nem születik megállapodás, a tevékenységet bármelyik fél kérésére be kell fejezni. A megállapodás megszűnése után is védelem alatt marad az üzleti titoknak minősülő információ."
     }
@@ -5498,12 +5541,69 @@
   "text_hash": "78139566ac0d23b6"
  },
  "T/950": {
-  "chars": 1037549,
-  "made": "2026-11-09",
+  "made": "2026-11-10",
   "model": "opus",
   "pages": 350,
+  "partial": {
+   "annex_pages": [
+    42,
+    315
+   ]
+  },
+  "problems": [],
   "source": "https://www.parlament.hu/irom43/00950/00950.pdf",
-  "status": "too_long",
+  "status": "ok",
+  "summary": {
+   "idezet": {
+    "hely": "Általános indokolás",
+    "oldal": 316,
+    "szoveg": "Arra a kérdésre keresi a választ: hogyan lehet egyszerre rendbe tenni az ország pénzügyeit és jobb életet biztosítani azoknak, akiket a legtovább hagytak magukra."
+   },
+   "kiket_erint": "A javaslat érinti az államháztartás valamennyi szereplőjét: a központi költségvetési szerveket, a helyi önkormányzatokat, az egyházi és magán fenntartókat, a társadalombiztosítási alapokat, a vállalkozásokat és a lakosságot.",
+   "lede": "A javaslat Magyarország 2027. évi központi költségvetését állapítja meg. A központi alrendszer kiadási főösszege 47 587 633,0 millió forint, bevételi főösszege 42 484 933,0 millió forint, hiánya 5 102 700,0 millió forint. Az államadósság-mutató 2027 végére tervezett értéke 77,2%.",
+   "mikortol": {
+    "oldal": 41,
+    "paragrafus": "75. §",
+    "szoveg": "A törvény 2027. január 1-jén lép hatályba, és 2030. december 31-én hatályát veszti."
+   },
+   "valtozik": [
+    {
+     "oldal": 5,
+     "paragrafus": "1. §",
+     "szoveg": "A központi alrendszer 2027. évi hiánya 5 102 700,0 millió forint. A hazai működési költségvetés hiánya 967 397,4 millió forint, a hazai felhalmozási költségvetésé 2 024 476,2 millió forint, az európai uniós fejlesztési költségvetésé 2 110 826,4 millió forint."
+    },
+    {
+     "oldal": 6,
+     "paragrafus": "3. §",
+     "szoveg": "Az államadósság-mutató 2027. december 31-ére tervezett értéke 77,2%, ami a 2026 végére várt 77,5%-hoz képest csökkenést jelent."
+    },
+    {
+     "oldal": 36,
+     "paragrafus": "59. §",
+     "szoveg": "A 2027. januári nyugdíjemelésnél 3,0%-os fogyasztói árnövekedést kell figyelembe venni."
+    },
+    {
+     "oldal": 36,
+     "paragrafus": "61. §",
+     "szoveg": "A közszolgálati tisztviselői illetményalap 2027-ben 38 650 forint, a rendvédelmi illetményalap 42 515 forint. A költségvetési szerveknél a cafetéria-juttatás éves kerete nem haladhatja meg a nettó 400 000 forintot."
+    },
+    {
+     "oldal": 38,
+     "paragrafus": "65. §",
+     "szoveg": "A bírói és ügyészi illetményalap 2027-ben 824 350 forint. A jogi segítői óradíj 12 000 forint, a kirendelt ügyvédi óradíj 7 000 forint."
+    },
+    {
+     "oldal": 40,
+     "paragrafus": "73. §",
+     "szoveg": "A nemzeti közbeszerzési értékhatár 2027-ben árubeszerzésnél 20,0 millió forint, építési beruházásnál 60,0 millió forint, szolgáltatás megrendelésénél 20,0 millió forint. Közszolgáltatói szerződéseknél az értékhatárok magasabbak (pl. árubeszerzésnél 50,0 millió forint)."
+    },
+    {
+     "oldal": 32,
+     "paragrafus": "49. § és 53. §",
+     "szoveg": "A Kormány 2027-ben összesen 50 000,0 millió forint összegű új egyedi állami kezesség és garancia vállalására adhat felhatalmazást. A Garantiqa Hitelgarancia Zrt. állami viszontgarancia melletti kezességállománya nem haladhatja meg a 3 400 000,0 millió forintot."
+    }
+   ]
+  },
   "szam": "T/950",
   "text_hash": "49c923d4d8692a76"
  },
@@ -5544,7 +5644,7 @@
      "szoveg": "Ha valaki nem szándékosan szerez egy tőzsdei társaságban a kötelező vételi ajánlat küszöbét meghaladó befolyást (például óvadéki jog végrehajtásakor), hat hónapja van a befolyás csökkentésére. Ezalatt a küszöb feletti szavazati jogot nem gyakorolhatja. Ha hat hónap alatt nem csökkenti, tizenöt napon belül nyilvános vételi ajánlatot kell tennie."
     },
     {
-     "oldal": 4,
+     "oldal": 3,
      "paragrafus": "4. §",
      "szoveg": "Ha egy zártkörű kockázati vagy magántőkealap kezelőjének személye megváltozik (kezelőváltás), ez önmagában nem váltja ki a kötelező nyilvános vételi ajánlattételt, és nem alapozza meg az összehangolt eljárás megállapítását."
     },

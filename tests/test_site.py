@@ -4186,8 +4186,29 @@ class WhatTheBillSays(unittest.TestCase):
             h = self.page(k)
             panel = h[h.index('id="mirol-szol"'):]
             panel = panel[:panel.index("</section>")]
-            n = len(v["summary"].get("valtozik") or [])
+            # a page is printed only when it was found in the text; a § whose heading the PDF lost links the PDF
+            n = sum(isinstance(c.get("oldal"), int) for c in v["summary"].get("valtozik") or [])
             self.assertGreaterEqual(panel.count(f'href="{v["source"]}#page='), n, k)
+
+    def test_every_page_is_the_one_python_looks_up(self):
+        # pages are never the model's: a page in the file must be the one the lookup gives for that citation
+        import shutil
+        from scripts.summarize_bills import CACHE, units, cite_page, trimmed, fetch_text
+        recs = {r["szam"]: r for r in json.loads((ROOT / "data" / "derived" / "iromany_records.json").read_text(encoding="utf-8"))["records"].values()}
+        if not shutil.which("pdftotext"):
+            self.skipTest("pdftotext is not installed here")
+        for k, v in list(self.inp["summaries"].items())[:12]:
+            if not (CACHE / f'{recs[k]["szam_parsed"]["number"]:05d}.pdf').exists():
+                self.skipTest("bill PDFs are not cached here (data/raw/ is git-ignored); never fetched by a test")
+            pages = fetch_text(recs[k])
+            u = units(trimmed(pages)[0] if v.get("partial") else pages)
+            for c in (v["summary"].get("valtozik") or []) + ([v["summary"]["mikortol"]] if v["summary"].get("mikortol") else []):
+                self.assertEqual(c.get("oldal"), cite_page(c.get("paragrafus"), u), (k, c.get("paragrafus")))
+
+    def test_a_bill_read_without_its_annexes_says_so(self):
+        from scripts.build_site import partial_note
+        self.assertIn("42–315. oldal", partial_note({"partial": {"annex_pages": [42, 315]}}))
+        self.assertEqual("", partial_note({}))
 
     def test_a_vote_page_says_its_excerpt_is_about_the_whole_bill(self):
         # a roll call may be on one amendment; the excerpt describes the bill, and has to say so

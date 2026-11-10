@@ -5320,7 +5320,16 @@ def summary_html(inp: dict, rec: dict, b: dict) -> str:
             f'<h2><span data-kz-text>Miről szól</span><span class="tag">gépi összefoglaló · a benyújtott szövegből</span></h2>'
             f'<p class="sum-lede">{esc(sm["lede"])}</p>'
             f'<dl class="verdict sum-dl">{"".join(rows)}</dl>{quote}'
-            f'<p class="sum-note">{summary_note(b.get("votes") or [])}</p></section>')
+            f'<p class="sum-note">{summary_note(b.get("votes") or [])}{partial_note(entry)}</p></section>')
+
+
+def partial_note(entry: dict) -> str:
+    """A bill read without its annexes (the budget's tables, a treaty's own text) says so, with the pages left out."""
+    cut = (entry.get("partial") or {}).get("annex_pages")
+    if not cut:
+        return ""
+    return (f" A mellékletek ({cut[0]}–{cut[1]}. oldal) terjedelmük miatt kimaradtak az összefoglalóból: az a "
+            f"javaslat paragrafusaiból és indokolásából készült.")
 
 
 def build_bill_page(inp: dict, b: dict) -> str:
