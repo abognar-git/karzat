@@ -314,7 +314,12 @@ def load_inputs(cycle: int = CURRENT_CYCLE) -> dict:
     # been showing a number where the title belongs, and no road panel at all.
     bill_recs_by_num = {int(r["szam_parsed"]["number"]): r for r in bill_recs.values()
                         if isinstance((r.get("szam_parsed") or {}).get("number"), int)}
-    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "search_bench": search_bench, "idealpoints": idealpoints, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num,
+    # Plain-language summaries of the current cycle's bills (scripts/summarize_bills.py). Only those that passed
+    # every check are printed; one flagged for review stays in the file and off the site.
+    os_path = DERIVED / "osszefoglalok.json"
+    summaries = ({k: v for k, v in load_json(os_path).items() if v.get("status") == "ok" and v.get("summary")}
+                 if (cycle == CURRENT_CYCLE and os_path.exists()) else {})
+    inp = {"idx": idx, "store": store, "fl": fl, "plan": plan, "facs": facs, "mps": mps, "speeches": speeches, "texts": texts, "committees": committees, "szoszolok": szoszolok, "kormany": kormany, "echo": echo, "switches": switches, "receipt": receipt, "parquet": parquet, "search_bench": search_bench, "idealpoints": idealpoints, "bill_recs": bill_recs, "bill_recs_by_num": bill_recs_by_num, "summaries": summaries,
            "by_ts": {v["ts"]: v for v in idx["votes"]}, "order": [v["ts"] for v in idx["votes"]]}
     inp["alignment"] = compute_alignment(inp)
     inp["cycle"] = cycle
@@ -938,6 +943,17 @@ tbody tr.hl td{background:rgba(255,255,255,.07)}
 .verdict dd .hero-meta{display:block;color:var(--dim2);font-size:11px}
 /* mi jön: a sitting day in a sentence or two — prose in the sans, the day label stays the terminal mono */
 .verdict.days{grid-template-columns:96px 1fr;gap:12px 16px}.verdict.days dt{line-height:1.5}.verdict.days dd{font-family:var(--sans);font-size:15px;line-height:1.55}.verdict.days a{text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px}.verdict.days a:hover{text-decoration-color:var(--white)}.verdict.days .sub{color:var(--dim2)}
+.sum .sum-lede{font-size:17px;line-height:1.55;color:var(--text);max-width:72ch;margin:4px 0 16px}
+.sum .sum-dl{grid-template-columns:120px 1fr;gap:14px 18px}
+.sum .sum-dl dd{font-family:var(--sans);font-size:15px;line-height:1.6;max-width:80ch}
+.sum .sum-list{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:7px}
+.sum .src{font-size:11px;color:var(--dim2);border:1px solid var(--border-hi);padding:0 5px;margin-left:4px;white-space:nowrap}
+.sum a.src:hover{color:var(--white);border-color:var(--dim3)}
+.sum .sum-quote{margin:18px 0 0;border-left:2px solid var(--border-hi);padding:4px 0 4px 14px;max-width:80ch}
+.sum .sum-quote blockquote{margin:6px 0 0;font-size:15px;line-height:1.6;color:var(--dim);font-style:italic}
+.sum .sum-note{margin:16px 0 0;font-size:13px;color:var(--dim);max-width:80ch;border-top:1px solid var(--border);padding-top:12px}
+@media(max-width:640px){.sum .sum-dl{grid-template-columns:1fr}}
+.vote-sum{margin:10px 0 0;max-width:80ch;font-size:15px;line-height:1.55;color:var(--text)}.vote-sum .label{display:block;margin-bottom:2px}.vote-sum a{color:var(--dim);text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px;white-space:nowrap}.vote-sum a:hover{color:var(--white)}
 .badge{display:inline-block;padding:2px 8px;border:1px solid var(--border);font-family:var(--mono);font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim)}
 .badge.hi{border-color:var(--dim3);color:var(--white)}.badge.ok{border-color:var(--okbd);background:var(--okbg);color:var(--ok)}.badge.no{border-color:var(--badbd);background:var(--badbg);color:var(--bad)}.badge.mid{color:var(--dim2);background:rgba(24,24,27,.6)}
 .bar{height:6px;background:var(--line2);position:relative;margin:8px 0 4px}
@@ -3435,6 +3451,32 @@ def motion_title_html(view: dict, up: str = "../") -> tuple[str, str]:
     return f'<div class="hero-title">{link}{esc(mo.get("title", ""))}</div>', f'<div class="hero-meta">{meta}</div>'
 
 
+def first_sentence(text: str, room: int = 240) -> str:
+    """The lede's opening sentence — and the next one too while both fit in `room`, because an opener like
+    "több törvényt módosít egyszerre" says nothing until the sentence after it."""
+    parts = re.split(r"(?<=[.!?])\s+(?=[A-ZÁÉÍÓÖŐÚÜŰ„])", (text or "").strip())
+    out = parts[0]
+    for p in parts[1:]:
+        if len(out) >= 90 and len(out) + 1 + len(p) > room:
+            break
+        out += " " + p
+    return out
+
+
+def vote_summary_html(inp: dict, view: dict) -> str:
+    """On a vote page, the first sentence of the bill's summary — labelled as being about the bill as a whole,
+    because the vote itself may be on one amendment of it — and a link to the full panel."""
+    mo = view["motions"][0] if view.get("motions") else {}
+    n, _ = an.bill_key(mo.get("iromany")) if mo else (None, None)
+    rec = (inp.get("bill_recs_by_num") or {}).get(n) or {}
+    entry = (inp.get("summaries") or {}).get(rec.get("szam") or "")
+    if not entry:
+        return ""
+    return (f'<p class="vote-sum"><span class="label">Miről szól · a javaslat egészéről</span> '
+            f'{esc(first_sentence(entry["summary"]["lede"]))} '
+            f'<a href="../iromany/{n}.html#mirol-szol">a teljes összefoglaló →</a></p>')
+
+
 def _glyph(pos: str, c: str) -> str:
     """The position glyph as a CSS-drawn element (thousands per page; the legend keeps the SVG originals)."""
     return f'<i class="g g-{esc(pos)}" style="--c:{c}" aria-hidden="true"></i>'
@@ -3874,7 +3916,7 @@ def build_vote_page(inp: dict, ts: str) -> str:
 <section class="grid">
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>A szavazás</span><span class="tag">{esc(view["ts"])}</span></h2>
-    {title_html}{meta_html}
+    {title_html}{meta_html}{vote_summary_html(inp, view)}
     {chart_block(view, inp) if not inp["archive"] else archive_note(inp, view)}
   </section>
   <section class="panel">{CORNERS}
@@ -5212,6 +5254,75 @@ def merge_motion_records(bs: dict, by_num: dict) -> dict:
     return dict(sorted(out.items()))
 
 
+def _src_chip(url: str, para: str, page) -> str:
+    """The paragraph a claim comes from, linked to that page of the submitted PDF."""
+    if not para:
+        return ""
+    href = f'{esc(url)}#page={int(page)}' if url and isinstance(page, int) else esc(url or "")
+    title = f' title="a benyújtott szöveg {int(page)}. oldala"' if isinstance(page, int) else ""
+    return f' <a class="src mono" href="{href}" target="_blank" rel="noopener"{title}>{esc(para)}</a>' if href else f' <span class="src mono">{esc(para)}</span>'
+
+
+def summary_note(votes: list) -> str:
+    """What happened to the bill after the text the summary was written from — from the roll calls, never guessed.
+
+    The summary is of the SUBMITTED text. Once the House has adopted a summarising amendment, the law that was
+    promulgated can differ from it, and the page has to say so where the reader is."""
+    final = [v for v in votes if (v.get("outcome") or "").casefold().startswith("önálló indítvány")]
+    fixed = any((v.get("outcome") or "").casefold().startswith("összegző módosító") and "elfogadva" in (v.get("outcome") or "")
+                for v in votes)
+    last = final[-1] if final else None
+    if last and "elfogadva" in (last.get("outcome") or ""):
+        verb = "elfogadta"
+    elif last and "elutasítva" in (last.get("outcome") or ""):
+        verb = "elutasította"
+    else:
+        return ("Az összefoglaló a benyújtott szövegből készült. A javaslatról a zárószavazás még nem történt meg; "
+                "a tárgyalás során a szövege módosulhat.")
+    counts = f'{hu_date(last["date"])}, {last["igen"]} igen, {last["nem"]} nem, {last["tartozkodott"]} tartózkodás'
+    s = f'Az Országgyűlés {verb} a javaslatot (szavazás: {counts}).'
+    if fixed and verb == "elfogadta":
+        s += (" Előtte elfogadta az összegző módosító javaslatot is, ezért a kihirdetett szöveg eltérhet a "
+              "benyújtottól, amelyből ez az összefoglaló készült.")
+    else:
+        s += " Az összefoglaló a benyújtott szövegből készült."
+    return s
+
+
+def summary_html(inp: dict, rec: dict, b: dict) -> str:
+    """Miről szól — the bill in plain words, every claim with the paragraph and page it comes from.
+
+    Written by scripts/summarize_bills.py from the submitted PDF and printed only when every check passed. The
+    one sentence of reasoning is the submitter's own, quoted word for word and labelled as theirs."""
+    entry = (inp.get("summaries") or {}).get((rec or {}).get("szam") or "")
+    if not entry:
+        return ""
+    sm, url = entry["summary"], entry.get("source") or ""
+    rows = []
+    if sm.get("kiket_erint"):
+        rows.append(f'<dt>Kiket érint</dt><dd>{esc(sm["kiket_erint"])}</dd>')
+    items = "".join(f'<li>{esc(c["szoveg"])}{_src_chip(url, c.get("paragrafus"), c.get("oldal"))}</li>'
+                    for c in sm.get("valtozik") or [])
+    if items:
+        rows.append(f'<dt>Mi változik</dt><dd><ul class="sum-list">{items}</ul></dd>')
+    mk = sm.get("mikortol")
+    if mk:
+        rows.append(f'<dt>Mikortól</dt><dd>{esc(mk["szoveg"])}{_src_chip(url, mk.get("paragrafus"), mk.get("oldal"))}</dd>')
+    quote = ""
+    q = sm.get("idezet")
+    if q and q.get("szoveg"):
+        subs = rec.get("submitters") or []
+        who = ("A benyújtó, a kormány indoklása szerint" if subs and subs[0].casefold().startswith("kormány") else
+               "A benyújtók indoklása szerint" if len(subs) > 1 else "A benyújtó indoklása szerint")
+        quote = (f'<figure class="sum-quote"><figcaption class="label">{who}</figcaption>'
+                 f'<blockquote>„{esc(q["szoveg"])}”{_src_chip(url, (q.get("hely") or "indokolás").casefold(), q.get("oldal"))}</blockquote></figure>')
+    return (f'<section class="panel deep sum" id="mirol-szol">{CORNERS}'
+            f'<h2><span data-kz-text>Miről szól</span><span class="tag">gépi összefoglaló · a benyújtott szövegből</span></h2>'
+            f'<p class="sum-lede">{esc(sm["lede"])}</p>'
+            f'<dl class="verdict sum-dl">{"".join(rows)}</dl>{quote}'
+            f'<p class="sum-note">{summary_note(b.get("votes") or [])}</p></section>')
+
+
 def build_bill_page(inp: dict, b: dict) -> str:
     """iromany/<n>.html — one bill's roll calls in order: the bill's own stages and its amendments, each with rule,
     counts and result; the parlament.hu record link when the list carries it (current cycle only)."""
@@ -5267,6 +5378,7 @@ def build_bill_page(inp: dict, b: dict) -> str:
 <div class="hero-title">{esc(title)}</div>
 <p class="hero-meta">{meta}{ext}</p>
 {motion_card_html(inp, rec)}
+{summary_html(inp, rec, b)}
 {exchange_html(inp, rec)}
 {written_answer_html(inp, rec)}
 {votes_panel}

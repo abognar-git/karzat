@@ -4146,6 +4146,68 @@ class ReportPage(unittest.TestCase):
         self.assertIn("Kiszolgáló nincs mögötte", self.html)
 
 
+def an_key(iromany):
+    from karzat import analytics as an
+    return an.bill_key(iromany)[0]
+
+
+class WhatTheBillSays(unittest.TestCase):
+    """Miről szól: the plain-language summary on a bill page. Only a summary that passed every check is printed,
+    it sits right under the record, every change carries its own paragraph, and the page says which text it is of."""
+
+    @classmethod
+    def setUpClass(cls):
+        from scripts.build_site import merge_motion_records
+        from karzat import analytics as an
+        cls.inp = dict(load_inputs(), site_wide=False, base_depth=0)
+        if not cls.inp.get("summaries"):
+            raise unittest.SkipTest("no summaries — run: python3 -m scripts.summarize_bills")
+        cls.bs = merge_motion_records(an.bills(cls.inp), cls.inp["bill_recs_by_num"])
+        cls.raw = json.loads((ROOT / "data" / "derived" / "osszefoglalok.json").read_text(encoding="utf-8"))
+
+    def page(self, szam):
+        from scripts.build_site import build_bill_page
+        return build_bill_page(self.inp, self.bs[int(szam.split("/")[1])])
+
+    def test_only_a_checked_summary_reaches_the_site(self):
+        self.assertTrue(all(v["status"] == "ok" for v in self.inp["summaries"].values()))
+        held = [k for k, v in self.raw.items() if v.get("status") != "ok" and int(k.split("/")[1]) in self.bs]
+        for k in held[:5]:
+            self.assertNotIn('id="mirol-szol"', self.page(k), f"{k} is {self.raw[k]['status']} and must stay off")
+
+    def test_it_comes_right_after_the_record_and_never_names_its_maker_in_a_footer(self):
+        for k in list(self.inp["summaries"])[:5]:
+            h = self.page(k)
+            self.assertLess(h.index("Az adatlap</span>"), h.index('id="mirol-szol"'), k)
+            self.assertNotIn("minden állítás mellett", h)
+
+    def test_every_change_links_to_its_page_of_the_submitted_text(self):
+        for k, v in list(self.inp["summaries"].items())[:10]:
+            h = self.page(k)
+            panel = h[h.index('id="mirol-szol"'):]
+            panel = panel[:panel.index("</section>")]
+            n = len(v["summary"].get("valtozik") or [])
+            self.assertGreaterEqual(panel.count(f'href="{v["source"]}#page='), n, k)
+
+    def test_a_vote_page_says_its_excerpt_is_about_the_whole_bill(self):
+        # a roll call may be on one amendment; the excerpt describes the bill, and has to say so
+        from scripts.build_site import build_vote_page
+        nums = {int(k.split("/")[1]) for k in self.inp["summaries"]}
+        ts = next(v["ts"] for v in self.inp["idx"]["votes"] for mo in (v.get("motions") or [])[:1]
+                  if an_key(mo.get("iromany")) in nums)
+        h = build_vote_page(self.inp, ts)
+        self.assertIn("a javaslat egészéről", h)
+        self.assertIn("#mirol-szol", h)
+
+    def test_an_amended_bill_says_the_law_may_differ_from_the_summary(self):
+        from scripts.build_site import summary_note
+        votes = [{"outcome": "összegző módosító javaslat elfogadva", "date": "2026-11-03", "igen": 115, "nem": 38, "tartozkodott": 4},
+                 {"outcome": "önálló indítvány elfogadva", "date": "2026-11-03", "igen": 115, "nem": 38, "tartozkodott": 4}]
+        self.assertIn("eltérhet a benyújtottól", summary_note(votes))
+        self.assertIn("zárószavazás még nem történt meg", summary_note([]))
+        self.assertNotIn("eltérhet", summary_note(votes[1:]))
+
+
 class WhatComesNext(unittest.TestCase):
     """mijon/: the bills still ahead of the House and the recent sitting days in a sentence each. The page must not
     promise what the record does not hold: no day's agenda, no bill the House already voted through."""
