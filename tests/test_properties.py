@@ -920,6 +920,24 @@ class TheSupersededStoreLosesNothing(unittest.TestCase):
         self.assertEqual(len(sorted((d / ".superseded").rglob("*.xml"))), len(first),
                          "re-recording one transition left two copies of the same payload")
 
+    def test_a_re_recording_a_second_later_still_keeps_one_file(self):
+        """The property above only failed when its two calls happened to straddle a second (once in a full run,
+        on 10 November 2026); this pins the clock so the case is tested every time."""
+        import tempfile, time
+        from unittest import mock
+        from karzat.api import WebApi
+        d = Path(tempfile.mkdtemp())
+        api = WebApi(token="x", cache_dir=d)
+        svc, params = "szavazasok", {"p_datum_tol": "2026.05.01", "p_datum_ig": "2026.05.31"}
+        path = api.cache_path(svc, params)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        for sec, old in ((1, b"<v>a</v>"), (2, b"<v>a</v>"), (3, b"<v>b</v>")):
+            with mock.patch("time.gmtime", return_value=time.gmtime(sec)):
+                api._record_change(svc, params, path, old, b"<v>new</v>")
+        kept = sorted(f.name for f in (d / ".superseded").rglob("*.xml"))
+        self.assertEqual(len(kept), 2, kept)                    # one per distinct payload, under its first stamp
+        self.assertIn("T000001Z", kept[0])
+
 
 
 if __name__ == "__main__":                                     # pragma: no cover

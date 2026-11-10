@@ -212,8 +212,11 @@ class WebApi:
             # The content hash makes the name a function of the bytes: a payload already kept lands on its own
             # path and rewrites itself, so re-recording is idempotent, and two different payloads in the same
             # second cannot collide. The stamp stays because knowing when it was seen is half the point.
+            # The stamp alone still broke that promise: a re-recording that crossed a second boundary got a new
+            # name and a second copy of the same bytes. A payload already kept is kept once, under its first stamp.
             digest = _h.sha256(old_raw).hexdigest()[:12]
-            (keep / f"{path.stem}.{stamp}.{digest}.xml").write_bytes(old_raw)
+            if not any(keep.glob(f"{path.stem}.*.{digest}.xml")):
+                (keep / f"{path.stem}.{stamp}.{digest}.xml").write_bytes(old_raw)
             log = self.cache_dir / ".superseded" / "changes.jsonl"
             with log.open("a", encoding="utf-8") as fh:
                 fh.write(json.dumps({
