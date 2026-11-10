@@ -3799,7 +3799,7 @@ def build_index(inp: dict, hero_ts: str) -> str:
   {year_buttons}
   <div class="filters" role="group" aria-label="Szűrés szükséges többség szerint">{rule_buttons}</div>
   <div class="filters" role="group" aria-label="Szűrés eredmény szerint">{result_buttons}<input id="q" type="search" placeholder="keresés --tárgy" aria-label="Keresés a tárgyban"><span class="n" id="n" aria-live="polite"></span></div>
-  <div class="tablewrap" tabindex="0"><table data-page-size="25" data-counter="n"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows"{lazy_attr}>{dir_rows}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table data-page-size="10" data-counter="n"><thead><tr><th scope="col">Időpont</th><th scope="col">Tárgy</th><th scope="col">Szükséges többség</th><th scope="col" class="num">igen – nem – tart.</th><th scope="col" class="num">különbség</th><th scope="col">Eredmény</th></tr></thead><tbody id="rows"{lazy_attr}>{dir_rows}</tbody></table></div>
   {lazy_note}
 </section>
 """ + page_tail(inp, 0)
@@ -4118,7 +4118,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
         motions_note = ("" if stat_now is None or stat_now == len(items) else
                         f'Eltérés: a parlament.hu adatlapja {stat_now} önálló indítványt számol, az itteni lista {len(items)} tételt talál.')
         items_html = (f'<div class="hero-meta" style="margin:10px 0 4px"><span class="lbl">a jelenlegi ciklusban</span> {len(items)} iromány' + (f' · {kind_txt}' if kind_txt else '') + '</div>'
-                      f'<div class="tablewrap" tabindex="0"><table data-page-size="25"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
+                      f'<div class="tablewrap" tabindex="0"><table data-page-size="10"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
                       + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
     rel_root = "../" * (1 + inp["base_depth"])
     other_links = " · ".join([f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members]
@@ -4197,7 +4197,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
   <h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel · a legfrissebb elöl{twin_links}</span></h2>
   {mp_year_buttons}
   <div class="filters" role="group" aria-label="Szűrés egyezés szerint"><button type="button" data-alf="all" class="on">mind</button><button type="button" data-alf="with">frakcióval</button><button type="button" data-alf="against">frakció ellen</button><button type="button" data-alf="none">nem adott le szavazatot</button><input type="search" data-filter-table="mine" placeholder="tárgy, szám" aria-label="Szűrés tárgyra" style="min-width:160px"><span class="n" id="rn" aria-live="polite"></span></div>
-  <div class="tablewrap" tabindex="0"><table id="mine" data-page-size="25" data-counter="rn"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th><span class="vh">A szavazás lapja</span></th></tr></thead><tbody>{all_rows}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table id="mine" data-page-size="10" data-counter="rn"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th><span class="vh">A szavazás lapja</span></th></tr></thead><tbody>{all_rows}</tbody></table></div>
 </section>''')
     if inp["archive"]:
         all_votes_panel = (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel</span></h2>'
@@ -4215,7 +4215,7 @@ def build_mp_page(inp: dict, azon: str) -> str:
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Hétről hétre</span><span class="tag">{"a legutóbbi ülésnapos hét" if not inp["closed"] else "a ciklus utolsó ülésnapos hete"} · <a href="{esc(azon)}-heti.xml" type="application/atom+xml" title="heti összefoglaló Atom-csatornaként">Atom</a> · <a href="../adatok/heti.csv">CSV, minden hét</a></span></h2>
   {digest_now or '<div class="hero-meta">—</div>'}
-  <div class="tablewrap" tabindex="0" style="margin-top:10px"><table data-page-size="25" data-counter="wn"><thead><tr><th scope="col">Hét</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Névsorban</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciója ellen</th><th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{"".join(wrows) or '<tr><td colspan="6">—</td></tr>'}</tbody></table></div>
+  <div class="tablewrap" tabindex="0" style="margin-top:10px"><table data-page-size="10" data-counter="wn"><thead><tr><th scope="col">Hét</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Névsorban</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciója ellen</th><th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{"".join(wrows) or '<tr><td colspan="6">—</td></tr>'}</tbody></table></div>
   <div class="filters"><span class="n" id="wn" aria-live="polite"></span></div>
   <div class="hero-meta prose" style="margin-top:8px">Hét: naptári hét; a dátum az első és az utolsó ülésnapja. Csak olyan hét látszik, amelyen volt ülésnap, és amely a képviselő mandátumának idejére esik. Névsorban: a hét név szerinti szavazásai közül hányban szerepelt a neve a névsorban. Név szerinti az a szavazás, ahol nevenként rögzítik, ki mit szavazott — a jelenlét-megállapítás is ilyen, ott csak azt rögzítik, ki van jelen a teremben. Leadott: hányszor szavazott igennel, nemmel vagy tartózkodott. Frakciója ellen: hány leadott szavazata tért el attól, ahogy ugyanazon a szavazáson a frakciója többsége szavazott. Például a frakció többsége igennel szavaz, a képviselő nemmel — ez egy frakció elleni szavazat. Döntetlennél nincs frakciótöbbség, és nincs mitől eltérni; a független képviselőnek nincs frakciója — nála gondolatjel áll. Felszólalás: érdemi felszólalásainak száma a napi listák szerint; az ülésvezetés és a bejelentés nem számít bele. Ahová a lista még nem ér el, ott gondolatjel áll.</div>
 </section>
@@ -4258,11 +4258,11 @@ def build_mp_page(inp: dict, azon: str) -> str:
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Érdemi felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} tétel · a legfrissebb elöl · <a href="../felszolalas/index.html">a ciklus felszólalásai</a></span></h2>
   <div class="filters"><input type="search" data-filter-table="speeches" placeholder="tárgy, fajta" aria-label="Szűrés tárgyra vagy fajtára" style="min-width:160px"><span class="n" id="sn" aria-live="polite"></span></div>
-  <div class="tablewrap" tabindex="0"><table id="speeches" data-page-size="25" data-counter="sn"><thead><tr><th scope="col">Nap</th><th scope="col">Napirendi pont</th><th scope="col">Fajta</th><th scope="col">Szerep</th><th scope="col" class="num">Hossz</th></tr></thead><tbody>{sp_trs or ('<tr><td colspan="5">A felszólalás-listák nincsenek betöltve.</td></tr>' if inp["speeches"] is None else '<tr><td colspan="5">Ebben a ciklusban nem volt.</td></tr>')}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table id="speeches" data-page-size="10" data-counter="sn"><thead><tr><th scope="col">Nap</th><th scope="col">Napirendi pont</th><th scope="col">Fajta</th><th scope="col">Szerep</th><th scope="col" class="num">Hossz</th></tr></thead><tbody>{sp_trs or ('<tr><td colspan="5">A felszólalás-listák nincsenek betöltve.</td></tr>' if inp["speeches"] is None else '<tr><td colspan="5">Ebben a ciklusban nem volt.</td></tr>')}</tbody></table></div>
 </section>
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Szavazatok a frakció többségével szemben</span><span class="tag">{len(devs)}{f' · <a href="{esc(azon)}.xml" type="application/atom+xml" title="a képviselő különvéleményei Atom-csatornaként">Atom</a>' if has_channel else " · függetlenként nincs frakciótöbbség — csatorna nincs"}</span></h2>
-  <div class="tablewrap" tabindex="0"><table data-page-size="25"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th><span class="vh">A szavazás lapja</span></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table data-page-size="10"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th><span class="vh">A szavazás lapja</span></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
 </section>
 {mp_axis_panel(inp, azon)}
 {all_votes_panel}

@@ -289,13 +289,13 @@ class Build(unittest.TestCase):
     def test_long_tables_paginate_and_stay_complete_without_js(self):
         js = build_assets()["karzat.js"]
         self.assertIn("table[data-page-size]", js)                       # the shared pager
-        self.assertIn('data-page-size="25" data-counter="n"', self.cyc)   # the directory: every row in the HTML, 25 shown at a time
+        self.assertIn('data-page-size="10" data-counter="n"', self.cyc)   # the directory: every row in the HTML, 10 shown at a time
         self.assertEqual(self.cyc.count("<tr data-rule="), self.n_votes)
         vote = build_vote_page(self.__class__.inp if hasattr(self.__class__, "inp") else load_inputs(), HERO_TS)
         self.assertIn('id="roll" data-page-size="25" data-counter="rn"', vote)
         mp = build_mp_page(load_inputs(), "a011")
-        self.assertIn('id="mine" data-page-size="25" data-counter="rn"', mp)
-        self.assertEqual(mp.count('data-page-size="25"'), 5)             # weeks, speeches, votes, dissents, motions
+        self.assertIn('id="mine" data-page-size="10" data-counter="rn"', mp)
+        self.assertEqual(mp.count('data-page-size="10"'), 5)             # weeks, speeches, votes, dissents, motions: ten rows a page
 
     def test_boot_sequence_is_honest_and_optional(self):
         """The terminal used to print four lines of true numbers on every page — the corpus, this page's cycle, the
