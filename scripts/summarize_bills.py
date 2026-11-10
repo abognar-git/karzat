@@ -84,7 +84,10 @@ SCHEMA = {
 CHECK_SYSTEM = """Egy törvényjavaslat szövegét és a róla írt összefoglalót kapod. Ellenőrizd szigorúan.
 Hibának számít:
 - olyan állítás, amelyet a szöveg nem támaszt alá, vagy amely pontatlan (szám, határidő, szereplő);
-- rossz forráshivatkozás (a megadott paragrafus vagy oldal nem az, ahol az állítás áll);
+- rossz forráshivatkozás: a megadott paragrafus (vagy cikk) nem az, amelyben az állítás áll, vagy a megadott
+  oldalon nem kezdődik az a paragrafus. Az oldal mindig annak az oldalnak a száma, ahol a hivatkozott (több
+  esetén az első) paragrafus vagy cikk KEZDŐDIK; ha az állítás ugyanannak a paragrafusnak egy későbbi oldalán
+  áll, az nem hiba;
 - értékelő, minősítő szó vagy következtetés, amely nem a szövegből jön;
 - az idézet nem szó szerinti, vagy nem a benyújtó indokolásából való.
 Apró stílusbeli dolgot ne jelezz. Ha nincs hiba, a problems lista legyen üres."""
@@ -148,20 +151,21 @@ def mechanical_problems(s: dict, pages: list[str]) -> list[str]:
         first = re.match(r"\d+", item.get("paragrafus") or "")
         if first:
             window = norm("\n".join(pages[max(0, pg - 2):pg + 1]))       # a § can start on the page before
-            if not re.search(rf"\b{first.group(0)}\.\s*§", window):
+            if not re.search(rf"\b{first.group(0)}\.\s*(§|cikk\b)", window, re.I):
                 probs.append(f"a {item['paragrafus']} nem a {pg}. oldal környékén áll")
     return probs
 
 
 def own_page(par: str, pages: list[str], ind: int | None) -> int | None:
     """The page where the bill's own § with this number starts — a heading at the start of a line, before the
-    reasoning begins, never a quoted § of the law being amended (those open with „)."""
+    reasoning begins, never a quoted § of the law being amended (those open with „). A treaty's articles
+    ("1. cikk", "5. CIKK") count the same way: in a bill that promulgates one, they are what a claim cites."""
     m = re.match(r"\d+", par or "")
     if not m:
         return None
     last = (ind - 1) if ind else len(pages)
     for i, pg in enumerate(pages[:last], 1):
-        if re.search(rf"^\s*{m.group(0)}\.\s*§(?!-)", pg, re.M):
+        if re.search(rf"^\s*{m.group(0)}\.\s*(§(?!-)|cikk\b)", pg, re.M | re.I):
             return i
     return None
 
@@ -246,7 +250,7 @@ def main(argv: list[str] | None = None) -> int:
         recs = [r for r in recs if r["szam"] in set(args.only)]
     done = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     if args.refine:
-        todo = [r for r in recs if done.get(r["szam"], {}).get("status") == "review" and not done[r["szam"]].get("refined")]
+        todo = [r for r in recs if done.get(r["szam"], {}).get("status") == "review"]
     else:
         todo = [r for r in recs if args.force or done.get(r["szam"], {}).get("status") not in ("ok", "too_long", "review")]
     print(f"{len(recs)} bills, {len(todo)} to write", flush=True)

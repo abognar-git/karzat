@@ -265,10 +265,9 @@
   "model": "opus",
   "pages": 10,
   "problems": [
-   "A masodik valtozik elem (1. melleklet 1. cikk) oldalszama hibas: oldal 2, holott a Jegyzokonyv 1. cikke a 4. oldalon talalhato.",
-   "A harmadik valtozik elem (1. melleklet 3. cikk (1)) oldalszama hibas: oldal 2, holott a 3. cikk (1) bekezdese az 5. oldalon talalhato.",
-   "A negyedik valtozik elem (1. melleklet 3. cikk (2)) oldalszama hibas: oldal 2, holott a 3. cikk (2) bekezdese az 5. oldalon talalhato.",
-   "Az otodik valtozik elem (5. §) oldalszama pontatlan: oldal 2, holott az 5. § tartalmi rendelkezesei a 3. oldalon szerepelnek."
+   "A masodik valtozik tetel (1. melleklet 1. cikk) oldalszama 2, holott az 1. melleklet es benne az 1. cikk a 4. oldalon kezdodik.",
+   "A harmadik valtozik tetel (1. melleklet 3. cikk (1)) oldalszama 2, holott a 3. cikk a 4. oldalon kezdodik.",
+   "A negyedik valtozik tetel (1. melleklet 3. cikk (2)) oldalszama 2, holott a 3. cikk a 4. oldalon kezdodik es a (2) bekezdes az 5. oldalon talalhato."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00171/00171.pdf",
@@ -322,9 +321,7 @@
   "model": "opus",
   "pages": 10,
   "problems": [
-   "A masodik valtozik-elem oldalszama hibas: az 1. melleklet 1. cikk tartalma (a vezetek koordinatai, hatarjelzok) a 4. oldalon talalhato, nem a 2.-on.",
-   "A harmadik valtozik-elem oldalszama hibas: az 1. melleklet 3. cikk (1) bekezdes (ideiglenes alkalmazas) az 5. oldalon szerepel, nem a 2.-on.",
-   "Az otodik valtozik-elem oldalszama hibas: az 5. § erdemi szovege (vegrehajtasert felelos miniszter, egyseges szerkezetbe foglalt szoveg kozzetele) a 3. oldalon van, nem a 2.-on."
+   "A \"valtozik\" 3. tételében (ideiglenes alkalmazás) az oldalszám hibás: az \"1. melléklet 3. cikk (1) bekezdés\" a 4-5. oldalon található (a 3. cikk címe a 4. oldal alján kezdődik), nem a 2. oldalon. A 2. oldalon csak a törvényszöveg zárójelben lévő megjegyzése utal az ideiglenes alkalmazásra, de az nem azonos a hivatkozott paragrafussal."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00172/00172.pdf",
@@ -378,7 +375,8 @@
   "model": "opus",
   "pages": 27,
   "problems": [
-   "A valtozik[0] (2. §) esetében az \"oldal\" mező értéke 2, holott a 2. § érdemi szövege – beleértve az ötmillió eurós küszöbértéket, a minimum tájékoztató feltételeit – teljes egészében a 3. oldalon található. A 2. oldalon csupán a szakasz címe és a módosított bekezdések megnevezése szerepel; a hivatkozott tartalmat alátámasztó rendelkezés a 3. oldalon kezdődik."
+   "valtozik[4]: Az oldal 8-ként van megadva, de a 15. § (az első hivatkozott paragrafus) a 7. oldalon kezdődik; a 8. oldalon csak a 16. § indul.",
+   "valtozik[5]: Az oldal 13-ként van megadva, de a 25. § (az első hivatkozott paragrafus) a 12. oldalon kezdődik; a 13. oldalon csak a folytatás és a 26. § található."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00173/00173.pdf",
@@ -405,7 +403,7 @@
     {
      "oldal": 3,
      "paragrafus": "3. §",
-     "szoveg": "A szabályozott piacra bevezetni kívánt vállalkozás piaci tőkeértékének vagy saját tőkéjének legalább 1 000 000 eurónak kell lennie a megelőző pénzügyi évben. Emellett a bevezetett részvényosztály jegyzett tőkéjének legalább 10%-ának közkézhányadként (a nyilvánosan forgalomban lévő részvényhányad) kell megjelennie. Ez nem vonatkozik a már bevezetett részvényekkel helyettesíthető részvényekre."
+     "szoveg": "A szabályozott piacra bevezetni kívánt vállalkozás piaci tőkeértékének vagy saját tőkéjének legalább 1 000 000 eurónak kell lennie a megelőző pénzügyi évben; ez alól kivételt képeznek a már bevezetett részvényekkel helyettesíthető részvények. A bevezetett részvényosztály jegyzett tőkéjének legalább 10%-ának közkézhányadként (a nyilvánosan forgalomban lévő részvényhányad) kell megjelennie. Ha a bevezetés már bevezetett részvényekkel helyettesíthető részvényekkel történik, a piacműködtető határozza meg az e részvényekhez és az összes kibocsátott részvényhez viszonyított közkézhányad arányát."
     },
     {
      "oldal": 4,
@@ -913,9 +911,60 @@
   "text_hash": "a6bb3a83c8eb5ad4"
  },
  "T/274": {
-  "error": "claude -p failed: \"standard\"},\"modelUsage\":{\"claude-opus-4-6\":{\"inputTokens\":6,\"outputTokens\":7843,\"cacheReadInputTokens\":63278,\"cacheCreationInputTokens\":7414,\"webSearchRequests\":0,\"costUSD\":0.2740815,\"contextWindow\":200000,\"maxOutputTokens\":64000}},\"permission_denials\":[],\"fast_mode_state\":\"off\",\"",
-  "status": "error",
-  "szam": "T/274"
+  "made": "2026-11-10",
+  "model": "opus",
+  "pages": 9,
+  "problems": [],
+  "source": "https://www.parlament.hu/irom43/00274/00274.pdf",
+  "status": "ok",
+  "summary": {
+   "idezet": {
+    "hely": "Általános indokolás",
+    "oldal": 6,
+    "szoveg": "A törvénymódosítás a fentiek segítésére létrehozza a minősített iratok felülvizsgálatát segítő tanácsadó bizottságot, amely konkrét javaslatokkal segíti a minősítők felülvizsgálati tevékenységét, illetve erről a nyilvánosságot is tájékoztatja."
+   },
+   "kiket_erint": "A nemzetbiztonsági szolgálatokat, az iratok minősítőit, az Állambiztonsági Szolgálatok Történeti Levéltárát, valamint az elmúlt rendszer titkosszolgálati tevékenységét kutató történészeket és levéltárosokat érinti.",
+   "lede": "A javaslat az 1990 előtti pártállami diktatúra állambiztonsági iratainak minősítés-felülvizsgálatát kívánja megújítani. Létrehozza a Minősített Iratok Felülvizsgálatát Segítő Tanácsadó Bizottságot, amely a nemzetbiztonsági szolgálatoknál őrzött, minősítésükben fenntartott iratok felülvizsgálatát támogatja és ellenőrzi. Emellett szűkíti azokat az okokat, amelyekre hivatkozva az iratok minősítése fenntartható, és a felülvizsgálat gyakoriságát is növeli.",
+   "mikortol": {
+    "oldal": 5,
+    "paragrafus": "5. §",
+    "szoveg": "A törvény a kihirdetését követő harmadik napon lép hatályba."
+   },
+   "valtozik": [
+    {
+     "oldal": 2,
+     "paragrafus": "1. § (1)",
+     "szoveg": "Létrejön a Minősített Iratok Felülvizsgálatát Segítő Tanácsadó Bizottság, amely a nemzetbiztonsági szolgálatoknál őrzött, minősítésükben fenntartott iratok felülvizsgálatát támogatja. A Bizottság kizárólag akkor jár el, ha a nemzetbiztonsági szolgálat a felülvizsgálatot követően is az irat minősítésének fenntartásáról döntött."
+    },
+    {
+     "oldal": 3,
+     "paragrafus": "1. § (1)",
+     "szoveg": "A Bizottság 11 tagból áll; az elnökre és 4 tagra a nemzetbiztonsági szolgálatokat irányító miniszterek közösen, 6 szakértői tagra a kultúráért felelős miniszter tesz javaslatot. A Kormány határozatban nevezi ki őket határozatlan időtartamra."
+    },
+    {
+     "oldal": 3,
+     "paragrafus": "1. § (1)",
+     "szoveg": "A Bizottság tagjai a minősített adatokat személyi biztonsági tanúsítvány nélkül, titoktartási nyilatkozat kitöltését követően ismerhetik meg, de kötelesek a minősített adat védelmére vonatkozó követelményeket megtartani."
+    },
+    {
+     "oldal": 4,
+     "paragrafus": "3. §",
+     "szoveg": "A minősített iratok kötelező felülvizsgálatának gyakorisága ötévről kétévesre változik, és a minősített iratot kezelő nemzetbiztonsági szolgálatot irányító miniszter felhívására soron kívüli felülvizsgálat is tartható."
+    },
+    {
+     "oldal": 4,
+     "paragrafus": "3. § és 4. §",
+     "szoveg": "Szűkül a minősítés fenntartásának lehetősége: a 2003. évi III. törvény 2. § (3) bekezdés b), c), g) és h) pontja hatályát veszti. A fennmaradó okok közül a külpolitikai ok kizárólag EU-, EGT- vagy NATO-tagállammal fennálló viszonyra korlátozódik."
+    },
+    {
+     "oldal": 4,
+     "paragrafus": "2. §",
+     "szoveg": "A Kormány a törvény hatálybalépését követő 15 napon belül köteles intézkedni a Bizottság létrehozásáról."
+    }
+   ]
+  },
+  "szam": "T/274",
+  "text_hash": "bf72e39136fee37e"
  },
  "T/289": {
   "made": "2026-11-09",
@@ -1079,15 +1128,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 21,
-  "problems": [
-   "Rossz oldalszám a 3. változás-elemnél (üzleti terv): az oldal 3-ként van megadva, de a Vtv. 24/D. § (1) bekezdése – amelyre a paragrafus-hivatkozás pontosan utal – a 4. oldalon található.",
-   "Rossz oldalszám az 5. változás-elemnél (helyi iparűzési adó mentesség): az oldal 2-ként van megadva, de a 4. § érdemi normatív szövege (a helyi adókról szóló törvény 52. § 35. pontjának módosítása) a 3. oldalon található.",
-   "Rossz oldalszám a 7. változás-elemnél (egyoldalú szerződésmódosítás): az oldal 11-ként van megadva, de az Sztv. 51. § (19) bekezdése a 12. oldalon kezdődik.",
-   "Rossz oldalszám a 8. változás-elemnél (MÁV-társaságok vagyonátadása): az oldal 11-ként van megadva, de az Sztv. 51. § (24)–(26) bekezdései – amelyek a térítésmentes átadásról, az adó- és köztehermentességről és a nyilvántartási értéken történő elszámolásról rendelkeznek – a 12–13. oldalon találhatók."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00304/00304.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -1202,19 +1246,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 14,
-  "problems": [
-   "a 2. cikk és 7. cikk (2) bekezdés 39. pont nem a 2. oldal környékén áll",
-   "a 3. cikk és 7. cikk (2) bekezdés 35-36. pont nem a 3. oldal környékén áll",
-   "a 4-5. cikk nem a 3. oldal környékén áll",
-   "a 6. cikk nem a 5. oldal környékén áll",
-   "a 7. cikk (2) bekezdés 34. pont nem a 5. oldal környékén áll",
-   "a 9. cikk a), e), j)-n) pont és 7. cikk (1) bekezdés nem a 6. oldal környékén áll",
-   "a 10. cikk nem a 7. oldal környékén áll",
-   "a 11. cikk nem a 7. oldal környékén áll"
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00324/00324.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -1245,7 +1280,7 @@
      "szoveg": "A Kúria elnökét és az Országos Bírósági Hivatal (OBH) elnökét a bírák által jelölt legfeljebb három személy közül a köztársasági elnök javasolja, és az Országgyűlés kétharmados szavazattal választja meg 6 évre. Egyikük sem választható újra. Megbízatásuk bírói kezdeményezésre visszahívással is megszüntethető."
     },
     {
-     "oldal": 5,
+     "oldal": 4,
      "paragrafus": "6. cikk",
      "szoveg": "Létrejön a Nemzeti Vagyonvisszaszerzési és Vagyonvédelmi Hivatal, amely független szervként a közvagyon védelmét és a jogellenesen felhasznált közvagyon visszaszerzését szolgálja. Elnökét és elnökhelyetteseit az Országgyűlés kétharmados szavazattal 6 évre választja. Személyi állománya nem lehet párttag és nem folytathat politikai tevékenységet."
     },
@@ -1324,12 +1359,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 13,
-  "problems": [
-   "A lede a szakszervezeti jogokkal kapcsolatban azt írja, hogy azok 'bővülnek', miközben a törvényjavaslat szövege ([1] bekezdés, 2. oldal) és az Általános indokolás (10. oldal) egyaránt 'a köznevelésben foglalkoztatottak kollektív jogainak helyreállítása' fordulatot használja. A 'bővülés' és a 'helyreállítás' eltérő értékelést hordoz; a 'bővülnek' szó a szövegből nem következik."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00340/00340.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -1947,13 +1980,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 18,
-  "problems": [
-   "valtozik[5]: Az oldalhivatkozas 7, de a 10. § (1) bekezdes a 8. oldalon talalhato, nem a 7.-en.",
-   "mikortol: Az oldalhivatkozas 11, de a 19. § a 12. oldalon szerepel (a 17. § valoban a 11. oldalon van, de a hivatkozott 19. § a 12. oldalon talalhato)."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00404/00404.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -1971,7 +2001,7 @@
     {
      "oldal": 11,
      "paragrafus": "14. §",
-     "szoveg": "A Levéltár kezelésében álló hatos kartonok, B-naplók, B-dossziék és mágnesszalagon tárolt leíró adatok közérdekből nyilvános adattá válnak. Ezeket a Levéltár honlapján digitálisan, személyazonosítás nélkül, kereshető formában bárki számára hozzáférhetővé kell tenni, az egészségi állapotra, kóros szenvedélyre, szexuális életre és szexuális irányultságra vonatkozó adatok kivételével; a személyi azonosító kizárása csak a hatos kartonokra vonatkozik."
+     "szoveg": "A Levéltár kezelésében álló hatos kartonok, B-naplók, B-dossziék és mágnesszalagon tárolt leíró adatok közérdekből nyilvános adattá válnak, és a Levéltár honlapján digitálisan, személyazonosítás nélkül, kereshető formában bárki számára hozzáférhetővé kell tenni. A kivételek irattípusonként eltérőek: a hatos kartonoknál a személyi azonosító és a hátoldalon szereplő egészségi állapotra, kóros szenvedélyre, szexuális életre, szexuális irányultságra vonatkozó adat nem tehető közzé; a B-naplóknál semmilyen kivétel nincs; a B-dossziéknál az egészségi állapotra, kóros szenvedélyre, szexuális életre, szexuális irányultságra vonatkozó adat nem tehető közzé; a mágnesszalagos adatoknál a minősített adat nem tehető közzé."
     },
     {
      "oldal": 8,
@@ -2435,8 +2465,7 @@
   "model": "opus",
   "pages": 8,
   "problems": [
-   "A \"mikortol\" blokkban az \"oldal\" értéke 2, de az 5. § (hatályba léptető rendelkezés) a 3. oldalon található.",
-   "Az ötödik \"valtozik\" bejegyzésben (\"A jelenleg hivatalban lévő képviselők…\") az \"oldal\" értéke 2, holott az 1–2. § indokolása a 6. oldalon, a Részletes indokolás részben szerepel."
+   "A „valtozik\" ötödik elemében (az 1–2. § indokolásáról szóló pont) az oldal 2-nek van megadva, holott a Részletes indokolás 1–2. §-hoz tartozó szövege a 6. oldalon található. A helyes oldalszám 6 lenne."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00493/00493.pdf",
@@ -2478,7 +2507,7 @@
     {
      "oldal": 2,
      "paragrafus": "1–2. § indokolása",
-     "szoveg": "A jelenleg hivatalban lévő képviselők és polgármesterek az állampolgársággal kapcsolatos bejelentést a soron következő éves vagyonnyilatkozatban kötelesek teljesíteni, ha a törvény eltérően nem rendelkezik."
+     "szoveg": "A jelenleg hivatalban lévő országgyűlési képviselők, helyi önkormányzati képviselők és polgármesterek, valamint az európai parlamenti képviselők az állampolgársággal kapcsolatos bejelentést a soron következő éves vagyonnyilatkozatban kötelesek teljesíteni, ha a törvény eltérően nem rendelkezik."
     }
    ]
   },
@@ -2581,13 +2610,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 20,
-  "problems": [
-   "A korai elutasitas leirasanal az oldalszam hibas: az osszefoglalo oldal 4-et ad meg, de a korai elutasitas reszletszabalyait tartalmazo 603/C. paragrafus az 5. oldalon kezdodik (a 6. paragrafus ugyan a 4. oldalon indul, de a hivatkozott konkret rendelkezesek az 5-6. oldalon talalhatok).",
-   "A perkoltseg-biztositekrol szolo bejegyzesnel az oldalszam hibas: az osszefoglalo oldal 4-et ad meg, holott a 603/D. paragrafus (amely a perkoltseg-biztositekot szabalyozza) a 6. oldalon talalhato."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00503/00503.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -2743,16 +2769,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 5,
-  "problems": [
-   "a 1. cikk nem a 2. oldal környékén áll",
-   "a 2. cikk nem a 2. oldal környékén áll",
-   "a 3. cikk nem a 2. oldal környékén áll",
-   "a 4. cikk nem a 2. oldal környékén áll",
-   "a 5. cikk (1) bekezdés nem a 2. oldal környékén áll"
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00051/00051.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": null,
    "kiket_erint": "A mindenkori miniszterelnököt, a közfeladatot ellátó közérdekű vagyonkezelő alapítványokat (és azok kuratóriumait), valamint a Szuverenitásvédelmi Hivatalt érinti közvetlenül.",
@@ -2794,12 +2814,12 @@
   "pages": 7,
   "problems": [
    "a 5. § nem a 4. oldal környékén áll",
-   "Rossz oldalszám a 2. változás-bejegyzésnél: a 3. § (2) bekezdés a törvényjavaslat 2–3. oldalán szerepel, nem az 5. oldalon (az 5. oldal az Indokolás).",
-   "Rossz oldalszám a 3. változás-bejegyzésnél: a 3. § (3) bekezdés a 3. oldalon található, nem az 5.-en.",
-   "Rossz oldalszám a 4. változás-bejegyzésnél: a 3. § (4) bekezdés a 3. oldalon található, nem az 5.-en.",
-   "Rossz oldalszám az 5. változás-bejegyzésnél: a 3. § (5)–(6) bekezdések a 3. oldalon találhatók, nem az 5.-en.",
-   "Rossz oldalszám a 6. változás-bejegyzésnél: a 3. § (8) bekezdés a 3–4. oldalon található, nem az 5.-en.",
-   "Rossz oldalszám a 7. változás-bejegyzésnél: a 4. § a 4. oldalon szerepel, nem a 6.-on."
+   "A 3. § (2) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon, ahogy az összefoglaló jelzi.",
+   "A 3. § (3) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon.",
+   "A 3. § (4) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon.",
+   "A 3. § (5)–(6) bekezdések a 3. oldalon kezdődnek, nem az 5. oldalon.",
+   "A 3. § (8) bekezdés a 3. oldalon kezdődik, nem az 5. oldalon.",
+   "A 4. § a 4. oldalon kezdődik, nem a 6. oldalon, ahogy az összefoglaló jelzi."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00052/00052.pdf",
@@ -2859,11 +2879,8 @@
   "model": "opus",
   "pages": 9,
   "problems": [
-   "a 4. § nem a 5. oldal környékén áll",
    "a 3. § nem a 5. oldal környékén áll",
-   "A 25/A. § (4) bekezdés (Kúriához benyújtható felülvizsgálati kérelem) tartalma a 3. oldalon található, az összefoglaló mégis a 2. oldalt jelöli meg forráshivatkozásként.",
-   "A 25/C. § (igazolási kérelem) tartalma a 3. oldalon kezdődik, az összefoglaló mégis a 2. oldalt jelöli meg forráshivatkozásként.",
-   "A 25/E–25/G. § és a második 25/F. § (meghallgatási tilalmak, nyilatkozattétel megtagadása, forrásvédelem) tartalma a 4–5. oldalon található, az összefoglaló mégis a 2. oldalt jelöli meg forráshivatkozásként."
+   "a 4. § nem a 5. oldal környékén áll"
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00053/00053.pdf",
@@ -2909,13 +2926,13 @@
     },
     {
      "oldal": 5,
-     "paragrafus": "4. §",
-     "szoveg": "Új bűncselekményi tényállás jön létre: aki a vizsgálóbizottság előtti együttműködési kötelezettségét szándékosan, alapos indok nélkül nem teljesíti és ezzel a bizottság munkáját akadályozza, vagy szándékosan valótlan nyilatkozatot tesz, vétséget követ el, és két évig terjedő szabadságvesztéssel büntetendő. Ha a cselekmény valamely bűncselekmény elkövetését szolgálja, vagy annak leplezésére irányul, a büntetés három évig terjedő szabadságvesztés. Országgyűlési képviselő e szakasz alapján nem büntethető."
+     "paragrafus": "3. §",
+     "szoveg": "A vizsgálóbizottságokra vonatkozó új szabályokat az állandó bizottságok vizsgálati tevékenységére is alkalmazni kell, ha törvény eltérően nem rendelkezik."
     },
     {
      "oldal": 5,
-     "paragrafus": "3. §",
-     "szoveg": "A vizsgálóbizottságokra vonatkozó új szabályokat az állandó bizottságok vizsgálati tevékenységére is alkalmazni kell, ha törvény eltérően nem rendelkezik."
+     "paragrafus": "4. §",
+     "szoveg": "Új bűncselekményi tényállás jön létre: aki a vizsgálóbizottság előtti együttműködési kötelezettségét szándékosan, alapos indok nélkül nem teljesíti és ezzel a bizottság munkáját akadályozza, vagy szándékosan valótlan nyilatkozatot tesz, vétséget követ el, és két évig terjedő szabadságvesztéssel büntetendő. Ha a cselekmény valamely bűncselekmény elkövetését szolgálja, vagy annak leplezésére irányul, a büntetés három évig terjedő szabadságvesztés. Országgyűlési képviselő e szakasz alapján nem büntethető."
     }
    ]
   },
@@ -3048,63 +3065,58 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 8,
-  "problems": [
-   "az idézet nem szó szerint áll a szövegben: Az Eltv., valamint a Btv. modositasa a karosito elleni vedekezes hatekonyabba te",
-   "A 4. valtozaspont szerint 'a hegykozség valasztmanyanak egy tagja' jogosult az ellenorzesre, de a torvenyszoveg (5/A. § (2) bekezdes) 'legalabb egy tagja' kifejezest hasznal - a 'legalabb' szo hiányzik az osszefoglalobol.",
-   "A 4. valtozaspont azt allitja, hogy 'birsag nem szabhato ki', holott a torvenyszoveg (5/A. § (4) bekezdes) kifejezetten 'mulasztasi birsag nem szabhato ki' szukitest tartalmaz - az osszefoglalo tagabbra vonja a tilalmat.",
-   "A 3. valtozaspont 'a szolotol legfeljebb 4 km-en belul mas szoloultetetveny talalhato' fordulatot hasznal, de a torvenyszoveg (Btv. 5. § (6a) bekezdes) pontosabban 'szoloultetetveny tol vagy egyeb szolotol legfeljebb 4 kilometeres tavolsagban mas szoloultetetveny talalhato' - az osszefoglalo 'szolotol'-re egyszerusit, elveszitve a ket kulon kategoriat.",
-   "Az idezet nem szo szerinti: az osszefoglalo 'Az Eltv., valamint a Btv. modositasa...' format hasznal, mig az Altalanos indokolas eredeti szovege kiirja a teljes torvenycimeket a roviditesek bevezetesevel egyutt."
-  ],
+  "problems": [],
+  "refined": true,
   "source": "https://www.parlament.hu/irom43/00570/00570.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
-    "hely": "Altalanos indokolas",
+    "hely": "Általános indokolás",
     "oldal": 5,
-    "szoveg": "Az Eltv., valamint a Btv. modositasa a karosito elleni vedekezes hatekonyabba tetelere vonatkozoan tartalmaz rendelkezeseket."
+    "szoveg": "Az élelmiszerláncról és hatósági felügyeletéről szóló 2008. évi XLVI. törvény (a továbbiakban: Éltv.), valamint a szőlészetről és borászatról szóló 2020. évi CLXIII. törvény (a továbbiakban: Btv.) módosítása a károsító elleni védekezés hatékonyabbá tételére vonatkozóan tartalmaz rendelkezéseket."
    },
    "kiket_erint": "A javaslat közvetlenül érinti a szőlőültetvények és az újonnan definiált egyéb szőlő területek használóit és tulajdonosait, a hegybírókat, a hegyközségek választmányait, valamint az élelmiszerlánc-felügyeleti szervet.",
    "lede": "A javaslat a szőlő aranyszínű sárgaság nevű növénybetegség terjedésének lassítását célzó szabályokat vezet be. Módosítja az élelmiszerlánc-törvényt (2008. évi XLVI. törvény) és a szőlészeti-borászati törvényt (2020. évi CLXIII. törvény). Bevezeti az „egyéb szőlő\" fogalmát, és kiterjeszti rájuk a művelési kötelezettséget, valamint újraszabályozza a kártalanítás és az azonnali végrehajthatóság egyes feltételeit.",
    "mikortol": {
     "oldal": 4,
     "paragrafus": "10. §",
-    "szoveg": "A torveny a kihirdeteset koveto harmadik napon lep hatalyba."
+    "szoveg": "A törvény a kihirdetését követő harmadik napon lép hatályba."
    },
    "valtozik": [
     {
      "oldal": 2,
      "paragrafus": "1. §",
-     "szoveg": "Nem jar kartalanitas a termelonek vagy foldhasznalonak, ha noveny-egeszsegugyi zarlati intezkedés eseten a kartalanitas feltetelekent eloirt kotelezettseg teljesiteset nem vallalja, vagy a vallalt kotelezettsegnek hataridoben nem tesz eleget."
+     "szoveg": "Nem jár kártalanítás a termelőnek vagy földhasználónak, ha növény-egészségügyi zárlati intézkedés esetén a kártalanítás feltételeként előírt kötelezettség teljesítését nem vállalja, vagy a vállalt kötelezettségnek határidőben nem tesz eleget."
     },
     {
      "oldal": 2,
      "paragrafus": "2. §",
-     "szoveg": "Uj fogalom: egyeb szolo, a ligeti szolo kivetelevel minden, a Vitis nemzetséghez tartozo egyed vagy novenytarsulas, amely nem minosul szoloultetvenynek."
+     "szoveg": "Új fogalom: egyéb szőlő, a ligeti szőlő kivételével minden, a Vitis nemzetséghez tartozó egyed vagy növénytársulás, amely nem minősül szőlőültetvénynek."
     },
     {
      "oldal": 2,
      "paragrafus": "3. §",
-     "szoveg": "Ha a hatarozat kezbesitesi velelem alapjan kezbesitettnek tekintendo, vagy hirdetmeny utjan kell kozolni, es a szolotol legfeljebb 4 km-en belul mas szoloultetetveny talalhato, a hatarozat azonnal vegrehajtható. Ilyen esetben a hegybiro elrendeli a kozerdeku kivagast."
+     "szoveg": "Ha a határozat kézbesítési vélelem alapján kézbesítettnek tekintendő, vagy hirdetmény útján kell közölni, az azonnali végrehajthatóság megállapítható, ha szőlőültetvénytől vagy egyéb szőlőtől legfeljebb 4 kilométeres távolságban más szőlőültetvény található. Ilyen esetben a hegybíró elrendeli a közérdekű kivágást."
     },
     {
      "oldal": 3,
      "paragrafus": "4. §",
-     "szoveg": "Az egyeb szolo hasznaloja koteles a szolot rendeltetesnek megfeleloen muvelni. Az ellenorzesre a hegybiro es a hegykozség valasztmanyanak egy tagja jogosult, ha az egyeb szolo korulhatarolt teruletbe esik vagy zarlati intezkedest rendeltek el. Birsag nem szabhato ki."
+     "szoveg": "Az egyéb szőlő használója köteles a szőlőt rendeltetésének megfelelően művelni. Az ellenőrzésre a hegybíró és a hegyközség választmányának legalább egy tagja jogosult, ha az egyéb szőlő körülhatárolt területbe esik vagy zárlati intézkedést rendeltek el. Bírság nem szabható ki."
     },
     {
      "oldal": 3,
-     "paragrafus": "4. § es 6. §",
-     "szoveg": "Az egyeb szolo hasznalojanak a korulhatarolt terulet kijeloleserol szolo hatarozat kozhirre tetelet koveto 30 napon belul be kell jelentenie az egyeb szolot. Ha a kozhirre tetel a torveny hatalybalepese elott tortent, a bejelentesre a hatalybalepestol szamitott 30 nap all rendelkezesre."
+     "paragrafus": "4. § és 6. §",
+     "szoveg": "Az egyéb szőlő használójának a körülhatárolt terület kijelöléséről szóló határozat közhírré tételét követő 30 napon belül be kell jelentenie az egyéb szőlőt. Ha a közhírré tétel a törvény hatálybalépése előtt történt, a bejelentésre a hatálybalépéstől számított 30 nap áll rendelkezésre."
     },
     {
      "oldal": 3,
      "paragrafus": "4. §",
-     "szoveg": "Ha a jarvanyugyi intezkedest a grapevine flavescence doree phytoplasma karosito miatt rendelik el, a nagyszamu ugyfel erintettsege velelmezendo, igy a hatarozat kozhirre tetel utjan kozolheto."
+     "szoveg": "Ha a járványügyi intézkedést a grapevine flavescence dorée phytoplasma károsító miatt rendelik el, a nagyszámú ügyfél érintettsége vélelmezendő, így a határozat közhírré tétel útján közölhető."
     },
     {
      "oldal": 4,
      "paragrafus": "9. §",
-     "szoveg": "Hatalyat veszti a szoleszeti torveny azon szovegreste, amely az ellenorzest egy vegetacios idoszak soran vegzendokent hatarozta meg."
+     "szoveg": "Hatályát veszti a szőlészeti törvény azon szövegrésze, amely az ellenőrzést egy vegetációs időszak során végzendőként határozta meg."
     }
    ]
   },
@@ -3469,8 +3481,7 @@
   "model": "opus",
   "pages": 11,
   "problems": [
-   "az idézet nem szó szerint áll a szövegben: A javítóintézeti nevelés, mint büntetőjogi intézkedés ugyan szabadságelvonással ",
-   "A 11. szakaszhoz tartozo osszefoglalo-pont \"haromszintu dontesi rend\"-et emlit, ami a szovegben nem szerepel. A torvenyszoveg ket pontot (a es b) tartalmaz: az a) pont egy helyettesitesi lancot ir le (igazgato, tavolléteben ugyveletes vezeto, ezek tavolléteben reszlegvezeto), a b) pont surgos szukseg eseten haladetktalan intezkedest. Ez nem haromszintu dontesi rend, hanem ketfele jogalap."
+   "az idézet nem szó szerint áll a szövegben: A javítóintézeti nevelés, mint büntetőjogi intézkedés ugyan szabadságelvonással "
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00666/00666.pdf",
@@ -3574,12 +3585,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 17,
-  "problems": [
-   "A második változás-elem (ETT etikai eljárások átadása) \"oldal\" mezője 8, holott a 33. § tartalma – amelyre az állítások vonatkoznak (2026. december 31-i lezárás, 2027. január 10-i átadás, 2027. január 1-jétől kamarai hatáskör) – a 9. oldalon kezdődik és a 10. oldalon folytatódik. A 8. oldalon csupán a 14. § bevezető része és a 32. § található; a 33. § érdemi szövege a 9–10. oldalon szerepel."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00668/00668.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -3761,8 +3770,8 @@
   "model": "opus",
   "pages": 5,
   "problems": [
-   "A 3. § (6)–(7) bejegyzésnel az oldal 2-kent van megadva, holott a 3. § (6)–(7) bekezdese a szovegben a 3. oldalon szerepel.",
-   "A mikortol blokkban az 5. § hivatkozasa 4. oldalra mutat, de az 5. § a szovegben a 3. oldalon talalhato; a 4. oldal mar az Altalanos indokolassal kezdodik."
+   "A 3. § (6)–(7) tételhez megadott oldalszám 2, holott a 3. § (6) bekezdése a 3. oldalon kezdődik.",
+   "A mikortol blokkban az 5. §-hoz megadott oldalszám 4, holott az 5. § a 3. oldalon kezdődik."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00007/00007.pdf",
@@ -4020,13 +4029,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 7,
-  "problems": [
-   "A 3. § és 8. § bejegyzésnél az oldal értéke 2, pedig a 3. § (61/A. §) szövege a 3. oldalon, a 8. § (140/B. §) szövege pedig a 4. oldalon található; a 2. oldalon egyikük sem szerepel.",
-   "A 3. § és 8. § összefoglalójában az áll, hogy a szolgáltatók az első tájékoztatást küldik meg. A törvényszöveg nem használja az első szót, az indokolás pedig egyszeri tájékoztatást említ; az első nem a szövegből származik."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00789/00789.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -4086,9 +4092,7 @@
   "model": "opus",
   "pages": 8,
   "problems": [
-   "az idézet nem szó szerint áll a szövegben: nem változtat a nyilvántartások közbizalmi, tanúsító erején, hanem azt szolgálja",
-   "A valtozik 4. elemeben hivatkozott oldal 3 reszben teves: a 92. § (1) bekezdes p) pontjara vonatkozo (1c) bekezdes a 4. oldalon talalhato, nem a 3.-on.",
-   "A valtozik 5. elemeben hivatkozott oldal 3 teves: az (1d) bekezdes (a kuratorium/kurator allami alapitoi kijeloleserol) a 4. oldalon szerepel, nem a 3.-on."
+   "az idézet nem szó szerint áll a szövegben: tehát nem változtat a nyilvántartások közbizalmi, tanúsító erején, hanem azt szo"
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00790/00790.pdf",
@@ -4097,7 +4101,7 @@
    "idezet": {
     "hely": "Általános indokolás, 5–6. oldal",
     "oldal": 5,
-    "szoveg": "nem változtat a nyilvántartások közbizalmi, tanúsító erején, hanem azt szolgálja, hogy az állami közhiteles nyilvántartásokra vonatkozóan meghatározza azokat az adatokat, amelyek esetében a cégnyilvántartás, valamint a civil és egyéb cégnek nem minősülő szervezetek nyilvántartása tekinthető az adat közhiteles forrásának."
+    "szoveg": "tehát nem változtat a nyilvántartások közbizalmi, tanúsító erején, hanem azt szolgálja, hogy az állami közhiteles nyilvántartásokra vonatkozóan meghatározza azokat az adatokat, amelyek esetében a cégnyilvántartás, valamint a civil és egyéb cégnek nem minősülő szervezetek nyilvántartása tekinthető az adat közhiteles forrásának."
    },
    "kiket_erint": "A cégjegyzékbe bejegyzett cégeket, valamint a civil és egyéb cégnek nem minősülő szervezeteket (például egyesületeket, alapítványokat) érinti, amelyeket bírósági nyilvántartás tart nyilván.",
    "lede": "A javaslat meghatározza, hogy a cégjegyzékben és a civil szervezetek bírósági nyilvántartásában mely adatok minősülnek közhitelesnek (azaz amelyekről az adott nyilvántartás hivatalosan tanúsítja a hitelességet). A módosítás a közhitelességről szóló 2024. évi LXXXII. törvénnyel (Közhiteles törvény) való összhangot teremti meg. Emellett a cégjegyzékből automatikusan törlésre kerülnek a régi, át nem állított tevékenységi kórók.",
@@ -4141,13 +4145,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 6,
-  "problems": [
-   "A első változás (1. § és 8. §) hivatkozásánál az \"oldal\": 2 pontatlan, mert a 8. § a 3. oldalon található, nem a 2.-on.",
-   "A második változás (2. § és 9. §) hivatkozásánál az \"oldal\": 2 pontatlan, mert a 9. § a 3. oldalon található, nem a 2.-on."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00791/00791.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Részletes indokolás, 1–2. §",
@@ -4248,9 +4249,8 @@
   "model": "opus",
   "pages": 8,
   "problems": [
-   "A 3. valtozik elem oldal mezoje hibas: oldal 2 szerepel, de a (2b) bekezdes szovege (negyedevenkenti meghallgatas) a 3. oldalon talalhato.",
-   "A 4. valtozik elem oldal mezoje hibas: oldal 2 szerepel, de a 2. paragrafus (3) bekezdese, amely a felugyelobizottsagi tagok megvalasztasat szabalyozza (14. paragrafus (4)-(6)), a 3-4. oldalon talalhato.",
-   "Az 5. valtozik elem oldal mezoje hibas: oldal 2 szerepel, de a 2. paragrafus (4) bekezdese, amely a negyeves megbizatast szabalyozza (14. paragrafus (8)), a 4. oldalon talalhato."
+   "A negyedik valtozas (felugyelobizottsagi tagok megvalasztasa) oldalszama hibas: a 2. § (3) bekezdes a 3. oldalon kezdodik, nem a 2. oldalon.",
+   "Az otodik valtozas (megbizatas idotartama) oldalszama hibas: a 2. § (4) bekezdes a 4. oldalon kezdodik, nem a 2. oldalon."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00796/00796.pdf",
@@ -4375,7 +4375,9 @@
   "model": "opus",
   "pages": 80,
   "problems": [
-   "A rezsikedvezményről szóló változás (69–71. §) oldalszáma hibás: az összefoglaló 23. oldalt jelöl meg, de a 69. § a 37. oldalon kezdődik és a 71. § a 40. oldalon található. Ez rossz forráshivatkozás."
+   "A 4. változás-elem (élelmiszer- és drogériai árréskorlátozás) oldalszáma 25, de a hivatkozott 49. § a 24. oldalon kezdődik.",
+   "Az 5. változás-elem (rezsikedvezmény, 69–71. §) oldalszáma 23, de a 69. § a 38. oldalon kezdődik.",
+   "A 6. változás-elem (energiaellátók különadója, 97–99. §) oldalszáma 52, de a 97. § az 51. oldalon kezdődik."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00008/00008.pdf",
@@ -4704,15 +4706,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 5,
-  "problems": [
-   "a 1. cikk nem a 2. oldal környékén áll",
-   "a 2. cikk nem a 2. oldal környékén áll",
-   "a 3. cikk nem a 2. oldal környékén áll",
-   "a 2. cikk nem a 2. oldal környékén áll"
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00009/00009.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -4751,13 +4748,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 11,
-  "problems": [
-   "valtozik[2]: Az \"oldal\": 2 hivatkozás hibás. A 15/C. § (megyei közgyűlés elnöke, pártelnök összeférhetetlensége) a 3–4. oldalon található, nem a 2. oldalon.",
-   "valtozik[3]: Az \"oldal\": 2 hivatkozás hibás. A 15/D. § (500 fős küszöb alóli mentesség) a 4. oldalon található, nem a 2. oldalon."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00914/00914.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -4979,15 +4973,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 26,
-  "problems": [
-   "valtozik 3. elem: az oldal erteke 6, de a 4. § erdemi tartalma (39. §) a 7. oldalon talalhato. A 6. oldal aljan csak a 4. § cimsor jelenik meg.",
-   "valtozik 7. elem: az oldal erteke 7, de a 44. § (ervenysitesi sorrend) a 10-11. oldalon szerepel, nem a 7. oldalon.",
-   "valtozik 6. elem: az oldal erteke 15, de az 1. melleklet, amely a csecsemogondozasi dij, gyermekgondozasi dij es orokbefogadoi dij adomentesseget tartalmazza, a 19. oldalon talalhato.",
-   "valtozik 2. elem: a paragrafus erteke 3. §, de a szemelyi kedvezmeny (43/A. §) es a 25 ev alatti fiatalok kedvezmenye (43. §) nem a javaslat 3. §-aban, hanem az 5. §-aban kerul szabalyozasra."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00929/00929.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -5046,15 +5035,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 73,
-  "problems": [
-   "Rossz forráshivatkozás: a 9. § (3) bekezdésre hivatkozó tétel oldalszáma 7, de a (3) bekezdés valójában a 8. oldalon szerepel.",
-   "Rossz forráshivatkozás: a 10. § (4) bekezdésre hivatkozó tétel oldalszáma 8, de a (4) bekezdés valójában a 9. oldalon szerepel.",
-   "Rossz forráshivatkozás: a mikortol mezőben a 36. § oldalszáma 29 (a szövegben és az oldal mezőben egyaránt), holott a 36. § a 30. oldalon található.",
-   "Rossz forráshivatkozás: a mikortol összesítő oldal mezője 29, miközben a 39. § (1) is a 30. oldalon van (a szöveg belül helyesen 30-at ír, de az oldal mező 29-et)."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00930/00930.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -5113,14 +5097,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 50,
-  "problems": [
-   "Az 1. változás oldalhivatkozása hibás: a 15 százalékos adókulcsot megállapító 11. § (Tao. 19. §) a 8. oldalon található, nem a 3. oldalon. A 3. oldal csak a 2. §-t (nagyvállalat-fogalom) tartalmazza.",
-   "A 3. változás oldalhivatkozása hibás: az 5. § (4) bekezdése (K+F adóalap-kedvezmény igénybe vett szolgáltatás korlátozása) az 5. oldalon, az 5. § (6) bekezdése (kutató-fejlesztő költségek kétszerese) a 6. oldalon található, nem a 4. oldalon.",
-   "Az idézet nem szó szerinti a megjelölt forrásból. Az összefoglaló az Általános indokolásra (33. oldal) hivatkozik, de ott a szöveg így kezdődik: 'A törvényjavaslat alapján a társasági adó szabályozása úgy alakul át…' – az idézet elhagyja az 'A törvényjavaslat alapján' bevezető részt. A szó szerint egyező szöveg a törvényjavaslat preambulumában (2. oldal, [1] bekezdés) található, nem az indokolásban."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00931/00931.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -5241,12 +5221,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 26,
-  "problems": [
-   "A küldöttgyűlésről szóló pont (3. változás) az oldal mezőben 7-et ad meg, de a delegálási szabályok (legfeljebb 60 közvetlenül választott, legfeljebb 140 delegált küldött, elismert szakmaközi szervezet legfeljebb 3, más szervezet legfeljebb 2 küldöttet delegálhat) nem a 7. oldalon, hanem a 21. §-ban (a törvényjavaslat 12. oldalán) találhatók. Az oldal: 7 hivatkozás csak a küldöttgyűlés létszámára és mandátumidejére (12. §) helytálló, a delegálási részletekre nem."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00933/00933.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -5305,14 +5283,10 @@
   "made": "2026-11-10",
   "model": "opus",
   "pages": 9,
-  "problems": [
-   "valtozik[0]: Az oldal: 2 pontatlan, mert az 1. § (5) bekezdés, amely a 7. § (11a) bekezdését iktatja be, a 3. oldalon található, nem a 2.-on.",
-   "valtozik[3] (termelői hozzájárulás emelése): Az oldal: 4 téves. A 7. § a)–c) pontjainak érdemi szövege az 5. oldalon szerepel, nem a 4.-en.",
-   "valtozik[4] (krízisbiztosítási kompenzáció): Az oldal: 4 téves. A 7. § e) pontja szintén az 5. oldalon található, nem a 4.-en."
-  ],
+  "problems": [],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00934/00934.pdf",
-  "status": "review",
+  "status": "ok",
   "summary": {
    "idezet": {
     "hely": "Általános indokolás",
@@ -5377,12 +5351,12 @@
   "model": "opus",
   "pages": 26,
   "problems": [
-   "A valtozik 2. eleme (Irányítóbizottság, 5. CIKK) oldalszáma 2, de az 5. CIKK az 1. mellékletben, a 9. oldalon található.",
-   "A valtozik 3. eleme (közös programvégrehajtási bizottság, 6. CIKK) oldalszáma 2, de a 6. CIKK az 1. mellékletben, a 9–10. oldalon található.",
-   "A valtozik 4. eleme (stratégiai együttműködés, 4. CIKK) oldalszáma 2, de a 4. CIKK az 1. mellékletben, a 9. oldalon található.",
-   "A valtozik 5. eleme (közbeszerzési mentesség, 7. CIKK) oldalszáma 2, de a 7. CIKK az 1. mellékletben, a 10–12. oldalon található.",
-   "A valtozik 6. eleme (finanszírozás, 8. CIKK) oldalszáma 2, de a 8. CIKK az 1. mellékletben, a 12. oldalon található.",
-   "A valtozik 7. eleme (szellemi tulajdon és titoktartás, 9. CIKK és 12. CIKK) oldalszáma 2, de a 9. CIKK a 11. oldalon, a 12. CIKK a 13. oldalon található."
+   "A valtozik 2. elemeben (1. melleklet, 5. CIKK 1-4. bekezdes) az oldal 2-kent van megadva, de az 5. CIKK a 9. oldalon kezdodik.",
+   "A valtozik 3. elemeben (1. melleklet, 6. CIKK 1-2. bekezdes) az oldal 2-kent van megadva, de a 6. CIKK a 10. oldalon kezdodik.",
+   "A valtozik 4. elemeben (1. melleklet, 4. CIKK) az oldal 2-kent van megadva, de a 4. CIKK a 9. oldalon kezdodik.",
+   "A valtozik 5. elemeben (1. melleklet, 7. CIKK) az oldal 2-kent van megadva, de a 7. CIKK a 11. oldalon kezdodik.",
+   "A valtozik 6. elemeben (1. melleklet, 8. CIKK) az oldal 2-kent van megadva, de a 8. CIKK a 12. oldalon kezdodik.",
+   "A valtozik 7. elemeben (1. melleklet, 9. CIKK 3. bekezdes es 12. CIKK 4. bekezdes) az oldal 2-kent van megadva, de az elso hivatkozott cikk (9. CIKK) a 12. oldalon kezdodik."
   ],
   "refined": true,
   "source": "https://www.parlament.hu/irom43/00936/00936.pdf",
