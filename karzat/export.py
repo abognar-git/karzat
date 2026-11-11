@@ -350,8 +350,8 @@ def floor_debates_csv(ft: dict[str, Any], cycle: int) -> str:
 
 
 def remuneration_csv(mps: dict, cycle: int) -> str:
-    """Every current member's stated monthly remuneration, as the datasheet gives it: one gross figure for
-    the query month. No breakdown exists in the source and none is invented here; a government office's pay
+    """Every current member's stated monthly remuneration, as the datasheet gives it: one gross figure per
+    month it states. No breakdown exists in the source and none is invented here; a government office's pay
     is outside this record entirely."""
     rows = []
     for azon, m in sorted(mps.items(), key=lambda kv: -((kv[1].get("remuneration") or [{}])[0].get("gross") or 0)):

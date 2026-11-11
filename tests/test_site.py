@@ -295,7 +295,8 @@ class Build(unittest.TestCase):
         self.assertIn('id="roll" data-page-size="25" data-counter="rn"', vote)
         mp = build_mp_page(load_inputs(), "a011")
         self.assertIn('id="mine" data-page-size="10" data-counter="rn"', mp)
-        self.assertEqual(mp.count('data-page-size="10"'), 5)             # weeks, speeches, votes, dissents, motions: ten rows a page
+        self.assertEqual(mp.count('data-page-size="10"'), 2)             # votes, dissents: ten rows a page
+        self.assertEqual(mp.count('data-page-size="5"'), 2)              # speeches and motions sit side by side: five each, so the pair stays level
 
     def test_boot_sequence_is_honest_and_optional(self):
         """The terminal used to print four lines of true numbers on every page — the corpus, this page's cycle, the
@@ -524,8 +525,11 @@ class MPPages(unittest.TestCase):
         self.assertIn("Ágh Péter", page)
         self.assertIn("2. szektor, 5. sor, 7. szék", page)
         self.assertIn("Vas 2. OEVK", page)
-        self.assertIn("kepviselok_mobil", page)                     # parlament.hu profile link
-        self.assertIn("wikidata.org/wiki/Q", page)
+        self.assertNotIn("kepviselok_mobil", page)                  # no links out of the site under the name
+        self.assertNotIn("wikidata.org/wiki/Q", page)
+        self.assertIn('szemely/a011.html">pályakép ↗</a>', page)
+        self.assertNotIn('<dt>Frakciója ellen</dt>', page)          # not under the name: the panel below is that count
+        self.assertIn('id="frakcio-ellen"', page)
         self.assertIn("Szavazatok a frakció többségével szemben", page)
         self.assertIn('id="mine"', page)
         _al = self.inp["alignment"]["per_mp"]["a011"]       # one link per roll call, and again for each dissent
@@ -547,7 +551,7 @@ class MPPages(unittest.TestCase):
         self.assertNotIn("még nincsenek betöltve", page)
         # a closed cycle only has the counts, and says why
         page42 = build_mp_page(load_inputs(42), "a011")
-        self.assertIn("A tételek csak a jelenlegi ciklusból érhetők el.", page42)
+        self.assertIn("A tételek listája csak a jelenlegi ciklusból érhető el.", page42)
         self.assertNotIn("iromanyok_mobil", page42)
 
     def test_former_mp_page_says_so(self):
@@ -747,6 +751,17 @@ class CareerPages(unittest.TestCase):
         self.assertIn('href="../ckl42/kepviselo/a011.html">42. ciklus</a>', page)
         self.assertIn("2\u00a0835 névsorban · leadott 2\u00a0734 · frakciójával 2\u00a0718 · ellene 15", page)   # the two stints above, added up
         self.assertIn("@misc{karzat-szemely-a011,", page)
+        # the header's way back to the member's own page in a cycle of the reader's choosing; the outbound record links are gone
+        self.assertIn('<details class="jump"><summary>képviselői oldala</summary>', page)
+        self.assertIn('<a href="../kepviselo/a011.html"><span>43. ciklus</span><span class="yrs">2026–</span></a>', page)
+        self.assertIn('<a href="../ckl42/kepviselo/a011.html"><span>42. ciklus</span><span class="yrs">2022–2026</span></a>', page)
+        self.assertNotIn("parlament.hu adatlap", page)
+        self.assertNotIn("wikidata.org", page)
+        self.assertIn("details.jump", build_assets()["karzat.js"])
+        # the order the owner set: factions and mandates above the life path's numbers, the cycle table before the motions
+        self.assertLess(page.index("Frakciótagság</span>"), page.index("Mandátumok</span>"))
+        self.assertLess(page.index("Mandátumok</span>"), page.index("Ciklusonként</span>"))
+        self.assertLess(page.index("Ciklusonként</span>"), page.index("Benyújtott indítványok</span>"))
         # the adatlap's motion counts: the current cycle's lead to its list, an earlier cycle's stay a number
         stints[0]["motion_stats"] = [{"ciklus": "2026-", "onallo": 2, "nem_onallo": 0}, {"ciklus": "2022-2026", "onallo": 5, "nem_onallo": 1}]
         page = build_person_page(inp, "a011", stints)
@@ -1136,22 +1151,28 @@ class SpeakingTime(unittest.TestCase):
         self.assertEqual(sorted(m for m in modes if m not in MODE_DEFS), [],
                          "voting modes with no definition — add them to MODE_DEFS")
 
-    def test_the_remuneration_page_counts_everyone_and_marks_part_months(self):
-        """One row per member whose datasheet states an amount; the lede's median is the rows' own; a mandate
-        that ended inside the stated month is marked on its row — the outlier explains itself or not at all."""
-        from scripts.build_site import build_remuneration_page, HU_MONTH_NUM
-        html = build_remuneration_page(self.inp)
+    def test_the_remuneration_page_holds_one_month_and_marks_part_months(self):
+        """One row per member whose datasheet states an amount for the table's month — the month most records
+        state last; the lede's median is those rows' own; a mandate that ended inside that month is marked on
+        its row. A member whose record stops earlier is counted in the lede, not listed under the wrong month."""
+        from scripts.build_site import build_remuneration_page, HU_MONTH_NUM, hu_num
+        from collections import Counter
         import re as _re
-        n = sum(1 for m in self.inp["mps"].values() if any(x.get("gross") for x in m.get("remuneration") or []))
-        self.assertEqual(len(_re.findall(r"<tr data-f=", html)), n)
-        gs = sorted((x["gross"] for m in self.inp["mps"].values() for x in m.get("remuneration") or [] if x.get("gross")), reverse=True)
+        html = build_remuneration_page(self.inp)
+        last = {a: next((x for x in m.get("remuneration") or [] if x.get("gross")), None) for a, m in self.inp["mps"].items()}
+        period = Counter(x["period"] for x in last.values() if x).most_common(1)[0][0]
+        self.assertIn(f"ciklus · {period} · bruttó", html)
+        mine = {a: x["gross"] for a, x in last.items() if x and x["period"] == period}
+        listed = _re.findall(r'<tr data-f="[^"]*"><td><a href="\.\./kepviselo/([^"]+)\.html">', html)
+        self.assertEqual(sorted(listed), sorted(mine))
+        others = sum(1 for x in last.values() if x) - len(mine)
+        if others:
+            self.assertIn(f"{hu_num(others)} képviselő adatlapja erre a hónapra nem közöl összeget", html)
+        gs = sorted(mine.values(), reverse=True)
         med = gs[len(gs) // 2] if len(gs) % 2 else (gs[len(gs) // 2 - 1] + gs[len(gs) // 2]) // 2
-        from scripts.build_site import hu_num
-        self.assertIn(hu_num(med), html, "the lede's median is not the rows' median")
-        period = next(x.get("period") for m in self.inp["mps"].values() for x in m.get("remuneration") or [] if x.get("gross"))
+        self.assertIn(f"érték {hu_num(med)} Ft", html, "the lede's median is not the rows' median")
         y, mo = period.replace(".", "").split()[0], HU_MONTH_NUM[period.replace(".", "").split()[1]]
-        enders = [m for m in self.inp["mps"].values()
-                  if (m.get("mandate_to") or "").startswith(f"{y}-{mo}") and any(x.get("gross") for x in m.get("remuneration") or [])]
+        enders = [a for a in mine if (self.inp["mps"][a].get("mandate_to") or "").startswith(f"{y}-{mo}")]
         if enders:
             self.assertIn("tört hónap — a mandátum vége:", html)
 
@@ -1273,10 +1294,16 @@ class ProfileLine(unittest.TestCase):
         cls.mps = json.loads((ROOT / "data" / "derived" / "mps.json").read_text(encoding="utf-8"))["mps"]
 
     def test_the_two_pages_of_one_person_open_with_the_same_paragraph(self):
-        """A sitting member has a cycle page and a career page, and both open with this paragraph, so it has to say
+        """A sitting member has a cycle page and a career page, and both open with this list, so it has to say
         the same thing on each. It did not: the career page's copy of the record was assembled without the
         committees, so the cycle page named a committee and the career page silently did not."""
-        para = re.compile(r'<p class="profile">(.*?)</p>', re.S)
+        # the career page adds the faction row and each page adds its own voting rows; the record's rows must agree
+        dl = re.compile(r'<dl class="verdict who">(.*?)</dl>', re.S)
+        mine = re.compile(r"<dt>(Képviselő(?: volt)?|Tisztségei?|Önkormányzatban|Bizottság(?:a|ai)|Végzettsége)</dt><dd>(.*?)</dd>", re.S)
+
+        def record_rows(html):
+            m = dl.search(html)
+            return mine.findall(m.group(1)) if m else None
         checked = 0
         for azon, mp in self.mps.items():
             if not mp.get("current") or not [c for c in (mp.get("committees") or []) if not c.get("to")]:
@@ -1285,9 +1312,9 @@ class ProfileLine(unittest.TestCase):
             b = ROOT / "site" / "szemely" / f"{azon}.html"
             if not (a.exists() and b.exists()):
                 self.skipTest("site not built")
-            ma, mb = para.search(a.read_text(encoding="utf-8")), para.search(b.read_text(encoding="utf-8"))
-            self.assertTrue(ma and mb, f"{azon}: a profile paragraph is missing from one of the two pages")
-            self.assertEqual(ma.group(1), mb.group(1), f"{azon}: the two pages disagree")
+            ma, mb = record_rows(a.read_text(encoding="utf-8")), record_rows(b.read_text(encoding="utf-8"))
+            self.assertTrue(ma and mb, f"{azon}: the profile list is missing from one of the two pages")
+            self.assertEqual(ma, mb, f"{azon}: the two pages disagree")
             checked += 1
             if checked >= 25:
                 break
@@ -1313,7 +1340,7 @@ class ProfileLine(unittest.TestCase):
         from scripts.build_site import profile_html
         bare = {"faction": "Fidesz", "elections": [{"ciklus": "2026-", "mandate_from": "2026-05-09"}], "current": True}
         html = profile_html(bare, [])
-        self.assertIn("2026 óta képviselő.", html)
+        self.assertIn("<dt>Képviselő</dt><dd>2026 óta</dd>", html)
         for word in ("Tisztsége", "Bizottsága", "Végzettsége", "Önkormányzatban"):
             self.assertNotIn(word, html)
 
@@ -1518,15 +1545,25 @@ class RecordPanels(unittest.TestCase):
             self.assertIn('class="due"', live)
             self.assertIn("nincs közzétett dokumentum", live)
 
-    def test_remuneration_names_its_one_month_and_never_implies_a_series(self):
+    def test_remuneration_names_its_latest_month_and_lists_the_earlier_ones(self):
         from scripts.build_site import remuneration_html
         azon = next(a for a, m in self.mps.items() if m.get("remuneration"))
         mp = self.mps[azon]
         html = remuneration_html(self.inp, mp)
         self.assertIn(mp["remuneration"][0]["period"], html)
-        self.assertIn("Egyetlen hónap", html)
+        self.assertIn("utolsó közölt hónapja", html)
         parts = [mp["remuneration"][0].get(k) or 0 for k in ("gross", "constituency_allowance", "housing_allowance")]
         self.assertEqual("összesen" in html, sum(1 for v in parts if v) > 1)   # no total when there is one line
+
+    def test_remuneration_prints_a_negative_month_with_its_sign_and_says_so(self):
+        # parlament.hu published −1 225 870 Ft for a member's last month; the page shows what the record says
+        from scripts.build_site import remuneration_html
+        mp = {"remuneration": [{"period": "2026. augusztus", "gross": -1225870},
+                               {"period": "2026. július", "gross": 322800}]}
+        html = remuneration_html(self.inp, mp)
+        self.assertIn("\u22121\u00a0225\u00a0870 Ft", html)
+        self.assertIn("negatív összeget közöl", html)
+        self.assertIn("2026. július: 322\u00a0800 Ft", html)
 
     def test_nothing_recorded_renders_nothing(self):
         """Declarations and pay vanish on an empty record; schooling instead SAYS the record is empty — a reader

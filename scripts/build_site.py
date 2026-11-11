@@ -240,6 +240,11 @@ def hu_dec(x, places: int = 2) -> str:
     return "—" if x is None else f"{x:.{places}f}".replace(".", ",")
 
 
+def hu_money(n: int) -> str:
+    """A forint amount that may be negative: the same grouping, with a real minus sign."""
+    return ("\u2212" if n < 0 else "") + hu_num(abs(n))
+
+
 def hu_num(n) -> str:
     """31 402 — thousands with a non-breaking space, as Hungarian prints them."""
     return f"{n:,}".replace(",", "\u00a0") if isinstance(n, int) else str(n)
@@ -829,7 +834,8 @@ h1{margin:0;font-size:40px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .fold>summary>h2 .tag{color:var(--dim2);letter-spacing:.15em}.fold[open]>summary>h2{margin-bottom:10px}
 .fold>summary>h2>span:first-child::before{content:"▸";display:inline-block;width:1.4em;letter-spacing:0}.fold[open]>summary>h2>span:first-child::before{content:"▾"}
 .fold>summary:hover>h2>span:first-child,.fold>summary:focus-visible>h2>span:first-child{color:var(--white)}
-.grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}
+.grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}.grid .stack{display:flex;flex-direction:column;min-width:0}.grid .stack .panel:last-child{flex:1}
+.jump{position:relative;display:inline-block}.jump summary{list-style:none;cursor:pointer;user-select:none;border:1px solid var(--dim3);background:var(--panel-deep);color:var(--text);padding:4px 10px;font-family:var(--mono);font-size:13px;white-space:nowrap}.jump summary::-webkit-details-marker{display:none}.jump summary::after{content:'▾';margin-left:10px;color:var(--dim)}.jump[open] summary::after{content:'▴'}.jump summary:hover,.jump[open] summary{border-color:var(--text)}.jump summary:focus-visible,.jump-menu a:focus-visible{outline:1px solid var(--text);outline-offset:2px}.jump-menu{position:absolute;z-index:30;top:calc(100% + 4px);left:0;min-width:100%;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--dim3);box-shadow:0 8px 24px rgba(0,0,0,.5)}.jump-menu a{display:flex;justify-content:space-between;gap:18px;padding:6px 10px;font-family:var(--mono);font-size:13px;color:var(--text);text-decoration:none;white-space:nowrap;border-bottom:1px solid var(--line2)}.jump-menu a:last-child{border-bottom:0}.jump-menu a:hover,.jump-menu a:focus-visible{background:var(--text);color:var(--bg)}.jump-menu .yrs{color:var(--dim)}.jump-menu a:hover .yrs,.jump-menu a:focus-visible .yrs{color:inherit}.who-top .hero-h.withpic>div{min-width:0}.jumprow{display:flex;margin-top:4px;flex-wrap:wrap;align-items:center;gap:6px 12px}.jumprow>a{white-space:nowrap}.figs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 18px;align-items:end;margin:18px 0 0;padding:14px 0 0;border-top:1px solid var(--border)}.figs div{min-width:0}.figs dt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:0 0 4px}.figs dd{margin:0;font-size:30px;line-height:1.1;letter-spacing:-.02em;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}@media(max-width:560px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.figs dd{font-size:22px}}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.02em;position:relative}
 .fresh:before{content:">";color:var(--dim3);margin-right:8px}
@@ -1111,8 +1117,9 @@ td.lb{width:40%}td.lb i{display:block;height:6px;width:var(--w);background:var(-
 .evlog{margin-top:12px}
 .evlog summary{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim2);cursor:pointer;padding:6px 0}
 .evlog summary:hover{color:var(--white)}
-.profile{margin:12px 0 0;max-width:88ch;color:var(--dim);font-size:13px;line-height:1.65}
-.profile b{color:var(--text);font-weight:400}
+.who-top{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:12px 40px;align-items:start;margin:0 0 6px}.who-top .hero-h.withpic{flex-wrap:nowrap;margin:0}.who-top .verdict.who{margin:6px 0 0}.who-top .portrait.hero{width:120px;height:160px}.who-top .hero-h.withpic{gap:20px}.who-top .hero-meta{line-height:1.9}.who-top .hero-meta a{white-space:nowrap}@media(max-width:640px){.who-top .portrait.hero{width:84px;height:112px}.who-top .hero-h.withpic{gap:14px}}@media(max-width:900px){.who-top{grid-template-columns:1fr}}
+.verdict.who{grid-template-columns:150px 1fr;gap:8px 16px;margin:16px 0 4px;max-width:96ch}.verdict.who dt{line-height:1.6}.verdict.who a{text-decoration:underline;text-decoration-color:var(--border-hi);text-underline-offset:2px}.verdict.who a:hover{text-decoration-color:var(--white)}.verdict.who dd{font-family:var(--sans);font-size:15px;line-height:1.5}
+@media(max-width:640px){.verdict.who{grid-template-columns:1fr;gap:2px 0}.verdict.who dd{margin-bottom:8px}}
 /* Visually hidden, and hidden without escaping its container. The usual recipe adds position:absolute, and
    an absolutely positioned element inside a horizontally scrolling table is laid out against whatever
    ancestor happens to be positioned — which here was the page. A 1px span at x=531 pushed the document to
@@ -1478,6 +1485,11 @@ JS_PAGER = """
     render(false);
   }
   document.querySelectorAll('table[data-page-size]').forEach(paginate);
+  // the career page's cycle menu is a <details> of links; it closes on a click elsewhere and on Escape
+  document.querySelectorAll('details.jump').forEach(function(d){
+    document.addEventListener('click', function(e){ if (d.open && !d.contains(e.target)) d.open = false; });
+    d.addEventListener('keydown', function(e){ if (e.key === 'Escape' && d.open) { d.open = false; d.querySelector('summary').focus(); } });
+  });
   window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ if (!r.classList.contains('grp')) r.hidden = r.hasAttribute('data-x'); }); } };
 })();
 """
@@ -3367,17 +3379,17 @@ def vote_sentence(view: dict, inp: dict) -> str:
     return f'<p class="lede summary">{esc(first)}{esc(second)}</p>'
 
 
-def record_sentence(in_roll: int, cast: int, against: int, where: str, has_line: bool = True, last: str = "") -> str:
-    """A member's voting record in one plain sentence — the figures the tables below break down. "alkalommal"
-    rather than a -szor/-szer/-ször suffix, which depends on how the number is said."""
+def record_rows(in_roll: int, cast: int, against: int, where: str, has_line: bool = True) -> list[tuple[str, str]]:
+    """A member's voting record as labelled rows of the profile list. Label form, so no number ever takes a
+    suffix: "443 / 453", not "443-szor". The cycle page passes has_line=False: its dissent count is the
+    panel right below, and the owner took the repeated row out (10 November 2026); the career page keeps it."""
     if not in_roll:
-        return ""
+        return []
     pct = f"{100 * cast / in_roll:.0f}%".replace(".", ",")
-    out = f"{where} {hu_num(in_roll)} név szerinti szavazáson volt képviselő, ebből {hu_num(cast)} alkalommal szavazott ({pct})."
+    rows = [("Szavazott", f"{hu_num(cast)} / {hu_num(in_roll)} név szerinti szavazáson ({pct}), {esc(where)}")]
     if has_line and cast:
-        out += (f" {hu_num(against)} alkalommal szavazott a frakciója többsége ellen{last}." if against
-                else " Egyszer sem szavazott a frakciója többsége ellen.")
-    return f'<p class="lede summary">{esc(out)}</p>'
+        rows.append(("Frakciója ellen", hu_num(against)))
+    return rows
 
 
 def verdict_block(view: dict, inp: dict) -> str:
@@ -4076,12 +4088,11 @@ def build_mp_page(inp: dict, azon: str) -> str:
     counts = al["counts"]
     in_roll = al["in_roll"] or 0
     cast = al["cast"]
-    part = f"{100*cast/in_roll:.0f}%" if in_roll else "—"
     aligned_total = al["with"] + al["against"]
     with_pct = f"{100*al['with']/aligned_total:.0f}%" if aligned_total else "—"
     devs = [v for v in al["votes"] if v["align"] == "against"]
 
-    def vote_row(v):
+    def vote_row(v, flagged=True):      # flagged: the last cell says with or against the faction — noise in a table that is all against
         vv = inp["by_ts"][v["ts"]]
         mo = vv["motions"][0] if vv["motions"] else {}
         subj = f'{esc(mo.get("iromany") or "")} {esc(cut(mo.get("title") or vv.get("remark") or ("Jelenlét megállapítása" if vv["kind"] == "jelenlet" else ""), 80))}'
@@ -4089,16 +4100,17 @@ def build_mp_page(inp: dict, azon: str) -> str:
         fp = POSITION_LABEL.get(v["faction_plurality"] or "", "—") if v["faction_plurality"] else "—"
         flag = {"with": '<span class="badge">frakcióval</span>', "against": '<span class="badge hi">frakció ellen</span>'}.get(v["align"] or "", '<span class="badge mid">nem szavazott</span>' if v["position"] not in CAST else "")
         return (f'<tr data-al="{esc(v["align"] or "none")}" data-p="{esc(v["position"])}" data-y="{esc(vv["on_date"][:4])}"><td class="ts mono"><a href="../szavazas/{esc(vv["slug"])}.html">{esc(vv["on_date"])} {esc(vv["time"])}</a></td>'
-                f'<td>{subj}<span class="sub">{esc(rule_short((vv.get("majority") or {}).get("rule")))} · {esc(vv["result_raw"])}</span></td><td>{pos_html}</td><td>{esc(fp)}</td><td>{flag}</td></tr>')
-    dev_rows = "".join(vote_row(v) for v in reversed(devs))
+                f'<td>{subj}<span class="sub">{esc(rule_short((vv.get("majority") or {}).get("rule")))} · {esc(vv["result_raw"])}</span></td><td>{pos_html}</td><td>{esc(fp)}</td>{f"<td>{flag}</td>" if flagged else ""}</tr>')
+    dev_rows = "".join(vote_row(v, flagged=False) for v in reversed(devs))
     all_rows = "".join(vote_row(v) for v in reversed(al["votes"])) if not inp["archive"] else ""     # an archive MP's votes: in the cycle's data files, not on the page
     all_votes_panel = ""      # filled below once the year buttons exist
     mp_years = sorted({inp["by_ts"][v["ts"]]["on_date"][:4] for v in al["votes"]}, reverse=True)
     mp_year_buttons = ('<div class="filters" role="group" aria-label="Szűrés év szerint"><button type="button" data-yf="all" class="on">minden év</button>'
                        + "".join(f'<button type="button" data-yf="{y}">{y}</button>' for y in mp_years) + '</div>') if len(mp_years) > 1 else ""
-    fac_hist = "".join(f'<tr><td class="mono">{esc(f["ciklus"])}</td><td>{esc(f["faction"])}</td><td class="mono">{esc(f["from"] or "")} – {esc(f["to"] or "")}</td></tr>' for f in mp.get("factions") or [])
-    elections = "".join(f'<tr><td class="mono">{esc(e["ciklus"])}</td><td>{esc(e["constituency"] or "—")}</td><td class="mono">{esc(e["elected_on"] or "")}</td><td class="mono">{esc(e["mandate_from"] or "")} – {esc(e["mandate_to"] or "")}</td></tr>' for e in mp.get("elections") or [])
-    motions = "".join(f'<tr><td class="mono">{esc(m["ciklus"])}</td><td class="num mono">{esc(m["onallo"])}</td><td class="num mono">{esc(m["nem_onallo"])}</td></tr>' for m in mp.get("motion_stats") or [])
+    # this cycle's own count only: the table of every cycle is the person's history, on the career page
+    m_now = next((m for m in mp.get("motion_stats") or [] if CYCLE_BY_LABEL.get(m.get("ciklus")) == inp["cycle"]), None)
+    motions_tag = f'<span class="tag">{esc(m_now["onallo"])} önálló · {esc(m_now["nem_onallo"])} nem önálló</span>' if m_now else ""
+    career_link = f'A korábbi ciklusok számai a <a href="{"../" * (1 + inp["base_depth"])}szemely/{esc(azon)}.html">pályakép</a> oldalon.'
     items = mp.get("motions") or []
     kinds = {}
     for it in items:
@@ -4112,69 +4124,41 @@ def build_mp_page(inp: dict, azon: str) -> str:
         return f'<tr><td class="ts mono">{num}</td><td>{esc(it["title"] or "")}{co}</td><td><span class="{badge}">{esc(it.get("status") or "—")}</span></td></tr>'
     item_rows = "".join(item_row(it) for it in items)
     if inp["closed"]:
-        motions_note = "A tételek csak a jelenlegi ciklusból érhetők el."
+        motions_note = "A tételek listája csak a jelenlegi ciklusból érhető el. " + career_link
         items_html = ""
     else:
         motions_note = ("" if stat_now is None or stat_now == len(items) else
-                        f'Eltérés: a parlament.hu adatlapja {stat_now} önálló indítványt számol, az itteni lista {len(items)} tételt talál.')
+                        f'Eltérés: a parlament.hu adatlapja {stat_now} önálló indítványt számol, az itteni lista {len(items)} tételt talál. ') + career_link
         items_html = (f'<div class="hero-meta" style="margin:10px 0 4px"><span class="lbl">a jelenlegi ciklusban</span> {len(items)} iromány' + (f' · {kind_txt}' if kind_txt else '') + '</div>'
-                      f'<div class="tablewrap" tabindex="0"><table data-page-size="10"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
+                      f'<div class="tablewrap" tabindex="0"><table data-page-size="5"><thead><tr><th scope="col">Szám</th><th scope="col">Cím</th><th scope="col">Állapot</th></tr></thead><tbody>'
                       + (item_rows or '<tr><td colspan="3">Ebben a ciklusban nincs benyújtott irománya.</td></tr>') + '</tbody></table></div>') if not inp["closed"] else ""
     rel_root = "../" * (1 + inp["base_depth"])
-    other_links = " · ".join([f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members]
-                             + [f'<a href="{rel_root}szemely/{esc(azon)}.html">pályakép ↗</a>'])
+    other_links = " · ".join([f'<a href="{rel_root}szemely/{esc(azon)}.html">pályakép ↗</a>']
+                             + [f'<a href="{rel_root}{cycle_dir(c)}kepviselo/{esc(azon)}.html">{c}. ciklus ↗</a>' for c, members in inp["also_in"].items() if azon in members])
     if inp["closed"]:
         ended = mp.get("mandate_to") or mp.get("wikidata_end")            # the record's own row for the cycle first
         former_note = (f'<div class="hero-meta">A {inp["cycle"]}. ciklus lezárult · '
                        + ("ma is képviselő" if mp.get("current") else (f"mandátum vége: {hu_date(ended)}" if ended else "mandátuma megszűnt"))
-                       + (f' · ugyanez a személy: {other_links}' if other_links else "") + '</div>')
+                       + '</div>')
     else:
-        former_note = ("" if mp.get("current") else f'<div class="hero-meta">{("Mandátum vége: " + hu_date(mp["wikidata_end"])) if mp.get("wikidata_end") else "Mandátuma megszűnt."}</div>') \
-            + (f'<div class="hero-meta">Ugyanez a személy: {other_links}</div>' if other_links else "")
-    links = " · ".join(x for x in [
-        f'<a href="{esc(mp["parlament_url"])}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>',
-        f'<a href="{esc(mp["photo_url"])}" target="_blank" rel="noopener">fénykép (parlament.hu) ↗</a>' if mp.get("photo_url") else "",
-        f'<a href="https://www.wikidata.org/wiki/{esc(mp["wikidata_qid"])}" target="_blank" rel="noopener">Wikidata {esc(mp["wikidata_qid"])} ↗</a>' if mp.get("wikidata_qid") else "",
-        f'<a href="{esc(ext_url(mp["website"]))}" target="_blank" rel="noopener">{esc(re.sub(r"^https?://", "", mp["website"]))} ↗</a>' if mp.get("website") and "." in mp["website"] and ext_url(mp["website"]) else "",
-    ] if x)
+        former_note = ("" if mp.get("current") else f'<div class="hero-meta">{("Mandátum vége: " + hu_date(mp["wikidata_end"])) if mp.get("wikidata_end") else "Mandátuma megszűnt."}</div>')
+    # Under the name: only the same person's other pages — the career page and their pages in other cycles. The
+    # parlament.hu record, the photo and the Wikidata item were links out of the site in the place a reader
+    # looks first; the owner took them out (10 November 2026). The photo's credit stays on the image itself.
+    links = other_links
     shown = [p for p in POSITION_ORDER if p != "igazoltan_tavol" or counts.get(p)]     # the seventh state only when it occurs
     pos_cells = "".join(f'<div><b class="mono" data-kz-number="{counts.get(p, 0)}">{hu_num(counts.get(p, 0))}</b><span>{def_term(POSITION_LABEL[p], POSITION_DEFS)}</span></div>' for p in shown)
     tally_cls = "tally seven" if len(shown) == 7 else "tally six"
     seat_panel = (f"""  <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Ülőhely az ülésteremben</span><span class="tag">{esc(seat_text(mp))}</span></h2>
+    <h2><span data-kz-text>Ülőhely az ülésteremben</span><span class="tag">az emelvény felől nézve</span></h2>
+    <div class="hero-meta">{esc(seat_text(mp))}</div>
     <div class="chart">{chamber_mini_svg(inp, azon) or '<div class="hero-meta">Nincs ülőhely-adat.</div>'}</div>
-    <div class="hero-meta">az emelvény felől nézve</div>
   </section>""" if not inp["closed"] else "")
-    seat_label = f' · {esc(seat_text(mp))}' if not inp["closed"] else ""
-    # -- the digest: sitting weeks, speeches, committees
-    weeks = sitting_weeks(inp)
-    dg = week_digests(inp)
-    m_from, m_to = mp.get("mandate_from") or "", mp.get("mandate_to")
-    def in_mandate(w):
-        return not (w["to"] < m_from or (m_to and w["from"] > m_to))
-    weeks = [w for w in weeks if in_mandate(w)]
-    wrows = []
-    for w in weeks:
-        d = dg.get(w["key"]) or {}
-        m = (d.get("mps") or {}).get(azon)
-        rc = (d.get("cycle") or {}).get("roll_calls", 0)
-        known = speeches_cover(inp, w)
-        if m and not m["in_roll"] and mp.get("faction") == fd.INDEPENDENT:
-            m = dict(m, independent=True)                       # no roll call that week: independence from the person's faction
-        against = "—" if (m or {}).get("independent") else str((m or {}).get("against", 0))
-        wrows.append(f'<tr><td class="ts mono">{esc(w["label"])}</td><td class="num mono">{w["ulnaps"]}</td><td class="num mono">{(m or {}).get("in_roll", 0)} / {rc}</td>'
-                     f'<td class="num mono">{(m or {}).get("cast", 0)}</td><td class="num mono">{against}</td><td class="num mono">{len((m or {}).get("speeches") or []) if known else "—"}</td></tr>')
-    last_w = weeks[0] if weeks else None
-    last_m = ((dg.get(last_w["key"]) or {}).get("mps") or {}).get(azon) if last_w else None
-    last_rc = ((dg.get(last_w["key"]) or {}).get("cycle") or {}).get("roll_calls", 0) if last_w else 0
-    if last_m and not last_m["in_roll"] and mp.get("faction") == fd.INDEPENDENT:
-        last_m = dict(last_m, independent=True)
-    last_known = speeches_cover(inp, last_w) if last_w else False
-    digest_now = (f'<div class="hero-meta"><b>{esc(last_w["label"])}</b> · {last_w["ulnaps"]} ülésnap · {esc(digest_line(last_m, last_rc, last_known))}</div>' if last_w else "")
-    if last_m and last_m["speeches"]:
-        digest_now += '<ul class="prose" style="margin:6px 0 0 18px;padding:0">' + "".join(
-            f'<li>{esc(r["date"])} · {esc(cut(r["event"] or "—", 110))} — {esc(r["kind"] or "")}{" · " + hu_mmss(r["duration_s"]) if r.get("duration_s") else ""}</li>'
-            for r in sorted(last_m["speeches"], key=lambda r: (r["date"], r["order"]))) + "</ul>"
+    # The faction-and-mandate tables are on the career page only (10 November 2026): they are the person's
+    # whole history, not this cycle's, and the link to that page is under the name.
+    # -- speeches and committees. The week-by-week panel that opened the page is gone (10 November 2026): in a
+    # week with a sitting day and no roll call it was a row of zeros, which read as a placeholder. The weekly
+    # digest stays an Atom channel (linked in the head and on feed/) and a CSV under adatok/.
     sp_rows = speeches_by_mp(inp).get(azon, [])
     sp_sub = [r for r in sp_rows if not r["technical"]]
     rec_stat = next((st for st in (mp.get("speech_stats") or []) if st.get("ciklus") == CYCLE_LABELS_.get(inp["cycle"])), None)
@@ -4202,70 +4186,56 @@ def build_mp_page(inp: dict, azon: str) -> str:
     if inp["archive"]:
         all_votes_panel = (f'<section class="panel deep">{CORNERS}<h2><span data-kz-text>Minden szavazása</span><span class="tag">{hu_num(in_roll)} tétel</span></h2>'
                            f'<div class="hero-meta prose">Archív ciklus: itt nem az összes szavazata látszik, hanem csak azok, ahol a frakciója többségével szemben szavazott. Minden név szerinti szavazata megvan a ciklus <a href="../adatok/index.html">adatállományában</a> — a <span class="mono">nevsorok.csv.gz</span> fájlban, a képviselő p_azon kódja szerint szűrhető — és az adatbázisban is.</div></section>')
+    # Open cycle: the list of motions sits beside the speeches. A closed cycle has only the two counts,
+    # so the panel is a few lines and goes under the committees instead of leaving a tall empty box.
+    motions_panel = f"""  <section class="panel" id="inditvanyok">{CORNERS}
+    <h2><span data-kz-text>Benyújtott indítványok</span>{motions_tag}</h2>
+    {items_html}
+    <div class="hero-meta prose" style="margin-top:8px">{motions_note}</div>
+  </section>
+"""
     return page_head(f'{mp["name"]} ({mp.get("faction") or "—"}){" · " + str(inp["cycle"]) + ". ciklus" if inp["closed"] else ""} · karzat',
                      f'{mp["name"]} — {mp.get("faction") or ""}, {mandate_text(mp)}: szavazási részvétel és a frakcióval való egyezés a {inp["cycle"]}. ciklusban.', 1 + inp["base_depth"],
                      feeds=([(f"{azon}.xml", f'karzat · {mp["name"]} — különvéleményei · {inp["cycle"]}. ciklus')] if has_channel else []) + [(f"{azon}-heti.xml", f'karzat · {mp["name"]} — heti összefoglaló · {inp["cycle"]}. ciklus')]) + \
         topbar(inp, [("képviselők", "index.html"), (mp["name"], None)], 1) + f"""
-<div class="hero-h withpic">{portrait_html(mp, "hero")}<div><h1>{esc(mp["name"])}</h1><small class="label"><span class="pos"><i class="d" style="--c:{c}"></i>{esc(mp.get("faction") or "—")}</span> · {mandate_html(mp)}{seat_label}</small>
+<div class="who-top"><div class="hero-h withpic">{portrait_html(mp, "hero")}<div><h1>{esc(mp["name"])}</h1><small class="label"><span class="pos"><i class="d" style="--c:{c}"></i>{esc(mp.get("faction") or "—")}</span> · {mandate_html(mp)}</small>
 <p class="hero-meta">{links}</p></div></div>
-{profile_html(mp, [])}
-{record_sentence(in_roll, cast, al["against"], f'A {inp["cycle"]}. ciklusban', has_channel,
-                 (lambda v: f', legutóbb {hu_date(v["on_date"]).rstrip(".")}' if v else "")(inp["by_ts"][devs[-1]["ts"]] if devs else None))}
+{profile_html(mp, [], lead=False, extra=record_rows(in_roll, cast, 0, f'a {inp["cycle"]}. ciklusban', has_line=False))}</div>
 {former_note}
-<section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Hétről hétre</span><span class="tag">{"a legutóbbi ülésnapos hét" if not inp["closed"] else "a ciklus utolsó ülésnapos hete"} · <a href="{esc(azon)}-heti.xml" type="application/atom+xml" title="heti összefoglaló Atom-csatornaként">Atom</a> · <a href="../adatok/heti.csv">CSV, minden hét</a></span></h2>
-  {digest_now or '<div class="hero-meta">—</div>'}
-  <div class="tablewrap" tabindex="0" style="margin-top:10px"><table data-page-size="10" data-counter="wn"><thead><tr><th scope="col">Hét</th><th scope="col" class="num">Ülésnap</th><th scope="col" class="num">Névsorban</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciója ellen</th><th scope="col" class="num">Felszólalás</th></tr></thead><tbody>{"".join(wrows) or '<tr><td colspan="6">—</td></tr>'}</tbody></table></div>
-  <div class="filters"><span class="n" id="wn" aria-live="polite"></span></div>
-  <div class="hero-meta prose" style="margin-top:8px">Hét: naptári hét; a dátum az első és az utolsó ülésnapja. Csak olyan hét látszik, amelyen volt ülésnap, és amely a képviselő mandátumának idejére esik. Névsorban: a hét név szerinti szavazásai közül hányban szerepelt a neve a névsorban. Név szerinti az a szavazás, ahol nevenként rögzítik, ki mit szavazott — a jelenlét-megállapítás is ilyen, ott csak azt rögzítik, ki van jelen a teremben. Leadott: hányszor szavazott igennel, nemmel vagy tartózkodott. Frakciója ellen: hány leadott szavazata tért el attól, ahogy ugyanazon a szavazáson a frakciója többsége szavazott. Például a frakció többsége igennel szavaz, a képviselő nemmel — ez egy frakció elleni szavazat. Döntetlennél nincs frakciótöbbség, és nincs mitől eltérni; a független képviselőnek nincs frakciója — nála gondolatjel áll. Felszólalás: érdemi felszólalásainak száma a napi listák szerint; az ülésvezetés és a bejelentés nem számít bele. Ahová a lista még nem ér el, ott gondolatjel áll.</div>
-</section>
-<section class="{"grid" if not inp["closed"] else "grid one"}">
+<section class="grid">
+{'<div class="stack">' if not inp["closed"] else ""}
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Szavazási részvétel a {inp["cycle"]}. ciklusban</span><span class="tag">{hu_num(in_roll)} név szerinti szavazás</span></h2>
     <div class="{tally_cls}">{pos_cells}</div>
     <dl class="verdict">
-      <dt>Leadott szavazat</dt><dd class="mono">{cast} / {in_roll} ({part})</dd>
-      <dt>Frakciójával</dt><dd class="mono">{al["with"]} · ellene {al["against"]} · egyezés {with_pct}</dd>
+      <dt>Egyezés a frakcióval</dt><dd class="mono">{with_pct} · {al["with"]} egyező, {al["against"]} ellene</dd>
     </dl>
-    <div class="hero-meta prose" style="margin-top:8px">„Frakciójával”: azt szavazta, amit a frakciójából szavazatot leadók közül a legtöbben; „ellene”: mást. Az egyezés a frakcióval egyező szavazatok száma osztva az egyező és az ellene leadott szavazatok együttes számával.</div>
+    <div class="hero-meta prose" style="margin-top:8px">Egyező: azt szavazta, amit a frakciójából szavazatot leadók közül a legtöbben; ellene: mást. Az egyezés az egyező szavazatok aránya a kettő együttes számában. A leadott szavazatok száma fent, a név mellett áll.</div>
   </section>
-{seat_panel}
-</section>
-<section class="grid">
-  <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Frakciótagság és mandátum</span></h2>
-    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th>Frakció</th><th>Időszak</th></tr></thead><tbody>{fac_hist or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
-    <div class="tablewrap" tabindex="0" style="border:0;margin-top:10px"><table><thead><tr><th>Ciklus</th><th>Választókerület / lista</th><th>Választás</th><th>Mandátum</th></tr></thead><tbody>{elections or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
-  </section>
-  <section class="panel" id="inditvanyok">{CORNERS}
-    <h2><span data-kz-text>Benyújtott indítványok</span></h2>
-    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
-    {items_html}
-    {f'<div class="hero-meta prose" style="margin-top:8px">{motions_note}</div>' if motions_note else ''}
-  </section>
-</section>
-<section class="grid">
+{'<div class="stack">' if inp["closed"] else ""}
   <section class="panel">{CORNERS}
     <h2><span data-kz-text>Bizottságok</span><span class="tag">{len(coms)} tagság a ciklusban</span></h2>
     <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th scope="col">Bizottság</th><th scope="col">Tisztség</th><th scope="col">Időszak</th></tr></thead><tbody>{com_rows or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
   </section>
-  <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} érdemi · {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor{" · mikrofonnál " + hu_hours((speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds")) if (speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds") else ""}</span></h2>
-    <div class="hero-meta prose">Érdemi: a tárgyhoz szólás, kérdés, interpelláció és válaszaik, napirend előtti és utáni, ügyrendi; eljárási: ülésvezetés, bejelentés, eredmény kihirdetése.{(" " + esc(sp_note)) if sp_note else ""}</div>
-    {transcript_note(inp)}
-  </section>
+{motions_panel if inp["closed"] else ""}
+</div>
+{seat_panel}
 </section>
-<section class="panel deep">{CORNERS}
-  <h2><span data-kz-text>Érdemi felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} tétel · a legfrissebb elöl · <a href="../felszolalas/index.html">a ciklus felszólalásai</a></span></h2>
-  <div class="filters"><input type="search" data-filter-table="speeches" placeholder="tárgy, fajta" aria-label="Szűrés tárgyra vagy fajtára" style="min-width:160px"><span class="n" id="sn" aria-live="polite"></span></div>
-  <div class="tablewrap" tabindex="0"><table id="speeches" data-page-size="10" data-counter="sn"><thead><tr><th scope="col">Nap</th><th scope="col">Napirendi pont</th><th scope="col">Fajta</th><th scope="col">Szerep</th><th scope="col" class="num">Hossz</th></tr></thead><tbody>{sp_trs or ('<tr><td colspan="5">A felszólalás-listák nincsenek betöltve.</td></tr>' if inp["speeches"] is None else '<tr><td colspan="5">Ebben a ciklusban nem volt.</td></tr>')}</tbody></table></div>
-</section>
-<section class="panel deep">{CORNERS}
+<section class="panel deep" id="frakcio-ellen">{CORNERS}
   <h2><span data-kz-text>Szavazatok a frakció többségével szemben</span><span class="tag">{len(devs)}{f' · <a href="{esc(azon)}.xml" type="application/atom+xml" title="a képviselő különvéleményei Atom-csatornaként">Atom</a>' if has_channel else " · függetlenként nincs frakciótöbbség — csatorna nincs"}</span></h2>
-  <div class="tablewrap" tabindex="0"><table data-page-size="10"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th><th><span class="vh">A szavazás lapja</span></th></tr></thead><tbody>{dev_rows or '<tr><td colspan="5">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
+  <div class="tablewrap" tabindex="0"><table data-page-size="10"><thead><tr><th>Időpont</th><th>Tárgy</th><th>Szavazata</th><th>Frakció többsége</th></tr></thead><tbody>{dev_rows or '<tr><td colspan="4">Nincs ilyen szavazás.</td></tr>'}</tbody></table></div>
 </section>
 {mp_axis_panel(inp, azon)}
 {all_votes_panel}
+{"" if inp["closed"] else '<section class="grid">'}
+  <section class="{"panel deep" if inp["closed"] else "panel"}">{CORNERS}
+    <h2><span data-kz-text>Felszólalásai</span><span class="tag">{hu_num(len(sp_sub))} érdemi · {hu_num(len(sp_rows) - len(sp_sub))} eljárási sor{" · mikrofonnál " + hu_hours((speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds")) if (speaking_time(inp)["per_mp"].get(azon) or {}).get("seconds") else ""} · <a href="../felszolalas/index.html">a ciklus felszólalásai</a></span></h2>
+    <div class="hero-meta prose">A lista az érdemi felszólalásait mutatja, a legfrissebb elöl. Érdemi: a tárgyhoz szólás, kérdés, interpelláció és válaszaik, napirend előtti és utáni, ügyrendi; eljárási: ülésvezetés, bejelentés, eredmény kihirdetése.{(" " + esc(sp_note)) if sp_note else ""}</div>
+    {transcript_note(inp)}
+    <div class="filters"><input type="search" data-filter-table="speeches" placeholder="tárgy, fajta" aria-label="Szűrés tárgyra vagy fajtára" style="min-width:160px"><span class="n" id="sn" aria-live="polite"></span></div>
+    <div class="tablewrap" tabindex="0"><table id="speeches" data-page-size="{10 if inp["closed"] else 5}" data-counter="sn"><thead><tr><th scope="col">Nap</th><th scope="col">Napirendi pont</th><th scope="col">Fajta</th><th scope="col">Szerep</th><th scope="col" class="num">Hossz</th></tr></thead><tbody>{sp_trs or ('<tr><td colspan="5">A felszólalás-listák nincsenek betöltve.</td></tr>' if inp["speeches"] is None else '<tr><td colspan="5">Ebben a ciklusban nem volt.</td></tr>')}</tbody></table></div>
+  </section>
+{"" if inp["closed"] else motions_panel + "</section>"}
 {cite_html(inp, f'{cycle_dir(inp["cycle"])}kepviselo/{azon}.html', f'{mp["name"]} ({mp.get("faction") or "—"}), {inp["cycle"]}. ciklus', f'{inp["cycle"]}-{azon}', *(() if inp["archive"] else (f'{azon}.json', f'{azon}.csv')))}
 """ + page_tail(inp, 1)
 
@@ -5808,7 +5778,7 @@ def build_data_page(inp: dict, out_dir: Path | None = None) -> str:
              ("kulonvelemenyek.csv", None, "minden különvélemény — a frakció többségével szemben leadott szavazatok; a különvélemény-csatornák teljes tartalma (a függetlenek soraival, akiket a csatornák nem visznek)"),
              ("felszolalasok.csv", None, "az ülésnapok felszólalás-listái soronként: napirendi pont, felszólaló, fajta, szerep, hossz, érdemi/eljárási"),
              ("heti.csv", None, "képviselőnként és ülésnapos hetenként: névsorban, leadott, frakciója ellen, érdemi felszólalás — a heti összefoglalók számai"),
-             ] + ([("javadalmazas.csv", None, "képviselőnként a lekérdezés havának bruttó országgyűlési javadalmazása, ahogy az adatlap közli — kormányzati illetmény nincs benne")]
+             ] + ([("javadalmazas.csv", None, "képviselőnként és hónaponként a bruttó országgyűlési javadalmazás, ahogy az adatlap közli — kormányzati illetmény nincs benne")]
                   if not inp["closed"] and any(m.get("remuneration") for m in inp["mps"].values()) else []) + [
              ("kepviselok.csv", "kepviselok.json", "a ciklus névsoraiban szereplő személyek, összesítéssel"),
              ("../../adatok/szavazatok.parquet", None, "MINDEN ciklus együtt, egy fájlban: 17,4 millió leadott szavazat — Parquet, DuckDB-vel vagy pandasszal egy lekérdezés"),
@@ -8519,7 +8489,7 @@ def _pack_spans(rows: list[tuple]) -> list[list[tuple]]:
 HU_NUMWORD = {1: "egy", 2: "két", 3: "három", 4: "négy", 5: "öt", 6: "hat", 7: "hét", 8: "nyolc", 9: "kilenc", 10: "tíz"}
 
 
-def profile_html(latest: dict, stints: list[dict]) -> str:
+def profile_html(latest: dict, stints: list[dict], lead: bool = True, extra: list[tuple[str, str]] | None = None) -> str:
     """The orientation a reader wants before the numbers: who this is, how long they have sat, what they held
     before, what they work on now.
 
@@ -8534,23 +8504,22 @@ def profile_html(latest: dict, stints: list[dict]) -> str:
     cyc = sorted({CYCLE_BY_LABEL[e["ciklus"]] for e in (latest.get("elections") or []) if e.get("ciklus") in CYCLE_BY_LABEL})
     if not cyc:
         cyc = sorted({st["cycle"] for st in stints})
-    bits: list[str] = []
+    bits: list[tuple[str, str]] = []                     # (label the code owns, the record's values)
 
     # the seat: the faction and the constituency of the most recent mandate the record dates
     els = sorted((e for e in (latest.get("elections") or []) if e.get("mandate_from")), key=lambda e: e["mandate_from"])
     where = (els[-1].get("constituency") if els else None) or None
-    lead = " · ".join(x for x in [latest.get("faction") or "független", where] if x)
+    lead_text = " · ".join(x for x in [latest.get("faction") or "független", where] if x)
 
     if cyc:
         first_year = CYCLE_SPAN.get(cyc[0], "")[:4]
         n = len(cyc)
         word = HU_NUMWORD.get(n, hu_num(n))
         if latest.get("current"):
-            bits.append(f"{first_year} óta {word} ciklusban képviselő." if n > 1 else f"{first_year} óta képviselő.")
+            bits.append(("Képviselő", f"{first_year} óta · {word} ciklusban" if n > 1 else f"{first_year} óta"))
         else:
             last_year = (CYCLE_SPAN.get(cyc[-1], "").split("–")[-1] or "").strip()[:4] or CYCLE_SPAN.get(cyc[-1], "")[:4]
-            bits.append(f"{word} ciklusban volt képviselő, {first_year} és {last_year} között." if n > 1
-                        else f"Egy ciklusban volt képviselő ({first_year}–{last_year}).")
+            bits.append(("Képviselő volt", f"{first_year}–{last_year} · {word} ciklusban"))
 
     def span(a: str | None, b: str | None) -> str:
         return f' ({(a or "")[:4]}–{(b or "")[:4]})'.replace("–)", ")") if a else ""
@@ -8565,8 +8534,8 @@ def profile_html(latest: dict, stints: list[dict]) -> str:
     offices = sorted((o for o in (latest.get("offices") or []) if o.get("office") and o.get("from") and held_days(o) >= 30),
                      key=lambda o: o["from"], reverse=True)[:2]
     if offices:
-        bits.append(("Tisztsége: " if len(offices) == 1 else "Tisztségei: ")
-                    + ", ".join(f'{esc(o["office"])}{span(o.get("from"), o.get("to"))}' for o in offices) + ".")
+        bits.append(("Tisztsége" if len(offices) == 1 else "Tisztségei",
+                     "<br>".join(f'{esc(o["office"])}{span(o.get("from"), o.get("to"))}' for o in offices)))
 
     # the most recent unbroken run of the same local post. Terms arrive one row each and a career can have a gap in
     # it (mayor 1990-94, a councillor's term, then mayor again 1998-2010); the outer range would paper over the gap
@@ -8591,12 +8560,12 @@ def profile_html(latest: dict, stints: list[dict]) -> str:
             best = (b, a, body, office)
     if best:
         end, a, body, office = best
-        bits.append(f'Önkormányzatban: {esc(body)}{", " + esc(office) if office else ""} ({a}–{end}).')
+        bits.append(("Önkormányzatban", f'{esc(body)}{", " + esc(office) if office else ""} ({a}–{end})'))
 
     coms = [c["committee"] for c in (latest.get("committees") or [])
             if c.get("committee") and not c.get("subcommittee") and not c.get("to")][:2]
     if coms:
-        bits.append(("Bizottsága: " if len(coms) == 1 else "Bizottságai: ") + ", ".join(esc(c) for c in dict.fromkeys(coms)) + ".")
+        bits.append(("Bizottsága" if len(coms) == 1 else "Bizottságai", "<br>".join(esc(c) for c in dict.fromkeys(coms))))
 
     sc = sorted((x for x in (latest.get("schools") or []) if x.get("year") and x.get("institution")),
                 key=lambda x: -x["year"])
@@ -8611,10 +8580,13 @@ def profile_html(latest: dict, stints: list[dict]) -> str:
         # Measured before shipping: 2 521 first rows keep, 127 pages improve, 20 fall through.
         pick = next((r for r in sc if SCHOOL_WORD.search(r["institution"])), sc[0])
         what = f'{esc(pick["degree"])} — {esc(pick["institution"])}' if pick.get("degree") else esc(pick["institution"])
-        bits.append(f'Végzettsége: {what} ({pick["year"]}).')
+        bits.append(("Végzettsége", f'{what} ({pick["year"]})'))
+    rows = ([("Frakció, mandátum", esc(lead_text))] if lead and lead_text else []) + bits + list(extra or [])
     if not bits:
         return ""
-    return (f'<p class="profile"><b>{esc(lead)}</b> ' + " ".join(bits) + "</p>")
+    # A labelled list, not a paragraph: the values are the record's and the labels are ours, so the shape says
+    # which is which — and a reader scans five rows faster than one long sentence of them.
+    return ('<dl class="verdict who">' + "".join(f"<dt>{esc(k)}</dt><dd>{v}</dd>" for k, v in rows) + "</dl>")
 
 
 def life_path_html(inp: dict, latest: dict, stints: list[dict]) -> str:
@@ -8750,8 +8722,8 @@ def declarations_html(latest: dict) -> str:
 
 
 def remuneration_html(inp: dict, latest: dict) -> str:
-    """The one month of remuneration the record carries. The service publishes no history, so the page says which
-    month this is and does not imply a series."""
+    """The latest month of remuneration the record carries, named, with the record's earlier months listed under
+    it. The record holds the cycle's months newest first; nothing is averaged and no month is invented."""
     rows = [p for p in latest.get("remuneration") or [] if p.get("gross")]
     if not rows:
         return ""
@@ -8766,7 +8738,7 @@ def remuneration_html(inp: dict, latest: dict) -> str:
            if sum(1 for _l, v in parts if v) > 1 else "")
     paybar_html = f'<div class="paybar">{bar}</div>' if bar else ""
     shown = [(lbl, v) for lbl, v in parts if v]
-    lines = "".join(f'<tr><td>{esc(lbl)}</td><td class="num mono">{hu_num(v)} Ft</td></tr>' for lbl, v in shown)
+    lines = "".join(f'<tr><td>{esc(lbl)}</td><td class="num mono">{hu_money(v)} Ft</td></tr>' for lbl, v in shown)
     if len(shown) > 1:                                  # a total repeats the single line when there is only one
         lines += f'<tr><td><b>összesen</b></td><td class="num mono"><b>{hu_num(total)} Ft</b></td></tr>'
     # Where this sits in the House, same month only: the reader who asked "miért ennyi?" gets the comparison
@@ -8836,12 +8808,19 @@ def remuneration_html(inp: dict, latest: dict) -> str:
                         f'({esc(gov[0])}) illetményét a törvény nem rögzíti: évente a miniszterelnök állapítja '
                         f'meg (Ksztv. 52. §), és a Miniszterelnöki Kormányiroda teszi közzé (Kit. 186. § (2)). '
                         f'Ezen a lapon csak az országgyűlési javadalmazás szerepel.</div>')
+    # a negative month is what the datasheet prints (a settlement after the mandate ended); it is shown as
+    # printed, with the sign, and the page says it does not know why
+    neg_note = ('<div class="hero-meta" style="margin-top:6px">Az adatlap erre a hónapra negatív összeget közöl. '
+                'Az okát nem írja le; az oldal nem találgat.</div>') if p["gross"] < 0 else ""
+    earlier = " · ".join(f'{esc(x.get("period") or "")}: {hu_money(x["gross"])} Ft' for x in rows[1:])
+    tail = ("Az adatlap utolsó közölt hónapja, nem havi átlag."
+            + (f" Korábbi hónapok az adatlapon: {earlier}." if earlier else " Más hónapot az adatlap nem közöl."))
     return (f'<section class="panel">{CORNERS}'
             f'<h2><span data-kz-text>Javadalmazás</span><span class="tag">{esc(p.get("period") or "")} · bruttó · <a href="../{cycle_dir(inp["cycle"])}javadalmazas/index.html">az egész Ház</a></span></h2>'
             f'{paybar_html}'
             f'<div class="tablewrap" tabindex="0" style="border:0"><table><tbody>{lines}</tbody></table></div>'
-            + strip + house_ctx + band_note + gov_note +
-            f'<div class="hero-meta">Egyetlen hónap: az adatlap ennyit közöl, előzményt nem. Ez a lekérdezés hónapja, nem havi átlag.</div></section>')
+            + strip + house_ctx + neg_note + band_note + gov_note +
+            f'<div class="hero-meta">{tail}</div></section>')
 
 
 # HU_MONTH_NUM, not HU_MONTHS: the module already has an HU_MONTHS list that hu_date() indexes into, and the
@@ -8882,14 +8861,20 @@ def build_remuneration_page(inp: dict) -> str:
     mandate's own dates fall inside the month) and prints the statute's schedule separately, cited, as what
     the law says rather than as a per-person reconciliation."""
     cycle = inp["cycle"]
-    rows = []
-    for azon, m in inp["mps"].items():
-        r = next((x for x in m.get("remuneration") or [] if x.get("gross")), None)
-        if r:
-            rows.append((azon, m, r))
-    if not rows:
+    # ONE month for the whole table: the month most datasheets state last. A member whose record stops at
+    # an earlier month (the mandate ended, or the month is not yet published for them) is left out and
+    # counted below — the first version listed their older amount under this month's heading.
+    latest_of = {azon: next((x for x in m.get("remuneration") or [] if x.get("gross")), None)
+                 for azon, m in inp["mps"].items()}
+    periods = Counter(r.get("period") or "" for r in latest_of.values() if r)
+    if not periods:
         return ""
-    period = rows[0][2].get("period") or ""
+    period = periods.most_common(1)[0][0]
+    rows = [(azon, inp["mps"][azon], r) for azon, r in latest_of.items() if r and (r.get("period") or "") == period]
+    n_other = sum(periods.values()) - len(rows)
+    other_note = (f' {hu_num(n_other)} képviselő adatlapja erre a hónapra nem közöl összeget (megszűnt a '
+                  f'mandátuma, vagy a hónapja még nem jelent meg): ők ebben a táblázatban nem szerepelnek, '
+                  f'utolsó közölt hónapjuk a saját oldalukon áll.') if n_other else ""
     rows.sort(key=lambda t: -t[2]["gross"])
     gs = [t[2]["gross"] for t in rows]
     med = gs[len(gs) // 2] if len(gs) % 2 else (gs[len(gs) // 2 - 1] + gs[len(gs) // 2]) // 2
@@ -8933,8 +8918,8 @@ def build_remuneration_page(inp: dict) -> str:
                      f'A {cycle}. ciklus képviselőinek bruttó országgyűlési javadalmazása ({period}), az adatlapok szerint: medián, tisztségek, letölthető CSV.',
                      1 + inp["base_depth"]) + topbar(inp, [("javadalmazás", None)], 1) + f"""
 <div class="hero-h"><h1>Javadalmazás</h1><small class="label" data-kz-text>{cycle}. ciklus · {esc(period)} · bruttó · {hu_num(len(rows))} képviselő</small></div>
-<p class="lede">Mennyit fizet az Országgyűlés a képviselőknek: az adatlapok bruttó összege egyetlen hónapra —
-a forrás csak a lekérdezés hónapját közli, előzményt nem. A kormányzati tisztségek (miniszterelnök, miniszter,
+<p class="lede">Mennyit fizet az Országgyűlés a képviselőknek: az adatlapok bruttó összege egyetlen hónapra,
+a legutóbb közöltre ({esc(period)}).{other_note} A kormányzati tisztségek (miniszterelnök, miniszter,
 államtitkár) illetménye nem innen jön, ezen a lapon nem szerepel. A középső érték {hu_num(med)} Ft; a
 legkisebb és a legnagyobb közti különbség okait az adatlap nem közli — bontás nincs, csak a végösszeg.</p>
 <section class="panel">{CORNERS}
@@ -9048,11 +9033,45 @@ def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
     motions = "".join(f'<tr><td class="mono">{esc(m["ciklus"])}</td><td class="num mono">{motion_cell(m, "onallo")}</td><td class="num mono">{motion_cell(m, "nem_onallo")}</td></tr>' for m in latest["motion_stats"])
     motions_note = ('<div class="hero-meta prose" style="margin-top:8px">A számok a parlament.hu adatlapjáról valók. A tételeket az API csak a jelenlegi ciklusra adja: '
                     + (f'<a href="{now_mp}">a {CURRENT_CYCLE}. ciklus indítványai</a>.' if now_mp else 'a korábbi ciklusok listája itt nem érhető el.') + '</div>') if latest["motion_stats"] else ""
-    links = " · ".join(x for x in [
-        f'<a href="{esc(latest["parlament_url"])}" target="_blank" rel="noopener">parlament.hu adatlap ↗</a>' if latest.get("parlament_url") else "",
-        f'<a href="{esc(latest["biography_url"])}" target="_blank" rel="noopener">önéletrajz ↗</a>' if latest.get("biography_url") else "",
-        f'<a href="https://www.wikidata.org/wiki/{esc(latest["wikidata_qid"])}" target="_blank" rel="noopener">Wikidata {esc(latest["wikidata_qid"])} ↗</a>' if latest.get("wikidata_qid") else ""] if x)
+    # The way from the career to a cycle's own page: a dropdown in the header, because the table's links sit a
+    # screen lower and a reader on the career page asked for the cycle page first. Without scripts a select
+    # cannot navigate, so there the same cycles are plain links. The parlament.hu and Wikidata links were taken
+    # off this page by the owner (10 November 2026); the cycle pages still carry the datasheet link.
+    with_page = [st for st in stints if st.get("href")]
+    def years(c):
+        a, _, z = CYCLE_SPAN.get(c, "").partition(" – ")
+        return f"{a[:4]}–{z[:4]}" if a else ""
+    # A <details>, not a <select>: the system's own menu ignores the page's type and colours, and a list of
+    # links needs no script to work — so there is no <noscript> twin either.
+    jump = (('<details class="jump"><summary>képviselői oldala</summary><div class="jump-menu">'
+             + "".join(f'<a href="../{esc(st["href"])}"><span>{st["cycle"]}. ciklus</span><span class="yrs">{years(st["cycle"])}</span></a>' for st in with_page)
+             + '</div></details>') if with_page else "")
+    links = '<span class="jumprow">' + "".join(x for x in [jump,
+        f'<a href="{esc(latest["biography_url"])}" target="_blank" rel="noopener">önéletrajz ↗</a>' if latest.get("biography_url") else ""] if x) + '</span>'
+    fac_panel = f'''<section class="panel">{CORNERS}
+    <h2><span data-kz-text>Frakciótagság</span></h2>
+    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th>Frakció</th><th>Időszak</th></tr></thead><tbody>{fac_hist or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+  </section>'''
+    mand_panel = f'''<section class="panel">{CORNERS}
+    <h2><span data-kz-text>Mandátumok</span></h2>
+    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th>Választókerület / lista</th><th>Választás</th><th>Mandátum</th></tr></thead><tbody>{elections or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
+  </section>'''
+    motions_panel = f'''<section class="panel">{CORNERS}
+    <h2><span data-kz-text>Benyújtott indítványok</span></h2>
+    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
+    {motions_note}
+  </section>'''
+    # The order the owner set on 10 November 2026: who this is first (schooling beside pay, then the
+    # declarations), then how they sat (factions beside mandates), the life path, and last the numbers —
+    # the cycle table and the motions. A half with nothing in it is left out and its neighbour runs full width.
+    def row(*hs):
+        hs = [h for h in hs if h]
+        return f'<section class="grid{"" if len(hs) == 2 else " one"}">{"".join(hs)}</section>\n' if hs else ""
     loaded = ", ".join(f"{st['cycle']}." for st in stints)
+    # The record in four figures under the name, where the header's left half used to stand empty beside the
+    # longer list on the right. They replace the list's two rows of the same numbers, so nothing is said twice.
+    figs = (f'<dl class="figs"><div><dt>Ciklus</dt><dd>{len(stints)}</dd></div><div><dt>Leadott szavazat</dt><dd>{hu_num(total_cast)}</dd></div>'
+            f'<div><dt>Részvétel</dt><dd>{100 * total_cast / total_roll:.0f}%</dd></div><div><dt>Frakciója ellen</dt><dd>{hu_num(total_against)}</dd></div></dl>') if total_roll else ""
     # Three different people have been called Tóth István in this House, and three pages called
     # "Tóth István — pályakép" are three pages nobody can tell apart in a search result. The name is not a
     # distinction the record can invent one for, but the cycles they sat in are a fact about each of them.
@@ -9065,31 +9084,17 @@ def build_person_page(inp: dict, azon: str, stints: list[dict]) -> str:
     who = f'{name} ({fac})' if fac else name
     return page_head(f'{who} — pályakép, {span} ciklus · karzat', f'{name} az Országgyűlésben: ciklusonként a részvétele és a frakciójával való egyezése, a képviselői adatlap frakció- és mandátumtörténete.', 1) + \
         topbar(inp, [("személyek", "index.html"), (name, None)], 1) + f"""
-<div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": latest.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>pályakép · {len(stints)} betöltött ciklus{" · ma is képviselő" if latest.get("current") else ""}</small>
-<p class="hero-meta">{links}</p></div></div>
-{profile_html(latest, stints)}
-{record_sentence(total_roll, total_cast, total_against, "A " + hu_list([f"{c}." for c in cs]) + " ciklusban")}
+<div class="who-top"><div class="who-left"><div class="hero-h withpic">{portrait_html({"p_azon": azon, "photo_url": latest.get("photo_url"), "name": name}, "hero")}<div><h1>{esc(name)}</h1><small class="label" data-kz-text>pályakép · {len(stints)} betöltött ciklus{" · ma is képviselő" if latest.get("current") else ""}</small>
+<div class="hero-meta">{links}</div></div></div>{figs}</div>
+{profile_html(latest, stints)}</div>
+{row(schooling_html(latest), remuneration_html(inp, latest))}{declarations_html(latest)}
+{row(fac_panel, mand_panel)}{life_path_html(inp, latest, stints)}
 <section class="panel deep">{CORNERS}
   <h2><span data-kz-text>Ciklusonként</span><span class="tag">{hu_num(total_roll)} névsorban · leadott {hu_num(total_cast)} · frakciójával {hu_num(total_with)} · ellene {hu_num(total_against)}</span></h2>
   <div class="tablewrap" tabindex="0"><table><thead><tr><th scope="col">Ciklus</th><th scope="col">Frakció</th><th scope="col">Mandátum</th><th scope="col" class="num">Névsor</th><th scope="col" class="num">Leadott</th><th scope="col" class="num">Frakciójával</th><th scope="col" class="num">Ellene</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>
   <div class="hero-meta prose" style="margin-top:8px">A betöltött ciklusok ({loaded}) számai; a ciklus oldalán minden szavazása külön. „Frakciójával”: a frakciója leadott szavazatainak többségével egyezően.</div>
 </section>
-<section class="grid">
-  <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Frakciótagság és mandátum</span></h2>
-    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th>Frakció</th><th>Időszak</th></tr></thead><tbody>{fac_hist or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
-    <div class="tablewrap" tabindex="0" style="border:0;margin-top:10px"><table><thead><tr><th>Ciklus</th><th>Választókerület / lista</th><th>Választás</th><th>Mandátum</th></tr></thead><tbody>{elections or '<tr><td colspan="4">—</td></tr>'}</tbody></table></div>
-  </section>
-  <section class="panel">{CORNERS}
-    <h2><span data-kz-text>Benyújtott indítványok</span></h2>
-    <div class="tablewrap" tabindex="0" style="border:0"><table><thead><tr><th>Ciklus</th><th class="num">önálló</th><th class="num">nem önálló</th></tr></thead><tbody>{motions or '<tr><td colspan="3">—</td></tr>'}</tbody></table></div>
-    {motions_note}
-  </section>
-</section>
-{life_path_html(inp, latest, stints)}
-<section class="grid">{schooling_html(latest)}{remuneration_html(inp, latest)}</section>
-{declarations_html(latest)}
-{cite_html(inp, f'szemely/{azon}.html', f'{name} — pályakép', f'szemely-{azon}')}
+{row(motions_panel)}{cite_html(inp, f'szemely/{azon}.html', f'{name} — pályakép', f'szemely-{azon}')}
 """ + page_tail(inp, 1)
 
 
@@ -9823,7 +9828,11 @@ def build_landing() -> str:
                   + ' · a színek az oldal jelölései')
                  if chamber else "Az ülésrend csak a jelenlegi ciklusból ismert.")
     n_cyc = len(tot["cycles"])
-    n_paid = sum(1 for m in cur["mps"].values() if any(x.get("gross") for x in (m.get("remuneration") or [])))
+    # the pay table holds ONE month — the one most datasheets state last — so the door counts that month's rows
+    _last_pay = Counter(next((x.get("period") for x in (m.get("remuneration") or []) if x.get("gross")), None)
+                        for m in cur["mps"].values())
+    _last_pay.pop(None, None)
+    n_paid = _last_pay.most_common(1)[0][1] if _last_pay else 0
     # the same </ guard the sibling JSON embeds carry: the payload holds free-text strings,
     # and an unguarded </script> inside one would end the block mid-JSON
     hall_json = (json.dumps(hall_data(cur), ensure_ascii=False, separators=(",", ":"))
@@ -9887,7 +9896,7 @@ def build_landing() -> str:
     <p>A felszólalások jegyzőkönyvi szövege szó szerint; a {CURRENT_CYCLE}. ciklus szövegeiben keres.</p>
     <div class="row"><input type="search" name="q" placeholder="szó, legalább 3 betű" aria-label="Keresés a felszólalásokban" autocomplete="off"><button type="submit">keresés</button></div>
   </form>
-  {f'<a class="panel door" href="{cdir}javadalmazas/index.html">{CORNERS}<h2><span data-kz-text>Javadalmazás</span></h2><p>Mennyit keresnek a képviselők: {hu_num(n_paid)} képviselő egy hónapra kapott bruttó összege egy táblában, mellette a törvényi szorzók. Az adatlap mindig csak a legutóbbi hónapot közli, ezért a tábla a mostani ciklusé.</p><span class="go mono">{cdir}javadalmazas/ →</span></a>' if n_paid else ""}
+  {f'<a class="panel door" href="{cdir}javadalmazas/index.html">{CORNERS}<h2><span data-kz-text>Javadalmazás</span></h2><p>Mennyit keresnek a képviselők: {hu_num(n_paid)} képviselő egy hónapra kapott bruttó összege egy táblában, mellette a törvényi szorzók. Az adatlap csak a mostani ciklus hónapjait közli, a tábla a legutóbbit mutatja.</p><span class="go mono">{cdir}javadalmazas/ →</span></a>' if n_paid else ""}
   <a class="panel door" href="szemely/index.html">{CORNERS}<h2><span data-kz-text>Pályaképek</span></h2><p>{hu_num(tot['people'])} személy {hu_date(tot['from'])[:4]} óta: mandátumok, frakciók, szavazási mérleg ciklusonként, és az életút egy tengelyen.</p><span class="go mono">szemely/ →</span></a>
   <a class="panel door" href="arcel/index.html">{CORNERS}<h2><span data-kz-text>A Ház arcéle</span></h2><p>Ciklusonként hányan ülnek először a Házban, és mit rögzít a nyilvántartás a megválasztottak végzettségéről, nyelveiről, önkormányzati múltjáról.</p><span class="go mono">arcel/ →</span></a>
   {f'<a class="panel door" href="frakciovaltas/index.html">{CORNERS}<h2><span data-kz-text>Frakcióváltás</span></h2><p>Minden mandátum közbeni frakcióváltás 1990 óta, és hogy a két nyilvántartás ugyanazt mondja-e róla.</p><span class="go mono">frakciovaltas/ →</span></a>' if (inp.get("switches") or {}).get("items") else ""}

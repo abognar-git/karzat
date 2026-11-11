@@ -171,7 +171,7 @@ def main(argv: list[str] | None = None) -> int:
             "schools": (rec or {}).get("schools") or [],                 # iskolák: degree, institution, faculty, year
             "languages": (rec or {}).get("languages") or [],
             "declarations": (rec or {}).get("declarations") or [],       # vagyonnyilatkozatok: the published PDFs and the ones due
-            "remuneration": (rec or {}).get("remuneration") or [],       # javadalmazás: the one month the record carries
+            "remuneration": (rec or {}).get("remuneration") or [],       # javadalmazás: the cycle's months, newest first
             "local_offices": (rec or {}).get("local_offices") or [],     # egyéb tagságok: local government seats, by year
             "biography_url": (rec or {}).get("biography_url"),
             "motions": motions_by_azon.get(azon, []),           # this cycle's irományok (current cycle only; empty for earlier cycles)
@@ -188,7 +188,7 @@ def main(argv: list[str] | None = None) -> int:
            "current": sum(1 for m in out_mps.values() if m["current"]),
            "with_record": sum(1 for m in out_mps.values() if m["has_record"]), "mps": out_mps}
     OUT = out_path
-    # Remuneration history: the datasheet publishes one month and forgets it, so the site remembers.
+    # Remuneration history: the datasheet carries the current cycle's months only, so the site remembers.
     # Append-only per member per period; the widget can grow a series as syncs accumulate. Nothing is
     # interpolated and no month is invented — a gap in the file is a month nobody queried.
     hist_p = OUT.parent / "remuneration_history.json"

@@ -317,6 +317,11 @@
     render(false);
   }
   document.querySelectorAll('table[data-page-size]').forEach(paginate);
+  // the career page's cycle menu is a <details> of links; it closes on a click elsewhere and on Escape
+  document.querySelectorAll('details.jump').forEach(function(d){
+    document.addEventListener('click', function(e){ if (d.open && !d.contains(e.target)) d.open = false; });
+    d.addEventListener('keydown', function(e){ if (e.key === 'Escape' && d.open) { d.open = false; d.querySelector('summary').focus(); } });
+  });
   window.__karzatRerender = function(table, reset){ if (table && table.__pager) table.__pager.render(reset); else if (table) { var rows = Array.prototype.slice.call(table.tBodies[0].rows); rows.forEach(function(r){ if (!r.classList.contains('grp')) r.hidden = r.hasAttribute('data-x'); }); } };
 })();
 

@@ -215,8 +215,8 @@ def parse_kepviselo(payload: dict[str, Any]) -> dict[str, Any]:
                      "as_of": _hu_date(v.get("@allapot_idopont")), "due": _hu_date(v.get("@beadasi_hatarido")),
                      "filed": (v.get("@beadva") or "").strip() == "igen"}
                     for v in as_list((r.get("vagyonnyilatkozatok") or {}).get("vagyonnyilatkozat")) if isinstance(v, dict)]
-    # <javadalom idoszak brutto_tiszteletdij valasztokeruleti_potlek lakhatasi_tamogatas/> — one month, the month the
-    # record was fetched; the service keeps no history, so a series only exists if we keep the snapshots ourselves
+    # <javadalom idoszak brutto_tiszteletdij valasztokeruleti_potlek lakhatasi_tamogatas/> — one row per month of the
+    # current cycle, newest first; an amount can be negative (a settlement after a mandate ended)
     pay = [{"period": (j.get("@idoszak") or "").strip() or None, "gross": _int(j.get("@brutto_tiszteletdij")),
             "constituency_allowance": _int(j.get("@valasztokeruleti_potlek")), "housing_allowance": _int(j.get("@lakhatasi_tamogatas"))}
            for j in as_list((r.get("javadalmazas") or {}).get("javadalom")) if isinstance(j, dict)]

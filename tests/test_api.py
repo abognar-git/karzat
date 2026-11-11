@@ -222,3 +222,43 @@ class SupersededPayloads(unittest.TestCase):
         from scripts.watch_source import _param_from_key
         for stem in ("2019-06-04T13-12-50", "2026-05-09T11-42-46", "1998-12-15T09-05-00"):
             self.assertEqual(api.cache_key("szavazas", {"p_szavdatum": _param_from_key(stem)}), stem)
+
+
+class DepartedMembersAreStillAsked(unittest.TestCase):
+    """A member who leaves mid-cycle drops out of the list, but the service goes on publishing their pay for a
+    month or two. sync-mps --refresh re-asks every cached record that carries remuneration and is not listed."""
+
+    def test_refresh_refetches_a_cached_unlisted_record_with_pay_and_no_other(self):
+        import argparse
+        import tempfile
+        from pathlib import Path
+        from unittest import mock
+        from karzat import cli
+
+        with tempfile.TemporaryDirectory() as d:
+            cache = Path(d)
+            (cache / "kepviselo").mkdir()
+            (cache / "kepviselo" / "mp_gone.xml").write_bytes(b"<kepviselo><javadalmazas><javadalom idoszak='x'/></javadalmazas></kepviselo>")
+            (cache / "kepviselo" / "mp_old.xml").write_bytes(b"<kepviselo/>")          # an earlier cycle's member: no pay
+            (cache / "kepviselo" / "mp_here.xml").write_bytes(b"<kepviselo><javadalmazas><javadalom idoszak='x'/></javadalmazas></kepviselo>")
+            asked = []
+
+            def fetch(self, service, *, refresh=False, **params):
+                asked.append((service, params.get("p_azon"), refresh))
+                if service == "kepviselok":
+                    return b"<kepviselok><kepviselo p_azon='here'/></kepviselok>"
+                if service == "szoszolok":
+                    return b"<szoszolok/>"
+                return b"<kepviselo/>"
+
+            with mock.patch.object(cli.WebApi, "fetch", fetch), mock.patch.object(cli, "_write_sync_state", lambda *a, **k: "state"):
+                with mock.patch("sys.stdout"):
+                    rc = cli.cmd_sync_mps(argparse.Namespace(cache=cache, refresh=True))
+            self.assertEqual(rc, 0)
+            records = [a for s, a, _r in asked if s == "kepviselo"]
+            self.assertEqual(sorted(records), ["gone", "here"])
+            asked.clear()
+            with mock.patch.object(cli.WebApi, "fetch", fetch), mock.patch.object(cli, "_write_sync_state", lambda *a, **k: "state"):
+                with mock.patch("sys.stdout"):
+                    cli.cmd_sync_mps(argparse.Namespace(cache=cache, refresh=False))
+            self.assertEqual([a for s, a, _r in asked if s == "kepviselo"], ["here"])   # a plain run asks nothing extra

@@ -211,6 +211,7 @@ def cmd_sync_mps(args: argparse.Namespace) -> int:
     # the nationality spokespersons sit in the same chamber (they may speak, they may not vote): the list plus one
     # record each, so their seats and their committees are known too
     n_sz = 0
+    sz: list = []
     try:
         from .normalise import parse_szoszolok
         sz = parse_szoszolok(to_dict_payload(api.fetch("szoszolok", refresh=True)))
@@ -223,6 +224,22 @@ def cmd_sync_mps(args: argparse.Namespace) -> int:
         print(f"{len(sz)} nationality spokespersons listed, {n_sz} records cached")
     except ApiError as e:
         print(f"szoszolok: {e}", file=sys.stderr)
+    # members who left mid-cycle drop out of the list, but parlament.hu goes on publishing their pay for a
+    # month or two (the last, partial month, sometimes a negative settlement); without this their record froze
+    # on the day they left. Any cached record that carries remuneration and is no longer listed is re-asked.
+    n_left = 0
+    if args.refresh:
+        listed = set(ids) | {r["p_azon"] for r in sz}
+        for path in sorted(api.cache_path("kepviselo", {"p_azon": "x"}).parent.glob("mp_*.xml")):
+            azon = path.stem[3:]
+            if azon in listed or b"<javadalom" not in path.read_bytes():
+                continue
+            try:
+                api.fetch("kepviselo", p_azon=azon, refresh=True)
+                n_left += 1
+            except ApiError as e:
+                print(f"  {azon}: {e}", file=sys.stderr)
+        print(f"{n_left} departed members' records re-fetched")
     print(f"done: {ok}/{len(ids)} MP records cached; live calls={api.live_calls} cache hits={api.cache_hits}")
     state = _write_sync_state(args.cache, "sync-mps", api, mps=len(ids), ok=ok, szoszolok=n_sz)
     print(f"sync state -> {state}")

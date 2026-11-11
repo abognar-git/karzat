@@ -264,10 +264,11 @@ class Digest(unittest.TestCase):
 
     def test_mp_page_has_the_digest_speeches_and_committees(self):
         page = build_mp_page(self.inp, "0026")
-        self.assertIn("Hétről hétre", page)
-        self.assertIn('href="0026-heti.xml" type="application/atom+xml"', page)
+        self.assertNotIn("Hétről hétre", page)                          # the weekly panel is gone; the channel stays
+        self.assertIn('<dt>Szavazott</dt>', page)                        # the record's figures open the page instead
         self.assertIn('<link rel="alternate" type="application/atom+xml" href="0026-heti.xml"', page)
-        self.assertIn("Érdemi felszólalásai", page)
+        self.assertNotIn("Érdemi felszólalásai", page)                  # one speeches panel, not two
+        self.assertIn("<span data-kz-text>Felszólalásai</span>", page)
         self.assertIn("Bizottságok", page)
         self.assertIn("Törvényalkotási Bizottság", page)
         self.assertIn('data-filter-table="speeches"', page)
