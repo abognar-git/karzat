@@ -1673,6 +1673,10 @@
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (document.hidden) return;                       // a background tab gets the finished page, not a stalled boot
+  // once per visit: the intro greets a reader on the first page they open, and every page after it is simply
+  // there — an animation seen on every click stops being a welcome and becomes a wait
+  try { if (sessionStorage.getItem('kz-boot')) return; sessionStorage.setItem('kz-boot', '1'); } catch (e) {}
+  document.documentElement.classList.add('kz-boot');
   var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   function rnd(){ return CH[Math.floor(Math.random()*CH.length)]; }
   function ease(t){ return 1 - Math.pow(1 - t, 3); }

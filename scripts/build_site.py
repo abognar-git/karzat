@@ -737,7 +737,7 @@ CSS = """
    Type scale (2026-11): those steps left nineteen sizes, most of them half a pixel apart. Every HTML size is now
    one of eight — 11 labels · 13 secondary and tables · 15 body and running prose · 17 ledes · 22 titles ·
    30 big numbers · 40 headings · 52 the landing's name. A new rule picks from these; a test holds the list. */
-:root{--sz:#b9a06a;--bg:#050505;--panel:rgba(10,10,10,.9);--panel-deep:rgba(5,5,5,.95);--topbar:rgba(5,5,5,.9);--terminal:#000;
+:root{--ease-out:cubic-bezier(.23,1,.32,1);--sz:#b9a06a;--bg:#050505;--panel:rgba(10,10,10,.9);--panel-deep:rgba(5,5,5,.95);--topbar:rgba(5,5,5,.9);--terminal:#000;
 --border:#27272a;--border-hi:#3f3f46;--corner:#777;--text:#e4e4e7;--dim:#a1a1aa;--dim2:#9b9ba4;--dim3:#8d8d96;--dim4:#82828b;--line2:#18181b;--grid:rgba(255,255,255,.05);
 --ok:#34d399;--okbg:rgba(16,185,129,.1);--okbd:rgba(16,185,129,.4);--bad:#f87171;--badbg:rgba(239,68,68,.1);--badbd:rgba(239,68,68,.4);--white:#fff;
 --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace}
@@ -836,6 +836,11 @@ h1{margin:0;font-size:40px;font-weight:300;letter-spacing:-.03em;color:var(--whi
 .fold>summary:hover>h2>span:first-child,.fold>summary:focus-visible>h2>span:first-child{color:var(--white)}
 .grid{display:grid;grid-template-columns:1.25fr .9fr;gap:16px}.grid.one{grid-template-columns:1fr}.grid .panel{margin-top:16px;min-width:0}.grid .stack{display:flex;flex-direction:column;min-width:0}.grid .stack .panel:last-child{flex:1}
 .jump{position:relative;display:inline-block}.jump summary{list-style:none;cursor:pointer;user-select:none;border:1px solid var(--dim3);background:var(--panel-deep);color:var(--text);padding:4px 10px;font-family:var(--mono);font-size:13px;white-space:nowrap}.jump summary::-webkit-details-marker{display:none}.jump summary::after{content:'▾';margin-left:10px;color:var(--dim)}.jump[open] summary::after{content:'▴'}.jump summary:hover,.jump[open] summary{border-color:var(--text)}.jump summary:focus-visible,.jump-menu a:focus-visible{outline:1px solid var(--text);outline-offset:2px}.jump-menu{position:absolute;z-index:30;top:calc(100% + 4px);left:0;min-width:100%;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--dim3);box-shadow:0 8px 24px rgba(0,0,0,.5)}.jump-menu a{display:flex;justify-content:space-between;gap:18px;padding:6px 10px;font-family:var(--mono);font-size:13px;color:var(--text);text-decoration:none;white-space:nowrap;border-bottom:1px solid var(--line2)}.jump-menu a:last-child{border-bottom:0}.jump-menu a:hover,.jump-menu a:focus-visible{background:var(--text);color:var(--bg)}.jump-menu .yrs{color:var(--dim)}.jump-menu a:hover .yrs,.jump-menu a:focus-visible .yrs{color:inherit}.who-top .hero-h.withpic>div{min-width:0}.jumprow{display:flex;margin-top:4px;flex-wrap:wrap;align-items:center;gap:6px 12px}.jumprow>a{white-space:nowrap}.figs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 18px;align-items:end;margin:18px 0 0;padding:14px 0 0;border-top:1px solid var(--border)}.figs div{min-width:0}.figs dt{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin:0 0 4px}.figs dd{margin:0;font-size:30px;line-height:1.1;letter-spacing:-.02em;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}@media(max-width:560px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}.figs dd{font-size:22px}}
+.jump-menu{transform-origin:top left;transition:opacity .15s var(--ease-out),transform .15s var(--ease-out)}
+@starting-style{.jump[open] .jump-menu{opacity:0;transform:scale(.97)}}
+.filters button,.pgr button,.door .row button,.inspector .pin button,.figsave button,.cite .copy,.pager a,.jump summary,.landing .chamber-today .legend button.f{transition:color .15s,border-color .15s,transform .16s var(--ease-out)}
+.filters button:active,.pgr button:active,.door .row button:active,.inspector .pin button:active,.figsave button:active,.cite .copy:active,.pager a:active,.jump summary:active,.landing .chamber-today .legend button.f:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){.jump-menu{transition:none}.filters button:active,.pgr button:active,.door .row button:active,.inspector .pin button:active,.figsave button:active,.cite .copy:active,.pager a:active,.jump summary:active,.landing .chamber-today .legend button.f:active{transform:none}}
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .fresh{margin-top:14px;padding:10px 14px;border:1px solid var(--border);border-left:2px solid var(--dim2);background:var(--panel-deep);font-family:var(--mono);font-size:13px;color:var(--dim);letter-spacing:.02em;position:relative}
 .fresh:before{content:">";color:var(--dim3);margin-right:8px}
@@ -1195,9 +1200,9 @@ td a{color:var(--text);text-decoration:underline;text-decoration-color:var(--dim
 .kz-terminal .method>summary::before{content:"▸";display:inline-block;width:1.4em;letter-spacing:0}.kz-terminal .method[open]>summary::before{content:"▾"}.kz-terminal .method>summary:hover,.kz-terminal .method>summary:focus-visible{color:var(--white)}.kz-terminal .method[open]>summary{margin-bottom:4px}
 .kz-terminal .method h3{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim2);margin:8px 0 4px;font-weight:400}
 @keyframes kz-blink{0%,100%{opacity:1}50%{opacity:0}}
-.kz-terminal .scan:after{content:"";position:absolute;top:-10%;left:0;width:100%;height:2px;background:rgba(255,255,255,.08);animation:kz-scan 6s linear infinite}
+.kz-terminal .scan:after{content:"";position:absolute;top:-10%;left:0;width:100%;height:2px;background:rgba(255,255,255,.08)}html.kz-boot .kz-terminal .scan:after{animation:kz-scan 6s linear infinite}
 @keyframes kz-scan{0%{top:-10%}100%{top:110%}}
-@media (prefers-reduced-motion:reduce){.kz-terminal .scan:after,.kz-terminal .cursor{animation:none}[data-s]{transition:none}}
+@media (prefers-reduced-motion:reduce){html.kz-boot .kz-terminal .scan:after,.kz-terminal .cursor{animation:none}[data-s]{transition:none}}
 /* Printing a public record is a thing people do with it, and three declarations were missing here.
    `color-scheme:dark` is set on <html> and never reset, so Chrome painted all four page margins
    near-black — 15% of a multi-page sheet. `--terminal` was left out of the flip, so the footer block
@@ -2990,6 +2995,10 @@ JS_BOOT = """
 (function(){
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (document.hidden) return;                       // a background tab gets the finished page, not a stalled boot
+  // once per visit: the intro greets a reader on the first page they open, and every page after it is simply
+  // there — an animation seen on every click stops being a welcome and becomes a wait
+  try { if (sessionStorage.getItem('kz-boot')) return; sessionStorage.setItem('kz-boot', '1'); } catch (e) {}
+  document.documentElement.classList.add('kz-boot');
   var CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   function rnd(){ return CH[Math.floor(Math.random()*CH.length)]; }
   function ease(t){ return 1 - Math.pow(1 - t, 3); }
@@ -4313,9 +4322,25 @@ FAVICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" rol
 """
 
 
+def gate_hover(css: str) -> str:
+    """Hover styles only where there is a pointer that hovers. A tap on a phone leaves :hover stuck on the thing
+    tapped until the next tap elsewhere, so every :hover selector moves into `@media (hover:hover)`; whatever
+    shared its rule (:focus-visible, .hl, [open]) stays outside, in the same place in the cascade."""
+    def split(m):
+        sels = [x.strip() for x in m.group(1).split(",")]
+        hov = [x for x in sels if ":hover" in x]
+        if not hov:
+            return m.group(0)
+        lead = m.group(1)[:len(m.group(1)) - len(m.group(1).lstrip())]
+        rest = [x for x in sels if ":hover" not in x]
+        body = "{" + m.group(2) + "}"
+        return lead + (",".join(rest) + body if rest else "") + "@media (hover:hover){" + ",".join(hov) + body + "}"
+    return re.sub(r"([^{}]+)\{([^{}]*)\}", split, css)
+
+
 def build_assets() -> dict[str, str]:
     """The shared stylesheet, script and favicon (committed, checked, never hand-edited)."""
-    return {"olvaso.txt": "", "favicon.svg": FAVICON_SVG, "karzat.css": CSS.strip() + "\n", "karzat.js": (JS_COUNT + "\n" + JS_HASJS + "\n" + JS_MONTHS + "\n" + JS_TSTIP + "\n" + JS_FLOORF + "\n" + JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_FIGSAVE + "\n" + JS_BOOT).strip() + "\n"}
+    return {"olvaso.txt": "", "favicon.svg": FAVICON_SVG, "karzat.css": gate_hover(CSS.strip()) + "\n", "karzat.js": (JS_COUNT + "\n" + JS_HASJS + "\n" + JS_MONTHS + "\n" + JS_TSTIP + "\n" + JS_FLOORF + "\n" + JS_PAGER + "\n" + JS_FACT + "\n" + JS_TEXTFILTER + "\n" + JS_SPEECHSEARCH + "\n" + JS_TOWN + "\n" + JS_HALL + "\n" + JS_INDEX + "\n" + JS_INSPECT + "\n" + JS_VOTE + "\n" + JS_MP + "\n" + JS_CITE + "\n" + JS_SEARCH + "\n" + JS_SQL + "\n" + JS_CYCLESTRIP + "\n" + JS_FIGSAVE + "\n" + JS_BOOT).strip() + "\n"}
 
 
 def _pct(x, digits=0) -> str:

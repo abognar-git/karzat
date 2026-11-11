@@ -131,7 +131,7 @@ it has would be quietly claiming the rest does not exist.
 | People who ever held a mandate | **1,604** |
 | Floor speeches indexed | **495,191** |
 | Sitting days | **1,858** |
-| Offline tests guarding all of it | **558** |
+| Offline tests guarding all of it | **562** |
 
 Every number in this table — and every number in this repository's prose — is recomputed
 by `scripts/check_readme.py` and the test suite fails when the text and the data disagree.

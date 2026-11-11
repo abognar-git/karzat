@@ -4319,6 +4319,36 @@ class WhatComesNext(unittest.TestCase):
         self.assertIn('href="../mijon/index.html">mi jön</a>', build_index(self.inp, HERO_TS))
 
 
+class TheFeelOfIt(unittest.TestCase):
+    """The small things a hand notices: hover only where a pointer hovers, a press that answers, a menu that
+    opens from its button, and an intro that greets a reader once instead of on every page."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.css = build_assets()["karzat.css"]
+        cls.js = build_assets()["karzat.js"]
+
+    def test_no_hover_style_outside_a_hover_media_query(self):
+        gated = re.sub(r"@media \(hover:hover\)\{[^{}]*\{[^{}]*\}\}", "", self.css)
+        self.assertNotIn(":hover", gated, "a :hover rule a phone would leave stuck after a tap")
+        self.assertEqual(self.css.count("{"), self.css.count("}"))
+        # what shared a rule with :hover keeps its style outside the query
+        self.assertIn("a.door:focus-visible{border-color:var(--border-hi)}", self.css)
+
+    def test_buttons_answer_a_press_and_reduced_motion_is_spared(self):
+        self.assertRegex(self.css, r"\.filters button:active[^{]*\{transform:scale\(\.97\)\}")
+        self.assertRegex(self.css, r"prefers-reduced-motion:reduce\)\{\.jump-menu\{transition:none\}[^{]*:active[^{]*\{transform:none\}")
+
+    def test_the_cycle_menu_opens_from_its_button(self):
+        self.assertIn("@starting-style{.jump[open] .jump-menu{opacity:0;transform:scale(.97)}}", self.css)
+        self.assertRegex(self.css, r"\.jump-menu\{transform-origin:top left;transition:opacity \.15s var\(--ease-out\)")
+
+    def test_the_intro_plays_once_a_visit(self):
+        self.assertIn("sessionStorage.getItem('kz-boot')", self.js)
+        self.assertIn("html.kz-boot .kz-terminal .scan:after{animation:kz-scan", self.css)
+        self.assertNotRegex(self.css, r"(?<!html\.kz-boot )\.kz-terminal \.scan:after\{[^}]*animation:kz-scan")
+
+
 class TypeScale(unittest.TestCase):
     """Eight sizes, not nineteen: every HTML font size in the stylesheet is a step of the scale. Text inside the
     charts' SVGs is in viewBox units and scales with the drawing, so it is not held to it."""
