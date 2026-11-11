@@ -324,8 +324,14 @@ class Origin:
 def run(pages: list[dict], viewport: str, chrome: str) -> dict:
     job = {"chrome": chrome, "axe": str(AXE), "pages": pages, "viewport": VIEWPORTS[viewport],
            "motionCheck": viewport == "desktop"}
+    # not the literal "node": under launchd the PATH holds no node at all, and this call died with
+    # FileNotFoundError on every scheduled full build while passing in every terminal
+    from tests import node_bin
+    node = node_bin()
+    if not node:
+        return {"error": "node is not installed; the audit driver needs it", "pages": []}
     try:
-        p = subprocess.run(["node", str(DRIVER)], input=json.dumps(job), capture_output=True, text=True,
+        p = subprocess.run([node, str(DRIVER)], input=json.dumps(job), capture_output=True, text=True,
                            timeout=60 * 20)
     except subprocess.TimeoutExpired:
         return {"error": "the driver did not finish in 20 minutes", "pages": []}
