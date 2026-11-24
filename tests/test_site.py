@@ -2808,9 +2808,15 @@ class AnEmptyAnswerForADayThatSatIsNotAnAnswer(unittest.TestCase):
             uln, date = d.get("ulnap"), d.get("date")
             if not uln or not date or have.get(uln):
                 continue                                   # it has speeches; nothing to ask about
-            if date > datetime.date.today().isoformat():
+            if date >= datetime.date.today().isoformat():
                 continue                                   # the index carries sittings already scheduled;
-                                                           # an empty list for one of those is just the future
+                                                           # an empty list for one of those is just the future.
+                                                           # TODAY counts as the future too: the nightly runs at
+                                                           # 04:10, hours before the House sits, so on every
+                                                           # sitting day it asked "too early" by construction and
+                                                           # this gate stopped the publish on five sitting days in November 2026.
+                                                           # The retry rule asks again tomorrow; if it does not,
+                                                           # tomorrow this test sees a file dated the sitting day.
             f = cache / f"ckl{inp['cycle']}_nap{int(uln):04d}.xml"
             if not f.exists():
                 continue                                   # never fetched at all is a different fault
